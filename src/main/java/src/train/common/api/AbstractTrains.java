@@ -218,6 +218,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
 	@Override
 	public void onUpdate() {
+		super.onUpdate();
 		//if(this instanceof Locomotive)System.out.println("I'm alive. Remote: " + worldObj.isRemote);
 		if (!worldObj.isRemote && this.uniqueID == -1) {
 			if (FMLCommonHandler.instance().getMinecraftServerInstance() != null) {

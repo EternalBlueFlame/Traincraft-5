@@ -1,0 +1,2 @@
+#0001: Diesel and Electric Trains can't be turned on. Fix: Rewrite Packets: src.traincraft.common.api.Locomotive Line 771 & 775
+#0002: Trains are not rotating correctly at Client. Fix: Rewrite Packets: src.traincraft.common.api.EntityRollingStock Line 964
