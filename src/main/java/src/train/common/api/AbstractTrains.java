@@ -175,6 +175,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 		}
 	}
 
+	public AbstractTrains(World world, double x, double y, double z){
+		this(world);
+		this.setPosition(x, y, z);
+	}
+
 	public abstract boolean isLocomotive();
 
 	public abstract boolean isPassenger();

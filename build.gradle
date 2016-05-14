@@ -75,3 +75,9 @@ idea
 		inheritOutputDirs = true
 	}
 }
+
+jar {
+    manifest {
+        attributes 'FMLAT': 'accessTransformer.cfg'
+    }
+}

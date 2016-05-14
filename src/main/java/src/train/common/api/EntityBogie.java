@@ -316,8 +316,11 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	/**
      * Called to update the entity's position/logic.
      */
+	@Override
     public void onUpdate()
     {
+		super.onUpdate();
+		/*
     	//if(side.isClient())System.out.println("client "+ posY);
 		//if(side.isServer())System.out.println("Bogie server "+ posY);
     	setCurrentCartSpeedCapOnRail(1.8F);
@@ -398,7 +401,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
         if (this.worldObj.isRemote)
         {
 			//TODO Access Transformer for protected fields
-			/*
+
+
             if (this.turnProgress > 0)
             {
                 double d0 = this.posX + (this.minecartX - this.posX) / (double)this.turnProgress;
@@ -416,7 +420,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
                 this.setPosition(this.posX, this.posY, this.posZ);
                 this.setRotation(this.rotationYaw, this.rotationPitch);
             }
-            */
+
         }
         else
         {
@@ -430,10 +434,10 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
         	int y=i;
         	int z=k;
         	
-            /*if (BlockRailBase.isRailBlockAt(this.worldObj, j, i - 1, k))
+            if (BlockRailBase.isRailBlockAt(this.worldObj, j, i - 1, k))
             {
                 --i;
-            }*/
+            }
             if (BlockRailBase.func_150051_a(worldObj.getBlock(x,y -1,z)) || worldObj.getBlock(x, y - 1, z) == BlockIDs.tcRail.block || worldObj.getBlock(x, y - 1, z) == BlockIDs.tcRailGag.block) {
     			i--;
     			y--;
@@ -544,12 +548,12 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
                 this.rotationYaw = (float)(Math.atan2(d7, d6) * 180.0D / Math.PI);
 
 				//TODO Access Transformer for protected fields
-				/*
+
                 if (this.isInReverse)
                 {
                     this.rotationYaw += 180.0F;
                 }
-                */
+
             }
             double d8 = (double)MathHelper.wrapAngleTo180_float(this.rotationYaw - this.prevRotationYaw);
 
@@ -599,6 +603,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
             MinecraftForge.EVENT_BUS.post(new MinecartUpdateEvent(this, j, i, k));
         }
+	*/
         
        // System.out.println(this.entityMainTrainID);
         if (this instanceof EntityBogieUtility)

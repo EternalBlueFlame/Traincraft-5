@@ -33,6 +33,7 @@ import src.train.common.library.ItemIDs;
 import src.train.common.tile.TileTCRail;
 import src.train.common.tile.TileTCRailGag;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ItemRollingStock extends ItemMinecart implements IMinecart, IMinecartItem {
@@ -208,11 +209,12 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				rollingStock = (EntityRollingStock) train.getEntity(world, (float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F);
 		    
 				if(train.getColors()!=null){
-					rollingStock.setColor(rollingStock.getColorFromString(train.getColors()[0]));
+					System.out.println(rollingStock + ":::" + train + ":::" + Arrays.toString(train.getColors()));
+					rollingStock.setColor(AbstractTrains.getColorFromString(train.getColors()[0]));
 				}
 			}
 		}
-		if (rollingStock != null && rollingStock instanceof EntityRollingStock) {
+		if (rollingStock != null) {
 			if (!world.isRemote) {
 				
 				if((rollingStock instanceof SteamTrain && !ConfigHandler.ENABLE_STEAM) || (rollingStock instanceof ElectricTrain && !ConfigHandler.ENABLE_ELECTRIC) || (rollingStock instanceof DieselTrain && !ConfigHandler.ENABLE_DIESEL) || (rollingStock instanceof EntityTracksBuilder && !ConfigHandler.ENABLE_BUILDER) ||(rollingStock instanceof Tender && !ConfigHandler.ENABLE_TENDER)){
