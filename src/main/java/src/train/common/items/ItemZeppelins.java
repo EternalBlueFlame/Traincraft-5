@@ -22,10 +22,9 @@ import java.util.List;
 public class ItemZeppelins extends Item {
 	private int type;
 	public ItemZeppelins(int type) {
-		super();
-		maxStackSize = 5;
-		setCreativeTab(Traincraft.tcTab);
-		this.type=type;
+		this.setMaxStackSize(5);
+		this.setCreativeTab(Traincraft.tcTab);
+		this.type = type;
 	}
 
 	@Override

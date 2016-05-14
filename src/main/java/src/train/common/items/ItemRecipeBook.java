@@ -18,9 +18,8 @@ import java.util.List;
 public class ItemRecipeBook extends Item implements IBoxable {
 
 	public ItemRecipeBook() {
-		super();
-		maxStackSize = 1;
-		setCreativeTab(Traincraft.tcTab);
+		this.setMaxStackSize(1);
+		this.setCreativeTab(Traincraft.tcTab);
 	}
 
 	/**
@@ -65,12 +64,6 @@ public class ItemRecipeBook extends Item implements IBoxable {
 	@Override
 	public boolean getShareTag() {
 		return true;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":parts/item_book_blue");
 	}
 
 }

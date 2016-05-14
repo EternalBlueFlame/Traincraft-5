@@ -16,9 +16,4 @@ public class ItemTrain extends Item {
 		setCreativeTab(Traincraft.tcTab);
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":parts/" + ItemIDs.getIcon(Item.getIdFromItem(this)));
-	}
 }

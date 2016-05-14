@@ -15,10 +15,9 @@ import java.util.List;
 public class ItemChunkLoaderActivator extends Item implements IBoxable {
 
 	public ItemChunkLoaderActivator() {
-		super();
-		maxStackSize = 1;
-		setCreativeTab(Traincraft.tcTab);
-		setMaxDamage(10);
+		this.setMaxStackSize(1);
+		this.setCreativeTab(Traincraft.tcTab);
+		this.setMaxDamage(10);
 	}
 
 	@Override
@@ -26,11 +25,6 @@ public class ItemChunkLoaderActivator extends Item implements IBoxable {
 		return true;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":chunk_loader");
-	}
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {

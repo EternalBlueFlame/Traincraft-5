@@ -84,8 +84,9 @@ public class TCItems {
 	private static void nameItems() {
 		for (ItemIDs items : ItemIDs.values()) {
 			if (items.item != null) {
-				items.item.setUnlocalizedName(items.name());
-				GameRegistry.registerItem(items.item, Info.modID.toLowerCase() + ":" + items.name());
+				items.item.setUnlocalizedName(Info.modID + ":" + items.name());
+				items.item.setTextureName(Info.modID + ":" + items.iconName);
+				GameRegistry.registerItem(items.item, items.name());
 			}
 		}
 	}

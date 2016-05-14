@@ -29,22 +29,12 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
 	public ItemTCCompositeSuit(ArmorMaterial material, int par3, int par4, int color) {
 		super(material, par3, par4,color);
 		this.material = material;
-		setCreativeTab(Traincraft.tcTab);
+		this.setCreativeTab(Traincraft.tcTab);
 		this.color = color;
 		MinecraftForge.EVENT_BUS.register(this);
 		
 	}
-	/*@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer) {
-		if(stack.getItem() == ItemIDs.helmet_suit_paintable.item || stack.getItem() == ItemIDs.jacket_suit_paintable.item || stack.getItem() == ItemIDs.boots_suit_paintable.item){
-			return Info.resourceLocation+":"+Info.armorPrefix+"composite_suit_"+layer+".png";
-		}else if(stack.getItem() == ItemIDs.pants_suit_paintable.item){
-			return Info.resourceLocation+":"+Info.armorPrefix+"composite_suit_pants_"+layer+".png";	
-		}
-		else{
-			return "";
-		}
-	}*/
+
 	/**
      * Called by RenderBiped and RenderPlayer to determine the armor texture that 
      * should be use for the currently equiped item.
@@ -58,19 +48,25 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
      * @param type The subtype, can be null or "overlay"
      * @return Path of texture to bind, or null to use default
      */
+
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type){
 		if(stack.getItem() == ItemIDs.helmet_suit_paintable.item || stack.getItem() == ItemIDs.jacket_suit_paintable.item || stack.getItem() == ItemIDs.boots_suit_paintable.item){
-			if(type!=null)return Info.resourceLocation+":"+Info.armorPrefix+"composite_suit_"+2+".png";
-			return Info.resourceLocation+":"+Info.armorPrefix+"composite_suit_"+1+".png";
-		}else if(stack.getItem() == ItemIDs.pants_suit_paintable.item){
-			if(type!=null)return Info.resourceLocation+":"+Info.armorPrefix+"composite_suit_pants_"+2+".png";	
-			return Info.resourceLocation+":"+Info.armorPrefix+"composite_suit_pants_"+1+".png";	
+			if(type!=null){
+				return Info.resourceLocation + ":" + Info.armorPrefix + "composite_suit_" + 2 + ".png";
+			}
+			return Info.resourceLocation + ":" + Info.armorPrefix + "composite_suit_" + 1 + ".png";
+		} else if(stack.getItem() == ItemIDs.pants_suit_paintable.item){
+			if(type != null){
+				return Info.resourceLocation + ":" + Info.armorPrefix + "composite_suit_pants_" + 2 + ".png";
+			}
+			return Info.resourceLocation + ":" + Info.armorPrefix + "composite_suit_pants_" + 1 + ".png";
 		}
-		else{
-			return "";
+		else {
+			return super.getArmorTexture(stack, entity, slot, type);
 		}
 	}
+
 	/**
      * Return an item rarity from EnumRarity
      */
@@ -80,9 +76,9 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
     {
         return EnumRarity.epic;
     }
+
 	@Override
-	public void onArmorTick(World world, EntityPlayer player,
-			ItemStack stack) {
+	public void onArmorTick(World world, EntityPlayer player, ItemStack stack) {
 		super.onArmorTick(world, player, stack);
 		updateTicks++;
 		ItemStack armorHelmet = player.inventory.armorItemInSlot(3);

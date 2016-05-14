@@ -44,9 +44,9 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	public ItemRollingStock() {
 		super(1);
-		maxStackSize = 1;
-		trainName = this.getUnlocalizedName();
-		setCreativeTab(Traincraft.tcTab);
+		this.setMaxStackSize(1);
+		this.trainName = this.getUnlocalizedName();
+		this.setCreativeTab(Traincraft.tcTab);
 	}
 
 	public int setNewUniqueID(ItemStack stack, EntityPlayer player, int numberOfTrains) {
@@ -400,9 +400,4 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		return false;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":trains/" + ItemIDs.getIcon(Item.getIdFromItem(this)));
-	}
 }

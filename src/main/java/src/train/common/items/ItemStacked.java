@@ -15,8 +15,7 @@ import java.util.List;
 public class ItemStacked extends Item {
 
 	public ItemStacked(int maxUse) {
-		super();
-		maxStackSize = 1;
+		this.setMaxStackSize(1);
 		this.setMaxDamage(maxUse);
 		setCreativeTab(Traincraft.tcTab);
 	}
@@ -40,10 +39,5 @@ public class ItemStacked extends Item {
 		par3List.add("\u00a77" + "Sneak+Right click on a locomotive");
 		par3List.add("\u00a77" + " to set mode: 'Can pull/Can be pulled'");
 	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":parts/" + ItemIDs.getIcon(Item.getIdFromItem(this)));
-	}
+
 }

@@ -19,17 +19,10 @@ import java.util.List;
 public class ItemWrench extends Item implements IToolWrench{
 
 	public ItemWrench() {
-		super();
-		maxStackSize = 1;
-		setCreativeTab(Traincraft.tcTab);
+		this.setMaxStackSize(1);
+		this.setCreativeTab(Traincraft.tcTab);
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":parts/" + ItemIDs.getIcon(Item.getIdFromItem(this)));
-	}
-	
 	@Override
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		Block blockId = world.getBlock(x, y, z);
@@ -61,4 +54,5 @@ public class ItemWrench extends Item implements IToolWrench{
 	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
 		return true;
 	}
+
 }

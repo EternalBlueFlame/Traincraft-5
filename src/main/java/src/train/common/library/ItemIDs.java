@@ -60,7 +60,7 @@ public enum ItemIDs {
 	emptyCanister("ItemContainer", "item_canister", 40),
 	copperRail("ItemRail", "item_rail_copper", 1),
 	steelRail("ItemRail", "item_rail_steel", 1),
-	recipeBook("ItemRecipeBook", "", 1),
+	recipeBook("ItemRecipeBook", "item_book_blue", 1),
 
 	minecartWork("ItemRollingStock", "train_work", 4),
 	minecartTender("ItemRollingStock", "train_tender", 4),

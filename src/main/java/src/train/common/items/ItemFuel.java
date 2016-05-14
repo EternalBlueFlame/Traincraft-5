@@ -12,9 +12,8 @@ public class ItemFuel extends Item implements IBoxable {
 	private ArrayList<String[]> info;
 
 	public ItemFuel(ArrayList<String[]> list) {
-		super();
-		maxStackSize = 64;
-		setCreativeTab(Traincraft.tcTab);
+		this.setMaxStackSize(64);
+		this.setCreativeTab(Traincraft.tcTab);
 		this.info = list;
 	}
 

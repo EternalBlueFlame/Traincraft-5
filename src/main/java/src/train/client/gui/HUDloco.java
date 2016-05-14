@@ -26,6 +26,8 @@ public class HUDloco extends GuiScreen {
 	}
 
 	public void renderSkillHUD(Locomotive rcCar) {
+		//TODO rewrite with event GameOverlayEvent
+		/*
 		windowWidth = new ScaledResolution(game, game.displayWidth, game.displayHeight).getScaledWidth();
 		windowHeight = new ScaledResolution(game, game.displayWidth, game.displayHeight).getScaledHeight();
 		j = (windowWidth - sizeX) / 2;
@@ -34,6 +36,7 @@ public class HUDloco extends GuiScreen {
 		/**
 		 * Steam Train have water
 		 */
+		/*
 		if (rcCar instanceof SteamTrain) {
 			renderWaterBar(rcCar);
 		}
@@ -41,16 +44,19 @@ public class HUDloco extends GuiScreen {
 		/**
 		 * Some loco may not overheat in the future
 		 */
+		/*
 		if (rcCar.canOverheat()) {
 			renderOverheating(rcCar);
 		}
 		renderSpeedometer(rcCar);
 		renderFuelBar(rcCar);
 		renderText(rcCar);
+		*/
 	}
 
 	private void renderBG(Locomotive rcCar) {
-		GL11.glEnable(3042 /* GL_BLEND */);
+		/*
+		GL11.glEnable(3042);
 		GL11.glEnable(32826);
 		this.zLevel = -90.0F;
 		RenderHelper.enableStandardItemLighting();
@@ -67,7 +73,8 @@ public class HUDloco extends GuiScreen {
 
 		GL11.glDisable(32826);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-		GL11.glDisable(3042 /* GL_BLEND */);
+		GL11.glDisable(3042);
+		*/
 	}
 
 	private void renderText(Locomotive loco) {

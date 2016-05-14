@@ -112,15 +112,9 @@ public class ItemTCRail extends Item {
 
 	public ItemTCRail(TrackTypes t) {
 		super();
-		maxStackSize = 64;
-		setCreativeTab(Traincraft.tcTab);
+		this.setMaxStackSize(64);
+		this.setCreativeTab(Traincraft.tcTab);
 		this.type = t;
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":tracks/" + ItemIDs.getIcon(Item.getIdFromItem(this)));
 	}
 
 	private boolean canPlaceTrack(World world, int x, int y, int z) {

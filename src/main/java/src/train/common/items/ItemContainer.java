@@ -19,17 +19,10 @@ import src.train.common.library.ItemIDs;
 public class ItemContainer extends Item {
 
 	public ItemContainer() {
-		super();
-		maxStackSize = 64;
-		setCreativeTab(Traincraft.tcTab);
+		this.setMaxStackSize(64);
+		this.setCreativeTab(Traincraft.tcTab);
 	}
-	
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":parts/" + ItemIDs.getIcon(Item.getIdFromItem(this)));
-	}
-	
+
 	@Override
 	public Item getContainerItem() {
 		return ItemIDs.emptyCanister.item;
