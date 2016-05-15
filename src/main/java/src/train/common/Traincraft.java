@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
+import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import src.train.common.api.LiquidManager;
@@ -123,7 +124,8 @@ public class Traincraft {
 		EntityHandler.init();
 
 		AchievementHandler.load();
-		//TODO AchievementPage.registerAchievementPage(AchievementHandler.tmPage);
+		//TODO
+		//AchievementPage.registerAchievementPage(AchievementHandler.tmPage);
 
 		/* Check holidays */
 		proxy.isHoliday();

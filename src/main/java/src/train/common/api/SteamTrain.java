@@ -41,7 +41,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 
 	private SteamTrain(FluidStack liquid, int capacity, World world, FluidStack filter) {
 		super(world);
-		//this.liquid = liquid;
+		this.liquid = liquid;
 		this.maxTank = capacity;
 		if (filter == null)
 			this.theTank = LiquidManager.getInstance().new StandardTank(capacity);

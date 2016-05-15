@@ -7,3 +7,10 @@
 /Traincraft.iml
 /Traincraft.ipr
 /.idea
+asm
+config
+saves
+logs
+crash-reports
+usernamecache.json
+options.txt

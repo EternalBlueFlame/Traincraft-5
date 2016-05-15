@@ -18,10 +18,7 @@ import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import src.train.common.Traincraft;
-import src.train.common.core.handlers.ConfigHandler;
-import src.train.common.core.handlers.RollingStockStatsEventHandler;
-import src.train.common.core.handlers.TrainHandler;
-import src.train.common.core.handlers.TraincraftSaveHandler;
+import src.train.common.core.handlers.*;
 import src.train.common.items.ItemChunkLoaderActivator;
 import src.train.common.items.ItemRollingStock;
 import src.train.common.library.EnumTrains;
@@ -589,8 +586,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 	}
 
 	public void sendTrainLockedPacket(EntityPlayer entity, boolean locked) {
-		//TODO Packets
-		// PacketHandler.setTrainLocked(entity, this, locked);
+		PacketHandler.setTrainLocked(entity, this, locked);
 	}
 
 	/** Locking for passengers, flat, caboose, jukebox,workcart */

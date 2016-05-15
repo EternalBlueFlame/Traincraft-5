@@ -320,6 +320,163 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
     public void onUpdate()
     {
 		super.onUpdate();
+//if(side.isClient())System.out.println("client "+ posY);
+		//if(side.isServer())System.out.println("Bogie server "+ posY);
+		setCurrentCartSpeedCapOnRail(1.8F);
+		setMaxSpeedAirLateral(1.8F);
+
+
+		int i;
+
+		if (!this.worldObj.isRemote) {
+			this.prevPosX = this.posX;
+			this.prevPosY = this.posY;
+			this.prevPosZ = this.posZ;
+			int j = MathHelper.floor_double(this.posX);
+			i = MathHelper.floor_double(this.posY);
+			int k = MathHelper.floor_double(this.posZ);
+			int x = j;
+			int y = i;
+			int z = k;
+
+			if (BlockRailBase.func_150051_a(worldObj.getBlock(x, y - 1, z)) || worldObj.getBlock(x, y - 1, z) == BlockIDs.tcRail.block || worldObj.getBlock(x, y - 1, z) == BlockIDs.tcRailGag.block) {
+				i--;
+				y--;
+			}
+
+			double d4 = 0.4D;
+			double d5 = 0.0078125D;
+			Block l = this.worldObj.getBlock(j, i, k);
+
+			if (l == BlockIDs.tcRail.block) {
+				//applyDragAndPushForces();
+				limitSpeedOnTCRail(x, y, z);
+				if (worldObj.getTileEntity(x, y, z) == null || !(worldObj.getTileEntity(x, y, z) instanceof TileTCRail))
+					return;
+				TileTCRail tile = (TileTCRail) worldObj.getTileEntity(x, y, z);
+				//System.out.println(tile.getType());
+				if (ItemTCRail.isTCTurnTrack(tile)) {
+					double r = tile.r;
+					double cx = tile.cx;
+					double cy = tile.cy;
+					double cz = tile.cz;
+					int meta = tile.getBlockMetadata();
+					shouldIgnoreSwitch(tile, x, y, z, meta);
+					moveOnTC90TurnRail(x, y, z, r, cx, cy, cz, tile.getType(), meta);
+				}
+				if (ItemTCRail.isTCStraightTrack(tile)) {
+					int meta = tile.getBlockMetadata();
+					double cx = tile.xCoord;
+					double cy = tile.yCoord;
+					double cz = tile.zCoord;
+					moveOnTCStraight(x, y, z, cx, cy, cz, meta);
+				}
+				if (ItemTCRail.isTCTwoWaysCrossingTrack(tile)) {
+					int meta = tile.getBlockMetadata();
+					double cx = tile.xCoord;
+					double cy = tile.yCoord;
+					double cz = tile.zCoord;
+					moveOnTCTwoWaysCrossing(x, y, z, cx, cy, cz, meta);
+				}
+				if (ItemTCRail.isTCSlopeTrack(tile)) {
+					int meta = tile.getBlockMetadata();
+					double cx = tile.xCoord;
+					double cy = tile.yCoord;
+					double cz = tile.zCoord;
+					double slopeAngle = tile.slopeAngle;
+					double slopeHeight = tile.slopeHeight;
+					double slopeLength = tile.slopeLength;
+					moveOnTCSlope(x, y, z, cx, cy, cz, slopeAngle, slopeHeight, slopeLength, meta);
+				}
+
+			} else if (l == BlockIDs.tcRailGag.block) {
+				//applyDragAndPushForces();
+				limitSpeedOnTCRail(x, y, z);
+				if (worldObj.getTileEntity(x, y, z) == null || !(worldObj.getTileEntity(x, y, z) instanceof TileTCRailGag))
+					return;
+				TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(x, y, z);
+				TileTCRail tile = (TileTCRail) worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
+				//System.out.println(tile.getType());
+				if (ItemTCRail.isTCTurnTrack(tile)) {
+					double r = tile.r;
+					double cx = tile.cx;
+					double cy = tile.cy;
+					double cz = tile.cz;
+					int meta = tile.getBlockMetadata();
+					moveOnTC90TurnRail(x, y, z, r, cx, cy, cz, tile.getType(), meta);
+				}
+				if (ItemTCRail.isTCStraightTrack(tile)) {
+					int meta = tile.getBlockMetadata();
+					double cx = tile.xCoord;
+					double cy = tile.yCoord;
+					double cz = tile.zCoord;
+					moveOnTCStraight(x, y, z, cx, cy, cz, meta);
+				}
+				if (ItemTCRail.isTCSlopeTrack(tile)) {
+					int meta = tile.getBlockMetadata();
+					double cx = tile.xCoord;
+					double cy = tile.yCoord;
+					double cz = tile.zCoord;
+					double slopeAngle = tile.slopeAngle;
+					double slopeHeight = tile.slopeHeight;
+					double slopeLength = tile.slopeLength;
+					moveOnTCSlope(x, y, z, cx, cy, cz, slopeAngle, slopeHeight, slopeLength, meta);
+				}
+			}else if (BlockRailBase.func_150051_a(l)){
+				//case for if tile is basegame/railcraft track, needs to be fixed
+
+				//applyDragAndPushForces();
+				limitSpeedOnTCRail(x, y, z);
+				TileEntity tile = worldObj.getTileEntity(x, y, z);
+				//System.out.println(tile.getType());
+				if (tile is turn track) {
+					double r = tile.r;
+					double cx = tile.cx;
+					double cy = tile.cy;
+					double cz = tile.cz;
+					int meta = tile.getBlockMetadata();
+					shouldIgnoreSwitch(tile, x, y, z, meta);
+					moveOnTC90TurnRail(x, y, z, r, cx, cy, cz, tile.getType(), meta);
+				}
+				if (tile is straight track) {
+					int meta = tile.getBlockMetadata();
+					double cx = tile.xCoord;
+					double cy = tile.yCoord;
+					double cz = tile.zCoord;
+					moveOnTCStraight(x, y, z, cx, cy, cz, meta);
+				}
+				if (tile is rail intersection) {
+					int meta = tile.getBlockMetadata();
+					double cx = tile.xCoord;
+					double cy = tile.yCoord;
+					double cz = tile.zCoord;
+					moveOnTCTwoWaysCrossing(x, y, z, cx, cy, cz, meta);
+				}
+				if (tile is slope track) {
+					int meta = tile.getBlockMetadata();
+					double cx = tile.xCoord;
+					double cy = tile.yCoord;
+					double cz = tile.zCoord;
+					double slopeAngle = tile.slopeAngle;
+					double slopeHeight = tile.slopeHeight;
+					double slopeLength = tile.slopeLength;
+					moveOnTCSlope(x, y, z, cx, cy, cz, slopeAngle, slopeHeight, slopeLength, meta);
+				}
+
+			}
+
+			this.func_145775_I();
+			this.rotationPitch = 0.0F;
+			double d6 = this.prevPosX - this.posX;
+			double d7 = this.prevPosZ - this.posZ;
+		}
+
+
+
+
+
+
+
        // System.out.println(this.entityMainTrainID);
         if (this instanceof EntityBogieUtility)
 			return;
@@ -328,26 +485,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			//if(updateTicks%20==0)System.out.println(this);
 			if (this.entityMainTrain == null) {
 				this.setDead();
-				/*AxisAlignedBB box2 = null;
-				box2 = boundingBox.expand(20, 20, 20);
-				List lis = worldObj.getEntitiesWithinAABBExcludingEntity(this, box2);
-
-				if (lis != null && lis.size() > 0) {
-
-					for (int j1 = 0; j1 < lis.size(); j1++) {
-						Entity entity = (Entity) lis.get(j1);
-						if (entity instanceof AbstractTrains) {
-							//System.out.println(entityMainTrainID+ " "+ ((AbstractTrains) entity).getID());
-							if (((AbstractTrains) entity).uniqueID == this.entityMainTrainID) {
-								entityMainTrain = (EntityRollingStock) entity;
-								entityMainTrain.bogieLoco[bogieIndex] = this;
-							}
-						}
-					}
-				}
-				if (entityMainTrain == null && updateTicks > 200) {
-					this.setDead();
-				}*/
 			}
 
 			AxisAlignedBB box;// = AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 0.0D, 0.0D);

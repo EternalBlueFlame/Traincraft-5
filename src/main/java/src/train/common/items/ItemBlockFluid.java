@@ -30,20 +30,6 @@ public class ItemBlockFluid extends ItemBlock {
 		this.fluid = (BlockTraincraftFluid) fluid;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister icon) {
-		String s = ((Block) fluid).getItemIconName();
-		if (s != null) {
-			this.icon = icon.registerIcon(s);
-		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public CreativeTabs getCreativeTab() {
-		return ((Block) fluid).getCreativeTabToDisplayOn();
-	}
 
 	@Override
 	public String getUnlocalizedName(ItemStack par1ItemStack) {
