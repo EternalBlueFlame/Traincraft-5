@@ -1,16 +1,22 @@
-/build
-/Traincraft.iws
-/out
-/.gradle
-/run
-/eclipse
-/Traincraft.iml
-/Traincraft.ipr
-/.idea
-asm
-config
-saves
-logs
-crash-reports
-usernamecache.json
-options.txt
+# eclipse
+bin
+*.launch
+.settings
+.metadata
+.classpath
+.project
+
+# idea
+out
+*.ipr
+*.iws
+*.iml
+.idea
+
+# gradle
+build
+.gradle
+
+# other
+eclipse
+run
