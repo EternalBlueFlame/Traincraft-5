@@ -11,14 +11,10 @@ import src.train.common.api.LiquidManager.StandardTank;
 public abstract class Tender extends Freight implements IFluidHandler {
 
 	public ItemStack tenderItems[];
-	public int liquidId = 0;
-	public int fuelSlot = 1;
-	public int waterSlot = 1;
 	private int maxTank;
 	private int update = 8;
 	private StandardTank theTank;
 	private IFluidTank[] tankArray = new IFluidTank[1];
-	private FluidStack liquid;
 
 	/**
 	 * 
@@ -27,25 +23,24 @@ public abstract class Tender extends Freight implements IFluidHandler {
 	 * @param quantity
 	 * @param capacity
 	 */
-	public Tender(World world, int liquidId, int quantity, int capacity) {
-		this(new FluidStack(liquidId, quantity), capacity, world, null);
+	public Tender(World world, int capacity) {
+		this(capacity, world, null);
 	}
 
-	public Tender(World world, int liquidId, int quantity, int capacity, FluidStack filter) {
-		this(new FluidStack(liquidId, quantity), capacity, world, filter);
+	public Tender(World world, int capacity, FluidStack filter) {
+		this(capacity, world, filter);
 	}
 
-	private Tender(FluidStack liquid, int capacity, World world, FluidStack filter) {
+	private Tender(int capacity, World world, FluidStack filter) {
 		super(world);
-		this.liquid = liquid;
 		this.maxTank = capacity;
 		if (filter == null)
 			this.theTank = LiquidManager.getInstance().new StandardTank(capacity);
 		if (filter != null)
 			this.theTank = LiquidManager.getInstance().new FilteredTank(capacity, filter);
 		tankArray[0] = theTank;
-		dataWatcher.addObject(4, new Integer(0));
-		this.dataWatcher.addObject(23, new Integer(0));
+		dataWatcher.addObject(4, 0);
+		this.dataWatcher.addObject(23, 0);
 	}
 	@Override
 	public abstract int getSizeInventory();
@@ -213,18 +208,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
 			itemstack.stackSize = getInventoryStackLimit();
 		}
 	}
-	
-	public void setLiquid(FluidStack liquid) {
-		this.liquid = liquid;
-	}
 
-	public void setCapacity(int capacity) {
-		this.maxTank = capacity;
-	}
-
-	public int getCapacity() {
-		return this.maxTank;
-	}
 	@Override
     public int fill(ForgeDirection from, FluidStack resource, boolean doFill)
     {
@@ -270,8 +254,4 @@ public abstract class Tender extends Freight implements IFluidHandler {
         return theTank.getFluid();
     }
 
-    public int getFluidAmount()
-    {
-        return theTank.getFluidAmount();
-    }
 }

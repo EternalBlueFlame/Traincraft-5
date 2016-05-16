@@ -488,6 +488,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		return (this.dataWatcher.getWatchableObjectInt(27));
 	}
 
+
+	//TODO May delete this because its never used
 	public boolean isBlockInteresting(ItemStack i) {
 		Item blockNow = i.getItem();
 		boolean is = false;
@@ -614,6 +616,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	/**
 	 * Is the block in the inventory autorized to be put down? This doesn't seem to work properly, So I had another system going
 	 */
+	//TODO delete because its unused?
 	private boolean isAutorizedBlock(int i) {
 		boolean is = false;
 		if ((!UnAuthorizedBlock(i))) {
@@ -622,11 +625,13 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		return is;
 	}
 
+	//TODO delete because its unused?
 	/* Is it a cable from industrial craft 2? */
 	private boolean isCableOrPipe(ItemStack i) {
 		return Item.getIdFromItem(i.getItem()) == Item.getIdFromItem(PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[45]).getItem()) || Item.getIdFromItem(i.getItem()) == Item.getIdFromItem(PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[33]).getItem()) || Item.getIdFromItem(i.getItem()) == Item.getIdFromItem(PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[36]).getItem()) || Item.getIdFromItem(i.getItem()) == Item.getIdFromItem(PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[35]).getItem()) || Item.getIdFromItem(i.getItem()) == Item.getIdFromItem(PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[37]).getItem()) || Item.getIdFromItem(i.getItem()) == Item.getIdFromItem(PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[38]).getItem()) || Item.getIdFromItem(i.getItem()) == Item.getIdFromItem(PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[39]).getItem()) || Item.getIdFromItem(i.getItem()) == Item.getIdFromItem(PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[40]).getItem()) || Item.getIdFromItem(i.getItem()) == Item.getIdFromItem(PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[41]).getItem()) || Item.getIdFromItem(i.getItem()) == Item.getIdFromItem(PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[42]).getItem()) || Item.getIdFromItem(i.getItem()) == Item.getIdFromItem(PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[43]).getItem()) || i.getItem().getClass().getSimpleName().equals("ItemPipe");
 	}
 
+	//TODO delete because its unused?
 	private boolean isOverheadLine(int i) {
 		/* if(InitOverheadLine.lineItem==null){ return false; } return i==InitOverheadLine.lineItem.itemID; */
 		return false;
@@ -845,6 +850,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		return 1;
 	}
 
+	//TODO Delete this Method because its never used?
 	public boolean noRoof(int i) {
 		return i == 0 || i == 6 || i == 18 || i == 23 || i == 25 || i == 26 || i == 27 || i == 28 || i == 29 || i == 35 || i == 41 || i == 46 || i == 52 || i == 54 || i == 55 || i == 53 || i == 61 || i == 62 || i == 58 || i == 64 || i == 65 || i == 66 || i == 75 || i == 76 || i == 78 || i == 81 || i == 83 || i == 84 || i == 85 || i == 93 || i == 94 || i == 95 || i == 96 || i == 101 || i == 106 || i == 107 || i == 111 || i == 115 || i == 116 || i == 117 || i == 118 || i == 122 || i == Block.getIdFromBlock(Block.getBlockFromName("wood")) || BuilderOreHandler.isOre(i);
 	}

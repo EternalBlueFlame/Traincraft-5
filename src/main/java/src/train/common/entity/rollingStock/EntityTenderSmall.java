@@ -21,7 +21,7 @@ public class EntityTenderSmall extends Tender implements IInventory {
 	EntityPlayer playerEntity;
 
 	public EntityTenderSmall(World world) {
-		super(world, 0, 0, EnumTrains.tenderSmall.getTankCapacity(), LiquidManager.WATER_FILTER);
+		super(world, EnumTrains.tenderSmall.getTankCapacity(), LiquidManager.WATER_FILTER);
 		initFreightTender();
 	}
 
@@ -135,8 +135,7 @@ public class EntityTenderSmall extends Tender implements IInventory {
 	}
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
-		float dist = 0.8F;
-		return dist;
+		return 0.8F;
 	}
 
 	@Override

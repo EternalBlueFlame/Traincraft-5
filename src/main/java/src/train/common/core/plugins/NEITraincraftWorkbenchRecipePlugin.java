@@ -9,6 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.ShapedRecipes;
 import net.minecraftforge.oredict.OreDictionary;
 import src.train.client.gui.GuiTrainCraftingBlock;
+import src.train.common.core.handlers.OreHandler;
 import src.train.common.inventory.TrainCraftingManager;
 import src.train.common.recipes.ShapedTrainRecipes;
 import src.train.common.recipes.ShapelessTrainRecipe;
@@ -98,9 +99,9 @@ public class NEITraincraftWorkbenchRecipePlugin extends ShapedRecipeHandler {
 			cycleTicks++;
 			for (int itemIndex = 0; itemIndex < ingredients.size(); itemIndex++) {
 
-				String oreName = OreDictionary.getOreName(OreDictionary.getOreID(ingredients.get(itemIndex).item));
+				String oreName = OreHandler.getFirstOreDictEntry(ingredients.get(itemIndex).item);
 				if (oreName.equals("ingotSteel") || oreName.equals("ingotIron") || oreName.equals("ingotCopper") || oreName.equals("dustPlastic") || oreName.equals("dustCoal")) {
-					ArrayList list = OreDictionary.getOres(OreDictionary.getOreName(OreDictionary.getOreID(ingredients.get(itemIndex).item)));
+					ArrayList list = OreDictionary.getOres(oreName);
 					Random rand = new Random(cycle + System.currentTimeMillis());
 					if (cycleTicks % 15 == 0) {
 						int stackSize = ingredients.get(itemIndex).item.stackSize;

@@ -172,7 +172,7 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 					currentItemBurnTime = furnaceBurnTime = getItemBurnTime(furnaceItemStacks[2]);
 					if (furnaceBurnTime > 0) {
 						flag1 = true;
-						if (furnaceItemStacks[2].getItem().hasContainerItem()) {
+						if (furnaceItemStacks[2].getItem().getContainerItem() != null) {
 							furnaceItemStacks[2] = new ItemStack(furnaceItemStacks[2].getItem().getContainerItem());
 						}
 						else {
@@ -267,7 +267,7 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 			furnaceItemStacks[3].stackSize += itemstack.stackSize;
 
 		}
-		if (furnaceItemStacks[0].getItem().hasContainerItem()) {
+		if (furnaceItemStacks[0].getItem().getContainerItem() != null) {
 			furnaceItemStacks[0] = new ItemStack(furnaceItemStacks[0].getItem().getContainerItem());
 		}
 		else {
@@ -277,7 +277,7 @@ public class TileEntityOpenHearthFurnace extends TileEntity implements IInventor
 			furnaceItemStacks[0] = null;
 		}
 
-		if (furnaceItemStacks[1].getItem().hasContainerItem()) {
+		if (furnaceItemStacks[1].getItem().getContainerItem() != null) {
 			furnaceItemStacks[1] = new ItemStack(furnaceItemStacks[1].getItem().getContainerItem());
 		}
 		else {

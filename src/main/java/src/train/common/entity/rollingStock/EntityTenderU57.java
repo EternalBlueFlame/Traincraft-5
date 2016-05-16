@@ -14,12 +14,13 @@ import src.train.common.api.LiquidManager;
 import src.train.common.api.Tender;
 import src.train.common.library.GuiIDs;
 
+//TODO An unimplemented cart
 public class EntityTenderU57 extends Tender implements IInventory {
 	public int freightInventorySize;
 	public int numFreightSlots;
 
 	public EntityTenderU57(World world) {
-		super(world, 0, 0, 10000 /*EnumTrains..getTankCapacity()*/, LiquidManager.WATER_FILTER);
+		super(world, 10000 /*EnumTrains..getTankCapacity()*/, LiquidManager.WATER_FILTER);
 		initFreightTender();
 	}
 
@@ -135,8 +136,7 @@ public class EntityTenderU57 extends Tender implements IInventory {
 
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
-		float dist = 1.85F;
-		return dist;
+		return 1.85F;
 	}
 
 	@Override

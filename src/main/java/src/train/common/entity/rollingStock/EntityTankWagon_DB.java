@@ -18,7 +18,7 @@ public class EntityTankWagon_DB extends LiquidTank {
 	public int freightInventorySize;
 
 	public EntityTankWagon_DB(World world) {
-		super(world, 0, 0, EnumTrains.tankWagon_DB.getTankCapacity(), LiquidManager.LAVA_FILTER, true);
+		super(world, EnumTrains.tankWagon_DB.getTankCapacity(), LiquidManager.LAVA_FILTER, true);
 		initFreightWater();
 	}
 
@@ -129,10 +129,7 @@ public class EntityTankWagon_DB extends LiquidTank {
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		if (isDead) {
-			return false;
-		}
-		return entityplayer.getDistanceSqToEntity(this) <= 64D;
+		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
 	}
 	
 	@Override
@@ -142,7 +139,6 @@ public class EntityTankWagon_DB extends LiquidTank {
 	
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
-		float dist = 1.84F;
-		return dist;
+		return 1.84F;
 	}
 }

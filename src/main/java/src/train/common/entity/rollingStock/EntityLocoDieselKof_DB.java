@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import src.train.common.Traincraft;
+import src.train.common.api.AbstractTrains;
 import src.train.common.api.DieselTrain;
 import src.train.common.api.LiquidManager;
 import src.train.common.library.EnumTrains;
@@ -16,18 +17,18 @@ import src.train.common.library.GuiIDs;
 
 public class EntityLocoDieselKof_DB extends DieselTrain {
 	public EntityLocoDieselKof_DB(World world) {
-		super(world, 0, 0, EnumTrains.locoDieselKOF.getTankCapacity(), LiquidManager.getInstance().dieselFilter());
+		super(world, EnumTrains.locoDieselKOF.getTankCapacity(), LiquidManager.getInstance().dieselFilter());
 		initLoco();
 	}
 
 	public void initLoco() {
 		fuelTrain = 0;
 		locoInvent = new ItemStack[inventorySize];
-		this.acceptedColors.add(this.getColorFromString("Red"));
-		this.acceptedColors.add(this.getColorFromString("Green"));
-		this.acceptedColors.add(this.getColorFromString("Yellow"));
-		this.acceptedColors.add(this.getColorFromString("Black"));
-		this.acceptedColors.add(this.getColorFromString("Blue"));
+		this.acceptedColors.add(getColorFromString("Red"));
+		this.acceptedColors.add(getColorFromString("Green"));
+		this.acceptedColors.add(getColorFromString("Yellow"));
+		this.acceptedColors.add(getColorFromString("Black"));
+		this.acceptedColors.add(getColorFromString("Blue"));
 	}
 
 	public EntityLocoDieselKof_DB(World world, double d, double d1, double d2) {
@@ -149,17 +150,14 @@ public class EntityLocoDieselKof_DB extends DieselTrain {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}
-			if (!worldObj.isRemote) {
-				entityplayer.mountEntity(this);
-			}
+			entityplayer.mountEntity(this);
 		}
 		return true;
 	}
 
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
-		float dist = 0.6F;
-		return (dist);
+		return 0.6F;
 	}
 
 	@Override

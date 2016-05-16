@@ -11,7 +11,6 @@ import net.minecraftforge.fluids.*;
 import src.train.common.api.LiquidManager.StandardTank;
 
 public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISidedInventory {
-	private FluidStack liquid;
 	private int capacity;
 	protected ItemStack cargoItems[];
 	private int update = 8;
@@ -25,21 +24,20 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
 	 * @param quantity
 	 * @param capacity
 	 */
-	public LiquidTank(World world, int liquidId, int quantity, int capacity) {
-		this(new FluidStack(liquidId, quantity), capacity, world, null, false);
+	public LiquidTank(World world, int capacity) {
+		this(capacity, world, null, false);
 	}
 
-	public LiquidTank(World world, int liquidId, int quantity, int capacity, FluidStack filter) {
-		this(new FluidStack(liquidId, quantity), capacity, world, filter, false);
+	public LiquidTank(World world, int capacity, FluidStack filter) {
+		this(capacity, world, filter, false);
 	}
 	
-	public LiquidTank(World world, int liquidId, int quantity, int capacity, FluidStack filter, boolean reverseSort) {
-		this(new FluidStack(liquidId, quantity), capacity, world, filter, reverseSort);
+	public LiquidTank(World world, int capacity, FluidStack filter, boolean reverseSort) {
+		this(capacity, world, filter, reverseSort);
 	}
 
-	private LiquidTank(FluidStack liquid, int capacity, World world, FluidStack filter, boolean reverseSort) {
+	private LiquidTank(int capacity, World world, FluidStack filter, boolean reverseSort) {
 		super(world);
-		this.liquid = liquid;
 		this.capacity = capacity;
 		if(filter == null)
 			this.theTank = LiquidManager.getInstance().new StandardTank(capacity);
@@ -48,17 +46,13 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
 		if(filter != null && reverseSort)
 			this.theTank = LiquidManager.getInstance().new ReverseFilteredTank(capacity, filter);
 		tankArray[0] = theTank;
-		dataWatcher.addObject(4, new Integer(0));
-		dataWatcher.addObject(22, new String(""));
+		dataWatcher.addObject(4, 0);
+		dataWatcher.addObject(22, "");
 
 	}
 
 	public int getAmount() {
 		return (this.dataWatcher.getWatchableObjectInt(18));
-	}
-
-	public int getLiquidItemID() {
-		return (this.dataWatcher.getWatchableObjectInt(4));
 	}
 
 	public String getLiquidName() {
@@ -122,14 +116,14 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
 				result = LiquidManager.getInstance().processContainer(this, 0, theTank, itemstack, 0);
 			}
 			else if(emptyItem != null) {
-				if(cargoItems[1] != null && emptyItem.getItem() == cargoItems[1].getItem()) {
+				if(emptyItem.getItem() == cargoItems[1].getItem()) {
     				if(cargoItems[1].stackSize+1 < cargoItems[1].getMaxStackSize()) {
     					result = LiquidManager.getInstance().processContainer(this, 0, theTank, itemstack, 0);
     				}
 				}
 			}
 			else {
-				if(cargoItems[1] != null && itemstack.getItem() == cargoItems[1].getItem()) {
+				if(itemstack.getItem() == cargoItems[1].getItem()) {
     				if(cargoItems[1].stackSize+1 <= cargoItems[1].getMaxStackSize()) {
     					result = LiquidManager.getInstance().processContainer(this, 0, theTank, itemstack, 0);
     				}
@@ -146,14 +140,6 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
 			}
 		}
 		return itemstack;
-	}
-
-	public void setLiquid(FluidStack liquid) {
-		this.liquid = liquid;
-	}
-
-	public void setCapacity(int capacity) {
-		this.capacity = capacity;
 	}
 
 	public int getCapacity() {
@@ -338,10 +324,6 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
 
 	public FluidStack getFluid() {
 		return theTank.getFluid();
-	}
-
-	public int getFluidAmount() {
-		return theTank.getFluidAmount();
 	}
 
 	@Override

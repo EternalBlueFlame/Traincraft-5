@@ -9,6 +9,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import src.train.common.Traincraft;
+import src.train.common.api.AbstractTrains;
 import src.train.common.api.LiquidManager;
 import src.train.common.api.LiquidTank;
 import src.train.common.library.EnumTrains;
@@ -18,7 +19,7 @@ public class EntityTankLava extends LiquidTank {
 	public int freightInventorySize;
 
 	public EntityTankLava(World world) {
-		super(world, 0, 0, EnumTrains.tankCartLava.getTankCapacity(), LiquidManager.LAVA_FILTER);
+		super(world, EnumTrains.tankCartLava.getTankCapacity(), LiquidManager.LAVA_FILTER);
 		initFreightWater();
 	}
 
@@ -76,9 +77,9 @@ public class EntityTankLava extends LiquidTank {
 		if (worldObj.isRemote)
 			return;
 		if (getAmount() > 0)
-			setColor(this.getColorFromString("Full"));
+			setColor(getColorFromString("Full"));
 		if (getAmount() <= 0)
-			setColor(this.getColorFromString("Empty"));
+			setColor(getColorFromString("Empty"));
 	}
 	
 	@Override
@@ -139,7 +140,6 @@ public class EntityTankLava extends LiquidTank {
 
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
-		float dist = 1.85F;
-		return dist;
+		return 1.85F;
 	}
 }
