@@ -86,7 +86,7 @@ public class TCItems {
 	private static void nameItems() {
 		for (ItemIDs items : ItemIDs.values()) {
 			if (items.item != null) {
-				items.item.setUnlocalizedName(Info.modID + ":" + items.name());
+				items.item.setUnlocalizedName(items.name());
 				GameRegistry.registerItem(items.item, items.name());
 			}
 		}
