@@ -18,7 +18,7 @@ public class TCItems {
 
 	public static void init() {
 		loadItems();
-		nameItems();
+		registerItems();
 	}
 
 	private static void loadItems() {
@@ -82,8 +82,8 @@ public class TCItems {
 		ItemIDs.tcRailLargeSlopeBallast.item = new ItemTCRail(ItemTCRail.TrackTypes.LARGE_SLOPE_BALLAST);
 		
 	}
-
-	private static void nameItems() {
+	
+	private static void registerItems() {
 		for (ItemIDs items : ItemIDs.values()) {
 			if (items.item != null) {
 				items.item.setUnlocalizedName(Info.modID + ":" + items.name());
