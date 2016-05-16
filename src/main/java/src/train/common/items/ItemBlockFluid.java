@@ -15,7 +15,27 @@ import java.util.List;
 
 public class ItemBlockFluid extends ItemBlock {
 
+	private BlockTraincraftFluid fluid;
+	private int id;
+
 	public ItemBlockFluid(Block block) {
 		super(block);
 	}
+
+	public ItemBlockFluid(Block id, Block fluid) {
+		super(id);
+		this.id = Block.getIdFromBlock(id);
+		this.fluid = (BlockTraincraftFluid) fluid;
+		}
+
+	@Override
+	public String getUnlocalizedName(ItemStack par1ItemStack) {
+		return ((Block) fluid).getUnlocalizedName();
+	}
+
+	@Override
+	public String getUnlocalizedName() {
+		return ((Block) fluid).getUnlocalizedName();
+		}
+
 }
