@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013 Mrbrutal. All rights reserved.
- *
+ * 
  * @name Traincraft
  * @author Mrbrutal
  ******************************************************************************/
@@ -123,7 +123,10 @@ public class ItemHandler {
 		}
 		if (entity instanceof EntityFreightGrain) {
 			int id = Item.getIdFromItem(itemstack.getItem());
-			if (id == Item.getIdFromItem(Items.wheat) || id == Item.getIdFromItem(Items.wheat_seeds) || id == Item.getIdFromItem(Items.melon_seeds) || id == Item.getIdFromItem(Items.pumpkin_seeds)) {
+			if (id == Item.getIdFromItem(Items.wheat)
+					|| id == Item.getIdFromItem(Items.wheat_seeds)
+					|| id == Item.getIdFromItem(Items.melon_seeds)
+					|| id == Item.getIdFromItem(Items.pumpkin_seeds)) {
 				return true;
 			}
 			return cropStuff(itemstack);
@@ -132,10 +135,19 @@ public class ItemHandler {
 			return block !=null && !woodStuff(itemstack);
 		}
 		if (entity instanceof EntityFreightMinetrain) {
+
 			if (block != null) {
+
 				return block.isOpaqueCube();
-			} else {
+			}
+			else {
+
+				// TODO: Why there is this? NOTE: This wouldn't have been
+				// deadcode because the blocks nullness wasn't checked
+				// TODO NOTE #2: This IS dead code; the method called to return the given field "block" will ALWAYS return some sort of Block instance, be it "Block.air". The check that probably should be done here is likely not a null check, but probably rather a check on the TYPE of block.
+
 				if (itemstack.getItem().isDamaged(itemstack)) {
+
 					return false;
 				}
 			}
@@ -173,7 +185,7 @@ public class ItemHandler {
 
 	private static boolean cropStuff(ItemStack itemstack) {
 		String[] names = new String[] { "cropCorn", "cropHops", "cropRice",
-				"seedCorn" };
+		"seedCorn" };
 		for (String name: names) {
 			if (isDict(name, itemstack)) {
 				return true;
