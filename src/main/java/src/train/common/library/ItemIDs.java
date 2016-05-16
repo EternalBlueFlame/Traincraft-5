@@ -210,12 +210,4 @@ public enum ItemIDs {
 		this.amountForEmerald = amountForEmerald;
 	}
 
-	public static String getIcon(int itemIDs) {
-		for (ItemIDs itemID : ItemIDs.values()) {
-			if (itemIDs == itemID.itemID + 256) {
-				return itemID.iconName;
-			}
-		}
-		return "";
-	}
 }

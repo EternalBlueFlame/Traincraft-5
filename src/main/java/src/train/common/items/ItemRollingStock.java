@@ -37,13 +37,15 @@ import java.util.List;
 
 public class ItemRollingStock extends ItemMinecart implements IMinecart, IMinecartItem {
 
+	private String iconName = "";
 	private String trainName;
 	private String trainCreator;
 	private int trainColor = -1;
 	private RollingStockStatsEventHandler statsEvent = new RollingStockStatsEventHandler();
 
-	public ItemRollingStock() {
+	public ItemRollingStock(String iconName) {
 		super(1);
+		this.iconName = iconName;
 		maxStackSize = 1;
 		trainName = this.getUnlocalizedName();
 		setCreativeTab(Traincraft.tcTab);
@@ -206,9 +208,10 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		for(EnumTrains train : EnumTrains.values()){
 			if(train.getItem() == itemstack.getItem()){
 				rollingStock = (EntityRollingStock) train.getEntity(world, (float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F);
-
 				if(train.getColors()!=null){
-					rollingStock.setColor(rollingStock.getColorFromString(train.getColors()[0]));
+					if(rollingStock != null){
+						rollingStock.setColor(AbstractTrains.getColorFromString(train.getColors()[0]));
+					}
 				}
 			}
 		}
@@ -403,6 +406,6 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":trains/" + ItemIDs.getIcon(Item.getIdFromItem(this)));
+		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":trains/" + this.iconName);
 	}
 }

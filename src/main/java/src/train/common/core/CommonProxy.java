@@ -57,7 +57,7 @@ public class CommonProxy implements IGuiHandler {
 
 	}
 
-	private void registerEvent(Object o){
+	public void registerEvent(Object o){
 		FMLCommonHandler.instance().bus().register(o);
 		MinecraftForge.EVENT_BUS.register(o);
 	}
