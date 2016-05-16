@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2013 Mrbrutal. All rights reserved.
- * 
+ *
  * @name Traincraft
  * @author Mrbrutal
  ******************************************************************************/
@@ -90,9 +90,7 @@ public class ItemHandler {
 		}
 		if (entity instanceof EntityFreightCartUS) {
 			if (!woodStuff(itemstack)) {
-				// TODO: Why there is this check? Did they though it could be
-				// item?
-				if (block instanceof Block) {
+				if (block !=null) {
 					return true;
 				}
 			}
@@ -109,9 +107,7 @@ public class ItemHandler {
 		}
 		if (entity instanceof EntityFreightClosed) {
 			if (!woodStuff(itemstack)) {
-				// TODO: Why there is this check? Did they though it could be
-				// item?
-				if (block instanceof Block) {
+				if (block !=null) {
 					return true;
 				}
 			}
@@ -119,9 +115,7 @@ public class ItemHandler {
 		}
 		if (entity instanceof EntityFreightGondola_DB) {
 			if (!woodStuff(itemstack)) {
-				// TODO: Why there is this check? Did they though it could be
-				// item?
-				if (block instanceof Block) {
+				if (block !=null) {
 					return true;
 				}
 			}
@@ -129,24 +123,18 @@ public class ItemHandler {
 		}
 		if (entity instanceof EntityFreightGrain) {
 			int id = Item.getIdFromItem(itemstack.getItem());
-			if (id == Item.getIdFromItem(Items.wheat)
-					|| id == Item.getIdFromItem(Items.wheat_seeds)
-					|| id == Item.getIdFromItem(Items.melon_seeds)
-					|| id == Item.getIdFromItem(Items.pumpkin_seeds)) {
+			if (id == Item.getIdFromItem(Items.wheat) || id == Item.getIdFromItem(Items.wheat_seeds) || id == Item.getIdFromItem(Items.melon_seeds) || id == Item.getIdFromItem(Items.pumpkin_seeds)) {
 				return true;
 			}
 			return cropStuff(itemstack);
 		}
 		if (entity instanceof EntityFreightHopperUS) {
-			// TODO: Why there is this check? Did they though it could be item?
-			return block instanceof Block && !woodStuff(itemstack);
+			return block !=null && !woodStuff(itemstack);
 		}
 		if (entity instanceof EntityFreightMinetrain) {
 			if (block != null) {
 				return block.isOpaqueCube();
 			} else {
-				// TODO: Why there is this? NOTE: This wouldn't have been
-				// deadcode because the blocks nullness wasn't checked
 				if (itemstack.getItem().isDamaged(itemstack)) {
 					return false;
 				}
@@ -154,9 +142,7 @@ public class ItemHandler {
 		}
 		if (entity instanceof EntityFreightOpen2) {
 			if (!woodStuff(itemstack)) {
-				// TODO: Why there is this check? Did they though it could be
-				// item?
-				if (block instanceof Block) {
+				if (block !=null) {
 					return true;
 				}
 			}
@@ -178,8 +164,7 @@ public class ItemHandler {
 			return isDict("logWood", itemstack);
 		}
 		if (entity instanceof EntityFreightOpenWagon) {
-			// TODO: Why there is this check? Did they though it could be item?
-			if (block instanceof Block && !woodStuff(itemstack)) {
+			if (block !=null && !woodStuff(itemstack)) {
 				return true;
 			}
 		}

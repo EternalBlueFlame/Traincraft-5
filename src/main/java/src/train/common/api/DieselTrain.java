@@ -17,7 +17,7 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	private FluidStack liquid;
 
 	public DieselTrain(World world, int liquidId, int quantity, int capacity) {
-		this( new FluidStack(liquidId, quantity) , capacity, world, null, null);
+		this(new FluidStack(liquidId, quantity), capacity, world, null, null);
 	}
 
 	public DieselTrain(World world, int liquidId, int quantity, int capacity, FluidStack filter) {

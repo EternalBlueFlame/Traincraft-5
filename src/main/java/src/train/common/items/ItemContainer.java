@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 Mrbrutal. All rights reserved.
- * 
+ *
  * @name Traincraft
  * @author Mrbrutal
  ******************************************************************************/
@@ -23,18 +23,18 @@ public class ItemContainer extends Item {
 		maxStackSize = 64;
 		setCreativeTab(Traincraft.tcTab);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IIconRegister iconRegister) {
 		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":parts/" + ItemIDs.getIcon(Item.getIdFromItem(this)));
 	}
-	
+
 	@Override
 	public Item getContainerItem() {
 		return ItemIDs.emptyCanister.item;
 	}
-	
+
 	@Override
 	public ItemStack getContainerItem(ItemStack itemStack) {
 		return new ItemStack(ItemIDs.emptyCanister.item);

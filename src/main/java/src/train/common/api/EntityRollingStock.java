@@ -56,12 +56,7 @@ import org.lwjgl.input.Keyboard;
 import src.train.client.core.handlers.SoundUpdaterRollingStock;
 import src.train.common.Traincraft;
 import src.train.common.core.HandleOverheating;
-import src.train.common.core.handlers.CollisionHandler;
-import src.train.common.core.handlers.ConfigHandler;
-import src.train.common.core.handlers.FuelHandler;
-import src.train.common.core.handlers.LinkHandler;
-import src.train.common.core.handlers.TrainHandler;
-import src.train.common.core.handlers.TrainsDamageSource;
+import src.train.common.core.handlers.*;
 import src.train.common.core.network.PacketKeyPress;
 import src.train.common.core.network.PacketRollingStockRotation;
 import src.train.common.entity.rollingStock.EntityStockCar;
@@ -1691,8 +1686,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 		if (!worldObj.isRemote) {
 			//System.out.println(this.uniqueID);
-			//TODO Packets
-			// PacketHandler.sendPacketToClients(PacketHandler.setTrainLockedToClient(entityplayer, this, locked), worldObj, (int) posX, (int) posY, (int) posZ, 15);
+			 PacketHandler.sendPacketToClients(PacketHandler.setTrainLockedToClient(entityplayer, this, locked), worldObj, (int) posX, (int) posY, (int) posZ, 15);
 		}
 		playerEntity = entityplayer;
 		itemstack = entityplayer.inventory.getCurrentItem();

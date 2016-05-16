@@ -16,14 +16,14 @@ import java.util.List;
 public class ItemBlockFluid extends ItemBlock {
 	@SideOnly(Side.CLIENT)
 	private IIcon icon;
-	
+
 	private BlockTraincraftFluid fluid;
 	private int id;
 
 	public ItemBlockFluid(Block block){
 		super(block);
 	}
-	
+
 	public ItemBlockFluid(Block id, Block fluid) {
 		super(id);
 		this.id = Block.getIdFromBlock(id);
