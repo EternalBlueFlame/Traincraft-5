@@ -58,10 +58,9 @@ public class LiquidManager {
 		BuildcraftFuelRegistry.fuel.addFuel(DIESEL, 3, 200000);
 		BuildcraftFuelRegistry.fuel.addFuel(REFINED_FUEL, 6, 100000);
 		MinecraftForge.EVENT_BUS.register(this);
-
-		//TODO
-		//Traincraft.proxy.registerBlock(BlockIDs.diesel.block, ItemBlockFluid.class);
-		//Traincraft.proxy.registerBlock(BlockIDs.refinedFuel.block, ItemBlockFluid.class);
+		
+		Traincraft.proxy.registerBlock(BlockIDs.diesel.block, ItemBlockFluid.class);
+		Traincraft.proxy.registerBlock(BlockIDs.refinedFuel.block, ItemBlockFluid.class);
 	}
 
 	@SubscribeEvent

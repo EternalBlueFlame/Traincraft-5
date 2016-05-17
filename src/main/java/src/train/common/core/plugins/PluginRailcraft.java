@@ -74,6 +74,8 @@ public class PluginRailcraft implements IPlugin {
 		}
 	}
 
+	//TODO Delete these Method
+	@Deprecated
 	private void addTrackNames() {
 		if (TrackIDs.COUPLER_TRACK.getTrackSpec() != null)
 			LanguageRegistry.addName(TrackIDs.COUPLER_TRACK.getTrackSpec().getItem(), "[TC] Coupler Track");

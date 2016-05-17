@@ -10,6 +10,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import src.train.common.Traincraft;
+import src.train.common.api.AbstractTrains;
 import src.train.common.api.LiquidManager;
 import src.train.common.api.Tender;
 import src.train.common.library.EnumTrains;
@@ -18,7 +19,7 @@ import src.train.common.library.GuiIDs;
 public class EntityTender4_4_0 extends Tender implements IInventory {
 	public int freightInventorySize;
 	public EntityTender4_4_0(World world) {
-		super(world, 0, 0, EnumTrains.tender4_4_0.getTankCapacity(), LiquidManager.WATER_FILTER);
+		super(world, EnumTrains.tender4_4_0.getTankCapacity(), LiquidManager.WATER_FILTER);
 		initFreightTender();
 	}
 
@@ -26,12 +27,12 @@ public class EntityTender4_4_0 extends Tender implements IInventory {
 		freightInventorySize = 16;
 		tenderItems = new ItemStack[freightInventorySize];
 		this.setDefaultMass(0.2);
-		this.acceptedColors.add(this.getColorFromString("Black"));
-		this.acceptedColors.add(this.getColorFromString("White"));
-		this.acceptedColors.add(this.getColorFromString("Brown"));
-		this.acceptedColors.add(this.getColorFromString("Blue"));
-		this.acceptedColors.add(this.getColorFromString("Green"));
-		this.acceptedColors.add(this.getColorFromString("Red"));
+		this.acceptedColors.add(getColorFromString("Black"));
+		this.acceptedColors.add(getColorFromString("White"));
+		this.acceptedColors.add(getColorFromString("Brown"));
+		this.acceptedColors.add(getColorFromString("Blue"));
+		this.acceptedColors.add(getColorFromString("Green"));
+		this.acceptedColors.add(getColorFromString("Red"));
 	}
 
 	public EntityTender4_4_0(World world, double d, double d1, double d2) {
@@ -140,8 +141,7 @@ public class EntityTender4_4_0 extends Tender implements IInventory {
 
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
-		float dist = 1.15F;
-		return dist;
+		return 1.15F;
 	}
 
 	@Override

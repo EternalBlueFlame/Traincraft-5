@@ -20,7 +20,7 @@ public class EntityTenderBR01_DB extends Tender implements IInventory {
 	public int numFreightSlots;
 
 	public EntityTenderBR01_DB(World world) {
-		super(world, 0, 0, EnumTrains.tenderBR01.getTankCapacity(), LiquidManager.WATER_FILTER);
+		super(world, EnumTrains.tenderBR01.getTankCapacity(), LiquidManager.WATER_FILTER);
 		initFreightTender();
 	}
 
@@ -135,8 +135,7 @@ public class EntityTenderBR01_DB extends Tender implements IInventory {
 
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
-		float dist = 1.5F;
-		return dist;
+		return 1.5F;
 	}
 
 	@Override

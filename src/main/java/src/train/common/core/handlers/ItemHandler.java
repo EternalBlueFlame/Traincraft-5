@@ -90,9 +90,7 @@ public class ItemHandler {
 		}
 		if (entity instanceof EntityFreightCartUS) {
 			if (!woodStuff(itemstack)) {
-				// TODO: Why there is this check? Did they though it could be
-				// item?
-				if (block instanceof Block) {
+				if (block !=null) {
 					return true;
 				}
 			}
@@ -109,9 +107,7 @@ public class ItemHandler {
 		}
 		if (entity instanceof EntityFreightClosed) {
 			if (!woodStuff(itemstack)) {
-				// TODO: Why there is this check? Did they though it could be
-				// item?
-				if (block instanceof Block) {
+				if (block !=null) {
 					return true;
 				}
 			}
@@ -119,9 +115,7 @@ public class ItemHandler {
 		}
 		if (entity instanceof EntityFreightGondola_DB) {
 			if (!woodStuff(itemstack)) {
-				// TODO: Why there is this check? Did they though it could be
-				// item?
-				if (block instanceof Block) {
+				if (block !=null) {
 					return true;
 				}
 			}
@@ -138,8 +132,7 @@ public class ItemHandler {
 			return cropStuff(itemstack);
 		}
 		if (entity instanceof EntityFreightHopperUS) {
-			// TODO: Why there is this check? Did they though it could be item?
-			return block instanceof Block && !woodStuff(itemstack);
+			return block !=null && !woodStuff(itemstack);
 		}
 		if (entity instanceof EntityFreightMinetrain) {
 
@@ -161,9 +154,7 @@ public class ItemHandler {
 		}
 		if (entity instanceof EntityFreightOpen2) {
 			if (!woodStuff(itemstack)) {
-				// TODO: Why there is this check? Did they though it could be
-				// item?
-				if (block instanceof Block) {
+				if (block !=null) {
 					return true;
 				}
 			}
@@ -185,8 +176,7 @@ public class ItemHandler {
 			return isDict("logWood", itemstack);
 		}
 		if (entity instanceof EntityFreightOpenWagon) {
-			// TODO: Why there is this check? Did they though it could be item?
-			if (block instanceof Block && !woodStuff(itemstack)) {
+			if (block !=null && !woodStuff(itemstack)) {
 				return true;
 			}
 		}

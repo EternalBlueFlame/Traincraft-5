@@ -14,23 +14,21 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	private int update = 8;
 	private StandardTank theTank;
 	private IFluidTank[] tankArray = new IFluidTank[1];
-	private FluidStack liquid;
 
-	public DieselTrain(World world, int liquidId, int quantity, int capacity) {
-		this( new FluidStack(liquidId, quantity) , capacity, world, null, null);
+	public DieselTrain(World world, int capacity) {
+		this(capacity, world, null, null);
 	}
 
-	public DieselTrain(World world, int liquidId, int quantity, int capacity, FluidStack filter) {
-		this(new FluidStack(liquidId, quantity), capacity, world, filter, null);
+	public DieselTrain(World world, int capacity, FluidStack filter) {
+		this(capacity, world, filter, null);
 	}
 
-	public DieselTrain(World world, int liquidId, int quantity, int capacity, FluidStack[] multiFilter) {
-		this(new FluidStack(liquidId, quantity), capacity, world, null, multiFilter);
+	public DieselTrain(World world, int capacity, FluidStack[] multiFilter) {
+		this(capacity, world, null, multiFilter);
 	}
 
-	private DieselTrain(FluidStack liquid, int capacity, World world, FluidStack filter, FluidStack[] multiFilter) {
+	private DieselTrain(int capacity, World world, FluidStack filter, FluidStack[] multiFilter) {
 		super(world);
-		this.liquid = liquid;
 		this.maxTank = capacity;
 		if (filter == null && multiFilter == null)
 			this.theTank = LiquidManager.getInstance().new StandardTank(capacity);
@@ -39,12 +37,12 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 		if (multiFilter != null)
 			this.theTank = LiquidManager.getInstance().new FilteredTank(capacity, multiFilter);
 		tankArray[0] = theTank;
-		dataWatcher.addObject(4, new Integer(0));
+		dataWatcher.addObject(4, 0);
 		numCargoSlots = 3;
 		numCargoSlots1 = 3;
 		numCargoSlots2 = 3;
 		inventorySize = numCargoSlots + numCargoSlots2 + numCargoSlots1 + fuelSlot;
-		this.dataWatcher.addObject(23, new Integer(0));
+		this.dataWatcher.addObject(23, 0);
 	}
 
 	@Override
@@ -68,10 +66,6 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 
 	public int getDiesel() {
 		return (this.dataWatcher.getWatchableObjectInt(23));
-	}
-
-	public int getLiquidItemID() {
-		return (this.dataWatcher.getWatchableObjectInt(4));
 	}
 
 	public StandardTank getTank() {
@@ -137,7 +131,6 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 		if (!this.canCheckInvent)
 			return locoInvent0;
 
-		ItemStack ret = locoInvent0;
 		if (getDiesel() > 0) {
 			fuelTrain = (getDiesel());
 		}
@@ -164,18 +157,6 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 				drain(ForgeDirection.UNKNOWN, 1, true);
 			}
 		}
-	}
-
-	public void setLiquid(FluidStack liquid) {
-		this.liquid = liquid;
-	}
-
-	public void setCapacity(int capacity) {
-		this.maxTank = capacity;
-	}
-
-	public int getCapacity() {
-		return this.maxTank;
 	}
 
 	@Override
@@ -215,7 +196,4 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 		return theTank.getFluid();
 	}
 
-	public int getFluidAmount() {
-		return theTank.getFluidAmount();
-	}
 }
