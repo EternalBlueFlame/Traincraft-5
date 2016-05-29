@@ -1,6 +1,8 @@
 package train.common.api;
 
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
+import cpw.mods.fml.common.Loader;
+import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
@@ -59,12 +61,17 @@ public class LiquidManager {
 		dieselFilter();
 		FuelManager.addBoilerFuel(DIESEL, 60000);
 		FuelManager.addBoilerFuel(REFINED_FUEL, 96000);
-		BuildcraftFuelRegistry.fuel.addFuel(DIESEL, 3, 200000);
-		BuildcraftFuelRegistry.fuel.addFuel(REFINED_FUEL, 6, 100000);
+		if(Loader.isModLoaded("BuildCraft|Core")) registerBCLiquids();
 		MinecraftForge.EVENT_BUS.register(this);
 
 		registerFluidBlock((BlockTraincraftFluid) BlockIDs.diesel.block);
 		registerFluidBlock((BlockTraincraftFluid) BlockIDs.refinedFuel.block);
+	}
+
+	@Optional.Method(modid = "BuildCraft|Core")
+	private void registerBCLiquids(){
+		BuildcraftFuelRegistry.fuel.addFuel(DIESEL, 3, 200000);
+		BuildcraftFuelRegistry.fuel.addFuel(REFINED_FUEL, 6, 100000);
 	}
 
 	@SubscribeEvent
