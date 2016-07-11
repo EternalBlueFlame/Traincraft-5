@@ -83,7 +83,7 @@ public class ShapedTrainRecipes implements ITCRecipe {
 					slots[i] = false;
 					continue;
 				}
-				if (var9.getItem() != var10.getItem() && var9.stackSize <= var10.stackSize) {
+				if (var9.getItem() != var10.getItem() || var9.stackSize > var10.stackSize || var9.getItemDamage() != var10.getItemDamage()) {
 					//System.out.println(var9.getDisplayName() + " : " + var10.getDisplayName());
 					slots[i] = false;
 					continue;
