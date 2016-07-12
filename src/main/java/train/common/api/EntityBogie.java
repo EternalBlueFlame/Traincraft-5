@@ -413,7 +413,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 					int meta = tileRail.getBlockMetadata();
 
-					//shouldIgnoreSwitch(tileRail, i, j, k, meta);
+					shouldIgnoreSwitch(tileRail, i, j, k, meta);
 					moveOnTC90TurnRail(i, j, k, tileRail.r, tileRail.cx, tileRail.cy, tileRail.cz, tileRail.getType(), meta);
 				}
 
