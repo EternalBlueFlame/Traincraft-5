@@ -1,5 +1,9 @@
 package train.common.tile;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -16,12 +20,7 @@ import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
 import train.common.library.Info;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 public class TileCrafterTierII extends TileEntity implements IInventory, ITier {
-	private Random rand;
 	private ItemStack[] crafterInventory;
 
 	private ForgeDirection facing;
@@ -32,7 +31,7 @@ public class TileCrafterTierII extends TileEntity implements IInventory, ITier {
 
 	public TileCrafterTierII() {
 		crafterInventory = new ItemStack[26];
-		this.rand = new Random();
+		new Random();
 		this.resultList = new ArrayList<ItemStack>();
 		slotSelected = new int[8];
 	}
@@ -47,6 +46,7 @@ public class TileCrafterTierII extends TileEntity implements IInventory, ITier {
 		return crafterInventory[i];
 	}
 
+	@Override
 	public List<ItemStack> getResultList() {
 		return resultList;
 	}
@@ -166,10 +166,10 @@ public class TileCrafterTierII extends TileEntity implements IInventory, ITier {
 			crafterInventory[i] = null;
 		}
 
-		List<TierRecipe> recipes = TierRecipeManager.getInstance().getTierRecipeList(2);
+		List<?> recipes = TierRecipeManager.getInstance().getTierRecipeList(2);
 		int count = 0;
 		for (int j = 0; j < recipes.size(); j++) {
-			ItemStack stack = recipes.get(j).hasComponents(crafterInventory);
+			ItemStack stack = ((TierRecipe) recipes.get(j)).hasComponents(crafterInventory);
 			if (stack != null) {
 				if((count+10)<crafterInventory.length) {
 					resultList.add(stack);
@@ -186,6 +186,7 @@ public class TileCrafterTierII extends TileEntity implements IInventory, ITier {
 		}
 	}
 
+	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 		if (worldObj == null) {
 			return true;
@@ -193,7 +194,7 @@ public class TileCrafterTierII extends TileEntity implements IInventory, ITier {
 		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
 			return false;
 		}
-		return entityplayer.getDistanceSq((double) xCoord + 0.5D, (double) yCoord + 0.5D, (double) zCoord + 0.5D) <= 64D;
+		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
 	}
 
 	public ForgeDirection getFacing() {
@@ -246,7 +247,7 @@ public class TileCrafterTierII extends TileEntity implements IInventory, ITier {
 
 	@Override
 	public void setSlotSelected(int[] selected) {
-		this.slotSelected = selected;
+		TileCrafterTierII.slotSelected = selected;
 	}
 
 	@Override
@@ -271,9 +272,9 @@ public class TileCrafterTierII extends TileEntity implements IInventory, ITier {
 		if(i>9)
 			return false;
 		
-		List<TierRecipe> recipeList = TierRecipeManager.getInstance().getTierRecipeList(this.Tier);
-		for(TierRecipe recipe : recipeList){
-			ItemStack stack2 = recipe.getInput().get(i);
+		List<?> recipeList = TierRecipeManager.getInstance().getTierRecipeList(this.Tier);
+		for (Object recipe : recipeList) {
+			ItemStack stack2 = ((TierRecipe) recipe).getInput().get(i);
 			if (stack2 != null && TierRecipe.areItemsIdentical(stack, stack2)) {
 				return true;
 			}

@@ -23,7 +23,7 @@ public interface ITierRecipe {
 
 	public abstract ItemStack getRecipeIn(int slot);
 
-	public abstract List getInput();
+	public abstract List<?> getInput();
 
 	public abstract int toDecrease(int slot);
 }

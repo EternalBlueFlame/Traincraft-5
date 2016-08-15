@@ -1,5 +1,7 @@
 package train.common.api;
 
+import org.lwjgl.input.Keyboard;
+
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -9,14 +11,17 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
-import net.minecraft.item.*;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.ItemSword;
+import net.minecraft.item.ItemTool;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import org.lwjgl.input.Keyboard;
 import train.common.Traincraft;
 import train.common.core.handlers.ConfigHandler;
 
@@ -87,7 +92,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 		this.furnaceItemStacks = new ItemStack[this.getSizeInventoryWork()];
 
 		for (int var3 = 0; var3 < var2.tagCount(); ++var3) {
-			NBTTagCompound var4 = (NBTTagCompound) var2.getCompoundTagAt(var3);
+			NBTTagCompound var4 = var2.getCompoundTagAt(var3);
 			byte var5 = var4.getByte("Slot");
 
 			if (var5 >= 0 && var5 < this.furnaceItemStacks.length) {
@@ -96,7 +101,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 		}
 		this.furnaceBurnTime = nbttagcompound.getShort("BurnTime");
 		this.furnaceCookTime = nbttagcompound.getShort("CookTime");
-		this.currentItemBurnTime = this.getItemBurnTime(this.furnaceItemStacks[1]);
+		this.currentItemBurnTime = AbstractWorkCart.getItemBurnTime(this.furnaceItemStacks[1]);
 	}
 
 	/**
@@ -134,8 +139,6 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 
 	public void updateBurning() {
 		boolean var1 = this.furnaceBurnTime > 0;
-		boolean var2 = false;
-
 		if (this.furnaceBurnTime > 0) {
 			--this.furnaceBurnTime;
 		}
@@ -144,8 +147,6 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 				this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.furnaceItemStacks[1]);
 
 				if (this.furnaceBurnTime > 0) {
-					var2 = true;
-
 					if (this.furnaceItemStacks[1] != null) {
 						--this.furnaceItemStacks[1].stackSize;
 
@@ -161,7 +162,6 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 				if (this.furnaceCookTime == 200) {
 					this.furnaceCookTime = 0;
 					this.smeltItem();
-					var2 = true;
 				}
 			}
 			else {
@@ -169,7 +169,6 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 			}
 
 			if (var1 != this.furnaceBurnTime > 0) {
-				var2 = true;
 			}
 		}
 

@@ -1,22 +1,38 @@
 package train.common.core.handlers;
 
+import java.util.List;
+import java.util.Random;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.monster.*;
-import net.minecraft.entity.passive.*;
+import net.minecraft.entity.monster.EntityCreeper;
+import net.minecraft.entity.monster.EntityEnderman;
+import net.minecraft.entity.monster.EntityGiantZombie;
+import net.minecraft.entity.monster.EntityIronGolem;
+import net.minecraft.entity.monster.EntityPigZombie;
+import net.minecraft.entity.monster.EntitySkeleton;
+import net.minecraft.entity.monster.EntitySlime;
+import net.minecraft.entity.monster.EntitySpider;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityChicken;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityMooshroom;
+import net.minecraft.entity.passive.EntityPig;
+import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
+import train.common.api.AbstractTrains;
 import train.common.api.Locomotive;
 import train.common.entity.EntityLasersLines;
-import train.common.api.AbstractTrains;
 import train.common.entity.rollingStock.EntityStockCar;
-
-import java.util.List;
-import java.util.Random;
 
 public class CollisionHandler {
 
@@ -46,7 +62,7 @@ public class CollisionHandler {
 		 * A smaller BB is needed otherwise the entity will get sucked back as soon as it unmounts this does not affect collisions with player or other carts. Only collisions with mobs
 		 */
 		boxSmall = boundingBox.expand(-0.5, -0.5, -0.5);
-		List listRide = worldObj.getEntitiesWithinAABBExcludingEntity((Entity) entityOne, boxSmall);
+		List<?> listRide = worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, boxSmall);
 		if (listRide != null && listRide.size() > 0) {
 			for (int j1 = 0; j1 < listRide.size(); j1++) {
 				Entity entity = (Entity) listRide.get(j1);
@@ -66,7 +82,7 @@ public class CollisionHandler {
 		else {
 			box = boundingBox.expand(2, 0, 2);
 		}
-		List listLiving = worldObj.getEntitiesWithinAABBExcludingEntity((Entity) entityOne, box);
+		List<?> listLiving = worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, box);
 		if (listLiving != null && listLiving.size() > 0) {
 
 			for (int j1 = 0; j1 < listLiving.size(); j1++) {
@@ -92,7 +108,7 @@ public class CollisionHandler {
 		}
 		//box = boundingBox.expand(2, 2, 2);
 
-		List list = worldObj.getEntitiesWithinAABBExcludingEntity((Entity) entityOne, box);
+		List<?> list = worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, box);
 		if (list != null && list.size() > 0) {
 
 			for (int j1 = 0; j1 < list.size(); j1++) {
@@ -127,8 +143,8 @@ public class CollisionHandler {
 	 */
 	public void applyEntityCollisionVanilla(Entity par1Entity, EntityMinecart entityOne) {
 		MinecraftForge.EVENT_BUS.post(new MinecartCollisionEvent(entityOne, par1Entity));
-		if (entityOne.getCollisionHandler() != null) {
-			entityOne.getCollisionHandler().onEntityCollision(entityOne, par1Entity);
+		if (EntityMinecart.getCollisionHandler() != null) {
+			EntityMinecart.getCollisionHandler().onEntityCollision(entityOne, par1Entity);
 			return;
 		}
 		if (!this.worldObj.isRemote) {
@@ -137,7 +153,7 @@ public class CollisionHandler {
 				double d0 = par1Entity.posX - entityOne.posX;
 				double d1 = par1Entity.posZ - entityOne.posZ;
 				double d2 = d0 * d0 + d1 * d1;
-				d2 = (double) MathHelper.sqrt_double(d2);
+				d2 = MathHelper.sqrt_double(d2);
 
 				if (d2 <= ((AbstractTrains) entityOne).getLinkageDistance(entityOne) && d2 >= 9.999999747378752E-5D) {
 
@@ -153,17 +169,13 @@ public class CollisionHandler {
 					d1 *= d3;
 					d0 *= 0.10000000149011612D;
 					d1 *= 0.10000000149011612D;
-					d0 *= (double) (1.0F - 0.6);
-					d1 *= (double) (1.0F - 0.6);
+					d0 *= 1.0F - 0.6;
+					d1 *= 1.0F - 0.6;
 					d0 *= 0.5D;
 					d1 *= 0.5D;
 
 					if (par1Entity instanceof EntityMinecart) {
-						double d4 = par1Entity.posX - entityOne.posX;
-						double d5 = par1Entity.posZ - entityOne.posZ;
-						Vec3 vec3 = Vec3.createVectorHelper(d4, 0.0D, d5).normalize();
-						Vec3 vec31 = Vec3.createVectorHelper((double) MathHelper.cos(entityOne.rotationYaw * (float) Math.PI / 180.0F), 0.0D, (double) MathHelper.sin(entityOne.rotationYaw * (float) Math.PI / 180.0F)).normalize();
-						double d6 = Math.abs(vec3.dotProduct(vec31));
+
 
 						/*
 						 * if (d6 < 0.800000011920929D) { return; } */
@@ -218,7 +230,7 @@ public class CollisionHandler {
 				double var2 = entity.posX - entityOne.posX;
 				double var4 = entity.posZ - entityOne.posZ;
 				double var6 = var2 * var2 + var4 * var4;
-				var6 = (double) MathHelper.sqrt_double(var6);
+				var6 = MathHelper.sqrt_double(var6);
 				if (var6 <= ((AbstractTrains) entityOne).getLinkageDistance((EntityMinecart) entityOne)*0.8 && var6 >= 9.999999747378752E-5D) {
 
 					var2 /= var6;
@@ -233,8 +245,8 @@ public class CollisionHandler {
 					var4 *= var8;
 					var2 *= 0.10000000149011612D;
 					var4 *= 0.10000000149011612D;
-					var2 *= (double) (1.0F - 0.6);
-					var4 *= (double) (1.0F - 0.6);
+					var2 *= 1.0F - 0.6;
+					var4 *= 1.0F - 0.6;
 					var2 *= 0.5D;
 					var4 *= 0.5D;
 
@@ -242,7 +254,7 @@ public class CollisionHandler {
 						double var10 = entity.posX - entityOne.posX;
 						double var12 = entity.posZ - entityOne.posZ;
 						Vec3 var14 = Vec3.createVectorHelper(var10, 0.0D, var12).normalize();
-						Vec3 var15 = Vec3.createVectorHelper((double) MathHelper.cos(entityOne.rotationYaw * (float) Math.PI / 180.0F), 0.0D, (double) MathHelper.sin(entityOne.rotationYaw * (float) Math.PI / 180.0F)).normalize();
+						Vec3 var15 = Vec3.createVectorHelper(MathHelper.cos(entityOne.rotationYaw * (float) Math.PI / 180.0F), 0.0D, MathHelper.sin(entityOne.rotationYaw * (float) Math.PI / 180.0F)).normalize();
 						double var16 = Math.abs(var14.dotProduct(var15));
 
 						if (var16 < 0.800000011920929D) {
@@ -293,9 +305,8 @@ public class CollisionHandler {
 							}
 							if (movingobjectposition != null) {
 								if (movingobjectposition.entityHit != null) {
-									float f1 = MathHelper.sqrt_double(entityOne.motionX * entityOne.motionX + entityOne.motionY * entityOne.motionY + entityOne.motionZ * entityOne.motionZ);
 									float f7 = MathHelper.sqrt_double(entityOne.motionX * entityOne.motionX + entityOne.motionZ * entityOne.motionZ);
-									movingobjectposition.entityHit.addVelocity(-((entityOne.motionX * (double) 1 * 0.0060000002384185791D)) / (double) f7, 0.00000000000000001D, -(((entityOne.motionZ * (double) 1 * 0.0060000002384185791D)) / (double) f7));
+									movingobjectposition.entityHit.addVelocity(-((entityOne.motionX * 1 * 0.0060000002384185791D)) / f7, 0.00000000000000001D, -(((entityOne.motionZ * 1 * 0.0060000002384185791D)) / f7));
 									entity.velocityChanged = true;
 								}
 							}
@@ -397,14 +408,14 @@ public class CollisionHandler {
 								return;
 							}
 							//System.out.println("bla");
-							movingobjectposition.entityHit.addVelocity(((entityOne.motionX * (double) 1 * 0.060000002384185791D)) / (double) f7, 0.00000000000000001D, (((entityOne.motionZ * (double) 1 * 0.060000002384185791D)) / (double) f7));
+							movingobjectposition.entityHit.addVelocity(((entityOne.motionX * 1 * 0.060000002384185791D)) / f7, 0.00000000000000001D, (((entityOne.motionZ * 1 * 0.060000002384185791D)) / f7));
 							entity.velocityChanged = true;
 							return;
 						}
 						if (entity instanceof EntityCreeper) {//Creeper are killed in one shot hopefully
 							damage = 100D;
 						}
-						int j1 = (int) Math.ceil((double) (f1) * damage);
+						int j1 = (int) Math.ceil((f1) * damage);
 
 						DamageSource damagesource = null;
 						
@@ -414,14 +425,14 @@ public class CollisionHandler {
 							damagesource = TrainsDamageSource.ranOver;//DamageSource.causeMobDamage((EntityLiving) entity);
 							entity.attackEntityFrom(damagesource, j1);
 								if (f7 > 0.0F) {
-									movingobjectposition.entityHit.addVelocity((entityOne.motionX * (double) 2 * 0.60000002384185791D) / (double) f7, 0.10000000000000001D, (entityOne.motionZ * (double) 2 * 0.60000002384185791D) / (double) f7);
+									movingobjectposition.entityHit.addVelocity((entityOne.motionX * 2 * 0.60000002384185791D) / f7, 0.10000000000000001D, (entityOne.motionZ * 2 * 0.60000002384185791D) / f7);
 									entity.velocityChanged = true;
 								}
 
 								//worldObj.playSoundAtEntity(entityOne, "damage.fallsmall", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
 								entityOne.playSound("damage.fallsmall", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
 								for (int var9 = 0; var9 < 4; ++var9) {
-									entity.worldObj.spawnParticle("crit", entity.posX + entity.motionX * (double) var9 / 4.0D, entity.posY + entity.motionY * (double) var9 / 4.0D, entity.posZ + entity.motionZ * (double) var9 / 4.0D, -entity.motionX, -entity.motionY + 0.2D, -entity.motionZ);
+									entity.worldObj.spawnParticle("crit", entity.posX + entity.motionX * var9 / 4.0D, entity.posY + entity.motionY * var9 / 4.0D, entity.posZ + entity.motionZ * var9 / 4.0D, -entity.motionX, -entity.motionY + 0.2D, -entity.motionZ);
 								}
 							
 						}

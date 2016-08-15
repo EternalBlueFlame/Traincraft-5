@@ -1,5 +1,9 @@
 package train.client.gui;
 
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
@@ -8,30 +12,25 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 import train.client.gui.sideTabs.SideTabInfo;
 import train.client.gui.sideTabs.SideTabRecipes;
+import train.client.gui.sideTabs.SideTabSlots;
 import train.common.api.AbstractTrains;
+import train.common.containers.ContainerTier;
 import train.common.core.interfaces.ITier;
-import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
 import train.common.library.EnumTrains;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
-import train.client.gui.sideTabs.SideTabSlots;
-import train.common.containers.ContainerTier;
-
-import java.util.List;
 
 public class GuiCrafterTier extends GuiTraincraft {
 
-	private IInventory tier;
 	public static ITier tier1;
 	private static int[] states = new int[10];
 	public static int[] slotStates = new int[8];
 	public static int recipeSize = 0;
 	public static List<ItemStack> recipes;
-	public static List<TierRecipe> recipeList;
+	public static List<?>			recipeList;
 
 	public static boolean isShow = false;
 	public static boolean isClear = false;
@@ -51,8 +50,7 @@ public class GuiCrafterTier extends GuiTraincraft {
 	public GuiCrafterTier(InventoryPlayer inv, IInventory tier) {
 		super(new ContainerTier(inv, tier), tier);
 
-		this.tier = tier;
-		this.tier1 = (ITier) tier;
+		GuiCrafterTier.tier1 = (ITier) tier;
 		recipeList = TierRecipeManager.getInstance().getTierRecipeList(tier1.Tier());
 		recipes = tier1.knownRecipes();
 		ySize = 256;
@@ -82,8 +80,6 @@ public class GuiCrafterTier extends GuiTraincraft {
 
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int t, int g) {
-		List cs = inventorySlots.inventorySlots;
-
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
@@ -93,11 +89,11 @@ public class GuiCrafterTier extends GuiTraincraft {
 
 		borderSlots(recipeList, states);
 		
-		if(!this.isTabRecipeOpen){
+		if (!GuiCrafterTier.isTabRecipeOpen) {
 			currentRenderTabY=this.START_Y;
 		}
 		/**Render the entity in GUI*/
-		if(currentKnownItem!=null && this.isTabRecipeOpen){
+		if (currentKnownItem != null && GuiCrafterTier.isTabRecipeOpen) {
 			if(currentRenderTabY<END_Y)currentRenderTabY++;
 			ticksInGui++;
 			for(int a=0;a<6;a++){
@@ -125,7 +121,8 @@ public class GuiCrafterTier extends GuiTraincraft {
 					if(color < 0)color = 0;
 					if(ticksInGui % 400 == 0)color++;
 					if(color>train.getColors().length-1)color=0;
-					if(renderEntity!=null)((AbstractTrains)renderEntity).setColor(((AbstractTrains)renderEntity).getColorFromString(train.getColors()[color]));
+					if (renderEntity != null) ((AbstractTrains) renderEntity)
+							.setColor(AbstractTrains.getColorFromString(train.getColors()[color]));
 				}
 				float scale = train.getGuiRenderScale();
 				GL11.glScalef(-scale, scale, scale);
