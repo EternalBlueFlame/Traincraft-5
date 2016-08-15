@@ -183,7 +183,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 		else {
 			box3 = loco.boundingBox.expand(1.5, 2.1, 1.5);
 		}
-		List lis3 = worldObj.getEntitiesWithinAABBExcludingEntity(this, box3);
+		List<?> lis3 = worldObj.getEntitiesWithinAABBExcludingEntity(this, box3);
 		if (lis3 != null && lis3.size() > 0) {
 			for (int j1 = 0; j1 < lis3.size(); j1++) {
 				Entity entity = (Entity) lis3.get(j1);

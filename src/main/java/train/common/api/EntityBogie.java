@@ -41,7 +41,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	protected Side side;
 	
 
-	private boolean isInReverse;
 	private int turnProgress;
     private double minecartX;
     private double minecartY;
@@ -725,9 +724,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 				&& tile.canTypeBeModifiedBySwitch) {
 			if (meta == 2) {
 				if (motionZ > 0 && Math.abs(motionX) < 0.01) {
-					double cx = tile.xCoord;
-					double cy = tile.yCoord;
-					double cz = tile.zCoord;
 					// moveOnTCStraight(i, j, k, cx, cy, cz, meta);
 					tile.setType(TrackTypes.SMALL_STRAIGHT.getLabel());
 					TileEntity tile2 = worldObj.getTileEntity(i, j, k + 1);
@@ -739,9 +735,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			}
 			if (meta == 0) {
 				if (motionZ < 0 && Math.abs(motionX) < 0.01) {
-					double cx = tile.xCoord;
-					double cy = tile.yCoord;
-					double cz = tile.zCoord;
 					// moveOnTCStraight(i, j, k, cx, cy, cz, meta);
 					tile.setType(TrackTypes.SMALL_STRAIGHT.getLabel());
 					TileEntity tile2 = worldObj.getTileEntity(i, j, k - 1);
@@ -753,9 +746,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			}
 			if (meta == 1) {
 				if (Math.abs(motionZ) < 0.01 && motionX > 0) {
-					double cx = tile.xCoord;
-					double cy = tile.yCoord;
-					double cz = tile.zCoord;
 					// moveOnTCStraight(i, j, k, cx, cy, cz, meta);
 					tile.setType(TrackTypes.SMALL_STRAIGHT.getLabel());
 					TileEntity tile2 = worldObj.getTileEntity(i + 1, j, k);
@@ -767,9 +757,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			}
 			if (meta == 3) {
 				if (Math.abs(motionZ) < 0.01 && motionX < 0) {
-					double cx = tile.xCoord;
-					double cy = tile.yCoord;
-					double cz = tile.zCoord;
 					// moveOnTCStraight(i, j, k, cx, cy, cz, meta);
 					tile.setType(TrackTypes.SMALL_STRAIGHT.getLabel());
 					TileEntity tile2 = worldObj.getTileEntity(i - 1, j, k);
