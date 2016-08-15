@@ -7,21 +7,23 @@
 
 package train.client.gui;
 
+import java.util.List;
+
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
 import train.client.gui.sideTabs.SideTabManager;
 import train.common.containers.ContainerTraincraft;
 import train.common.core.interfaces.ITier;
 import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
 import train.common.library.Info;
-
-import java.util.List;
 
 public abstract class GuiTraincraft extends GuiContainer {
 
@@ -78,16 +80,6 @@ public abstract class GuiTraincraft extends GuiContainer {
 		return this.func_74188_c(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
 	}
 
-	private int isMouseOverSlot2(Slot slot, int par2, int par3) {
-		boolean over = func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, par2, par3);
-		if (over) {
-			return slot.slotNumber;
-		}
-		else {
-			return 0;
-		}
-	}
-
 	protected boolean func_74188_c(int par1, int par2, int par3, int par4, int par5, int par6) {
 		int var7 = this.guiLeft;
 		int var8 = this.guiTop;
@@ -110,9 +102,8 @@ public abstract class GuiTraincraft extends GuiContainer {
 		GL11.glDisable(GL11.GL_BLEND);
 	}
 
-	protected void borderSlots(List<TierRecipe> recipeList, int[] states) {
-		List cs = inventorySlots.inventorySlots;
-		int state = 0;
+	protected void borderSlots(List<?> recipeList, int[] states) {
+		List<?> cs = inventorySlots.inventorySlots;
 		for (int l = 0; l < cs.size(); l++) {
 			Slot slot = (Slot) cs.get(l);
 			if (slot.slotNumber < 10) {
@@ -120,7 +111,7 @@ public abstract class GuiTraincraft extends GuiContainer {
 					ItemStack stack = slot.getStack();
 					for (int i = 0; i < recipeList.size(); i++) {
 						if (recipeList.get(i) != null) {
-							List<ItemStack> items = recipeList.get(i).getInput();
+							List<ItemStack> items = ((TierRecipe) recipeList.get(i)).getInput();
 							ItemStack stack2 = items.get(l);
 							if (stack2 != null) {
 								if (TierRecipe.areItemsIdentical(stack, stack2)) {
@@ -195,10 +186,7 @@ public abstract class GuiTraincraft extends GuiContainer {
 
 	public void drawOverlays(int recipeSize, List<ItemStack> recipes) {
 
-		int j = (width - xSize) / 2;
-		int k = (height - ySize) / 2;
-
-		List<ItemStack> itemStacks = null;
+		List<?> itemStacks = null;
 		if (recipeSize == -1) {
 			itemStacks = TierRecipeManager.getInstance().getTierRecipe(tier.Tier(), recipes.get(recipes.size() - 1)).getInput();
 		}
@@ -220,11 +208,11 @@ public abstract class GuiTraincraft extends GuiContainer {
 		drawOverlays2(itemStacks.get(9), 145, 27);
 	}
 
-	public void drawOverlays2(ItemStack item, int x, int y) {
+	public void drawOverlays2(Object object, int x, int y) {
 		int j = (width - xSize) / 2;
 		int k = (height - ySize) / 2;
 
-		if (item != null) {
+		if (object != null) {
 			String var4 = tier.getGUITexture();
 			GL11.glColor4f(1.0F, 1.0F, 1.0F, 0.3F);
 			mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation,var4));
@@ -232,7 +220,9 @@ public abstract class GuiTraincraft extends GuiContainer {
 			GL11.glDisable(GL11.GL_DEPTH_TEST);
 			GL11.glEnable(GL11.GL_BLEND);
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_SRC_ALPHA);
-			this.itemRender.renderItemIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, item, j + x, k + y);
+			GuiScreen.itemRender.renderItemIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, (ItemStack) object,
+					j + x,
+					k + y);
 			GL11.glDisable(GL11.GL_BLEND);
 			GL11.glEnable(GL11.GL_LIGHTING);
 			GL11.glEnable(GL11.GL_DEPTH_TEST);

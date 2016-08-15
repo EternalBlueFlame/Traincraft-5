@@ -25,9 +25,9 @@ public abstract interface ITierCraftingManager {
 
 	public abstract ITierRecipe getTierRecipe(int tier, ItemStack output);
 
-	public abstract List getRecipeList();
+	public abstract List<?> getRecipeList();
 
-	public abstract List getTierRecipeList(int tier);
+	public abstract List<?> getTierRecipeList(int tier);
 
 	public abstract int getRecipeSize();
 
