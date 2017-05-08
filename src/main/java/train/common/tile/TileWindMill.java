@@ -21,6 +21,7 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 	private int updateTicks = 0;
 	private static Random rand = new Random();
 	public int windClient = 0;
+    public int standsOpen = 0;
 
 
 	public TileWindMill() {
@@ -42,6 +43,7 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 		super.readFromNBT(nbt, synced);
 		facingMeta = nbt.getByte("Orientation");
 		this.windClient = nbt.getInteger("Wind");
+        this.standsOpen = nbt.getInteger("standsOpen");
 	}
 
 	@Override
@@ -49,6 +51,7 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 		super.writeToNBT(nbt, synced);
 		nbt.setByte("Orientation", (byte) facingMeta);
 		nbt.setInteger("Wind", this.windClient);
+        nbt.setInteger("standsOpen", this.standsOpen);
 		return nbt;
 	}
 
@@ -83,13 +86,26 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 							worldObj.spawnEntityInWorld(entityitem);
 						}
 					}
-					this.worldObj.setBlockToAir(this.xCoord, this.yCoord + 1, this.zCoord);
+					this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
 				}
 			}
+
+			/**
+			 * Check every 6 seconds a 5x5 area around the windmill top-block if it can see the sky
+             * (possible make the area configureable in the config file)
+			 */
+            if(this.updateTicks % 120 == 0) {
+               this.standsOpen = 0;
+               for(int x=-2;x<3;x++)
+                 for(int z=-2;z<3;z++)
+                   if(!this.worldObj.canBlockSeeTheSky(this.xCoord + x, this.yCoord + 1, this.zCoord + z))
+                       this.standsOpen++;
+            }
+
 			/**
 			 * Calculate production using wind strength
 			 */
-			if (updateTicks % 4 == 0) {
+			if (this.standsOpen == 0 && updateTicks % 4 == 0) {
 				this.energy.receiveEnergy((WorldEvents.windStrength + (Math.round(this.yCoord *0.25f)) * 10), false);
 				if (this.worldObj.isThundering()) {
 					this.energy.receiveEnergy(Math.round(this.energy.getEnergyStored() * 3.5f), false);
