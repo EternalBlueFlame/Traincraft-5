@@ -1582,8 +1582,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setDouble("speedLimiter", this.speedLimiter);
 		nbttagcompound.setFloat("serverRealRotation", this.serverRealRotation);
 		//nbttagcompound.setBoolean("hasSpawnedBogie", this.hasSpawnedBogie);
@@ -1594,8 +1594,22 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+		super.readFromNBT(nbttagcompound);
+		if (!worldObj.isRemote){
+			if (this instanceof Locomotive || this instanceof Freight){
+		    this.serverRealRotation = nbttagcompound.getFloat("serverRealRotation");
+			if (Math.abs(this.serverRealRotation) > 178.5f) {this.serverRealRotation = Math.copySign(178.5f, this.serverRealRotation);}
+		}
+			this.serverRealRotation = nbttagcompound.getFloat("serverRealRotation");
+			this.speedLimiter = nbttagcompound.getDouble("speedLimiter");
+			this.needsBogieUpdate = nbttagcompound.getBoolean("needsBogieUpdate");
+			this.firstLoad = nbttagcompound.getBoolean("firstLoad");
+			this.rotation = nbttagcompound.getFloat("rotation");
+			this.isBraking = nbttagcompound.getBoolean("brake");
+		
+		}
+		if (worldObj.isRemote){
 		this.speedLimiter = nbttagcompound.getDouble("speedLimiter");
 		this.serverRealRotation = nbttagcompound.getFloat("serverRealRotation");
 		//if (Math.abs(this.serverRealRotation) > 178.5f) this.serverRealRotation = Math.copySign(178.5f, this.serverRealRotation);
@@ -1603,8 +1617,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 		this.needsBogieUpdate = nbttagcompound.getBoolean("needsBogieUpdate");
 		this.firstLoad = nbttagcompound.getBoolean("firstLoad");
 		this.rotation = nbttagcompound.getFloat("rotation");
-		this.isBraking = nbttagcompound.getBoolean("brake");
-	}
+		this.isBraking = nbttagcompound.getBoolean("brake");}
+		
+		
+		}
 
 	@Override
 	@SideOnly(Side.CLIENT)

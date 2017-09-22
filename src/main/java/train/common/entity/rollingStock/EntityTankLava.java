@@ -57,7 +57,7 @@ public class EntityTankLava extends LiquidTank {
 	
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
+	//	super.writeEntityToNBT(nbttagcompound);
 
 		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < cargoItems.length; i++) {
@@ -72,7 +72,7 @@ public class EntityTankLava extends LiquidTank {
 	
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
+		//super.readEntityFromNBT(nbttagcompound);
 
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		cargoItems = new ItemStack[getSizeInventory()];

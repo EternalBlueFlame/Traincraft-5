@@ -278,8 +278,8 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
+	public void writeToNBT(NBTTagCompound nbttagcompound) {
+		super.writeToNBT(nbttagcompound);
 		nbttagcompound.setBoolean("canBeAdjusted", canBeAdjusted);
 		nbttagcompound.setBoolean("canBePulled", canBePulled);
 		nbttagcompound.setInteger("overheatLevel",  getOverheatLevel());
@@ -292,8 +292,8 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
+	public void readFromNBT(NBTTagCompound nbttagcompound) {
+		super.readFromNBT(nbttagcompound);
 		canBeAdjusted = nbttagcompound.getBoolean("canBeAdjusted");
 		canBePulled = nbttagcompound.getBoolean("canBePulled");
 		setOverheatLevel(nbttagcompound.getInteger("overheatLevel"));
