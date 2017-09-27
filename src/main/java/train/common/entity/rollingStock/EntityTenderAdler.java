@@ -61,7 +61,7 @@ public class EntityTenderAdler extends Tender implements IInventory  {
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-	//	super.writeEntityToNBT(nbttagcompound);
+		super.writeEntityToNBT(nbttagcompound);
 
 		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < tenderItems.length; i++) {
@@ -77,7 +77,7 @@ public class EntityTenderAdler extends Tender implements IInventory  {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-	//	super.readEntityFromNBT(nbttagcompound);
+		super.readEntityFromNBT(nbttagcompound);
 
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		tenderItems = new ItemStack[getSizeInventory()];

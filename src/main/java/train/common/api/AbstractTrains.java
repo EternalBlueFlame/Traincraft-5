@@ -340,8 +340,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+		//super.writeEntityToNBT(nbttagcompound);
 		nbttagcompound.setInteger("color", getColor());
 		nbttagcompound.setBoolean("chunkLoadingState", getFlag(7));
 		nbttagcompound.setDouble("trainDistanceTraveled", trainDistanceTraveled);
@@ -350,11 +350,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 		nbttagcompound.setString("theCreator", trainCreator);
 		nbttagcompound.setString("theName", trainName);
 		nbttagcompound.setString("theType", trainType);
-		//nbttagcompound.setInteger("uniqueID", uniqueID);
+		nbttagcompound.setInteger("uniqueID", uniqueID);
 		//nbttagcompound.setInteger("uniqueIDs",uniqueIDs);
 
-		//nbttagcompound.setInteger("numberOfTrains", AbstractTrains.numberOfTrains);
-	//	nbttagcompound.setInteger("ID", this.ID);
+		nbttagcompound.setInteger("numberOfTrains", AbstractTrains.numberOfTrains);
+		nbttagcompound.setInteger("ID", this.ID);
 		nbttagcompound.setBoolean("isAttached", this.isAttached);
 		nbttagcompound.setBoolean("linked", this.linked);
 		nbttagcompound.setDouble("motionX", motionX);
@@ -364,8 +364,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+		//super.readEntityFromNBT(nbttagcompound);
 		setColor(nbttagcompound.getInteger("color"));
 		setFlag(7, nbttagcompound.getBoolean("chunkLoadingState"));
 		trainDistanceTraveled = nbttagcompound.getDouble("trainDistanceTraveled");
@@ -379,15 +379,14 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 		//uniqueIDs = nbttagcompound.getInteger("uniqueIDs");
 		((EntityRollingStock) this).setInformation(trainType, trainOwner, trainCreator, trainName, uniqueID);
 
-	//	ID = nbttagcompound.getInteger("ID");
-		//numberOfTrains = nbttagcompound.getInteger("numberOfTrains");
+		ID = nbttagcompound.getInteger("ID");
+		numberOfTrains = nbttagcompound.getInteger("numberOfTrains");
 		isAttached = nbttagcompound.getBoolean("isAttached");
 		linked = nbttagcompound.getBoolean("linked");
-		motionX = nbttagcompound.getDouble("motionX");
-		motionZ = nbttagcompound.getDouble("motionZ");
+		//motionX = nbttagcompound.getDouble("motionX");
+		//motionZ = nbttagcompound.getDouble("motionZ");
 		Link1 = nbttagcompound.getDouble("Link1");
 		Link2 = nbttagcompound.getDouble("Link2");
-		
 	}
 
 	public static String getColorAsString(int i) {

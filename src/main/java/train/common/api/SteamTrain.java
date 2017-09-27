@@ -116,15 +116,15 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+		super.writeEntityToNBT(nbttagcompound);
 		this.theTank.writeToNBT(nbttagcompound);
 		nbttagcompound.setBoolean("canBeAdjusted", canBeAdjusted);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+		super.readEntityFromNBT(nbttagcompound);
 		this.theTank.readFromNBT(nbttagcompound);
 		canBeAdjusted = nbttagcompound.getBoolean("canBeAdjusted");
 	}

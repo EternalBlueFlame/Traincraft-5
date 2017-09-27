@@ -4,7 +4,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.api.AbstractWorkCart;
@@ -112,15 +111,6 @@ public class EntityWorkCart extends AbstractWorkCart implements IInventory {
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
-	}
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-	
-	}
-
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-	
 	}
 
 	public void markDirty(){}

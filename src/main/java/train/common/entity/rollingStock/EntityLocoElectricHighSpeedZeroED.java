@@ -76,7 +76,7 @@ public class EntityLocoElectricHighSpeedZeroED extends ElectricTrain {
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-	//	super.writeEntityToNBT(nbttagcompound);
+		super.writeEntityToNBT(nbttagcompound);
 
 		nbttagcompound.setShort("fuelTrain", (short) fuelTrain);
 		NBTTagList nbttaglist = new NBTTagList();
@@ -93,7 +93,7 @@ public class EntityLocoElectricHighSpeedZeroED extends ElectricTrain {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-	//	super.readEntityFromNBT(nbttagcompound);
+		super.readEntityFromNBT(nbttagcompound);
 
 		fuelTrain = nbttagcompound.getShort("fuelTrain");
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);

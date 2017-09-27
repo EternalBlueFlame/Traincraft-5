@@ -33,8 +33,8 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+		super.writeEntityToNBT(nbttagcompound);
 
 		nbttagcompound.setShort("BurnTime", (short) this.furnaceBurnTime);
 		nbttagcompound.setShort("CookTime", (short) this.furnaceCookTime);
@@ -52,8 +52,8 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+		super.readEntityFromNBT(nbttagcompound);
 		NBTTagList var2 = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		this.furnaceItemStacks = new ItemStack[this.getSizeInventoryWork()];
 

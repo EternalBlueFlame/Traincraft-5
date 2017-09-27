@@ -3,7 +3,6 @@ package train.common.entity.rollingStock;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import train.common.api.EntityRollingStock;
 import train.common.api.IPassenger;
@@ -73,14 +72,5 @@ public class EntityPassengerTramKonstal105N extends EntityRollingStock implement
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 2.2F;
-	}
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-	
-	}
-
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-	
 	}
 }

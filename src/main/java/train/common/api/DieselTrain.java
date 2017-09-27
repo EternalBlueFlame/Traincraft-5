@@ -6,6 +6,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import train.common.api.LiquidManager.StandardTank;
+import train.common.entity.rollingStock.EntityBUnitEMDF3;
 import train.common.entity.rollingStock.EntityBUnitEMDF7;
 
 public abstract class DieselTrain extends Locomotive implements IFluidHandler {
@@ -78,15 +79,15 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+		super.writeEntityToNBT(nbttagcompound);
 		this.theTank.writeToNBT(nbttagcompound);
 		nbttagcompound.setBoolean("canBeAdjusted", canBeAdjusted);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+		super.readEntityFromNBT(nbttagcompound);
 		this.theTank.readFromNBT(nbttagcompound);
 		canBeAdjusted = nbttagcompound.getBoolean("canBeAdjusted");
 	}
@@ -155,11 +156,34 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 			motionZ *= 0.8;
 		}
 		else {
-			if (this.isLocoTurnedOn()) {
-				if(linked && (cartLinked1 instanceof EntityBUnitEMDF7 || cartLinked2 instanceof EntityBUnitEMDF7)){
-					amount *=1.5;
+			FluidStack drain = null;
+			if(cartLinked1 instanceof LiquidTank && !(cartLinked1 instanceof EntityBUnitEMDF7) && !(cartLinked1 instanceof EntityBUnitEMDF3)){
+				if (getFluid() == null) {
+					drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+					if (drain == null){
+						drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 100), true);
+					}
+				} else if (getFluid().getFluid() == LiquidManager.DIESEL) {
+					drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+				} else {
+					drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 100), true);
 				}
-
+			} else if (cartLinked2 instanceof LiquidTank && !(cartLinked2 instanceof EntityBUnitEMDF7) && !(cartLinked2 instanceof EntityBUnitEMDF3)){
+				if (getFluid() == null) {
+					drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+					if (drain == null){
+						drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 100), true);
+					}
+				} else if (getFluid().getFluid() == LiquidManager.DIESEL) {
+					drain = ((LiquidTank) cartLinked2).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+				} else {
+					drain = ((LiquidTank) cartLinked2).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 100), true);
+				}
+			}
+			if (drain != null){
+				fill(ForgeDirection.UNKNOWN, drain, true);
+			}
+			if (this.isLocoTurnedOn()) {
 				fuelTrain -= amount;
 				if (fuelTrain < 0) {
 					fuelTrain = 0;

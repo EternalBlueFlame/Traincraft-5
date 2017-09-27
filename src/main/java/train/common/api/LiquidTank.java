@@ -57,14 +57,14 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
-		super.writeToNBT(nbttagcompound);
+	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+		super.writeEntityToNBT(nbttagcompound);
 		this.theTank.writeToNBT(nbttagcompound);
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+		super.readEntityFromNBT(nbttagcompound);
 		this.theTank.readFromNBT(nbttagcompound);
 	}
 

@@ -162,8 +162,8 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
 		return this.dataWatcher.getWatchableObjectInt(22);
 	}
 	@Override
-	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		super.readFromNBT(nbttagcompound);
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+		super.readEntityFromNBT(nbttagcompound);
 		ItemStack cargoItemsCount[];
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		cargoItemsCount = new ItemStack[getSizeInventory()];
