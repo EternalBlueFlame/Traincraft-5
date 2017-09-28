@@ -338,10 +338,18 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 	public int getColor() {
 		return dataWatcher.getWatchableObjectInt(12);
 	}
+	
+	@Override
+	public boolean hasDisplayTile()
+    { return false; }
+	
+	@Override
+	public void setHasDisplayTile(boolean p_94096_1_)
+    {  }
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		//super.writeEntityToNBT(nbttagcompound);
+		super.writeEntityToNBT(nbttagcompound);
 		nbttagcompound.setInteger("color", getColor());
 		nbttagcompound.setBoolean("chunkLoadingState", getFlag(7));
 		nbttagcompound.setDouble("trainDistanceTraveled", trainDistanceTraveled);
@@ -365,7 +373,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		//super.readEntityFromNBT(nbttagcompound);
+		super.readEntityFromNBT(nbttagcompound);
 		setColor(nbttagcompound.getInteger("color"));
 		setFlag(7, nbttagcompound.getBoolean("chunkLoadingState"));
 		trainDistanceTraveled = nbttagcompound.getDouble("trainDistanceTraveled");
