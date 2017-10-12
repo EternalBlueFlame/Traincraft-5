@@ -1591,6 +1591,26 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 		nbttagcompound.setBoolean("firstLoad", this.firstLoad);
 		nbttagcompound.setFloat("rotation", this.rotation);
 		nbttagcompound.setBoolean("brake", isBraking);
+		/////////////////////From AbstractTrains because super cannot be called in an abstract class/////////////////////
+		nbttagcompound.setInteger("color", getColor());
+		nbttagcompound.setBoolean("chunkLoadingState", getFlag(7));
+		nbttagcompound.setDouble("trainDistanceTraveled", trainDistanceTraveled);
+		nbttagcompound.setString("theOwner", trainOwner);
+		nbttagcompound.setBoolean("locked", locked);
+		nbttagcompound.setString("theCreator", trainCreator);
+		nbttagcompound.setString("theName", trainName);
+		nbttagcompound.setString("theType", trainType);
+		nbttagcompound.setInteger("uniqueID", uniqueID);
+		//nbttagcompound.setInteger("uniqueIDs",uniqueIDs);
+
+		nbttagcompound.setInteger("numberOfTrains", AbstractTrains.numberOfTrains);
+		nbttagcompound.setInteger("ID", this.ID);
+		nbttagcompound.setBoolean("isAttached", this.isAttached);
+		nbttagcompound.setBoolean("linked", this.linked);
+		nbttagcompound.setDouble("motionX", motionX);
+		nbttagcompound.setDouble("motionZ", motionZ);
+		nbttagcompound.setDouble("Link1", Link1);
+		nbttagcompound.setDouble("Link2", Link2);
 	}
 
 	@Override
@@ -1604,6 +1624,28 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 		this.firstLoad = nbttagcompound.getBoolean("firstLoad");
 		this.rotation = nbttagcompound.getFloat("rotation");
 		this.isBraking = nbttagcompound.getBoolean("brake");
+		/////////////////////From AbstractTrains because super cannot be called in an abstract class/////////////////////
+		setColor(nbttagcompound.getInteger("color"));
+		setFlag(7, nbttagcompound.getBoolean("chunkLoadingState"));
+		trainDistanceTraveled = nbttagcompound.getDouble("trainDistanceTraveled");
+		trainOwner = nbttagcompound.getString("theOwner");
+		this.locked = nbttagcompound.getBoolean("locked");
+		setFlag(8, locked);
+		trainCreator = nbttagcompound.getString("theCreator");
+		trainName = nbttagcompound.getString("theName");
+		trainType = nbttagcompound.getString("theType");
+		uniqueID = nbttagcompound.getInteger("uniqueID");
+		//uniqueIDs = nbttagcompound.getInteger("uniqueIDs");
+		((EntityRollingStock) this).setInformation(trainType, trainOwner, trainCreator, trainName, uniqueID);
+
+		ID = nbttagcompound.getInteger("ID");
+		numberOfTrains = nbttagcompound.getInteger("numberOfTrains");
+		isAttached = nbttagcompound.getBoolean("isAttached");
+		linked = nbttagcompound.getBoolean("linked");
+		//motionX = nbttagcompound.getDouble("motionX");
+		//motionZ = nbttagcompound.getDouble("motionZ");
+		Link1 = nbttagcompound.getDouble("Link1");
+		Link2 = nbttagcompound.getDouble("Link2");
 	}
 
 	@Override

@@ -338,8 +338,15 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 	public int getColor() {
 		return dataWatcher.getWatchableObjectInt(12);
 	}
+	public boolean hasDisplayTile()
+    {
+        return false;
+    }
 
-	@Override
+    public void setHasDisplayTile(boolean p_94096_1_)
+    {         }
+
+	/*@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		//super.writeEntityToNBT(nbttagcompound);
 		nbttagcompound.setInteger("color", getColor());
@@ -387,7 +394,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 		//motionZ = nbttagcompound.getDouble("motionZ");
 		Link1 = nbttagcompound.getDouble("Link1");
 		Link2 = nbttagcompound.getDouble("Link2");
-	}
+	}*/
 
 	public static String getColorAsString(int i) {
 		switch (i) {
