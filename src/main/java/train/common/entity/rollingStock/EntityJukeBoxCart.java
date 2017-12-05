@@ -203,15 +203,15 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
+	public void saveNBTData(NBTTagCompound nbttagcompound) {
+		super.saveNBTData(nbttagcompound);
 		nbttagcompound.setString("StreamUrl", this.streamURL);
 		nbttagcompound.setBoolean("isPlaying", this.isPlaying());
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
+	 public void loadNBTData(NBTTagCompound nbttagcompound) {
+		super.loadNBTData(nbttagcompound);
 		this.streamURL = nbttagcompound.getString("StreamUrl");
 		this.isPlaying = nbttagcompound.getBoolean("isPlaying");
 		this.dataWatcher.updateObject(22, streamURL);

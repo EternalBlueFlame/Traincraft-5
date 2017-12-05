@@ -22,6 +22,7 @@ import train.common.api.LiquidTank;
 import train.common.api.Tender;
 import train.common.containers.*;
 import train.common.core.handlers.ChunkEvents;
+import train.common.core.handlers.EventProperties;
 import train.common.core.handlers.WorldEvents;
 import train.common.core.util.MP3Player;
 import train.common.entity.digger.EntityRotativeDigger;
@@ -45,7 +46,9 @@ public class CommonProxy implements IGuiHandler {
 	public void registerEvents(FMLPreInitializationEvent event){
 		WorldEvents worldEvents = new WorldEvents();
 		ChunkEvents chunkEvents = new ChunkEvents();
-
+		EventProperties eventproperties = new EventProperties();
+		
+		registerEvent(eventproperties);
 		registerEvent(worldEvents);
 		registerEvent(chunkEvents);
 		ForgeChunkManager.setForcedChunkLoadingCallback(Traincraft.instance, chunkEvents);

@@ -5,6 +5,7 @@ import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.carts.IRoutableCart;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,6 +19,7 @@ import net.minecraft.util.StatCollector;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import train.client.render.RenderEnum;
 import train.common.Traincraft;
@@ -33,8 +35,9 @@ import train.common.library.EnumTrains;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractTrains extends EntityMinecart implements IMinecart, IRoutableCart, IEntityAdditionalSpawnData {
+public abstract class AbstractTrains extends EntityMinecart implements IMinecart, IRoutableCart, IEntityAdditionalSpawnData,IExtendedEntityProperties {
 
+	public static final String IEEP = "PropertiesAbstractTrains";
 	/**
 	 * The color of the current rollingstock -1 if default
 	 */
@@ -340,7 +343,13 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+	protected void writeEntityToNBT(NBTTagCompound nbttagcompound){}
+	
+	@Override
+	protected void readEntityFromNBT(NBTTagCompound nbttagcompound){}
+	
+	@Override
+	public void saveNBTData(NBTTagCompound nbttagcompound) {
 		//super.writeEntityToNBT(nbttagcompound);
 		nbttagcompound.setInteger("color", getColor());
 		nbttagcompound.setBoolean("chunkLoadingState", getFlag(7));
@@ -364,8 +373,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		//super.readEntityFromNBT(nbttagcompound);
+	 public void loadNBTData(NBTTagCompound nbttagcompound) {
+		//super.loadNBTData(nbttagcompound);
 		setColor(nbttagcompound.getInteger("color"));
 		setFlag(7, nbttagcompound.getBoolean("chunkLoadingState"));
 		trainDistanceTraveled = nbttagcompound.getDouble("trainDistanceTraveled");
@@ -645,4 +654,15 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 		}
 	}
 
+	@Override
+	public void init(Entity entity, World world) {
+		AbstractTrains theentity = (AbstractTrains)entity;
+		
+		this.worldObj = world;
+				
+	}
+	
+	public static void register(AbstractTrains abstrain) {
+    	abstrain.registerExtendedProperties(IEEP, abstrain);
+    }
 }

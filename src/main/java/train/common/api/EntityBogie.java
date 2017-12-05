@@ -18,6 +18,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IExtendedEntityProperties;
 import train.common.items.ItemTCRail;
 import train.common.items.ItemTCRail.TrackTypes;
 import train.common.library.BlockIDs;
@@ -26,8 +27,9 @@ import train.common.tile.TileTCRailGag;
 
 import java.util.List;
 
-public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableCart {
+public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableCart,IExtendedEntityProperties {
 
+	public static final String IEEP = "PropertiesBogie";
 	public boolean isOnRail;
 	public float prevDpdx;
 	public float prevDpdz;
@@ -273,23 +275,21 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-
+	 public void loadNBTData(NBTTagCompound nbttagcompound) {
+		
 		this.entityMainTrainID = nbttagcompound.getInteger("trainID");
 		this.bogieIndex = nbttagcompound.getInteger("bogieIndex");
 		this.bogieShift = nbttagcompound.getDouble("bogieShift");
 
-		super.readEntityFromNBT(nbttagcompound);
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-
+	public void saveNBTData(NBTTagCompound nbttagcompound) {
+	
 		nbttagcompound.setInteger("trainID", entityMainTrainID);
 		nbttagcompound.setInteger("bogieIndex", bogieIndex);
 		nbttagcompound.setDouble("bogieShift", bogieShift);
 
-		super.writeEntityToNBT(nbttagcompound);
 	}
 
 	@Override
@@ -763,4 +763,14 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		this.motionY = this.velocityY;
 		this.motionZ = this.velocityZ;
 	}
+
+	@Override
+	public void init(Entity entity, World world) {
+		EntityBogie theentity = (EntityBogie) entity;
+		 
+		this.worldObj = world;
+	}
+	public static void register(EntityBogie bogie) {
+    	bogie.registerExtendedProperties(IEEP, bogie);
+    }
 }
