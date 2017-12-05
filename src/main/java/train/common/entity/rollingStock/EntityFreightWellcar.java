@@ -44,8 +44,8 @@ public class EntityFreightWellcar extends Freight implements IInventory {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
+	public void saveNBTData(NBTTagCompound nbttagcompound) {
+		super.saveNBTData(nbttagcompound);
 
 		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < cargoItems.length; i++) {
@@ -60,8 +60,8 @@ public class EntityFreightWellcar extends Freight implements IInventory {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
+	 public void loadNBTData(NBTTagCompound nbttagcompound) {
+		super.loadNBTData(nbttagcompound);
 
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		cargoItems = new ItemStack[getSizeInventory()];

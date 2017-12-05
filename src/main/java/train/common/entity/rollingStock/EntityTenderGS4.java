@@ -52,8 +52,8 @@ public class EntityTenderGS4 extends Tender implements IInventory {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
+	public void saveNBTData(NBTTagCompound nbttagcompound) {
+		super.saveNBTData(nbttagcompound);
 
 		NBTTagList nbttaglist = new NBTTagList();
 		for (int i = 0; i < tenderItems.length; i++) {
@@ -68,8 +68,8 @@ public class EntityTenderGS4 extends Tender implements IInventory {
 	}
 
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
+	 public void loadNBTData(NBTTagCompound nbttagcompound) {
+		super.loadNBTData(nbttagcompound);
 
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		tenderItems = new ItemStack[getSizeInventory()];
