@@ -182,8 +182,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		return (checkForBallast() && checkForTracks() && getFuel() > 0);
 	}
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
+	public void saveNBTData(NBTTagCompound nbttagcompound) {
+		super.saveNBTData(nbttagcompound);
+		
 		nbttagcompound.setInteger("plannedHeight", plannedHeight);
 		nbttagcompound.setBoolean("followTracks", followTracks);
 
@@ -203,8 +204,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		nbttagcompound.setTag("Items", nbttaglist);
 	}
 	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
+	 public void loadNBTData(NBTTagCompound nbttagcompound) {
+		super.loadNBTData(nbttagcompound);
 
 		pushX = nbttagcompound.getDouble("PushX");
 		pushZ = nbttagcompound.getDouble("PushZ");
