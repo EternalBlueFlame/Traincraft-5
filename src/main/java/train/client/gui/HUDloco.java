@@ -3,9 +3,11 @@ package train.client.gui;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.lwjgl.opengl.GL11;
+import train.common.api.ControlCar;
 import train.common.api.DieselTrain;
 import train.common.api.Locomotive;
 import train.common.api.SteamTrain;
@@ -17,15 +19,36 @@ public class HUDloco extends GuiScreen {
 	private int windowWidth, windowHeight;
 
 	@SubscribeEvent
-	public void onGameRender(RenderGameOverlayEvent.Text event){
-		if (game != null && game.thePlayer != null && game.thePlayer.ridingEntity != null && game.thePlayer.ridingEntity instanceof Locomotive && Minecraft.isGuiEnabled() && game.currentScreen == null) {
-			renderSkillHUD(event, (Locomotive) game.thePlayer.ridingEntity);
-		} else {
-			this.game = this.mc = Minecraft.getMinecraft();
-			this.fontRendererObj = this.game.fontRenderer;
-		}
-	}
+	public void onGameRender(RenderGameOverlayEvent.Text event) {
 
+        if (game != null) {
+
+            if (game.thePlayer != null && game.thePlayer.ridingEntity != null && game.thePlayer.ridingEntity instanceof Locomotive || game.thePlayer.ridingEntity instanceof ControlCar && Minecraft.isGuiEnabled() && game.currentScreen == null) {
+
+                if (game.thePlayer.ridingEntity instanceof ControlCar) {
+
+                    ControlCar controlCar = ((ControlCar) game.thePlayer.ridingEntity);
+
+                    Entity eLoco = controlCar.worldObj.getEntityByID(controlCar.getDataWatcher().getWatchableObjectInt(31));
+
+                    if (eLoco instanceof Locomotive) {
+                        Locomotive drLoco = (Locomotive) controlCar.worldObj.getEntityByID(controlCar.getDataWatcher().getWatchableObjectInt(31));
+
+                        renderSkillHUD(event, drLoco);
+
+                    }
+                } else {
+                    renderSkillHUD(event, (Locomotive) game.thePlayer.ridingEntity);
+                }
+
+
+            }
+        } else {
+            this.game = this.mc = Minecraft.getMinecraft();
+            this.fontRendererObj = this.game.fontRenderer;
+
+        }
+    }
 	public void renderSkillHUD(RenderGameOverlayEvent event, Locomotive rcCar) {
 		windowWidth = event.resolution.getScaledWidth();
 		windowHeight = event.resolution.getScaledHeight() - 100;
