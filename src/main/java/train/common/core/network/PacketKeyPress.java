@@ -6,6 +6,7 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import train.common.api.ControlCar;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 import train.common.core.CommonProxy;
@@ -65,6 +66,9 @@ public class PacketKeyPress implements IMessage {
 
 					((Locomotive) ridingEntity).keyHandlerFromPacket(message.key);
 				}
+				else if (ridingEntity instanceof ControlCar) {
+					((ControlCar) ridingEntity).keyHandlerFromPacket(message.key);
+				}
 				else if (ridingEntity instanceof EntityRollingStock) {
 
 					((EntityRollingStock) ridingEntity).keyHandlerFromPacket(message.key);
@@ -79,12 +83,12 @@ public class PacketKeyPress implements IMessage {
 				}
 			}
 
-			/*if (message.key == 404){
+			if (message.key == 404){
 				CommonProxy.debug = CommonProxy.debug;
 				if (Minecraft.getMinecraft().theWorld != null) {
 					System.out.println(Minecraft.getMinecraft().theWorld.isRemote);
 				}
-			}*/
+			}
 			return null;
 		}
 	}

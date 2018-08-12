@@ -19,7 +19,7 @@ public enum EnumTrains {
 	passengerHighSpeedZeroED("Passenger High Speed Zero ED",EntityPassengerHighSpeedCarZeroED.class, ItemIDs.minecartPassengerHighSpeedCarZeroED.item,"passenger",0,0,2,0,0,0,0,0,0,null,18,0),
 	passengerTramNY("Passenger Tram NY",EntityPassengerTramNY.class, ItemIDs.minecartPassengerTramNY.item,"passenger",0,0,1,0,0,0,0,0,0,null,18,0),
 	passengerAdler("Passenger Adler",EntityPassengerAdler.class, ItemIDs.minecartPassengerAdler.item,"passenger",0,0,1,0,0,0,0,0,0,null,18,0),
-	passengerDBOriental("Passenger DB oriental",EntityPassengerDBOriental.class, ItemIDs.minecartPassengerDBOriental.item,"passenger",0,0,2,0,0,0,0,0,0,new String[]{"Yellow", "Blue", "White"},18,0),
+	//passengerDBOriental("pass_DB_oriental",EntityPassengerDBOriental.class, ItemIDs.minecartPassengerDBOriental.item,"train_tram_ny","passenger",0,0,1,0,0,0,0,0,0,null,18,null,null),
 	passengerIC4_DSB_FG("Passenger IC4 DSB FG",PassengerIC4_DSB_FG.class, ItemIDs.minecartIC4_DSB_FG.item,"passenger",0,0,0.5,0,0,0,0,0,0,null,10,0, new String[]{"Unfinished, Creative Only"}),
 	passengerIC4_DSB_FH("Passenger IC4 DSB FH",PassengerIC4_DSB_FH.class, ItemIDs.minecartIC4_DSB_FH.item,"passenger",0,0,0.5,0,0,0,0,0,0,null,10,0, new String[]{"Unfinished, Creative Only"}),
 	passengerICE1_Class1("Passenger ICE 1st Class", EntityPassengerICE_1class.class,ItemIDs.minecartICE1_1stClass.item, "passenger", 0, 0, 0.5, 0, 0, 0, 0, 0, 0, null, 10, 0),
@@ -148,7 +148,7 @@ public enum EnumTrains {
 	locoDieselGP40("Loco Diesel CD742", EntityLocoDieselCD742.class,  ItemIDs.minecartCD742.item, "diesel", 1200, 90,
 			0, 50, 0, 250, 0.8, 0.966, 10000, new String[] { "Yellow", "White", "Blue", "Orange", "LightBlue" }, 15, -2.5),
 	locoDieselChME3("Loco Diesel ChME3", EntityLocoDieselChME3.class,  ItemIDs.minecartChmE3.item,"diesel", 1318, 95, 0, 60, 0, 170, 0.66, 0.96, 5000, null, 15,  -1.2),
-	locoDieselGP7Red("Loco Diesel GP7",EntityLocoDieselGP7Red.class, ItemIDs.minecartGP7Red.item,"diesel",1520,112,0,50,0,200,0.74,0.96,20000,new String[] {"Red","Blue","Black","Yellow", "Magenta", "Cyan", "Pink", "LightGrey", "Green", "White", "LightBlue", "Lime", "Brown", "Purple", "Orange", "Grey"},15,-1.4),
+	locoDieselGP7Red("Loco Diesel GP7",EntityLocoDieselGP7Red.class, ItemIDs.minecartGP7Red.item,"diesel",1520,112,0,50,0,200,0.74,0.96,20000,new String[] {"Red","Blue","Black","Yellow", "Magenta", "Cyan", "Pink", "LightGrey", "Green", "White", "LightBlue", "Lime", "Brown", "Purple", "Orange", "Greyr"},15,-1.4),
 	locoDieselSD40("Loco Diesel SD40",EntityLocoDieselSD40.class, ItemIDs.minecartLocoSD40.item,"diesel",3041,134,0,60,0,200,0.8,0.97,20000,new String[] {"Red","Yellow","Black","Green","Orange","Magenta","Blue"},10,-2.3),
 	locoDieselSD70("Loco Diesel SD70",EntityLocoDieselSD70.class, ItemIDs.minecartLocoSD70.item,"diesel",4055,112,0,60,0,200,0.8,0.97,20000,new String[] {"Orange","Yellow","Red","Blue","Magenta","Black", "Pink"},10,-2.3),
 	locoDieselShunter("Loco Diesel Shunter", EntityLocoDieselShunter.class,  ItemIDs.minecartShunter.item,"diesel", 354, 32, 0, 70, 0, 260, 0.6, 0.94, 8000,new String[] { "Blue", "Green", "Red", "Black" }, 14,  -2.58),
@@ -184,7 +184,8 @@ public enum EnumTrains {
 	locoDieselE10lDB("Loco Electric E10 DB",EntityLocoElectricE10_DB.class, ItemIDs.minecartE10_DB.item,"electric",5069,150,0,8,0,170,0.66,0.96,8000,new String[] {"Blue","Red", "Grey"},15,-3.8),
 	locoElectricClass85("Loco Electric Class 85", EntityLocoElectricClass85.class,
 			ItemIDs.minecartLocoClass85.item, "electric", 3156, 160, 0, 10, 0, 170, 0.7, 0.965, 0, null, 18, -5),
-
+    /** Control Car */
+	ControlCarVL10("Control Car VL10", EntityControlCarVL10.class,  ItemIDs.minecartVL10CC.item, "Control Car",0,0, 0, 8, 0, 400, 1.1, 0.956, 0, null, 14, -2.3,  new String[]{"Experimental, can drive the train"}),
 	/** Steam */
 	locoSteamA4("Loco Steam A4 Mallard", EntityLocoSteamMallardA4.class,  ItemIDs.minecartLocoA4Mallard.item, "steam", 639, 203, 0, 60, 200, 160, 0.65, 0.97, 10000, new String[] { "Blue", "Lime", "Black", "Green", "White" }, 7, -5 ),
 	locoSteamMILW("Loco Steam MILW Class A", EntityLocoSteamMILWClassA.class,  ItemIDs.minecartLocoMILWClassA.item, "steam", 639, 140, 0, 60, 150, 160, 0.65, 0.97, 10000, null, 7, -4.5 ),
@@ -211,7 +212,7 @@ public enum EnumTrains {
 	locoSteamClimax("Loco Steam Climax",EntityLocoSteamClimax.class, ItemIDs.minecartLocoSteamClimax.item,"steam",250,45,0,50,160,130,0.5,0.968,4000,null,15,-1.5),
 	locoSteamPannier("Loco Steam Pannier",EntityLocoSteamPannier.class, ItemIDs.minecartLocoSteamPannier.item,"steam",229,45,0,50,160,130,0.5,0.968,8000,null,15,-3.5),
 	locoSteamAlice("Loco Steam Alice",EntityLocoSteamAlice0_4_0.class, ItemIDs.minecartLocoSteamAlice.item,"steam",200,32,0,60,160,200,0.5,0.968,3750,null,15,-2),
-	locoSteamGLYN("Loco Steam glyn",EntityLocoSteamGLYN042T.class, ItemIDs.minecartLocoSteamGLYN.item,"steam",600,32,0,60,160,200,0.45,0.968,3750,null,15,-2.5),
+	locoSteamGLYN("Loco Steam glyn",EntityLocoSteamGLYN042T.class, ItemIDs.minecartLocoSteamGLYN.item,"steam",200,32,0,60,160,200,0.45,0.968,3750,null,15,-2.5),
 	locoSteam262T("Loco Steam 262T",EntityLocoSteam262T.class, ItemIDs.minecartLocoSteam262T.item,"steam",300,70,0,60,160,300,0.5,0.968,4250,null,15,-3),
 	locoSteam040VB("Loco Steam 040VB",EntityLocoSteam040VB.class, ItemIDs.minecartLocoSteam040vb.item,"steam",200,32,0,40,120,200,0.5,0.968,2500,null,15,-1.1),
 	locoSteamAdler("Loco Steam Adler",EntityLocoSteamAdler.class, ItemIDs.minecartLocoSteamAdler.item,"steam",200,45,0,60,160,300,0.5,0.968,3000,null,15,-1.5),

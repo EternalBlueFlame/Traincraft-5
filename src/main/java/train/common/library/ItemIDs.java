@@ -79,6 +79,7 @@ public enum ItemIDs {
 	minecartBR_E69("ItemRollingStock", "train_bre69", 10),
 	minecartShunter("ItemRollingStock", "train_shunter", 10),
 	minecartVL10("ItemRollingStock", "train_vl10", 10),
+	minecartVL10CC("ItemRollingStock", "train_vl10CC", 10),
 	minecartTramWood("ItemRollingStock", "train_tram", 7),
 	minecartChmE3("ItemRollingStock", "train_chme3", 8),
 	//minecartHeavySteam("ItemRollingStock", "steam", HandleMaxAttachedCarts.HEAVY_STEAM_CARTS, 0D, (int) SpeedHandler.HEAVYSTEAM, "train_steam_heavy"),//TODO put it back once Heavy Steam is back
@@ -242,8 +243,8 @@ public enum ItemIDs {
 	minecartCabooseLogging("ItemRollingStock", "train_logging_caboose", 1),
 	minecartCabooseLoggingPRR("ItemRollingStock", "train_prr_caboose", 1),
 	minecartPassengerTramNY("ItemRollingStock", "train_tram_ny", 3),
-
-	minecartPassengerDBOriental("ItemRollingStock", "train_passenger_orient", 2),
+	//TODO Needs icon
+	//minecartPassengerDBOriental("ItemRollingStock", "train_tram_ny", 2),
 	minecartLocoSD40("ItemRollingStock", "train_sd40", 10),
 	zeppelin("ItemZeppelin", "item_zeppelin_one_balloon", 1),
 
