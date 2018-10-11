@@ -59,6 +59,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
 	public int mtcStatus = 0;
 	public int mtcType = 1;
 	public int atoStatus = 0;
+	public int atoType = 0;
 	public int blocksFromStopPoint = 0;
 	public Double xFromStopPoint = 0.0;
 	public Double yFromStopPoint = 0.0;
