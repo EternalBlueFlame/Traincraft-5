@@ -72,9 +72,31 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
 	public Double yFromSpeedChange = 0.0;
 	public Double zFromSpeedChange = 0.0;
 	
-	//TrainAdditions support ends here
+	//ADVTC: Advanced Train Control
+	public int speedLimitADVTC = 0;
+	public String signalAspectADVTC = "off";
+	public int trainIDADVTC = 0;
+	public Double blocksFromWarningCurve = 0.0;
+	public Double xWarningCurve = 0.0;
+	public Double yWarningCurve = 0.0;
+	public Double zWarningCurve = 0.0;
+	
+	public Double blocksFromBrakingCurve = 0.0;
+	public Double xBrakingCurve = 0.0;
+	public Double yBrakingCurve = 0.0;
+	public Double zBrakingCurve = 0.0;
+	
+	public Double blocksFromStopPoint = 0.0;
+	public Double xStopPoint = 0.0;
+	public Double yStopPoint = 0.0;
+	public Double zStopPoint = 0.0;
 	
 	
+	public Double blocksFromSpeedLimitChange = 0.0;
+	public Double xSpeedLimitChange = 0.0;
+	public Double ySpeedLimitChange = 0.0;
+	public Double zSpeedLimitChange = 0.0;
+	//TrainAdditions support ends here (Apolgizes for the large amount of code)
 	/**
 	 * state of the loco
 	 */
