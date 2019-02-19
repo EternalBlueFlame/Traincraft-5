@@ -783,7 +783,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
 					speedLimit = (int) Math.round(distanceFromSpeedChange);
 					Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(this.worldObj.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
 				}
-				if (distanceFromStopPoint < this.getSpeed() && !(distanceFromStopPoint < nextSpeedLimit)) {
+				if (distanceFromStopPoint < this.getSpeed() && !(distanceFromStopPoint < nextSpeedLimit) && (this.getSpeed() <= 15)) {
 					speedLimit = (int) Math.round(distanceFromStopPoint);
 					Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(this.worldObj.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D) );
 				}
