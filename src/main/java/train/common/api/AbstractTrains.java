@@ -33,6 +33,7 @@ import train.common.library.EnumTrains;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class AbstractTrains extends EntityMinecart implements IMinecart, IRoutableCart, IEntityAdditionalSpawnData {
 
@@ -372,6 +373,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 		//nbttagcompound.setDouble("motionZ", motionZ);
 		nbttagcompound.setDouble("Link1", Link1);
 		nbttagcompound.setDouble("Link2", Link2);
+
+		nbttagcompound.setInteger("Dim", this.dimension);
+
+		nbttagcompound.setLong("UUIDM", this.getUniqueID().getMostSignificantBits());
+		nbttagcompound.setLong("UUIDL", this.getUniqueID().getLeastSignificantBits());
 	}
 
 	@Override
@@ -397,8 +403,28 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 		//motionZ = nbttagcompound.getDouble("motionZ");
 		Link1 = nbttagcompound.getDouble("Link1");
 		Link2 = nbttagcompound.getDouble("Link2");
+		if(nbttagcompound.hasKey("Dim")){
+			this.dimension=nbttagcompound.getInteger("Dim");
+		}
+
+		if(nbttagcompound.hasKey("UUIDM")){
+			this.entityUniqueID = new UUID(nbttagcompound.getLong("UUIDM"), nbttagcompound.getLong("UUIDL"));
+		}
 	}
 
+	@Override
+	public boolean writeMountToNBT(NBTTagCompound tag){
+		return false;
+	}
+	@Override
+	public boolean writeToNBTOptional(NBTTagCompound p_70039_1_) {
+		if (!this.isDead && this.getEntityString() != null) {
+			p_70039_1_.setString("id", this.getEntityString());
+			this.writeToNBT(p_70039_1_);
+			return true;
+		}
+		return false;
+	}
 
 	public void setInformation(String trainType, String trainOwner, String trainCreator, String trainName, int uniqueID) {
 		if (!worldObj.isRemote) {
@@ -566,17 +592,22 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 	/** Locking for passengers, flat, caboose, jukebox,workcart */
 	protected boolean lockThisCart(ItemStack itemstack, EntityPlayer entityplayer) {
 		if (itemstack != null && (itemstack.getItem() instanceof ItemWrench || itemstack.getItem() instanceof ItemAdminBook)) {
-			if (entityplayer.getDisplayName().equals(this.trainOwner) || entityplayer.getGameProfile().getName().equals(this.trainOwner) || this.trainOwner.equals("") || entityplayer.canCommandSenderUseCommand(2, "")) {
+			if (entityplayer.getDisplayName().equals(this.trainOwner) || entityplayer.getGameProfile().getName().equals(this.trainOwner)
+					|| this.trainOwner.equals("") || entityplayer.canCommandSenderUseCommand(2, "")) {
 				if (locked) {
 					locked = false;
-					entityplayer.addChatMessage(new ChatComponentText("unlocked"));
+					if(worldObj.isRemote) {
+						entityplayer.addChatMessage(new ChatComponentText("unlocked"));
+					}
 				}
 				else {
 					locked = true;
-					entityplayer.addChatMessage(new ChatComponentText("locked"));
+					if(worldObj.isRemote) {
+						entityplayer.addChatMessage(new ChatComponentText("locked"));
+					}
 				}
 			}
-			else {
+			else if (worldObj.isRemote) {
 				entityplayer.addChatMessage(new ChatComponentText("You are not the owner!"));
 			}
 			return true;
@@ -591,10 +622,13 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 	protected boolean canBeDestroyedByPlayer(DamageSource damagesource) {
 		if (this.getTrainLockedFromPacket()) {
 			if (damagesource.getEntity() instanceof EntityPlayer) {
-				if ((damagesource.getEntity() instanceof EntityPlayerMP) && ((EntityPlayerMP)damagesource.getEntity()).canCommandSenderUseCommand(2, "") && ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem() != null && ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem().getItem() instanceof ItemWrench) {
+				if ((damagesource.getEntity() instanceof EntityPlayerMP) &&
+						((EntityPlayerMP)damagesource.getEntity()).canCommandSenderUseCommand(2, "") &&
+						((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem() != null &&
+						((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem().getItem() instanceof ItemWrench) {
 
 					((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("Removing the train using OP permission"));
-					return true;
+					return false;
 				}
 				else if (!((EntityPlayer) damagesource.getEntity()).getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
 					((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("You are not the owner!"));

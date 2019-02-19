@@ -3,7 +3,9 @@ package train.common.api;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
@@ -177,13 +179,36 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			return;
 
 		boolean hasCoalInTender = false;
-		if (isLocoTurnedOn()) {
+		if (isLocoTurnedOn() && ticksExisted%10==0) {
 			FluidStack drain = null;
+
+			if(fill(ForgeDirection.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
+				blocksToCheck = new TileEntity[]{worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY - 1), MathHelper.floor_double(posZ)),
+						worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 2), MathHelper.floor_double(posZ)),
+						worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 3), MathHelper.floor_double(posZ)),
+						worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 4), MathHelper.floor_double(posZ))
+				};
+
+				for (TileEntity block : blocksToCheck) {
+					if (drain == null && block instanceof IFluidHandler) {
+						for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+							if(((IFluidHandler) block).drain(direction,100,false)!=null &&
+									((IFluidHandler) block).drain(direction, 100, false).fluid==FluidRegistry.WATER &&
+									((IFluidHandler) block).drain(direction, 100, false).amount ==100
+							) {
+								drain = ((IFluidHandler) block).drain(
+										direction, 100, true);
+							}
+						}
+					}
+				}
+			}
+
 			if(cartLinked1 instanceof Tender){
-				if (getFluid() == null) {
-					drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
-				} else if (getFluid().getFluid() == FluidRegistry.WATER) {
-					drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+				if(drain==null && fill(ForgeDirection.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
+					if (getFluid() == null || getFluid().getFluid() == FluidRegistry.WATER) {
+						drain = ((Tender) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+					}
 				}
 				for (int h = 0; h < ((Tender) cartLinked1).tenderItems.length; h++) {
 					if (((Tender) cartLinked1).tenderItems[h] != null && FuelHandler.steamFuelLast(((Tender) cartLinked1).tenderItems[h]) != 0) {
@@ -198,10 +223,11 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 
 
 			} else if (cartLinked2 instanceof Tender){
-				if (getFluid() == null) {
-					drain = ((LiquidTank) cartLinked2).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
-				} else if (getFluid().getFluid() == FluidRegistry.WATER) {
-					drain = ((LiquidTank) cartLinked2).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+
+				if(drain==null && fill(ForgeDirection.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
+					if (getFluid() == null || getFluid().getFluid() == FluidRegistry.WATER) {
+						drain = ((Tender) cartLinked2).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+					}
 				}
 
 

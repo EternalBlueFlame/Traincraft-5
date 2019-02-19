@@ -206,6 +206,8 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		EntityRollingStock rollingStock = null;
 		for(EnumTrains train : EnumTrains.values()){
 			if(train.getItem() == itemstack.getItem()){
+				//System.out.println(train.getItem().getUnlocalizedName());
+				//System.out.println(world!=null);
 				rollingStock = (EntityRollingStock) train.getEntity(world, i + 0.5F, j + 0.5F, k + 0.5F);
 				if(train.getColors()!=null){
 					if(rollingStock != null){
@@ -306,9 +308,15 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 								rollingStock.serverRealRotation = 90;
 							}
 						}else{
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
-							rollingStock.setDead();
-							return rollingStock;
+							if(player!=null) {
+								player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+								rollingStock.setDead();
+								return rollingStock;
+							} else {
+								if(meta == 0 || meta == 2){
+									rollingStock.serverRealRotation = 90;
+								}
+							}
 						}
 					}
 				}

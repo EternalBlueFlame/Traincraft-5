@@ -39,6 +39,7 @@ import train.common.mtc.*;
 import train.common.recipes.AssemblyTableRecipes;
 
 import java.io.File;
+import java.util.Calendar;
 
 @Mod(modid = Info.modID, name = Info.modName, version = Info.modVersion)
 public class Traincraft {
@@ -50,6 +51,14 @@ public class Traincraft {
 	/* TrainCraft proxy files */
 	@SidedProxy(clientSide = "train.client.core.ClientProxy", serverSide = "train.common.core.CommonProxy")
 	public static CommonProxy proxy;
+	
+	/* Traincraft Alpha checks */
+	public static final boolean alpha = false;
+	
+	public static boolean alphaEnd() {
+		Calendar cal = Calendar.getInstance();
+		return (cal.get(Calendar.YEAR) == 2019 && cal.get(Calendar.MONTH) == Calendar.JANUARY && cal.get(Calendar.DATE) >= 21 && cal.get(Calendar.DATE) <= 31);
+	}
 
 	/* TrainCraft Logger */
 	public static Logger tcLog = LogManager.getLogger(Info.modName);
@@ -69,7 +78,7 @@ public class Traincraft {
     public static SimpleNetworkWrapper updateDestinationChannel = NetworkRegistry.INSTANCE.newSimpleChannel("updateDestinationChannel");
 	public static final SimpleNetworkWrapper itaChannel = NetworkRegistry.INSTANCE.newSimpleChannel("TransmitterAspect");
 	public static  SimpleNetworkWrapper itsChannel = NetworkRegistry.INSTANCE.newSimpleChannel("TransmitterSpeed");
-	public static  SimpleNetworkWrapper mtcsChannel = NetworkRegistry.INSTANCE.newSimpleChannel("MTCSysSetSpeed");
+	//public static  SimpleNetworkWrapper mtcsChannel = NetworkRegistry.INSTANCE.newSimpleChannel("MTCSysSetSpeed");
 	public static  SimpleNetworkWrapper itnsChannel = NetworkRegistry.INSTANCE.newSimpleChannel("TransmitterNextSpeed");
 	public static final SimpleNetworkWrapper mtlChannel = NetworkRegistry.INSTANCE.newSimpleChannel("MTCLevelUpdater");
 	public static final SimpleNetworkWrapper msChannel = NetworkRegistry.INSTANCE.newSimpleChannel("MTCStatus");
@@ -79,7 +88,6 @@ public class Traincraft {
 	public static final SimpleNetworkWrapper atoDoAccelChannel = NetworkRegistry.INSTANCE.newSimpleChannel("ATODoAccel");
 	public static final SimpleNetworkWrapper atoSetStopPoint = NetworkRegistry.INSTANCE.newSimpleChannel("ATOSetStopPoint");
 	public static final SimpleNetworkWrapper NCSlowDownChannel = NetworkRegistry.INSTANCE.newSimpleChannel("NCDoSlowDown");
-	public static final SimpleNetworkWrapper ctChannel = NetworkRegistry.INSTANCE.newSimpleChannel("ctmChannel");
 	public static final SimpleNetworkWrapper gsfsChannel = NetworkRegistry.INSTANCE.newSimpleChannel("gsfsChannel");
 	public static final SimpleNetworkWrapper gsfsrChannel = NetworkRegistry.INSTANCE.newSimpleChannel("gsfsReturnChannel");
 
@@ -103,6 +111,14 @@ public class Traincraft {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		tcLog.info("Starting Traincraft " + Info.modVersion + "!");
+		/* Alpha Check */
+		
+		if (alpha) {
+			if(!alphaEnd()) {
+				proxy.throwAlphaException();
+			}
+		}
+		
 		/* Config handler */
 		configDirectory= event.getModConfigurationDirectory();
 		ConfigHandler.init(new File(event.getModConfigurationDirectory(), Info.modName + ".cfg"));
