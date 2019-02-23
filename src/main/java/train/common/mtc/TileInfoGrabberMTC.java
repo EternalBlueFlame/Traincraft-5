@@ -86,7 +86,7 @@ public class TileInfoGrabberMTC  extends TileEntity implements IPeripheral {
 
     @Override
     public String[] getMethodNames() {
-        return new String[]  {"activate", "deactivate", "getMTCLevel", "getMTCName", "getMTCType", "isTrainOverSensor"};
+        return new String[]  {"activate", "deactivate", "getMTCLevel", "getMTCName", "getMTCType", "isTrainOverSensor", "getTrainID"};
     }
     @Override
     public Object[] callMethod(IComputerAccess computer, ILuaContext context, int method, Object[] arguments) throws LuaException, InterruptedException {
@@ -110,6 +110,8 @@ public class TileInfoGrabberMTC  extends TileEntity implements IPeripheral {
                 return new Object[]{trainType};
             } case 5: {
                 return new Object[]{trainOverSensor};
+            } case 6: {
+                return new Object[]{trainID};
             } default:
                 return new Object[] {"nil"};
         }
