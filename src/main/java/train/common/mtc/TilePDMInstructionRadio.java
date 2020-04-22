@@ -4,7 +4,6 @@ import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
-import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
@@ -19,12 +18,12 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
     public Boolean isActivated = false;
     public ArrayList<IComputerAccess> computers = new ArrayList<IComputerAccess>();
     public int system = 0;
-    public String uniqueID;
+    public String uniqueID = "";
     public AxisAlignedBB boundingBox = null;
     Map< String,Map<String, String>> connectedTrains =
             new HashMap<String,Map<String, String>>();
     public TilePDMInstructionRadio() {
-        if (uniqueID == null) {
+        if (uniqueID.equals("")) {
             uniqueID = UUID.randomUUID().toString();
         }
     }
@@ -148,6 +147,7 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
         int l = (this.zCoord / 16) + 50;
         List[] entities;
         ArrayList<WirelessTransmitter> toAdd = new ArrayList();
+
         for (int i1 = i; i1 <= j; ++i1) {
             for (int j1 = k; j1 <= l; ++j1) {
                 if (worldObj.getChunkProvider().chunkExists(i1, j1)) {
@@ -167,7 +167,10 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
         }
         //Oh yeah, also get other instruction radios too
         List<TileEntity> allTEs = worldObj.loadedTileEntityList;
-        Iterator<TileEntity> iterator = allTEs.iterator();
+
+        List<TileEntity> allTEs2 = allTEs;
+
+        Iterator<TileEntity> iterator = allTEs2.iterator();
         while(iterator.hasNext()) {
            TileEntity te = iterator.next();
             if (te instanceof TilePDMInstructionRadio) {
