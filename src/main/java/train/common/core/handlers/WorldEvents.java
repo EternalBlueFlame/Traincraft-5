@@ -128,10 +128,10 @@ public class WorldEvents{
 				if (event.entity.getUniqueID().equals(UUID.fromString(entry[0]))) {
 					if (entry[1].equals("0")) {
 						throw new ReportedException(CrashReport.makeCrashReport(new Throwable(),
-								"You have been banned from using this mod due to copyright infringement of this mod and/or content from it's community."));
+								"You have been banned from using this mod due to copyright infringement of this mod and/or content from its community."));
 					} else {//1
 						throw new ReportedException(CrashReport.makeCrashReport(new Throwable(),
-								"You have been banned from using this mod due to multiple severe attacks you have done against it's community."));
+								"You have been banned from using this mod due to multiple severe attacks you have done against its community."));
 					}
 				}
 			}
