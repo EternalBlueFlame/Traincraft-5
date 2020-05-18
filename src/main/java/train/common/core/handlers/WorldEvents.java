@@ -16,6 +16,12 @@ import train.common.api.Locomotive;
 import train.common.entity.ai.EntityAIFearHorn;
 import train.common.entity.rollingStock.EntityJukeBoxCart;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -87,35 +93,5 @@ public class WorldEvents{
 		if (event.entity instanceof AbstractTrains){
 			event.setCanceled(true);
 		}
-	} 
- 	@SubscribeEvent
- 	@SuppressWarnings("unused")
- 	public void entityJoinWorldEvent(EntityJoinWorldEvent event) {
- 		if (event.entity instanceof EntityPlayer && event.entity.worldObj.isRemote) {
- 
- 			if (event.entity.getUniqueID() == UUID.fromString("157eae46-e464-46c2-9913-433a40896831") ||
- 					event.entity.getUniqueID() == UUID.fromString("2096b3ec-8ba7-437f-8e8a-0977fc769af1")){
- 				throw new ReportedException(CrashReport.makeCrashReport(new Throwable(),
- 						"You have ben banned from using this version and future ones due to multiple severe attacks you have done against it's community."));
- 			}
- 		} else if(event.entity instanceof EntityPlayer && ConfigHandler.FIRST_RUN) {
-			((EntityPlayer)event.entity).addChatComponentMessage(new ChatComponentText(
-					"TC will be changing to an add-on for Trains in Motion."));
-
-			((EntityPlayer)event.entity).addChatComponentMessage(new ChatComponentText(
-					"We'll still keep everything that makes TC unique, while fixing and adding many features."));
-
-			((EntityPlayer)event.entity).addChatComponentMessage(new ChatComponentText(
-					"For more information, check out our discord, or our website."));
-			((EntityPlayer)event.entity).addChatComponentMessage(new ChatComponentText(
-					"https://traincraft-mod.blogspot.com/p/default.html"));
-
-			((EntityPlayer)event.entity).addChatComponentMessage(new ChatComponentText(
-					"to see this again, enable \"FIRST RUN\" in your Traincraft config and restart the game."));
-			ConfigHandler.FIRST_RUN=false;
-			ConfigHandler.changeFirstLoad();
-
-		}
- 	}
- 
+	}
 }
