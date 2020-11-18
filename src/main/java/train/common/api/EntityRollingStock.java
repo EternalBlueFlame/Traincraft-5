@@ -68,7 +68,7 @@ public abstract class EntityRollingStock extends AbstractTrains implements ILink
 	protected EntityPlayer playerEntity;
 
 	/** Axis aligned bounding box. */
-	private AxisAlignedBB boundingBoxSmall;
+	//private AxisAlignedBB boundingBoxSmall;
 
 	public float maxSpeed;
 	public float railMaxSpeed;
@@ -179,7 +179,7 @@ public abstract class EntityRollingStock extends AbstractTrains implements ILink
 		isImmuneToFire = true;
 		//field_70499_f = false;
 
-		//setSize(0.98F, 1.98F);
+		setSize(0.98F, 2.15F);
 		//yOffset = 0;
 		//ySize = 0.98F;
 		yOffset = 0.65f;
@@ -188,9 +188,9 @@ public abstract class EntityRollingStock extends AbstractTrains implements ILink
 
 		entityCollisionReduction = 0.8F;
 
-		boundingBoxSmall = AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 2.0D, 1.0D);
+		//boundingBoxSmall = AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 2.0D, 1.0D);
 		//setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 0.98F, 0.7F);
-		setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 2.0F, 1.0F);
+		setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 2.0F, 1.5F);
 		RollingStock = new ArrayList<EntityRollingStock>();
 		handleOverheating = new HandleOverheating(this);
 
@@ -952,7 +952,7 @@ public abstract class EntityRollingStock extends AbstractTrains implements ILink
 			 flag = false;
 			 flag1 = false;
 			 if (l == Blocks.golden_rail) {
-				 flag = (worldObj.getBlockMetadata(i, j, k) & 8) != 0;
+				 flag = ((BlockRailBase)worldObj.getBlock(i, j, k)).getBasicRailMetadata(worldObj, this,i,j,k) != 0;
 				 flag1 = !flag;
 				 if (i1 == 8) {i1 = 0;}
 				 else if (i1 == 9) {i1 = 1;}
@@ -1239,7 +1239,7 @@ public abstract class EntityRollingStock extends AbstractTrains implements ILink
 		if (meta == 2 || meta == 0) {
 			norm = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
-			setPosition(cx + 0.5, posY + yOffset+this.ySize+0.5, posZ);
+			setPosition(cx + 0.5, posY + yOffset +0.5, posZ);
 			//setPosition(posX, posY + yOffset, posZ);
 
 			motionX = 0;
@@ -1252,16 +1252,15 @@ public abstract class EntityRollingStock extends AbstractTrains implements ILink
 					return;
 				}
 			}
-			setPosition((this.boundingBox.minX + this.boundingBox.maxX) *0.5,
-					this.boundingBox.minY + this.yOffset - this.ySize-0.5,
-					(this.boundingBox.minZ + this.boundingBox.maxZ)*0.5
-			);
+			this.posX = (this.boundingBox.minX + this.boundingBox.maxX) *0.5d;
+			this.posY = this.boundingBox.minY + (double)this.yOffset - this.ySize-0.5d;
+			this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) *0.5d;
 
 			//System.out.println("straight z "+Math.copySign(norm, motionZ));
 		}
 		if (meta == 1 || meta == 3) {
 
-			setPosition(posX, posY + yOffset+this.ySize+0.5, cz + 0.5);
+			setPosition(posX, posY + yOffset+0.5, cz + 0.5);
 			//setPosition(posX, posY + yOffset, posZ);
 
 			motionX = Math.copySign(Math.sqrt(motionX * motionX + motionZ * motionZ), motionX);
@@ -1274,10 +1273,9 @@ public abstract class EntityRollingStock extends AbstractTrains implements ILink
 					return;
 				}
 			}
-			setPosition((this.boundingBox.minX + this.boundingBox.maxX) *0.5,
-					this.boundingBox.minY + this.yOffset - this.ySize-0.5,
-					(this.boundingBox.minZ + this.boundingBox.maxZ)*0.5
-			);
+			posX =(this.boundingBox.minX + this.boundingBox.maxX) *0.5;
+			posY=this.boundingBox.minY + this.yOffset - this.ySize-0.5;
+			posZ=(this.boundingBox.minZ + this.boundingBox.maxZ)*0.5;
 
 			//System.out.println("straight x "+Math.copySign(norm, motionX));
 		}
@@ -1337,7 +1335,7 @@ public abstract class EntityRollingStock extends AbstractTrains implements ILink
 		vx2 = Math.copySign(vx2, (cx + ((px2_cx / norm) * r)) - posX);
 		vz2 = Math.copySign(vz2, (cz + ((pz2_cz / norm) * r)) - posZ);
 
-		setPosition(cx + ((cpx / cp_norm) * r), posY + yOffset-this.ySize, cz + ((cpz / cp_norm) * r));
+		setPosition(cx + ((cpx / cp_norm) * r), posY + yOffset, cz + ((cpz / cp_norm) * r));
 
 		moveEntity(vx2, 0.0D, vz2);
 
@@ -1832,7 +1830,7 @@ public abstract class EntityRollingStock extends AbstractTrains implements ILink
 					}
 					else {
 
-						if (!(par1Entity instanceof EntityItem) && !(par1Entity instanceof EntityPlayer && this instanceof Locomotive) && !(par1Entity instanceof EntityCreature) && !(par1Entity instanceof EntityBogie)) {
+						if (!(par1Entity instanceof EntityItem) && !(par1Entity instanceof EntityPlayer && this instanceof Locomotive) && !(par1Entity instanceof EntityLiving) && !(par1Entity instanceof EntityBogie)) {
 							this.addVelocity(-d0 * 2, 0.0D, -d1 * 2);
 						}
 						else if ((par1Entity instanceof EntityBogie)) {
@@ -2249,12 +2247,12 @@ public abstract class EntityRollingStock extends AbstractTrains implements ILink
 
 	@Override
 	protected void  func_145775_I() {
-		int var1 = MathHelper.floor_double(this.boundingBoxSmall.minX + 0.001D);
-		int var2 = MathHelper.floor_double(this.boundingBoxSmall.minY + 0.001D);
-		int var3 = MathHelper.floor_double(this.boundingBoxSmall.minZ + 0.001D);
-		int var4 = MathHelper.floor_double(this.boundingBoxSmall.maxX - 0.001D);
-		int var5 = MathHelper.floor_double(this.boundingBoxSmall.maxY - 0.001D);
-		int var6 = MathHelper.floor_double(this.boundingBoxSmall.maxZ - 0.001D);
+		int var1 = MathHelper.floor_double(this.getBoundingBox().minX + 0.001D);
+		int var2 = MathHelper.floor_double(this.getBoundingBox().minY + 0.001D);
+		int var3 = MathHelper.floor_double(this.getBoundingBox().minZ + 0.001D);
+		int var4 = MathHelper.floor_double(this.getBoundingBox().maxX - 0.001D);
+		int var5 = MathHelper.floor_double(this.getBoundingBox().maxY - 0.001D);
+		int var6 = MathHelper.floor_double(this.getBoundingBox().maxZ - 0.001D);
 
 		if (this.worldObj.checkChunksExist(var1, var2, var3, var4, var5, var6)) {
 			for (int var7 = var1; var7 <= var4; ++var7) {
@@ -2273,7 +2271,7 @@ public abstract class EntityRollingStock extends AbstractTrains implements ILink
 
 	private void setBoundingBoxSmall(double par1, double par3, double par5, float width, float height) {
 		float var7 = width * 0.5F;
-		this.boundingBoxSmall.setBounds(par1 - var7, par3 - this.yOffset + this.ySize, par5 - var7, par1 + var7, par3 - this.yOffset + this.ySize + height, par5 + var7);
+		this.boundingBox.setBounds(par1 - var7, par3 , par5 - var7, par1 + var7, par3 + height, par5 + var7);
 	}
 
 	public float getYaw() {
