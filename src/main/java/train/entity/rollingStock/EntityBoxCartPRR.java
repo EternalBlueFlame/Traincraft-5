@@ -34,9 +34,9 @@ public class EntityBoxCartPRR extends GenericRailTransport {
     @Override
     public String transportName(){return "Freight Box Cart PRR";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return "us";}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return "1945";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -70,7 +70,7 @@ public class EntityBoxCartPRR extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                new ItemStack(ItemIDs.steel.item, 5), new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 3), 
+                new ItemStack(ItemIDs.steel.item, 5), new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 3),
                 new ItemStack(ItemIDs.steel.item, 2), null, null, null, null, new ItemStack(Blocks.chest, 2)        };
     }
 
@@ -81,7 +81,7 @@ public class EntityBoxCartPRR extends GenericRailTransport {
     @Override
     public float[] getHitboxSize(){return new float[]{6.099999904632568f,2.1f,1.1f};}
     @Override
-    public float[] bogieLengthFromCenter() {return new float[]{2.440000057220459f, -2.440000057220459f};}
+    public float[] rotationPoints() {return new float[]{2.440000057220459f, -2.440000057220459f};}
 
 
 

@@ -53,7 +53,7 @@ public class EntityLocoSteamLSSP7 extends EntityTrainCore {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelLSSP7()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.3f, 0.3f, -0.8f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.3f, worldObj==null?0.1f:0.3f, -0.8f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -83,7 +83,7 @@ public class EntityLocoSteamLSSP7 extends EntityTrainCore {
     @Override
     public float[] getHitboxSize(){return worldObj==null?new float[]{2.8f,2.2f,1.3f}:new float[]{2.2f,2.2f,1.3f};}
     @Override
-    public float[] bogieLengthFromCenter() {return new float[]{0.3f, -0.55f};}
+    public float[] rotationPoints() {return new float[]{0.3f, -0.55f};}
     //Train specific stuff
     @Override
     public String transportFuelType(){return "steam";}

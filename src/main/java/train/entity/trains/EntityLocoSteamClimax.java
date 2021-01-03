@@ -35,9 +35,9 @@ public class EntityLocoSteamClimax extends EntityTrainCore {
     @Override
     public String transportName(){return "Loco Steam Climax";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return "us";}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return "1888";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -71,8 +71,8 @@ public class EntityLocoSteamClimax extends EntityTrainCore {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                null, new ItemStack(ItemIDs.ironBogie.item, 3), new ItemStack(ItemIDs.ironFrame.item, 1), 
-                null, new ItemStack(ItemIDs.ironChimney.item, 1), new ItemStack(ItemIDs.woodenCab.item, 1), 
+                null, new ItemStack(ItemIDs.ironBogie.item, 3), new ItemStack(ItemIDs.ironFrame.item, 1),
+                null, new ItemStack(ItemIDs.ironChimney.item, 1), new ItemStack(ItemIDs.woodenCab.item, 1),
                 new ItemStack(ItemIDs.boiler.item, 1), new ItemStack(ItemIDs.firebox.item, 1), null        };
     }
 
@@ -83,7 +83,7 @@ public class EntityLocoSteamClimax extends EntityTrainCore {
     @Override
     public float[] getHitboxSize(){return new float[]{4.8f,2.4f,1.5f};}
     @Override
-    public float[] bogieLengthFromCenter() {return new float[]{1.9f, -1.875f};}
+    public float[] rotationPoints() {return new float[]{1.9f, -1.875f};}
     //Train specific stuff
     @Override
     public String transportFuelType(){return "steam";}

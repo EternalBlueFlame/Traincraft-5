@@ -53,7 +53,7 @@ public class EntityLocoSteamCherepanov extends EntityTrainCore {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelLocoCherepanov()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.075f, 0.6f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.075f, worldObj==null?0.2f:0.6f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, -180.0f}};}
     @Override
@@ -82,7 +82,7 @@ public class EntityLocoSteamCherepanov extends EntityTrainCore {
     @Override
     public float[] getHitboxSize(){return new float[]{worldObj==null?2.8f:2.2f,2.7f,1.1f};}
     @Override
-    public float[] bogieLengthFromCenter() {return new float[]{0.1f, -0.6f};}
+    public float[] rotationPoints() {return new float[]{0.1f, -0.6f};}
     //Train specific stuff
     @Override
     public String transportFuelType(){return "steam";}

@@ -35,11 +35,11 @@ public class EntityLocoDieselFOLM1 extends EntityTrainCore {
     @Override
     public String transportName(){return "Loco FOL M1";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return "Factorio";}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return null;}
     @Override
-    public boolean isFictional(){return false;}
+    public boolean isFictional(){return true;}
     @Override
     public int getInventoryRows(){return 1;}
     @Override
@@ -47,13 +47,15 @@ public class EntityLocoDieselFOLM1 extends EntityTrainCore {
         return TrainsInMotion.transportTypes.DIESEL.singleton();
     }
     @Override
-    public float weightKg(){return 10f;}
+    //the theme is a heavy steampunk, and it's rather large, so a little less than 1.5x an END F unit seems legit?
+    //EDIT: was corrected to 2000lb, that's rather light seeming.
+    public float weightKg(){return 907f;}
 
     //Model stuff
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelFOL_M1()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-2.8f, -0.05f, 0.9f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.9f, 0.15f, -0.9f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -81,11 +83,11 @@ public class EntityLocoDieselFOLM1 extends EntityTrainCore {
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{-2.2f,1.5f, 0f}};}
     @Override
-    public float[] getHitboxSize(){return new float[]{5.9f,2.1f,1.1f};}
+    public float[] getHitboxSize(){return new float[]{6.1f,2.4f,1.5f};}
     @Override
-    public float[] bogieLengthFromCenter() {return new float[]{2.750000011920929f, -2.750000011920929f};}
+    public float[] rotationPoints() {return new float[]{1.85f, -1.825f};}
     //Train specific stuff
     @Override
     public String transportFuelType(){return "diesel";}
@@ -105,7 +107,7 @@ public class EntityLocoDieselFOLM1 extends EntityTrainCore {
     //these only change in very specific use cases.
     @Override
     public boolean shouldRiderSit(){
-        return false;
+        return true;
     }
     @Override
     public Item getItem(){return thisItem;}

@@ -35,9 +35,9 @@ public class EntityCaboose extends GenericRailTransport {
     @Override
     public String transportName(){return "Caboose Red";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return "us";}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return "1863";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -71,8 +71,8 @@ public class EntityCaboose extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 6), new ItemStack(ItemIDs.woodenBogie.item, 2), new ItemStack(ItemIDs.woodenFrame.item, 2), 
-                new ItemStack(Items.stick, 2), null, new ItemStack(ItemIDs.woodenCab.item, 1), 
+                new ItemStack(Blocks.planks, 6), new ItemStack(ItemIDs.woodenBogie.item, 2), new ItemStack(ItemIDs.woodenFrame.item, 2),
+                new ItemStack(Items.stick, 2), null, new ItemStack(ItemIDs.woodenCab.item, 1),
                 null, null, new ItemStack(ItemIDs.seats.item, 1)        };
     }
 
@@ -83,7 +83,7 @@ public class EntityCaboose extends GenericRailTransport {
     @Override
     public float[] getHitboxSize(){return new float[]{2.5999999046325684f,2.1f,1.1f};}
     @Override
-    public float[] bogieLengthFromCenter() {return new float[]{1.0399999618530273f, -1.0399999618530273f};}
+    public float[] rotationPoints() {return new float[]{1.0399999618530273f, -1.0399999618530273f};}
 
 
 

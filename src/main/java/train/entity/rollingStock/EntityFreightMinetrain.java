@@ -35,9 +35,9 @@ public class EntityFreightMinetrain extends GenericRailTransport {
     @Override
     public String transportName(){return "Freight Minecart Yellow";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return null;}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return null;}
     @Override
     public boolean isFictional(){return true;}
     @Override
@@ -82,7 +82,7 @@ public class EntityFreightMinetrain extends GenericRailTransport {
     @Override
     public float[] getHitboxSize(){return new float[]{worldObj==null?1.9f:1.2f,1.6f,1.2f};}
     @Override
-    public float[] bogieLengthFromCenter() {return new float[]{0.3f, -0.3f};}
+    public float[] rotationPoints() {return new float[]{0.3f, -0.3f};}
 
 
 

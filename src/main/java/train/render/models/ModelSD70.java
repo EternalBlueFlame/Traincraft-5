@@ -733,7 +733,6 @@ public class ModelSD70 extends ModelBase {
 		};
 
 		fixRotation(bodyModel);
-
 	}
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

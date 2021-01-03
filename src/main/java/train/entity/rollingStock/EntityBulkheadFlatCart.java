@@ -33,9 +33,9 @@ public class EntityBulkheadFlatCart extends GenericRailTransport {
     @Override
     public String transportName(){return "Freight Bulkhead Flat Cart";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return "us";}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return "1820";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -73,7 +73,7 @@ public class EntityBulkheadFlatCart extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                new ItemStack(ItemIDs.steel.item, 4), new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 2), 
+                new ItemStack(ItemIDs.steel.item, 4), new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 2),
                 new ItemStack(ItemIDs.steel.item, 4), null, null, null, null, null        };
     }
 
@@ -84,7 +84,7 @@ public class EntityBulkheadFlatCart extends GenericRailTransport {
     @Override
     public float[] getHitboxSize(){return new float[]{5.1f,2.3f,1.5f};}
     @Override
-    public float[] bogieLengthFromCenter() {return new float[]{1.7f, -1.7f};}
+    public float[] rotationPoints() {return new float[]{1.7f, -1.7f};}
 
 
 

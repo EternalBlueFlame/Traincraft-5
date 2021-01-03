@@ -34,9 +34,9 @@ public class EntityFreightHeavyweightBaggage extends GenericRailTransport {
     @Override
     public String transportName(){return "Freight Heavyweight Baggage";}
     @Override
-    public String transportcountry(){return "Undefined";}
-    @Override
-    public String transportYear(){return "Undefined";}
+    public String transportcountry(){return "us";}
+    @Override//I think this is the rock island golden gate?
+    public String transportYear(){return "1929-1969";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -83,7 +83,7 @@ public class EntityFreightHeavyweightBaggage extends GenericRailTransport {
     @Override
     public float[] getHitboxSize(){return new float[]{10.0f,2.7f,1.4f};}
     @Override
-    public float[] bogieLengthFromCenter() {return new float[]{3.8f, -3.8f};}
+    public float[] rotationPoints() {return new float[]{3.8f, -3.8f};}
 
 
 

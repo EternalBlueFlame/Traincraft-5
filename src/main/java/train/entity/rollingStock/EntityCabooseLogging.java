@@ -30,7 +30,7 @@ public class EntityCabooseLogging extends GenericRailTransport {
 
     public static final Item thisItem = new ItemTransport(new EntityCabooseLogging((World)null), Info.modID, Traincraft.tcTab);
 
-
+    //I cannot find anything about this one xx Chiel
     //main stats
     @Override
     public String transportName(){return "Caboose Logging";}
@@ -73,7 +73,7 @@ public class EntityCabooseLogging extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 3), new ItemStack(ItemIDs.woodenBogie.item, 2), new ItemStack(ItemIDs.woodenFrame.item, 2), 
+                new ItemStack(Blocks.planks, 3), new ItemStack(ItemIDs.woodenBogie.item, 2), new ItemStack(ItemIDs.woodenFrame.item, 2),
                 new ItemStack(Items.iron_ingot, 1), null, null, null, null, new ItemStack(Blocks.crafting_table, 1)        };
     }
 
@@ -84,7 +84,7 @@ public class EntityCabooseLogging extends GenericRailTransport {
     @Override
     public float[] getHitboxSize(){return new float[]{2.0f,2.1f,1.1f};}
     @Override
-    public float[] bogieLengthFromCenter() {return new float[]{0.800000011920929f, -0.800000011920929f};}
+    public float[] rotationPoints() {return new float[]{0.800000011920929f, -0.800000011920929f};}
 
 
 

@@ -96,6 +96,7 @@ menu.item.belgium=Belgium
 menu.item.russia=Russia
 menu.item.england=England
 menu.item.china=China
+menu.item.britain=Great Britain
 menu.item.north korea=North Korea
 menu.item.south korea=South Korea
 menu.item.undefined=Undefined
@@ -105,11 +106,13 @@ menu.item.africa=Africa
 menu.item.scotland=Scotland
 menu.item.poland=Poland
 menu.item.wales=Wales
+menu.item.cezch=Czechoslovakia
 menu.item.denmark=Denmark
 menu.item.north ireland=Northern Ireland
 menu.item.ireland=Ireland
 menu.item.south ireland=Republic of Ireland
 menu.item.united kingdom=United Kingdom
+menu.item.uk=United Kingdom
 menu.item.india=India
 menu.item.france=France
 menu.item.spain=Spain
@@ -117,6 +120,7 @@ menu.item.australia=Australia
 menu.item.austria=Austria
 menu.item.brazil=Brazil
 menu.item.italy=Italy
+menu.item.Factorio=Factorio
 
 
 

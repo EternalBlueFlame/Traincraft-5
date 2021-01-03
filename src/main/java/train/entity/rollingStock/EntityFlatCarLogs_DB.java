@@ -34,9 +34,9 @@ public class EntityFlatCarLogs_DB extends GenericRailTransport {
     @Override
     public String transportName(){return "Freight Flat Cart Logs DB";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return "german";}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return "1924";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -72,7 +72,7 @@ public class EntityFlatCarLogs_DB extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                new ItemStack(ItemIDs.steel.item, 5), new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 2), 
+                new ItemStack(ItemIDs.steel.item, 5), new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 2),
                 new ItemStack(ItemIDs.steel.item, 2), null, null, null, null, new ItemStack(Blocks.log, 1)        };
     }
 
@@ -83,7 +83,7 @@ public class EntityFlatCarLogs_DB extends GenericRailTransport {
     @Override
     public float[] getHitboxSize(){return new float[]{3.680000066757202f,2.1f,1.1f};}
     @Override
-    public float[] bogieLengthFromCenter() {return new float[]{1.472000002861023f, -1.472000002861023f};}
+    public float[] rotationPoints() {return new float[]{1.472000002861023f, -1.472000002861023f};}
 
 
 
