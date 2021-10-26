@@ -1,0 +1,21 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "key": {
+    "X": {
+      "item": "minecraft:clay_ball"
+    },
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "dustCoal"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:graphite",
+    "count": 2
+  }
+}

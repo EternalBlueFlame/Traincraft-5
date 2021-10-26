@@ -1,0 +1,21 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "PPP",
+    "P  ",
+    "PIP"
+  ],
+  "key": {
+    "P": {
+      "type": "forge:ore_dict",
+      "ore": "itemPlastic"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:cabin.plastic"
+  }
+}

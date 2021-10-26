@@ -2,14 +2,12 @@ package train.blocks.distil;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.TransportSlotManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ICrafting;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
 
-public class ContainerDistil extends Container {
+public class ContainerDistil extends TransportSlotManager {
 
 	private TileEntityDistil distil;
 	private int cookTime;
@@ -17,23 +15,11 @@ public class ContainerDistil extends Container {
 	private int itemBurnTime;
 
 	public ContainerDistil(InventoryPlayer inventoryplayer, TileEntityDistil tileentitydistil) {
+		super(inventoryplayer,tileentitydistil);
 		cookTime = 0;
 		burnTime = 0;
 		itemBurnTime = 0;
 		distil = tileentitydistil;
-		addSlotToContainer(new Slot(tileentitydistil, 0, 56, 17));
-		addSlotToContainer(new Slot(tileentitydistil, 1, 56, 53));
-		addSlotToContainer(new Slot(tileentitydistil, 2, 123, 8));
-		addSlotToContainer(new SlotDistil(inventoryplayer.player, tileentitydistil, 4, 123, 33));
-		addSlotToContainer(new SlotDistil(inventoryplayer.player, tileentitydistil, 3, 116, 60));
-		for (int i = 0; i < 3; i++) {
-			for (int k = 0; k < 9; k++) {
-				addSlotToContainer(new Slot(inventoryplayer, k + i * 9 + 9, 8 + k * 18, 84 + i * 18));
-			}
-		}
-		for (int j = 0; j < 9; j++) {
-			addSlotToContainer(new Slot(inventoryplayer, j, 8 + j * 18, 142));
-		}
 	}
 
 	@Override
@@ -50,8 +36,10 @@ public class ContainerDistil extends Container {
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (int i = 0; i < crafters.size(); i++) {
-			ICrafting icrafting = (ICrafting) crafters.get(i);
+
+		if(distil==null){return;}
+		for (Object crafter : crafters) {
+			ICrafting icrafting = (ICrafting) crafter;
 			if (cookTime != distil.distilCookTime) {
 				icrafting.sendProgressBarUpdate(this, 0, distil.distilCookTime);
 			}
@@ -86,7 +74,7 @@ public class ContainerDistil extends Container {
 		return distil.isUseableByPlayer(entityplayer);
 	}
 
-	@Override
+	/*@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
 		ItemStack itemstack = null;
 		Slot slot = (Slot) inventorySlots.get(i);
@@ -109,5 +97,5 @@ public class ContainerDistil extends Container {
 			}
 		}
 		return itemstack;
-	}
+	}*/
 }

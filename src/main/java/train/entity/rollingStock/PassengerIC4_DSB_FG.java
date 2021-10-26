@@ -32,9 +32,9 @@ public class PassengerIC4_DSB_FG extends GenericRailTransport {
     @Override
     public String transportName(){return "Passenger IC4 DSB FG";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return "Denmark";}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return "2005-2013";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -44,13 +44,13 @@ public class PassengerIC4_DSB_FG extends GenericRailTransport {
         return TrainsInMotion.transportTypes.PASSENGER.singleton();
     }
     @Override
-    public float weightKg(){return 10f;}
+    public float weightKg(){return 35000f;}
 
     //Model stuff
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelLocoDieselIC4_DSB_FG()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.8f, 0.44f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-3.45f, -0.87f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,90f,0f}};}
     @Override
@@ -66,7 +66,7 @@ public class PassengerIC4_DSB_FG extends GenericRailTransport {
 
     //recipe
     @Override
-    public ItemStack[] getRecipie() {
+    public ItemStack[] getRecipe() {
         return null;
     }
 
@@ -75,9 +75,9 @@ public class PassengerIC4_DSB_FG extends GenericRailTransport {
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
-    public float[] getHitboxSize(){return new float[]{7.300000190734863f,2.1f,1.1f};}
+    public float[] getHitboxSize(){return new float[]{7.5f,2.1f,1.525f};}
     @Override
-    public float[] rotationPoints() {return new float[]{2.9200000762939453f, -2.9200000762939453f};}
+    public float[] rotationPoints() {return new float[]{3.525f, -3.575f};}
 
 
 

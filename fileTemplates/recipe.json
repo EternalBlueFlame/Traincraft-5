@@ -1,0 +1,22 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "${patternFirstRow}",
+    "${patternSecondRow}",
+    "${patternThirdRow}"
+  ],
+  "key": {
+    "T": {
+      "item": "minecraft:rail"
+    },
+    "B": {
+      "item": "minecraft:book"
+    }
+  },
+  "result": {
+    "item": "${result}",
+    #if( ${resultCount} != $null && ${resultCount} != 1)
+    "count": ${resultCount}
+    #end
+  }
+}

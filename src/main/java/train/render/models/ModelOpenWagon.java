@@ -101,7 +101,7 @@ public class ModelOpenWagon extends ModelBase {
 
 		bodyModel=new ModelRendererTurbo[]{box,
 				box0,box1,box2,box4,box5,box6,box7,box8,box9,
-				box10,box11,box12,box13,box14,box24,box25
+				box11,box12,box13,box14,box24,box25
 		};
 
 		fixRotation(bodyModel);
@@ -110,7 +110,6 @@ public class ModelOpenWagon extends ModelBase {
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
 		int cargo = 0;
-		box10.showModel=false;
 
 		for (ItemStackSlot s : ((GenericRailTransport) entity).inventory){
 			if(s.getStack()!=null){
@@ -120,11 +119,10 @@ public class ModelOpenWagon extends ModelBase {
 		if (cargo != 0) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0, -0.8f+cargo*0.023f, 0);
-			box10.showModel=true;
+			box10.render();
 			GL11.glPopMatrix();
 		}
 		super.render(entity, f, f1, f2, f3, f4, f5);
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

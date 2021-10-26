@@ -1,0 +1,20 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "S S",
+    " R ",
+    " R "
+  ],
+  "key": {
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    },
+    "R": {
+      "item": "traincraft:reinforcedPlates"
+    }
+  },
+  "result": {
+    "item": "traincraft:composite_wrench"
+  }
+}

@@ -5,6 +5,7 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.EntityTrainCore;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Items;
@@ -13,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -69,11 +69,11 @@ public class EntityLocoElectricMinetrain extends EntityTrainCore {
 
     //recipe
     @Override
-    public ItemStack[] getRecipie() {
+    public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Items.iron_ingot, 2), new ItemStack(ItemIDs.ironBogie.item, 2), new ItemStack(ItemIDs.ironFrame.item, 1), 
-                new ItemStack(Items.iron_ingot, 1), null, new ItemStack(ItemIDs.controls.item, 1), 
-                new ItemStack(ItemIDs.transformer.item, 1), new ItemStack(ItemIDs.electmotor.item, 2), new ItemStack(Items.redstone, 1)        };
+                new ItemStack(Items.iron_ingot, 2), new ItemStack(TiMItems.wheelIron, 2), new ItemStack(TiMItems.frameIron, 1),
+                new ItemStack(Items.iron_ingot, 1), null, new ItemStack(TiMItems.controlPanel, 1),
+                new ItemStack(TiMItems.transformer, 1), new ItemStack(TiMItems.smallElectricEngine, 2), new ItemStack(Items.redstone, 1)        };
     }
 
 
@@ -93,7 +93,7 @@ public class EntityLocoElectricMinetrain extends EntityTrainCore {
     public float transportTopSpeed(){return 40;}
     @Override
     public ItemStackSlot fuelSlot(){
-        return super.fuelSlot().setOverlay(Items.coal);
+        return super.fuelSlot();
     }
     public int[] getTankCapacity(){return new int[]{2250};}
 

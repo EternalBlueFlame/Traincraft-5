@@ -1,0 +1,22 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "###",
+    "XXX",
+    "CCC"
+  ],
+  "key": {
+    "#": {
+      "item": "minecraft:piston"
+    },
+    "X": {
+      "item": "trainsinmotion:engine.cylinder"
+    },
+    "C": {
+      "item": "trainsinmotion:camshaft"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:medium.diesel.engine"
+  }
+}

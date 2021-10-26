@@ -65,17 +65,18 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     /**actually useless for this entity*/
     @Override
     public void onUpdate() {
-        if (worldObj.getEntityByID(parentId) instanceof GenericRailTransport) {
-            if(worldObj.isRemote) {
-                if(parent==null){
-                    parent=(GenericRailTransport) worldObj.getEntityByID(parentId);
+        if(ticksExisted%40==0 || parent==null) {
+            if (worldObj.getEntityByID(parentId) instanceof GenericRailTransport) {
+                if (worldObj.isRemote) {
+                    if (parent == null) {
+                        parent = (GenericRailTransport) worldObj.getEntityByID(parentId);
+                    }
+                    parent.setseats(this, seatNumber);
                 }
-                parent.setseats(this, seatNumber);
+            } else {
+                worldObj.removeEntity(this);
             }
-        } else {
-            worldObj.removeEntity(this);
         }
-
 
     }
     @Override

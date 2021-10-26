@@ -5,6 +5,8 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
+import ebf.tim.registry.TiMOres;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -12,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,9 +35,9 @@ public class EntityFreightHopperUS extends GenericRailTransport {
     @Override
     public String transportName(){return "Freight Hopper US";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return "Us";}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return "1960-1970";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -46,14 +47,14 @@ public class EntityFreightHopperUS extends GenericRailTransport {
         return TrainsInMotion.transportTypes.FREIGHT.singleton();
     }
     @Override//weight unknown, average weight of a 2-bay hopper is from 263,000 to 286,000 lbs.
-    public float weightKg(){return 120000f;}
+    public float weightKg(){return 119294.793f;}
 
     //Model stuff
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelFreightHopper()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.62f, 0.0f}};}
-@Override
+    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.6275f, 0.0f}};}
+    @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
     public void registerSkins(){
@@ -92,8 +93,8 @@ public class EntityFreightHopperUS extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                new ItemStack(ItemIDs.steel.item, 5), new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 2), 
-                new ItemStack(ItemIDs.steel.item, 2), null, null, null, null, new ItemStack(Items.wheat, 3)        };
+                new ItemStack(TiMOres.ingotSteel, 5), new ItemStack(TiMItems.wheelWood, 2), new ItemStack(TiMItems.frameSteel, 2),
+                new ItemStack(TiMOres.ingotSteel, 2), null, null, null, null, new ItemStack(Items.wheat, 3)        };
     }
 
 
@@ -101,9 +102,9 @@ public class EntityFreightHopperUS extends GenericRailTransport {
     @Override
     public float[][] getRiderOffsets(){return null;}
     @Override
-    public float[] getHitboxSize(){return new float[]{3.6f,2.1f,1.1f};}
+    public float[] getHitboxSize(){return new float[]{3.72f,1.8f,1.05f};}
     @Override
-    public float[] rotationPoints() {return new float[]{1f, -1f};}
+    public float[] rotationPoints() {return new float[]{0.925f, -.95f};}
 
 
 

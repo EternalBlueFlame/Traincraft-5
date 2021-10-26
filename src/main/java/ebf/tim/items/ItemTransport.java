@@ -28,6 +28,7 @@ public class ItemTransport extends Item {
     private final List<String> subtext = new ArrayList<>();
     /**the class for the entity*/
     private final Class<? extends GenericRailTransport> transport;
+    public List<TrainsInMotion.transportTypes> types =null;
     @SideOnly(Side.CLIENT)
     GenericRailTransport entity;
     /**the main constructor.
@@ -48,6 +49,7 @@ public class ItemTransport extends Item {
                     t("menu.item."+cart.transportFuelType().toLowerCase()));
         }
         if(cart.getTypes()!=null && cart.getTypes().size()>0){
+            types=cart.getTypes();
             StringBuilder s = new StringBuilder();
             subtext.add(EnumChatFormatting.RED + t("menu.item.types")+":");
             boolean b=false;

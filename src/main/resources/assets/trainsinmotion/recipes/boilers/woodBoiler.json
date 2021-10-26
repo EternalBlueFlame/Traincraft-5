@@ -1,0 +1,21 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "###",
+    "XXX",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "X": {
+      "item": "minecraft:water_bucket"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:boiler.wood",
+    "count": 2
+  }
+}

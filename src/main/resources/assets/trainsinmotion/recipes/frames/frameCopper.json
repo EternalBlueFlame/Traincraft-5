@@ -1,0 +1,20 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "M M",
+    "III"
+  ],
+  "key": {
+    "M": {
+      "type": "forge:ore_dict",
+      "ore": "plankWood"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:frame.copper"
+  }
+}

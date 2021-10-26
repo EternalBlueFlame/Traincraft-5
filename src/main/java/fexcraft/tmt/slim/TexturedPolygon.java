@@ -10,7 +10,6 @@ public class TexturedPolygon {
 
 
 	public List<TexturedVertex> vertices;
-	public Vec3f normal = null;
 
 	public TexturedPolygon(List<TexturedVertex> apositionTexturevertex){
 		vertices = apositionTexturevertex;

@@ -1,0 +1,21 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    " M ",
+    "MIM",
+    " M "
+  ],
+  "key": {
+    "M": {
+      "type": "forge:ore_dict",
+      "ore": "itemPlastic"
+    },
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:wheel.plastic"
+  }
+}

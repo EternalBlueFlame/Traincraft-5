@@ -150,7 +150,7 @@ public class ParticleFX {
         if(physicsUpdate) {
             if (particleType == 3 || particleType == 4 || particleType == 5) {//lamps
                 shouldRender = host.getBoolean(GenericRailTransport.boolValues.LAMP);
-                pos = CommonUtil.rotatePointF(offset[0], offset[1], offset[2], 0, 0, 0);
+                pos=offset;
                 if (particleType == 5) {
                     //todo mars lamp stuff
                 }
@@ -287,13 +287,14 @@ public class ParticleFX {
             GL11.glColor4f(((entity.host.getParticleData(entity.particleID)[2] >> 16 & 0xFF)-entity.colorTint)* 0.00392156863f,
                     ((entity.host.getParticleData(entity.particleID)[2] >> 8 & 0xFF)-entity.colorTint)* 0.00392156863f,
                     ((entity.host.getParticleData(entity.particleID)[2] & 0xFF)-entity.colorTint)* 0.00392156863f,
-                    0.05f);
+                    0.045f);
             lamp.clear();
-            lamp.addCylinder(-(entity.offset[0])+0.5f,  entity.offset[1]+0.5f,  -entity.offset[2]+0.5f,
-                    1*size, 80*size, 16, 24, 1, 2, null)
-                    .setRotationPoint( 0,0,0)
-                    .setRotationAngle(entity.offset[3],entity.offset[4], entity.offset[5]);
-
+            for(int i=5;i>0;i--) {
+                lamp.addCylinder(-(entity.offset[0])+0.5f,  entity.offset[1]+0.5f,  -entity.offset[2]+0.5f,
+                        1*size, 80*size-(i*3), 16, 1, 24-(i*3), 3, null/*new Vec3f(0,0,0)*/)
+                        .setRotationPoint( size,-size*0.5f,-size*1.5f)
+                        .setRotationAngle(entity.offset[3],entity.offset[4], entity.offset[5]);
+            }
             GL11.glRotated(180f,0,1,0);
             GL11.glDisable(GL11.GL_LIGHTING);
             Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
@@ -307,18 +308,12 @@ public class ParticleFX {
             } else {
                 TextureManager.bindTexture(new ResourceLocation(TrainsInMotion.MODID, "textures/effects/lamp_low.png"));
             }
-
             GL11.glDisable(GL_TEXTURE_2D);
-            for (int i=0; i<entity.host.getParticleData(entity.particleID)[0]; i++) {
-                GL11.glPushMatrix();
-                GL11.glTranslatef(0,i*-0.0375f,0);
-                GL11.glScalef(1-(i*0.033f),1-(i*0.075f),1-(i*0.075f));
-                lamp.render(scale);
-                GL11.glPopMatrix();
-            }
+            lamp.render(scale);
             GL11.glEnable(GL_CULL_FACE);
             GL11.glEnable(GL_TEXTURE_2D);
             GL11.glEnable(GL11.GL_LIGHTING);
+            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1f);
             Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
             GL11.glDepthMask(true);
             //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -363,6 +358,7 @@ public class ParticleFX {
             GL11.glEnable(GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);
             GL11.glEnable(GL11.GL_TEXTURE_2D);
+            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1f);
             GL11.glDepthMask(true);
 
         }

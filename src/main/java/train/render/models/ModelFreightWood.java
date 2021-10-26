@@ -124,7 +124,6 @@ public class ModelFreightWood extends ModelBase {
 		box9.setPosition(6F, 9F, -11F);
 		bodyModel=new ModelRendererTurbo[]{box,bogey,bogey0,
 				box0,box1,box2,box3,box4,box5,box6,box7,box8,box9,
-				box10,box11,box12,
 				box52,box53,box54,box55,box68,box71,box72,box73,box79,
 				box80,box81,box82,bogey,bogey0
 		};
@@ -133,9 +132,6 @@ public class ModelFreightWood extends ModelBase {
 	}
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		box10.showModel=false;
-		box11.showModel=false;
-		box12.showModel=false;
 		int cargo = 0;
 
 		for (ItemStackSlot s : ((GenericRailTransport) entity).inventory){
@@ -145,25 +141,23 @@ public class ModelFreightWood extends ModelBase {
 		}
 		if (cargo != 0) {
     		if(cargo<=6) {
-    			box10.showModel=true;
+    			box10.render();
 			}
     		else if(cargo<=12 && cargo>6) {
-    			box10.showModel=true;
-    			box11.showModel=true;
+    			box10.render();
+    			box11.render();
     		}
     		else {
-    			box10.showModel=true;
-    			box11.showModel=true;
-    			box12.showModel=true;
+    			box10.render();
+    			box11.render();
+    			box12.render();
     		}
 		}
 		super.render(entity, f, f1, f2, f3, f4, f5);
 
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
-
-	// variables init:
+    // variables init:
 	public CustomModelRenderer bogey;
 	public CustomModelRenderer bogey0;
 	public CustomModelRenderer box;

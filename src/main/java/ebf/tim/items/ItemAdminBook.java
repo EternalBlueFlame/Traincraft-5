@@ -128,6 +128,9 @@ public class ItemAdminBook extends Item{
                 data = data.substring(2);
                 event=2;
             }
+            if(data.length()>1 && data.substring(0,2).equals("2:")){
+                data = data.substring(2);
+            }
             File f = new File(CommonProxy.configDirectory + "/TrainsInMotion/logging/" + data);
             if (f.exists()) {
                 //if player wasin't looking at a train

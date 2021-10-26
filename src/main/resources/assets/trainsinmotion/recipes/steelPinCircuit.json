@@ -1,0 +1,23 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "XXX",
+    "RPR",
+    "XXX"
+  ],
+  "key": {
+    "X": {
+      "item": "trainsinmotion:copper.wire"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "P": {
+      "type": "forge:ore_dict",
+      "ore": "itemPlastic"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:steel.pin.circuit"
+  }
+}

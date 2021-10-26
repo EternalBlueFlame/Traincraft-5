@@ -1,0 +1,23 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    " ##",
+    "E$$",
+    " ##"
+  ],
+  "key": {
+    "#": {
+      "item": "trainsinmotion:copper.wire"
+    },
+    "$": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "E": {
+      "item": "trainsinmotion:steel.pin.circuit"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:generator"
+  }
+}

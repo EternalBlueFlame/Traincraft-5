@@ -1,5 +1,6 @@
 package ebf.tim.items;
 
+import ebf.tim.blocks.TileRenderFacing;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.render.models.ModelRail;
 import ebf.tim.utility.ClientProxy;
@@ -7,9 +8,11 @@ import ebf.tim.utility.Vec5f;
 import fexcraft.tmt.slim.Tessellator;
 import fexcraft.tmt.slim.TextureManager;
 import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
@@ -27,6 +30,14 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
     public static CustomItemModel instance = new CustomItemModel();
 
     private static HashMap<ResourceLocation, Item> models = new HashMap<>();
+
+    private static HashMap<Item, TileRenderFacing> blockTextures = new HashMap<>();
+
+    public static void registerBlockTextures(Item itm, TileEntity tile){
+        if(tile instanceof TileRenderFacing) {
+            blockTextures.put(itm, (TileRenderFacing) tile);
+        }
+    }
 
     public static void registerModel(Item itm){
         models.put(new ResourceLocation(itm.getUnlocalizedName()), itm);
@@ -62,7 +73,21 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
     @Override
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         if(item==null){return;}
-        if (item.getItem() instanceof ItemTransport){
+
+        if(blockTextures.containsKey(item.getItem())) {
+
+            GL11.glPushMatrix();
+            GL11.glScalef(0.95f,0.95f,0.95f);
+            GL11.glTranslatef(0,-0.1f,0);
+            if(blockTextures.get(item.getItem()).host.tesr instanceof TileEntitySpecialRenderer){
+                ((TileEntitySpecialRenderer)blockTextures.get(item.getItem()).host.tesr)
+                        .renderTileEntityAt(blockTextures.get(item.getItem()),0,0,0,0);
+            } else {
+                blockTextures.get(item.getItem()).func_145828_a(null);
+            }
+            GL11.glPopMatrix();
+
+        } else if (item.getItem() instanceof ItemTransport){
             GL11.glPushMatrix();
             GenericRailTransport entity = ((ItemTransport) item.getItem()).entity;
             scale = entity.getHitboxSize()[0];
@@ -79,7 +104,7 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
                     break;
                 }
                 case INVENTORY: {
-                    GL11.glRotatef(180,0,1,0);
+                    GL11.glRotatef(270,0,1,0);
                     GL11.glTranslatef(0,-0.85f,0);
                     break;
                 }
@@ -101,6 +126,9 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
                     ((ItemTransport)item.getItem()).entity,0,0,0, 0, true, null);
             GL11.glPopMatrix();
         } else if (item.getItem() instanceof ItemRail){
+            if(item.getTagCompound()==null){
+                return;
+            }
             GL11.glPushMatrix();
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
             GL11.glEnable(GL11.GL_BLEND);

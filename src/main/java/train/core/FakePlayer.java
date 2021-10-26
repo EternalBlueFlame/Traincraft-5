@@ -13,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatBase;
 import net.minecraft.util.ChunkCoordinates;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.world.World;
@@ -54,12 +53,7 @@ public class FakePlayer extends EntityPlayer {
 		fireResistance = 20;
 	}
 
-	@Override
-	protected void entityInit() {
-		super.entityInit();
-	}
-
-	@Override
+    @Override
 	public void onUpdate() {}
 
 	@Override
@@ -71,13 +65,8 @@ public class FakePlayer extends EntityPlayer {
 	@Override
 	public void onLivingUpdate() {}
 
-	@Override
-	public void onDeath(DamageSource damagesource) {
-		super.onDeath(damagesource);
-	}
 
-
-	@Override
+    @Override
 	public EntityItem dropPlayerItemWithRandomChoice(ItemStack itemstack, boolean flag) {
 		return null;
 	}
@@ -126,12 +115,7 @@ public class FakePlayer extends EntityPlayer {
 	@Override
 	public void respawnPlayer() {}
 
-	@Override
-	public void setDead() {
-		super.setDead();
-	}
-
-	@Override
+    @Override
 	public boolean isEntityInsideOpaqueBlock() {
 		return false;
 	}

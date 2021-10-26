@@ -5,6 +5,8 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
+import ebf.tim.registry.TiMOres;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -12,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,9 +35,9 @@ public class EntityTankWagonThreeDome extends GenericRailTransport {
     @Override
     public String transportName(){return "Tank Wagon Three Dome";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return "Us";}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return "1960";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -46,13 +47,13 @@ public class EntityTankWagonThreeDome extends GenericRailTransport {
         return TrainsInMotion.transportTypes.TANKER.singleton();
     }
     @Override
-    public float weightKg(){return 10f;}
+    public float weightKg(){return 29483.504f;}
 
     //Model stuff
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelTankWagonThreeDome()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.17f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.005f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -70,20 +71,20 @@ public class EntityTankWagonThreeDome extends GenericRailTransport {
 
     //recipe
     @Override
-    public ItemStack[] getRecipie() {
+    public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(ItemIDs.steel.item, 4), new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 3), 
-                new ItemStack(ItemIDs.steel.item, 4), null, null, null, null, new ItemStack(Items.water_bucket, 1)        };
+                new ItemStack(TiMOres.ingotSteel, 4), new ItemStack(TiMItems.wheelWood, 2), new ItemStack(TiMItems.frameSteel, 3),
+                new ItemStack(TiMOres.ingotSteel, 4), null, null, null, null, new ItemStack(Items.water_bucket, 1)        };
     }
 
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    public float[][] getRiderOffsets(){return null;}
     @Override
-    public float[] getHitboxSize(){return new float[]{5.400000095367432f,2.1f,1.1f};}
+    public float[] getHitboxSize(){return new float[]{5.5f,2.15f,1.1f};}
     @Override
-    public float[] rotationPoints() {return new float[]{2.1600000858306885f, -2.1600000858306885f};}
+    public float[] rotationPoints() {return new float[]{1.925f, -1.85f};}
     @Override
     public int[] getTankCapacity(){return new int[]{90000};}
 

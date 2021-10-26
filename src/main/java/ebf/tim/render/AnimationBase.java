@@ -16,6 +16,8 @@ public abstract class AnimationBase {
 
     public abstract boolean culls(ModelRendererTurbo model);
 
+    public abstract boolean noCull(ModelRendererTurbo model);
+
     public abstract int getID(ModelRendererTurbo model);
 
     public abstract void animate(float rotationZ, float[] pistonOffset, GenericRailTransport host);

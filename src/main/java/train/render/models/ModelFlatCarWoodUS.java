@@ -198,29 +198,13 @@ public class ModelFlatCarWoodUS extends ModelBase {
 
 		bodyModel=new ModelRendererTurbo[]{box,
 				box0,box1,box2,box3,box4,box5,box6,box7,box8,box9,
-				box10,box11,box12,box13,box14,box15,box16,box17,box18,box19,
-				box20,box21,box22,box23,box24,box25,box26,box27,box28,box29,
-				box30,box31,box32,box33,box34,box35
+				box10,box11,box12,box13,box14,box15,box16,box17,box18,box23,box24,box25
 		};
 
 		fixRotation(bodyModel);
 	}
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		box19.showModel=false;
-		box20.showModel=false;
-		box22.showModel=false;
-		box26.showModel=false;
-		box27.showModel=false;
-		box28.showModel=false;
-		box29.showModel=false;
-		box21.showModel=false;
-		box30.showModel=false;
-		box31.showModel=false;
-		box32.showModel=false;
-		box33.showModel=false;
-		box34.showModel=false;
-		box35.showModel=false;
 		int cargo = 0;
 
 		for (ItemStackSlot s : ((GenericRailTransport) entity).inventory){
@@ -230,40 +214,39 @@ public class ModelFlatCarWoodUS extends ModelBase {
 		}
 		if (cargo != 0) {
     		if(cargo<=9) {
-    			box19.showModel=true;
-    			box21.showModel=true;
-    			box27.showModel=true;
-    			box26.showModel=true;
+    			box19.render();
+    			box21.render();
+    			box27.render();
+    			box26.render();
 			}
     		else if(cargo<=18 && cargo>9) {
-    			box19.showModel=true;
-    			box20.showModel=true;
-    			box22.showModel=true;
-    			box26.showModel=true;
-    			box28.showModel=true;
-    			box29.showModel=true;
-    			box21.showModel=true;
-    			box27.showModel=true;
+    			box19.render();
+    			box20.render();
+    			box22.render();
+    			box26.render();
+    			box28.render();
+    			box29.render();
+    			box21.render();
+    			box27.render();
     		}
     		else {
-    			box19.showModel=true;
-    			box20.showModel=true;
-    			box22.showModel=true;
-    			box26.showModel=true;
-    			box27.showModel=true;
-    			box28.showModel=true;
-    			box29.showModel=true;
-    			box21.showModel=true;
-    			box30.showModel=true;
-    			box31.showModel=true;
-    			box32.showModel=true;
-    			box33.showModel=true;
-    			box34.showModel=true;
-    			box35.showModel=true;
+    			box19.render();
+    			box20.render();
+    			box22.render();
+    			box26.render();
+    			box27.render();
+    			box28.render();
+    			box29.render();
+    			box21.render();
+    			box30.render();
+    			box31.render();
+    			box32.render();
+    			box33.render();
+    			box34.render();
+    			box35.render();
     		}
 		}
 		super.render(entity, f, f1, f2, f3, f4, f5);
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

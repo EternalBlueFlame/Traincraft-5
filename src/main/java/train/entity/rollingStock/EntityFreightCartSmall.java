@@ -5,6 +5,7 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -13,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,9 +35,9 @@ public class EntityFreightCartSmall extends GenericRailTransport {
     @Override
     public String transportName(){return "Freight Cart Small";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return "Us";}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return "1890";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -47,13 +47,13 @@ public class EntityFreightCartSmall extends GenericRailTransport {
         return TrainsInMotion.transportTypes.FREIGHT.singleton();
     }
     @Override
-    public float weightKg(){return 10f;}
+    public float weightKg(){return 20502.375f;}
 
     //Model stuff
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelSmallFreightCart()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.2f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.38f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
@@ -71,18 +71,18 @@ public class EntityFreightCartSmall extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 6), new ItemStack(ItemIDs.woodenBogie.item, 2), new ItemStack(ItemIDs.woodenFrame.item, 2), 
+                new ItemStack(Blocks.planks, 6), new ItemStack(TiMItems.wheelWood, 2), new ItemStack(TiMItems.frameWood, 2),
                 new ItemStack(Items.stick, 2), null, null, null, null, new ItemStack(Blocks.chest, 1)        };
     }
 
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    public float[][] getRiderOffsets(){return null;}
     @Override
-    public float[] getHitboxSize(){return new float[]{2.9000000953674316f,2.1f,1.1f};}
+    public float[] getHitboxSize(){return new float[]{3.125f,2.1f,1.1f};}
     @Override
-    public float[] rotationPoints() {return new float[]{1.1600000858306885f, -1.1600000858306885f};}
+    public float[] rotationPoints() {return new float[]{0.9f, -0.75f};}
 
 
 

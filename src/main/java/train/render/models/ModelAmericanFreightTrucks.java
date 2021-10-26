@@ -106,21 +106,11 @@ public class ModelAmericanFreightTrucks extends ModelBase
 		americanfreighttrucksModel[19].addBox(0F, 0F, 0F, 5, 5, 0, 0F); // Box 20
 		americanfreighttrucksModel[19].setRotationPoint(-6F, -4F, 12F);
 
+		fixRotation(americanfreighttrucksModel);
+		bodyModel=americanfreighttrucksModel;
+
 
 	}
 
-	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-	{
-		for(int i = 0; i < 20; i++)
-		{
-			americanfreighttrucksModel[i].render(f5);
-		}
-	}
-
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-	{
-	}
-
-	public ModelRendererTurbo americanfreighttrucksModel[];
+    public ModelRendererTurbo americanfreighttrucksModel[];
 }

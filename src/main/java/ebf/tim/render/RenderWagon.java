@@ -90,6 +90,8 @@ public class RenderWagon extends Render {
      */
     public static void doRender(GenericRailTransport entity, double x, double y, double z, float yaw, float bogieOffset, boolean isPaintBucket, @Nullable TransportSkin textureURI, RenderWagon renderInstance){
 
+        if(entity==null){return;}
+
         if (entity.renderData.modelList == null || entity.renderData.needsModelUpdate) {
             entity.renderData = new TransportRenderData();
             entity.renderData.modelList = entity.getModel();
@@ -98,12 +100,17 @@ public class RenderWagon extends Render {
             //cache animating parts
             if (entity.worldObj!=null && ClientProxy.EnableAnimations && entity.renderData.needsModelUpdate) {
                 boolean isAdded;
+                int m=0;
                 for (ModelBase part : entity.renderData.modelList) {
-                    for (ModelRendererTurbo render : part.getParts()) {
+                    for (ModelRendererTurbo render : part.getnamedParts()) {
                         if (render.boxName ==null){continue;}
                         //attempt to cache the parts for the main transport model
                         if(StaticModelAnimator.checkCulls(render)){
+                            render.boxName=render.boxName.replace("cull","").replace("Cull", "");
                             render.showModel = false;
+                        } else if(StaticModelAnimator.checkNoCulls(render)){
+                            render.boxName=render.boxName.replace("nocull","").replace("Nocull", "").replace("NoCull", "");
+                            render.noCull = true;
                         }
                         if(render.boxName.contains(StaticModelAnimator.tagGlow)){
                             render.boxName=render.boxName.replace(StaticModelAnimator.tagGlow,"");
@@ -129,17 +136,20 @@ public class RenderWagon extends Render {
                         }
                         if(ParticleFX.parseData(render.boxName, entity.getClass())!=null){
                             entity.renderData.particles.addAll(ParticleFX.newParticleItterator(render.boxName,
-                                    render.rotationPointX, render.rotationPointY, render.rotationPointZ,
+                                    render.rotationPointX+(entity.modelOffsets()[m][0]*16),
+                                    render.rotationPointY+(entity.modelOffsets()[m][1]*16),
+                                    render.rotationPointZ+(entity.modelOffsets()[m][2]*16),
                                     render.rotateAngleX,render.rotateAngleY,render.rotateAngleZ, entity));
                         }
                     }
+                    m++;
                 }
                 //cache the animating parts on the bogies.
                 if (entity.renderData.bogies != null) {
                     for (Bogie bogie : entity.renderData.bogies) {
                         bogie.rotationYaw=entity.rotationYaw;
                         List<ParticleFX> animators = new ArrayList<>();
-                        for (ModelRendererTurbo box : bogie.bogieModel.getParts()) {
+                        for (ModelRendererTurbo box : bogie.bogieModel.getnamedParts()) {
                             if (box.boxName ==null){continue;}
                             //attempt to cache the parts for the main transport model
                             if(StaticModelAnimator.checkCulls(box)){
@@ -164,7 +174,7 @@ public class RenderWagon extends Render {
                         //cache the animating parts on sub-bogies
                         for(Bogie subBogie : bogie.subBogies){
                             subBogie.rotationYaw=entity.rotationYaw;
-                            for(ModelRendererTurbo box : subBogie.bogieModel.getParts()){
+                            for(ModelRendererTurbo box : subBogie.bogieModel.getnamedParts()){
                                 if (box.boxName ==null){continue;}
                                 //attempt to cache the parts for the main transport model
                                 if(StaticModelAnimator.checkCulls(box)){
@@ -209,11 +219,24 @@ public class RenderWagon extends Render {
         GL11.glEnable(GL_NORMALIZE);
 
         //set the render position
-        GL11.glTranslated(x, y+ railOffset + ((entity.getRenderScale()-0.0625f)*10)+bogieOffset, z);
+        GL11.glTranslated(x, y+ railOffset +bogieOffset, z);
         //rotate the model.
-        GL11.glPushMatrix();
-        GL11.glRotatef(-yaw - 180f, 0.0f, 1.0f, 0.0f);
+        if(!isPaintBucket) {
+            GL11.glRotatef(-yaw - 180f, 0.0f, 1.0f, 0.0f);
+        }
         GL11.glRotatef(entity.rotationPitch - 180f, 0.0f, 0.0f, 1.0f);
+        GL11.glPushMatrix();
+
+        //todo: this is jank and kinda inaccurate, but it's close.
+        GL11.glTranslated(0, -CommonUtil.rotatePoint(new Vec3f(
+                Math.abs(entity.bogieLengthFromCenter()[0])+Math.abs(entity.bogieLengthFromCenter()[1]),
+                0,0), entity.rotationPitch,0,0).yCoord*2, 0);
+        if(entity.frontBogie!=null && entity.backBogie!=null){
+            GL11.glTranslated(0,entity.frontBogie.posY-entity.backBogie.posY,0);
+        }
+
+        //scale the model
+        GL11.glScalef(((entity.getRenderScale()-0.0625f)*10f)+1,((entity.getRenderScale()-0.0625f)*10f)+1,((entity.getRenderScale()-0.0625f)*10f)+1);
 
         /*
          * <h3>animations</h3>
@@ -274,7 +297,7 @@ public class RenderWagon extends Render {
                 GL11.glRotatef(entity.modelRotations()[i][1],0,1,0);
                 GL11.glRotatef(entity.modelRotations()[i][2],0,0,1);
             }
-            entity.renderData.modelList[i].render(entity, 0,0,0,0,0, entity.getRenderScale());
+            entity.renderData.modelList[i].render(entity, 0,0,0,0,0, 0.0625f);
             GL11.glPopMatrix();
         }
 
@@ -307,19 +330,28 @@ public class RenderWagon extends Render {
                 //bind the texture
                 if (s!=null && s.getBogieSkin(ii) != null) {
                     TextureManager.bindTexture(s.getBogieSkin(ii), s.colorsFrom, s.colorsTo, entity.colorsFrom, entity.colorsTo);
+                } else if (s!=null && s.getBogieSkin(ii) == null) {
+                    //redundency additional force texture bind if bogies inherit locomotive skin, and have any
+                    //  animations that override texture, like lights
+                    TextureManager.bindTexture(s.getTexture(ii), s.colorsFrom, s.colorsTo, entity.colorsFrom, entity.colorsTo);
                 }
                 GL11.glPushMatrix();
-                GL11.glRotatef(-entity.rotationYaw, 0.0f, 1.0f, 0.0f);
-                GL11.glRotatef(entity.rotationPitch - 180f, 0.0f, 0.0f, 1.0f);
-                GL11.glTranslated(-b.offset[0], -b.offset[1], -b.offset[2]);
+                GL11.glTranslated(b.offset[0], -b.offset[1], b.offset[2]);
+                GL11.glRotatef(b.rotation[0], 1.0f, 0.0f, 0.0f);
+                GL11.glRotatef(b.rotation[1], 0.0f, 1.0f, 0.0f);
+                GL11.glRotatef(b.rotation[2], 0.0f, 0.0f, 1.0f);
+                //GL11.glRotatef(-180, 0.0f, 0.0f, 1.0f);
                 if(!isPaintBucket) {
                     GL11.glRotatef(b.rotationYaw-entity.rotationYaw, 0.0f, 1.0f, 0);
-                    GL11.glRotatef(entity.rotationPitch, 0.0f, 0.0f, 1.0f);
+                   //GL11.glRotatef(entity.rotationPitch, 0.0f, 0.0f, 1.0f);
                 }
-                b.bogieModel.render(entity, 0, 0, 0, 0, 0, entity.getRenderScale());
+                //scale the model.
+                GL11.glScalef(((entity.getRenderScale()-0.0625f)*10f)+1,((entity.getRenderScale()-0.0625f)*10f)+1,((entity.getRenderScale()-0.0625f)*10f)+1);
+
+                b.bogieModel.render(entity, 0, 0, 0, 0, 0, 0.0625f);
 
                 //render the particles, if there are any. do this _after_ the normal render because it breaks texture bind
-                if(!isPaintBucket && entity.worldObj!=null) {
+                if(!isPaintBucket && entity.worldObj!=null && entity.renderData.bogieParticles.size()>0) {
                     for (ParticleFX p : entity.renderData.bogieParticles.get(ii)) {
                         ParticleFX.doRender(p, entity.getRenderScale(), yaw);
                     }
@@ -330,6 +362,10 @@ public class RenderWagon extends Render {
                     for (Bogie sub : b.subBogies) {
                         if(s!=null && s.getSubBogieSkin(iii)!=null){
                             TextureManager.bindTexture(s.getSubBogieSkin(iii), s.colorsFrom, s.colorsTo, entity.colorsFrom, entity.colorsTo);
+                        } else if (s!=null && s.getBogieSkin(ii) != null) {
+                            //redundency additional force texture bind if sub-bogies inherit bogie skin, and have any
+                            //  animations that override texture, like lights
+                            TextureManager.bindTexture(s.getBogieSkin(ii), s.colorsFrom, s.colorsTo, entity.colorsFrom, entity.colorsTo);
                         }
                         GL11.glPushMatrix();
                         GL11.glTranslated(sub.offset[0]-b.offset[0], sub.offset[1]-b.offset[1], sub.offset[2]-b.offset[2]);
@@ -337,7 +373,7 @@ public class RenderWagon extends Render {
                         if(!isPaintBucket) {
                             GL11.glRotatef(sub.rotationYaw - b.rotationYaw, 0.0f, 1.0f, 0);
                         }
-                        sub.bogieModel.render(entity, 0, 0, 0, 0, 0, entity.getRenderScale());
+                        sub.bogieModel.render(entity, 0, 0, 0, 0, 0, 0.0625f);
                         GL11.glPopMatrix();
                         iii++;
                     }

@@ -1,0 +1,24 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "III",
+    "PTP",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "P": {
+      "item": "minecraft:glass_pane"
+    },
+    "T": {
+      "item": "minecraft:torch"
+    }
+  },
+  "result": {
+    "item": "traincraft:block.lantern",
+    "count": 4
+  }
+}

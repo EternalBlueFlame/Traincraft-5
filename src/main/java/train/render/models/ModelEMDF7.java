@@ -11,7 +11,6 @@ package train.render.models;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import fexcraft.tmt.slim.Tessellator;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -769,10 +768,6 @@ public class ModelEMDF7 extends ModelBase
 		GL11.glScalef(0.9F, 0.9F, 0.9F);
         backtrucks.render(entity,f,f1,f2,f3,f4,f5);
         GL11.glPopMatrix();
-    }
-
-    public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-    {
     }
 
     public ModelRendererTurbo emdf7Model[];

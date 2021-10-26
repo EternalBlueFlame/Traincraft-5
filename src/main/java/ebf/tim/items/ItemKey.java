@@ -3,7 +3,6 @@ package ebf.tim.items;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
-import ebf.tim.utility.DebugUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -27,7 +26,6 @@ public class ItemKey extends Item{
 
 
     public static void addHost(ItemStack stack, UUID host, String entityName){
-        DebugUtil.println(host.toString(), entityName);
         if(stack.stackTagCompound ==null && stack.getItem() instanceof ItemKey){
             stack.stackTagCompound = new NBTTagCompound();
         }

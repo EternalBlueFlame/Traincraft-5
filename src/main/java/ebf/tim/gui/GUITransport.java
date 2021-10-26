@@ -18,10 +18,12 @@ import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.text.DecimalFormat;
@@ -81,7 +83,7 @@ public class GUITransport extends GUIContainerNoNEI {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 
         //draw inventory slots and whatnot
-        if (transport.inventory.size()>0){
+        if (transport.getSizeInventory()>0){
             renderFreightInventory(mc,mouseX, mouseY);
         }
         if (transport instanceof EntityTrainCore){
@@ -531,6 +533,21 @@ public class GUITransport extends GUIContainerNoNEI {
         super.mouseMovedOrUp(p_146286_1_, p_146286_2_, p_146286_3_);
     }
 
+
+    @Override
+    protected void handleMouseClick(Slot p_146984_1_, int p_146984_2_, int p_146984_3_, int p_146984_4_) {
+        if (p_146984_1_ != null) {
+            p_146984_2_ = p_146984_1_.slotNumber;
+        }
+
+        if (p_146984_4_ == 4){
+            p_146984_4_ = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) ? 1 ://cover shift click
+                    player.inventory.getItemStack() != null ? 4 : //cover if the cursor is carrying an item
+                            (Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL))?3://cover CTRL clicking
+                                    0;//cover everything else
+        }
+        this.mc.playerController.windowClick(this.inventorySlots.windowId, p_146984_2_, p_146984_3_, p_146984_4_, this.mc.thePlayer);
+    }
 
 
 }

@@ -5,6 +5,8 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.EntityTrainCore;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
+import ebf.tim.registry.TiMOres;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Items;
@@ -13,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -71,11 +72,11 @@ public class EntityLocoDieselDD35A extends EntityTrainCore {
 
     //recipe
     @Override
-    public ItemStack[] getRecipie() {
+    public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(ItemIDs.controls.item, 2), new ItemStack(ItemIDs.bogie.item, 8), new ItemStack(ItemIDs.steelframe.item, 3), 
-                new ItemStack(ItemIDs.steel.item, 2), new ItemStack(ItemIDs.steelchimney.item, 2), new ItemStack(ItemIDs.steelcab.item, 1), 
-                new ItemStack(ItemIDs.electmotor.item, 8), new ItemStack(ItemIDs.dieselengine.item, 11), new ItemStack(ItemIDs.generator.item, 4)        };
+                new ItemStack(TiMItems.controlPanel, 2), new ItemStack(TiMItems.wheelSteel, 8), new ItemStack(TiMItems.frameSteel, 3),
+                new ItemStack(TiMOres.ingotSteel, 2), new ItemStack(TiMItems.chimneySteel, 2), new ItemStack(TiMItems.cabinSteel, 1),
+                new ItemStack(TiMItems.smallElectricEngine, 8), new ItemStack(TiMItems.smallDieselEngine, 11), new ItemStack(TiMItems.generator, 4)        };
     }
 
 
@@ -95,7 +96,7 @@ public class EntityLocoDieselDD35A extends EntityTrainCore {
     public float transportTopSpeed(){return 145;}
     @Override
     public ItemStackSlot fuelSlot(){
-        return super.fuelSlot().setOverlay(Items.coal);
+        return super.fuelSlot();
     }
     @Override
     public int[] getTankCapacity(){return new int[]{31150};}

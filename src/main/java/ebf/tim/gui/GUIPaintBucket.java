@@ -7,7 +7,6 @@ import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.networking.PacketPaint;
 import ebf.tim.utility.ClientProxy;
 import ebf.tim.utility.CommonUtil;
-import ebf.tim.utility.DebugUtil;
 import ebf.tim.utility.EventManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -29,10 +28,6 @@ import java.util.List;
 public class GUIPaintBucket extends GuiScreen {
 
 
-    public GuiButton buttonLeft;
-    public GuiButton buttonRight;
-    public GuiButton buttonApply;
-    public GuiButton buttonClose;
     public GuiButton buttonSkinDropdown;
 
     public GuiButton buttonRecolor;
@@ -94,38 +89,18 @@ public class GUIPaintBucket extends GuiScreen {
             return;
         }
         currentTransportSkin = entity.getTextureByID(Minecraft.getMinecraft().thePlayer,true, skinList.get(page));
-        //initGui();
+
         if(currentTransportSkin ==null){return;}
 
         switch(guiScreen) {
             case 0:{defineButtons();guiSkinSelect();break;}
         }
-    }
 
-    @Override
-    protected void actionPerformed(GuiButton parButton) {
-        if (parButton==buttonApply) {
-            if(guiScreen==0) {//TransportSkin select
-                TrainsInMotion.keyChannel.sendToServer(new PacketPaint(skinList.get(page), entity.getEntityId()));
-            } else if(guiScreen==1){//color select
-
-            } else {//livery select
-
+        //draw button hover text
+        for (Object b : buttonList){
+            if(b instanceof GUIButton) {
+                ((GUIButton) b).drawText(parWidth, parHeight);
             }
-            entity.renderData.needsModelUpdate=true;
-        }
-        else if(parButton==buttonClose){
-            mc.displayGuiScreen(null);
-        }
-        else if (parButton==buttonLeft) {
-            page = (page <= 0 ? entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).keySet().size() -1: page - 1);
-            currentTransportSkin =entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).get(skinList.get(page));
-            DebugUtil.println(page, currentTransportSkin.name);
-        }
-        else if (parButton==buttonRight) {
-            page = (page+1 >= entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).keySet().size() ? 0 : page + 1);
-            currentTransportSkin =entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).get(skinList.get(page));
-            DebugUtil.println(page, currentTransportSkin.name);
         }
     }
 
@@ -139,11 +114,68 @@ public class GUIPaintBucket extends GuiScreen {
         switch (guiScreen){
             case 0:{
                 buttonList =new ArrayList();
-                buttonList.add(buttonLeft = new GuiButton(-1, percentLeft(15)-10,percentTop(56), 20,20,"<<"));//left
-                buttonList.add(buttonRight = new GuiButton(-1, percentLeft(75)-10,percentTop(56), 20,20,">>"));//right
-                buttonList.add(buttonApply = new GuiButton(-1, percentLeft(83)-16,percentTop(56), 32,20,"Apply"));//apply
-                buttonList.add(buttonClose = new GuiButton(-1, percentLeft(75)-16,percentTop(45), 64,20,"Close"));//close
-                buttonApply.visible=true;
+                buttonList.add(
+                    new GUIButton( percentLeft(15)-10,percentTop(56), 20,20,"<<") {
+                        @Override
+                        public String getHoverText() {
+                            return "Previous Page";
+                        }
+                        @Override
+                        public void onClick() {
+                            page = (page <= 0 ? entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).keySet().size() -1: page - 1);
+                            currentTransportSkin =entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).get(skinList.get(page));
+                        }
+                    }
+                );
+
+                buttonList.add(
+                        new GUIButton( percentLeft(75)-10,percentTop(56), 20,20,">>") {
+                            @Override
+                            public String getHoverText() {
+                                return "Next Page";
+                            }
+                            @Override
+                            public void onClick() {
+                                page = (page+1 >= entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).keySet().size() ? 0 : page + 1);
+                                currentTransportSkin =entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).get(skinList.get(page));
+                            }
+                        }
+                );
+
+
+                buttonList.add(
+                        new GUIButton( percentLeft(83)-16,percentTop(56), 32,20,"Apply") {
+                            @Override
+                            public String getHoverText() {
+                                return "Apply Skin";
+                            }
+                            @Override
+                            public void onClick() {
+                                if(guiScreen==0) {//TransportSkin select
+                                    TrainsInMotion.keyChannel.sendToServer(new PacketPaint(skinList.get(page), entity.getEntityId()));
+                                } else if(guiScreen==1){//color select
+
+                                } else {//livery select
+
+                                }
+                                entity.renderData.needsModelUpdate=true;
+                            }
+                        }
+                );
+
+
+                buttonList.add(
+                        new GUIButton( percentLeft(75)-16,percentTop(45), 64,20, "Close") {
+                            @Override
+                            public String getHoverText() {
+                                return "Close Menu";
+                            }
+                            @Override
+                            public void onClick() {
+                                mc.displayGuiScreen(null);
+                            }
+                        }
+                );
                 break;
             }
         }
@@ -191,16 +223,17 @@ public class GUIPaintBucket extends GuiScreen {
         //check scaling Width vs scaling Height, we want the smaller of the two, however we scale them differently.
         float scale = entity.getHitboxSize()[0];
         if(scale!=0){
-            scale = 0.25f/(scale /0.25f);
+           // scale = 0.25f/(scale /0.25f);
         }
 
         float scale2 =  entity.getHitboxSize()[1];
         if(scale2!=0){
-            scale2 = 0.125f/(scale2 /0.125f);
+          //  scale2 = 0.125f/(scale2 /0.125f);
         }
         scale=Math.min(scale,scale2);
         //now scale based on the resolution
-        scale*=Math.min(mc.displayWidth/800f, mc.displayHeight/600f);
+        scale*=Math.min(mc.displayWidth/800f, mc.displayHeight/300f);
+        scale *=0.004f;
 
 
 
@@ -209,7 +242,7 @@ public class GUIPaintBucket extends GuiScreen {
         GL11.glPushMatrix();
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-        GL11.glTranslatef(-0.4f,0.05f,-1f);
+        GL11.glTranslatef(-0.4f,0.15f,-1f);
 
         Project.gluPerspective(45.0F, (float)Minecraft.getMinecraft().displayWidth/(float)Minecraft.getMinecraft().displayHeight, 0.05f, 2);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
@@ -232,4 +265,10 @@ public class GUIPaintBucket extends GuiScreen {
     }
 
 
+    @Override
+    protected void actionPerformed(GuiButton button) {
+        if (button instanceof GUIButton) {
+            ((GUIButton) button).onClick();
+        }
+    }
 }

@@ -20,7 +20,6 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nullable;
 
@@ -65,26 +64,26 @@ public class RailTileEntity extends TileEntity {
 
             Minecraft.getMinecraft().entityRenderer.enableLightmap(1);
             TextureManager.adjustLightFixture(worldObj,xCoord,yCoord,zCoord);
-            if(railGLID!=null){
+            if(railGLID!=null && !ClientProxy.disableCache){
                 if(!org.lwjgl.opengl.GL11.glIsList(railGLID)){
                     railGLID=null;
                     return;
                 }
                 org.lwjgl.opengl.GL11.glCallList(railGLID);
-                if(ClientProxy.disableCache) {
-                    GL11.glDeleteLists(railGLID, 1);
-                    railGLID = null;
-                }
             }
             if(railGLID==null && data !=null && data.floatArrayMap.size()>0){
                 RailShapeCore route =new RailShapeCore().fromXML(data);
                 if (route.activePath!=null) {
-                    railGLID = net.minecraft.client.renderer.GLAllocation.generateDisplayLists(1);
-                    org.lwjgl.opengl.GL11.glNewList(railGLID, org.lwjgl.opengl.GL11.GL_COMPILE);
+                    if(!ClientProxy.disableCache) {
+                        railGLID = net.minecraft.client.renderer.GLAllocation.generateDisplayLists(1);
+                        org.lwjgl.opengl.GL11.glNewList(railGLID, org.lwjgl.opengl.GL11.GL_COMPILE);
 
-                    Model1x1Rail.Model3DRail(worldObj, xCoord, yCoord, zCoord, route);
+                        Model1x1Rail.Model3DRail(worldObj, xCoord, yCoord, zCoord, route);
 
-                    org.lwjgl.opengl.GL11.glEndList();
+                        org.lwjgl.opengl.GL11.glEndList();
+                    } else {
+                        Model1x1Rail.Model3DRail(worldObj, xCoord, yCoord, zCoord, route);
+                    }
                 } // else {DebugUtil.println("NO DATA");}*/
             }
         } else {super.func_145828_a(report);}
@@ -92,7 +91,7 @@ public class RailTileEntity extends TileEntity {
 
     @Override
     public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
-        return oldMeta!=newMeta;
+        return (oldBlock != newBlock) || (oldMeta != newMeta);
     }
 
     @Override
@@ -131,6 +130,7 @@ public class RailTileEntity extends TileEntity {
                 railGLID = null;
             }
         }
+        data.buildXML();
 
     }
 
@@ -162,7 +162,7 @@ public class RailTileEntity extends TileEntity {
     public void writeToNBT(NBTTagCompound tag){
         super.writeToNBT(tag);
         tag.setInteger("meta", meta);
-        if(data!=null) {
+        if(data!=null && data.toXMLString()!=null && data.toXMLString().length()>0) {
             tag.setString("raildata", data.toXMLString());
         }
     }

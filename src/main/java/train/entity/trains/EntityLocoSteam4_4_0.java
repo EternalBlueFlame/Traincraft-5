@@ -6,6 +6,7 @@ import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.EntityTrainCore;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
 import ebf.tim.utility.FuelHandler;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
@@ -14,9 +15,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
-import train.blocks.bench.AssemblyTableRecipes;
 import train.library.Info;
-import train.library.ItemIDs;
 import train.render.models.ModelLoco;
 
 import java.util.List;
@@ -131,7 +130,7 @@ public class EntityLocoSteam4_4_0 extends EntityTrainCore {
      */
     @Override
     public ItemStackSlot fuelSlot(){
-        return super.fuelSlot().setOverlay(Items.coal);
+        return super.fuelSlot();
     }
 
     /**
@@ -178,12 +177,18 @@ public class EntityLocoSteam4_4_0 extends EntityTrainCore {
      * @see ebf.tim.utility.RecipeManager#ODC(ItemStack)
      */
     @Override
-    public ItemStack[] getRecipie() {
+    public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(ItemIDs.ironChimney.item, 1), new ItemStack(Items.stick, 2), null,
-                new ItemStack(ItemIDs.ironBoiler.item, 1), new ItemStack(ItemIDs.ironFirebox.item, 1), new ItemStack(ItemIDs.woodenCab.item, 1),
-                new ItemStack(ItemIDs.ironBogie.item, 3), new ItemStack(ItemIDs.woodenFrame.item, 2), null
+                new ItemStack(TiMItems.chimneyIron, 1), new ItemStack(Items.stick, 2), null,
+                new ItemStack(TiMItems.boilerIron, 1), new ItemStack(TiMItems.fireboxIron, 1), new ItemStack(TiMItems.cabinWood, 1),
+                new ItemStack(TiMItems.wheelIron, 3), new ItemStack(TiMItems.frameWood, 2), null
         };
+
+//        return new ItemStack[]{
+//                new ItemStack(TiMItems.chimneyIron, 1), new ItemStack(Items.stick, 2), null,
+//                new ItemStack(TiMItems.boilerIron, 1), new ItemStack(TiMItems.fireboxIron, 1), new ItemStack(TiMItems.cabinWood, 1),
+//                new ItemStack(TiMItems.wheelIron, 3), new ItemStack(TiMItems.frameWood, 2), null
+//        };
     }
 
 
@@ -224,7 +229,7 @@ public class EntityLocoSteam4_4_0 extends EntityTrainCore {
     public ModelBase[] getModel(){return new ModelBase[]{new ModelLoco()};}
 
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.2f,worldObj==null?0.4f:0.6f,0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.2f,worldObj==null?0.6f:0.6f,0f}};}
 
     @Override
     public float[][] modelRotations(){return new float[][]{{0f,90f,180f}};}

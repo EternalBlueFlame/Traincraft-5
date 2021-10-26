@@ -5,6 +5,7 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -12,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,9 +34,9 @@ public class EntityFreightGS4_Baggage extends GenericRailTransport {
     @Override
     public String transportName(){return "Freight Cart GS4 Baggage";}
     @Override
-    public String transportcountry(){return "us";}
+    public String transportcountry(){return "Us";}
     @Override
-    public String transportYear(){return "941-1942";}
+    public String transportYear(){return "1939";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -46,13 +46,13 @@ public class EntityFreightGS4_Baggage extends GenericRailTransport {
         return TrainsInMotion.transportTypes.FREIGHT.singleton();
     }
     @Override
-    public float weightKg(){return 10f;}
+    public float weightKg(){return 48987.976f;}
 
     //Model stuff
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelGS4Baggage()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.025f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.13f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -90,18 +90,18 @@ public class EntityFreightGS4_Baggage extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                null, new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 1), 
+                null, new ItemStack(TiMItems.wheelWood, 2), new ItemStack(TiMItems.frameSteel, 1),
                 null, null, null, null, null, new ItemStack(Blocks.chest, 2)        };
     }
 
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    public float[][] getRiderOffsets(){return null;}
     @Override
-    public float[] getHitboxSize(){return new float[]{6.199999809265137f,2.1f,1.1f};}
+    public float[] getHitboxSize(){return new float[]{7.875f,2.25f,1.4f};}
     @Override
-    public float[] rotationPoints() {return new float[]{2.4800000190734863f, -2.4800000190734863f};}
+    public float[] rotationPoints() {return new float[]{1.8f, -1.885f};}
 
 
 

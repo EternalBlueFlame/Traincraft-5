@@ -2,8 +2,6 @@ package train.render.models;
 
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 
 public class ModelSD40 extends ModelBase {
 	
@@ -675,7 +673,5 @@ public class ModelSD40 extends ModelBase {
 
 		fixRotation(bodyModel);
 	}
-
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 
 }

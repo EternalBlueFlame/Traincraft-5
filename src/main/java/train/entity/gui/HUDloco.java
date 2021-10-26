@@ -3,7 +3,8 @@ package train.entity.gui;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import ebf.tim.TrainsInMotion;
 import ebf.tim.entities.EntityTrainCore;
-import ebf.tim.utility.FuelHandler;
+import ebf.tim.utility.*;
+import fexcraft.tmt.slim.TextureManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
@@ -12,6 +13,7 @@ import org.lwjgl.opengl.GL11;
 import train.library.Info;
 
 public class HUDloco extends GuiScreen {
+	//todo all of this is fucked, fuel bar doesnt scale, speed is wrong, heat doesn't do jack on steam
 
 	private Minecraft game;
 	private int windowWidth, windowHeight;
@@ -44,7 +46,7 @@ public class HUDloco extends GuiScreen {
 	}
 
 	private void renderBG(EntityTrainCore rcCar) {
-		GL11.glEnable(3042);
+		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(32826);
 		this.zLevel = -90.0F;
 		if (rcCar.getTypes().contains(TrainsInMotion.transportTypes.STEAM)) {
@@ -55,12 +57,12 @@ public class HUDloco extends GuiScreen {
 		}
 		drawTexturedModalRect(10, windowHeight, 0, 150, 137, 90);
 		GL11.glDisable(32826);
-		GL11.glDisable(3042);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	private void renderText(EntityTrainCore loco) {
-		double speed =(Math.abs(loco.motionX)+Math.abs(loco.motionZ))*0.05;//*0.05 same as /20 and not prone to error on speed 0
-
+		double speed =( Math.sqrt(loco.getVelocity()) * (CommonProxy.realSpeed?58D:58D*0.835));
+		speed*=ClientProxy.speedInKmh?1:0.621371;
 		int h;
 		if (loco.getTypes().contains(TrainsInMotion.transportTypes.STEAM)) {
 			h = 15;
@@ -68,18 +70,18 @@ public class HUDloco extends GuiScreen {
 		else {
 			h = 13;
 		}
-		GL11.glEnable(3042 /* GL_BLEND */);
+		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(32826);
 		fontRendererObj.drawStringWithShadow("Speed:", 106, windowHeight + 7 + (h), 0xFFFFFF);
-		fontRendererObj.drawStringWithShadow("  " + Math.floor(speed*0.27777777777), 106,
+		fontRendererObj.drawStringWithShadow("  " + Math.floor(speed), 106,
 				windowHeight + 18 + (h), 0xFFFFFF);
-		fontRendererObj.drawStringWithShadow(" Km/h", 106, windowHeight + 29 + (h), 0xFFFFFF);
+		fontRendererObj.drawStringWithShadow(ClientProxy.speedInKmh?" Km/h":"Mp/h", 106, windowHeight + 29 + (h), 0xFFFFFF);
 
 		if (loco.getTypes().contains(TrainsInMotion.transportTypes.STEAM)) {
 			fontRendererObj.drawStringWithShadow("State: " + getState(loco.fuelHandler), 50, windowHeight + 80, 0xFFFFFF);
 		}
 		GL11.glDisable(32826);
-		GL11.glDisable(3042 /* GL_BLEND */);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	private String getState(FuelHandler fuel){
@@ -95,49 +97,42 @@ public class HUDloco extends GuiScreen {
 	}
 
 	private void renderFuelBar(EntityTrainCore loco) {
-		GL11.glEnable(3042 /* GL_BLEND */);
+		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(32826);
 		int l;
 		/**
 		 * So that the content of the tank is renderer and not the fuel currently burned
 		 */
-		if (loco.getTypes().contains(TrainsInMotion.transportTypes.DIESEL)) {
-			l = loco.getTankInfo(null)[0]!=null?loco.getTankInfo(null)[0].fluid.amount:1;
-			l = Math.abs(((l * 70) / ( loco.getTankCapacity()[0])));
-		}
-		else {
-			l = loco.getTankInfo(null)[0]!=null?loco.getTankInfo(null)[0].fluid.amount:1;
-			l= ((l * 70) / 1200);//scaled on 70 pixels
+		if(!loco.getTypes().contains(TrainsInMotion.transportTypes.STEAM)) {
+			l = loco.getTankInfo(null)[0] != null ? loco.getTankInfo(null)[0].fluid.amount : 1;
+			l = Math.abs(((l * 70) / (loco.getTankCapacity()[0])));
+		} else {
+			l = (int)loco.fuelHandler.burnTimeMax;
+			if(l!=0 && loco.fuelHandler.burnTime!=0){
+				l = Math.abs(((l * 70) / ((int)loco.fuelHandler.burnTime)));
+			}
 		}
 		if (l > 70) {
 			l = 70;// to fit the 70 pixels bar
 		}
-		if (l < 0) {
+		else if (l < 0) {
 			l = 0;
-		}
-
-		/**
-		 * Steam Train have different HUD
-		 */
-		if (loco.getTypes().contains(TrainsInMotion.transportTypes.STEAM)) {
-			game.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation,Info.guiPrefix + "loco_hud_steam.png"));
-		}
-		else {
-			game.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation,Info.guiPrefix + "locohud.png"));
 		}
 		/**
 		 * Things are slightly different in Steam HUD
 		 * because it's a black bar that is rendered that hides the color bar the black bar is rendered from top to bottom
 		 */
 		if (!(loco.getTypes().contains(TrainsInMotion.transportTypes.STEAM))) {
-			drawTexturedModalRect(28, windowHeight + 11, 148, 150 + l, 7, 70 - l);// l max = 70
+			TextureManager.bindTexture(new ResourceLocation(Info.resourceLocation,Info.guiPrefix + "locohud.png"));
+			ClientUtil.drawTexturedRect(28, windowHeight + 11, 154, 170 + l, 7, 70 - l);// l max = 70
 		}
 		else {
-			drawTexturedModalRect(34, windowHeight + 17, 154, 170 + l, 9, 70 - l);// l max = 70
+			TextureManager.bindTexture(new ResourceLocation(Info.resourceLocation,Info.guiPrefix + "loco_hud_steam.png"));
+			ClientUtil.drawTexturedRect(34, windowHeight + 17, 154, 170 + l, 7, 70 - l);// l max = 70
 		}
 		// fontRendererObj.drawStringWithShadow("Fuel:", 4, (windowHeight/2)+1, 0xFFFFFF);
 		GL11.glDisable(32826);
-		GL11.glDisable(3042 /* GL_BLEND */);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	private void renderWaterBar(EntityTrainCore loco) {
@@ -152,11 +147,11 @@ public class HUDloco extends GuiScreen {
 		/**
 		 * because it's a black bar that is rendered that hides the color bar the black bar is rendered from top to bottom
 		 */
-		GL11.glEnable(3042 /* GL_BLEND */);
+		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(32826);
 		drawTexturedModalRect(70, windowHeight + 17, 190, 169 + l_Scaled, 6, 49 - l_Scaled);// l max = 49
 		GL11.glDisable(32826);
-		GL11.glDisable(3042 /* GL_BLEND */);
+		GL11.glDisable(GL11.GL_BLEND);
 		/* this is for the red overlay if you don't put water into steam trains */
 		if (l <= 1 && loco.fuelHandler.burnHeat>0) {
 			this.drawGradientRect(0, 0, windowWidth, windowHeight + 100, 1615855616, -1602211792);
@@ -164,37 +159,27 @@ public class HUDloco extends GuiScreen {
 	}
 
 	private void renderSpeedometer(EntityTrainCore loco) {
-		double speed =(Math.abs(loco.motionX)+Math.abs(loco.motionZ))*0.05;//*0.05 same as /20 and not prone to error on speed 0
-		GL11.glEnable(3042);
-		GL11.glEnable(32826);
+		int speed =loco.getAccelerator();
+		//clamp speed to the normal range
+		speed=speed>0?Math.min(speed,6):Math.max(speed,-6);
+		//scale speed to the bar
+		speed*=-4;
 
-		/**
-		 * SteamTrain have different HUD
-		 */
-		if (loco.getTypes().contains(TrainsInMotion.transportTypes.STEAM)) {
-			game.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation,Info.guiPrefix + "loco_hud_steam.png"));
-		}
-		else {
-			game.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation,Info.guiPrefix + "locohud.png"));
-		}
-		/**
-		 * Scale the speed so that it doesn't go higher than 49 pixels
-		 */
-		double speedScaled = Math.abs((Math.floor(speed*0.27777777777) * 49) / 280);
-		if (speedScaled > 49) {
-			speedScaled = 49;
-		}
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glEnable(32826);
 		/**
 		 * Things are slightly different in Steam HUD
 		 */
 		if (!(loco.getTypes().contains(TrainsInMotion.transportTypes.STEAM))) {
-			drawTexturedModalRect(75, windowHeight + 37 - ((int) speedScaled) + (20), 163, 150, 30, 5);
+			game.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation,Info.guiPrefix + "loco_hud_steam.png"));
+			drawTexturedModalRect(75, windowHeight + 32 - speed, 163, 150, 30, 5);
 		}
 		else {
-			drawTexturedModalRect(84, windowHeight + 37 - ((int) speedScaled) + (20), 177, 149, 16, 8);
+			game.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation,Info.guiPrefix + "locohud.png"));
+			drawTexturedModalRect(84, windowHeight + 32 - speed, 177, 149, 16, 8);
 		}
 		GL11.glDisable(32826);
-		GL11.glDisable(3042);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 	private void renderOverheating(EntityTrainCore loco) {
@@ -203,7 +188,7 @@ public class HUDloco extends GuiScreen {
 			overheatLevel += 30;
 		}
 		// fontRendererObj.drawStringWithShadow("Heat:", 33, (windowHeight/2)+1, 0xFFFFFF);
-		GL11.glEnable(3042 /* GL_BLEND */);
+		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glEnable(32826);
 
 		/**
@@ -230,7 +215,7 @@ public class HUDloco extends GuiScreen {
 			drawTexturedModalRect(56, windowHeight + 17, 176, (169 + overheatScaled), 5, 49 - overheatScaled);
 		}
 		GL11.glDisable(32826);
-		GL11.glDisable(3042 /* GL_BLEND */);
+		GL11.glDisable(GL11.GL_BLEND);
 	}
 
 }

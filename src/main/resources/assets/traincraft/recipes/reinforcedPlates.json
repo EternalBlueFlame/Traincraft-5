@@ -1,0 +1,23 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "RRR",
+    "SSS",
+    "CCC"
+  ],
+  "key": {
+    "R": {
+      "item": "traincraft:reinforcedPlastic"
+    },
+    "S": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    },
+    "C": {
+      "item": "minecraft:clay_ball"
+    }
+  },
+  "result": {
+    "item": "traincraft:reinforcedPlates"
+  }
+}

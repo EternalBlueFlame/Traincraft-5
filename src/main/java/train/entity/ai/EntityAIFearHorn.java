@@ -25,17 +25,13 @@ public class EntityAIFearHorn extends EntityAIBase{
 	@Override
 	public boolean shouldExecute() {
 		if(entity.getEntityToAttack() instanceof EntityTrainCore) {
-			Entity loco = entity.getEntityToAttack(); 
-			Vec3 posLoco = Vec3.createVectorHelper(loco.posX, loco.posY, loco.posZ);
 			entity.detachHome();
-            Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 10, 8, posLoco);
+            Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 10, 8, Vec3.createVectorHelper(entity.getEntityToAttack().posX, entity.getEntityToAttack().posY, entity.getEntityToAttack().posZ));
 
             if (vec3 == null)
             {
                 return false;
-            }
-            else
-            {
+            } else {
                 this.randPosX = vec3.xCoord;
                 this.randPosY = vec3.yCoord;
                 this.randPosZ = vec3.zCoord;
@@ -49,26 +45,23 @@ public class EntityAIFearHorn extends EntityAIBase{
     /**
      * Execute a one shot task or start executing a continuous task
      */
-    public void startExecuting()
-    {
+    public void startExecuting() {
     	tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, 2.0D);
     }
 
     /**
      * Returns whether an in-progress EntityAIBase should continue executing
      */
-    public boolean continueExecuting()
-    {
+    public boolean continueExecuting() {
         return !this.entity.getNavigator().noPath();
     }
     
     /**
      * Returns the path to the given coordinates
      */
-    private PathEntity getPathToXYZ(double x, double y, double z)
-    {
+    private PathEntity getPathToXYZ(double x, double y, double z) {
         return getEntityPathToXYZ(MathHelper.floor_double(x), (int)y, MathHelper.floor_double(z), 
-        		entity.getNavigator().getPathSearchRange(), false, false, false);
+                (int)entity.getNavigator().getPathSearchRange()+8, false, false, false);
     }
 
     /**
@@ -80,19 +73,15 @@ public class EntityAIFearHorn extends EntityAIBase{
         return entity.getNavigator().setPath(pathentity, speed);
     }
     
-    private PathEntity getEntityPathToXYZ(int targetX, int targetY, int targetZ, float range, boolean canPassOpenDoor, boolean canPassClosedDoor, boolean canSwim)
-    {
+    private PathEntity getEntityPathToXYZ(int targetX, int targetY, int targetZ, int range, boolean canPassOpenDoor, boolean canPassClosedDoor, boolean canSwim) {
         int x = MathHelper.floor_double(entity.posX);
         int y = MathHelper.floor_double(entity.posY);
         int z = MathHelper.floor_double(entity.posZ);
-        int r = (int)(range + 8.0F);
-        int xmin = x - r;
-        int ymin = y - r;
-        int zmin = z - r;
-        int xmax = x + r;
-        int ymax = y + r;
-        int zmax = z + r;
-        ChunkCache chunkcache = new ChunkCache(entity.worldObj, xmin, ymin, zmin, xmax, ymax, zmax, 0);
+
+        ChunkCache chunkcache = new ChunkCache(entity.worldObj,
+                x - range, y - range, z - range,
+                x + range, y + range, z + range,
+                0);
         PathEntity pathentity = (new TCPathFinder(chunkcache, canPassOpenDoor, canPassClosedDoor, false, canSwim)).createEntityPathTo(entity, targetX, targetY, targetZ, range);
         return pathentity;
     }

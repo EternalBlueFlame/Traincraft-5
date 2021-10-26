@@ -1,0 +1,18 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "# #",
+    "# #",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "ingotPlastic"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:chimney.plastic",
+    "count": 2
+  }
+}

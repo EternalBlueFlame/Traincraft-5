@@ -5,8 +5,8 @@ import ebf.tim.entities.GenericRailTransport;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import train.render.CustomModelRenderer;
 import train.library.Info;
+import train.render.CustomModelRenderer;
 
 public class ModelBuilder extends ModelBase {
 
@@ -676,5 +676,4 @@ public class ModelBuilder extends ModelBase {
 		}
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

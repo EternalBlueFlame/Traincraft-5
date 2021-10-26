@@ -2,7 +2,6 @@ package train.render.models;
 
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
-import net.minecraft.entity.Entity;
 import train.render.CustomModelRenderer;
 
 public class ModelTankWagonUS extends ModelBase {
@@ -190,9 +189,8 @@ public class ModelTankWagonUS extends ModelBase {
 
 		fixRotation(bodyModel);
 	}
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 
-	// variables init:
+    // variables init:
 	public CustomModelRenderer box;
 	public CustomModelRenderer box0;
 	public CustomModelRenderer box1;

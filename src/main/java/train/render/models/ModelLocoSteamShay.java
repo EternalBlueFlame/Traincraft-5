@@ -4,7 +4,6 @@ import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import train.render.CustomModelRenderer;
@@ -578,7 +577,7 @@ public class ModelLocoSteamShay extends ModelBase {
 
 		bodyModel=new ModelRendererTurbo[]{box,rod_frnt_track,rod_frnt_mid,piston_front,
 				roof_piston_upper,roof_piston_lower,roof_blank_upper,roof_blank_lower,rod_rear_truck,rod_rear_mid,
-				ladder_piston_side,ladder_blank_side,crank_1,crank_2,crank_3,crank_4,coal_pile,brake_cyl,
+				ladder_piston_side,ladder_blank_side,crank_1,crank_2,crank_3,crank_4,brake_cyl,
 				box0,box1,box2,box3,box4,box6,box7,box8,box9,
 				box10,box11,box12,box14,box15,box16,box17,box18,box19,
 				box20,box21,box22,box23,box24,box25,box26,box27,box28,box29,
@@ -611,5 +610,4 @@ public class ModelLocoSteamShay extends ModelBase {
 		}
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

@@ -1,0 +1,18 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "# #",
+    "# #",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:engine.cylinder",
+    "count": 6
+  }
+}

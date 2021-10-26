@@ -9,11 +9,14 @@
 
 package train.render.models;
 
+import ebf.tim.entities.GenericRailTransport;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
-import net.minecraft.client.Minecraft;
+import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import train.library.Info;
 
 public class ModelFOL_M1 extends ModelBase
 {
@@ -790,11 +793,11 @@ public class ModelFOL_M1 extends ModelBase
 
 
 		//todo: this should be handled by TiM's skin system
-		/*if(entity instanceof AbstractTrains && ((AbstractTrains) entity).getColor()==8){
+		if(entity instanceof GenericRailTransport && ((GenericRailTransport) entity).getCurrentSkin().name.equals("Grey")){
 			Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/FOL_M1_Bogie_grey.png"));
 		} else {
 			Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/FOL_M1_Bogie.png"));
-		}*/
+		}
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(-0.2,0,1.0);
@@ -807,9 +810,5 @@ public class ModelFOL_M1 extends ModelBase
 
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-	{
-	}
-
-	public ModelRendererTurbo fol_m1Model[];
+    public ModelRendererTurbo fol_m1Model[];
 }

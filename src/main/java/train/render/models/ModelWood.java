@@ -201,10 +201,10 @@ public class ModelWood extends ModelBase {
 		box9.setPosition(-28F, 6F, -2F);
 
 		bodyModel=new ModelRendererTurbo[]{box,
-				box0,box1,box2,box3,box5,box6,box7,box8,box9,
+				box0,box3,box5,box6,box7,box8,box9,
 				box10,box11,box12,box13,box14,box15,box16,box17,box18,box19,
-				box21,box22,box23,box24,box25,box26,box27,box28,box29,
-				box30,box31,box34,box35,box36,box37,box63
+				box21,box22,box23,box24,box25,box26,box27,box28,
+				box30,box31,box34,box36,box37,box63
 		};
 
 		fixRotation(bodyModel);
@@ -212,11 +212,6 @@ public class ModelWood extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-
-		box35.showModel=false;
-		box29.showModel=false;
-		box2.showModel=false;
-		box1.showModel=false;
 
 		int cargo = 0;
 
@@ -226,14 +221,13 @@ public class ModelWood extends ModelBase {
 			}
 		}
 		if (cargo != 0) {
-			box35.showModel=true;
-			box29.showModel=true;
-			box2.showModel=true;
-			box1.showModel=true;
+			box35.render();
+			box29.render();
+			box2.render();
+			box1.render();
 		}
 
 		super.render(entity, f, f1, f2, f3, f4, f5);
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

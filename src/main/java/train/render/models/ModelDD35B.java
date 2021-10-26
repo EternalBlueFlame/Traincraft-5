@@ -487,28 +487,10 @@ public class ModelDD35B extends ModelBase
 		dd35bModel[115].addShapeBox(0F, 0F, 0F, 3, 3, 0, 0F, 0F, -2F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -2F, 0F, 0F, 0F, 0F, 0F, -2F, 0F, 0F, -2F, 0F, 0F, 0F, 0F); // Box 115
 		dd35bModel[115].setRotationPoint(-48F, -11F, 9F);
 
+		bodyModel=dd35bModel;
+		fixRotation(bodyModel);
 
 	}
 
-	@Override
-	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
-	{
-		for(int i = 0; i < 116; i++)
-		{
-			if(dd35bModel[i].boxName!= null && dd35bModel[i].boxName.equals("lamp")){
-				Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
-				dd35bModel[i].render(f5);
-				Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
-
-			} else {
-				dd35bModel[i].render(f5);
-			}
-		}
-	}
-
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-	{
-	}
-
-	public ModelRendererTurbo dd35bModel[];
+    public ModelRendererTurbo dd35bModel[];
 }

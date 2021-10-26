@@ -1,6 +1,5 @@
 package train.core;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -10,15 +9,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import train.blocks.bench.GuiTrainCraftingBlock;
 import train.blocks.bench.TileTrainWbench;
-import train.blocks.bridge.TileBridgePillar;
 import train.blocks.distil.GuiDistil;
 import train.blocks.distil.TileEntityDistil;
 import train.blocks.generator.GuiGeneratorDiesel;
@@ -27,29 +23,30 @@ import train.blocks.hearth.GuiOpenHearthFurnace;
 import train.blocks.hearth.TileEntityOpenHearthFurnace;
 import train.blocks.lantern.GuiLantern;
 import train.blocks.lantern.TileLantern;
-import train.blocks.signal.TileSignal;
-import train.blocks.switchstand.TileSwitchStand;
-import train.blocks.waterwheel.TileWaterWheel;
-import train.blocks.windmill.TileWindMill;
 import train.core.handlers.ClientTickHandler;
 import train.core.handlers.TCKeyHandler;
 import train.core.helpers.JLayerHook;
-import train.entity.gui.*;
-import train.render.*;
-import train.entity.digger.EntityRotativeDigger;
-import train.entity.digger.EntityRotativeWheel;
+import train.entity.gui.GuiJukebox;
+import train.entity.gui.GuiZepp;
+import train.entity.gui.HUDloco;
 import train.entity.rollingStock.EntityJukeBoxCart;
 import train.entity.zeppelin.EntityZeppelinOneBalloon;
 import train.entity.zeppelin.EntityZeppelinTwoBalloons;
-import train.library.BlockIDs;
 import train.library.GuiIDs;
 import train.library.Info;
+import train.render.RenderZeppelins;
+import train.render.models.ModelSwitchStandOff;
+import train.render.models.ModelSwitchStandOn;
 
 import java.util.Calendar;
 
 public class ClientProxy extends CommonProxy {
 
-	public static boolean isHoliday() {
+	//NOTE: these had to be moved here rather than the render, because they wouldn't init soon enough in the TESR and crashed
+    public static ModelSwitchStandOn modelSwitch = new ModelSwitchStandOn();
+    public static ModelSwitchStandOff modelSwitch2 = new ModelSwitchStandOff();
+
+    public static boolean isHoliday() {
 		Calendar cal = Calendar.getInstance();
 		return(cal.get(Calendar.MONTH) == Calendar.DECEMBER || (cal.get(Calendar.MONTH) == Calendar.JANUARY) && cal.get(Calendar.DATE) < 7);
 	}
@@ -68,33 +65,7 @@ public class ClientProxy extends CommonProxy {
 
 		RenderingRegistry.registerEntityRenderingHandler(EntityZeppelinTwoBalloons.class, new RenderZeppelins());
 		RenderingRegistry.registerEntityRenderingHandler(EntityZeppelinOneBalloon.class, new RenderZeppelins());
-		RenderingRegistry.registerEntityRenderingHandler(EntityRotativeDigger.class, new RenderRotativeDigger());
-		RenderingRegistry.registerEntityRenderingHandler(EntityRotativeWheel.class, new RenderRotativeWheel());
 
-
-		//ClientRegistry.bindTileEntitySpecialRenderer(TileBook.class, new RenderTCBook());
-		//MinecraftForgeClient.registerItemRenderer(BlockIDs.book.blockID, new ItemRenderBook());
-
-		ClientRegistry.bindTileEntitySpecialRenderer(TileSignal.class, new RenderSignal());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.signal.block), new ItemRenderSignal());
-		
-		ClientRegistry.bindTileEntitySpecialRenderer(TileLantern.class, new RenderLantern());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.lantern.block), new ItemRenderLantern());
-
-		ClientRegistry.bindTileEntitySpecialRenderer(TileSwitchStand.class, new RenderSwitchStand());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.switchStand.block), new ItemRenderSwitchStand());
-		
-		ClientRegistry.bindTileEntitySpecialRenderer(TileWaterWheel.class, new RenderWaterWheel());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.waterWheel.block), new ItemRenderWaterWheel());
-		
-		ClientRegistry.bindTileEntitySpecialRenderer(TileWindMill.class, new RenderWindMill());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.windMill.block), new ItemRenderWindMill());
-
-		ClientRegistry.bindTileEntitySpecialRenderer(TileGeneratorDiesel.class, new RenderGeneratorDiesel());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.generatorDiesel.block), new ItemRenderGeneratorDiesel());
-
-		ClientRegistry.bindTileEntitySpecialRenderer(TileBridgePillar.class, new RenderBridgePillar());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.bridgePillar.block), new ItemRenderBridgePillar());
 	}
 
 	@Override
@@ -115,13 +86,13 @@ public class ClientProxy extends CommonProxy {
 		}
 		switch (ID) {
 		case (GuiIDs.DISTIL):
-			return te != null && te instanceof TileEntityDistil ? new GuiDistil(player.inventory, (TileEntityDistil) te) : null;
+			return te instanceof TileEntityDistil ? new GuiDistil(player.inventory, (TileEntityDistil) te) : null;
 		case (GuiIDs.GENERATOR_DIESEL):
-			return te != null && te instanceof TileGeneratorDiesel ? new GuiGeneratorDiesel(player.inventory, (TileGeneratorDiesel) te) : null;
+			return te instanceof TileGeneratorDiesel ? new GuiGeneratorDiesel(player.inventory, (TileGeneratorDiesel) te) : null;
 		case (GuiIDs.OPEN_HEARTH_FURNACE):
-			return te != null && te instanceof TileEntityOpenHearthFurnace ? new GuiOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
+			return te instanceof TileEntityOpenHearthFurnace ? new GuiOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
 		case GuiIDs.TRAIN_WORKBENCH:
-			return te != null && te instanceof TileTrainWbench ? new GuiTrainCraftingBlock(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
+			return te instanceof TileTrainWbench ? new GuiTrainCraftingBlock(player.inventory, (TileTrainWbench) te) : null;
 		case (GuiIDs.ZEPPELIN):
 			return riddenByEntity != null ? new GuiZepp(riddenByEntity.inventory, entity) : null;
 			//Stationary entities while player is not riding.
@@ -144,11 +115,6 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerVillagerSkin(int villagerId, String textureName) {
 		VillagerRegistry.instance().registerVillagerSkin(villagerId, new ResourceLocation(Info.resourceLocation,Info.villagerPrefix + textureName));
-	}
-
-	@Override
-	public void registerSounds() {
-		MinecraftForge.EVENT_BUS.register(new Traincraft_EventSounds());
 	}
 
 	@Override

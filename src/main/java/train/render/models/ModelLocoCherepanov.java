@@ -2,9 +2,7 @@ package train.render.models;
 
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
-import net.minecraft.entity.Entity;
 import train.render.CustomModelRenderer;
-import train.core.handlers.ConfigHandler;
 
 public class ModelLocoCherepanov extends ModelBase {
 
@@ -203,9 +201,7 @@ public class ModelLocoCherepanov extends ModelBase {
 	}
 
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
-
-	public CustomModelRenderer box;
+    public CustomModelRenderer box;
 	public CustomModelRenderer box0;
 	public CustomModelRenderer box1;
 	public CustomModelRenderer box10;

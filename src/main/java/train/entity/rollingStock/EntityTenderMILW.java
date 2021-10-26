@@ -5,6 +5,7 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -12,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -52,7 +52,7 @@ public class EntityTenderMILW extends GenericRailTransport {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelMILWTender()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.1f, 0.07f, 0.025f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.1f, 0.065f, 0.025f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -68,9 +68,9 @@ public class EntityTenderMILW extends GenericRailTransport {
 
     //recipe
     @Override
-    public ItemStack[] getRecipie() {
+    public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Items.coal, 2), new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 1), 
+                new ItemStack(Items.coal, 2), new ItemStack(TiMItems.wheelWood, 2), new ItemStack(TiMItems.frameSteel, 1),
                 null, null, null, null, null, null        };
     }
 
@@ -79,9 +79,9 @@ public class EntityTenderMILW extends GenericRailTransport {
     @Override
     public float[][] getRiderOffsets(){return null;}
     @Override
-    public float[] getHitboxSize(){return new float[]{4.4f,2.2f,1.4f};}
+    public float[] getHitboxSize(){return new float[]{4.55f,2.0f,1.3f};}
     @Override
-    public float[] rotationPoints() {return new float[]{1.2f, -1.0f};}
+    public float[] rotationPoints() {return new float[]{1.125f, -1.1f};}
     @Override
     public int[] getTankCapacity(){return new int[]{16000};}
 

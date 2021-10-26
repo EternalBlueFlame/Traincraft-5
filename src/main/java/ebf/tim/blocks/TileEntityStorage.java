@@ -1,8 +1,11 @@
 package ebf.tim.blocks;
 
 
+import ebf.XmlBuilder;
 import ebf.tim.registry.TiMFluids;
+import ebf.tim.utility.CommonProxy;
 import ebf.tim.utility.CommonUtil;
+import ebf.tim.utility.DebugUtil;
 import ebf.tim.utility.ItemStackSlot;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
@@ -27,25 +30,83 @@ import java.util.List;
  * @author Eternal Blue Flame
  */
 public class TileEntityStorage extends TileRenderFacing implements IInventory, IFluidHandler {
+    /**the list of item stacks in the inventory*/
+    public List<ItemStackSlot> inventory = new ArrayList<ItemStackSlot>();
+    public int storageType=0;
+    public int outputPage=1;
+    public int pages=1;
 
+    public int assemblyTableTier = -1; //only applies if part of assemblyTable/traintable, no need to set otherwise.
+
+    public TileEntityStorage(){}
 
     public TileEntityStorage(BlockDynamic block){
         super(block);
+        initInventoryFromBlock( block );
+        markDirty();
+    }
+
+    protected void initInventoryFromBlock( BlockDynamic block ){
         int s=400;
-        inventory= new ArrayList<>();
-        if(block.getUnlocalizedName().equals("tile.block.traintable")){
-            //inventory grid
-            for (int l = 0; l < 3; ++l) {
-                for (int i1 = 0; i1 < 3; ++i1) {
-                    inventory.add(new ItemStackSlot(this,s).setCoords( 30 + i1 * 18, 17 + l * 18));
-                    s++;
-                }
+        inventory = new ArrayList<>();
+        if(block.getUnlocalizedName().equals("tile.block.traintabletier1") ||
+                block.getUnlocalizedName().equals("tile.block.traintabletier2") ||
+                block.getUnlocalizedName().equals("tile.block.traintabletier3") ||
+                block.getUnlocalizedName().equals("tile.block.traintable")) {
+
+            if (block.assemblyTableTier != -1) {
+                //if it's a traintable, it should be, things might break otherwise, this is temporary to see if I missed a case.
+                this.assemblyTableTier = block.assemblyTableTier;
+            } else {
+                DebugUtil.println("Did not set the tier of the assembly table/traintable!");
+                this.assemblyTableTier = 0;
             }
-            //tile entity's crafting grid
-            for (int l = 0; l < 3; ++l) {
-                for (int i1 = 0; i1 < 3; ++i1) {
-                    inventory.add(new ItemStackSlot(this,s).setCoords( 106 + i1 * 18, 17 + l * 18).setCraftingInput(true));
-                    s++;
+
+            if (!CommonProxy.isTraincraft || block.getUnlocalizedName().equals("tile.block.traintable")) {
+                //inventory grid (left grid)
+                for (int l = 0; l < 3; ++l) {
+                    for (int i1 = 0; i1 < 3; ++i1) {
+                        inventory.add(new ItemStackSlot(this, s, assemblyTableTier).setCoords(30 + i1 * 18, 17 + l * 18).setCraftingInput(true));
+                        s++;
+                    }
+                }
+                //tile entity's crafting grid (right hand grid)
+                for (int l = 0; l < 3; ++l) {
+                    for (int i1 = 0; i1 < 3; ++i1) {
+                        inventory.add(new ItemStackSlot(this, s, assemblyTableTier).setCoords(106 + i1 * 18, 17 + l * 18).setCraftingOutput(true));
+                        s++;
+                    }
+                }
+            } else {
+                //this is traincraft
+                //create the assembly table crafting slots (0-9)
+                inventory.add(new ItemStackSlot(this, s+0, assemblyTableTier).setCoords(25, 27).setCraftingInput(true));
+                inventory.add(new ItemStackSlot(this, s+1, assemblyTableTier).setCoords(79, 27).setCraftingInput(true));
+                inventory.add(new ItemStackSlot(this, s+2, assemblyTableTier).setCoords(115, 27).setCraftingInput(true));
+                //the following is dye slot
+                inventory.add(new ItemStackSlot(this, s+3, assemblyTableTier).setCoords(145, 27).setCraftingInput(true));
+
+                inventory.add(new ItemStackSlot(this, s+4, assemblyTableTier).setCoords(25, 61).setCraftingInput(true));
+                inventory.add(new ItemStackSlot(this, s+5, assemblyTableTier).setCoords(79, 61).setCraftingInput(true));
+                inventory.add(new ItemStackSlot(this, s+6, assemblyTableTier).setCoords(115, 61).setCraftingInput(true));
+                inventory.add(new ItemStackSlot(this, s+7, assemblyTableTier).setCoords(43, 93).setCraftingInput(true));
+                inventory.add(new ItemStackSlot(this, s+8, assemblyTableTier).setCoords(79, 93).setCraftingInput(true));
+                inventory.add(new ItemStackSlot(this, s+9, assemblyTableTier).setCoords(145, 93).setCraftingInput(true));
+
+                //create the assembly table output slots (9-16)
+                for(int i = 0; i < 4; ++i){
+                    for(int j = 0; j < 2; ++j){
+                        inventory.add(new ItemStackSlot(this, (s+10) + (j * 4 + i), assemblyTableTier).setCoords(92 + i * 18, (128) + j * 18).setCraftingOutput(true));
+                    }
+                }
+
+                //create the assembly table storage slots
+                //  slots 35 - 400 were meant for storage
+                int storageSlot = 36;
+                for(int i = 0; i < 2; ++i) {
+                    for (int j = 0; j < 4; ++j) {
+                        inventory.add(new ItemStackSlot(this, (storageSlot) + (j + i * 4)).setCoords(8 + j * 18, (128) + i * 18));
+                    }
                 }
             }
             storageType=1;
@@ -55,20 +116,14 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
             inventory.add(new ItemStackSlot(this,402).setCoords( 30 , 37).setCraftingInput(true).setOverlay(Blocks.gravel)); //ballast
 
             inventory.add(new ItemStackSlot(this,403).setCoords( 50 , 7).setCraftingInput(true)); //wires
-            inventory.add(new ItemStackSlot(this,404).setCoords( 50 , 27).setCraftingInput(true));//augument slot
+            inventory.add(new ItemStackSlot(this,404).setCoords( 50 , 27).setCraftingInput(true));//augment slot
 
             inventory.add(new ItemStackSlot(this,405).setCoords( 124 , -2).setCraftingInput(true).setOverlay(Blocks.rail));//old shape input
 
             inventory.add(new ItemStackSlot(this,406).setCoords( 124 , 33).setCraftingOutput(true)); //output
             storageType=0;
         }
-        markDirty();
     }
-    /**the list of item stacks in the inventory*/
-    public List<ItemStackSlot> inventory = new ArrayList<ItemStackSlot>();
-    public int storageType=0;
-    public int outputPage=0;
-    public boolean multiPage=false;
 
     @Override
     public String getInventoryName(){
@@ -82,10 +137,28 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
     @Override
     public void readFromNBT(NBTTagCompound tag) {
         super.readFromNBT(tag);
-        if (getSizeInventory()>0) {
+
+        // When world load, we need to recreate TileEntity from default constructor (no args)
+        // So we need to retrieve host block from NBT data
+        if ( host == null ) {
+            String hostName = tag.getString("hostBlockName");
+            Block block = Block.getBlockFromName(hostName);
+
+            if ( block instanceof BlockDynamic )
+            {
+                host = (BlockDynamic)  block;
+                initInventoryFromBlock( host );
+            }
+        }
+
+        XmlBuilder data = new XmlBuilder(tag.getString("xmlData"));
+        // Build to create itemMap
+        data.buildXML();
+
+        if (getSizeInventory()>0 && !data.itemMap.isEmpty()) {
             for (int i=0;i<getSizeInventory();i++) {
-                if (tag.hasKey("transportinv."+i)) {
-                    inventory.get(i).setSlotContents(ItemStack.loadItemStackFromNBT(tag.getCompoundTag("transportinv."+i)), inventory);
+                if (data.containsItemStack("items."+i)) {
+                    inventory.get(i).setSlotContents(data.getItemStack("items."+i), inventory);
                 }
             }
         }
@@ -93,8 +166,8 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
         if(getTankCapacity()!=null) {
             fluidTank = new FluidTankInfo[getTankCapacity().length];
             for (int i = 0; i < getTankCapacity().length; i++) {
-                if (tag.hasKey("tanks." + i)) {
-                    fluidTank[i] = new FluidTankInfo(FluidStack.loadFluidStackFromNBT(tag.getCompoundTag("tanks." + i)), getTankCapacity()[i]);
+                if (data.containsFluidStack("tanks." + i)) {
+                    fluidTank[i] = new FluidTankInfo(data.getFluidStack("tanks."+i), getTankCapacity()[i]);
                 }
             }
         } else {
@@ -106,24 +179,31 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
     @Override
     public void writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
+
+        if ( host != null )
+            tag.setString( "hostBlockName", Block.blockRegistry.getNameForObject( host ) );
+
+        XmlBuilder data = new XmlBuilder();
         if (inventory!=null) {
             for (int i=0;i<getSizeInventory();i++) {
-                NBTTagCompound invTag = new NBTTagCompound();
                 if(inventory.get(i)!=null && inventory.get(i).getStack()!=null) {
-                    inventory.get(i).getStack().writeToNBT(invTag);
-                    tag.setTag("transportinv."+i, invTag);
+                    data.putItemStack("items."+i, inventory.get(i).getStack());
                 }
             }
         }
         for(int i=0; i<getTankInfo(null).length;i++){
-            if(getTankInfo(null) !=null) {
-                NBTTagCompound tank = new NBTTagCompound();
-                getTankInfo(null)[i].fluid.writeToNBT(tank);
-                tag.setTag("tanks." + i, tank);
+            if(getTankInfo(i)!=null && getTankInfo(i).fluid!=null) {
+                data.putFluidStack("tanks." + i, getTankInfo(i).fluid);
+            } else if(getTankInfo(i)!=null){
+                data.putFluidStack("tanks." + i, null);
             }
         }
+        //force build to be sure there's no errors
+        data.buildXML();
+        if(data.toXMLString() != null && !data.toXMLString().equals("") && data.toXMLString().length()>1) {
+            tag.setString("xmlData", data.toXMLString());
+        }
     }
-
 
     /**the fluidTank tank*/
     private FluidTankInfo[] fluidTank = null;
@@ -164,27 +244,46 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
                     continue;
                 }
             }
-            if (getTankInfo(null)[stack]!=null && (
-                    resource.getFluid() == null || getTankInfo(null)[stack].fluid.getFluid() == resource.getFluid() ||
-                            getTankInfo(null)[stack].fluid.amount ==0)) {
+            if(getTankInfo(stack)!=null && (getTankInfo(stack).fluid==null|| getTankInfo(stack).fluid.getFluid()==null
+            || getTankInfo(stack).fluid.amount==0)){
 
-                if(leftoverDrain+getTankInfo(null)[stack].fluid.amount>getTankInfo(null)[stack].capacity){
-                    leftoverDrain-=getTankInfo(null)[stack].capacity-getTankInfo(null)[stack].fluid.amount;
-                    if(doFill){
-                        getTankInfo(null)[stack] = new FluidTankInfo(
-                                new FluidStack(resource.fluid, getTankInfo(null)[stack].capacity), getTankInfo(null)[stack].capacity);
+                int fill=leftoverDrain-fluidTank[stack].capacity;
+                    if (fill < 0) {
+                        if(doFill) {
+                            fluidTank[stack] = new FluidTankInfo(resource, getTankInfo(stack).capacity);
+                        }
+                        return 0;
+                    } else {
+                        leftoverDrain-=getTankInfo(stack).capacity;
+                        if(doFill) {
+                        fluidTank[stack] = new FluidTankInfo(
+                                new FluidStack(resource.getFluid(),getTankInfo(stack).capacity),
+                                getTankInfo(stack).capacity);
                     }
-                } else if (leftoverDrain+getTankInfo(null)[stack].fluid.amount<0){
-                    leftoverDrain-=getTankInfo(null)[stack].fluid.amount-resource.amount;
+                }
+            }
+
+            if (getTankInfo(stack)!=null &&  (
+                    resource.getFluid() == null || (getTankInfo(stack).fluid!=null &&
+                            getTankInfo(stack).fluid.getFluid() == resource.getFluid()))) {
+
+                if(leftoverDrain+getTankInfo(stack).fluid.amount>getTankInfo(stack).capacity){
+                    leftoverDrain-=getTankInfo(stack).capacity-getTankInfo(stack).fluid.amount;
                     if(doFill){
-                        getTankInfo(null)[stack] = new FluidTankInfo(
-                                new FluidStack(getTankInfo(null)[stack].fluid, 0), getTankInfo(null)[stack].capacity);
+                        fluidTank[stack] = new FluidTankInfo(
+                                new FluidStack(resource.fluid, getTankInfo(stack).capacity), getTankInfo(stack).capacity);
+                    }
+                } else if (leftoverDrain+getTankInfo(stack).fluid.amount<0){
+                    leftoverDrain-=getTankInfo(stack).fluid.amount-resource.amount;
+                    if(doFill){
+                        fluidTank[stack] = new FluidTankInfo(
+                                new FluidStack(getTankInfo(stack).fluid, 0), getTankInfo(stack).capacity);
                     }
                 } else {
                     if(doFill){
-                        getTankInfo(null)[stack] = new FluidTankInfo(
-                                new FluidStack(resource.fluid, getTankInfo(null)[stack].fluid.amount+leftoverDrain),
-                                getTankInfo(null)[stack].capacity);
+                        fluidTank[stack] = new FluidTankInfo(
+                                new FluidStack(resource.fluid, getTankInfo(stack).fluid.amount+leftoverDrain),
+                                getTankInfo(stack).capacity);
                     }
                     leftoverDrain=0;
                 }
@@ -218,6 +317,14 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
 
     }
 
+    public FluidStack getFluidStack(int slot){
+        if(getTankInfo(null)!=null && getTankInfo(null)[slot]!=null){
+            return null;
+        } else {
+            return getTankInfo(null)[slot].fluid;
+        }
+    }
+
     /*
      * <h1>Fluid Management</h1>
      */
@@ -242,6 +349,10 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
         return false;
     }
 
+    public FluidTankInfo getTankInfo(int tank){
+        return getTankInfo(null)[tank];
+    }
+
     @Override
     public FluidTankInfo[] getTankInfo(ForgeDirection from){
         if(getTankCapacity()==null || getTankCapacity().length ==0){
@@ -255,8 +366,13 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
                 tanks[i] = new FluidTankInfo(new FluidStack(FluidRegistry.WATER, 0), getTankCapacity()[i]);
             }
             fluidTank = tanks;
+        } else {
+            for (int f=0; f<fluidTank.length;f++){
+                if(fluidTank[f]==null){
+                    fluidTank[f]=new FluidTankInfo(new FluidStack(FluidRegistry.WATER, 0), getTankCapacity()[f]);
+                }
+            }
         }
-
         return fluidTank;
     }
 
@@ -329,7 +445,7 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
         switch (storageType){
-            //todo prevent putting items in output
+            //to do prevent putting items in output (taken care of elsewhere, left here as a note)
             case 0:{
                 return true;
             }
@@ -353,6 +469,27 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
                 item.setPosition(xCoord,yCoord+1,zCoord);
                 worldObj.spawnEntityInWorld(item);
             }
+        }
+    }
+
+    /**
+     * Goes to the next page of trains that fit the recipe. Will only increment if there is another page.
+     */
+    public void incrementPage() {
+        if (pages > 1 && outputPage < pages) {
+            //get the number of remaining pages
+            //if there are some, increment the outputPage int
+            outputPage++;
+            getSlotIndexByID(400).updatePage(this, inventory);
+            this.markDirty();
+        }
+    }
+
+    public void decrementPage() {
+        if (pages > 1 && outputPage > 1) {
+            outputPage--;
+            getSlotIndexByID(400).updatePage(this, inventory);
+            this.markDirty();
         }
     }
 

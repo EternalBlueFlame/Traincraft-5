@@ -15,23 +15,30 @@ import static ebf.tim.registry.TiMGenericRegistry.registerBlock;
 public class TiMBlocks {
 
     /**the crafting table for trains*/
-    public static BlockDynamic trainTable = new BlockDynamic(new Material(MapColor.mapColorArray[13]), true, true);
+    public static BlockDynamic trainTable = new BlockDynamic(new Material(MapColor.mapColorArray[13]),true, 0); //tier 0 = "no tier"
 
-    public static BlockDynamic railTable = new BlockDynamic(new Material(MapColor.mapColorArray[6]), true, true);
+    public static BlockDynamic railTable = new BlockDynamic(new Material(MapColor.mapColorArray[6]),true);
 
     public static BlockRailCore railBlock = new BlockRailCore(750,1f);
 
 
     public static void registerBlocks(){
+        trainTable.setTextureName(TrainsInMotion.MODID +":textures/blocks/train_table.png");
+        railTable.setTextureName(TrainsInMotion.MODID +":textures/blocks/rail_table.png");
 
         registerBlock(railBlock, null, TrainsInMotion.MODID,"block.timrail", null, TrainsInMotion.proxy.getTESR());
 
         //register the train crafting table
         addRecipe(new ItemStack(registerBlock(trainTable, TrainsInMotion.creativeTab, TrainsInMotion.MODID,"block.traintable", null, null),1),
-                "WWW", "WIW", "WWW", 'W', Blocks.planks, 'I', Items.iron_ingot);
+                "WWW", "WIW", "WWW", 'W', Blocks.planks, 'I', Items.iron_ingot); //original
 
         addRecipe(new ItemStack(registerBlock(railTable, TrainsInMotion.creativeTab, TrainsInMotion.MODID,"block.railtable", null, null),1),
-                "III", "I I", "I I", 'I', Items.iron_ingot);
+                "IRI", "WCW", "WWW", 'I', Items.iron_ingot, 'W', Blocks.planks, 'C', Blocks.crafting_table, 'R', Blocks.rail);
 
+        trainTable.setHardness(3);
+        railTable.setHardness(3);
+
+        railBlock.setHardness(0.7f);
+        railBlock.setResistance(0.7f);
     }
 }

@@ -1,7 +1,6 @@
 package ebf.tim.blocks;
 
 import cpw.mods.fml.common.IWorldGenerator;
-import ebf.tim.registry.TiMFluids;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;

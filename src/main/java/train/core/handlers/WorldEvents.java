@@ -19,29 +19,26 @@ public class WorldEvents{
 	public void onWorldTick(TickEvent.WorldTickEvent handler){
 		if(handler.world.isRemote){
 			if(windTicker % 128 == 0){
-				updateWind();
+				int upChance = 10;
+				int downChance = 10;
+				if (windStrength > 20) {
+					upChance -= windStrength - 20;
+				}
+				else if (windStrength < 10) {
+					downChance -= 10 - windStrength;
+				}
+				if (rand.nextInt(100) <= upChance) {
+					windStrength += 1;
+				}
+				if (rand.nextInt(100) <= downChance) {
+					windStrength -= 1;
+				}
 				windTicker=0;
 			}
 			windTicker++;
 		}
 	}
 
-	private static void updateWind() {
-		int upChance = 10;
-		int downChance = 10;
-		if (windStrength > 20) {
-			upChance -= windStrength - 20;
-		}
-		else if (windStrength < 10) {
-			downChance -= 10 - windStrength;
-		}
-		if (rand.nextInt(100) <= upChance) {
-			windStrength += 1;
-		}
-		if (rand.nextInt(100) <= downChance) {
-			windStrength -= 1;
-		}
-	}
 	
 	@SubscribeEvent
 	public void entitySpawn(EntityJoinWorldEvent event) {
@@ -55,6 +52,7 @@ public class WorldEvents{
 		for(Object o : event.getChunk().entityLists){
 			if (o instanceof EntityJukeBoxCart){
 				((EntityJukeBoxCart) o).player.setVolume(0);
+				((EntityJukeBoxCart) o).player.stop();
 			}
 		}
 	}

@@ -1,0 +1,20 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "###",
+    "#F#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    },
+    "F": {
+      "item": "trainsinmotion:firebox.steel"
+    }
+  },
+  "result": {
+    "item": "traincraft:block.distil"
+  }
+}

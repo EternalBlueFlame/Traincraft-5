@@ -2,7 +2,6 @@ package ebf.tim.gui;
 
 import cpw.mods.fml.common.eventhandler.EventPriority;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import ebf.tim.TrainsInMotion;
 import ebf.tim.entities.EntityTrainCore;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.utility.ClientProxy;
@@ -39,6 +38,7 @@ public class HUDTrain extends GuiScreen {
     @SuppressWarnings("unused")
     /**checks if minecraft and the player is loaded, if true it checks if the player is in a locomotive, if true, it displays the debug GUI*/
     public void onRenderExperienceBar(RenderGameOverlayEvent event) {
+        if(!ClientProxy.debugHUD){return;}
         if (Minecraft.getMinecraft() != null && Minecraft.getMinecraft().thePlayer != null) {
             if (Minecraft.getMinecraft().thePlayer.ridingEntity instanceof EntityTrainCore) {
                 EntityTrainCore trainEntity = (EntityTrainCore) Minecraft.getMinecraft().thePlayer.ridingEntity;
@@ -56,10 +56,10 @@ public class HUDTrain extends GuiScreen {
                 fontRendererObj.drawString("DEBUG INFO:", 8, 18, 4210752);
                 fontRendererObj.drawString("Accelerator State: " + -trainEntity.getDataWatcher().getWatchableObjectInt(18), 8, 28, 4210752);
                 //speed is velocity *20 to get meters per second. convert to km/h by dividing by 3.6, or mph by 2.236936293
-                double speed =trainEntity.getVelocity()* (CommonProxy.realSpeed ?20:100);
-                speed*=ClientProxy.speedInKmh?2.23694:3.6;
-                String speedDisplay = speed+"";
-                speedDisplay=speedDisplay.substring(0,Math.min(speedDisplay.length(),4));
+                double speed =trainEntity.getVelocity()* (CommonProxy.realSpeed ?25D:100D);
+                speed*=ClientProxy.speedInKmh?1:0.621371;
+                String speedDisplay = speed+".....";
+                speedDisplay=speedDisplay.substring(0,4);
 
                 if(ClientProxy.speedInKmh) {
                     fontRendererObj.drawString("speed: " + speedDisplay + "km/h", 8, 38, 4210752);

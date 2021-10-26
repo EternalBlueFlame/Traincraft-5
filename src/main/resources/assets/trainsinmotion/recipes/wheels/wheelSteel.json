@@ -1,0 +1,17 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    " I ",
+    "III",
+    " I "
+  ],
+  "key": {
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:wheel.steel"
+  }
+}

@@ -5,6 +5,7 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -13,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -35,9 +35,9 @@ public class EntityFreightOpen2 extends GenericRailTransport {
     @Override
     public String transportName(){return "Freight Open RedBrown";}
     @Override
-    public String transportcountry(){return "undefined";}
+    public String transportcountry(){return "Us";}
     @Override
-    public String transportYear(){return "unknown";}
+    public String transportYear(){return "1890";}
     @Override
     public boolean isFictional(){return true;}
     @Override
@@ -53,7 +53,7 @@ public class EntityFreightOpen2 extends GenericRailTransport {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelFreightOpen2()};}
     @Override
-    public float[][] modelOffsets(){return worldObj==null?new float[][]{{0.0f, 0.24f, 0.0f}}:new float[][]{{0.0f, 0.64f, 0.0f}};}
+    public float[][] modelOffsets(){return worldObj==null?new float[][]{{0.0f, 0.24f, 0.0f}}:new float[][]{{0.0f, 0.63f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, -90.0f, -180.0f}};}
     @Override
@@ -71,7 +71,7 @@ public class EntityFreightOpen2 extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 2), new ItemStack(ItemIDs.ironBogie.item, 2), new ItemStack(ItemIDs.ironFrame.item, 2), 
+                new ItemStack(Blocks.planks, 2), new ItemStack(TiMItems.wheelIron, 2), new ItemStack(TiMItems.frameIron, 2),
                 new ItemStack(Items.iron_ingot, 2), null, null, null, null, new ItemStack(Blocks.hopper, 2)        };
     }
 
@@ -80,9 +80,9 @@ public class EntityFreightOpen2 extends GenericRailTransport {
     @Override
     public float[][] getRiderOffsets(){return null;}
     @Override
-    public float[] getHitboxSize(){return new float[]{2.6f,2.1f,1.1f};}
+    public float[] getHitboxSize(){return new float[]{2.725f,1.525f,1.1f};}
     @Override
-    public float[] rotationPoints() {return new float[]{0.7f, -0.7f};}
+    public float[] rotationPoints() {return new float[]{0.675f, -0.75f};}
 
 
 

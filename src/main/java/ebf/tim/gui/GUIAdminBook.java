@@ -3,6 +3,7 @@ package ebf.tim.gui;
 import ebf.tim.TrainsInMotion;
 import ebf.tim.items.ItemAdminBook;
 import ebf.tim.utility.ServerLogger;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
@@ -96,14 +97,23 @@ public class GUIAdminBook extends GuiScreen {
 
     @Override
     public void actionPerformed(GuiButton button) {
-
         switch (button.id){
+            case -3:{
+                TrainsInMotion.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient("2:"+list[0]));//tell server to send a new gui for the page
+                buttonList = new ArrayList();
+                initGui();
+                break;
+            }
+            case -2:{
+                Minecraft.getMinecraft().currentScreen=null;
+                break;
+            }
             case -1:{
                 TrainsInMotion.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient( "0:"+list[0].substring(1)));//tell server to drop items
                 break;
             }
             case 0:{
-                TrainsInMotion.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient( "1:"+list[0].substring(1)));//tell server to drop items
+                TrainsInMotion.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient( "1:"+list[0].substring(1)));//tell server to remove entry
                 break;
             }
             case 1:{
@@ -131,7 +141,7 @@ public class GUIAdminBook extends GuiScreen {
                 break;
             }
             default:{
-                TrainsInMotion.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient( list[button.id-3]));//tell server to send a new gui
+                TrainsInMotion.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient(list[button.id-3]));//tell server to send a new gui
                 break;
             }
         }
@@ -143,20 +153,29 @@ public class GUIAdminBook extends GuiScreen {
         super.initGui();
         this.guiLeft = (this.width - 176) / 2;
         this.guiTop = (this.height - 166) / 2;
-
         if(!isTrainPage) {
             int index=0;
             for (int i = 6 * page; i < 6+(6*page) && i<list.length-1; i++) {//only show 6 entries per page
-                this.buttonList.add(new GuiButton(i+3, guiLeft-70, guiTop+20 +(index*18), 150, 20, list[i].equals("")?"Back":list[i]));
+                if (list.length >= i && i >= 0 && list[i].length()>0) {
+                    String text = list[i];
+                    if(text.contains("item.")){
+                        text=(text.substring(text.indexOf("item.")+5));
+                    }
+                    text= text.replace(".txt","").replace("_", " ");
+                    this.buttonList.add(new GuiButton(i+4, guiLeft-90, guiTop+20 +(index*18), 350, 20,text));
+                } else if(list.length >= i && i >= 0){
+                    this.buttonList.add(new GuiButton(-3, guiLeft - 90, guiTop + 20+(index*18), 350, 20, "Back"));
+                }
                 index++;
             }
             if(list.length-6-(page*6)>6){
                 //draw next
-                this.buttonList.add(new GuiButton(2, guiLeft-70, guiTop+140 , 70, 20, "next page"));
+                this.buttonList.add(new GuiButton(2, guiLeft-90, guiTop+140 , 70, 20, "next page"));
             }
             if (page>0){
                 this.buttonList.add(new GuiButton(1, guiLeft+10, guiTop+140 , 70, 20, "back"));
             }
+            this.buttonList.add(new GuiButton(-2, guiLeft+190, guiTop+140 , 70, 20, "Close"));
         } else {
             try {
                 //draw back

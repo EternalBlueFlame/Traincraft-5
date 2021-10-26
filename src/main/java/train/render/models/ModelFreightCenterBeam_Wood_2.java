@@ -120,16 +120,14 @@ public class ModelFreightCenterBeam_Wood_2 extends ModelBase {
 
 		bodyModel=new ModelRendererTurbo[]{box,
 				box0,box1,box2,box3,box4,box5,box6,box7,box8,box9,
-				box10,box11,box12,box13,box14,box15,box16,box17,box18,box19,
-				box20,box22,box31,box32,box41,box43
+				box10,box11,box12,box13,box14,box15,box16,box17,box18,
+				box22,box31,box32,box41,box43
 		};
 
 		fixRotation(bodyModel);
 	}
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		box19.showModel=false;
-		box20.showModel=false;
 		
 		//freight
 		int cargo = 0;
@@ -144,8 +142,8 @@ public class ModelFreightCenterBeam_Wood_2 extends ModelBase {
 			//GL11.glScalef(1, 0.0f+((Freight)entity).getAmmountOfCargo()*0.0194f, 1);
 			//GL11.glTranslatef(0, 0.0f+(((Freight)entity).getSizeInventory()-((Freight)entity).getAmmountOfCargo())*0.5f, 0);
 			//System.out.println(((Freight)entity).getSizeInventory()-((Freight)entity).getAmmountOfCargo());
-    		box19.showModel=true;
-    		box20.showModel=true;
+    		box19.render();
+    		box20.render();
     		//GL11.glPopMatrix();
 		}
 
@@ -153,9 +151,7 @@ public class ModelFreightCenterBeam_Wood_2 extends ModelBase {
 
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
-
-	public CustomModelRenderer box;
+    public CustomModelRenderer box;
 	public CustomModelRenderer box0;
 	public CustomModelRenderer box1;
 	public CustomModelRenderer box10;

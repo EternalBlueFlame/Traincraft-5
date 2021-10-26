@@ -5,6 +5,7 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -12,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,9 +34,9 @@ public class EntityFreightBaggageMILW extends GenericRailTransport {
     @Override
     public String transportName(){return "MILW Baggage";}
     @Override
-    public String transportcountry(){return "Undefined";}
+    public String transportcountry(){return "Us";}
     @Override
-    public String transportYear(){return "Undefined";}
+    public String transportYear(){return "1935";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -46,13 +46,13 @@ public class EntityFreightBaggageMILW extends GenericRailTransport {
         return TrainsInMotion.transportTypes.FREIGHT.singleton();
     }
     @Override
-    public float weightKg(){return 10f;}
+    public float weightKg(){return 39344.602f;}
 
     //Model stuff
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelMILWBaggage()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.1f, -0.1f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.1f, 0.005f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -70,7 +70,7 @@ public class EntityFreightBaggageMILW extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                null, new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 1), 
+                null, new ItemStack(TiMItems.wheelWood, 2), new ItemStack(TiMItems.frameSteel, 1),
                 null, null, null, null, null, new ItemStack(Blocks.chest, 2)        };
     }
 
@@ -79,9 +79,9 @@ public class EntityFreightBaggageMILW extends GenericRailTransport {
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
     @Override
-    public float[] getHitboxSize(){return new float[]{5.349999904632568f,2.1f,1.1f};}
+    public float[] getHitboxSize(){return new float[]{6.6f,1.96f,1.4f};}
     @Override
-    public float[] rotationPoints() {return new float[]{2.140000104904175f, -2.140000104904175f};}
+    public float[] rotationPoints() {return new float[]{2.025f, -1.55f};}
 
 
 

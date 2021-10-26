@@ -1,0 +1,20 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "#",
+    "X"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    },
+    "X": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:engine.piston",
+    "count": 3
+  }
+}

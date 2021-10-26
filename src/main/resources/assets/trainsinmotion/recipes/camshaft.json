@@ -1,0 +1,16 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "###"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:camshaft",
+    "count": 3
+  }
+}

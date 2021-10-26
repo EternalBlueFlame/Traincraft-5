@@ -6,12 +6,12 @@ import ebf.XmlBuilder;
 import ebf.tim.blocks.RailTileEntity;
 import ebf.tim.items.ItemRail;
 import ebf.tim.registry.TiMItems;
-import ebf.tim.utility.DebugUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -22,9 +22,11 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraft.world.chunk.Chunk;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Eternal Blue Flame
@@ -108,20 +110,30 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
 
     @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-        if (getBasicRailMetadata(world, null, x,y,z) >6) {
-            return AxisAlignedBB.getBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.5f, 1.0F);
-        } else {
-            return AxisAlignedBB.getBoundingBox(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
-        }
+        return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + this.maxY, (double)z + this.maxZ);
     }
 
 
-    public void setBlockBoundsBasedOnState(IBlockAccess p_149719_1_, int p_149719_2_, int p_149719_3_, int p_149719_4_) {
-        if (getBasicRailMetadata(p_149719_1_, null, p_149719_2_, p_149719_3_, p_149719_4_) >6) {
-            this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5f, 1.0F);
+    public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
+        int meta = getBasicRailMetadata(world, null, x, y, z);
+        if (meta >1 && meta <6) {
+            this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1f, 1.0F);
         } else {
             this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
         }
+    }
+
+    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB hitboxSelf, List p_149743_6_, Entity collidingEntity) {
+        int meta = getBasicRailMetadata(world, null, x, y, z);
+        if (meta > 1 && meta < 6) {
+            //todo: return twi hitboxes so it can be climbed like stairs
+            this.setBlockBoundsBasedOnState(world, x, y, z);
+            super.addCollisionBoxesToList(world, x, y, z, hitboxSelf, p_149743_6_, collidingEntity);
+        } else {
+            this.setBlockBoundsBasedOnState(world, x, y, z);
+            super.addCollisionBoxesToList(world, x, y, z, hitboxSelf, p_149743_6_, collidingEntity);
+        }
+
     }
 
 
@@ -345,13 +357,19 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
 
     @Override
     public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_) {
-        if(!p_149749_1_.isRemote){
-            TileEntity e = p_149749_1_.getTileEntity(p_149749_2_,p_149749_3_,p_149749_4_);
-            if(e instanceof RailTileEntity){
-                ((RailTileEntity) e).dropItem();
+        if(p_149749_1_!=null && !p_149749_1_.isRemote){
+            EntityPlayer p = p_149749_1_.getClosestPlayer(p_149749_2_,p_149749_3_,p_149749_4_,6);
+            if(p!=null && p.capabilities!=null && !p.capabilities.isCreativeMode) {
+                TileEntity e = p_149749_1_.getTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
+                if (e instanceof RailTileEntity && p_149749_1_.getGameRules().getGameRuleBooleanValue("doTileDrops")) {
+                    ((RailTileEntity) e).dropItem();
+                }
             }
         }
-        p_149749_1_.removeTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
+        if(p_149749_1_!=null) {
+            p_149749_1_.getChunkFromChunkCoords(p_149749_2_ >> 4, p_149749_4_ >> 4)
+                    .removeTileEntity(p_149749_2_ & 15, p_149749_3_, p_149749_4_ & 15);
+        }
     }
 
     @Override

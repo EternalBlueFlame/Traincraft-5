@@ -51,6 +51,8 @@ public class AnimList {
     public String tagGlow(){return " glow ";}
     /**animation tag to prevent the part from rendering*/
     public String tagHide(){return " cull ";}
+    /**animation tag to force geometry to render inside the cube*/
+    public String tagShowInside(){return " nocull ";}
 
 
     public String tagDoorSlide(int direction){return "";}

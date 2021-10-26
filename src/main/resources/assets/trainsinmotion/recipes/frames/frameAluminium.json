@@ -1,0 +1,16 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "M M",
+    "MMM"
+  ],
+  "key": {
+    "M": {
+      "type": "forge:ore_dict",
+      "ore": "ingotAluminium"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:frame.aluminium"
+  }
+}

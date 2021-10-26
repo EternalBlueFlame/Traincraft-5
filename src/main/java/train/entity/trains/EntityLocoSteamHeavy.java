@@ -5,6 +5,8 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.EntityTrainCore;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
+import ebf.tim.registry.TiMOres;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Items;
@@ -13,7 +15,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -53,8 +54,8 @@ public class EntityLocoSteamHeavy extends EntityTrainCore {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelHeavySteamLoco()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{1.4f, 0.54f, 0.0f}};}
-@Override
+    public float[][] modelOffsets(){return new float[][]{{1.55f, 0.54f, 0.0f}};}
+    @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
     public void registerSkins(){
@@ -69,11 +70,11 @@ public class EntityLocoSteamHeavy extends EntityTrainCore {
 
     //recipe
     @Override
-    public ItemStack[] getRecipie() {
+    public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                null, new ItemStack(ItemIDs.bogie.item, 3), new ItemStack(ItemIDs.steelframe.item, 3), 
-                new ItemStack(ItemIDs.steel.item, 2), new ItemStack(ItemIDs.steelchimney.item, 1), new ItemStack(ItemIDs.steelcab.item, 1), 
-                new ItemStack(ItemIDs.boiler.item, 3), new ItemStack(ItemIDs.firebox.item, 2), null        };
+                null, new ItemStack(TiMItems.wheelSteel, 3), new ItemStack(TiMItems.frameSteel, 3),
+                new ItemStack(TiMOres.ingotSteel, 2), new ItemStack(TiMItems.chimneySteel, 1), new ItemStack(TiMItems.cabinSteel, 1),
+                new ItemStack(TiMItems.boilerIron, 3), new ItemStack(TiMItems.fireboxSteel, 2), null        };
     }
 
 
@@ -81,7 +82,7 @@ public class EntityLocoSteamHeavy extends EntityTrainCore {
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{1.5f,1.5f, 0.25f}};}
     @Override
-    public float[] getHitboxSize(){return new float[]{5.0f,2.4f,1.3f};}
+    public float[] getHitboxSize(){return new float[]{4.65f,2.4f,1.3f};}
     @Override
     public float[] rotationPoints() {return new float[]{1.1f, -1.8f};}
     //Train specific stuff
@@ -93,7 +94,7 @@ public class EntityLocoSteamHeavy extends EntityTrainCore {
     public float transportTopSpeed(){return 65;}
     @Override
     public ItemStackSlot fuelSlot(){
-        return super.fuelSlot().setOverlay(Items.coal);
+        return super.fuelSlot();
     }
     @Override
     public int[] getTankCapacity(){return new int[]{10000, 2000};}

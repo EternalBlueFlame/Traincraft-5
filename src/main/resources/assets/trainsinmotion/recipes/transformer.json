@@ -1,0 +1,23 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "# #",
+    "XEX",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    },
+    "X": {
+      "item": "minecraft:redstone"
+    },
+    "E": {
+      "item": "trainsinmotion:steel.pin.circuit"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:transformer"
+  }
+}

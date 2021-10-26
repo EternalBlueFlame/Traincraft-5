@@ -24,40 +24,27 @@ public class TCPathFinder extends PathFinder{
 	}
 
 	@Override
-    public int getVerticalOffset(Entity entity, int x, int y, int z, PathPoint point)
-    {
-        return getVertical(entity, x, y, z, point,	waterAllowed, movementAllowed, doorAllowed);
-    }
+    public int getVerticalOffset(Entity entity, int x, int y, int z, PathPoint point) {
 
-    public static int getVertical(Entity entity, int x, int y, int z, PathPoint point, boolean water, boolean movement, boolean door)
-    {
         boolean flag3 = false;
+        Block block;
 
-        for (int i = x; i < x + point.xCoord; ++i)
-        {
-            for (int j = y; j < y + point.yCoord; ++j)
-            {
-                for (int k = z; k < z + point.zCoord; ++k)
-                {
-                    Block block = entity.worldObj.getBlock(i, j, k);
+        for (int i = x; i < x + point.xCoord; ++i) {
+            for (int j = y; j < y + point.yCoord; ++j) {
+                for (int k = z; k < z + point.zCoord; ++k) {
+                    block = entity.worldObj.getBlock(i, j, k);
 
-                    if (block.getMaterial() != Material.air)
-                    {
-                        if (block == Blocks.trapdoor)
-                        {
+                    if (block.getMaterial() != Material.air) {
+                        if (block == Blocks.trapdoor) {
                             flag3 = true;
                         }
-                        else if (block != Blocks.flowing_water && block != Blocks.water)
-                        {
-                            if (!door && block == Blocks.wooden_door)
-                            {
+                        else if (block != Blocks.flowing_water && block != Blocks.water) {
+                            if (!doorAllowed && block == Blocks.wooden_door) {
                                 return 0;
                             }
                         }
-                        else
-                        {
-                            if (water)
-                            {
+                        else {
+                            if (waterAllowed) {
                                 return -1;
                             }
 
@@ -66,8 +53,7 @@ public class TCPathFinder extends PathFinder{
 
                         int k1 = block.getRenderType();
 
-                        if (entity.worldObj.getBlock(i, j, k).getRenderType() == 9)
-                        {
+                        if (entity.worldObj.getBlock(i, j, k).getRenderType() == 9) {
                             int j2 = MathHelper.floor_double(entity.posX);
                             int l1 = MathHelper.floor_double(entity.posY);
                             int i2 = MathHelper.floor_double(entity.posZ);
@@ -77,27 +63,22 @@ public class TCPathFinder extends PathFinder{
                                 return -3;
                             }
                         }
-                        else if (!block.getBlocksMovement(entity.worldObj, i, j, k) && (!movement || block != Blocks.wooden_door))
-                        {
-                            if (k1 == 11 || block == Blocks.fence_gate || k1 == 32)
-                            {
+                        else if (!block.getBlocksMovement(entity.worldObj, i, j, k) && (!movementAllowed || block != Blocks.wooden_door)) {
+                            if (k1 == 11 || block == Blocks.fence_gate || k1 == 32) {
                                 return -3;
                             }
 
-                            if (block == Blocks.trapdoor)
-                            {
+                            if (block == Blocks.trapdoor) {
                                 return -4;
                             }
 
                             Material material = block.getMaterial();
 
-                            if (material != Material.lava)
-                            {
+                            if (material != Material.lava) {
                                 return 0;
                             }
 
-                            if (!entity.handleLavaMovement())
-                            {
+                            if (!entity.handleLavaMovement()) {
                                 return -2;
                             }
                         }
@@ -107,5 +88,6 @@ public class TCPathFinder extends PathFinder{
         }
 
         return flag3 ? 2 : 1;
+
     }
 }

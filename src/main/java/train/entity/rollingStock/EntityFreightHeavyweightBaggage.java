@@ -5,6 +5,8 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
+import ebf.tim.registry.TiMOres;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -12,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -52,7 +53,7 @@ public class EntityFreightHeavyweightBaggage extends GenericRailTransport {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelHeavyweightBaggage()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.0f, 0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.03f, 0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -72,8 +73,8 @@ public class EntityFreightHeavyweightBaggage extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                new ItemStack(ItemIDs.steel.item, 4), new ItemStack(ItemIDs.bogie.item, 2), new ItemStack(ItemIDs.steelframe.item, 2), 
-                new ItemStack(ItemIDs.steel.item, 2), null, null, null, null, new ItemStack(Blocks.chest, 2)        };
+                new ItemStack(TiMOres.ingotSteel, 4), new ItemStack(TiMItems.wheelWood, 2), new ItemStack(TiMItems.frameSteel, 2),
+                new ItemStack(TiMOres.ingotSteel, 2), null, null, null, null, new ItemStack(Blocks.chest, 2)        };
     }
 
 
@@ -81,9 +82,9 @@ public class EntityFreightHeavyweightBaggage extends GenericRailTransport {
     @Override
     public float[][] getRiderOffsets(){return null;}
     @Override
-    public float[] getHitboxSize(){return new float[]{10.0f,2.7f,1.4f};}
+    public float[] getHitboxSize(){return new float[]{10.35f,2.6f,1.4f};}
     @Override
-    public float[] rotationPoints() {return new float[]{3.8f, -3.8f};}
+    public float[] rotationPoints() {return new float[]{3.8f, -3.7f};}
 
 
 

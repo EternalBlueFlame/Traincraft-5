@@ -12,7 +12,7 @@ public class Info {
 	/* Mod relevant information */
 	public static final String modID = "traincraft";
 	public static final String modName = "Traincraft";
-	public static final String		modVersion				= "@VERSION1@";
+	public static final String modVersion = "@VERSION1@";
 	public static final String channel = "Traincraft";
 	public static final String keyChannel = "TraincraftKey";
 	public static final String rotationChannel = "TraincraftRotation";
@@ -30,12 +30,4 @@ public class Info {
 	public static final String modelTexPrefix = "textures/models/";
 	public static final String armorPrefix = "textures/armor/";
 	public static final String villagerPrefix = "textures/villager/";
-
-	public static final String TEX_TIER_I = guiPrefix + "gui_tierI_ironAge.png";
-	public static final String TEX_TIER_II = guiPrefix + "gui_tierII_steelAge.png";
-	public static final String TEX_TIER_III = guiPrefix + "gui_tierIII_advancedAge.png";
-
-	/* Other variables */
-	public static final String[] tooltipsTierI = new String[] { "Planks", "Chimney", "Cab", "Dye", "Component", "Boiler", "Firebox", "Wheels", "Frame", "Coupler" };
-	public static final String[] tooltipsTierII = new String[] { "Component", "Chimney", "Cab", "Dye", "Component", "Power", "Engine", "Wheels", "Frame", "Coupler" };
 }

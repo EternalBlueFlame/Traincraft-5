@@ -1,0 +1,18 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "# #",
+    "# #",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "<fiberglass item>"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:chimney.fiberglass",
+    "count": 2
+  }
+}

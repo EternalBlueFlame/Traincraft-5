@@ -5,6 +5,7 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.EntityTrainCore;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Items;
@@ -13,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -53,7 +53,7 @@ public class EntityLocoSteamLSSP7 extends EntityTrainCore {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelLSSP7()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.3f, worldObj==null?0.1f:0.3f, -0.8f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.3f, worldObj==null?0.1f:0.36f, -0.825f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -69,11 +69,11 @@ public class EntityLocoSteamLSSP7 extends EntityTrainCore {
 
     //recipe
     @Override
-    public ItemStack[] getRecipie() {
+    public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                null, new ItemStack(ItemIDs.woodenBogie.item, 2), new ItemStack(ItemIDs.woodenFrame.item, 2), 
-                null, null, new ItemStack(ItemIDs.ironCab.item, 1), 
-                new ItemStack(ItemIDs.ironBoiler.item, 1), new ItemStack(ItemIDs.ironFirebox.item, 1), null        };
+                null, new ItemStack(TiMItems.wheelWood, 2), new ItemStack(TiMItems.frameWood, 2),
+                null, null, new ItemStack(TiMItems.cabinIron, 1),
+                new ItemStack(TiMItems.boilerIron, 1), new ItemStack(TiMItems.fireboxIron, 1), null        };
     }
 
 
@@ -93,7 +93,7 @@ public class EntityLocoSteamLSSP7 extends EntityTrainCore {
     public float transportTopSpeed(){return 45;}
     @Override
     public ItemStackSlot fuelSlot(){
-        return super.fuelSlot().setOverlay(Items.coal);
+        return super.fuelSlot();
     }
     @Override
     public int[] getTankCapacity(){return new int[]{5000, 1000};}

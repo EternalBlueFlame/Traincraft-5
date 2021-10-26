@@ -1,12 +1,12 @@
 package train.render.models;
 
 import ebf.tim.entities.GenericRailTransport;
+import ebf.tim.utility.DebugUtil;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.entity.Entity;
 import train.render.CustomModelRenderer;
-import train.core.handlers.ConfigHandler;
 
 public class ModelFlatCarLogs_DB extends ModelBase {
 	
@@ -251,8 +251,8 @@ public class ModelFlatCarLogs_DB extends ModelBase {
 				box0,box1,box2,box3,box4,box5,box6,box7,box8,box9,
 				box10,box11,box12,box13,box14,box15,box16,box17,box18,box19,
 				box20,box21,box22,box23,box24,box25,box26,box27,box28,box29,
-				box30,box31,box32,box33,box34,box35,box36,box37,box38,box39,
-				box40,box41,box42,box44,box63
+				box30,box35,box38,
+				box40,box42,box44,box63
 		};
 
 		fixRotation(bodyModel);
@@ -260,14 +260,6 @@ public class ModelFlatCarLogs_DB extends ModelBase {
 	}
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		box31.showModel=false;
-		box32.showModel=false;
-		box33.showModel=false;
-		box34.showModel=false;
-		box35.showModel=false;
-		box36.showModel=false;
-		box37.showModel=false;
-		box41.showModel=false;
 		int cargo = 0;
 
 		for (ItemStackSlot s : ((GenericRailTransport) entity).inventory){
@@ -277,50 +269,49 @@ public class ModelFlatCarLogs_DB extends ModelBase {
 		}
 		if (cargo != 0) {
     		if(cargo<=9) {
-    			box31.showModel=true;
-	    		box32.showModel=true;
+    			box31.render();
+	    		box32.render();
 			}
-			else if(cargo<=18 && cargo>9) {
-				box31.showModel=true;
-	    		box32.showModel=true;
-	    		box33.showModel=true;
+			else if(cargo<=18) {
+				box31.render();
+	    		box32.render();
+	    		box33.render();
 			}
-			else if(cargo<=27 && cargo>18) {
-				box31.showModel=true;
-	    		box32.showModel=true;
-	    		box33.showModel=true;
-	    		box37.showModel=true;
+			else if(cargo<=27) {
+				box31.render();
+	    		box32.render();
+	    		box33.render();
+	    		box37.render();
 			}
-			else if(cargo<=36 && cargo>27) {
-				box31.showModel=true;
-	    		box32.showModel=true;
-	    		box33.showModel=true;
-	    		box34.showModel=true;
-	    		box36.showModel=true;
-	    		box37.showModel=true;
+			else if(cargo<=36) {
+				box31.render();
+	    		box32.render();
+	    		box33.render();
+	    		box34.render();
+	    		box36.render();
+	    		box37.render();
 			}
-			else if(cargo<45 && cargo>36) {
-	    		box41.showModel=true;
-	    		box31.showModel=true;
-	    		box32.showModel=true;
-	    		box33.showModel=true;
-	    		box34.showModel=true;
-	    		box36.showModel=true;
-	    		box37.showModel=true;
+			else if(cargo<45) {
+	    		box41.render();
+	    		box31.render();
+	    		box32.render();
+	    		box33.render();
+	    		box34.render();
+	    		box36.render();
+	    		box37.render();
 			}
 			else {
-				box39.showModel=true;
-	    		box41.showModel=true;
-	    		box31.showModel=true;
-	    		box32.showModel=true;
-	    		box33.showModel=true;
-	    		box34.showModel=true;
-	    		box36.showModel=true;
-	    		box37.showModel=true;
+				box39.render();
+	    		box41.render();
+	    		box31.render();
+	    		box32.render();
+	    		box33.render();
+	    		box34.render();
+	    		box36.render();
+	    		box37.render();
     		}
 		}
 		super.render(entity, f, f1, f2, f3, f4, f5);
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

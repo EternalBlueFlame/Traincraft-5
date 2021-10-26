@@ -1,20 +1,35 @@
-[
-{
-  "modid": "tc",
-  "name": "Traincraft",
-  "description": "A mod that adds over 200 trains and rolling stock to the game.",
-  "version": "${version}",
+[{
+  "modid": "trainsinmotion",
+  "name": "Trains in Motion",
+  "description": "A community driven API mod that adds rails and functionality for creating trains and rollingstock.",
+  "version": "${timversion}",
   "mcversion": "${mcversion}",
-  "logoFile": "Logo.png",
-  "url": "http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/1287038",
-  "updateUrl": "https://github.com/EternalBlueFlame/Traincraft-5",
-  "authorList": ["EternalBlueFlame", "�5NitroxydeX�f", "canitzp", "Hagrud", "ZnDevelopement", "�4Spitfire4466�f", "�fMrbrutal", "DAYdiecast"],
-  "credits": "Created by Spitfire4466 & Mrbrutal",
+  "logoFile": "/assets/trainsinmotion/items/TiM.png",
+  "url": "https://gitlab.com/EternalBlueFlame/trains-in-motion/",
+  "updateUrl": "https://gitlab.com/EternalBlueFlame/trains-in-motion/-/tree/master/builds",
+  "authorList": ["EternalBlueFlame", "Broscolotos"],
+  "credits": "code help: ComputerButter, ZoraNoDensha, Cam27Cam, MothershipQ, Sebasver, Dominik__1, Riggs64. A large number of icons by twitter.com/MaePoss",
   "parent": "",
   "screenshots": [],
   "requiredMods": ["Forge@[10.13.4.1558,)"],
   "dependencies": ["Forge@[10.13.4.1558,)", "Railcraft@[9.11.0.0,)"],
-  "dependants": ["TConstruct"],
+  "dependants": [],
   "useDependencyInformation": "true"
-}
-]
+},{
+  "modid": "traincraft",
+  "name": "Traincraft",
+  "description": "A community driven mod that adds over 200 trains and rolling stock to the game.",
+  "version": "${tcversion}",
+  "mcversion": "${mcversion}",
+  "logoFile": "Logo.png",
+  "url": "https://www.curseforge.com/minecraft/mc-mods/traincraft",
+  "updateUrl": "https://github.com/EternalBlueFlame/Traincraft-5",
+  "authorList": ["EternalBlueFlame", "NitroxydeX", "canitzp", "ComputerButter", "Spitfire4466", "Mrbrutal", "DAYdiecast"],
+  "credits": "Created by Spitfire4466 & Mrbrutal",
+  "parent": "",
+  "screenshots": [],
+  "requiredMods": ["Forge@[10.13.4.1558,)"],
+  "dependencies": ["Forge@[10.13.4.1558,)", "Railcraft@[9.11.0.0,)", "trainsinmotion"],
+  "dependants": [],
+  "useDependencyInformation": "true"
+}]

@@ -5,6 +5,7 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -12,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,9 +34,9 @@ public class EntityFreightBamboo extends GenericRailTransport {
     @Override
     public String transportName(){return "Bamboo Flatcar Freight";}
     @Override
-    public String transportcountry(){return "cambodia";}
+    public String transportcountry(){return "Undefined";}
     @Override
-    public String transportYear(){return "1980s";}
+    public String transportYear(){return "Undefined";}
     @Override
     public boolean isFictional(){return false;}
     @Override
@@ -45,14 +45,14 @@ public class EntityFreightBamboo extends GenericRailTransport {
     public List<TrainsInMotion.transportTypes> getTypes(){
         return TrainsInMotion.transportTypes.FREIGHT.singleton();
     }
-    @Override//the weight is a rough estimate based on size and the average weight of bamboo.
-    public float weightKg(){return 67f;}
+    @Override
+    public float weightKg(){return 10f;}
 
     //Model stuff
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelBambooTrainCargo()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.14f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.1f, 0.13f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -72,7 +72,7 @@ public class EntityFreightBamboo extends GenericRailTransport {
         SkinRegistry.addSkin(this.getClass(),
             new TransportSkin(Info.modID,"textures/trains/bamboo_freight_Pink.png","Pink", "description.bamboo.freight.Pink"));
         SkinRegistry.addSkin(this.getClass(),
-            new TransportSkin(Info.modID,"textures/trains/bamboo_freight_LightGrey.png","LightGrey", "description.bamboo.freight.LightGrey"));
+            new TransportSkin(Info.modID,"textures/trains/bamboo_freight_LightGray.png","LightGrey", "description.bamboo.freight.LightGrey"));
         SkinRegistry.addSkin(this.getClass(),
             new TransportSkin(Info.modID,"textures/trains/bamboo_freight_Green.png","Green", "description.bamboo.freight.Green"));
         SkinRegistry.addSkin(this.getClass(),
@@ -88,7 +88,7 @@ public class EntityFreightBamboo extends GenericRailTransport {
         SkinRegistry.addSkin(this.getClass(),
             new TransportSkin(Info.modID,"textures/trains/bamboo_freight_Orange.png","Orange", "description.bamboo.freight.Orange"));
         SkinRegistry.addSkin(this.getClass(),
-            new TransportSkin(Info.modID,"textures/trains/bamboo_freight_Grey.png","Grey", "description.bamboo.freight.Grey"));
+            new TransportSkin(Info.modID,"textures/trains/bamboo_freight_Gray.png","Grey", "description.bamboo.freight.Grey"));
     }
     @Override
     public String getDefaultSkin(){
@@ -100,7 +100,7 @@ public class EntityFreightBamboo extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                null, new ItemStack(ItemIDs.woodenBogie.item, 2), new ItemStack(ItemIDs.woodenFrame.item, 1), 
+                null, new ItemStack(TiMItems.wheelWood, 2), new ItemStack(TiMItems.frameWood, 1),
                 null, null, null, null, null, new ItemStack(Blocks.chest, 1)        };
     }
 
@@ -109,9 +109,9 @@ public class EntityFreightBamboo extends GenericRailTransport {
     @Override
     public float[][] getRiderOffsets(){return null;}
     @Override
-    public float[] getHitboxSize(){return new float[]{3.1f,1.3f,1.6f};}
+    public float[] getHitboxSize(){return new float[]{3.3f,1.3f,1.65f};}
     @Override
-    public float[] rotationPoints() {return new float[]{0.925f, -1f};}
+    public float[] rotationPoints() {return new float[]{1.05f, -0.875f};}
 
 
 

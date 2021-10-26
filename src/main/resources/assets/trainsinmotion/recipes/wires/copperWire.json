@@ -1,0 +1,22 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "CCC",
+    "CPC",
+    "CCC"
+  ],
+  "key": {
+    "C": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    },
+    "P": {
+      "type": "forge:ore_dict",
+      "ore": "itemPlastic"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:copper.wire",
+    "count": 8
+  }
+}

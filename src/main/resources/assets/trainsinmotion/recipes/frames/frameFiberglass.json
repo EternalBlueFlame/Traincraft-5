@@ -1,0 +1,19 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "M M",
+    "III"
+  ],
+  "key": {
+    "M": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    },
+    "I": {
+      "item": "minecraft:glass"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:frame.steel"
+  }
+}

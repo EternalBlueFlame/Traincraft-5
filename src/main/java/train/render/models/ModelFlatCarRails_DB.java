@@ -294,11 +294,8 @@ public class ModelFlatCarRails_DB extends ModelBase {
 		box9.setPosition(-27F, 6F, -7F);
 		bodyModel=new ModelRendererTurbo[]{box,
 				box0,box1,box2,box3,box4,box5,box6,box7,box8,box9,
-				box10,box11,box12,box13,box14,box15,box16,box17,box18,box19,
-				box20,box21,box22,box23,box24,box25,box26,box27,box28,box29,
-				box30,box31,box32,box33,box34,box35,box36,box37,box38,box39,
-				box40,box41,box42,box43,box44,box45,box46,box47,box48,box49,
-				box50,box51
+				box10,box11,box12,box13,box14,box15,box16,
+				box38,box40,box42,box44,box48,box49,box50,box51
 		};
 
 		fixRotation(bodyModel);
@@ -306,33 +303,6 @@ public class ModelFlatCarRails_DB extends ModelBase {
 
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5) {
-		box23.showModel=false;
-		box17.showModel=false;
-		box18.showModel=false;
-		box21.showModel=false;
-		box19.showModel=false;
-		box20.showModel=false;
-		box22.showModel=false;
-		box24.showModel=false;
-		box25.showModel=false;
-		box26.showModel=false;
-		box27.showModel=false;
-		box28.showModel=false;
-		box29.showModel=false;
-		box30.showModel=false;
-		box31.showModel=false;
-		box32.showModel=false;
-		box33.showModel=false;
-		box34.showModel=false;
-		box35.showModel=false;
-		box36.showModel=false;
-		box37.showModel=false;
-		box45.showModel=false;
-		box46.showModel=false;
-		box47.showModel=false;
-		box39.showModel=false;
-		box41.showModel=false;
-		box43.showModel=false;
 
 		int cargo = 0;
 		for (ItemStackSlot s : ((GenericRailTransport) entity).inventory){
@@ -342,135 +312,134 @@ public class ModelFlatCarRails_DB extends ModelBase {
 		}
 		if (cargo != 0) {
     		if(cargo<=6) {
-    			box23.showModel=true;
-    			box17.showModel=true;
-    			box18.showModel=true;
-    			box21.showModel=true;
+    			box23.render();
+    			box17.render();
+    			box18.render();
+    			box21.render();
 			}
 			else if(cargo<=12 && cargo>6) {
-				box23.showModel=true;
-				box17.showModel=true;
-				box18.showModel=true;
-				box21.showModel=true;
-				box19.showModel=true;
-				box20.showModel=true;
-				box22.showModel=true;
-				box24.showModel=true;
+				box23.render();
+				box17.render();
+				box18.render();
+				box21.render();
+				box19.render();
+				box20.render();
+				box22.render();
+				box24.render();
 			}
 			else if(cargo<=18 && cargo>12) {
-				box23.showModel=true;
-				box17.showModel=true;
-				box18.showModel=true;
-				box21.showModel=true;
-				box19.showModel=true;
-				box20.showModel=true;
-				box22.showModel=true;
-				box24.showModel=true;
-				box25.showModel=true;
-				box26.showModel=true;
-				box27.showModel=true;
-				box28.showModel=true;
+				box23.render();
+				box17.render();
+				box18.render();
+				box21.render();
+				box19.render();
+				box20.render();
+				box22.render();
+				box24.render();
+				box25.render();
+				box26.render();
+				box27.render();
+				box28.render();
 			}
 			else if(cargo<=24 && cargo>18) {
-				box23.showModel=true;
-				box17.showModel=true;
-				box18.showModel=true;
-				box21.showModel=true;
-				box19.showModel=true;
-				box20.showModel=true;
-				box22.showModel=true;
-				box24.showModel=true;
-				box25.showModel=true;
-				box26.showModel=true;
-				box27.showModel=true;
-				box28.showModel=true;
-				box29.showModel=true;
-				box30.showModel=true;
-				box31.showModel=true;
-				box32.showModel=true;
+				box23.render();
+				box17.render();
+				box18.render();
+				box21.render();
+				box19.render();
+				box20.render();
+				box22.render();
+				box24.render();
+				box25.render();
+				box26.render();
+				box27.render();
+				box28.render();
+				box29.render();
+				box30.render();
+				box31.render();
+				box32.render();
 			}
 			else if(cargo<=30 && cargo>24) {
-				box23.showModel=true;
-				box17.showModel=true;
-				box18.showModel=true;
-				box21.showModel=true;
-				box19.showModel=true;
-				box20.showModel=true;
-				box22.showModel=true;
-				box24.showModel=true;
-				box25.showModel=true;
-				box26.showModel=true;
-				box27.showModel=true;
-				box28.showModel=true;
-				box29.showModel=true;
-				box30.showModel=true;
-				box31.showModel=true;
-				box32.showModel=true;
-				box33.showModel=true;
-				box34.showModel=true;
-				box35.showModel=true;
-				box36.showModel=true;
+				box23.render();
+				box17.render();
+				box18.render();
+				box21.render();
+				box19.render();
+				box20.render();
+				box22.render();
+				box24.render();
+				box25.render();
+				box26.render();
+				box27.render();
+				box28.render();
+				box29.render();
+				box30.render();
+				box31.render();
+				box32.render();
+				box33.render();
+				box34.render();
+				box35.render();
+				box36.render();
 			}
 			else if(cargo<36 && cargo>30) {
-				box23.showModel=true;
-				box17.showModel=true;
-				box18.showModel=true;
-				box21.showModel=true;
-				box19.showModel=true;
-				box20.showModel=true;
-				box22.showModel=true;
-				box24.showModel=true;
-				box25.showModel=true;
-				box26.showModel=true;
-				box27.showModel=true;
-				box28.showModel=true;
-				box29.showModel=true;
-				box30.showModel=true;
-				box31.showModel=true;
-				box32.showModel=true;
-				box33.showModel=true;
-				box34.showModel=true;
-				box35.showModel=true;
-				box36.showModel=true;
-				box37.showModel=true;
-				box46.showModel=true;
-				box47.showModel=true;
-				box39.showModel=true;
-				box41.showModel=true;
+				box23.render();
+				box17.render();
+				box18.render();
+				box21.render();
+				box19.render();
+				box20.render();
+				box22.render();
+				box24.render();
+				box25.render();
+				box26.render();
+				box27.render();
+				box28.render();
+				box29.render();
+				box30.render();
+				box31.render();
+				box32.render();
+				box33.render();
+				box34.render();
+				box35.render();
+				box36.render();
+				box37.render();
+				box46.render();
+				box47.render();
+				box39.render();
+				box41.render();
 			}
 			else {
-				box23.showModel=true;
-				box17.showModel=true;
-				box18.showModel=true;
-				box21.showModel=true;
-				box19.showModel=true;
-				box20.showModel=true;
-				box22.showModel=true;
-				box24.showModel=true;
-				box25.showModel=true;
-				box26.showModel=true;
-				box27.showModel=true;
-				box28.showModel=true;
-				box29.showModel=true;
-				box30.showModel=true;
-				box31.showModel=true;
-				box32.showModel=true;
-				box33.showModel=true;
-				box34.showModel=true;
-				box35.showModel=true;
-				box36.showModel=true;
-				box37.showModel=true;
-				box45.showModel=true;
-				box46.showModel=true;
-				box47.showModel=true;
-				box39.showModel=true;
-				box41.showModel=true;
-				box43.showModel=true;
+				box23.render();
+				box17.render();
+				box18.render();
+				box21.render();
+				box19.render();
+				box20.render();
+				box22.render();
+				box24.render();
+				box25.render();
+				box26.render();
+				box27.render();
+				box28.render();
+				box29.render();
+				box30.render();
+				box31.render();
+				box32.render();
+				box33.render();
+				box34.render();
+				box35.render();
+				box36.render();
+				box37.render();
+				box45.render();
+				box46.render();
+				box47.render();
+				box39.render();
+				box41.render();
+				box43.render();
     		}
 		}
 
 		super.render(entity, f, f1, f2, f3, f4, f5);
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

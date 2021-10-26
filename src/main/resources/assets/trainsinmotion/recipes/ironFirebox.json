@@ -1,0 +1,21 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "###",
+    "#X#",
+    "###"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    },
+    "X": {
+      "item": "minecraft:flint_and_steel"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:firebox.iron",
+    "count": 2
+  }
+}

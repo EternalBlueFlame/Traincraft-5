@@ -1,0 +1,17 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "III",
+    "I  ",
+    "III"
+  ],
+  "key": {
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:cabin.iron"
+  }
+}

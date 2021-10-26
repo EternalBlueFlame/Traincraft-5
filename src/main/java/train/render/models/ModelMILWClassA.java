@@ -11,8 +11,6 @@ package train.render.models;
 
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 
 public class ModelMILWClassA extends ModelBase
 {
@@ -839,9 +837,5 @@ public class ModelMILWClassA extends ModelBase
 		bodyModel=milwclassaModel;
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5)
-	{
-	}
-
-	public ModelRendererTurbo milwclassaModel[];
+    public ModelRendererTurbo milwclassaModel[];
 }

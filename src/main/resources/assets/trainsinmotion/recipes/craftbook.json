@@ -1,0 +1,19 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "III",
+    "IMI",
+    "III"
+  ],
+  "key": {
+    "M": {
+      "item": "minecraft:rail"
+    },
+    "I": {
+      "item": "minecraft:book"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:craftbook"
+  }
+}

@@ -34,10 +34,15 @@ public class CommonProxy implements IGuiHandler {
     public static EventManagerServer eventManagerServer = new EventManagerServer();
     public static Map<String, List<Recipe>> recipesInMods = new HashMap<>();
     public static String configDirectory;
+
+    public static boolean pushabletrains=true;
     public static boolean realSpeed=false;
-    public static boolean enableChunkloading=true;
-
-
+    public static boolean enableChunkloading = true;
+    public static boolean doAluminumGeneration = true;
+    public static boolean doSteelGeneration = true;
+    public static boolean doCopperGeneration = true;
+    /**Decides whether to use Traincraft or TiM assembly tables. */
+    public static boolean isTraincraft = true;
 
 
     /**
@@ -81,16 +86,24 @@ public class CommonProxy implements IGuiHandler {
         SkinRegistry.debugSkinRegistration = config.getBoolean("DebugSkinRegister", "Debug (Common, IDE Only)",false,
                 "Logs all TransportSkin registration events to debug console.");
 
-        config.save();
-        configDirectory = event.getModConfigurationDirectory().getAbsolutePath();
+        config.addCustomCategoryComment("Gameplay", "Settings that affect gameplay (ie. chunk loading, world generation, train speed");
 
+        pushabletrains=config.getBoolean("PushableTrains", "Gameplay",true,"Enables/Disables the ability to push trains and rollingstock around.");
         realSpeed=config.getBoolean("UseRealSpeed","Gameplay", false,
                 "Real speed moves the train on the assumption a block is a meter. Setting this to false will move the train on the assumption a block is 16 meters (more similar to Traincraft).");
 
         enableChunkloading=config.getBoolean("enableChunkloading","Gameplay", true,
                 "Allows Trains and Rollingstock to load chunks in a 3x3 area around them, this allows them to function without players nearby, but at the cost of performance (effects server and singleplayer only)");
 
+        doAluminumGeneration = config.getBoolean("doAluminumGeneration","Gameplay", true,
+                "Decides whether or not to generate the aluminum ore in the overworld. Enabling will not cause retrogen (yet).");
+        doSteelGeneration = config.getBoolean("doSteelGeneration","Gameplay", true,
+                "Decides whether or not to generate the steel ore in the nether. Enabling will not cause retrogen (yet).");
+        doCopperGeneration = config.getBoolean("doCopperGeneration","Gameplay", true,
+                "Decides whether or not to generate the copper ore in the nether. Enabling will not cause retrogen (yet).");
 
+        config.save();
+        configDirectory = event.getModConfigurationDirectory().getAbsolutePath();
 
 
 
@@ -100,18 +113,27 @@ public class CommonProxy implements IGuiHandler {
      * <h2>load entity from UUID</h2>
      * This checks every entity in every dimension for one with the proper UUID,
      * this is very similar to the system used in 1.8+.
+     * there is an additional optimization it will check the current dimension first,
      * NOTE: this is SERVER ONLY.
      *
      * We can't use a foreach loop, if we do it will very often throw a java.util.ConcurrentModificationException
      */
-    @Deprecated //use a world relative value via DimensionManager.getWorld(dimensionId)
     @Nullable
-    public static Entity getEntityFromUuid(UUID uuid) {
+    public static Entity getEntityFromUuid(UUID uuid, World dim) {
+        int i;
+        for (i=0; i< dim.loadedEntityList.size();i++) {
+            //if it's an entity, not null, and has a matching UUID, then return it.
+            if (dim.loadedEntityList.get(i) instanceof Entity &&
+                    ((Entity) dim.loadedEntityList.get(i)).getUniqueID().equals(uuid)) {
+                return (Entity) dim.loadedEntityList.get(i);
+            }
+        }
+
         //loop for dimensions, even ones from mods.
         for (int w=0; w < MinecraftServer.getServer().worldServers.length; w++) {
-            if (MinecraftServer.getServer().worldServers[w] != null) {
+            if (MinecraftServer.getServer().worldServers[w] != null && dim.provider.dimensionId!=w) {
                 //if the server isn't null, loop for the entities loaded in that server
-                for (int i=0; i< MinecraftServer.getServer().worldServers[w].loadedEntityList.size();i++) {
+                for (i=0; i< MinecraftServer.getServer().worldServers[w].loadedEntityList.size();i++) {
                     //if it's an entity, not null, and has a matching UUID, then return it.
                     if (MinecraftServer.getServer().worldServers[w].loadedEntityList.get(i) instanceof Entity &&
                             ((Entity) MinecraftServer.getServer().worldServers[w].loadedEntityList.get(i)).getUniqueID().equals(uuid)) {

@@ -393,7 +393,7 @@ public class ModelWatertransp extends ModelBase {
 		//lava	
 		//Fluid theLiquid = FluidRegistry.getFluid(((LiquidTank)entity).getLiquidName());
 		GL11.glPushMatrix();
-		if (((GenericRailTransport) entity).getTankInfo(null)[0]!=null &&
+		if (entity.worldObj!=null && ((GenericRailTransport) entity).getTankInfo(null)[0]!=null &&
 				((GenericRailTransport) entity).getTankInfo(null)[0].fluid!=null &&
 				(((GenericRailTransport) entity).getTankInfo(null)[0].fluid.amount) != 0) {
 			GL11.glTranslatef(0.0f,
@@ -405,5 +405,4 @@ public class ModelWatertransp extends ModelBase {
 		GL11.glPopMatrix();
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

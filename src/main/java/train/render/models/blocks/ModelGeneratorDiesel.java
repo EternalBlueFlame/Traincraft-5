@@ -8,6 +8,7 @@
 package train.render.models.blocks;
 
 import fexcraft.tmt.slim.ModelBase;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import org.lwjgl.opengl.GL11;
 import train.render.CustomModelRenderer;
 
@@ -147,6 +148,10 @@ public class ModelGeneratorDiesel extends ModelBase {
 		box9.setPosition(-8F, 6F, -3F);
 		box9.rotateAngleX = -0.7853981633974483F;
 
+		bodyModel= new ModelRendererTurbo[]{box,box0,box1,box10,box11,box12,box13,box2,box3,box4,
+				box43,box44,box45,box46,box47,box48,box49,box5,box50,box51,box54,box6,box7,box8,box9
+		};
+		fixRotation(bodyModel);
 	}
 
 	public void render(float f5, int meta) {
@@ -162,60 +167,7 @@ public class ModelGeneratorDiesel extends ModelBase {
 				GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 			}
 		}
-		box.render(f5);
-		box0.render(f5);
-		box1.render(f5);
-		box10.render(f5);
-		box11.render(f5);
-		box12.render(f5);
-		box13.render(f5);
-		box2.render(f5);
-		box3.render(f5);
-		box4.render(f5);
-		box43.render(f5);
-		box44.render(f5);
-		box45.render(f5);
-		box46.render(f5);
-		box47.render(f5);
-		box48.render(f5);
-		box49.render(f5);
-		box5.render(f5);
-		box50.render(f5);
-		box51.render(f5);
-		box54.render(f5);
-		box6.render(f5);
-		box7.render(f5);
-		box8.render(f5);
-		box9.render(f5);
-
-	}
-
-	public void render2(float f5) {
-		box.render(f5);
-		box0.render(f5);
-		box1.render(f5);
-		box10.render(f5);
-		box11.render(f5);
-		box12.render(f5);
-		box13.render(f5);
-		box2.render(f5);
-		box3.render(f5);
-		box4.render(f5);
-		box43.render(f5);
-		box44.render(f5);
-		box45.render(f5);
-		box46.render(f5);
-		box47.render(f5);
-		box48.render(f5);
-		box49.render(f5);
-		box5.render(f5);
-		box50.render(f5);
-		box51.render(f5);
-		box54.render(f5);
-		box6.render(f5);
-		box7.render(f5);
-		box8.render(f5);
-		box9.render(f5);
+		super.render();
 
 	}
 }

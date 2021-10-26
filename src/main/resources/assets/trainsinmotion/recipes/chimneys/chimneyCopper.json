@@ -1,0 +1,18 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "# #",
+    "# #",
+    "# #"
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "ingotCopper"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:chimney.copper",
+    "count": 2
+  }
+}

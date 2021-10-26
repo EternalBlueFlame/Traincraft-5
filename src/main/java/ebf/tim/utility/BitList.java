@@ -25,6 +25,26 @@ public class BitList {
             bits[i]= (value & (1 << i)) != 0;
         }
     }
+    /*set the value of the array from an array of bytes*/
+    public void set(byte[] values){
+        for (int i=0; i<16; i++){
+            bits[i]= values[i]==1;
+        }
+    }
+
+    public byte[] getBits() {
+        byte[] value= new byte[bits.length];
+        for(int i=0; i<bits.length;i++){
+            value[i]=bits[i]?(byte)1:(byte)0;
+        }
+        return value;
+    }
+
+    public void setBits(byte[] value){
+        for(int i=0; i<bits.length;i++){
+            bits[i]=value[i]!=0;
+        }
+    }
 
     /*get's the value for a bit at a specific position in the int*/
     public boolean getFromInt(int index, int value){

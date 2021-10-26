@@ -115,7 +115,7 @@ public class ModelFreightCartUS extends ModelBase {
 		box9.setPosition(11F, 4F, -4F);
 
 		bodyModel=new ModelRendererTurbo[]{box,
-				box0,box1,box2,box3,box4,box5,box8,box9,
+				box1,box2,box3,box4,box5,box8,box9,
 				box10,box11,box12,box13,box19,
 				box20,box21,box22,box23,box24,box25,
 		};
@@ -142,5 +142,4 @@ public class ModelFreightCartUS extends ModelBase {
 		}
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

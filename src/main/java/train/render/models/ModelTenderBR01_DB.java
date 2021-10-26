@@ -9,8 +9,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import train.core.ClientProxy;
-import train.render.CustomModelRenderer;
 import train.library.Info;
+import train.render.CustomModelRenderer;
 
 public class ModelTenderBR01_DB extends ModelBase {
 	
@@ -358,7 +358,7 @@ public class ModelTenderBR01_DB extends ModelBase {
 				box30,box32,box33,box34,box35,box36,box37,box38,box39,
 				box47,box48,box49,
 				box50,box51,box52,box53,box54,box55,box56,box58,box59,
-				box60,box61,box62,box63,box64,box65,box66,box67,box68,box69,
+				box60,box61,box62,box63,box64,box65,box66,box67,box69,
 				box70,box71,box81
 		};
 
@@ -395,5 +395,4 @@ public class ModelTenderBR01_DB extends ModelBase {
 		super.render(entity, f, f1, f2, f3, f4, f5);
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

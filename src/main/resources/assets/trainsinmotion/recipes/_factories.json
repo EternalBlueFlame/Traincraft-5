@@ -1,0 +1,6 @@
+{
+  "_comment": "This is used in 1.12 and higher to direct forge to how to parse the recipes.",
+  "recipes": {
+    "trainsinmotion:table": "ebf.tim.registry.craftTableRecipeFactory"
+  }
+}

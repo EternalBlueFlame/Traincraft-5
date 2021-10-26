@@ -583,38 +583,37 @@ public class ModelPassenger6 extends ModelBase {
 		if (ClientProxy.isHoliday()) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(-1.12f, 0.8f, -0.72f);
-			lights.render(5);
+			lights.render(5,entity.worldObj);
 			GL11.glPopMatrix();
 			
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0, 0.8f, -0.72f);
-			lights.render(5);
+			lights.render(5,entity.worldObj);
 			GL11.glPopMatrix();
 			
 			GL11.glPushMatrix();
 			GL11.glTranslatef(1.12f, 0.8f, -0.72f);
-			lights.render(5);
+			lights.render(5,entity.worldObj);
 			GL11.glPopMatrix();
 			
 			GL11.glPushMatrix();
 			GL11.glTranslatef(-1.12f, 0.8f, 0.72f);
 			GL11.glRotatef(-180f, 0, 1, 0);
-			lights.render(5);
+			lights.render(5,entity.worldObj);
 			GL11.glPopMatrix();
 			
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0, 0.8f, 0.72f);
 			GL11.glRotatef(-180f, 0, 1, 0);
-			lights.render(5);
+			lights.render(5,entity.worldObj);
 			GL11.glPopMatrix();
 			
 			GL11.glPushMatrix();
 			GL11.glTranslatef(1.12f, 0.8f, 0.72f);
 			GL11.glRotatef(-180f, 0, 1, 0);
-			lights.render(5);
+			lights.render(5,entity.worldObj);
 			GL11.glPopMatrix();
 		}
 	}
 
-	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5) {}
 }

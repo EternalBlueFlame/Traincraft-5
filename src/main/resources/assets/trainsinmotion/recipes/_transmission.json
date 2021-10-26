@@ -1,0 +1,20 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    " # ",
+    "#X#",
+    " # "
+  ],
+  "key": {
+    "#": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    },
+    "X": {
+      "item": "trainsinmotion:diesel_canister"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:hydraulic.transmission"
+  }
+}

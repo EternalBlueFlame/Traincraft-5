@@ -2,12 +2,11 @@ package ebf.tim.networking;
 
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import ebf.tim.entities.GenericRailTransport;
-import ebf.tim.utility.ServerLogger;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.ItemStack;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.DamageSource;
 import net.minecraftforge.common.DimensionManager;
 
 /**
@@ -17,35 +16,30 @@ import net.minecraftforge.common.DimensionManager;
  */
 public class PacketRemove implements IMessage {
     /**the entity ID to define what entity to use the function on*/
-    private int entityId, dimensionId;
-    private boolean shouldDropItem;
+    private int entityId, dimensionId, senderID;
 
     public PacketRemove() {}
-    public PacketRemove(int entityId, boolean shouldDropItem) {
-        this.entityId = entityId;
+    public PacketRemove(int target, int sender) {
+        this.entityId = target;
         this.dimensionId= Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId;
-        this.shouldDropItem = shouldDropItem;
+        this.senderID=sender;
     }
     /**reads the packet on server to get the variables from the Byte Buffer*/
     @Override
     public void fromBytes(ByteBuf bbuf) {
         entityId = bbuf.readInt();
         this.dimensionId=bbuf.readInt();
-        shouldDropItem = bbuf.readBoolean();
+        senderID = bbuf.readInt();
 
         Entity entity = DimensionManager.getWorld(dimensionId).getEntityByID(entityId);
+        Entity other = senderID==-1?null:DimensionManager.getWorld(dimensionId).getEntityByID(senderID);
         //if the entity was an instance of Generic Rail Transport, then spawn it's item and remove it from world.
         if (entity instanceof GenericRailTransport) {
-            if (shouldDropItem) {
-                entity.worldObj.spawnEntityInWorld(new EntityItem(entity.worldObj, entity.posX, entity.posY, entity.posZ, new ItemStack(((GenericRailTransport) entity).getItem(), 1)));
-                //since it was a player be sure we remove the entity from the logging.
-                ServerLogger.deleteWagon((GenericRailTransport) entity);
+            if (other instanceof EntityPlayer){
+                entity.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer) other),1);
+            } else {
+                entity.attackEntityFrom(null,1);
             }
-            //be sure we drop the inventory items on death.
-            ((GenericRailTransport) entity).dropAllItems();
-            entity.setDead();
-
-            DimensionManager.getWorld(dimensionId).removeEntity(entity);
         }
     }
     /**puts the variables into a Byte Buffer so they can be sent to server*/
@@ -53,6 +47,6 @@ public class PacketRemove implements IMessage {
     public void toBytes(ByteBuf bbuf) {
         bbuf.writeInt(entityId);
         bbuf.writeInt(dimensionId);
-        bbuf.writeBoolean(shouldDropItem);
+        bbuf.writeInt(senderID);
     }
 }

@@ -35,6 +35,8 @@ public class StaticModelAnimator extends AnimationBase {
     public static final String tagGlow=" glow ";
     /**animation tag to prevent the part from rendering*/
     public static final String tagHide=" cull ";
+    /**animation tag to force geometry to render inside the cube*/
+    public static final String tagNoCull=" nocull ";
 
     /**
      * Note that types 2, 3, and 4 are not yet implemented.
@@ -135,6 +137,10 @@ public class StaticModelAnimator extends AnimationBase {
         return CommonUtil.stringContains(part.boxName, tagHide);
     }
 
+    public boolean noCull(ModelRendererTurbo part){
+        return CommonUtil.stringContains(part.boxName, tagNoCull);
+    }
+
     public int getID(ModelRendererTurbo part){
         if(CommonUtil.stringContains(part.boxName, " offsetwheel ")){
             return Integer.parseInt(part.boxName.split( " offsetwheel ")[1]);
@@ -206,6 +212,15 @@ public class StaticModelAnimator extends AnimationBase {
     static boolean checkCulls(ModelRendererTurbo part){
         for (AnimationBase animator : customAnimators){
             if (animator != null && animator.culls(part)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    static boolean checkNoCulls(ModelRendererTurbo part){
+        for (AnimationBase animator : customAnimators){
+            if (animator != null && animator.noCull(part)) {
                 return true;
             }
         }

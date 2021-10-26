@@ -1,33 +1,24 @@
 <!-- ## Blocks ## -->
-tile.traincraft:oreTC.copperOre.name=Copper Ore
-tile.traincraft:oreTC.oilSands.name=Oil Sands
-tile.traincraft:oreTC.petroleum.name=Petroleum
-tile.traincraft:oreTC.ballast.name=Ballast
-tile.traincraft:generatorDiesel.name=Diesel Generator
-tile.traincraft:windMill.name=Windmill
-tile.traincraft:waterWheel.name=Water Wheel
-tile.traincraft:lantern.name=Lantern
-tile.traincraft:openFurnaceActive.name=Hearth Furnace (active)
-tile.traincraft:openFurnaceIdle.name=Hearth Furnace
+tile.block.oilsand.name=Oil Sands
+tile.block.petroleum.name=Petroleum
+tile.block.dieselGenerator.name=Diesel Generator
+tile.block.windmill.name=Windmill
+tile.block.waterwheel.name=Water Wheel
+tile.block.lantern.name=Lantern
+tile.block.hearthfurnace.name=Hearth Furnace
 tile.traincraft:stopper.name=Train Buffer
-tile.traincraft:trainWorkbench.name=Train Workbench
-tile.traincraft:distilActive.name=Distill (active)
-tile.traincraft:distilIdle.name=Distill
-tile.traincraft:assemblyTableI.name=Assembly Table I
-tile.traincraft:assemblyTableII.name=Assembly Table II
-tile.traincraft:assemblyTableIII.name=Assembly Table III
+tile.block.parttable.name=Train Workbench
+tile.block.distil.name=Distill
+tile.block.asmtable.name=Assembly Table
+tile.block.traintabletier1.name=Assembly Table I
+tile.block.traintabletier2.name=Assembly Table II
+tile.block.traintabletier3.name=Assembly Table III
 tile.traincraft:tcRail.name=Traincraft Rail
 tile.traincraft:tcRailGag.name=Traincraft Rail
 fluid.traincraft:fluid.diesel.name=Diesel Fuel
 fluid.traincraft:fluid.refinedfuel.name=Refined Fuel
-tile.traincraft:bridgePillar.name=Bridge Pillar
-tile.traincraft:switchStand.name=High Star Switch Stand
-tile.traincraft:mtcTransmitterSpeed.name=MTC Speed Transmitter
-tile.traincraft:mtcTransmitterMTC.name=MTC Status Transmitter
-tile.traincraft:mtcATOStopTransmitter.name=MTC ATO Stop Point Transmitter
-tile.traincraft:mtcReceiverMTC.name=MTC Status Receiver
-tile.traincraft:mtcReceiverDestination.name=MTC Destination Receiver
-tile.traincraft:pdmInstructionBlock.name=W-TC Wireless Radio
+tile.block.bridgePillar.name=Bridge Pillar
+tile.block.highstar.name=High Star Switch Stand
 
 
 <!-- ## Fluids ## -->
@@ -64,7 +55,6 @@ tile.traincraft.track.steel.name=Steel Track
 item.traincraft:diesel.name=Diesel Canister
 item.traincraft:stake.name=Stake
 item.traincraft:steeldust.name=Steel Dust
-item.traincraft:coaldust.name=Coal Dust
 item.traincraft:graphite.name=Graphite
 item.traincraft:boiler.name=Boiler
 item.traincraft:firebox.name=Firebox

@@ -1,0 +1,24 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "DGD",
+    "GDG",
+    "lGl"
+  ],
+  "key": {
+    "D": {
+      "type": "forge:ore_dict",
+      "ore": "itemPlastic"
+    },
+    "G": {
+      "item": "trainsinmotion:graphite"
+    },
+    "l": {
+      "item": "minecraft:glass_pane"
+    }
+  },
+  "result": {
+    "item": "traincraft:reinforcedPlastic",
+    "count": 16
+  }
+}

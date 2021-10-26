@@ -5,6 +5,7 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.items.ItemTransport;
+import ebf.tim.registry.TiMItems;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
@@ -12,7 +13,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +34,7 @@ public class EntityGWRBrakeVan extends GenericRailTransport {
     @Override
     public String transportName(){return "GWR Toad Brake Van";}
     @Override
-    public String transportcountry(){return "us";}
+    public String transportcountry(){return "Uk";}
     @Override
     public String transportYear(){return "1894-1947";}
     @Override
@@ -52,7 +52,7 @@ public class EntityGWRBrakeVan extends GenericRailTransport {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelGWRBrakeVan()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.0025f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -70,8 +70,8 @@ public class EntityGWRBrakeVan extends GenericRailTransport {
     @Override
     public ItemStack[] getRecipie() {
         return new ItemStack[]{
-                new ItemStack(Blocks.crafting_table, 1), new ItemStack(ItemIDs.ironBogie.item, 2), new ItemStack(ItemIDs.woodenFrame.item, 1), 
-                new ItemStack(Blocks.planks, 8), null, new ItemStack(ItemIDs.woodenCab.item, 1), 
+                new ItemStack(Blocks.crafting_table, 1), new ItemStack(TiMItems.wheelIron, 2), new ItemStack(TiMItems.frameWood, 1),
+                new ItemStack(Blocks.planks, 8), null, new ItemStack(TiMItems.cabinWood, 1),
                 null, null, new ItemStack(Blocks.furnace, 1)        };
     }
 
@@ -80,9 +80,9 @@ public class EntityGWRBrakeVan extends GenericRailTransport {
     @Override
     public float[][] getRiderOffsets(){return new float[][]{{0,1.6f, -0.2f}};}
     @Override
-    public float[] getHitboxSize(){return new float[]{6.8f,2.6f,1.4f};}
+    public float[] getHitboxSize(){return new float[]{6.85f,2.45f,1.5f};}
     @Override
-    public float[] rotationPoints() {return new float[]{2.0f, -2.0f};}
+    public float[] rotationPoints() {return new float[]{2.01f, -2.06f};}
 
 
 

@@ -1,11 +1,13 @@
 package ebf.tim.registry;
 
+import cpw.mods.fml.common.Loader;
 import ebf.tim.TrainsInMotion;
 import ebf.tim.blocks.OreGen;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 
 import static ebf.tim.registry.TiMGenericRegistry.RegisterFluid;
 import static ebf.tim.registry.TiMGenericRegistry.registerOreGen;
@@ -32,7 +34,15 @@ public class TiMFluids {
     public static Fluid fluidRedstone = new Fluid("Redstone");
     public static Item bucketRedstone;
 
+    public static Fluid fluidBCFuel = FluidRegistry.getFluid("fuel");
+    public static Fluid fluidEthanol = FluidRegistry.getFluid("bioethanol");
+    public static Fluid fluidBiofuel = FluidRegistry.getFluid("biofuel");
+    public static Fluid fluidBioDiesel = FluidRegistry.getFluid("biodiesel");
+    public static Fluid fluidBiomass = FluidRegistry.getFluid("biomass");
+
     public static Fluid nullFluid = new Fluid("nullFluid");
+
+
 
 
 
@@ -56,5 +66,21 @@ public class TiMFluids {
         registerOreGen(0,
                 new OreGen(fluidOil.getBlock(),40,60,20,6,3));
 
+
+
+        if (Loader.isModLoaded("BuildCraft|Energy")) {
+            TiMGenericRegistry.registerBCFluid(TiMFluids.fluidOil, 2500, 5000);
+            TiMGenericRegistry.registerBCFluid(TiMFluids.fluidDiesel, 5000, 10000);
+            TiMGenericRegistry.registerBCFluid(TiMFluids.fluidfueloil, 5000,25000);
+
+        }
+        if (Loader.isModLoaded("Railcraft")){
+            TiMGenericRegistry.registerRCFluid(TiMFluids.fluidfueloil,2500);
+            TiMGenericRegistry.registerRCFluid(TiMFluids.fluidOil,5000);
+            TiMGenericRegistry.registerRCFluid(TiMFluids.fluidDiesel, 10000);
+        }
+        if (Loader.isModLoaded("Forestry")){
+
+        }
     }
 }

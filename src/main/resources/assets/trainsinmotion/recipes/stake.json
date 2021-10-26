@@ -1,0 +1,19 @@
+{
+  "type": "trainsinmotion:table",
+  "pattern": [
+    "IFI"
+  ],
+  "key": {
+    "I": {
+      "type": "forge:ore_dict",
+      "ore": "ingotSteel"
+    },
+    "F": {
+      "type": "forge:ore_dict",
+      "ore": "ingotIron"
+    }
+  },
+  "result": {
+    "item": "trainsinmotion:stake"
+  }
+}
