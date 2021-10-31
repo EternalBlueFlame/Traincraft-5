@@ -6,6 +6,7 @@
 package train.blocks.tracks;
 
 import ebf.tim.entities.EntityTrainCore;
+import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackPowered;
 import net.minecraft.block.Block;
@@ -129,7 +130,7 @@ public class BlockLocomotiveSpeedControllerTrack extends TrackBaseTraincraft imp
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
+		Block block = CommonUtil.getBlockAt(getWorld(), getX(), getY(), getZ());
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
 

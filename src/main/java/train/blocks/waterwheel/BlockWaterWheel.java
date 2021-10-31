@@ -3,6 +3,7 @@ package train.blocks.waterwheel;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.blocks.BlockDynamic;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -74,7 +75,7 @@ public class BlockWaterWheel extends BlockDynamic {
 	 */
 	@Override
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLiving, ItemStack par6ItemStack) {
-		int l = MathHelper.floor_double((double) (par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int l = CommonUtil.floorDouble((double) (par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int i1 = par1World.getBlockMetadata(par2, par3, par4) >> 2;
 		++l;
 		l %= 4;

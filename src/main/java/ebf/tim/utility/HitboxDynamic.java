@@ -7,7 +7,6 @@ import fexcraft.tmt.slim.Vec3d;
 import fexcraft.tmt.slim.Vec3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
 
 import java.util.ArrayList;
@@ -102,10 +101,10 @@ public class HitboxDynamic {
         if(host.collisionHandler==null){
             return arraylist;
         }
-        i = MathHelper.floor_double((-longest+host.posX - 0.25) / 16.0D);
-        j = MathHelper.floor_double((longest+host.posX + 0.25) / 16.0D);
-        k = MathHelper.floor_double((-longest+host.posZ - 0.25) / 16.0D);
-        l = MathHelper.floor_double((longest+host.posZ + 0.25) / 16.0D);
+        i = CommonUtil.floorDouble((-longest+host.posX - 0.25) / 16.0D);
+        j = CommonUtil.floorDouble((longest+host.posX + 0.25) / 16.0D);
+        k = CommonUtil.floorDouble((-longest+host.posZ - 0.25) / 16.0D);
+        l = CommonUtil.floorDouble((longest+host.posZ + 0.25) / 16.0D);
 
         for (int i1 = i; i1 <= j; ++i1) {
             for (int j1 = k; j1 <= l; ++j1) {

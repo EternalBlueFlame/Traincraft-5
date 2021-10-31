@@ -20,7 +20,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 
 /**
@@ -178,14 +177,14 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
             this.prevPosZ = this.posZ;
 
 
-            int floorX = MathHelper.floor_double(this.posX);
-            int floorY = MathHelper.floor_double(this.posY);
-            int floorZ = MathHelper.floor_double(this.posZ);
+            int floorX = CommonUtil.floorDouble(this.posX);
+            int floorY = CommonUtil.floorDouble(this.posY);
+            int floorZ = CommonUtil.floorDouble(this.posZ);
 
             double velocity = moveX*moveX+moveZ*moveZ;
 
 
-            Block block = worldObj.getBlock(floorX, floorY, floorZ);
+            Block block = CommonUtil.getBlockAt(worldObj, floorX, floorY, floorZ);
             //todo: if (block instanceof BlockRailCore) {
             //update using spline movement
             //} else if (block instanceof BlockRailBase)
@@ -207,7 +206,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
                     motionZ-=Math.min(0.35, motionZ);
                     velocity -= 0.35;
 
-                    if (worldObj.getBlock(MathHelper.floor_double(posX), MathHelper.floor_double(posY-0.5), MathHelper.floor_double(posZ)) instanceof BlockAir) {
+                    if (CommonUtil.getBlockAt(worldObj, posX, posY-0.5,posZ) instanceof BlockAir) {
                         posY--;
                     }
                 }
@@ -240,10 +239,10 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
             velocity -= 0.35;
 
             //update the last used block to the one we just used, if it's actually different.
-            if(floorX!=MathHelper.floor_double(this.posX) || floorZ != MathHelper.floor_double(this.posZ)) {
-                floorX = MathHelper.floor_double(this.posX);
-                floorY = MathHelper.floor_double(this.posY);
-                floorZ = MathHelper.floor_double(this.posZ);
+            if(floorX!=CommonUtil.floorDouble(this.posX) || floorZ != CommonUtil.floorDouble(this.posZ)) {
+                floorX = CommonUtil.floorDouble(this.posX);
+                floorY = CommonUtil.floorDouble(this.posY);
+                floorZ = CommonUtil.floorDouble(this.posZ);
                 //handle slope movement before other interactions
                 if(!BlockRailBase.func_150049_b_(worldObj, floorX, floorY, floorZ)){
                     this.prevPosY =posY;
@@ -252,7 +251,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
                     } else if (BlockRailBase.func_150049_b_(worldObj, floorX, floorY-1, floorZ)) {
                         posY--;
                     }
-                    floorY = MathHelper.floor_double(this.posY);
+                    floorY = CommonUtil.floorDouble(this.posY);
                 }
 
                 blockNext = this.worldObj.getBlock(floorX, floorY, floorZ);

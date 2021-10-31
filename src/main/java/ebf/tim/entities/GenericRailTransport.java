@@ -23,7 +23,6 @@ import ebf.tim.render.ParticleFX;
 import ebf.tim.render.TransportRenderData;
 import ebf.tim.utility.*;
 import fexcraft.tmt.slim.ModelBase;
-import fexcraft.tmt.slim.Vec3d;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.ILinkableCart;
@@ -53,7 +52,10 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 
 import javax.annotation.Nullable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import static ebf.tim.TrainsInMotion.transportTypes.*;
 import static ebf.tim.utility.CommonUtil.rotatePointF;
@@ -882,31 +884,20 @@ public class GenericRailTransport extends EntityMinecart implements IEntityAddit
             }
 
             //do scaled rail boosting but keep it capped to the max velocity of the rail
-            Block b = worldObj.getBlock((int) frontBogie.posX, (int) frontBogie.posY, (int) frontBogie.posZ);
+            Block b = CommonUtil.getBlockAt(worldObj,posX,posY,posZ);
             if (b instanceof BlockRailBase && ((BlockRailBase) b).isPowered() &&
-                    Math.abs(frontBogie.motionX) + Math.abs(frontBogie.motionZ) <//this part keeps it capped
-                            ((BlockRailBase) b).getRailMaxSpeed(worldObj, frontBogie, (int) frontBogie.posX, (int) frontBogie.posY, (int) frontBogie.posZ)) {
+                    //this part keeps it capped
+                    getVelocity() < maxBoost(b)) {
+                float boost = CommonUtil.getMaxRailSpeed(worldObj, (BlockRailBase) b,this,posX,posY,posZ) * 0.005f;
                 frontBogie.addVelocity(//this part boosts in the current direction, scaled by the speed of the rail
-                        Math.copySign(
-                                ((BlockRailBase) b).getRailMaxSpeed(worldObj, frontBogie, (int) frontBogie.posX, (int) frontBogie.posY, (int) frontBogie.posZ) * 0.005f,
-                                frontBogie.motionX),
+                        Math.copySign(boost, frontBogie.motionX),
                         0,
-                        Math.copySign(
-                                ((BlockRailBase) b).getRailMaxSpeed(worldObj, frontBogie, (int) frontBogie.posX, (int) frontBogie.posY, (int) frontBogie.posZ) * 0.005f,
-                                frontBogie.motionZ));
-            }
-            b = worldObj.getBlock((int) backBogie.posX, (int) backBogie.posY, (int) backBogie.posZ);
-            if (b instanceof BlockRailBase && ((BlockRailBase) b).isPowered() &&
-                    Math.abs(backBogie.motionX) + Math.abs(backBogie.motionZ) <
-                            ((BlockRailBase) b).getRailMaxSpeed(worldObj, backBogie, (int) backBogie.posX, (int) backBogie.posY, (int) backBogie.posZ)) {
-                backBogie.addVelocity(
-                        Math.copySign(
-                                ((BlockRailBase) b).getRailMaxSpeed(worldObj, backBogie, (int) backBogie.posX, (int) backBogie.posY, (int) backBogie.posZ) * 0.005f,
-                                backBogie.motionX),
+                        Math.copySign(boost, frontBogie.motionZ));
+
+                backBogie.addVelocity(//this part boosts in the current direction, scaled by the speed of the rail
+                        Math.copySign(boost, backBogie.motionX),
                         0,
-                        Math.copySign(
-                                ((BlockRailBase) b).getRailMaxSpeed(worldObj, backBogie, (int) backBogie.posX, (int) backBogie.posY, (int) backBogie.posZ) * 0.005f,
-                                backBogie.motionZ));
+                        Math.copySign(boost, backBogie.motionZ));
             }
 
 
@@ -944,6 +935,13 @@ public class GenericRailTransport extends EntityMinecart implements IEntityAddit
         collisionHandler.position(posX, posY, posZ, rotationPitch, rotationYaw);
     }
 
+    double maxBoost(Block booster){
+        if(this.transportTopSpeed()>0){
+            return Math.min(transportTopSpeed(),
+                    CommonUtil.getMaxRailSpeed(worldObj, (BlockRailBase) booster,this, posX,posY,posZ));
+        }
+        return CommonUtil.getMaxRailSpeed(worldObj, (BlockRailBase) booster,this, posX,posY,posZ);
+    }
 
 
     /**
@@ -1707,7 +1705,7 @@ public class GenericRailTransport extends EntityMinecart implements IEntityAddit
                 i++;
             }
         }
-        return i>0?MathHelper.floor_double(((i / getSizeInventory()) *indexes)+0.5):0;
+        return i>0?(int)(((i / getSizeInventory()) *indexes)+0.5):0;
     }
 
 

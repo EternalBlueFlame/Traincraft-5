@@ -1,6 +1,7 @@
 package ebf.tim.blocks.rails;
 
 import ebf.tim.blocks.RailTileEntity;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
@@ -79,7 +80,7 @@ public class RailData {
 
     private RailData checkYpositions(ChunkPosition p_150654_1_) {
         for (int y=-1; y<2;y++){
-            if(this.world.getBlock(p_150654_1_.chunkPosX, p_150654_1_.chunkPosY+y, p_150654_1_.chunkPosZ) instanceof BlockRailBase){
+            if(CommonUtil.getBlockAt(world, p_150654_1_.chunkPosX, p_150654_1_.chunkPosY+y, p_150654_1_.chunkPosZ) instanceof BlockRailBase){
                 return new RailData(this.world, p_150654_1_.chunkPosX, p_150654_1_.chunkPosY+y, p_150654_1_.chunkPosZ);
             }
         }
@@ -222,11 +223,11 @@ public class RailData {
                     meta=9;
                 }
                 //cover slopes
-                if (this.world.getBlock(this.xCoord, this.yCoord + 1, this.zCoord - 1) instanceof BlockRailBase) {
+                if (CommonUtil.getBlockAt(world, this.xCoord, this.yCoord + 1, this.zCoord - 1) instanceof BlockRailBase) {
                     meta = 4;
                 }
 
-                if (this.world.getBlock(this.xCoord, this.yCoord + 1, this.zCoord + 1) instanceof BlockRailBase) {
+                if (CommonUtil.getBlockAt(world, this.xCoord, this.yCoord + 1, this.zCoord + 1) instanceof BlockRailBase) {
                     meta = 5;
                 }
             }
@@ -247,11 +248,11 @@ public class RailData {
                     meta=7;
                 }
                 //cover slopes
-                if (this.world.getBlock(this.xCoord + 1, this.yCoord + 1, this.zCoord) instanceof BlockRailBase) {
+                if (CommonUtil.getBlockAt(world, this.xCoord + 1, this.yCoord + 1, this.zCoord) instanceof BlockRailBase) {
                     meta = 2;
                 }
 
-                if (this.world.getBlock(this.xCoord - 1, this.yCoord + 1, this.zCoord) instanceof BlockRailBase) {
+                if (CommonUtil.getBlockAt(world, this.xCoord - 1, this.yCoord + 1, this.zCoord) instanceof BlockRailBase) {
                     meta = 3;
                 }
             }

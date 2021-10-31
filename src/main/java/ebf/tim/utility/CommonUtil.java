@@ -21,7 +21,6 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -41,6 +40,29 @@ public class CommonUtil {
     public static final float degreesF = (float) (180.0d / Math.PI);
     private static List<String> loggedLangChecks = new ArrayList<>();
 
+
+
+    /**redirect shorthand that typecasts doubles to ints
+     * @see #isRailBlockAt(World, int, int, int) */
+    public static boolean isRailBlockAt(World world, double x, double y, double z) {
+        return isRailBlockAt(world,floorDouble(x), floorDouble(y),floorDouble(z));
+    }
+
+    public static Block getBlockAt(World world, double x, double y, double z){
+        return world.getBlock(floorDouble(x), floorDouble(y),floorDouble(z));
+    }
+
+    public static Block getBlockAt(World world, int x, int y, int z){
+        return world.getBlock(x,y,z);
+    }
+
+    public static float getMaxRailSpeed(World world, BlockRailBase rail, GenericRailTransport host, double x, double y, double z){
+        return (rail.getRailMaxSpeed(world, host, floorDouble(x), floorDouble(y),floorDouble(z)));
+    }
+
+    public static int floorDouble(double value){
+        return value < (int)value ? ((int)value) - 1 : (int)value;
+    }
 
     /**
      * <h2>Vanilla Track  detection Overrrides</h2>
@@ -454,17 +476,17 @@ public class CommonUtil {
     public static boolean placeOnRail(GenericRailTransport entity, EntityPlayer playerEntity, ItemStack stack, World worldObj, int posX, int posY, int posZ) {
 
         //be sure there is a rail at the location
-        if (CommonUtil.isRailBlockAt(worldObj, posX,posY,posZ) && !worldObj.isRemote) {
+        if (isRailBlockAt(worldObj, posX,posY,posZ) && !worldObj.isRemote) {
             //define the direction of the track
-            int railMeta=((BlockRailBase)worldObj.getBlock(posX,posY,posZ)).getBasicRailMetadata(worldObj, null,posX,posY,posZ);
+            int railMeta=((BlockRailBase)getBlockAt(worldObj,posX,posY,posZ)).getBasicRailMetadata(worldObj, null,posX,posY,posZ);
             //define the angle between the player and the track.
             // this is more reliable than player direction because player goes from -360 to 360 for no real reason.
             float rotation =atan2degreesf(posX-playerEntity.posX, posZ-playerEntity.posZ);
 
             if(railMeta==0){
                 //check if the train fits on the track
-                if (!CommonUtil.isRailBlockAt(worldObj, posX, posY, posZ + MathHelper.floor_float(entity.rotationPoints()[0]+ 1.0f ))
-                        && !CommonUtil.isRailBlockAt(worldObj, posX, posY, posZ + MathHelper.floor_float(entity.rotationPoints()[1]- 1.0f ))) {
+                if (!isRailBlockAt(worldObj, posX, posY, posZ + MathHelper.floor_float(entity.rotationPoints()[0]+ 1.0f ))
+                        || !isRailBlockAt(worldObj, posX, posY, posZ + MathHelper.floor_float(entity.rotationPoints()[1]- 1.0f ))) {
                     playerEntity.addChatMessage(new ChatComponentText("Place on a straight piece of track that is of sufficient length"));
                     return false;
                 }
@@ -478,8 +500,8 @@ public class CommonUtil {
 
             } else if (railMeta==1){
                 //check if the train fits on the track
-                if (!CommonUtil.isRailBlockAt(worldObj, posX - MathHelper.floor_double(entity.rotationPoints()[0]+ 1.0f ), posY, posZ)
-                        && !CommonUtil.isRailBlockAt(worldObj, posX - MathHelper.floor_double(entity.rotationPoints()[1]- 1.0f ), posY, posZ)) {
+                if (!CommonUtil.isRailBlockAt(worldObj, posX - floorDouble(entity.rotationPoints()[0]+ 1.0f ), posY, posZ)
+                        || !CommonUtil.isRailBlockAt(worldObj, posX - floorDouble(entity.rotationPoints()[1]- 1.0f ), posY, posZ)) {
                     playerEntity.addChatMessage(new ChatComponentText("Place on a straight piece of track that is of sufficient length"));
                     return false;
                 }

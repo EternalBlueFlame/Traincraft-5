@@ -6,6 +6,7 @@ import ebf.XmlBuilder;
 import ebf.tim.blocks.BlockDynamic;
 import ebf.tim.blocks.TileEntityStorage;
 import ebf.tim.registry.TiMItems;
+import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.ItemStackSlot;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -199,7 +200,7 @@ public class TileEntityOpenHearthFurnace extends TileEntityStorage {
 			if (this.worldObj != null) {
 				worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 				worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
-				this.worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, worldObj.getBlock(xCoord, yCoord, zCoord));
+				this.worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, CommonUtil.getBlockAt(worldObj, xCoord, yCoord, zCoord));
 			}
 		}
 	}

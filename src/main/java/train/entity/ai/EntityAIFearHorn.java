@@ -1,6 +1,7 @@
 package train.entity.ai;
 
 import ebf.tim.entities.EntityTrainCore;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
@@ -60,7 +61,7 @@ public class EntityAIFearHorn extends EntityAIBase{
      * Returns the path to the given coordinates
      */
     private PathEntity getPathToXYZ(double x, double y, double z) {
-        return getEntityPathToXYZ(MathHelper.floor_double(x), (int)y, MathHelper.floor_double(z), 
+        return getEntityPathToXYZ(CommonUtil.floorDouble(x), (int)y, CommonUtil.floorDouble(z),
                 (int)entity.getNavigator().getPathSearchRange()+8, false, false, false);
     }
 
@@ -69,20 +70,19 @@ public class EntityAIFearHorn extends EntityAIBase{
      */
     private boolean tryMoveToXYZ(double x, double y, double z, double speed)
     {
-        PathEntity pathentity = this.getPathToXYZ((double)MathHelper.floor_double(x), (double)((int)y), (double)MathHelper.floor_double(z));
+        PathEntity pathentity = this.getPathToXYZ((double)CommonUtil.floorDouble(x), (double)((int)y), (double)CommonUtil.floorDouble(z));
         return entity.getNavigator().setPath(pathentity, speed);
     }
     
     private PathEntity getEntityPathToXYZ(int targetX, int targetY, int targetZ, int range, boolean canPassOpenDoor, boolean canPassClosedDoor, boolean canSwim) {
-        int x = MathHelper.floor_double(entity.posX);
-        int y = MathHelper.floor_double(entity.posY);
-        int z = MathHelper.floor_double(entity.posZ);
+        int x = CommonUtil.floorDouble(entity.posX);
+        int y = CommonUtil.floorDouble(entity.posY);
+        int z = CommonUtil.floorDouble(entity.posZ);
 
         ChunkCache chunkcache = new ChunkCache(entity.worldObj,
                 x - range, y - range, z - range,
                 x + range, y + range, z + range,
                 0);
-        PathEntity pathentity = (new TCPathFinder(chunkcache, canPassOpenDoor, canPassClosedDoor, false, canSwim)).createEntityPathTo(entity, targetX, targetY, targetZ, range);
-        return pathentity;
+        return (new TCPathFinder(chunkcache, canPassOpenDoor, canPassClosedDoor, false, canSwim)).createEntityPathTo(entity, targetX, targetY, targetZ, range);
     }
 }

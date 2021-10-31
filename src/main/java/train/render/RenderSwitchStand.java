@@ -2,6 +2,7 @@ package train.render;
 
 import ebf.tim.TrainsInMotion;
 import ebf.tim.blocks.TileRenderFacing;
+import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import fexcraft.tmt.slim.TextureManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -55,7 +56,7 @@ public class RenderSwitchStand extends TileEntitySpecialRenderer {
 					GL11.glPopMatrix();
 				}
 			}
-		} else if (tileEntity.getWorldObj().getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0) {
+		} else if (CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0) {
 			TextureManager.bindTexture(texture2);
 			if(ebf.tim.utility.ClientProxy.railSkin==3){
 				GL11.glTranslatef(0, 0.09f, 0);

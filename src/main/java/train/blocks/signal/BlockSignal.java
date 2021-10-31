@@ -2,6 +2,7 @@ package train.blocks.signal;
 
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import ebf.tim.blocks.BlockDynamic;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLiving;
@@ -65,7 +66,7 @@ public class BlockSignal extends BlockDynamic {
 
 		/*
 		 * if (l == 0) { world.setBlockMetadataWithNotify(i, j, k, 2); te.rot = 2; } if (l == 1) { world.setBlockMetadataWithNotify(i, j, k, 5); te.rot = 5; } if (l == 2) { world.setBlockMetadataWithNotify(i, j, k, 3); te.rot = 3; } if (l == 3) { world.setBlockMetadataWithNotify(i, j, k, 4); te.rot = 4; } */
-		int var6 = MathHelper.floor_double((double) (entityliving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int var6 = CommonUtil.floorDouble((double) (entityliving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int var7 = world.getBlockMetadata(i, j, k) >> 2;
 		++var6;
 		var6 %= 4;

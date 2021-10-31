@@ -262,8 +262,8 @@ public class FuelHandler{
 					train.updateConsist();
 				}
 			} else {//moving
-				if (train.drain(null, 0, MathHelper.floor_double((1 * train.getEfficiency()) + (Math.copySign(train.accelerator, 1) * (5 * train.getEfficiency()))), false)==0) {
-					train.drain(null, 0,  MathHelper.floor_double((1 * train.getEfficiency()) + (Math.copySign(train.accelerator, 1) * (5 * train.getEfficiency()))), true);
+				if (train.drain(null, 0, CommonUtil.floorDouble((1 * train.getEfficiency()) + (Math.copySign(train.accelerator, 1) * (5 * train.getEfficiency()))), false)==0) {
+					train.drain(null, 0,  CommonUtil.floorDouble((1 * train.getEfficiency()) + (Math.copySign(train.accelerator, 1) * (5 * train.getEfficiency()))), true);
 				} else {
 					train.setBoolean(GenericRailTransport.boolValues.RUNNING, false);
 					train.updateConsist();
@@ -326,7 +326,7 @@ public class FuelHandler{
 			Block b;
 			for (int i=-2; i<5;i++) {
 				if(i==1){continue;}
-				te=train.worldObj.getTileEntity(MathHelper.floor_double(train.posX), MathHelper.floor_double(train.posY + i), MathHelper.floor_double(train.posZ));
+				te=train.worldObj.getTileEntity(CommonUtil.floorDouble(train.posX), CommonUtil.floorDouble(train.posY + i), CommonUtil.floorDouble(train.posZ));
 				if (te instanceof IEnergyHandler) {
 					for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
 						draw = ((IEnergyHandler) te).receiveEnergy(direction, 100, true);
@@ -338,7 +338,7 @@ public class FuelHandler{
 						}
 					}
 				} else{
-					b= train.worldObj.getBlock(MathHelper.floor_double(train.posX), MathHelper.floor_double(train.posY + i), MathHelper.floor_double(train.posZ));
+					b= CommonUtil.getBlockAt(train.worldObj, train.posX, train.posY + i, train.posZ);
 					if (b instanceof IElectricGrid && ((IElectricGrid) b).getChargeHandler().getCharge()>=100){
 						((IElectricGrid) b).getChargeHandler().removeCharge(100);
 						train.fill(null, new FluidStack(TiMFluids.fluidRedstone, 100), true);
@@ -353,8 +353,8 @@ public class FuelHandler{
 		//use stored energy
 		if (train.getBoolean(GenericRailTransport.boolValues.RUNNING)){
 			//electric trains run at a generally set rate which is multiplied at the square of speed.
-			if (train.drain(null, 0, MathHelper.floor_double((1*train.getEfficiency()) + (Math.copySign(train.accelerator, 1)*(5*train.getEfficiency()))), false)<1){
-				train.drain(null, 0, MathHelper.floor_double((1*train.getEfficiency()) + (Math.copySign(train.accelerator, 1)*(5*train.getEfficiency()))), true);
+			if (train.drain(null, 0, CommonUtil.floorDouble((1*train.getEfficiency()) + (Math.copySign(train.accelerator, 1)*(5*train.getEfficiency()))), false)<1){
+				train.drain(null, 0, CommonUtil.floorDouble((1*train.getEfficiency()) + (Math.copySign(train.accelerator, 1)*(5*train.getEfficiency()))), true);
 			} else {
 				train.setBoolean(GenericRailTransport.boolValues.RUNNING, false);
 				train.updateConsist();

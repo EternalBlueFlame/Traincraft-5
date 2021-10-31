@@ -1,5 +1,7 @@
 package fexcraft.tmt.slim;
 
+import ebf.tim.render.GroupedModelRender;
+import ebf.tim.render.StaticModelAnimator;
 import ebf.tim.utility.ClientProxy;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.Minecraft;
@@ -275,7 +277,8 @@ public class ModelBase extends ArrayList<ModelRendererTurbo> {
 	public void addPart(ModelRendererTurbo part){
 		if(part==null) {
 			return;
-		}if(part.boxName!=null && part.boxName.length()>2){
+		}if(part.boxName!=null && part.boxName.length()>2 &&
+				(StaticModelAnimator.checkAnimators(part) || GroupedModelRender.canAdd(part))){
 			namedList.add(part);
 		} else {
 			boxList.add(part);

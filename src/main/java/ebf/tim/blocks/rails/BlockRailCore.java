@@ -6,6 +6,7 @@ import ebf.XmlBuilder;
 import ebf.tim.blocks.RailTileEntity;
 import ebf.tim.items.ItemRail;
 import ebf.tim.registry.TiMItems;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.BlockRailBase;
@@ -22,7 +23,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -415,7 +415,7 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
 
 
     public static RailSimpleShape getShape(World worldObj, int xPos, int yPos, int zPos){
-        if(!(worldObj.getBlock(xPos,yPos,zPos) instanceof BlockRailCore)){
+        if(!(CommonUtil.getBlockAt(worldObj, xPos,yPos,zPos) instanceof BlockRailCore)){
             return null;
         }
         TileEntity te= worldObj.getTileEntity(xPos, yPos, zPos);
@@ -474,7 +474,7 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
      */
     public static boolean checkBlockMeta(World world, int xCoord, int yCoord, int zCoord, int ... meta){
         if (!world.getChunkProvider().chunkExists(xCoord/16, zCoord/16) ||
-                !(world.getBlock(xCoord,yCoord,zCoord) instanceof BlockRailBase)){
+                !(CommonUtil.getBlockAt(world, xCoord,yCoord,zCoord) instanceof BlockRailBase)){
             return false;
         }else {
             int block = getRailMeta(world, xCoord, yCoord, zCoord,null);

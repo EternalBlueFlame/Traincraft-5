@@ -1,7 +1,10 @@
 package ebf.tim.entities;
 
 import ebf.tim.registry.NBTKeys;
-import ebf.tim.utility.*;
+import ebf.tim.utility.CommonProxy;
+import ebf.tim.utility.CommonUtil;
+import ebf.tim.utility.FuelHandler;
+import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.Vec3d;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -138,7 +141,7 @@ public class EntityTrainCore extends GenericRailTransport {
                 updateConsist();
                 weight = pullingWeight* (getBoolean(boolValues.BRAKE)?0.7f:0.007f);
             }
-            weight-=this.weightKg()-1;
+            weight -= this.weightKg() - 1;
             // weight's effect on HP is generally inverse of HP itself, it can be described as
             // 30 lbs of coal about 100 feet in one minute = 33,000 lbf for 1.01387 MHP
             //or roughly 13.6kg over 30.48 meters in one minute = 1MHP
@@ -156,13 +159,14 @@ public class EntityTrainCore extends GenericRailTransport {
             //0.62428*0.508=0.317 blocks per second acceleration.
 
             //store this for later first
-            vectorCache[1][2]=vectorCache[1][0];
+            vectorCache[1][2] = vectorCache[1][0];
 
             // so 1 mhp would normally cover 13.6kg vertically, however this is low friction horizontal
             // in which case we increase by around 70%
-            vectorCache[1][0] = (maxPowerMicroblocks*(maxPowerMicroblocks*0.7f));
+            vectorCache[1][0] = (maxPowerMicroblocks * (maxPowerMicroblocks * 0.7f));
             //now figure out the percentage of this vs with weight subtracted
-            vectorCache[1][1]=vectorCache[1][0]-weight;
+            vectorCache[1][1] = Math.abs(vectorCache[1][0] - weight);
+
             if(vectorCache[1][1]<1){
                 //if too much weight, you stall
                 vectorCache[1][0]=0;
@@ -172,7 +176,7 @@ public class EntityTrainCore extends GenericRailTransport {
 
                 //now throw in the transport m/s acceleration, but convert m/s to m/t, (1/20)
                 //in theory anyway, but i just threw a bunch of random garbage at this and it seems fine
-                vectorCache[1][0]=(transportAcceleration()*0.0000075f)*vectorCache[1][0];
+                vectorCache[1][0]=(transportAcceleration()*0.000075f)*vectorCache[1][0];
 
                 //todo: accelerator is reverse, for some reason?
                 //scale by throttle position
@@ -195,8 +199,6 @@ public class EntityTrainCore extends GenericRailTransport {
                         vectorCache[1][0] = transportTopSpeedReverse() * (0.277778f*0.05f)*1.25f;
                     }
                 } else {
-                    DebugUtil.println(transportTopSpeed(), transportTopSpeedReverse() * (0.277778f*0.05f),
-                            -transportTopSpeed() * (0.277778f*0.075f),vectorCache[1][0]);
                     if (vectorCache[1][0] < -transportTopSpeed() * (0.277778f*0.075f)) {
                         vectorCache[1][0] = -transportTopSpeed() * (0.277778f*0.075f);
                     } else if (vectorCache[1][0] > transportTopSpeedReverse() * (0.277778f*0.075f)) {
@@ -247,24 +249,38 @@ public class EntityTrainCore extends GenericRailTransport {
         if(frontBogie != null && backBogie != null) {
 
             if (!worldObj.isRemote) {
+                float slip = CommonUtil.isRailBlockAt(worldObj,this.posX, this.posY, this.posZ)?-1.0f:
+                        CommonUtil.getBlockAt(worldObj,this.posX,this.posY-1,this.posZ).slipperiness;
                 //twice a second, re-calculate the speed.
                 if (accelerator != 0 && ticksExisted % 10 == 0) {
                     //stop calculation if it can't move, running should be managed from the fuel handler, to be more dynamic
                     if (getBoolean(boolValues.RUNNING)) {
                         //skip updating speed on TC style cruise control
                         if(accelerator!=8 && accelerator!=-8 && !getBoolean(boolValues.BRAKE)) {
-                            calculateAcceleration();
+                            if(slip>0) {
+                                rotationYaw+=accelerator*slip;
+                                if(slip<6) {
+                                    vectorCache[1][2] *= slip*0.75;
+                                }
+                                calculateAcceleration();
+                                vectorCache[1][0] *= slip > 0 ? slip : 0.996;
+                            } else {
+                                calculateAcceleration();
+                            }
                         }
                     } else {
                         accelerator = 0;
                         this.dataWatcher.updateObject(18, accelerator);
                     }
-                } else if(ticksExisted % 10 == 0){
+                } else if(ticksExisted % 10 == 0) {
                     //basically apply normal bogie drag to acceleration
                     if((getVelocity()<0.3) || getBoolean(boolValues.BRAKE)) {
                         vectorCache[1][0] *= 0.95;
                     }
-                    vectorCache[1][0] *= 0.996;
+                    if(slip<6 && slip>0) {
+                        vectorCache[1][2] *= slip*0.75;
+                    }
+                    vectorCache[1][0] *= slip > 0 ? slip : 0.996;
                 }
 
                 if(accelerator==0 && getBoolean(boolValues.BRAKE) && getVelocity()==0){

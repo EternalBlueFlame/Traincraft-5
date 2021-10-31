@@ -1,6 +1,7 @@
 package fexcraft.fvtm;
 
 import ebf.tim.utility.ClientProxy;
+import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.renderer.GLAllocation;
@@ -26,9 +27,13 @@ public class RollingStockModel extends ModelBase {
 
     @Override
     public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5){
-        for(TurboList list :groups) {
-            if(list.init){
+        if(init){
+            for(TurboList list :groups) {
                 list.initAllParts();
+            }
+            //for the named list, we sort those into this class to avoid subclassing errors with the animator.
+            for(TurboList list :groups) {
+                namedList.addAll(list.namedList);
             }
         }
 
@@ -50,8 +55,9 @@ public class RollingStockModel extends ModelBase {
                 }
             }
         } else {
-            if(GL11.glIsList(staticPartMap.get(this.getClass().getName()))) {
-                GL11.glCallList(staticPartMap.get(this.getClass().getName()));
+            Integer m = staticPartMap.get(this.getClass().getName());
+            if(GL11.glIsList(m)) {
+                GL11.glCallList(m);
             } else {
                 staticPartMap.put(this.getClass().getName(), GLAllocation.generateDisplayLists(1));
                 GL11.glNewList(staticPartMap.get(this.getClass().getName()), GL11.GL_COMPILE);
@@ -62,19 +68,17 @@ public class RollingStockModel extends ModelBase {
             }
         }
 
-        for(TurboList list :groups) {
-            if (list.namedList != null) {
-                for (int i = 0; i < list.namedList.size(); i++) {
-                    if (list.displayList.size() > i && GL11.glIsList(list.displayList.get(i))) {
-                        GL11.glCallList(list.displayList.get(i));
-                    } else if (list.namedList.get(i) != null) {
-                        list.displayList.add(GLAllocation.generateDisplayLists(1));
-                        GL11.glNewList(list.displayList.get(i), GL11.GL_COMPILE);
-                        GL11.glPushMatrix();
-                        list.namedList.get(i).render();
-                        GL11.glPopMatrix();
-                        GL11.glEndList();
-                    }
+        if (namedList != null) {
+            for (int i = 0; i < namedList.size(); i++) {
+                if (displayList.size() > i && GL11.glIsList(displayList.get(i))) {
+                    GL11.glCallList(displayList.get(i));
+                } else if (namedList.get(i) != null) {
+                    displayList.add(GLAllocation.generateDisplayLists(1));
+                    GL11.glNewList(displayList.get(i), GL11.GL_COMPILE);
+                    GL11.glPushMatrix();
+                    namedList.get(i).render();
+                    GL11.glPopMatrix();
+                    GL11.glEndList();
                 }
             }
         }

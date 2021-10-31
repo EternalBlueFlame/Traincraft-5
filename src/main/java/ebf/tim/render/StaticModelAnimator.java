@@ -201,7 +201,7 @@ public class StaticModelAnimator extends AnimationBase {
         return null;
     }
 
-    static boolean checkAnimators(ModelRendererTurbo part){
+    public static boolean checkAnimators(ModelRendererTurbo part){
     for (AnimationBase animator : customAnimators){
             if (animator != null && animator.isPart(part)) {
                 return true;

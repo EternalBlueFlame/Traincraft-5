@@ -40,7 +40,7 @@ public class ItemRail extends Item implements ITrackItem {
     @Override
     public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int meta, float p_77648_8_, float p_77648_9_, float p_77648_10_) {
         if(world.isRemote){return true;}
-        net.minecraft.block.Block block = world.getBlock(x, y, z);
+        net.minecraft.block.Block block = CommonUtil.getBlockAt(world, x, y, z);
 
         if (block != Blocks.vine && block != Blocks.tallgrass && block != Blocks.deadbush) {
             switch (meta) {
@@ -61,29 +61,29 @@ public class ItemRail extends Item implements ITrackItem {
                 int rotation = MathHelper.floor_double((player!=null?player.rotationYawHead:p_77648_10_) * 4.0F / 360.0F + 0.5D) & 3;
                 switch (rotation){
                     case 0:{z++;
-                    if(world.getBlock(x,y,z) instanceof BlockRailBase){z++;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){z++;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){z++;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){return false;}
+                    if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){z++;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){z++;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){z++;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){return false;}
                         break;
                     }//south
                     case 1:{x--;
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){x--;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){x--;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){x--;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){return false;}}//west
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){x--;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){x--;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){x--;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){return false;}}//west
                     break;
                     case 2:{z--;
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){z--;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){z--;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){z--;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){return false;}}//north
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){z--;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){z--;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){z--;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){return false;}}//north
                     break;
                     case 3:{x++;
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){x++;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){x++;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){x++;}
-                        if(world.getBlock(x,y,z) instanceof BlockRailBase){return false;}}//east
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){x++;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){x++;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){x++;}
+                        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){return false;}}//east
                 }
 
             }
@@ -94,14 +94,14 @@ public class ItemRail extends Item implements ITrackItem {
                 x>>4, z>>4)) {
             return false;
         } else {
-            if(!(world.getBlock(x,y,z) instanceof BlockAir)){
+            if(!(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockAir)){
                 //replaceable covers things like fluids, IPlantable and IGrowable cover things like grass and flowers
-                if(!world.getBlock(x,y,z).isReplaceable(world,x,y,z)
+                if(!CommonUtil.getBlockAt(world, x,y,z).isReplaceable(world,x,y,z)
                         && !(block instanceof IPlantable) && !(block instanceof IGrowable)){
                     return false;
                 } else {
                     //if it is replaceable, try to spawn the dropped item.
-                    List<ItemStack> blockStacks = world.getBlock(x,y,z).getDrops(world,x,y,z,world.getBlockMetadata(x,y,z),0);
+                    List<ItemStack> blockStacks = CommonUtil.getBlockAt(world, x,y,z).getDrops(world,x,y,z,world.getBlockMetadata(x,y,z),0);
                     for(ItemStack stak : blockStacks){
                         world.spawnEntityInWorld(new EntityItem(world,x,y+0.5,z, stak));
                     }
@@ -110,10 +110,10 @@ public class ItemRail extends Item implements ITrackItem {
 
             if (world.setBlock(x,y,z, getPlacedBlock(), 0, 3)) {
                 int i1 = getPlacedBlock().onBlockPlaced(world, x,y,z, meta, p_77648_8_, p_77648_9_, p_77648_10_, 0);
-                if (world.getBlock(x,y,z) == getPlacedBlock()) {
+                if (CommonUtil.getBlockAt(world, x,y,z) == getPlacedBlock()) {
                     getPlacedBlock().onBlockPlacedBy(world, x,y,z, player, stack);
 
-                    ((BlockRailCore)world.getBlock(x,y,z)).updateShape(x,y,z,world,
+                    ((BlockRailCore)CommonUtil.getBlockAt(world, x,y,z)).updateShape(x,y,z,world,
                             //set rail
                             stack.getTagCompound().getTag("rail")!=null?
                                     ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("rail")):
@@ -153,7 +153,7 @@ public class ItemRail extends Item implements ITrackItem {
 
     public boolean placeTrack(ItemStack stack, World world, int x, int y, int z){
         if(world.isRemote){return true;}
-        net.minecraft.block.Block block = world.getBlock(x, y, z);
+        net.minecraft.block.Block block = CommonUtil.getBlockAt(world, x, y, z);
 
         if (!(World.doesBlockHaveSolidTopSurface(world ,x, y, z))){
             return false;
@@ -169,9 +169,9 @@ public class ItemRail extends Item implements ITrackItem {
             int i1 = getPlacedBlock().onBlockPlaced(world, x, y, z, meta, 0, 0, 0, 0);
 
             if (world.setBlock(x, y, z, getPlacedBlock(), 0, 3)) {
-                if (world.getBlock(x, y, z) == getPlacedBlock()) {
+                if (CommonUtil.getBlockAt(world, x, y, z) == getPlacedBlock()) {
                     getPlacedBlock().onPostBlockPlaced(world, x, y, z, i1);
-                    ((BlockRailCore) world.getBlock(x, y, z)).updateShape(x, y, z, world,
+                    ((BlockRailCore) CommonUtil.getBlockAt(world, x, y, z)).updateShape(x, y, z, world,
                             //set rail
                             stack.getTagCompound().getTag("rail")!=null?
                                     ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("rail")):

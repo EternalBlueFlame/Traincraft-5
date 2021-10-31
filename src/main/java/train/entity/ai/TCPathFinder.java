@@ -1,5 +1,6 @@
 package train.entity.ai;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -32,7 +33,7 @@ public class TCPathFinder extends PathFinder{
         for (int i = x; i < x + point.xCoord; ++i) {
             for (int j = y; j < y + point.yCoord; ++j) {
                 for (int k = z; k < z + point.zCoord; ++k) {
-                    block = entity.worldObj.getBlock(i, j, k);
+                    block = CommonUtil.getBlockAt(entity.worldObj, i, j, k);
 
                     if (block.getMaterial() != Material.air) {
                         if (block == Blocks.trapdoor) {
@@ -53,12 +54,12 @@ public class TCPathFinder extends PathFinder{
 
                         int k1 = block.getRenderType();
 
-                        if (entity.worldObj.getBlock(i, j, k).getRenderType() == 9) {
+                        if (CommonUtil.getBlockAt(entity.worldObj, i, j, k).getRenderType() == 9) {
                             int j2 = MathHelper.floor_double(entity.posX);
                             int l1 = MathHelper.floor_double(entity.posY);
                             int i2 = MathHelper.floor_double(entity.posZ);
 
-                            if (entity.worldObj.getBlock(j2, l1, i2).getRenderType() != 9 && entity.worldObj.getBlock(j2, l1 - 1, i2).getRenderType() != 9)
+                            if (CommonUtil.getBlockAt(entity.worldObj, j2, l1, i2).getRenderType() != 9 && CommonUtil.getBlockAt(entity.worldObj, j2, l1 - 1, i2).getRenderType() != 9)
                             {
                                 return -3;
                             }

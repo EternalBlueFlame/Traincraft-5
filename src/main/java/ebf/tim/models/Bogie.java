@@ -2,7 +2,6 @@ package ebf.tim.models;
 
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.utility.CommonUtil;
-import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.Vec3f;
 

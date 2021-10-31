@@ -36,18 +36,18 @@ public class TiMItems {
 
     public static Item generator;
 
-    public static Item itemStake = new ItemStake();
-    public static Item recipeBook = new ItemCraftGuide();
+    public static Item itemStake = new ItemStake().setMaxStackSize(1);
+    public static Item recipeBook = new ItemCraftGuide().setMaxStackSize(1);
 
 
     public static void registerItems(){
 
         TiMGenericRegistry.RegisterItem(itemStake, TrainsInMotion.MODID, "stake",TrainsInMotion.creativeTab);
 
-        TiMGenericRegistry.RegisterItem(new ItemAdminBook(),TrainsInMotion.MODID, "adminbook", TrainsInMotion.creativeTab);
+        TiMGenericRegistry.RegisterItem(new ItemAdminBook().setMaxStackSize(1),TrainsInMotion.MODID, "adminbook", TrainsInMotion.creativeTab);
         TiMGenericRegistry.RegisterItem(recipeBook,TrainsInMotion.MODID, "craftbook", TrainsInMotion.creativeTab);
 
-        TiMGenericRegistry.RegisterItem(new ItemPaintBucket(),TrainsInMotion.MODID, "paintbucket", TrainsInMotion.creativeTab);
+        TiMGenericRegistry.RegisterItem(new ItemPaintBucket().setMaxStackSize(1),TrainsInMotion.MODID, "paintbucket", TrainsInMotion.creativeTab);
         TiMGenericRegistry.RegisterItem(new ItemKey(),TrainsInMotion.MODID,  "transportkey", TrainsInMotion.creativeTab);
         TiMGenericRegistry.RegisterItem(new ItemTicket(),TrainsInMotion.MODID,  "transportticket", TrainsInMotion.creativeTab);
 

@@ -11,6 +11,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.TrainsInMotion;
 import ebf.tim.blocks.BlockDynamic;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -71,9 +72,9 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 			world.spawnParticle("flame", var7 - 0.06, (double) j + 1.03F, var9 - 0.06, 0, 0, 0);
 			world.spawnParticle("flame", var7 + 0.06, (double) j + 1.03F, var9 - 0.06, 0, 0, 0);
 			world.spawnParticle("flame", var7 - 0.06, (double) j + 1.03F, var9 + 0.06, 0, 0, 0);
-			world.getBlock(i,j,k).setLightLevel(0.8F);
+			CommonUtil.getBlockAt(world, i,j,k).setLightLevel(0.8F);
 		} else {
-			world.getBlock(i,j,k).setLightLevel(0F);
+			CommonUtil.getBlockAt(world, i,j,k).setLightLevel(0F);
 		}
 	}
 

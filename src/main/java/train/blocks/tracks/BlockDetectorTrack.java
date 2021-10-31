@@ -5,6 +5,7 @@
  */
 package train.blocks.tracks;
 
+import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.tracks.ITrackEmitter;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,7 +43,7 @@ public class BlockDetectorTrack extends TrackBaseTraincraft implements ITrackEmi
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
+		Block block = CommonUtil.getBlockAt(getWorld(), getX(), getY(), getZ());
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
 

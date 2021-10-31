@@ -3,6 +3,7 @@ package ebf.tim.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.TrainsInMotion;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -102,10 +103,10 @@ public class BlockTrainFluid extends BlockFluidClassic {
             int y2 = y - densityDir;
 
             if (world.getBlock(x,y2,z) == this ||
-                    world.getBlock(x - 1, y2, z) == this ||
-                    world.getBlock(x + 1, y2, z) == this ||
-                    world.getBlock(x,y2, z - 1) == this ||
-                    world.getBlock(x, y2, z + 1) == this)
+                    CommonUtil.getBlockAt(world, x - 1, y2, z) == this ||
+                    CommonUtil.getBlockAt(world,x + 1, y2, z) == this ||
+                    CommonUtil.getBlockAt(world,x,y2, z - 1) == this ||
+                    CommonUtil.getBlockAt(world,x, y2, z + 1) == this)
             {
                 newHeight = quantaPerBlock - 1;
             } else {
@@ -149,7 +150,7 @@ public class BlockTrainFluid extends BlockFluidClassic {
         }
 
         if (isSourceBlock(world, x, y, z) || !isFlowingVertically(world, x, y, z)) {
-            if (world.getBlock(x, y - densityDir, z) == this) {
+            if (CommonUtil.getBlockAt(world,x, y - densityDir, z) == this) {
                 flowMeta = 1;
             }
             boolean[] flowTo = getOptimalFlowDirections(world, x, y, z);

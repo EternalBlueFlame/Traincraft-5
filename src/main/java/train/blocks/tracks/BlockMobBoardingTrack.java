@@ -5,6 +5,7 @@ package train.blocks.tracks;
 
 import ebf.tim.TrainsInMotion;
 import ebf.tim.entities.GenericRailTransport;
+import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.tracks.ITrackEmitter;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -68,7 +69,7 @@ public class BlockMobBoardingTrack extends TrackBaseTraincraft implements ITrack
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
+		Block block = CommonUtil.getBlockAt(getWorld(), getX(), getY(), getZ());
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
 

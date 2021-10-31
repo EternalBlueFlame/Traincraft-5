@@ -3,6 +3,7 @@ package ebf.tim.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.TrainsInMotion;
+import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -13,7 +14,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 
@@ -120,7 +120,7 @@ public class BlockDynamic extends BlockContainer {
         world.setTileEntity(x,y,z,createNewTileEntity(world,0));
         if(world.getTileEntity(x,y,z) instanceof TileRenderFacing){
             ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(
-                    MathHelper.floor_double((entity.rotationYaw / 90.0F) + 2.5D) & 3);
+                    CommonUtil.floorDouble((entity.rotationYaw / 90.0F) + 2.5D) & 3);
         }
     }
 

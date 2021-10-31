@@ -16,7 +16,6 @@ import net.minecraftforge.oredict.OreDictionary;
 import train.core.handlers.ConfigHandler;
 
 import javax.annotation.Nullable;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

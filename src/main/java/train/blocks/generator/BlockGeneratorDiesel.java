@@ -12,6 +12,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.blocks.BlockDynamic;
 import ebf.tim.blocks.TileRenderFacing;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -84,7 +85,7 @@ public class BlockGeneratorDiesel extends BlockDynamic {
 		if(!(te instanceof TileRenderFacing)){
 			return;
 		}
-		int var6 = MathHelper.floor_double((double) (living.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int var6 = CommonUtil.floorDouble((double) (living.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int var7 = world.getBlockMetadata(par2, par3, par4) >> 2;
 		++var6;
 		var6 %= 4;
