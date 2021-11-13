@@ -221,10 +221,10 @@ public class ModelWood extends ModelBase {
 			}
 		}
 		if (cargo != 0) {
-			box35.render();
-			box29.render();
-			box2.render();
-			box1.render();
+			box35.renderClean();
+			box29.renderClean();
+			box2.renderClean();
+			box1.renderClean();
 		}
 
 		super.render(entity, f, f1, f2, f3, f4, f5);

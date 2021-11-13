@@ -121,8 +121,11 @@ public class GUICraftBook extends GuiScreen {
         if(getPage(leftPage?page:page+1)==null){return;}
         if(getPage(leftPage?page:page+1) instanceof Recipe) {
 
+            GL11.glPushMatrix();
+            GL11.glColor4f(1,1,1,1);
             Minecraft.getMinecraft().fontRenderer.drawString(((Recipe) getPage(leftPage?page:page+1)).getresult().get(0).getDisplayName()
                     ,percentLeft(leftPage?15:55), percentTop(20), 0x000000);
+            GL11.glPopMatrix();
 
             List<ItemStack> slots = new ArrayList<>();
             List<Integer> slotx = new ArrayList<>();

@@ -30,6 +30,11 @@ public class Vec5f extends Vec3f {
         this.v=v;
     }
 
+    public void addUV(float u, float v){
+        this.u+=u;
+        this.v+=v;
+    }
+
     public Vec5f crossProduct(Vec5f o){
         return new Vec5f(xCoord*o.xCoord,yCoord*o.yCoord,zCoord*o.zCoord,u*o.u,v*o.v);
     }

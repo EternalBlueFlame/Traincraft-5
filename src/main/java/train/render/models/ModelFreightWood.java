@@ -141,16 +141,16 @@ public class ModelFreightWood extends ModelBase {
 		}
 		if (cargo != 0) {
     		if(cargo<=6) {
-    			box10.render();
+    			box10.renderClean();
 			}
     		else if(cargo<=12 && cargo>6) {
-    			box10.render();
-    			box11.render();
+    			box10.renderClean();
+    			box11.renderClean();
     		}
     		else {
-    			box10.render();
-    			box11.render();
-    			box12.render();
+    			box10.renderClean();
+    			box11.renderClean();
+    			box12.renderClean();
     		}
 		}
 		super.render(entity, f, f1, f2, f3, f4, f5);

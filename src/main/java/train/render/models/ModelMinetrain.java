@@ -201,10 +201,10 @@ public class ModelMinetrain extends ModelBase {
 		}
 		if (cargo != 0) {
 			if(cargo<=9) {
-				box27.render();
+				box27.renderClean();
 			}
 			else {
-				box26.render();
+				box26.renderClean();
 			}
 		}
 

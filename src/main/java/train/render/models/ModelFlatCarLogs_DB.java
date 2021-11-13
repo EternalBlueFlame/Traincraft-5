@@ -6,6 +6,7 @@ import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.entity.Entity;
+import org.lwjgl.opengl.GL11;
 import train.render.CustomModelRenderer;
 
 public class ModelFlatCarLogs_DB extends ModelBase {
@@ -269,46 +270,46 @@ public class ModelFlatCarLogs_DB extends ModelBase {
 		}
 		if (cargo != 0) {
     		if(cargo<=9) {
-    			box31.render();
-	    		box32.render();
+    			box31.renderClean();
+	    		box32.renderClean();
 			}
 			else if(cargo<=18) {
-				box31.render();
-	    		box32.render();
-	    		box33.render();
+				box31.renderClean();
+	    		box32.renderClean();
+	    		box33.renderClean();
 			}
 			else if(cargo<=27) {
-				box31.render();
-	    		box32.render();
-	    		box33.render();
-	    		box37.render();
+				box31.renderClean();
+	    		box32.renderClean();
+	    		box33.renderClean();
+	    		box37.renderClean();
 			}
 			else if(cargo<=36) {
-				box31.render();
-	    		box32.render();
-	    		box33.render();
-	    		box34.render();
-	    		box36.render();
-	    		box37.render();
+				box31.renderClean();
+	    		box32.renderClean();
+	    		box33.renderClean();
+	    		box34.renderClean();
+	    		box36.renderClean();
+	    		box37.renderClean();
 			}
 			else if(cargo<45) {
-	    		box41.render();
-	    		box31.render();
-	    		box32.render();
-	    		box33.render();
-	    		box34.render();
-	    		box36.render();
-	    		box37.render();
+	    		box41.renderClean();
+	    		box31.renderClean();
+	    		box32.renderClean();
+	    		box33.renderClean();
+	    		box34.renderClean();
+	    		box36.renderClean();
+	    		box37.renderClean();
 			}
 			else {
-				box39.render();
-	    		box41.render();
-	    		box31.render();
-	    		box32.render();
-	    		box33.render();
-	    		box34.render();
-	    		box36.render();
-	    		box37.render();
+				box39.renderClean();
+	    		box41.renderClean();
+	    		box31.renderClean();
+	    		box32.renderClean();
+	    		box33.renderClean();
+	    		box34.renderClean();
+	    		box36.renderClean();
+	    		box37.renderClean();
     		}
 		}
 		super.render(entity, f, f1, f2, f3, f4, f5);

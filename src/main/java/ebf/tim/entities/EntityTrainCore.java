@@ -1,10 +1,7 @@
 package ebf.tim.entities;
 
 import ebf.tim.registry.NBTKeys;
-import ebf.tim.utility.CommonProxy;
-import ebf.tim.utility.CommonUtil;
-import ebf.tim.utility.FuelHandler;
-import ebf.tim.utility.ItemStackSlot;
+import ebf.tim.utility.*;
 import fexcraft.tmt.slim.Vec3d;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
@@ -163,46 +160,48 @@ public class EntityTrainCore extends GenericRailTransport {
 
             // so 1 mhp would normally cover 13.6kg vertically, however this is low friction horizontal
             // in which case we increase by around 70%
-            vectorCache[1][0] = (maxPowerMicroblocks * (maxPowerMicroblocks * 0.7f));
+            //vectorCache[1][0] = (maxPowerMicroblocks * (maxPowerMicroblocks * 0.7f));
             //now figure out the percentage of this vs with weight subtracted
-            vectorCache[1][1] = Math.abs(vectorCache[1][0] - weight);
+            //vectorCache[1][1] = Math.abs(vectorCache[1][0] - weight);
 
-            if(vectorCache[1][1]<1){
-                //if too much weight, you stall
+            //convert max power from MHP to HP, and then to lbf/s
+            vectorCache[1][0]= maxPowerMicroblocks * 0.98632f * 0.001818f;
+
+            if(vectorCache[1][0]<=0){
+                //if too much weight, or no power, you stall
                 vectorCache[1][0]=0;
             } else {
-                //this is a mess, but it should reliably scale the speed based on weight pulled
-                vectorCache[1][0]= (vectorCache[1][0]-vectorCache[1][1])/vectorCache[1][0];
-
-                //now throw in the transport m/s acceleration, but convert m/s to m/t, (1/20)
-                //in theory anyway, but i just threw a bunch of random garbage at this and it seems fine
-                vectorCache[1][0]=(transportAcceleration()*0.000075f)*vectorCache[1][0];
-
-                //todo: accelerator is reverse, for some reason?
-                //scale by throttle position
-                vectorCache[1][0]*=-getAcceleratiorPercentage();
+                //scale the acceleration in lbf based on itself minus the weight
+                // after weight is converted to lb and scaled to the rough friction coefficient of steel on steel.
+                vectorCache[1][0]/= vectorCache[1][0] - (weight * 2.204622621849f * 0.0015f);
+                //scale to the acceleration stat of the train.
+                vectorCache[1][0]*=transportAcceleration();
+                //scale further by throttle position
+                vectorCache[1][0]*=getAcceleratiorPercentage();
+                //nerf to more TC-esk acceleration rates
+                vectorCache[1][0]*=0.006;
 
 
                 if(CommonProxy.realSpeed){
-                    vectorCache[1][0]*=0.25f;//nerf to more realistic speeds
+                    vectorCache[1][0]*=0.5f;//for real speed nerf by half
                 }
 
                 //add back the speed from last tick
                 vectorCache[1][0]+=vectorCache[1][2];
 
+                //if speed is greater than top speed from km/h to m/s divided by 20 to get per tick
                 if(CommonProxy.realSpeed){
-                    //if speed is greater than top speed from km/h to m/s divided by 20 to get per tick
-                    //add a buff to max speed of 0.25
-                    if (vectorCache[1][0] < -transportTopSpeed() * (0.277778f*0.05f)*1.25f) {
-                        vectorCache[1][0] = -transportTopSpeed() * (0.277778f*0.05f)*1.25f;
-                    } else if (vectorCache[1][0] > transportTopSpeedReverse() * (0.277778f*0.05f)*1.25f) {
-                        vectorCache[1][0] = transportTopSpeedReverse() * (0.277778f*0.05f)*1.25f;
+                    //for real speed add a buff to max speed of 1.25%
+                    if (vectorCache[1][0] < -transportTopSpeed() * (0.277778f*0.03f)*1.25f) {
+                        vectorCache[1][0] = -transportTopSpeed() * (0.277778f*0.03f)*1.25f;
+                    } else if (vectorCache[1][0] > transportTopSpeedReverse() * (0.277778f*0.03f)*1.25f) {
+                        vectorCache[1][0] = transportTopSpeedReverse() * (0.277778f*0.03f)*1.25f;
                     }
                 } else {
-                    if (vectorCache[1][0] < -transportTopSpeed() * (0.277778f*0.075f)) {
-                        vectorCache[1][0] = -transportTopSpeed() * (0.277778f*0.075f);
-                    } else if (vectorCache[1][0] > transportTopSpeedReverse() * (0.277778f*0.075f)) {
-                        vectorCache[1][0] = transportTopSpeedReverse() * (0.277778f*0.075f);
+                    if (vectorCache[1][0] < -transportTopSpeed() * (0.277778f*0.03f)) {
+                        vectorCache[1][0] = -transportTopSpeed() * (0.277778f*0.03f);
+                    } else if (vectorCache[1][0] > transportTopSpeedReverse() * (0.277778f*0.03f)) {
+                        vectorCache[1][0] = transportTopSpeedReverse() * (0.277778f*0.03f);
                     }
                 }
 
@@ -249,7 +248,7 @@ public class EntityTrainCore extends GenericRailTransport {
         if(frontBogie != null && backBogie != null) {
 
             if (!worldObj.isRemote) {
-                float slip = CommonUtil.isRailBlockAt(worldObj,this.posX, this.posY, this.posZ)?-1.0f:
+                float slip = !getBoolean(boolValues.DERAILED)?-1.0f:
                         CommonUtil.getBlockAt(worldObj,this.posX,this.posY-1,this.posZ).slipperiness;
                 //twice a second, re-calculate the speed.
                 if (accelerator != 0 && ticksExisted % 10 == 0) {

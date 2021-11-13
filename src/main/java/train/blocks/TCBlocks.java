@@ -9,6 +9,7 @@ package train.blocks;
 
 import ebf.tim.TrainsInMotion;
 import ebf.tim.blocks.BlockDynamic;
+import ebf.tim.blocks.SimpleBlock;
 import ebf.tim.registry.TiMItems;
 import ebf.tim.registry.TiMOres;
 import ebf.tim.utility.RecipeManager;
@@ -38,10 +39,10 @@ public class TCBlocks {
 	public static BlockDynamic trainTableTier2 = new BlockDynamic(new Material(MapColor.mapColorArray[13]),true, 2);
 	public static BlockDynamic trainTableTier3 = new BlockDynamic(new Material(MapColor.mapColorArray[13]),true, 3);
 
-	public static BlockDynamic oilSand = new BlockDynamic(new Material(MapColor.mapColorArray[2]), false);
-	public static BlockDynamic orePetroleum = new BlockDynamic(new Material(MapColor.mapColorArray[11]), false);
+	public static SimpleBlock oilSand;
+	public static SimpleBlock orePetroleum;
 
-	public static BlockDynamic blockBallast = new BlockDynamic(new Material(MapColor.mapColorArray[29]), false);
+	public static SimpleBlock blockBallast;
 
 	public static BlockDistil blockDistil = new BlockDistil();
 	public static BlockOpenHearthFurnace blockHearthFurnace = new BlockOpenHearthFurnace();
@@ -67,7 +68,17 @@ public class TCBlocks {
 		trainTableTier2.setTextureName(Info.modID+ ":textures/blocks/assembly_2.png");
 		trainTableTier3.setTextureName(Info.modID+ ":textures/blocks/assembly_3.png");
 
-		blockBallast.setTextureName(Info.modID+ ":textures/blocks/ballast.png");
+		blockBallast = new SimpleBlock(3.0F, 6.0F, "block.ballast", Info.modID + ":ballast_test");
+		oilSand = new SimpleBlock(2.0F, 2.0F, "block.oilsand", Info.modID + ":ores/ore_oilsands");
+		orePetroleum = new SimpleBlock(3.0F, 3.0F, "block.petroleum", Info.modID + ":ores/ore_petroleum");
+
+		blockBallast.setCreativeTab(Traincraft.tcTab);
+		orePetroleum.setCreativeTab(Traincraft.tcTab);
+		oilSand.setCreativeTab(Traincraft.tcTab);
+		blockBallast.setHarvestLevel("shovel", 2);
+		oilSand.setHarvestLevel("shovel", 1);
+		orePetroleum.setHarvestLevel("pickaxe", 1);
+
 
 		blockDistil.setTextureName(Info.modID+ ":textures/blocks/distil_off.png");
 
@@ -76,13 +87,6 @@ public class TCBlocks {
 
 		partTable.setTextureName(TrainsInMotion.MODID +":textures/blocks/train_table.png");
 
-		oilSand.setTextureName(Info.modID+ ":textures/blocks/ores/ore_oilsands.png");
-		orePetroleum.setTextureName(Info.modID+ ":textures/blocks/ores/ore_petroleum.png");
-
-		registerBlock(oilSand, Traincraft.tcTab, Info.modID,"block.oilsand", null, null);
-		registerBlock(orePetroleum, Traincraft.tcTab, Info.modID,"block.petroleum", "petroleum", null);
-
-		registerBlock(blockBallast,Traincraft.tcTab,Info.modID,"block.ballast",null,null);
 
 		addRecipe(new ItemStack(registerBlock(trainTableTier1, Traincraft.tcTab, Info.modID,"block.traintabletier1", null, null),1),
 				"IPI", "S S", "SPS", 'S', Blocks.stone, 'I', Items.iron_ingot, 'P', Blocks.piston); //tier 1
@@ -120,8 +124,8 @@ public class TCBlocks {
 			registerBlock(lantern, Traincraft.tcTab, Info.modID, "block.lantern", null, null);
 		}
 
-		OreDictionary.registerOre("oreOilsands", new ItemStack(oilSand, 1, 1));
-		OreDictionary.registerOre("orePetroleum", new ItemStack(orePetroleum, 1, 2));
+		OreDictionary.registerOre("oreOilsands", new ItemStack(oilSand));
+		OreDictionary.registerOre("orePetroleum", new ItemStack(orePetroleum));
 
 
 		//OreDictionary.registerOre("dustCoal", new ItemStack(ItemIDs.coaldust.item));
@@ -130,8 +134,6 @@ public class TCBlocks {
 	}
 
 	public static void setHarvestLevels() {
-		orePetroleum.setHarvestLevel("pickaxe", 1);
-
 		Blocks.rail.setHarvestLevel("ItemStacked", 0);
 		Blocks.detector_rail.setHarvestLevel("ItemStacked", 0);
 		Blocks.golden_rail.setHarvestLevel("ItemStacked", 0);

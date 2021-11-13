@@ -1,6 +1,7 @@
 <!-- ## Blocks ## -->
 tile.block.oilsand.name=Oil Sands
 tile.block.petroleum.name=Petroleum
+tile.block.ballast.name=Ballast
 tile.block.dieselGenerator.name=Diesel Generator
 tile.block.windmill.name=Windmill
 tile.block.waterwheel.name=Water Wheel

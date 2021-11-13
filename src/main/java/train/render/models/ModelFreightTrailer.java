@@ -162,18 +162,18 @@ public class ModelFreightTrailer extends ModelBase {
 			}
 		}
 		if(cargo != 0) {
-    		box49.render();
-    		box23.render();
-    		box24.render();
-    		box20.render();
-    		box21.render();
-    		box18.render();
-    		box19.render();
-    		box16.render();
-    		box10.render();
-    		box11.render();
-    		box12.render();
-    		box13.render();
+    		box49.renderClean();
+    		box23.renderClean();
+    		box24.renderClean();
+    		box20.renderClean();
+    		box21.renderClean();
+    		box18.renderClean();
+    		box19.renderClean();
+    		box16.renderClean();
+    		box10.renderClean();
+    		box11.renderClean();
+    		box12.renderClean();
+    		box13.renderClean();
 		}
 
 		super.render(entity, f, f1, f2, f3, f4, f5);

@@ -214,36 +214,36 @@ public class ModelFlatCarWoodUS extends ModelBase {
 		}
 		if (cargo != 0) {
     		if(cargo<=9) {
-    			box19.render();
-    			box21.render();
-    			box27.render();
-    			box26.render();
+    			box19.renderClean();
+    			box21.renderClean();
+    			box27.renderClean();
+    			box26.renderClean();
 			}
     		else if(cargo<=18 && cargo>9) {
-    			box19.render();
-    			box20.render();
-    			box22.render();
-    			box26.render();
-    			box28.render();
-    			box29.render();
-    			box21.render();
-    			box27.render();
+    			box19.renderClean();
+    			box20.renderClean();
+    			box22.renderClean();
+    			box26.renderClean();
+    			box28.renderClean();
+    			box29.renderClean();
+    			box21.renderClean();
+    			box27.renderClean();
     		}
     		else {
-    			box19.render();
-    			box20.render();
-    			box22.render();
-    			box26.render();
-    			box27.render();
-    			box28.render();
-    			box29.render();
-    			box21.render();
-    			box30.render();
-    			box31.render();
-    			box32.render();
-    			box33.render();
-    			box34.render();
-    			box35.render();
+    			box19.renderClean();
+    			box20.renderClean();
+    			box22.renderClean();
+    			box26.renderClean();
+    			box27.renderClean();
+    			box28.renderClean();
+    			box29.renderClean();
+    			box21.renderClean();
+    			box30.renderClean();
+    			box31.renderClean();
+    			box32.renderClean();
+    			box33.renderClean();
+    			box34.renderClean();
+    			box35.renderClean();
     		}
 		}
 		super.render(entity, f, f1, f2, f3, f4, f5);

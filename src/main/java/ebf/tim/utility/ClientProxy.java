@@ -59,11 +59,11 @@ public class ClientProxy extends CommonProxy {
     /**enables pre-render of models*/
     public static boolean preRenderModels = false;
     /**the keybind for the lamp toggle*/
-    public static KeyBinding KeyLamp = new KeyBinding("Lamp Toggle", Keyboard.KEY_L, "Trains in Motion");
+    public static KeyBinding KeyLamp;
     /**the keybind for the horn/whistle*/
-    public static KeyBinding KeyHorn = new KeyBinding("Use Horn/Whistle", Keyboard.KEY_H, "Trains in Motion");
+    public static KeyBinding KeyHorn;
     /**the keybind for opening the inventory*/
-    public static KeyBinding KeyInventory = new KeyBinding("Open Train/rollingstock GUI",  Keyboard.KEY_R, "Trains in Motion");
+    public static KeyBinding KeyInventory;
     /**the model to use for the rail*/
     public static int railSkin = 3;
     /**toggles whether to show speed in km/h or mph*/
@@ -203,7 +203,11 @@ public class ClientProxy extends CommonProxy {
 
 
         //keybinds
+        KeyHorn = new KeyBinding("Use Horn/Whistle", Keyboard.KEY_H, "Trains in Motion");
+        ClientRegistry.registerKeyBinding(KeyHorn);
+        KeyLamp = new KeyBinding("Lamp Toggle", Keyboard.KEY_L, "Trains in Motion");
         ClientRegistry.registerKeyBinding(KeyLamp);
+        KeyInventory = new KeyBinding("Open Train/rollingstock GUI",  Keyboard.KEY_R, "Trains in Motion");
         ClientRegistry.registerKeyBinding(KeyInventory);
 
         if(DebugUtil.dev()) {

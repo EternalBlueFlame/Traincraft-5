@@ -4,6 +4,9 @@ import ebf.tim.utility.ClientProxy;
 import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
+import fexcraft.tmt.slim.Tessellator;
+import fexcraft.tmt.slim.TexturedPolygon;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
@@ -68,18 +71,50 @@ public class RollingStockModel extends ModelBase {
             }
         }
 
-        if (namedList != null) {
-            for (int i = 0; i < namedList.size(); i++) {
-                if (displayList.size() > i && GL11.glIsList(displayList.get(i))) {
+        if(namedList ==null){return;}
+        ModelRendererTurbo part;
+        for(int i = 0; i< namedList.size(); i++) {
+            //for animations to work we have to limit the displaylist cache to ONLY the geometry, and then
+            //    the position and offsets must be done manually every frame.
+            if (displayList.size() > i) {
+                part = namedList.get(i);
+                if (!part.showModel) {
+                    continue;
+                }
+                GL11.glPushMatrix();
+                if (part.ignoresLighting) {
+                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+                }
+                GL11.glTranslatef(part.rotationPointX * 0.0625F, part.rotationPointY * 0.0625F, part.rotationPointZ * 0.0625F);
+                GL11.glRotatef(part.rotateAngleY, 0.0F, 1.0F, 0.0F);
+                GL11.glRotatef(part.rotateAngleZ, 0.0F, 0.0F, 1.0F);
+                GL11.glRotatef(part.rotateAngleX, 1.0F, 0.0F, 0.0F);
+                if (GL11.glIsList(displayList.get(i))) {
                     GL11.glCallList(displayList.get(i));
-                } else if (namedList.get(i) != null) {
-                    displayList.add(GLAllocation.generateDisplayLists(1));
-                    GL11.glNewList(displayList.get(i), GL11.GL_COMPILE);
-                    GL11.glPushMatrix();
-                    namedList.get(i).render();
-                    GL11.glPopMatrix();
+                } else {
+                    int disp = GLAllocation.generateDisplayLists(1);
+                    displayList.set(i, disp);
+                    GL11.glNewList(disp, GL11.GL_COMPILE);
+                    for (TexturedPolygon poly : namedList.get(i).faces) {
+                        Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625F);
+                    }
                     GL11.glEndList();
                 }
+
+                GL11.glTranslatef(-part.rotationPointX * 0.0625F, -part.rotationPointY * 0.0625F, -part.rotationPointZ * 0.0625F);
+                if (part.ignoresLighting) {
+                    Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+                }
+                GL11.glPopMatrix();
+
+            } else if (namedList.get(i) != null) {
+                int disp = GLAllocation.generateDisplayLists(1);
+                displayList.add(disp);
+                GL11.glNewList(disp, GL11.GL_COMPILE);
+                for (TexturedPolygon poly : namedList.get(i).faces) {
+                    Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625F);
+                }
+                GL11.glEndList();
             }
         }
     }

@@ -5,7 +5,9 @@ import ebf.tim.utility.Vec6f;
 public class RailSimpleShape {
 
     private Vec6f start, center=new Vec6f(0,0,0,0,0,0), end;
+    //u is roll, v is yaw, w is width
     private int tieCount=4;
+    private boolean hardStart=false,hardEnd=false;
 
     public RailSimpleShape setSleeperCount(int s){
         tieCount=s;
@@ -19,11 +21,11 @@ public class RailSimpleShape {
     public RailSimpleShape setStart(float x, float y, float z){
         return setStart(x,y,z,0,0,0);
     }
-    public RailSimpleShape setStart(float x, float y, float z,float w){
-        return setStart(x,y,z,0,0,w);
+    public RailSimpleShape setStart(float x, float y, float z,float width){
+        return setStart(x,y,z,0,0,width);
     }
-    public RailSimpleShape setStart(float x, float y, float z,float u,float v,float w){
-        start=new Vec6f(x,y,z,u,v,w);
+    public RailSimpleShape setStart(float x, float y, float z,float roll,float yaw,float width){
+        start=new Vec6f(x,y,z,roll,yaw,width);
         return this;
     }
     public RailSimpleShape setStart(Vec6f s){
@@ -34,11 +36,11 @@ public class RailSimpleShape {
     public RailSimpleShape setCenter(float x, float y, float z){
         return setCenter(x,y,z,0,0,0);
     }
-    public RailSimpleShape setCenter(float x, float y, float z,float w){
-        return setCenter(x,y,z,0,0,w);
+    public RailSimpleShape setCenter(float x, float y, float z,float width){
+        return setCenter(x,y,z,0,0,width);
     }
-    public RailSimpleShape setCenter(float x, float y, float z,float u,float v,float w){
-        center=new Vec6f(x,y,z,u,v,w);
+    public RailSimpleShape setCenter(float x, float y, float z,float roll,float yaw,float width){
+        center=new Vec6f(x,y,z,roll,yaw,width);
         return this;
     }
     public RailSimpleShape setCenter(Vec6f c){
@@ -49,11 +51,11 @@ public class RailSimpleShape {
     public RailSimpleShape setEnd(float x, float y, float z){
         return setEnd(x,y,z,0,0,0);
     }
-    public RailSimpleShape setEnd(float x, float y, float z,float w){
-        return setEnd(x,y,z,0,0,w);
+    public RailSimpleShape setEnd(float x, float y, float z,float width){
+        return setEnd(x,y,z,0,0,width);
     }
-    public RailSimpleShape setEnd(float x, float y, float z,float u,float v,float w){
-        end=new Vec6f(x,y,z,u,v,w);
+    public RailSimpleShape setEnd(float x, float y, float z,float roll,float yaw,float width){
+        end=new Vec6f(x,y,z,roll,yaw,width);
         return this;
     }
     public RailSimpleShape setEnd(Vec6f e){
@@ -116,4 +118,31 @@ public class RailSimpleShape {
 
     private static Vec6f normalize(){return new Vec6f(0.5f,0,0.5f,0,0,0);}
 
+    public boolean isStartRotationForced() {
+        return hardStart;
+    }
+
+    public RailSimpleShape setForcedStartRotation(boolean hardStart) {
+        this.hardStart = hardStart;
+        return this;
+    }
+
+    public RailSimpleShape forceStartRotation() {
+        this.hardStart = true;
+        return this;
+    }
+
+    public boolean isEndRotationForced() {
+        return hardEnd;
+    }
+
+    public RailSimpleShape setForcedEndRotation(boolean hardEnd) {
+        this.hardEnd = hardEnd;
+        return this;
+    }
+
+    public RailSimpleShape forceEndRotation() {
+        this.hardEnd = true;
+        return this;
+    }
 }

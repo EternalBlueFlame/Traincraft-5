@@ -53,7 +53,7 @@ public class EntityLocoElectricBP4 extends EntityTrainCore {
         return TrainsInMotion.transportTypes.ELECTRIC.singleton();
     }
     @Override
-    public float weightKg(){return 133492f;}
+    public float weightKg(){return 11500f;}
 
     //Model stuff
     @Override
@@ -98,7 +98,7 @@ public class EntityLocoElectricBP4 extends EntityTrainCore {
     @Override
     public String transportFuelType(){return "electric";}
     @Override
-    public float transportMetricHorsePower(){return 1520;}
+    public float transportMetricHorsePower(){return 75;}
     @Override
     public float transportTopSpeed(){return 105;}
     @Override

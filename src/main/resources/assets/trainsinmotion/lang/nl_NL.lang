@@ -13,7 +13,7 @@ gui.lamp.false=Lamp staat uit.
 gui.horn=Gebruik toeter.
 gui.on=aan.
 gui.off=uit.
-gui.coupler.true=Koppelingen zijn gesloten.
+gui.coupler.true=Koppelingen zijn geopend.
 gui.coupler.false=Koppelingen zijn gesloten.
 gui.locked.true=Vergrendeld naar eigenaar.
 gui.locked.false=Ontgrendeld.
@@ -26,11 +26,11 @@ gui.buckets=Emmers.
 gui.unlink=Ontkoppel.
 gui.dropkey=Kopieer de eigenaarssleutel.
 gui.running.false=Locomotief is uitgeschakeld.
-gui.running.true=Locomotive is ingeschakeld.
+gui.running.true=Locomotief is ingeschakeld.
 gui.creative.false=Creative Modus uitgeschakeld.
 gui.creative.true=Creative Modus ingeschakeld.
 
-container.traincrafting=Train Crafting Table
+container.traincrafting=Treinwerkbank
 
 menu.item.steam=Stoom
 menu.item.diesel=Diesel
@@ -47,7 +47,7 @@ menu.item.weight=Gewicht
 menu.item.mhp=PK
 menu.item.seats=Stoelen
 menu.item.weight=Gewicht
-menu.item.isizeof=Inventory grootte van
+menu.item.isizeof=Inventaris grootte van
 menu.item.slots=Vakjes
 menu.item.fictional=Fictief
 menu.noties=Geen Dwarsliggers
@@ -64,7 +64,7 @@ item.TiM=Trains in Motion
 item.tab.timsquared.name=Tim Squared
 
 <!-- ## Countries ## -->
-menu.item.us=USA
+menu.item.us=Verenigde Staten
 menu.item.germany=Duitsland
 menu.item.japan=Japan
 menu.item.belgium=België
@@ -152,7 +152,7 @@ item.seats.luxury.name=Luxe Stoelen
 item.hydraulic.transmission.name=Hydraulische Transmissie
 item.pneumatic.transmission.name=Pneumatische transmissie
 item.transformer.name=Transformator
-item.transformer.hv.name=HV-Transformator
+item.transformer.hv.name=Hoogspannings-Transformator
 item.electric.controls.name=Elektrische Besturing
 item.engine.piston.name=Zuiger
 item.engine.cylinder.name=Cylinder
@@ -205,4 +205,4 @@ item.Pullman'sPalace.name=Pullman's Palace
 <!-- ## Rollingstock ## -->
 <!-- ## These are actually defined from the item name, so one name covers all areas ## -->
 item.pullmanspalace.name=Pullman's Palace
-item.vatlogcar.name=V.A.T Log Car
+item.vatlogcar.name=V.A.T Boomstammenwagon

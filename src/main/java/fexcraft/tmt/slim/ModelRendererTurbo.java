@@ -1302,6 +1302,14 @@ public class ModelRendererTurbo {
         render(0.0625F);
     }
 
+    @Deprecated
+    //this is a lazy fix that should be replaced with the hide/show part tags when the models using it get reworked.
+    public void renderClean(){
+        GL11.glPushMatrix();
+        render(0.0625F);
+        GL11.glPopMatrix();
+    }
+
     /**
      * Renders the shape.
      * @param scale the scale of the shape. Usually is 0.0625.

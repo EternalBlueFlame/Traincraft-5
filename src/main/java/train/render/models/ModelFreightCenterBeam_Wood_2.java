@@ -5,6 +5,7 @@ import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.entity.Entity;
+import org.lwjgl.opengl.GL11;
 import train.render.CustomModelRenderer;
 
 public class ModelFreightCenterBeam_Wood_2 extends ModelBase {
@@ -138,13 +139,13 @@ public class ModelFreightCenterBeam_Wood_2 extends ModelBase {
 			}
 		}
 		if(cargo != 0) {
-			//GL11.glPushMatrix();
+			GL11.glPushMatrix();
 			//GL11.glScalef(1, 0.0f+((Freight)entity).getAmmountOfCargo()*0.0194f, 1);
 			//GL11.glTranslatef(0, 0.0f+(((Freight)entity).getSizeInventory()-((Freight)entity).getAmmountOfCargo())*0.5f, 0);
 			//System.out.println(((Freight)entity).getSizeInventory()-((Freight)entity).getAmmountOfCargo());
     		box19.render();
     		box20.render();
-    		//GL11.glPopMatrix();
+    		GL11.glPopMatrix();
 		}
 
 		super.render(entity, f, f1, f2, f3, f4, f5);
