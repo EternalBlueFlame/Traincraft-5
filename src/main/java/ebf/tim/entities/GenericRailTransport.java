@@ -23,6 +23,7 @@ import ebf.tim.render.ParticleFX;
 import ebf.tim.render.TransportRenderData;
 import ebf.tim.utility.*;
 import fexcraft.tmt.slim.ModelBase;
+import fexcraft.tmt.slim.Vec3d;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.ILinkableCart;
@@ -1247,8 +1248,8 @@ public class GenericRailTransport extends EntityMinecart implements IEntityAddit
                                     motion[2]=Math.min(0,distance-frontBogie.motionZ);
                                 }
                             }
-                            this.frontBogie.minecartMove(this, motion[0], motion[2]);
-                            this.backBogie.minecartMove(this,motion[0], motion[2]);
+                            this.frontBogie.addVelocity(motion[0], 0, motion[2]);
+                            this.backBogie.addVelocity(motion[0], 0, motion[2]);
                         }
 
                     }
@@ -1393,44 +1394,41 @@ public class GenericRailTransport extends EntityMinecart implements IEntityAddit
      */
     public void manageLinks(GenericRailTransport linkedTransport, boolean front) {
 
-        if(getAccelerator()==0) {
-            //todo: Y U NO WORK
-            //distance
-            vectorCache[4][0]= (float)(this.posX - linkedTransport.posX);
-            vectorCache[4][2]= (float)(this.posZ - linkedTransport.posZ);
+        if(getAccelerator()==0 && front) {
 
-            //movement length
-            float norm = MathHelper.sqrt_double(vectorCache[4][0] * vectorCache[4][0] + vectorCache[4][2] * vectorCache[4][2]);
-            norm -=((this.getHitboxSize()[0]*0.5f)+(linkedTransport.getHitboxSize()[0]*0.5f));
-
-            //scale to just a little under half since we apply it to both entities every tick
-            norm*=0.99;
-
-
-            double radian = Math.PI/180d,x,z;
-            if(!getBoolean(boolValues.DERAILED)) {
-                radian*=rotationYaw;
-            } else {
+            //handle yaw changes for derail
+            if(getBoolean(boolValues.DERAILED)) {
                 if(frontLinkedID!=null && backLinkedID!=null){
-                    radian*=CommonUtil.atan2f(
+                    rotationYaw=CommonUtil.atan2degreesf(
                             worldObj.getEntityByID(frontLinkedID).posZ - worldObj.getEntityByID(backLinkedID).posZ,
                             worldObj.getEntityByID(frontLinkedID).posX - worldObj.getEntityByID(backLinkedID).posX);
                 } else if (frontLinkedID!=null){
-                    radian*=CommonUtil.atan2f(
+                    rotationYaw=CommonUtil.atan2degreesf(
                             worldObj.getEntityByID(frontLinkedID).posZ - posZ,
                             worldObj.getEntityByID(frontLinkedID).posX - posX);
-                } else{
-                    radian*=CommonUtil.atan2f(
+                } else if (backLinkedID!=null){
+                    rotationYaw=CommonUtil.atan2degreesf(
                             posZ - worldObj.getEntityByID(backLinkedID).posZ,
                             posX - worldObj.getEntityByID(backLinkedID).posX);
                 }
             }
 
-            x = ((front ? norm : -norm) * Math.cos(radian));
-            z = ((front ? norm : -norm) * Math.sin(radian));
+            //todo: some vec2 logic could optimize this a little.
+            //set the current position
+            Vec3d point = new Vec3d(posX,posY,posZ);
+            //now subtract the other entity's position
+            point.subtractVector(linkedTransport.posX, linkedTransport.posY, linkedTransport.posZ);
+            //now add the difference between the coupler offsets.
+            //this is done as other+this so we can get the angle at the hypotenuse of the right angle between the two
+            //which prevents phasing into eachother around corners.
+            point.add(CommonUtil.rotateDistance(
+                    (getOptimalDistance(linkedTransport)) + (linkedTransport.getOptimalDistance(this))
+                    ,0,front?rotationYaw:-rotationYaw));
 
-            frontBogie.addVelocity(x,0,z);
-            backBogie.addVelocity(x,0,z);
+            if(Math.abs(point.xCoord)+Math.abs(point.zCoord)>1) {
+                frontBogie.minecartMove(this, point.xCoord, point.zCoord);
+                backBogie.minecartMove(this, point.xCoord, point.zCoord);
+            }
         }
     }
 
@@ -2156,7 +2154,7 @@ public class GenericRailTransport extends EntityMinecart implements IEntityAddit
      * example:
      * return new float[]{x,y,z};
      * may not return null*/
-    public float[] getHitboxSize(){return new float[]{3,1.5f,.21f};}
+    public float[] getHitboxSize(){return new float[]{3,1.5f,0.21f};}
 
     /**defines if the transport is immune to explosions*/
     public boolean isReinforced(){return false;}

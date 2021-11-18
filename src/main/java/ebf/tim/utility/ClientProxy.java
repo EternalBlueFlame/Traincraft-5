@@ -170,7 +170,7 @@ public class ClientProxy extends CommonProxy {
                 "Pre-renders transport entity and item models during loading screen and stores them on GPU, Requires a lot of VRAM but makes the game run smoother, especially with NEI/JEI, Don't use if get the GL error 1285 (Out of memory)");
 
         disableCache = config.getBoolean("disableGLCache","Debugging and Fixes (Client only)", false,
-                "forces the render to skip model caching, this will cause significant lag, but is good for debugging, or if you get the GL error 1285 (Out of memory)");
+                "When true, forces the render to skip model caching, this will cause significant lag, but is good for debugging, or if you get the GL error 1285 (Out of memory)");
 
         ForceTextureBinding = config.getBoolean("ForceTextureBinding","Debugging and Fixes (Client only)", false,
                 "Forces textures to be bound, slows performance on some machines, speeds it up on others, and fixes a rare bug where the the texture does not get bound. So... This REALLY depends on your machine, see what works best for you.");

@@ -188,11 +188,9 @@ public class TrainsInMotion {
 
         if(event.getSide().isClient()) {
             //register the event handler
-            MinecraftForge.EVENT_BUS.register(ClientProxy.eventManager);
             FMLCommonHandler.instance().bus().register(ClientProxy.eventManager);
             fexcraft.tmt.slim.TextureManager.collectIngotColors();
         }
-        MinecraftForge.EVENT_BUS.register(CommonProxy.eventManagerServer);
         FMLCommonHandler.instance().bus().register(CommonProxy.eventManagerServer);
 
         //register GUI, model renders, Keybinds, client only blocks, and HUD

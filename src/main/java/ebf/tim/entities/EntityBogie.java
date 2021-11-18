@@ -7,7 +7,6 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.blocks.rails.BlockRailCore;
 import ebf.tim.utility.CommonUtil;
-import ebf.tim.utility.DebugUtil;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.carts.IRoutableCart;
@@ -16,14 +15,11 @@ import mods.railcraft.api.tracks.ITrackTile;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockRailBase;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 
 /**
@@ -63,7 +59,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
     private Block blockNext;
     double[] movementPath, retValue;
     float railmax;
-    double[] directionalVelocity;
+    double[] velDirection;
     /**normally this variable exists already in 1.7, this additional declaration of it is support for 1.8.9+*/
     public float yOffset=0.425f;
 
@@ -242,11 +238,11 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
         if(railmax!=0.4f){
             velocity=Math.min(velocity,railmax);
         }
-        directionalVelocity = new double[]{velocityX,velocityZ};
+        velDirection = new double[]{velocityX,velocityZ};
         railMetadata = block.getBasicRailMetadata(worldObj, this, floorX, floorY, floorZ);
         //actually move
         while (velocity>0) {
-            moveBogieVanilla(Math.min(0.35, velocity), floorX, floorZ);
+            moveBogieVanilla(Math.min(0.35, velocity), velDirection[0], velDirection[1], floorX, floorZ);
             velocity -= 0.35;
 
             //update the last used block to the one we just used, if it's actually different.
@@ -288,26 +284,36 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
     }
 
 
-    private void moveBogieVanilla(double currentMotion, int floorX, int floorZ){
+    private void moveBogieVanilla(double currentMotion, double directionX, double directionZ, int floorX, int floorZ){
         //figure out the current rail's direction
         railPathX = (martix[railMetadata][2][0]);
         railPathZ = (martix[railMetadata][2][1]);
         railPathSqrt = Math.sqrt(railPathX * railPathX + railPathZ * railPathZ);
 
-        if (motionX * railPathX + motionZ * railPathZ < 0.0D) {
+        motionSqrt = directionX * railPathX + directionZ * railPathZ;
+
+        if (motionSqrt < 0.0D) {
             railPathX = -railPathX;
             railPathZ = -railPathZ;
         }
 
-        motionSqrt = Math.sqrt(motionX * motionX + railPathZ * railPathZ);
+        motionSqrt = Math.sqrt(directionX * directionX + directionZ * directionZ);
+        if(motionSqrt>2.0D){
+            motionSqrt=2.0D;
+        }
 
+        //update direction for consecutive loop calls
+        velDirection[0]=railPathX==0.0D?0:motionSqrt * railPathX / railPathSqrt;
+        velDirection[1]=railPathZ==0.0D?0:motionSqrt * railPathZ / railPathSqrt;
 
+        //handle rotating normal velocity based on track path
+        motionSqrt = Math.sqrt(motionX * motionX + motionZ * motionZ);
         if (motionSqrt > 2.0D) {
             motionSqrt = 2.0D;
         }
+        motionX=railPathX==0.0D?0:motionSqrt * railPathX / railPathSqrt;
+        motionZ=railPathZ==0.0D?0:motionSqrt * railPathZ / railPathSqrt;
 
-        retValue = new double[]{railPathX==0.0D?0:motionSqrt * (railPathX / railPathSqrt),
-                railPathZ==0.0D?0:motionSqrt * (railPathZ / railPathSqrt)};
 
         movementPath = new double[]{railPathX==0.0D?0:currentMotion * (railPathX / railPathSqrt),0,
                 railPathZ==0.0D?0:currentMotion * (railPathZ / railPathSqrt)};
@@ -335,8 +341,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
         this.posZ = (railPathZ2 + railPathZ * railPathDirection)+movementPath[2];
         //endMagic();
 
-        motionX=retValue[0];
-        motionZ=retValue[1];
     }
 
 

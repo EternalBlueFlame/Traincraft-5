@@ -20,9 +20,7 @@ public class RenderZeppelins extends Render {
 	private static final ResourceLocation oneBalloon = new ResourceLocation(Info.resourceLocation, Info.zeppelinTexturePrefix + "zeppelin_one_balloon.png");
 	private static final ResourceLocation twoBalloon = new ResourceLocation(Info.resourceLocation, Info.zeppelinTexturePrefix + "zeppelin_two_balloons.png");
 
-	public RenderZeppelins() {
-		shadowSize = 0.5F;
-	}
+	public RenderZeppelins() { }
 
 	private void func_157_a(AbstractZeppelin entityzepplin, double d, double d1, double d2, float f, float f1) {
 		GL11.glPushMatrix();

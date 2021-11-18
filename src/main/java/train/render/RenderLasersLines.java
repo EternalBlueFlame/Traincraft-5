@@ -14,7 +14,6 @@ public class RenderLasersLines extends Render {
 	private ModelRenderer box;
 
 	public RenderLasersLines() {
-		this.shadowSize = 0.5F;
 		box = new ModelRenderer(model, 0, 0);
 		box.addBox(0, -0.5F, -0.5F, 16, 1, 1);
 		box.rotationPointX = 0;

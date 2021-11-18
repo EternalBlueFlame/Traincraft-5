@@ -50,6 +50,7 @@ public class EventManager {
      *
      * @param event the event of a key being pressed on client.
      */
+    @SideOnly(Side.CLIENT)
     @SubscribeEvent
     public void onClientKeyPress(InputEvent.KeyInputEvent event) {
         EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;

@@ -39,15 +39,27 @@ public class RollingStockModel extends ModelBase {
                 namedList.addAll(list.namedList);
             }
         }
+        //this can happen somehow
+        if(groups==null){
+            return;
+        }
 
 
         if(ClientProxy.disableCache) {
             for(TurboList list :groups) {
-                list.render(list.boxList);
+                if(list!=null) {
+                    list.render(list.boxList);
+                }
             }
-        } else if(staticPartMap.get(this.getClass().getName())==null) {
+        } else if(staticPartMap.get(this.getClass().getName())==null || localGLID==null) {
+            if(localGLID==null && staticPartMap.get(this.getClass().getName())!=null){
+                localGLID = staticPartMap.get(this.getClass().getName());
+                return;
+            }
+
             staticPartMap.put(this.getClass().getName(), GLAllocation.generateDisplayLists(1));
             GL11.glNewList(staticPartMap.get(this.getClass().getName()), GL11.GL_COMPILE);
+            localGLID = staticPartMap.get(this.getClass().getName());
             for(TurboList list :groups) {
                 list.render(list.boxList);
             }
@@ -58,12 +70,12 @@ public class RollingStockModel extends ModelBase {
                 }
             }
         } else {
-            Integer m = staticPartMap.get(this.getClass().getName());
-            if(GL11.glIsList(m)) {
-                GL11.glCallList(m);
+            if(GL11.glIsList(this.localGLID)) {
+                GL11.glCallList(this.localGLID);
             } else {
                 staticPartMap.put(this.getClass().getName(), GLAllocation.generateDisplayLists(1));
                 GL11.glNewList(staticPartMap.get(this.getClass().getName()), GL11.GL_COMPILE);
+                localGLID=staticPartMap.get(this.getClass().getName());
                 for(TurboList list :groups) {
                     list.render(list.boxList);
                 }
@@ -72,60 +84,53 @@ public class RollingStockModel extends ModelBase {
         }
 
         if(namedList ==null){return;}
-        ModelRendererTurbo part;
-        for(int i = 0; i< namedList.size(); i++) {
+        for(ModelRendererTurbo part : namedList) {
             //for animations to work we have to limit the displaylist cache to ONLY the geometry, and then
             //    the position and offsets must be done manually every frame.
-            if (displayList.size() > i) {
-                part = namedList.get(i);
-                if (!part.showModel) {
-                    continue;
-                }
-                GL11.glPushMatrix();
-                if (part.ignoresLighting) {
-                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
-                }
-                GL11.glTranslatef(part.rotationPointX * 0.0625F, part.rotationPointY * 0.0625F, part.rotationPointZ * 0.0625F);
-                GL11.glRotatef(part.rotateAngleY, 0.0F, 1.0F, 0.0F);
-                GL11.glRotatef(part.rotateAngleZ, 0.0F, 0.0F, 1.0F);
-                GL11.glRotatef(part.rotateAngleX, 1.0F, 0.0F, 0.0F);
-                if (GL11.glIsList(displayList.get(i))) {
-                    GL11.glCallList(displayList.get(i));
-                } else {
-                    int disp = GLAllocation.generateDisplayLists(1);
-                    displayList.set(i, disp);
-                    GL11.glNewList(disp, GL11.GL_COMPILE);
-                    for (TexturedPolygon poly : namedList.get(i).faces) {
-                        Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625F);
-                    }
-                    GL11.glEndList();
-                }
-
-                GL11.glTranslatef(-part.rotationPointX * 0.0625F, -part.rotationPointY * 0.0625F, -part.rotationPointZ * 0.0625F);
-                if (part.ignoresLighting) {
-                    Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
-                }
-                GL11.glPopMatrix();
-
-            } else if (namedList.get(i) != null) {
-                int disp = GLAllocation.generateDisplayLists(1);
-                displayList.add(disp);
-                GL11.glNewList(disp, GL11.GL_COMPILE);
-                for (TexturedPolygon poly : namedList.get(i).faces) {
+            if (!part.showModel) {
+                continue;
+            }
+            GL11.glPushMatrix();
+            if (part.ignoresLighting) {
+                Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+            }
+            GL11.glTranslatef(part.rotationPointX * 0.0625F, part.rotationPointY * 0.0625F, part.rotationPointZ * 0.0625F);
+            GL11.glRotatef(part.rotateAngleY, 0.0F, 1.0F, 0.0F);
+            GL11.glRotatef(part.rotateAngleZ, 0.0F, 0.0F, 1.0F);
+            GL11.glRotatef(part.rotateAngleX, 1.0F, 0.0F, 0.0F);
+            if (part.glID!=null && GL11.glIsList(part.glID)) {
+                GL11.glCallList(part.glID);
+            } else {
+                part.glID = GLAllocation.generateDisplayLists(1);
+                GL11.glNewList(part.glID, GL11.GL_COMPILE);
+                for (TexturedPolygon poly : part.faces) {
                     Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625F);
                 }
                 GL11.glEndList();
             }
+
+            GL11.glTranslatef(-part.rotationPointX * 0.0625F, -part.rotationPointY * 0.0625F, -part.rotationPointZ * 0.0625F);
+            if (part.ignoresLighting) {
+                Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+            }
+            GL11.glPopMatrix();
+
+
         }
     }
 
     @Override
     public List<ModelRendererTurbo> getnamedParts(){
-        LinkedList<ModelRendererTurbo> turboList = new LinkedList<>();
-        for(TurboList g: groups){
-            turboList.addAll(g.getnamedParts());
+        if(init){
+            for(TurboList list :groups) {
+                list.initAllParts();
+            }
+            //for the named list, we sort those into this class to avoid subclassing errors with the animator.
+            for(TurboList list :groups) {
+                namedList.addAll(list.namedList);
+            }
         }
-        return turboList;
+        return namedList;
     }
     
 }

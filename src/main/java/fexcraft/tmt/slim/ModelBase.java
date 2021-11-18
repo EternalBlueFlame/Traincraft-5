@@ -33,6 +33,7 @@ public class ModelBase extends ArrayList<ModelRendererTurbo> {
 	public List<Integer> displayList=new ArrayList<>();
 
 	public static Map<String,Integer> staticPartMap = new HashMap<>();
+	public Integer localGLID = null;
 
 	public void render(){
 		if(init){
@@ -41,30 +42,22 @@ public class ModelBase extends ArrayList<ModelRendererTurbo> {
 
 		if(ClientProxy.disableCache) {
 			render(boxList);
-		} else if(staticPartMap.get(this.getClass().getName())==null) {
-			int disp=GLAllocation.generateDisplayLists(1);
-			staticPartMap.put(this.getClass().getName(), disp);
-			GL11.glNewList(disp, GL11.GL_COMPILE);
+		} else if(localGLID!=null && GL11.glIsList(localGLID)) {
+			GL11.glCallList(localGLID);
+		} else if(staticPartMap.get(this.getClass().getName())==null || !GL11.glIsList(staticPartMap.get(this.getClass().getName()))) {
+			localGLID=GLAllocation.generateDisplayLists(1);
+			staticPartMap.put(this.getClass().getName(), localGLID);
+			GL11.glNewList(localGLID, GL11.GL_COMPILE);
 			render(boxList);
 			GL11.glEndList();
 			if(!ClientProxy.EnableAnimations) {
 				boxList = null;
 			}
 		} else {
-			//TODO: NOTE: find all instances of this,check if the entry exists before rendering, if not, make it generate a new one.
-			if(GL11.glIsList(staticPartMap.get(this.getClass().getName()))) {
-				GL11.glCallList(staticPartMap.get(this.getClass().getName()));
-			} else {
-				int disp=GLAllocation.generateDisplayLists(1);
-				staticPartMap.put(this.getClass().getName(), disp);
-				GL11.glNewList(disp, GL11.GL_COMPILE);
-				render(boxList);
-				GL11.glEndList();
-				if(!ClientProxy.EnableAnimations) {
-					boxList = null;
-				}
-			}
+			localGLID=staticPartMap.get(this.getClass().getName());
+			GL11.glCallList(localGLID);
 		}
+
 
 		if(namedList ==null){return;}
 		ModelRendererTurbo part;

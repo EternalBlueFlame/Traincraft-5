@@ -42,6 +42,7 @@ public class ModelRendererTurbo {
     public boolean ignoresLighting=false;
     public String boxName = null;
     public boolean animated=false;
+    public Integer glID=null;
 
     public static final int MR_FRONT = 0, MR_BACK = 1, MR_LEFT = 2, MR_RIGHT = 3, MR_TOP = 4, MR_BOTTOM = 5;
     public static final float pi = (float)Math.PI;

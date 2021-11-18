@@ -12,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
 import train.blocks.bench.GuiTrainCraftingBlock;
 import train.blocks.bench.TileTrainWbench;
 import train.blocks.distil.GuiDistil;
@@ -24,7 +23,7 @@ import train.blocks.hearth.TileEntityOpenHearthFurnace;
 import train.blocks.lantern.GuiLantern;
 import train.blocks.lantern.TileLantern;
 import train.core.handlers.ClientTickHandler;
-import train.core.handlers.TCKeyHandler;
+import train.core.handlers.TCInputHandler;
 import train.core.helpers.JLayerHook;
 import train.entity.gui.GuiJukebox;
 import train.entity.gui.GuiZepp;
@@ -134,7 +133,7 @@ public class ClientProxy extends CommonProxy {
 	}
 	@Override
 	public void registerKeyBindingHandler() {
-		FMLCommonHandler.instance().bus().register(new TCKeyHandler());
+		FMLCommonHandler.instance().bus().register(new TCInputHandler());
 	}
 	
 	@Override

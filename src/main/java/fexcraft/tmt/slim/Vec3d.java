@@ -26,6 +26,11 @@ public class Vec3d extends Vec3 {
         return new Vec3d(xCoord-vec2.xCoord,yCoord-vec2.yCoord,zCoord-vec2.zCoord);
     }
 
+    public Vec3d subtractVector(double x, double y, double z){
+        xCoord-=x;yCoord-=y;zCoord-=z;
+        return this;
+    }
+
     public Vec3d crossProduct(double value){
         return new Vec3d(xCoord*value,yCoord*value,zCoord*value);
     }

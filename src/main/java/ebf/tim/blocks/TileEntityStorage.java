@@ -445,12 +445,15 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack itemStack) {
         switch (storageType){
-            //to do prevent putting items in output (taken care of elsewhere, left here as a note)
+            //todo: prevent putting items in output (taken care of elsewhere, left here as a note)
             case 0:{
                 return true;
             }
             case 1:{
-                if(slot==0){return OreDictionary.getOres("ingot").contains(itemStack);}
+                if(slot==0){
+                    return CommonUtil.oredictMatch(itemStack, "ingot") ||
+                            itemStack.getItem() == Items.blaze_rod;
+                }
                 if(slot==1||slot==2){
                     //todo: if block.modid==chisel return false;
                     return Block.getBlockFromItem(itemStack.getItem())!=null && Block.getBlockFromItem(itemStack.getItem()).isOpaqueCube();
