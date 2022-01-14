@@ -111,6 +111,7 @@ public class Traincraft {
 		/* Register Items, Blocks, ... */
 		tcLog.info("Initialize Blocks, Items, ...");
 		tcTab = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft");
+        tcRSTab = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Rolling Stock");
 		trainArmor = proxy.addArmor("armor");
 		trainCloth = proxy.addArmor("Paintable");
 		trainCompositeSuit = proxy.addArmor("CompositeSuit");
