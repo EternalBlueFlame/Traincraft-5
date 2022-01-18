@@ -34,7 +34,7 @@ public class BlockSignal extends BlockContainer {
 		super(Material.circuits);
 		this.setLightLevel(1.0F);
 		setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 2.6F, 0.8F);
-		setCreativeTab(Traincraft.tcTab);
+		setCreativeTab(Traincraft.tcTabTrack);
 	}
 
 	@Override

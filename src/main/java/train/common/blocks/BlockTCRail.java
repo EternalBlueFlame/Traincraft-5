@@ -26,7 +26,7 @@ public class BlockTCRail extends Block {
 
 	public BlockTCRail() {
 		super(Material.iron);
-		setCreativeTab(Traincraft.tcTab);
+		setCreativeTab(Traincraft.tcTabTrack);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
 	}
 
