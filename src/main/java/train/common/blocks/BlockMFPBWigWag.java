@@ -21,7 +21,7 @@ import train.common.tile.TileMFPBWigWag;
 import java.util.List;
 import java.util.Random;
 
-public class BlockMFPBWigWag extends Block {
+/*public class BlockMFPBWigWag extends Block {
 	private IIcon texture;
 
 	public BlockMFPBWigWag() {
@@ -65,7 +65,8 @@ public class BlockMFPBWigWag extends Block {
 	/**
 	 * A randomly called display update to be able to add particles or other items for display
 	 */
-	@Override
+	/*
+     @Override
 	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
 
 	}
