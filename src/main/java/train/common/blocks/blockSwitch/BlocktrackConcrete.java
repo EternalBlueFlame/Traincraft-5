@@ -22,7 +22,7 @@ public class BlocktrackConcrete extends BlockContainer {
 
     public BlocktrackConcrete() {
         super(Material.wood);
-        setCreativeTab(Traincraft.tcTab);
+        setCreativeTab(Traincraft.tcTabTrack);
     }
 
     @Override

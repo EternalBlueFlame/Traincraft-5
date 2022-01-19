@@ -28,7 +28,7 @@ public class BlockoverheadWire extends Block {
 
     public BlockoverheadWire() {
         super(Material.rock);
-        setCreativeTab(Traincraft.tcTab);
+        setCreativeTab(Traincraft.tcTabTrack);
         this.setTickRandomly(true);
         //this.setBlockBounds(0.5F , 0.0F, 0.5F , 0.5F ,  2.0F, 0.5F);
     }
