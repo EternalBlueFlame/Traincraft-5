@@ -114,9 +114,9 @@ public class Traincraft {
 		/* Register Items, Blocks, ... */
 		tcLog.info("Initialize Blocks, Items, ...");
 		tcTab = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Core");
-        tcTabTrack = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Track")
-        tcTabRS = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Rolling Stock");
-        tcTabMaterials = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Materials");
+        tcTabTrack = new CreativeTabRail(CreativeTabs.getNextID(), "Traincraft Track")
+        tcTabRS = new CreativeTabRS(CreativeTabs.getNextID(), "Traincraft Rolling Stock");
+        tcTabMaterials = new CreativeTabMT(CreativeTabs.getNextID(), "Traincraft Materials");
 		trainArmor = proxy.addArmor("armor");
 		trainCloth = proxy.addArmor("Paintable");
 		trainCompositeSuit = proxy.addArmor("CompositeSuit");
