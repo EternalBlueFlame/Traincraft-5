@@ -19,7 +19,7 @@ public class ItemBolt extends Item {
     public ItemBolt() {
         super();
         maxStackSize = 64;
-        setCreativeTab(Traincraft.tcTab);
+        setCreativeTab(Traincraft.tcTabMaterials);
     }
 
 

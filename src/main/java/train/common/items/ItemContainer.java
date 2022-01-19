@@ -17,7 +17,7 @@ public class ItemContainer extends ItemPart {
 	public ItemContainer(String itemName){
 		super(itemName);
 		this.setMaxStackSize(64);
-		this.setCreativeTab(Traincraft.tcTab);
+		this.setCreativeTab(Traincraft.tcTabMaterials);
 	}
 
 	@Override

@@ -12,7 +12,7 @@ public class ItemWaterTankBuckets extends ItemBucket { // implements IBucketHand
 	public ItemWaterTankBuckets(Block block, int icon) {
 		super(block);
 		this.maxStackSize = 16;
-		setCreativeTab(Traincraft.tcTab);
+		setCreativeTab(Traincraft.tcTabMaterials);
 	}
 
 	public boolean canBeStoredInToolbox(ItemStack itemstack) {

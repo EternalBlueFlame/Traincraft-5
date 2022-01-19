@@ -89,6 +89,7 @@ public class Traincraft {
 	public static CreativeTabs tcTab;
     public static CreativeTabs tcTabTrack;
     public static CreativeTabs tcTabRS;
+    public static CreativeTabs tcTabMaterials;
 
 	public ArmorMaterial armor = EnumHelper.addArmorMaterial("Armor", 5, new int[] { 1, 2, 2, 1 }, 25);
 	public ArmorMaterial armorCloth = EnumHelper.addArmorMaterial("TCcloth", 5, new int[] {1, 2, 2, 1}, 25);
@@ -115,6 +116,7 @@ public class Traincraft {
 		tcTab = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Items");
         tcTabTrack = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Track")
         tcTabRS = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Rolling Stock");
+        tcTabMaterials = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Materials");
 		trainArmor = proxy.addArmor("armor");
 		trainCloth = proxy.addArmor("Paintable");
 		trainCompositeSuit = proxy.addArmor("CompositeSuit");
