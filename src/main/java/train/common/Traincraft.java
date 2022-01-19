@@ -131,7 +131,7 @@ public class Traincraft {
 		AchievementHandler.load();
 		AchievementPage.registerAchievementPage(AchievementHandler.tmPage);
 		GameRegistry.registerWorldGenerator(worldGen = new WorldGenWorld(),5);
-		
+		//Test Change. Chicken is Good
 		//Retrogen Handling
 		RetrogenHandler retroGen = new RetrogenHandler();
 		MinecraftForge.EVENT_BUS.register(retroGen);
