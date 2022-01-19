@@ -113,7 +113,7 @@ public class Traincraft {
 
 		/* Register Items, Blocks, ... */
 		tcLog.info("Initialize Blocks, Items, ...");
-		tcTab = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Items");
+		tcTab = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Core");
         tcTabTrack = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Track")
         tcTabRS = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Rolling Stock");
         tcTabMaterials = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Materials");
