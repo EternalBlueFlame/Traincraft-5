@@ -37,9 +37,9 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 		distilBurnTime = 0;
 		currentItemBurnTime = 0;
 		distilCookTime = 0;
-		cookDuration = 200;//default is 200
+		cookDuration = 400;//default is 200
 		random = new Random();
-		this.maxTank = 5000;
+		this.maxTank = 30000;
 		this.theTank = LiquidManager.getInstance().new FilteredTank(maxTank, LiquidManager.getInstance().dieselFilter(), 1);
 	}
 
