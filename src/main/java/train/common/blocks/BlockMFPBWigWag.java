@@ -1,4 +1,9 @@
 package train.common.blocks;
+/*
+*       Please Read! Important!
+*       Disabled by request
+*       Please don't remove my disabling!
+*/
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
@@ -21,7 +26,7 @@ import train.common.tile.TileMFPBWigWag;
 import java.util.List;
 import java.util.Random;
 
-/*public class BlockMFPBWigWag extends Block {
+public class BlockMFPBWigWag extends Block {
 	private IIcon texture;
 
 	public BlockMFPBWigWag() {
@@ -65,7 +70,7 @@ import java.util.Random;
 	/**
 	 * A randomly called display update to be able to add particles or other items for display
 	 */
-	/*
+	
      @Override
 	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
 
