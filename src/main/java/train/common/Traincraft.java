@@ -24,9 +24,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import train.common.api.LiquidManager;
 import train.common.blocks.TCBlocks;
-import train.common.core.CommonProxy;
-import train.common.core.CreativeTabTraincraft;
-import train.common.core.TrainModCore;
+import train.common.core.*;
 import train.common.core.handlers.*;
 import train.common.generation.ComponentVillageTrainstation;
 import train.common.generation.WorldGenWorld;
@@ -114,7 +112,7 @@ public class Traincraft {
 		/* Register Items, Blocks, ... */
 		tcLog.info("Initialize Blocks, Items, ...");
 		tcTab = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft Core");
-        tcTabTrack = new CreativeTabRail(CreativeTabs.getNextID(), "Traincraft Track")
+        tcTabTrack = new CreativeTabRail(CreativeTabs.getNextID(), "Traincraft Track");
         tcTabRS = new CreativeTabRS(CreativeTabs.getNextID(), "Traincraft Rolling Stock");
         tcTabMaterials = new CreativeTabMT(CreativeTabs.getNextID(), "Traincraft Materials");
 		trainArmor = proxy.addArmor("armor");

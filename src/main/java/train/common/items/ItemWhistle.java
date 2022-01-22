@@ -30,9 +30,7 @@ public class ItemWhistle extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-        par3List.add("\u00a77" + EnumChatFormatting.GREEN + "Right click to whistle!
-        
-        Why Does this exsist? IDK~ Glacierpark19, Dev, TCCE 4.2+");
+        par3List.add("\u00a77" + EnumChatFormatting.GREEN + "Right click to whistle!");
     }
 
     @Override
