@@ -18,7 +18,7 @@ public class ItemWrench extends ItemPart implements buildcraft.api.tools.IToolWr
 	public ItemWrench() {
 		super(ItemIDs.composite_wrench.iconName);
 		maxStackSize = 1;
-		setCreativeTab(Traincraft.tcTabMaterials);
+		setCreativeTab(Traincraft.tcTab);
 	}
 
 	@Override

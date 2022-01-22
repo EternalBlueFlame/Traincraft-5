@@ -18,7 +18,7 @@ public class BlockBridgePillar extends Block implements ITileEntityProvider {
 
 	public BlockBridgePillar() {
 		super(Material.wood);
-		setCreativeTab(Traincraft.tcTabTrack);
+		setCreativeTab(Traincraft.tcTab);
 		//this.setTickRandomly(true);
 		//this.setBlockBounds(0.5F , 0.0F, 0.5F , 0.5F ,  2.0F, 0.5F);
 	}

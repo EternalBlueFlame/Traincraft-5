@@ -30,7 +30,7 @@ public class BlockStopper extends BlockContainer {
 
 	public BlockStopper() {
 		super(Material.iron);
-		setCreativeTab(Traincraft.tcTabTrack);
+		setCreativeTab(Traincraft.tcTab);
 	}
 
 	@Override

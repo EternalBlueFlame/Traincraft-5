@@ -18,7 +18,7 @@ public class ItemPart extends Item{
     public ItemPart(String iconName){
         this.iconName = iconName;
         this.setMaxStackSize(64);
-        this.setCreativeTab(Traincraft.tcTabMaterials);
+        this.setCreativeTab(Traincraft.tcTab);
     }
 
     public ItemPart overridePath(String newFolder){
