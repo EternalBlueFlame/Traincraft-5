@@ -20,7 +20,7 @@ public class CreativeTabMT extends CreativeTabs {
 
 	@Override
 	public ItemStack getIconItemStack() {
-		return new ItemStack(ItemIDs.Bolt.item);
+		return new ItemStack(ItemIDs.minecartLocoBR80_DB.item);
 	}
 
 	@Override
@@ -29,5 +29,5 @@ public class CreativeTabMT extends CreativeTabs {
 	}
 
 	@Override
-	public Item getTabIconItem(){return ItemIDs.Bolt.item;}
+	public Item getTabIconItem(){return ItemIDs.minecartLocoBR80_DB.item;}
 }
