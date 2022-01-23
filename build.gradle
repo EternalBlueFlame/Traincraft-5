@@ -28,7 +28,7 @@ configFile.withReader {
 }
 
 
-version = config.modVersion.toString()
+version = 4.3
 group= "src.train" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Traincraft"
 
