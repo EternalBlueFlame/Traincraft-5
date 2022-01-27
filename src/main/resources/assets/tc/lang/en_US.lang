@@ -398,7 +398,7 @@ item.tc:minecartFOLM1B.name=FOL-M1B Unit
 item.tc:minecartLocoBR07.name=BR Class 07 Shunter
 item.tc:minecartLocoBR04.name=BR Class 04 Shunter
 item.tc:minecartLocoSM42.name= PKP SM42
-item.tc:minecartLocoWWCPGP7.name=WWCP GP7 High Hood
+
 item.tc:minecartLocoC11.name=JNR C11
 item.tc:minecartPSCenterDiner.name=Pullman Standard Center-Kitchen Dining Car
 item.tc:minecartPSAnotherDiner.name=Pullman Standard Center-Kitchen Dining Car 2
@@ -467,7 +467,7 @@ item.tc:minecartEF1B.name=GE-MILW EF-1B
 item.tc:minecartEP1A.name=GE-MILW EP-1A
 item.tc:minecartSD40dash2.name=EMD SD40-2
 item.tc:minecartSD9.name=EMD SD9
-item.tc:minecartWWCP40FootBox.name=WWCP 40' Boxcar
+
 item.tc:minecartHuskyStackWellcar.name=53' Husky-Stack Wellcar
 item.tc:minecartU23B.name=GE U23B
 item.tc:minecartU18B.name=GE U18B
@@ -862,7 +862,7 @@ entity.tc.FOL-M1B.name=FOL-M1B
 entity.tc.BR07.name=BR Class 07 Shunter
 entity.tc.BR07.name=BR Class 04 Shunter
 entity.tc.Loco SM42.name=PKP SM42
-entity.tc.Loco Diesel WWCP GP7.name=WWCP GP7 High Hood
+
 entity.tc.Loco Steam C11.name=JNR C11
 entity.tc.CD814 Driving Motor.name=CD814 Driving Motor
 entity.tc.CD014 Trailer.name=CD014 Trailer
@@ -931,7 +931,7 @@ entity.tc.EF1B.name=GE MILW EF-1B
 entity.tc.EP1A.name=GE MILW EP-1A
 entity.tc.SD9.name=EMD SD9
 entity.tc.SD40-2.name=EMD SD40-2
-entity.tc.WWCP 40 Foot Boxcar.name=WWCP 40' Boxcar
+
 entity.tc.HuskyStackWellcar.name=53' Husky-Stack Wellcar
 entity.tc.U23B.name=GE U23B
 entity.tc.U18B.name=GE U18B

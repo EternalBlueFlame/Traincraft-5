@@ -342,7 +342,7 @@ public enum ItemIDs {
 	minecartLocoSW8("ItemRollingStock", "train_sw8", 4),
 	minecartFOLM1B("ItemRollingStock", "folm1b", 4),
 	minecartLocoSM42("ItemRollingStock", "train_sm42", 4),
-	minecartLocoWWCPGP7("ItemRollingStock", "train_WWCPGP7", 4),
+	
 	minecartLocoGE44Ton("ItemRollingStock", "44-tonner_icon", 4),
 	minecartF7A("ItemRollingStock", "f7a", 5),
 	minecartF7B("ItemRollingStock", "f7b", 5),
@@ -478,7 +478,7 @@ public enum ItemIDs {
 	minecart20600DOT111("ItemRollingStock", "20600DOT", 5),
 	minecart29080DOT111("ItemRollingStock", "29080DOT", 6),
 	minecartLightCrane("ItemRollingStock", "LightCrane_Icon", 3),
-	minecartWWCP40FootBox("ItemRollingStock", "40fticon", 3),
+	
 	//minecartHuskyStackWellcar("ItemRollingStock", "huskystack", 5),
 	minecarthicube60foot("ItemRollingStock", "hicube60", 5),
 	minecartBNSFGon("ItemRollingStock", "BNSFGondola", 3),

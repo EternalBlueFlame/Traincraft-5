@@ -133,7 +133,7 @@ public enum EnumSounds {
 	DieselF7B(EntityLocoDieselBapF7B.class, "Silence", 1F, "EMD_16_567B_Notch8", 0.45F, 15, "EMD_16_567B_Idle", 0.75F, 3, true),
 	DieselFOLM1B(EntityLocoDieselFOLM1B.class, "Silence", 0.0F,"FM_38D_6_Notch8", 0.65F, 40, "FM_38D_6_Idle", 0.65F, 40, false),
 	DieselGP7(EntityLocoDieselBapGP7.class, "nathan_m5", 1F, "EMD_16_567B_Notch8", 0.9F, 8, "EMD_16_567B_Idle", 0.7F, 50, false),
-	DieselGP7wccp(EntityLocoDieselWWCPGP7.class, "gp40_2_horn", 1F, "EMD_16_567B_Notch8", 0.9F, 8, "EMD_16_567B_Idle", 0.7F, 50, false),
+	
 	DieselGP7b(EntityLocoDieselBapGP7b.class, "leslie_a200", 1F, "EMD_16_567B_Notch8", 0.9F, 8, "EMD_16_567B_Idle", 0.7F, 50, false),
 	DieselGP7u(EntityLocoDieselBapGP7u.class, "nathan_k3la_2", 1F, "EMD_16_567B_Notch8", 0.9F, 8, "EMD_16_567B_Idle", 0.7F, 50, false),
 	DieselGP9(EntityLocoDieselBapGP9.class, "nathan_p5", 1F, "EMD_16_567C_Notch8", 0.9F, 8, "EMD_16_567C_Idle", 0.7F, 50, false),
