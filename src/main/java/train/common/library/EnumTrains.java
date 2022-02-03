@@ -176,6 +176,7 @@ public enum EnumTrains {
 	tender_MILW("Tender MILW",EntityTenderMILW.class, ItemIDs.minecartMILWTender.item,"tender",0,0,1.5,0,0,0,0,0,16000,null,18,0,"Water capacity: 16000mb"),
 
 	/** Diesel */
+	locoDieselKOF_III("Loco Diesel KOF DB",EntityLocoDieselKof_DB.class,ItemIDs.minecartKof_DB.item, "diesel",750,45,0,60,0,170,0.66,0.96,5000,TraincraftUtil.getBytesFromColors(new String[] {"Red","Green","Yellow","Black","Blue"}),17,-1.6),
 	locoDieselKOF("Loco Diesel KOF DB",EntityLocoDieselKof_DB.class,ItemIDs.minecartKof_DB.item, "diesel",750,45,0,60,0,170,0.66,0.96,5000,TraincraftUtil.getBytesFromColors(new String[] {"Red","Green","Yellow","Black","Blue"}),17,-1.6),
 	locoDieselGP40("Loco Diesel CD742", EntityLocoDieselCD742.class,  ItemIDs.minecartCD742.item, "diesel", 1727, 70,
 			0, 50, 0, 250, 0.8, 0.966, 10000, TraincraftUtil.getBytesFromColors(new String[] { "Yellow", "White", "Blue", "Orange", "LightBlue" }), 15, -2.5),
@@ -438,7 +439,7 @@ public enum EnumTrains {
 	Class321Motor("Class321Motor", EntityPassengerClass321Panto.class, ItemIDs.minecartClass321Panto.item, "passenger", 0, 0, 3,0 , 0, 0, 0,0,0, TraincraftUtil.getBytesFromColors(new String[] {"Purple", "Grey", "White"}), 0, 0),
 	Class321Coach("Class321Coach", EntityPassengerClass321Coach.class, ItemIDs.minecartClass321Coach.item, "passenger", 0, 0, 3,0 , 0, 0, 0,0,0,TraincraftUtil.getBytesFromColors(new String[] {"Purple", "Grey", "White"}),0,0),
 	passengerMinetrain("Passenger Minecart Yellow", EntityPassengerMinetrain.class, ItemIDs.minecartPassengerMinetrain.item, "passenger", 0, 0, 1,0 , 0, 0, 0,0,0, null,0,0, EnumChatFormatting.YELLOW + "Not the most comfortabel of seats " + EnumChatFormatting.DARK_PURPLE +  "-hariesh" ),
-	Class153("class153", EntityLocoDieselClass153.class, ItemIDs.minecartclass153.item, "diesel", 300, 120, 5, 2, 0, 0, 0.7, 0.79, 0,  TraincraftUtil.getBytesFromColors(new String[]{"Cyan", "Grey"}), 18, -4, "A Gift to you From TCCE!" ),
+	Class153("class153", EntityLocoDieselClass153.class, ItemIDs.minecartclass153.item, "diesel", 300, 120, 5, 2, 0, 0, 0.7, 0.79, 0,  TraincraftUtil.getBytesFromColors(new String[]{"Cyan", "Grey"}), 18, 0, "A Gift to you From TCCE!" ),
 
 
 	;
