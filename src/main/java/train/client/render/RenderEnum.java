@@ -145,6 +145,8 @@ public enum RenderEnum {
 	tenderMILW(EntityTenderMILW.class, new ModelMILWTender(), "milw_tender", false, new float[] {0.15F, 0.055F, 0.025F }, new float[] { 0F, 180F, 180F }, new float[]{0.9f,0.9f,0.9f}, "", 0, null, "", null, 0, false),
 
 	/** Diesel */
+
+
 	Class153(EntityLocoDieselClass153.class, new Modelclass153(), "class153_", true, new float[] {-2.2F, 0.05F, 0.F}, new float[] {0F, 180F, 180F}, null, "smoke", 3, new ArrayList<double[]>(){
 		{
 			add(new double[]{1.6D, 1.45D, 0.0D});
@@ -237,6 +239,7 @@ public enum RenderEnum {
 		}
 	}, "", null, 0, true),
 	/** Electric */
+	BNLRV_A(EntityLocoElectricBNLRV_A.class, new ModelBNLRV_A(), "bnlrv_1", false, new float[] {-1.7F, 0.05F, 0.0F}, new float[] {0F, 0F, 180F}, new float[]{0.9F,0.9F,0.9F}, "", 0, null,"",null,0,false),
 	locoE10DB(EntityLocoElectricE10_DB.class, new ModelE10DB(), "locoe10_db_", true, new float[] { -1.7F, 0.05F, 0.0F }, new float[] { 0F, 0F, 180F }, new float[]{0.9f,0.9f,0.9f}, "",0,null, "", null, 0, false),
 	locoCD151(EntityLocoElectricCD151.class, new ModelLocoCD151(), "CD151_", true, new float[]{-2,0.18f,0}, new float[] { 0F, 180F, 180F }, new float[]{0.9f,1f,0.9f}, "",0,null, "", null, 0, false),
 	locoE103(EntityLocoElectricE103.class, new ModelE103(), "E103_", true, new float[]{-2,0.05f,0}, new float[] { 0F, 180F, 180F }, new float[]{0.9f,1f,0.9f}, "",0,null, "", null, 0, false),

@@ -3,6 +3,7 @@ package train.common.library;
 import net.minecraft.item.Item;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
+import train.common.Traincraft;
 import train.common.api.AbstractTrains;
 import train.common.core.util.TraincraftUtil;
 import train.common.entity.rollingStock.*;
@@ -439,8 +440,8 @@ public enum EnumTrains {
 	Class321Motor("Class321Motor", EntityPassengerClass321Panto.class, ItemIDs.minecartClass321Panto.item, "passenger", 0, 0, 3,0 , 0, 0, 0,0,0, TraincraftUtil.getBytesFromColors(new String[] {"Purple", "Grey", "White"}), 0, 0),
 	Class321Coach("Class321Coach", EntityPassengerClass321Coach.class, ItemIDs.minecartClass321Coach.item, "passenger", 0, 0, 3,0 , 0, 0, 0,0,0,TraincraftUtil.getBytesFromColors(new String[] {"Purple", "Grey", "White"}),0,0),
 	passengerMinetrain("Passenger Minecart Yellow", EntityPassengerMinetrain.class, ItemIDs.minecartPassengerMinetrain.item, "passenger", 0, 0, 1,0 , 0, 0, 0,0,0, null,0,0, EnumChatFormatting.YELLOW + "Not the most comfortabel of seats " + EnumChatFormatting.DARK_PURPLE +  "-hariesh" ),
-	Class153("class153", EntityLocoDieselClass153.class, ItemIDs.minecartclass153.item, "diesel", 300, 120, 5, 2, 0, 0, 0.7, 0.79, 0,  TraincraftUtil.getBytesFromColors(new String[]{"Cyan", "Grey"}), 18, 0, "A Gift to you From TCCE!" ),
-
+	Class153("class153", EntityLocoDieselClass153.class, ItemIDs.minecartclass153.item, "diesel", 300, 120, 5, 2, 0, 180, 0.7, 0.79, 0,  TraincraftUtil.getBytesFromColors(new String[]{"Cyan", "Grey"}), 18, 0, "A Gift to you From TCCE!" ),
+	bnlrv_a("bnlrv_a", EntityLocoElectricBNLRV_A.class, ItemIDs.minecartBNLRV_A.item, "electric", 300, 140, 6, 65, 0, 0, 0.8, 0.9, 0, TraincraftUtil.getBytesFromColors(new String[]{"Black"}),18, 0, "" );
 
 	;
 
