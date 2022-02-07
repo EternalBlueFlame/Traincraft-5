@@ -191,6 +191,7 @@ item.tc:minecartFreightGondola_DB.name=Freight Gondola (DB)
 item.tc:minecartTankWagon_DB.name=Tank Wagon (DB)
 item.tc:minecartLocoSD70.name=SD70M (US)
 item.tc:minecartLocoEr.name=USSR 0-5-0
+item.tc:minecartClass153.name= Class 153
 item.tc:minecartTenderEr.name=USSR 0-5-0 Tender
 item.tc:minecartFreightCenterBeam_Empty.name=Freight Car
 item.tc:minecartFreightCenterBeam_Wood_1.name=Wood Transport

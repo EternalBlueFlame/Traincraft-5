@@ -13,7 +13,7 @@ import tmt.ModelRendererTurbo;
 public class ModelBNLRV_A extends ModelConverter {
 
 	 int textureX = 1024;
-	 int textureY = 512;
+	 int textureY = 1024;
 
 	public ModelBNLRV_A(){
 		bodyModel = new ModelRendererTurbo[317];
