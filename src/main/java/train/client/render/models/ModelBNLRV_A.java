@@ -2,10 +2,7 @@
 
 package train.client.render.models;
 
-import com.flansmod.client.model.ModelVehicle;
-import com.flansmod.client.tmt.ModelRendererTurbo;
-import com.flansmod.client.tmt.PositionTextureVertex;
-import com.flansmod.client.tmt.TexturedPolygon;
+
 import tmt.ModelConverter;
 import tmt.ModelRendererTurbo;
 
@@ -13,12 +10,12 @@ import tmt.ModelRendererTurbo;
  *  FMT (Fex's Modelling Toolbox) v.2.7.1 &copy; 2022 - Fexcraft.net<br>
  *  All rights reserved. For this Model's License contact the Author/Creator.
  */
-public class unnamed_modelModel extends ModelConverter {
+public class ModelBNLRV_A extends ModelConverter {
 
-	 int textureX = 512;
+	 int textureX = 1024;
 	 int textureY = 512;
 
-	public unnamed_modelModel(){
+	public ModelBNLRV_A(){
 		bodyModel = new ModelRendererTurbo[317];
 		//
 		bodyModel[0] = new ModelRendererTurbo(this, 1, 1, textureX, textureY); // Box 0
