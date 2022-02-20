@@ -458,7 +458,7 @@ public enum ItemIDs {
 	//minecartBoxMotor("ItemRollingStock", "BoxMotor", 4),
 	minecartEU07("ItemRollingStock", "EU07Icon", 2),
 	minecartGM6C("ItemRollingStock", "GM6C_Icon", 5),
-
+	minecartMK3DVT("ItemRollingStock", "MK3_DVT_Icon", 5),
 	minecartRoundHopper("ItemRollingStock", "train_RoundHopper", 2),
 	minecartRibbedHopper("ItemRollingStock", "train_ribbed_hopper", 2),
 	minecart40highcube("ItemRollingStock", "40highcube", 3),
