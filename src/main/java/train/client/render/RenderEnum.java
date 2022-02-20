@@ -146,7 +146,7 @@ public enum RenderEnum {
 	tenderMILW(EntityTenderMILW.class, new ModelMILWTender(), "milw_tender", false, new float[] {0.15F, 0.055F, 0.025F }, new float[] { 0F, 180F, 180F }, new float[]{0.9f,0.9f,0.9f}, "", 0, null, "", null, 0, false),
 
 	/** Diesel */
-	MK3DVT(EntityLocoDieselMK3DVT.class, new ModelLocoMK3DVT(), "BR_Mk3_DVT_", true, new float[] {0.0F, 0.15F, -0.05F}, new float[] {0F, 180F, 180F}, new float[] {0.9F, 0.9F, 0.9F}, "smoke", 5, new ArrayList<double[]>(){
+	MK3DVT(EntityLocoDieselMK3DVT.class, new ModelLocoMK3DVT(), "BR_Mk3_DVT_", true, new float[] {0.0F, 0.0F, -0.05F}, new float[] {0F, 180F, 180F}, new float[] {0.9F, 0.9F, 0.9F}, "smoke", 5, new ArrayList<double[]>(){
         {
             add(new double[]{1.6D, 1.45F, 0.0D});
         }
