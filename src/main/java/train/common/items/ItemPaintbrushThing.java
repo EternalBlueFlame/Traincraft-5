@@ -18,7 +18,7 @@ public class ItemPaintbrushThing extends Item {
 
     public ItemPaintbrushThing() {
         super();
-        maxStackSize = 64;
+        maxStackSize = 1;
         setCreativeTab(Traincraft.tcTab);
     }
 
