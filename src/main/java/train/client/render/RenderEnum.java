@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public enum RenderEnum {
 
 	/** Passengers */
-	passengerBNLRV(EntityPassengerBNLRV_B.class, new ModelBNLRV_B(), "bnlrv_", false, new float[] {-1.7F, 0.0F, 0.0F},new float[] {180F, 180F, 0F}, null, "", 0, null, "", null, 0, false),
+	passengerBNLRV(EntityPassengerBNLRV_B.class, new ModelBNLRV_B(), "bnlrv_", false, new float[] {-1F, 0.0F, 0.0F},new float[] {180F, 180F, 0F}, null, "", 0, null, "", null, 0, false),
 	passengerCartBlue(EntityPassengerBlue.class, new ModelPassenger6(), "passenger_", true, new float[] { 0.0F, -0.47F, 0.0F }, null, null, "", 0, null, "", null, 0, false),
 	passengerCartBlackSmall(EntityPassenger2.class, new ModelPassenger2(), "passenger3", false, new float[] { 0.0F, -0.32F, -0.1F }, null, null, "", 0, null, "", null, 0, false),
 	passengerLongGreen(EntityPassenger5.class, new ModelPassenger5(), "passenger5_", true, new float[] { 0.0F, -0.32F, 0.0F }, null, null, "", 0, null, "", null, 0, false),
@@ -151,7 +151,7 @@ public enum RenderEnum {
             add(new double[]{1.6D, 1.45F, 0.0D});
         }
     }, "", null, 0, false),
-	Class153(EntityLocoDieselClass153.class, new Modelclass153(), "class153_", true, new float[] {-2.2F, 0.0F, 0.0F}, new float[] {0F, 180F, 180F}, new float[] {0.9F, 0.9F, 0.9F}, "smoke", 5,  new ArrayList<double[]>(){
+	Class153(EntityLocoDieselClass153.class, new Modelclass153(), "class153_", true, new float[] {-1.2F, 0.0F, 0.0F}, new float[] {0F, 180F, 180F}, new float[] {0.9F, 0.9F, 0.9F}, "smoke", 5,  new ArrayList<double[]>(){
 		{
 			add(new double[]{1.6D, 1.45D, 0.0D});
 		}

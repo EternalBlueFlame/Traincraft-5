@@ -18,7 +18,7 @@ public class ItemStacked extends Item {
 		super();
 		maxStackSize = 1;
 		this.setMaxDamage(maxUse);
-		setCreativeTab(Traincraft.tcTabRS);
+		setCreativeTab(Traincraft.tcTab);
 	}
 
 	@Override

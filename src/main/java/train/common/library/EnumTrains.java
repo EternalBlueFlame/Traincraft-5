@@ -439,9 +439,9 @@ public enum EnumTrains {
 	Class321Motor("Class321Motor", EntityPassengerClass321Panto.class, ItemIDs.minecartClass321Panto.item, "passenger", 0, 0, 3,0 , 0, 0, 0,0,0, TraincraftUtil.getBytesFromColors(new String[] {"Purple", "Grey", "White", "Green", "Red"}), 0, 0),
 	Class321Coach("Class321Coach", EntityPassengerClass321Coach.class, ItemIDs.minecartClass321Coach.item, "passenger", 0, 0, 3,0 , 0, 0, 0,0,0,TraincraftUtil.getBytesFromColors(new String[] {"Purple", "Grey", "White", "Green", "Red"}),0,0),
 	passengerMinetrain("Passenger Minecart Yellow", EntityPassengerMinetrain.class, ItemIDs.minecartPassengerMinetrain.item, "passenger", 0, 0, 1,0 , 0, 0, 0,0,0, null,0,0, EnumChatFormatting.YELLOW + "Not the most comfortabel of seats " + EnumChatFormatting.DARK_PURPLE +  "-hariesh" ),
-	Class153("class153", EntityLocoDieselClass153.class, ItemIDs.minecartclass153.item, "diesel", 300, 120, 5, 2, 0, 180, 0.7, 0.79, 0,  TraincraftUtil.getBytesFromColors(new String[]{"Cyan", "Grey", "Orange", "Yellow"}), 18, -3.45, "Pack: Trams In Motion" ),
-	BNLRV_A("BNLRV_A", EntityLocoElectricBNLRV_A.class, ItemIDs.minecartBNLRV_A.item, "electric", 375, 135, 6, 2, 0, 0, 0.9, 0.8, 0, TraincraftUtil.getBytesFromColors(new String[]{"Black"}), 18, -3.45, "Pack: Trams In Motion"),
-	BNLRV_B("BNLRV_B", EntityPassengerBNLRV_B.class, ItemIDs.minecartBNLRV_B.item, "passenger", 0, 0, 1.5, 0, 0, 0, 0, 0, 0, null, 0, -3.45, "Pack: Trams In Motion"),
+	Class153("class153", EntityLocoDieselClass153.class, ItemIDs.minecartclass153.item, "diesel", 300, 120, 5, 2, 0, 180, 0.7, 0.79, 0,  TraincraftUtil.getBytesFromColors(new String[]{"Cyan", "Grey", "Orange", "Yellow"}), 18, -2.45, "Pack: Trams In Motion" ),
+	BNLRV_A("BNLRV_A", EntityLocoElectricBNLRV_A.class, ItemIDs.minecartBNLRV_A.item, "electric", 375, 135, 6, 2, 0, 0, 0.9, 0.8, 0, TraincraftUtil.getBytesFromColors(new String[]{"Black"}), 18, -2.45, "Pack: Trams In Motion"),
+	BNLRV_B("BNLRV_B", EntityPassengerBNLRV_B.class, ItemIDs.minecartBNLRV_B.item, "passenger", 0, 0, 1.5, 0, 0, 0, 0, 0, 0, null, 0, -2.45,"Pack: Trams In Motion"),
 	MK3DVT("MK3DVT", EntityLocoDieselMK3DVT.class, ItemIDs.minecartMK3DVT.item, "diesel", 390, 225,6, 2, 0, 180, 0.78, 0.8, 1000, TraincraftUtil.getBytesFromColors(new String[]{"Cyan", "Blue", "Grey", "LightGrey", "Red", "White", "Yellow"}),18, -3.45, "Pack: BIP" ),
 
 	;

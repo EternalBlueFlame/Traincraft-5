@@ -30,7 +30,7 @@ public class EntityLocoElectricBNLRV_A extends ElectricTrain {
 
 	@Override
 	public void updateRiderPosition() {
-		TraincraftUtil.updateRider(this, 3.9, 0.2);
+		TraincraftUtil.updateRider(this, 0.9, -0.5);
 	}
 
 	@Override
