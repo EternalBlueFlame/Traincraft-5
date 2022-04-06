@@ -41,8 +41,8 @@ public class DistilRecipes {
 	 * public void addSmelting(ItemStack i, ItemStack itemstack, float exp, int plasticChance, ItemStack plasticStack) { smeltingList.put(i, itemstack); plasticList.put(i, plasticStack); this.experienceList.put(Integer.valueOf(plasticStack.getItem().shiftedIndex), Float.valueOf(exp)); this.plasticChanceList.put(i, Float.valueOf(plasticChance)); } */
 
 	/**
-	 * 
-	 * @param i: Input block id
+	 *
+	 * @param //i: Input block id
 	 * @param itemstack: Output
 	 * @param exp: Experience
 	 * @param plasticChance used as follow: Math.random(plasticChance)==0
