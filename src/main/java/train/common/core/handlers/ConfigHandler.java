@@ -77,7 +77,6 @@ public class ConfigHandler {
 			DISABLE_TRAIN_WORKBENCH = cf.get(CATEGORY_GENERAL, "DISABLE_TRAIN_WORKBENCH", false, "disables the train workbench, for those of you who want to use a custom part builder").getBoolean(false);
 			ENABLE_WAGON_REMOVAL_NOTICES = cf.get(CATEGORY_GENERAL, "ENABLE_WAGON_REMOVAL_NOTICES", true, "When OP and creative mode, tells you the owner of the train or rollingstock you just removed").getBoolean(true);
 			ENABLE_LOGGING = cf.get(CATEGORY_GENERAL, "ENABLE_TRANSPORT_LOGGING", true, "Logs the data for trains and rollingstock, turning this off will improve performance but break the admin book").getBoolean(true);
-			BETTER_TABS = cf.getBoolean(CATEGORY_GENERAL, "BETTER_TC_TABS", true, "Separates TC items to multiple tabs. Changing this does nothing RN");
 			ALLOW_ATO_ON_STEAMERS = cf.get(CATEGORY_GENERAL, "ALLOW_ATO_ON_STEAMERS", false, "Allows Minecraft Train Control's ATO system to be used on steam trains").getBoolean(true);
 		} catch (Exception e) {
 			Traincraft.tcLog.fatal("Traincraft had a problem loading its configuration\n" + e);

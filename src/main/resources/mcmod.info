@@ -4,8 +4,8 @@
   "name": "Traincraft - Community Edition",
   "description": "The Community Port of Traincraft, built off of version 020 by Hariesh with help from Bida and Dominik__1. Maintained by Glacierpark19",
 
-  "version": "4.5",
-  "mcversion": "1.7.10",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
   "logoFile": "Logo.png",
   "url": "https://traincraft-mod.blogspot.com/",
   "updateUrl": "https://github.com/EternalBlueFlame/Traincraft-5",

@@ -230,6 +230,7 @@ public enum ItemIDs {
 	minecartClass321Panto("ItemRollingStock","class321panto",5),
 	minecartClass321Coach("ItemRollingStock","class321coach", 5),
 	minecartclass153("ItemRollingStock", "class153", 6),
+	minecartSeries100("ItemRollingStock", "series100", 4),
 	minecartBNLRV_A("ItemRollingStock", "BNLRV_A", 6),
 	minecartBNLRV_B("ItemRollingStock", "BNLRV_B", 6),
 	hat_ticketMan_paintable("ItemTCArmor", "armor_ticket_man_hat", 1),
