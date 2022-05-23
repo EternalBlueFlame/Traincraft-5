@@ -38,5 +38,3 @@ classes
 runserver
 .classpath
 .project
-.theia
-.vscode
