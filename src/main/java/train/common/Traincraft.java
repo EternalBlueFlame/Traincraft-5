@@ -1,38 +1,38 @@
-package train.common;
+		package train.common;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.EventHandler;
-import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStoppedEvent;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
-import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.common.registry.VillagerRegistry;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.AchievementPage;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.EnumHelper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import train.common.api.LiquidManager;
-import train.common.blocks.TCBlocks;
-import train.common.core.*;
-import train.common.core.handlers.*;
-import train.common.generation.ComponentVillageTrainstation;
-import train.common.generation.WorldGenWorld;
-import train.common.items.TCItems;
-import train.common.library.Info;
-import train.common.recipes.AssemblyTableRecipes;
+		import cpw.mods.fml.common.FMLCommonHandler;
+		import cpw.mods.fml.common.Loader;
+		import cpw.mods.fml.common.Mod;
+		import cpw.mods.fml.common.Mod.EventHandler;
+		import cpw.mods.fml.common.Mod.Instance;
+		import cpw.mods.fml.common.SidedProxy;
+		import cpw.mods.fml.common.event.FMLInitializationEvent;
+		import cpw.mods.fml.common.event.FMLPostInitializationEvent;
+		import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+		import cpw.mods.fml.common.event.FMLServerStoppedEvent;
+		import cpw.mods.fml.common.network.NetworkRegistry;
+		import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+		import cpw.mods.fml.common.registry.GameRegistry;
+		import cpw.mods.fml.common.registry.VillagerRegistry;
+		import net.minecraft.creativetab.CreativeTabs;
+		import net.minecraft.item.ItemArmor.ArmorMaterial;
+		import net.minecraft.world.gen.structure.MapGenStructureIO;
+		import net.minecraftforge.common.AchievementPage;
+		import net.minecraftforge.common.MinecraftForge;
+		import net.minecraftforge.common.util.EnumHelper;
+		import org.apache.logging.log4j.LogManager;
+		import org.apache.logging.log4j.Logger;
+		import train.common.api.LiquidManager;
+		import train.common.blocks.TCBlocks;
+		import train.common.core.*;
+		import train.common.core.handlers.*;
+		import train.common.generation.ComponentVillageTrainstation;
+		import train.common.generation.WorldGenWorld;
+		import train.common.items.TCItems;
+		import train.common.library.Info;
+		import train.common.recipes.AssemblyTableRecipes;
 
-import java.io.File;
+		import java.io.File;
 
 @Mod(modid = Info.modID, name = Info.modName, version = Info.modVersion)
 public class Traincraft {
@@ -60,7 +60,7 @@ public class Traincraft {
 	public static SimpleNetworkWrapper lockChannel;
 	public static SimpleNetworkWrapper builderChannel;
 	public static SimpleNetworkWrapper updateTrainIDChannel = NetworkRegistry.INSTANCE.newSimpleChannel("TrainIDChannel");
-    public static SimpleNetworkWrapper updateDestinationChannel = NetworkRegistry.INSTANCE.newSimpleChannel("updateDestnChannel");
+	public static SimpleNetworkWrapper updateDestinationChannel = NetworkRegistry.INSTANCE.newSimpleChannel("updateDestnChannel");
 
 
 	public static final SimpleNetworkWrapper itaChannel = NetworkRegistry.INSTANCE.newSimpleChannel("TransmitterAspect");
@@ -84,10 +84,7 @@ public class Traincraft {
 	public static File configDirectory;
 
 	/* Creative tab for Traincraft */
-	public static CreativeTabs tcTab;
-
-    public static CreativeTabs tcTabRS;
-
+	public static CreativeTabs tcTab, tcTrainTab;
 
 	public ArmorMaterial armor = EnumHelper.addArmorMaterial("Armor", 5, new int[] { 1, 2, 2, 1 }, 25);
 	public ArmorMaterial armorCloth = EnumHelper.addArmorMaterial("TCcloth", 5, new int[] {1, 2, 2, 1}, 25);
@@ -96,7 +93,7 @@ public class Traincraft {
 	public static int trainCloth;
 	public static int trainCompositeSuit;
 
-	
+
 	public static WorldGenWorld worldGen;
 
 	@EventHandler
@@ -112,9 +109,7 @@ public class Traincraft {
 		/* Register Items, Blocks, ... */
 		tcLog.info("Initialize Blocks, Items, ...");
 		tcTab = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft");
-
-        //tcTabRS = new CreativeTabRS(CreativeTabs.getNextID(), "Traincraft Rolling Stock");
-
+		tcTrainTab = new CreativeTabTraincraftTrains(CreativeTabs.getNextID(), "Traincraft Trains");
 		trainArmor = proxy.addArmor("armor");
 		trainCloth = proxy.addArmor("Paintable");
 		trainCompositeSuit = proxy.addArmor("CompositeSuit");
@@ -129,12 +124,12 @@ public class Traincraft {
 		AchievementHandler.load();
 		AchievementPage.registerAchievementPage(AchievementHandler.tmPage);
 		GameRegistry.registerWorldGenerator(worldGen = new WorldGenWorld(),5);
-		//Test Change. Chicken is Good
+
 		//Retrogen Handling
 		RetrogenHandler retroGen = new RetrogenHandler();
 		MinecraftForge.EVENT_BUS.register(retroGen);
 		FMLCommonHandler.instance().bus().register(retroGen);
-		
+
 		MapGenStructureIO.func_143031_a(ComponentVillageTrainstation.class, "Trainstation");
 
 		if (Loader.isModLoaded("ComputerCraft")) {
@@ -195,7 +190,7 @@ public class Traincraft {
 
 		proxy.registerBookHandler();
 
-		
+
 		tcLog.info("Finished Initialization");
 
 

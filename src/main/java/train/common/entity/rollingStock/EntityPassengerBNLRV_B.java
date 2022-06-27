@@ -3,18 +3,21 @@ package train.common.entity.rollingStock;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
-import train.common.api.EntityRollingStock;
-import train.common.api.IPassenger;
+import net.minecraftforge.common.util.Constants;
+import train.common.Traincraft;
+import train.common.api.ElectricTrain;
+import train.common.core.util.TraincraftUtil;
+import train.common.library.GuiIDs;
 
-public class EntityPassengerBNLRV_B extends EntityRollingStock implements IPassenger {
-    //public TiltingHandler tiltingHandler = new TiltingHandler(7);
-
-    public EntityPassengerBNLRV_B(World world) {
+public class EntityLocoElectricBNLRV_A extends ElectricTrain {
+    public EntityLocoElectricBNLRV_A(World world) {
         super(world);
     }
 
-    public EntityPassengerBNLRV_B(World world, double d, double d1, double d2){
+    public EntityLocoElectricBNLRV_A(World world, double d, double d1, double d2) {
         this(world);
         setPosition(d, d1 + yOffset, d2);
         motionX = 0.0D;
@@ -27,9 +30,7 @@ public class EntityPassengerBNLRV_B extends EntityRollingStock implements IPasse
 
     @Override
     public void updateRiderPosition() {
-        if(riddenByEntity!=null) {
-            riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.0, posZ);
-        }//ew yucky rider position code, good thing its a passenger car so it doesnt matter! Wheeze.png
+        TraincraftUtil.updateRider(this, 4.1f, -0.2);
     }
 
     @Override
@@ -39,41 +40,81 @@ public class EntityPassengerBNLRV_B extends EntityRollingStock implements IPasse
     }
 
     @Override
+    public void pressKey(int i) {
+        if (i == 7 && riddenByEntity instanceof EntityPlayer) {
+            ((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+        }
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+        super.writeEntityToNBT(nbttagcompound);
+
+        nbttagcompound.setShort("fuelTrain", (short) fuelTrain);
+        NBTTagList nbttaglist = new NBTTagList();
+        for (int i = 0; i < locoInvent.length; i++) {
+            if (locoInvent[i] != null) {
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.setByte("Slot", (byte) i);
+                locoInvent[i].writeToNBT(nbttagcompound1);
+                nbttaglist.appendTag(nbttagcompound1);
+            }
+        }
+        nbttagcompound.setTag("Items", nbttaglist);
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
+        super.readEntityFromNBT(nbttagcompound);
+
+        fuelTrain = nbttagcompound.getShort("fuelTrain");
+        NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+        locoInvent = new ItemStack[getSizeInventory()];
+        for (int i = 0; i < nbttaglist.tagCount(); i++) {
+            NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
+            int j = nbttagcompound1.getByte("Slot") & 0xff;
+            if (j >= 0 && j < locoInvent.length) {
+                locoInvent[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+            }
+        }
+    }
+
+    @Override
+    public int getSizeInventory() {
+        return inventorySize;
+    }
+
+    @Override
+    public String getInventoryName() {
+        return "BNLRV_A";
+    }
+
+    @Override
     public boolean interactFirst(EntityPlayer entityplayer) {
         playerEntity = entityplayer;
         if ((super.interactFirst(entityplayer))) {
             return false;
         }
         if (!worldObj.isRemote) {
-            ItemStack itemstack = entityplayer.inventory.getCurrentItem();
-            if(lockThisCart(itemstack, entityplayer))return true;
             if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
                 return true;
             }
-            if (!worldObj.isRemote) {
-                entityplayer.mountEntity(this);
-            }
+            entityplayer.mountEntity(this);
         }
         return true;
     }
 
     @Override
-    public boolean canBeRidden() {
-        return true;
-    }
-
-    @Override
-    public boolean isStorageCart() {
-        return false;
-    }
-
-    @Override
-    public boolean isPoweredCart() {
-        return false;
-    }
-
-    @Override
     public float getOptimalDistance(EntityMinecart cart) {
-        return 2.63F;
+        return (0F);
+    }
+    @Override
+    public boolean canBeAdjusted(EntityMinecart cart) {
+        return canBeAdjusted;
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+        return true;
     }
 }

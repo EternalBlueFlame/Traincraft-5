@@ -30,7 +30,7 @@ public class EntityLocoElectricBNLRV_A extends ElectricTrain {
 
 	@Override
 	public void updateRiderPosition() {
-		TraincraftUtil.updateRider(this, 0.9, -0.5);
+		TraincraftUtil.updateRider(this, 4.1f, -0.2);
 	}
 
 	@Override
@@ -86,7 +86,7 @@ public class EntityLocoElectricBNLRV_A extends ElectricTrain {
 
 	@Override
 	public String getInventoryName() {
-		return "BNLRV A";
+		return "BNLRV_A";
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class EntityLocoElectricBNLRV_A extends ElectricTrain {
 
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
-		return (1F);
+		return (0F);
 	}
 	@Override
 	public boolean canBeAdjusted(EntityMinecart cart) {
