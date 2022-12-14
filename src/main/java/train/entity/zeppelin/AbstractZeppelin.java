@@ -72,7 +72,6 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		boatRockDirection = 1;
 		preventEntitySpawning = true;
 		setSize(2F, 0.8F);
-		yOffset = height / 2.0F;
 		numCargoSlots = 3;
 		numCargoSlots1 = 3;
 		numCargoSlots2 = 3;
@@ -84,6 +83,11 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		}
 		this.dataWatcher.addObject(20, fuel);
 		this.field_70279_a = true;
+	}
+
+	@Override
+	public double getYOffset(){
+		return height/2.0f;
 	}
 
 	@Override
@@ -140,7 +144,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 
 	public AbstractZeppelin(World world, double d, double d1, double d2) {
 		this(world);
-		setPosition(d, d1 + yOffset, d2);
+		setPosition(d, d1 + getYOffset(), d2);
 		motionX = 0.0D;
 		motionY = 0.0D;
 		motionZ = 0.0D;
@@ -587,10 +591,6 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		}
 	}
 
-	@Override
-	public String getInventoryName() {
-		return "Zeppelin";
-	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -638,6 +638,11 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	@Override
 	public boolean hasCustomInventoryName() {
 		return false;
+	}
+
+	@Override
+	public String getInventoryName() {
+		return "Zeppelin";
 	}
 
 	@Override

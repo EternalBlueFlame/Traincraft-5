@@ -9,7 +9,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
@@ -78,9 +77,8 @@ public class VillagerTraincraftHandler implements IVillageCreationHandler,IVilla
 	}
 	
 	@Override
-	public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random,
-																	int size) {
-		 return new StructureVillagePieces.PieceWeight(ComponentVillageTrainstation.class, 15, MathHelper.getRandomIntegerInRange(random, size, 1 + size));
+	public StructureVillagePieces.PieceWeight getVillagePieceWeight(Random random, int size) {
+		return new StructureVillagePieces.PieceWeight(ComponentVillageTrainstation.class, 15, size + random.nextInt(1));
 	}
 	@Override
 	public Class<?> getComponentClass() {

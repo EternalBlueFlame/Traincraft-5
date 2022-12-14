@@ -1,34 +1,66 @@
 package train.library;
 
 import ebf.tim.entities.GenericRailTransport;
+import fexcraft.fcl.common.lang.ArrayList;
+import train.core.handlers.ConfigHandler;
 import train.entity.rollingStock.*;
 import train.entity.trains.*;
 
+import java.util.List;
+
 public class TrainRegistry {
 
-    public static GenericRailTransport[] listSteam(){
-        return new GenericRailTransport[]{
-                new EntityLocoSteam4_4_0(null), new EntityLocoSteamMallardA4(null),
-                new EntityLocoSteamHallClass(null), new EntityLocoSteam040VB(null),
-                new EntityLocoSteam262T(null), new EntityLocoSteamAdler(null),
-                new EntityLocoSteamAlcoSC4(null), new EntityLocoSteamAlice0_4_0(null),
-                new EntityLocoSteamBerk765(null), new EntityLocoSteamBerk1225(null),
-                new EntityLocoSteamBR01_DB(null), new EntityLocoSteamBR80_DB(null),
-                new EntityLocoSteamC41(null), new EntityLocoSteamC41_080(null),
-                new EntityLocoSteamC41T(null), new EntityLocoSteamC62Class(null),
-                new EntityLocoSteamCherepanov(null), new EntityLocoSteamClimax(null),
-                new EntityLocoSteamCoranationClass(null), new EntityLocoSteamD51(null),
-                new EntityLocoSteamD51Long(null), new EntityLocoSteamEr_Ussr(null),
-                new EntityLocoSteamForneyRed(null), new EntityLocoSteamFowler(null),
-                new EntityLocoSteamGLYN042T(null), new EntityLocoSteamGS4(null),
-                new EntityLocoSteamHeavy(null), new EntityLocoSteamKingClass(null),
-                new EntityLocoSteamLSSP7(null), new EntityLocoSteamMILWClassA(null),
-                new EntityLocoSteamMogulBlue(null), new EntityLocoSteamPannier(null),
-                new EntityLocoSteamShay(null), new EntityLocoSteamSmall(null),
-                new EntityLocoSteamSnowPlow(null), new EntityLocoSteamSouthern1102(null),
-                new EntityLocoSteamUSATCUK(null), new EntityLocoSteamUSATCUS(null),
-                new EntityLocoSteamVBShay(null)
-        };
+    public static List<GenericRailTransport> listSteam(){
+
+        List<GenericRailTransport> transports = new ArrayList<GenericRailTransport>(){};
+
+        if(ConfigHandler.REMASTERS!=2) {
+            transports.add(new EntityLocoSteam4_4_0(null));
+        }
+        if(ConfigHandler.REMASTERS!=1){
+            transports.add(new EntityLocoSteam4_4_0_Remaster(null));
+        }
+
+        transports.add(new EntityLocoSteamMallardA4(null));
+        transports.add(new EntityLocoSteamHallClass(null));
+        transports.add(new EntityLocoSteam040VB(null));
+        transports.add(new EntityLocoSteam262T(null));
+        transports.add(new EntityLocoSteamAdler(null));
+        transports.add(new EntityLocoSteamAlcoSC4(null));
+        transports.add(new EntityLocoSteamAlice0_4_0(null));
+        transports.add(new EntityLocoSteamBerk765(null));
+        transports.add(new EntityLocoSteamBerk1225(null));
+        transports.add(new EntityLocoSteamBR01_DB(null));
+        transports.add(new EntityLocoSteamBR80_DB(null));
+        transports.add(new EntityLocoSteamC41(null));
+        transports.add(new EntityLocoSteamC41_080(null));
+        transports.add(new EntityLocoSteamC41T(null));
+        transports.add(new EntityLocoSteamC62Class(null));
+        transports.add(new EntityLocoSteamCherepanov(null));
+        transports.add(new EntityLocoSteamClimax(null));
+        transports.add(new EntityLocoSteamCoranationClass(null));
+        transports.add(new EntityLocoSteamD51(null));
+        transports.add(new EntityLocoSteamD51Long(null));
+        transports.add(new EntityLocoSteamEr_Ussr(null));
+        transports.add(new EntityLocoSteamForneyRed(null));
+        transports.add(new EntityLocoSteamFowler(null));
+        transports.add(new EntityLocoSteamGLYN042T(null));
+        transports.add(new EntityLocoSteamGS4(null));
+        transports.add(new EntityLocoSteamHeavy(null));
+        transports.add(new EntityLocoSteamKingClass(null));
+        transports.add(new EntityLocoSteamLSSP7(null));
+        transports.add(new EntityLocoSteamMILWClassA(null));
+        transports.add(new EntityLocoSteamMogulBlue(null));
+        transports.add(new EntityLocoSteamPannier(null));
+        transports.add(new EntityLocoSteamShay(null));
+        transports.add(new EntityLocoSteamSmall(null));
+        transports.add(new EntityLocoSteamSnowPlow(null));
+        transports.add(new EntityLocoSteamSouthern1102(null));
+        transports.add(new EntityLocoSteamUSATCUK(null));
+        transports.add(new EntityLocoSteamUSATCUS(null));
+        transports.add(new EntityLocoSteamVBShay(null));
+
+        return transports;
     }
 
 
@@ -120,18 +152,34 @@ public class TrainRegistry {
         };
     }
 
-    public static GenericRailTransport[] listTender(){
-        return new GenericRailTransport[]{
-                new EntityTender4_4_0(null), new EntityTender4000(null),
-                new EntityTender_C41(null), new EntityTender_Southern1102(null),
-                new EntityTenderA4(null), new EntityTenderAdler(null),
-                new EntityTenderBerk1225(null), new EntityTenderBR01_DB(null),
-                new EntityTenderC62Class(null), new EntityTenderCoranationClass(null),
-                new EntityTenderD51(null), new EntityTenderEr_Ussr(null),
-                new EntityTenderFowler4F(null), new EntityTenderGS4(null),
-                new EntityTenderHeavy(null), new EntityTenderMILW(null),
-                new EntityTenderSmall(null)
-        };
+    public static List<GenericRailTransport> listTender(){
+        List<GenericRailTransport> transports = new ArrayList<GenericRailTransport>(){};
+
+        if(ConfigHandler.REMASTERS!=2) {
+            transports.add(new EntityTender4_4_0(null));
+        }
+        if(ConfigHandler.REMASTERS!=1){
+            transports.add(new EntityTender4_4_0_Remaster(null));
+        }
+
+        transports.add(new EntityTender4000(null));
+        transports.add(new EntityTender_C41(null));
+        transports.add(new EntityTender_Southern1102(null));
+        transports.add(new EntityTenderA4(null));
+        transports.add(new EntityTenderAdler(null));
+        transports.add(new EntityTenderBerk1225(null));
+        transports.add(new EntityTenderBR01_DB(null));
+        transports.add(new EntityTenderC62Class(null));
+        transports.add(new EntityTenderCoranationClass(null));
+        transports.add(new EntityTenderD51(null));
+        transports.add(new EntityTenderEr_Ussr(null));
+        transports.add(new EntityTenderFowler4F(null));
+        transports.add(new EntityTenderGS4(null));
+        transports.add(new EntityTenderHeavy(null));
+        transports.add(new EntityTenderMILW(null));
+        transports.add(new EntityTenderSmall(null));
+
+        return transports;
     }
 
     public static GenericRailTransport[] listTanker(){

@@ -9,13 +9,13 @@ import mods.railcraft.api.tracks.TrackRegistry;
 import mods.railcraft.api.tracks.TrackSpec;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.IIcon;
-import train.library.Tracks;
+import train.library.RCTracks;
 
 public abstract class TrackBaseTraincraft extends TrackInstanceBase {
 
 	public SpeedController speedController;
 
-	public abstract Tracks getTrackType();
+	public abstract RCTracks getTrackType();
 	@Override
 	public float getRailMaxSpeed(EntityMinecart cart) {
 		if (this.speedController == null) {
@@ -33,7 +33,7 @@ public abstract class TrackBaseTraincraft extends TrackInstanceBase {
 	}
 
 	public IIcon getIcon(int index) {
-		return TrackTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[index];
+		return RailTextureLoader.INSTANCE.getTrackIcons(getTrackSpec())[index];
 	}
 
 	public int getPowerPropagation() {

@@ -61,7 +61,9 @@ public class GuiLantern extends GuiScreen {
 						int color = tryParse(colorString);//parse the string as a 16 int	
 						Traincraft.modChannel.sendToServer(new PacketLantern(color, lanternBlock.xCoord,
 								lanternBlock.yCoord, lanternBlock.zCoord));
-						Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(lanternBlock.xCoord, lanternBlock.yCoord, lanternBlock.zCoord); //TODO marks block as dirty, but it's only actually re-renders when chunk is loaded, but we need the re-render after it has been changed.
+						Minecraft.getMinecraft().renderGlobal.markBlockRangeForRenderUpdate(
+								lanternBlock.xCoord, lanternBlock.yCoord, lanternBlock.zCoord,
+								lanternBlock.xCoord, lanternBlock.yCoord, lanternBlock.zCoord);
 					}
 				}
 				this.mc.displayGuiScreen((GuiScreen)null);

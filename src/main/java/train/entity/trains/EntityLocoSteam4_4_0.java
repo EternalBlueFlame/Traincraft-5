@@ -91,7 +91,7 @@ public class EntityLocoSteam4_4_0 extends EntityTrainCore {
      * @return the value of the max speed in km/h
      */
     @Override
-    public float transportTopSpeed(){return accelerator<0?30f:50f;}
+    public float transportTopSpeed(){return 50f;}
 
     /**
      * <h2>Inventory Size</h2>
@@ -141,7 +141,7 @@ public class EntityLocoSteam4_4_0 extends EntityTrainCore {
      *     Each set of floats represents a different rider.
      */
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{1.0f,1.6f, 0f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{1.0f,1.55f, 0.2f}};}
 
     /**
      * defines the size of the hitbox for processing, in order of length, height, and width.
@@ -229,7 +229,7 @@ public class EntityLocoSteam4_4_0 extends EntityTrainCore {
     public ModelBase[] getModel(){return new ModelBase[]{new ModelLoco()};}
 
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.2f,worldObj==null?0.6f:0.6f,0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.2f,worldObj==null?0.6f:0.65f,0f}};}
 
     @Override
     public float[][] modelRotations(){return new float[][]{{0f,90f,180f}};}

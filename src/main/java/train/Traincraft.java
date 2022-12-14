@@ -19,6 +19,7 @@ import ebf.tim.registry.TiMGenericRegistry;
 import ebf.tim.utility.JsonRecipeHelper;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -26,7 +27,6 @@ import net.minecraftforge.common.util.EnumHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import train.blocks.TCBlocks;
-import train.blocks.fluids.LiquidManager;
 import train.core.CommonProxy;
 import train.core.handlers.ConfigHandler;
 import train.core.handlers.FuelHandler;
@@ -34,7 +34,6 @@ import train.core.handlers.VillagerTraincraftHandler;
 import train.core.network.PacketKeyPress;
 import train.core.network.PacketLantern;
 import train.core.network.PacketSetJukeboxStreamingUrl;
-import train.core.plugins.AssemblyTableNEIIntegration;
 import train.core.plugins.PluginRailcraft;
 import train.entity.zeppelin.EntityZeppelinOneBalloon;
 import train.entity.zeppelin.EntityZeppelinTwoBalloons;
@@ -84,7 +83,7 @@ public class Traincraft {
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 
-				/* Config handler */
+		/* Config handler */
 		configDirectory= event.getModConfigurationDirectory();
 		ConfigHandler.init(new File(event.getModConfigurationDirectory(), Info.modName + ".cfg"));
 
@@ -163,7 +162,6 @@ public class Traincraft {
 							"we work on adding back all\n" +
 							"of the missing features,\nand many many more.");
 		}
-		//proxy.getCape();
 
 		/* Register Items, Blocks, ... */
 		tcLog.info("Initialize Blocks, Items, ...");
@@ -225,11 +223,10 @@ public class Traincraft {
 
 		/*Trainman Villager*/
 		tcLog.info("Initialize Station Chief Villager");
-		VillagerRegistry.instance().registerVillagerId(ConfigHandler.TRAINCRAFT_VILLAGER_ID+1);
 		VillagerTraincraftHandler villageHandler = new VillagerTraincraftHandler();
-		VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
 		proxy.registerVillagerSkin(ConfigHandler.TRAINCRAFT_VILLAGER_ID+1, "station_chief.png");
 		VillagerRegistry.instance().registerVillageTradeHandler(ConfigHandler.TRAINCRAFT_VILLAGER_ID+1, villageHandler);
+		VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
 
 		
 		tcLog.info("Finished Initialization");
@@ -244,7 +241,8 @@ public class Traincraft {
 
 		tcLog.info("Activation Mod Compatibility");
 		//railcraft recipe compatibility
-		if(Loader.isModLoaded("Railcraft") && !Loader.isModLoaded("tc")){
+		if(Loader.isModLoaded("Railcraft")) {
+
 			File file = new File("./config/railcraft/railcraft.cfg");
 			try {
 				@SuppressWarnings("resource") Scanner scanner = new Scanner(new FileInputStream(file));
@@ -252,24 +250,22 @@ public class Traincraft {
 				while (scanner.hasNextLine()) {
 					String line = scanner.nextLine().trim();
 
-					if (line.equals("B:useAltRecipes=true")) {
-						Traincraft.tcLog.info(
-								"You've enabled vanilla rail recipes in Railcraft. Disable them to get Traincraft additional tracks");
-						break;
-					} else if (line.equals("B:useAltRecipes=false")) {
+					if (line.equals("B:useAltRecipes=false")) {
 						PluginRailcraft.init();
 						Traincraft.tcLog.info("Enabled Traincraft additional tracks for Railcraft");
 						break;
+					} else if(line.equals("B:useAltRecipes=true")){
+						Traincraft.tcLog.info(
+								"You've enabled vanilla rail recipes in Railcraft. Disable them to get Traincraft additional tracks");
 					}
 				}
 			} catch (FileNotFoundException e) {
 				e.printStackTrace();
 			}
 		}
-		LiquidManager.getLiquidsFromDictionnary();
 
-		if (Loader.isModLoaded("NotEnoughItems")) {
-			AssemblyTableNEIIntegration.setupNEIIntegration();
+		if (evt.getSide().isClient() && Loader.isModLoaded("NotEnoughItems")) {
+			train.core.plugins.AssemblyTableNEIIntegration.setupNEIIntegration();
 		}
 
 		tcLog.info("Finished PostInitialization");
@@ -292,11 +288,12 @@ public class Traincraft {
 		public String getCommandUsage(ICommandSender CommandSender) {return "/tcadmin";}
 		public int getRequiredPermissionLevel() {return 2;}
 
-		public void processCommand(ICommandSender CommandSender, String[] par2ArrayOfStr) {
-			getCommandSenderAsPlayer(CommandSender).addChatMessage(
-					new ChatComponentText(
-							"this command exists as a placeholder to allow admin permissions in TC via plugins and mds such as GroupManager and Forge Essentials"));
-
+		public void processCommand(ICommandSender commandSender, String[] par2ArrayOfStr) {
+			if(commandSender instanceof EntityPlayer) {
+				getCommandSenderAsPlayer(commandSender).addChatMessage(
+						new ChatComponentText(
+								"this command exists as a placeholder to allow admin permissions in TC via plugins and mds such as GroupManager and Forge Essentials"));
+			}
 		}
 	}
 

@@ -11,9 +11,11 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientUtil {
@@ -27,6 +29,8 @@ public class ClientUtil {
     public static final ResourceLocation vanillaChest =
             ClientProxy.useVanillaInventoryTextures?new ResourceLocation("textures/gui/container/generic_54.png"):
                     new ResourceLocation(TrainsInMotion.MODID, "textures/gui/chest.png");
+
+    private static List<String> loggedLangChecks = new ArrayList<>();
 
     private static Minecraft getMC(){return Minecraft.getMinecraft();}
 
@@ -259,4 +263,15 @@ public class ClientUtil {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
+    public static String translate(String text){
+        if (StatCollector.translateToLocal(text).equals(text)){
+            if(!loggedLangChecks.contains(text)) {
+                DebugUtil.println("Missing lang entry for: ", text, Thread.currentThread().getStackTrace()[2]);
+                loggedLangChecks.add(text);
+            }
+            return text;
+        } else {
+            return StatCollector.translateToLocal(text);
+        }
+    }
 }

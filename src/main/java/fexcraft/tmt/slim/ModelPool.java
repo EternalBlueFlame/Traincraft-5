@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ModelPool {
-	
+
 	public static ModelPoolEntry addFile(String file, Class<?> modelClass){
 		ModelPoolEntry entry = null;
 		if(modelMap.containsKey(file)){
@@ -26,24 +26,20 @@ public class ModelPool {
 			System.out.println(e.getMessage());
 			return null;
 		}
-		File modelFile = null;
-		for(int i = 0; i < resourceDir.length && (modelFile == null || !modelFile.exists()); i++){
-			String absPath = new File(Loader.instance().getConfigDir().getParent(), resourceDir[i]).getAbsolutePath();
-			if(!absPath.endsWith("/") || !absPath.endsWith("\\"))
-				absPath+= "/";
-			modelFile = entry.checkValidPath(absPath + file);
-		}
+		File modelFile = entry.checkValidPath(file.substring(5));
 		if(modelFile == null || !modelFile.exists()){
 			System.out.println("The model with the name " + file + " does not exist.");
 			return null;
 		}
+		entry.textures = new HashMap<String, TextureGroup>();
 		entry.name = file;
+		entry.setTextureGroup("0");
 		entry.getModel(modelFile);
 		modelMap.put(file, entry);
 		return entry;
 	}
-	
-    public static ModelPoolEntry addFileF(String file, Class<?> modelClass) throws IOException{
+
+	public static ModelPoolEntry addFileF(String file, Class<?> modelClass) throws IOException{
 		ModelPoolEntry entry = null;
 		if(modelMap.containsKey(file)){
 			entry = modelMap.get(file);
@@ -69,17 +65,19 @@ public class ModelPool {
 			System.out.println("The model with the name " + file + " does not exist.");
 			return null;
 		}
+		entry.textures = new HashMap<String, TextureGroup>();
 		entry.name = file;
+		entry.setTextureGroup("0");
 		entry.getModel(modelFile);
 		modelMap.put(file, entry);
 		return entry;
 	}
-	
-    private static Map<String, ModelPoolEntry> modelMap = new HashMap<String, ModelPoolEntry>();
-    private static String[] resourceDir = new String[] {
-    					"minecraft/resources/models/",
-    					"minecraft/resources/mod/models/"
-    	};
-    public static final Class<ModelPoolObjEntry> OBJ = ModelPoolObjEntry.class;
-    
+
+	private static Map<String, ModelPoolEntry> modelMap = new HashMap<String, ModelPoolEntry>();
+	private static String[] resourceDir = new String[] {
+			"minecraft/resources/models/",
+			"minecraft/resources/mod/models/"
+	};
+	public static final Class<ModelPoolObjEntry> OBJ = ModelPoolObjEntry.class;
+
 }

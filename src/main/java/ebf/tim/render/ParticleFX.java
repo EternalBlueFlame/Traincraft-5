@@ -89,7 +89,7 @@ public class ParticleFX {
         int[] data = parseData(boxName, host.getClass());
         List<ParticleFX> list = new ArrayList<>();
         if(boxName.contains("smoke") || boxName.contains("steam")) {
-            for (int i = 0; i < host.getParticleData(data[0])[0]*20; i++) {
+            for (int i = 0; i < host.getParticleData(data[0])[0]*30; i++) {
                 //the cubes are 4x4x4 so the offsets compensate for that, and the spawn cube to try and center it.
                 list.add(new ParticleFX(data[0], data[1], host, offsetX+1.5f, offsetY-5, offsetZ+1.5f, rotationX, rotationY, rotationZ));
             }
@@ -110,22 +110,22 @@ public class ParticleFX {
 
     public static int[] parseData(String s, Class host){
         if (CommonUtil.stringContains(s,"smoke")) {
-            return new int[]{CommonUtil.parseInt(s.split(" ")[2], host), 0};
+            return new int[]{CommonUtil.parseInt(s.substring(s.indexOf("smoke")+6).substring(0,s.indexOf(" ")+1), host), 0};
         } else if (CommonUtil.stringContains(s,"steam")) {
-            return new int[]{CommonUtil.parseInt(s.split(" ")[2], host), 1};
+            return new int[]{CommonUtil.parseInt(s.substring(s.indexOf("steam")+6).substring(0,s.indexOf(" ")+1), host), 1};
         }  else if (CommonUtil.stringContains(s,"wheel")){
             return new int[]{0, 2};
         } else if (CommonUtil.stringContains(s,"lamp")){
             if(CommonUtil.stringContains(s,"cone")){
-                return new int[]{CommonUtil.parseInt(s.split(" ")[3], host), 3};
+                return new int[]{CommonUtil.parseInt(s.substring(s.indexOf("lamp")+5).split(" ")[1], host), 3};
             }else if(CommonUtil.stringContains(s,"sphere")) {
-                return new int[]{CommonUtil.parseInt(s.split(" ")[3], host), 4};
+                return new int[]{CommonUtil.parseInt(s.substring(s.indexOf("lamp")+5).split(" ")[1], host), 4};
             }else if(CommonUtil.stringContains(s,"mars")) {
-                return new int[]{CommonUtil.parseInt(s.split(" ")[3], host), 5};
+                return new int[]{CommonUtil.parseInt(s.substring(s.indexOf("lamp")+5).split(" ")[1], host), 5};
             }else if(CommonUtil.stringContains(s,"siren")) {
-                return new int[]{CommonUtil.parseInt(s.split(" ")[3], host), 6};
+                return new int[]{CommonUtil.parseInt(s.substring(s.indexOf("lamp")+5).split(" ")[1], host), 6};
             }else if(CommonUtil.stringContains(s,"glare")) {
-                return new int[]{CommonUtil.parseInt(s.split(" ")[3], host), 7};
+                return new int[]{CommonUtil.parseInt(s.substring(s.indexOf("lamp")+5).split(" ")[1], host), 7};
             }
         }
         return null;//this states the box is not a supported particle
@@ -156,7 +156,7 @@ public class ParticleFX {
                 }
                 return;
             } else if (particleType == 2 && this.ticksExisted > this.lifespan) {//wheel sparks
-                if (host.vectorCache[1][1] > 0.005) {
+                if (host.cachedVectors[1].zCoord > 0.005) {
                     colorTint = (rand.nextInt(75) - 30);
                     lifespan = rand.nextInt(80) + 140;
                     ticksExisted = 0f;
@@ -177,13 +177,26 @@ public class ParticleFX {
                 //recalculating it throws away the rotation value, but that's only used for the cone lamp, which doesn't even run this, so we don't need it anyway.
                 pos = CommonUtil.rotatePointF(offset[0] * 0.0625f, offset[1] * -0.0625f, offset[2] * 0.0625f, host.rotationPitch, host.rotationYaw, 0);
                 this.boundingBox.setBounds(host.posX + pos[0] - 0.1, host.posY + pos[1] - 0.1, host.posZ + pos[2] - 0.1, host.posX + pos[0] + 0.1, host.posY + pos[1] + 0.1, host.posZ + pos[2] + 0.1);
-                motionX = (rand.nextInt(40) - 20) * 0.00033f;
+                motionX = (rand.nextInt(40) - 20) * 0.0005f;
                 if (particleType == 0) {
-                    motionY = rand.nextInt(15) * 0.001f;
+                    motionY = rand.nextInt(15) * 0.0045f;
                 } else if (particleType == 1) {
-                    motionY = rand.nextInt(15) * 0.00005f;
+                    motionY = rand.nextInt(15) * 0.0001f;
                 }
-                motionZ = (rand.nextInt(40) - 20) * 0.00033f;
+                motionZ = (rand.nextInt(40) - 20) * 0.0005f;
+                //increase speed and reduce lifespan as the train gets faster,
+                // for the visual effect of it seeming like there's more smoke and less wind effect.
+                if(host.getVelocity()>0.12){
+                    lifespan*=0.5;
+                }
+                if(host.getVelocity()>0.2){
+                    lifespan*=0.5;
+                    motionY*=1.5;
+                }
+                if(host.getVelocity()>0.3){
+                    lifespan*=0.5;
+                    motionY*=2.5;
+                }
                 shouldRender = true;
             } else if (this.ticksExisted > this.lifespan) {//smoke and steam while train is off
                 //if the transport isn't running and this has finished it's movement, set it' position to the transport and set that it shouldn't render.
@@ -313,7 +326,7 @@ public class ParticleFX {
             GL11.glEnable(GL_CULL_FACE);
             GL11.glEnable(GL_TEXTURE_2D);
             GL11.glEnable(GL11.GL_LIGHTING);
-            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1f);
+            GL11.glAlphaFunc(GL11.GL_GREATER, 1f);
             Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
             GL11.glDepthMask(true);
             //glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
@@ -335,10 +348,10 @@ public class ParticleFX {
                     (entity.offset[1]*0.0625f)-8f,//subtract half if cone radius
                     -entity.offset[2]*0.0625f);*/
 
-            lamp.setPosition(
+            /*lamp.setPosition(
                     lamp.rotationPointX,
                     lamp.rotationPointY-(size*0.5f),
-                    lamp.rotationPointZ-(size*0.5f));
+                    lamp.rotationPointZ-(size*0.5f));*/
 
             GL11.glDisable(GL11.GL_LIGHTING);
             Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
@@ -358,7 +371,7 @@ public class ParticleFX {
             GL11.glEnable(GL_CULL_FACE);
             GL11.glEnable(GL11.GL_LIGHTING);
             GL11.glEnable(GL11.GL_TEXTURE_2D);
-            GL11.glAlphaFunc(GL11.GL_GREATER, 0.1f);
+            GL11.glAlphaFunc(GL11.GL_GREATER, 0);
             GL11.glDepthMask(true);
 
         }

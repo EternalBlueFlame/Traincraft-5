@@ -14,7 +14,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import train.library.Tracks;
+import train.library.RCTracks;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -25,8 +25,8 @@ public class BlockAnimalBoardingTrack extends TrackBaseTraincraft implements ITr
 	private byte delay = 0;
 
 	@Override
-	public Tracks getTrackType() {
-		return Tracks.ANIMAL_BOARDING_TRACK;
+	public RCTracks getTrackType() {
+		return RCTracks.ANIMAL_BOARDING_TRACK;
 	}
 	@Override
 	public void onMinecartPass(EntityMinecart cart) {

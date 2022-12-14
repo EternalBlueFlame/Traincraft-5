@@ -31,7 +31,7 @@ public class GuiDistil extends GuiContainer {
 		fontRendererObj.drawString("Distillation tower", 8, 6, 0x404040);
 		fontRendererObj.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 		if (distilInventory.inventory.get(0).getStack() != null) {
-			double plasticChance = DistilRecipes.smelting().getPlasticChance(distilInventory.inventory.get(0).getStack().getItem());
+			double plasticChance = TileEntityDistil.getPlasticChance(distilInventory.inventory.get(0).getStack());
 			if(plasticChance!=0){//stops showing 100% for blocks that aren't part of a recipe
 				double chanceShown = ((1 / plasticChance) * 100);
 				fontRendererObj.drawString((int) chanceShown + "%", 79, 70, 0x404040);

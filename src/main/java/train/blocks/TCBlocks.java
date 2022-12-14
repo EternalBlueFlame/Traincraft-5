@@ -10,6 +10,7 @@ package train.blocks;
 import ebf.tim.TrainsInMotion;
 import ebf.tim.blocks.BlockDynamic;
 import ebf.tim.blocks.SimpleBlock;
+import ebf.tim.registry.TiMBlocks;
 import ebf.tim.registry.TiMItems;
 import ebf.tim.registry.TiMOres;
 import ebf.tim.utility.RecipeManager;
@@ -25,6 +26,7 @@ import train.blocks.distil.BlockDistil;
 import train.blocks.generator.BlockGeneratorDiesel;
 import train.blocks.hearth.BlockOpenHearthFurnace;
 import train.blocks.lantern.BlockLantern;
+import train.blocks.signal.BlockTCSignal;
 import train.blocks.switchstand.BlockSwitchStand;
 import train.blocks.waterwheel.BlockWaterWheel;
 import train.blocks.windmill.BlockWindMill;
@@ -35,9 +37,9 @@ import static cpw.mods.fml.common.registry.GameRegistry.addRecipe;
 import static ebf.tim.registry.TiMGenericRegistry.registerBlock;
 
 public class TCBlocks {
-	public static BlockDynamic trainTableTier1 = new BlockDynamic(new Material(MapColor.mapColorArray[13]),true, 1);
-	public static BlockDynamic trainTableTier2 = new BlockDynamic(new Material(MapColor.mapColorArray[13]),true, 2);
-	public static BlockDynamic trainTableTier3 = new BlockDynamic(new Material(MapColor.mapColorArray[13]),true, 3);
+	public static BlockDynamic trainTableTier1 = new BlockDynamic(new Material(MapColor.mapColorArray[13]),true);
+	public static BlockDynamic trainTableTier2 = new BlockDynamic(new Material(MapColor.mapColorArray[13]),true);
+	public static BlockDynamic trainTableTier3 = new BlockDynamic(new Material(MapColor.mapColorArray[13]),true);
 
 	public static SimpleBlock oilSand;
 	public static SimpleBlock orePetroleum;
@@ -60,6 +62,7 @@ public class TCBlocks {
 	public static BlockWindMill windmill = new BlockWindMill();
 	public static BlockWaterWheel waterWheel = new BlockWaterWheel();
 	public static BlockSwitchStand highStarSwitch = new BlockSwitchStand();
+	public static BlockTCSignal signal = new BlockTCSignal();
 
 
 	@Deprecated //need to use TiMGenericRegistry.registerBlock(), this will also cover tile entities and TESR.
@@ -102,13 +105,16 @@ public class TCBlocks {
 
 		registerBlock(partTable, Traincraft.tcTab, Info.modID,"block.parttable", null, null);
 
+		registerBlock(signal, Traincraft.tcTab, Info.modID, "block.signal", null, TrainsInMotion.proxy.getTESR());
+
+		registerBlock(highStarSwitch, Traincraft.tcTab, Info.modID, "block.highstar", null, TrainsInMotion.proxy.getTESR());
+
 		if(TrainsInMotion.proxy.isClient()){
 			registerBlock(dieselGenerator, Traincraft.tcTab, Info.modID, "block.dieselGenerator", null, new train.render.RenderGeneratorDiesel());
 			registerBlock(bridgePillar, Traincraft.tcTab, Info.modID, "block.bridgePillar", null, new train.render.RenderBridgePillar());
 
 			registerBlock(windmill, Traincraft.tcTab, Info.modID, "block.windmill", null, new train.render.RenderWindMill());
 			registerBlock(waterWheel, Traincraft.tcTab, Info.modID, "block.waterwheel", null, new train.render.RenderWaterWheel());
-			registerBlock(highStarSwitch, Traincraft.tcTab, Info.modID, "block.highstar", null, new train.render.RenderSwitchStand());
 
 			//registerBlock(signal, Traincraft.tcTab, Info.modID, "block.signal", null, new train.render.RenderSignal());
 			registerBlock(lantern, Traincraft.tcTab, Info.modID, "block.lantern", null, new train.render.RenderLantern());
@@ -118,7 +124,6 @@ public class TCBlocks {
 
 			registerBlock(windmill, Traincraft.tcTab, Info.modID, "block.windmill", null, null);
 			registerBlock(waterWheel, Traincraft.tcTab, Info.modID, "block.waterwheel", null, null);
-			registerBlock(highStarSwitch, Traincraft.tcTab, Info.modID, "block.highstar", null, null);
 
 			//registerBlock(signal, Traincraft.tcTab, Info.modID, "block.signal", null, null);
 			registerBlock(lantern, Traincraft.tcTab, Info.modID, "block.lantern", null, null);
@@ -143,30 +148,30 @@ public class TCBlocks {
 
 		RecipeManager.registerRecipe(
 				new Object[]{Blocks.nether_brick,Items.lava_bucket,Blocks.nether_brick,Blocks.nether_brick,Items.bucket,Blocks.nether_brick,Blocks.nether_brick,Blocks.iron_block,Blocks.nether_brick},
-				new ItemStack(blockHearthFurnace));
+				new ItemStack(blockHearthFurnace), TiMBlocks.trainTable);
 
 		RecipeManager.registerRecipe(
 				new Object[]{Items.iron_ingot,Items.iron_ingot,Items.iron_ingot,Blocks.glass_pane,Blocks.torch,Blocks.glass_pane,Items.iron_ingot,Items.iron_ingot,Items.iron_ingot},
-				new ItemStack(lantern));
+				new ItemStack(lantern), TiMBlocks.trainTable);
 
 		RecipeManager.registerRecipe(
 				new Object[]{TiMOres.ingotSteel,TiMOres.ingotSteel,TiMOres.ingotSteel,TiMOres.ingotSteel, TiMItems.fireboxSteel,TiMOres.ingotSteel,TiMOres.ingotSteel,TiMOres.ingotSteel,TiMOres.ingotSteel},
-				new ItemStack(blockDistil));
+				new ItemStack(blockDistil), TiMBlocks.trainTable);
 
 		RecipeManager.registerRecipe(
 				new Object[]{TiMItems.chimneySteel,null,null,TiMItems.mediumDieselEngine,TiMItems.steelPinCircuit,null,null,null,null},
-				new ItemStack(dieselGenerator));
+				new ItemStack(dieselGenerator), TiMBlocks.trainTable);
 
 		RecipeManager.registerRecipe(
 				new Object[]{null, ItemIDs.propeller.item, null, null, TiMItems.generator, null, Items.iron_ingot,null, Items.iron_ingot},
-				new ItemStack(windmill));
+				new ItemStack(windmill), TiMBlocks.trainTable);
 
 		RecipeManager.registerRecipe(
 				new Object[]{null, Blocks.log,null,Blocks.log,TiMItems.generator,Blocks.log,null,Blocks.log,null},
-				new ItemStack(waterWheel));
+				new ItemStack(waterWheel), TiMBlocks.trainTable);
 
 		RecipeManager.registerRecipe(new Object[]{Blocks.gravel,Items.clay_ball,Blocks.gravel,null,null,null,null,null,null},
-                new ItemStack(blockBallast));
+                new ItemStack(blockBallast), TiMBlocks.trainTable);
 
 	}
 }

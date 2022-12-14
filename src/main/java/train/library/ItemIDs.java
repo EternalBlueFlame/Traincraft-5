@@ -10,7 +10,7 @@ package train.library;
 import net.minecraft.item.Item;
 
 public enum ItemIDs {
-	//diesel("ItemContainer", "item_diesel_filled", 20),
+	diesel_canister("ItemContainer", "item_diesel_filled", 20),
 	//stake("ItemStacked", "item_stake", 1),
 	//steeldust("ItemTrain", "item_steeldust", 0),
 	//coaldust("ItemTrain", "item_coaldust", 15),

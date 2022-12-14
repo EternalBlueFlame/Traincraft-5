@@ -8,6 +8,7 @@ import ebf.tim.registry.TiMBlocks;
 import ebf.tim.registry.TiMItems;
 import ebf.tim.render.models.Model1x1Rail;
 import ebf.tim.utility.ClientProxy;
+import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.TextureManager;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -40,6 +41,9 @@ public class RailTileEntity extends TileEntity {
         return meta;
     }
     public void setMeta(int i){
+        if(meta==i){
+            return;
+        }
         meta=i;
         if(worldObj!=null) {
             worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, meta, 2);
@@ -48,8 +52,10 @@ public class RailTileEntity extends TileEntity {
     }
 
     public void setData(XmlBuilder d){
-        data=d;
-        markDirty();
+        if(data!=d) {
+            data = d;
+            markDirty();
+        }
     }
 
     public XmlBuilder getData() {
@@ -121,10 +127,9 @@ public class RailTileEntity extends TileEntity {
 
 
     public void markDirty() {
-        super.markDirty();
         if (this.worldObj != null) {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-            this.worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, TiMBlocks.railBlock);
+            CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
+            worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, TiMBlocks.railBlock);
             if(worldObj.isRemote && railGLID!=null) {
                 org.lwjgl.opengl.GL11.glDeleteLists(railGLID, 1);
                 railGLID = null;

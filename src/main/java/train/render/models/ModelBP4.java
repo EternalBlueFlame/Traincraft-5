@@ -9,14 +9,9 @@
 
 package train.render.models;
 
-import ebf.tim.entities.GenericRailTransport;
+import ebf.tim.render.AnimList;
 import fexcraft.tmt.slim.ModelConverter;
 import fexcraft.tmt.slim.ModelRendererTurbo;
-import fexcraft.tmt.slim.Tessellator;
-import net.minecraft.entity.Entity;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
-import train.library.Info;
 
 public class ModelBP4 extends ModelConverter
 {
@@ -113,8 +108,8 @@ public class ModelBP4 extends ModelConverter
 		bodyModel[73] = new ModelRendererTurbo(this, 393, 25, textureX, textureY); // Box 41
 		bodyModel[74] = new ModelRendererTurbo(this, 417, 33, textureX, textureY); // Box 101
 		bodyModel[75] = new ModelRendererTurbo(this, 305, 25, textureX, textureY); // Box 102
-		bodyModel[76] = new ModelRendererTurbo(this, 33, 26, textureX, textureY, "lamp"); // Box 115 liveryimg 2
-		bodyModel[77] = new ModelRendererTurbo(this, 249, 26, textureX, textureY, "lamp"); // Box 116 liveryimg 2
+		bodyModel[76] = new ModelRendererTurbo(this, 33, 26, textureX, textureY, AnimList.lampCone(5)); // Box 115 liveryimg 2
+		bodyModel[77] = new ModelRendererTurbo(this, 249, 26, textureX, textureY, AnimList.lampSphere(5)); // Box 116 liveryimg 2
 		bodyModel[78] = new ModelRendererTurbo(this, 73, 41, textureX, textureY); // Box 117
 		bodyModel[79] = new ModelRendererTurbo(this, 385, 25, textureX, textureY); // Box 118
 		bodyModel[80] = new ModelRendererTurbo(this, 409, 25, textureX, textureY); // Box 119

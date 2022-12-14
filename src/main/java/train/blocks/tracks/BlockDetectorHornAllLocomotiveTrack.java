@@ -12,15 +12,15 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.util.AxisAlignedBB;
 import train.library.EnumSounds;
 import train.library.Info;
-import train.library.Tracks;
+import train.library.RCTracks;
 
 import java.util.List;
 
 public class BlockDetectorHornAllLocomotiveTrack extends BlockDetectorTrack implements ITrackEmitter {
 
 	@Override
-	public Tracks getTrackType() {
-		return Tracks.HORN_ALL_LOCOMOTIVES;
+	public RCTracks getTrackType() {
+		return RCTracks.HORN_ALL_LOCOMOTIVES;
 	}
 	@Override
 	public void onMinecartPass(EntityMinecart cart) {

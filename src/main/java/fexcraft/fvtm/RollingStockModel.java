@@ -38,6 +38,7 @@ public class RollingStockModel extends ModelBase {
             for(TurboList list :groups) {
                 namedList.addAll(list.namedList);
             }
+            init=false;
         }
         //this can happen somehow
         if(groups==null){
@@ -129,6 +130,7 @@ public class RollingStockModel extends ModelBase {
             for(TurboList list :groups) {
                 namedList.addAll(list.namedList);
             }
+            init=false;
         }
         return namedList;
     }

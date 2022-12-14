@@ -4,6 +4,14 @@ buildscript {
 	repositories {
 		mavenCentral()
 		maven {
+			name = "forge"
+			url = "https://files.minecraftforge.net/maven"
+		}
+		maven {
+			name = "oldforge"
+			url = "https://maven.minecraftforge.net/"
+		}
+		maven {
 			name = "gt"
 			url = "https://gregtech.overminddl1.com/"
 		}
@@ -34,7 +42,7 @@ configFile.withReader {
 version=config.modVersion
 tcversion=config.modVersion
 mcversion="1.7.10-10.13.4.1614-1.7.10"
-timversion ="2.4 alpha"
+timversion ="3.0 Beta"
 group="train" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = "Traincraft"
 
@@ -47,52 +55,55 @@ minecraft {
 }
 
 processResources
-{
-	// this will ensure that this task is redone when the versions change.
-	inputs.property "version", tcversion
-	inputs.property "mcversion", mcversion
-	inputs.property "timversion", timversion
-	inputs.property "tcversion", tcversion
+		{
+			// this will ensure that this task is redone when the versions change.
+			inputs.property "version", tcversion
+			inputs.property "mcversion", mcversion
+			inputs.property "timversion", timversion
+			inputs.property "tcversion", tcversion
 
-	// replace stuff in mcmod.info, nothing else
-	from(sourceSets.main.resources.srcDirs) {
-		include 'mcmod.info'
+			// replace stuff in mcmod.info, nothing else
+			from(sourceSets.main.resources.srcDirs) {
+				include 'mcmod.info'
 
-		// replace version and mcversion
-		expand 'version':tcversion, 'mcversion':project.minecraft.version, 'timversion':timversion, 'tcversion':tcversion
-	}
+				// replace version and mcversion
+				expand 'version':tcversion, 'mcversion':project.minecraft.version, 'timversion':timversion, 'tcversion':tcversion
+			}
 
-	// copy everything else, thats not the mcmod.info
-	from(sourceSets.main.resources.srcDirs) {
-		exclude 'mcmod.info'
-	}
-}
-
+			// copy everything else, thats not the mcmod.info
+			from(sourceSets.main.resources.srcDirs) {
+				exclude 'mcmod.info'
+			}
+		}
 repositories {
 	maven {
-		name "gt"
-		url "https://gregtech.overminddl1.com/"
+		name "codechicken"
+		url "https://maven.cil.li/"
+	}
+	ivy {
+		name "BuildCraft"
+		artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
 	}
 }
 
 dependencies {
 	// `compile` will compile it and run with `runClient`/`runServer`
-    // `compileOnly will only compile but not load in dev testing (can still put in the instance mods directory though)
+	// `compileOnly will only compile but not load in dev testing (can still put in the instance mods directory though)
 	compileOnly "li.cil.oc:OpenComputers:MC1.7.10-1.7.2.1204:dev"
 	compileOnly "com.mod-buildcraft:buildcraft:7.1.23:dev"
-	compile "codechicken:CodeChickenLib:1.7.10-1.1.3.140:dev"
-	compile "codechicken:CodeChickenCore:1.7.10-1.0.7.47:dev"
-	compile "codechicken:NotEnoughItems:1.7.10-1.0.5.120:dev"
+	compile "codechicken:CodeChickenLib:1.7.10-1.1.3.136:dev"
+	compile "codechicken:CodeChickenCore:1.7.10-1.0.4.35:dev"
+	compile "codechicken:NotEnoughItems:1.7.10-1.0.4.90:dev"
 
-    // quality of life line to simplify importing jars for experimental testing
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+	// quality of life line to simplify importing jars for experimental testing
+	compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
 
 idea
-{
-	module
-	{
-		inheritOutputDirs = true
-	}
-}
+		{
+			module
+					{
+						inheritOutputDirs = true
+					}
+		}

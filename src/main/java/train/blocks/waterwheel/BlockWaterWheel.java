@@ -9,7 +9,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import train.Traincraft;
 
@@ -41,12 +40,12 @@ public class BlockWaterWheel extends BlockDynamic {
 
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
-		return new TileWaterWheel(this);
+		return new TileWaterWheel();
 	}
 
     @Override
     public TileEntity createNewTileEntity(World world, int metadata) {
-        return new TileWaterWheel(this);
+        return new TileWaterWheel();
     }
 
 	@Override

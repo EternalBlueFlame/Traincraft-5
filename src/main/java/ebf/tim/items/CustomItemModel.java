@@ -14,7 +14,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
@@ -29,8 +28,6 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
 
     public static CustomItemModel instance = new CustomItemModel();
 
-    private static HashMap<ResourceLocation, Item> models = new HashMap<>();
-
     private static HashMap<Item, TileRenderFacing> blockTextures = new HashMap<>();
 
     public static void registerBlockTextures(Item itm, TileEntity tile){
@@ -38,21 +35,6 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
             blockTextures.put(itm, (TileRenderFacing) tile);
         }
     }
-
-    public static void registerModel(Item itm){
-        models.put(new ResourceLocation(itm.getUnlocalizedName()), itm);
-    }
-
-    //@Override
-    public boolean accepts(ResourceLocation modelLocation) {
-        return models.containsKey(modelLocation);
-    }
-
-    //@Override
-    public /*IModel*/ void loadModel(ResourceLocation modelLocation) throws Exception {
-        renderItem(null, new ItemStack(models.get(modelLocation)), null);
-    }
-
 
 
     @Override// generally useless but needs to be here
@@ -74,20 +56,7 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
     public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
         if(item==null){return;}
 
-        if(blockTextures.containsKey(item.getItem())) {
-
-            GL11.glPushMatrix();
-            GL11.glScalef(0.95f,0.95f,0.95f);
-            GL11.glTranslatef(0,-0.1f,0);
-            if(blockTextures.get(item.getItem()).host.tesr instanceof TileEntitySpecialRenderer){
-                ((TileEntitySpecialRenderer)blockTextures.get(item.getItem()).host.tesr)
-                        .renderTileEntityAt(blockTextures.get(item.getItem()),0,0,0,0);
-            } else {
-                blockTextures.get(item.getItem()).func_145828_a(null);
-            }
-            GL11.glPopMatrix();
-
-        } else if (item.getItem() instanceof ItemTransport){
+        if (item.getItem() instanceof ItemTransport){
             GL11.glPushMatrix();
             GenericRailTransport entity = ((ItemTransport) item.getItem()).entity;
             scale = entity.getHitboxSize()[0];
@@ -100,25 +69,31 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
                     GL11.glRotatef(270+(1*entity.getHitboxSize()[0]),0,1,0);
                     GL11.glRotatef(10+(-1*entity.getHitboxSize()[0]),0,0,1);
                     GL11.glRotatef(-1*entity.getHitboxSize()[0],1,0,0);
-                    GL11.glTranslatef(1f,0.4f*(entity.getHitboxSize()[0]),0.75f);
+                    GL11.glTranslatef(1.5f,3+(0.4f*(entity.getHitboxSize()[0])),0.75f);
+                    GL11.glRotatef(180,1,0,0);
                     break;
                 }
                 case INVENTORY: {
-                    GL11.glRotatef(270,0,1,0);
-                    GL11.glTranslatef(0,-0.85f,0);
+                    GL11.glRotatef(90,0,1,0);
+                    GL11.glRotatef(-25,1,0,1);
+                    GL11.glRotatef(180,1,0,0);
+                    GL11.glTranslatef(0,-1.3f,0);
                     break;
                 }
                 case EQUIPPED:{
-                    GL11.glRotatef(0+(1*entity.getHitboxSize()[0]),0,1,0);
+                    GL11.glRotatef(45,0,1,0);
                     GL11.glRotatef(10+(-1*entity.getHitboxSize()[0]),0,0,1);
                     GL11.glRotatef(-1*entity.getHitboxSize()[0],1,0,0);
-                    GL11.glTranslatef(0.5f*(entity.getHitboxSize()[0]),0.15f*(entity.getHitboxSize()[0]),0.5f*(entity.getHitboxSize()[0]));
+                    GL11.glTranslatef(0.25f*(entity.getHitboxSize()[0]),0.15f*(entity.getHitboxSize()[0]),0.5f*(entity.getHitboxSize()[0]));
+                    GL11.glTranslatef(-1,2,0);
+                    GL11.glRotatef(180,1,0,0);
                     break;
                 }
                 default:{//item frame case
                     GL11.glRotatef(90,0,1,0);
                     GL11.glScalef(0.5f,0.5f,0.5f);
-                    GL11.glTranslatef(0,-0.5f,0);
+                    GL11.glTranslatef(0,1.5f,0);
+                    GL11.glRotatef(180,1,0,0);
                 }
 
             }
@@ -194,12 +169,17 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
 
             if(item.getTagCompound().hasKey("rail")) {
                 int[] color = {255,255,255};
-                for (Map.Entry<ItemStack, int[]> e : TextureManager.ingotColors.entrySet()) {
-                    if (e.getKey().getItem() == ItemStack.loadItemStackFromNBT(item.getTagCompound().getCompoundTag("rail")).getItem() &&
-                            e.getKey().getTagCompound() == ItemStack.loadItemStackFromNBT(item.getTagCompound().getCompoundTag("rail")).getTagCompound() &&
-                            e.getKey().getItemDamage() == ItemStack.loadItemStackFromNBT(item.getTagCompound().getCompoundTag("rail")).getItemDamage()) {
-                        color = TextureManager.ingotColors.get(e.getKey());
-                        break;
+                ItemStack rail = ItemStack.loadItemStackFromNBT(item.getTagCompound().getCompoundTag("rail"));
+                if(TextureManager.ingotColors.containsKey(rail)) {
+                    color = TextureManager.ingotColors.get(rail);
+                } else {
+                    for (Map.Entry<ItemStack, int[]> e : TextureManager.ingotColors.entrySet()) {
+                        if (e.getKey().getItem() ==rail.getItem() &&
+                                e.getKey().getTagCompound() == rail.getTagCompound() &&
+                                e.getKey().getItemDamage() == rail.getItemDamage()) {
+                            color = TextureManager.ingotColors.get(e.getKey());
+                            break;
+                        }
                     }
                 }
 
@@ -238,12 +218,25 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
                 addVertexWithOffsetAndUV(end, 0.3f, 0, 0, 0, 0);
                 Tessellator.getInstance().draw();
                 GL11.glEnable(GL_TEXTURE_2D);
+                GL11.glColor4f(1,1,1,1);
                 GL11.glPopMatrix();
             }
 
             GL11.glEnable(GL11.GL_LIGHTING);
             GL11.glDisable(GL11.GL_BLEND);
             GL11.glPopMatrix();
+        } else if(blockTextures.containsKey(item.getItem())) {
+            GL11.glPushMatrix();
+            GL11.glScalef(0.95f,0.95f,0.95f);
+            GL11.glTranslatef(0,-0.1f,0);
+            if(blockTextures.get(item.getItem()).host.tesr instanceof TileEntitySpecialRenderer){
+                ((TileEntitySpecialRenderer)blockTextures.get(item.getItem()).host.tesr)
+                        .renderTileEntityAt(blockTextures.get(item.getItem()),0,0,0,0);
+            } else {
+                blockTextures.get(item.getItem()).func_145828_a(null);
+            }
+            GL11.glPopMatrix();
+
         }
 
 

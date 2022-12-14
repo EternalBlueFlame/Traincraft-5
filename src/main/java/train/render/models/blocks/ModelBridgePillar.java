@@ -7,32 +7,32 @@
 
 package train.render.models.blocks;
 
+import fexcraft.tmt.slim.ModelBase;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import fexcraft.tmt.slim.Tessellator;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.library.Info;
 
 public class ModelBridgePillar extends ModelBase {
-	private IModelCustom bridgePillar;
+	private ModelRendererTurbo bridgePillar;
 
 	public ModelBridgePillar() {
-		bridgePillar = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "bridge_block.obj"));
+		bridgePillar = new ModelRendererTurbo(this);
+		bridgePillar.addObj(Info.getModelAddress("bridge_block.obj"));
 	}
 	
 	public void render() {
-		bridgePillar.renderAll();
+		bridgePillar.render(1);
 	}
 	
 	public void render(TileEntity pillar, double x, double y, double z) {
-		if(pillar.getWorldObj()==null){
-			GL11.glTranslated( x,  y+0.5,  z);
+		if(pillar !=null || pillar.getWorldObj()==null){
+			GL11.glTranslated( x,  y+0.15,  z+0.5);
 			GL11.glRotatef(180,0,0,1);
 		} else {
-			GL11.glTranslated( x + 0.5,  y,  z + 0.5);
+			GL11.glTranslated( x + 0.5,  y+0.5,  z+1);
 		}
 
 		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_slope.png"));

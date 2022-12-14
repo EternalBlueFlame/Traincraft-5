@@ -7,6 +7,10 @@
 
 package train.library;
 
+import train.Traincraft;
+
+import java.net.URISyntaxException;
+
 public class Info {
 
 	/* Mod relevant information */
@@ -25,9 +29,16 @@ public class Info {
 	public static final String bookPrefix = "textures/gui/book/";
 	public static final String trainsPrefix = "textures/trains/";
 	public static final String zeppelinTexturePrefix = "textures/zeppelin/";
-	public static final String modelPrefix = "traincraft:models/";//"/src/train/Resources/Models/";
 	//public static final String modelPrefix2 = "models/";
 	public static final String modelTexPrefix = "textures/models/";
 	public static final String armorPrefix = "textures/armor/";
 	public static final String villagerPrefix = "textures/villager/";
+
+	public static String getModelAddress(String name){
+		try {
+			return Traincraft.class.getResource("/assets/traincraft/models/" +name).toURI().toString();
+		} catch (URISyntaxException e) {
+			return "";
+		}
+	}
 }

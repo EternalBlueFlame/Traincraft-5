@@ -1,10 +1,9 @@
 package train.render;
 
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import train.render.models.blocks.ModelLantern;
 
-public class RenderLantern extends TileEntitySpecialRenderer {
+public class RenderLantern extends TiMTESR {
 	private static final ModelLantern modelLantern = new ModelLantern();
 
 	@Override

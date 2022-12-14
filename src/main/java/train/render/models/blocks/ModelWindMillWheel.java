@@ -3,30 +3,31 @@ package train.render.models.blocks;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.client.model.ModelBase;
+import ebf.tim.utility.CommonUtil;
+import fexcraft.tmt.slim.ModelBase;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
-import train.library.Info;
 import train.blocks.windmill.TileWindMill;
+import train.library.Info;
 
 @SideOnly(Side.CLIENT)
 public class ModelWindMillWheel extends ModelBase {
-	//private IModelCustom modelWindMill;
-	private IModelCustom modelWindMillWheel;
+	//private ModelRendererTurbo modelWindMill;
+	private ModelRendererTurbo modelWindMillWheel;
 	private long lastframe;
 	private float wheel;
 	private int l;
 	public float wheel1 = 0.4188790204786391F;
 
 	public ModelWindMillWheel() {
-		modelWindMillWheel = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "wind_mill_wheel.obj"));
+		modelWindMillWheel = new ModelRendererTurbo(this);
+		modelWindMillWheel.addObj(Info.getModelAddress("wind_mill_wheel.obj"));
 	}
 
 	public void render() {
-		modelWindMillWheel.renderAll();
+		modelWindMillWheel.render(1);
 	}
 
 	public void render(TileEntity windMill, double x, double y, double z) {
@@ -34,15 +35,18 @@ public class ModelWindMillWheel extends ModelBase {
 		GL11.glPushMatrix();
 
 		// Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
-		if(windMill.getWorldObj()==null){
-			GL11.glTranslated( x,  y+0.5,  z);
+		if(windMill==null || windMill.getWorldObj()==null){
+			GL11.glTranslated( x,  y+0.75,  z);
+			GL11.glRotatef(90,1,0,0);
+			GL11.glRotatef(90,0,0,1);
 			GL11.glScalef(0.8f,0.8f,0.8f);
 		} else {
 			GL11.glTranslated( x + 0.5,  y+1.5,  z + 0.5);
+			GL11.glRotatef(90,0,0,1);
 		}
 
 		// Bind the texture, so that OpenGL properly textures our block.
-		FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "water_wheel_uv.png"));
+		FMLClientHandler.instance().getClient().renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "water_wheel_uv.png"));
 		int j = 0x7A7674;//0x331D14;//0x1C0F0A; //0x5a3222;
 		//System.out.println(j);
 		float f1 = 1.0F;
@@ -52,8 +56,8 @@ public class ModelWindMillWheel extends ModelBase {
 		GL11.glColor4f(f1 * f2, f1 * f3, f1 * f4,1);
 		GL11.glScalef(0.45f, 0.45f, 0.45f);
 		int windStrength=1;
-		if(windMill.getWorldObj()!=null) {
-			int facing = windMill.getWorldObj().getBlockMetadata(windMill.xCoord, windMill.yCoord, windMill.zCoord);
+		if(windMill==null && windMill.getWorldObj()!=null) {
+			int facing = CommonUtil.getBlockFacing(windMill.getWorldObj(), windMill.xCoord,windMill.yCoord, windMill.zCoord);
 			if (facing == 3) {
 			}
 			if (facing == 1) {
@@ -82,7 +86,7 @@ public class ModelWindMillWheel extends ModelBase {
 		int elapsed = (int) ((now - lastframe) / (1000 * (100 - (windStrength))));
 		wheel -= (float) elapsed / (250.0f);
 		lastframe = now;
-		GL11.glRotatef(-(wheel + wheel1), 0F, 0F, 1F);
+		GL11.glRotatef(-(wheel + wheel1), 0F, 1F, 0F);
 
 		this.render();
 		//GL11.glColor3f(1, 1, 1);

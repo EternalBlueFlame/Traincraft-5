@@ -2,7 +2,11 @@ package ebf.tim.registry;
 
 import ebf.tim.TrainsInMotion;
 import ebf.tim.items.*;
+import ebf.tim.utility.Recipe;
+import ebf.tim.utility.RecipeManager;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import train.blocks.TCBlocks;
 
 public class TiMItems {
 
@@ -17,20 +21,20 @@ public class TiMItems {
 
     public static Item boilerWood,boilerIron,boilerSteel,boilerCopper;
     public static Item fireboxIron, fireboxSteel;
-    public static Item petrolEngine,smallDieselEngine,mediumDieselEngine,largeDieselEngine;
-    public static Item smallElectricEngine,mediumElectricEngine,largeElectricEngine;
+    public static Item mediumDieselEngine;//,petrolEngine,smallDieselEngine,largeDieselEngine;
+    public static Item smallElectricEngine;//,mediumElectricEngine,largeElectricEngine;
 
-    public static Item seatsWooden,seatsIron,seatsPadded,seatsLuxury;
+    public static Item seatsWooden;//,seatsIron,seatsPadded,seatsLuxury;
 
-    public static Item hydraulicTransmission,pneumaticTransmission,transformer,transformerHV,electricControls;
+    public static Item hydraulicTransmission,transformer;//,pneumaticTransmission,transformerHV,electricControls;
 
-    public static Item enginePiston,cylinder,camshaft,graphite,steelPinCircuit, goldPinCircuit, connectingRod;
+    public static Item enginePiston,cylinder,camshaft,graphite,steelPinCircuit;//, goldPinCircuit, connectingRod;
 
-    public static Item copperWire,goldWire, carbonWire, steelWire, aluminiumWire, insulatedCopperWire, insulatedAluminiumWire;
+    public static Item copperWire,goldWire, carbonWire, steelWire, aluminiumWire;//, insulatedCopperWire, insulatedAluminiumWire;
 
-    public static Item controlPanel, controlStand;
+    public static Item controlPanel;//, controlStand;
 
-    public static Item walschaertsValveGear, stephensonValveGear, bakerValveGear, radialValveGear, conjugatingValveGear;
+    //public static Item walschaertsValveGear, stephensonValveGear, bakerValveGear, radialValveGear, conjugatingValveGear;
 
     public static Item railItem;
 
@@ -108,26 +112,26 @@ public class TiMItems {
         fireboxSteel = createItem("firebox.steel");
 
         //Engines
-        petrolEngine = createItem("petrol.engine"); //c
-        smallDieselEngine = createItem("small.diesel.engine");
+        //petrolEngine = createItem("petrol.engine"); //c
+        //mediumDieselEngine = createItem("small.diesel.engine");
         mediumDieselEngine = createItem("medium.diesel.engine");
-        largeDieselEngine = createItem("large.diesel.engine"); //c
+        //largeDieselEngine = createItem("large.diesel.engine"); //c
         smallElectricEngine = createItem("small.electric.engine");
-        mediumElectricEngine = createItem("medium.electric.engine"); //c
-        largeElectricEngine = createItem("large.electric.engine"); //c
+        //mediumElectricEngine = createItem("medium.electric.engine"); //c
+        //largeElectricEngine = createItem("large.electric.engine"); //c
 
         //Seats
         seatsWooden = createItem("seats.wooden");
-        seatsIron = createItem("seats.iron"); //c
-        seatsPadded = createItem("seats.padded"); //c
-        seatsLuxury = createItem("seats.luxury"); //c
+        //seatsIron = createItem("seats.iron"); //c
+        //seatsPadded = createItem("seats.padded"); //c
+        //seatsLuxury = createItem("seats.luxury"); //c
 
         //Transmissions + Other
         hydraulicTransmission = createItem("hydraulic.transmission");
-        pneumaticTransmission = createItem("pneumatic.transmission");
+        //pneumaticTransmission = createItem("pneumatic.transmission");
         transformer = createItem("transformer");
-        transformerHV = createItem("transformer.hv"); //c
-        electricControls = createItem("electric.controls"); //c
+        //transformerHV = createItem("transformer.hv"); //c
+        //electricControls = createItem("electric.controls"); //c
 
         //Wires
         //TODO in future? rename to wire.material to match naming scheme
@@ -136,16 +140,16 @@ public class TiMItems {
         carbonWire = createItem("carbon.wire");
         steelWire = createItem("steel.wire");
         aluminiumWire = createItem("aluminium.wire");
-        insulatedCopperWire = createItem("insulated.copper.wire"); //c
-        insulatedAluminiumWire = createItem("insulated.aluminium.wire"); //c
+        //insulatedCopperWire = createItem("insulated.copper.wire"); //c
+        //insulatedAluminiumWire = createItem("insulated.aluminium.wire"); //c
 
         //Valve Gears
         //TODO in future? reverse order to match naming scheme
-        walschaertsValveGear = createItem("walschaerts.valve.gear"); //c
-        stephensonValveGear = createItem("stephenson.valve.gear"); //c
-        bakerValveGear = createItem("baker.valve.gear"); //c
-        radialValveGear = createItem("radial.valve.gear"); //c
-        conjugatingValveGear = createItem("conjugating.valve.gear"); //c
+        //walschaertsValveGear = createItem("walschaerts.valve.gear"); //c
+        //stephensonValveGear = createItem("stephenson.valve.gear"); //c
+        //bakerValveGear = createItem("baker.valve.gear"); //c
+        //radialValveGear = createItem("radial.valve.gear"); //c
+        //conjugatingValveGear = createItem("conjugating.valve.gear"); //c
 
         //Other
         //TODO in future? reverse order to match naming scheme
@@ -154,17 +158,23 @@ public class TiMItems {
         camshaft = createItem("camshaft");
         graphite = createItem("graphite");
         steelPinCircuit = createItem("steel.pin.circuit");
-        goldPinCircuit = createItem("gold.pin.circuit"); //c
+        //goldPinCircuit = createItem("gold.pin.circuit"); //c
         controlPanel = createItem("control.panel");
-        controlStand = createItem("control.stand"); //c
-        connectingRod = createItem("connecting.rod"); //c
+        //controlStand = createItem("control.stand"); //c
+        //connectingRod = createItem("connecting.rod"); //c
         generator = createItem("generator");
+    }
+
+    private static Item createItem(String unlocalizedName, ItemStack[] r) {
+        Item item = new Item();
+        TiMGenericRegistry.RegisterItem(item, TrainsInMotion.MODID, unlocalizedName, TrainsInMotion.creativeTabCrafting, "crafting/" + unlocalizedName);
+        RecipeManager.registerRecipe(new Recipe(new ItemStack(item), r[0],r[1],r[2],r[3],r[4],r[5],r[6],r[7],r[8]), TiMBlocks.trainTable);
+        return item;
     }
 
     private static Item createItem(String unlocalizedName) {
         Item item = new Item();
-        TiMGenericRegistry.RegisterItem(item, TrainsInMotion.MODID, unlocalizedName, TrainsInMotion.creativeTabCrafting);
-        item.setTextureName(TrainsInMotion.MODID+ ":" + "crafting/" + item.getUnlocalizedName().replace("item.", ""));
+        TiMGenericRegistry.RegisterItem(item, TrainsInMotion.MODID, unlocalizedName, TrainsInMotion.creativeTabCrafting, "crafting/" + unlocalizedName);
         return item;
     }
 }

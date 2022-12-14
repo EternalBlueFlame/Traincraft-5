@@ -9,16 +9,15 @@ package train.render.models.blocks;
 
 import cpw.mods.fml.client.FMLClientHandler;
 import fexcraft.tmt.slim.ModelBase;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.library.Info;
 import train.render.CustomModelRenderer;
 
 public class ModelStopper extends ModelBase {
 	
-	private IModelCustom track;
+	private ModelRendererTurbo track;
 
 	public CustomModelRenderer box;
 	public CustomModelRenderer box0;
@@ -33,7 +32,8 @@ public class ModelStopper extends ModelBase {
 
 	public ModelStopper(float scale) {
 
-		track =  AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_normal.obj"));
+		track =  new ModelRendererTurbo(this);
+		track.addObj(Info.getModelAddress("track_normal.obj"));
 		
 		box = new CustomModelRenderer(this, 43, 4, 64, 64);
 		box.addBox(0F, 0F, 0F, 2, 15, 1, scale);
@@ -106,7 +106,7 @@ public class ModelStopper extends ModelBase {
 		FMLClientHandler.instance().getClient().renderEngine
 				.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
 		GL11.glColor4f(1, 1, 1, 1);
-		track.renderAll();
+		track.render(1);
 		GL11.glPopMatrix();
 	}
 
@@ -124,6 +124,6 @@ public class ModelStopper extends ModelBase {
 		FMLClientHandler.instance().getClient().renderEngine
 				.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
 		GL11.glColor4f(1, 1, 1, 1);
-		track.renderAll();
+		track.render();
 	}
 }

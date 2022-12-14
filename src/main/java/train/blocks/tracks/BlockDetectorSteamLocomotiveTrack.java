@@ -9,13 +9,13 @@ import ebf.tim.TrainsInMotion;
 import ebf.tim.entities.GenericRailTransport;
 import mods.railcraft.api.tracks.ITrackEmitter;
 import net.minecraft.entity.item.EntityMinecart;
-import train.library.Tracks;
+import train.library.RCTracks;
 
 public class BlockDetectorSteamLocomotiveTrack extends BlockDetectorTrack implements ITrackEmitter {
 
 	@Override
-	public Tracks getTrackType() {
-		return Tracks.DETECTOR_STEAM_LOCOMOTIVES;
+	public RCTracks getTrackType() {
+		return RCTracks.DETECTOR_STEAM_LOCOMOTIVES;
 	}
 	@Override
 	public void onMinecartPass(EntityMinecart cart) {

@@ -1,12 +1,10 @@
 package train.render.models;
 
 import ebf.tim.entities.GenericRailTransport;
-import ebf.tim.utility.DebugUtil;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.entity.Entity;
-import org.lwjgl.opengl.GL11;
 import train.render.CustomModelRenderer;
 
 public class ModelFlatCarLogs_DB extends ModelBase {

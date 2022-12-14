@@ -15,7 +15,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
-import train.library.Tracks;
+import train.library.RCTracks;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -25,8 +25,8 @@ public class BlockDetectorAllLocomotiveTrack extends BlockDetectorTrack implemen
 	
 	private int	ThingToSet	= 0;
 	@Override
-	public Tracks getTrackType() {
-		return Tracks.DETECTOR_ALL_LOCOMOTIVES;
+	public RCTracks getTrackType() {
+		return RCTracks.DETECTOR_ALL_LOCOMOTIVES;
 	}
 	
 	@Override

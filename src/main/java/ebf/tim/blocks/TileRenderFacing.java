@@ -3,6 +3,7 @@ package ebf.tim.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.TrainsInMotion;
+import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.*;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -13,14 +14,13 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import org.lwjgl.opengl.GL11;
 
 public class TileRenderFacing extends TileEntity {
     public byte facing =-1;
     private Integer blockGLID =null;
-    private AxisAlignedBB boundingBox = null;
     public BlockDynamic host;
 
     public TileRenderFacing(BlockDynamic block){
@@ -67,59 +67,75 @@ public class TileRenderFacing extends TileEntity {
     @Override
     public void func_145828_a(CrashReportCategory r){
         if(r==null){
-            if(host.getTexture(xCoord,yCoord,zCoord)!=null) {
-                GL11.glEnable(GL11.GL_TEXTURE_2D);
-                TextureManager.bindTexture(host.getTexture(xCoord,yCoord,zCoord));
+            int boundTexture =  org.lwjgl.opengl.GL11.glGetInteger( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
+            if(getTexture(xCoord,yCoord,zCoord)!=null) {
+                org.lwjgl.opengl.GL11.glEnable( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
+                TextureManager.bindTexture(getTexture(xCoord,yCoord,zCoord));
             } else {
-                GL11.glDisable(GL11.GL_TEXTURE_2D);
+                org.lwjgl.opengl.GL11.glDisable( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
             }
 
 
-            if(blockGLID ==null){
-                blockGLID=org.lwjgl.opengl.GL11.glGenLists(1);
-                org.lwjgl.opengl.GL11.glNewList(blockGLID, org.lwjgl.opengl.GL11.GL_COMPILE);
-                if(worldObj==null) {
-                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
-                }
-                GL11.glTranslatef(0.5f,0.5f,0.5f);
-                switch (facing){
-                    //north
-                    case 0:{GL11.glRotatef(90,0,1,0);break;}
-                    //east
-                    case 1:{break;}
-                    //south
-                    case 2:{GL11.glRotatef(270,0,1,0);break;}
-                    //west
-                    case 3:{GL11.glRotatef(180,0,1,0);break;}
-                }
-                GL11.glRotatef(180,1,0,0);
-
-                if(host.model!=null) {
-                    host.model.render(null, 0, 0, 0, 0, 0, 0);
-                } else {
-                    for (TexturedPolygon poly : cube.faces) {
-                        Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625f);
-                    }
-                }
-                org.lwjgl.opengl.GL11.glEndList();
-
-            } else {
-
-                if(!org.lwjgl.opengl.GL11.glIsList(blockGLID)){
-                    blockGLID=null;
-                    return;
-                }
-                org.lwjgl.opengl.GL11.glCallList(blockGLID);
-                if(ebf.tim.utility.ClientProxy.disableCache){
-                    org.lwjgl.opengl.GL11.glDeleteLists(blockGLID,1);
-                    blockGLID =null;
-                }
+            if(worldObj==null) {
+                Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
             }
+            org.lwjgl.opengl.GL11.glTranslatef(0.5f,0.5f,0.5f);
+            switch (facing){
+                //north
+                case 0:{ org.lwjgl.opengl.GL11.glRotatef(90,0,1,0);break;}
+                //east
+                case 1:{break;}
+                //south
+                case 2:{ org.lwjgl.opengl.GL11.glRotatef(270,0,1,0);break;}
+                //west
+                case 3:{ org.lwjgl.opengl.GL11.glRotatef(180,0,1,0);break;}
+            }
+            org.lwjgl.opengl.GL11.glRotatef(180,1,0,0);
+
+            renderModel();
             //be sure to re-enable the texture biding, because the UI wont
-            GL11.glEnable(GL11.GL_TEXTURE_2D);
+            org.lwjgl.opengl.GL11.glEnable( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
+            org.lwjgl.opengl.GL11.glBindTexture( org.lwjgl.opengl.GL11.GL_TEXTURE_2D,boundTexture);
         } else{
             super.func_145828_a(r);
         }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void renderModel(){
+        if(host.model!=null) {
+            host.model.render();
+        } else {
+            if(blockGLID ==null) {
+                for (TexturedPolygon poly : cube.faces) {
+                    Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625f);
+                }
+                if(!ebf.tim.utility.ClientProxy.disableCache) {
+                    blockGLID = org.lwjgl.opengl.GL11.glGenLists(1);
+                    org.lwjgl.opengl.GL11.glNewList(blockGLID, org.lwjgl.opengl.GL11.GL_COMPILE);
+                    for (TexturedPolygon poly : cube.faces) {
+                        Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625f);
+                    }
+                    org.lwjgl.opengl.GL11.glEndList();
+                }
+            } else {
+
+            if(!org.lwjgl.opengl.GL11.glIsList(blockGLID)){
+                blockGLID=null;
+                return;
+            }
+            org.lwjgl.opengl.GL11.glCallList(blockGLID);
+            if(ebf.tim.utility.ClientProxy.disableCache){
+                org.lwjgl.opengl.GL11.glDeleteLists(blockGLID,1);
+                blockGLID =null;
+            }
+        }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    public ResourceLocation getTexture(int x, int y, int z){
+        return host.getTexture(x,y,z);
     }
 
     @Override
@@ -137,7 +153,7 @@ public class TileRenderFacing extends TileEntity {
     public void markDirty() {
         super.markDirty();
         if(this.worldObj != null) {
-            worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+            CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
             worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
             this.worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, host);
             if (worldObj.isRemote && blockGLID != null) {

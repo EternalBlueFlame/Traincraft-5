@@ -11,8 +11,8 @@
   "credits": "code help: ComputerButter, ZoraNoDensha, Cam27Cam, MothershipQ, Sebasver, Dominik__1, Riggs64. A large number of icons by twitter.com/MaePoss",
   "parent": "",
   "screenshots": [],
-  "requiredMods": ["Forge@[10.13.4.1558,)"],
-  "dependencies": ["Forge@[10.13.4.1558,)", "Railcraft@[9.11.0.0,)"],
+  "requiredMods": ["Forge@[10.13.4.1614,)"],
+  "dependencies": ["Forge@[10.13.4.1614,)", "Railcraft@[9.11.0.0,)"],
   "dependants": [],
   "useDependencyInformation": "true"
 },{
@@ -28,8 +28,8 @@
   "credits": "Created by Spitfire4466 & Mrbrutal",
   "parent": "",
   "screenshots": [],
-  "requiredMods": ["Forge@[10.13.4.1558,)"],
-  "dependencies": ["Forge@[10.13.4.1558,)", "Railcraft@[9.11.0.0,)", "trainsinmotion"],
+  "requiredMods": ["Forge@[10.13.4.1614,)"],
+  "dependencies": ["Forge@[10.13.4.1614,)", "Railcraft@[9.11.0.0,)", "trainsinmotion"],
   "dependants": [],
   "useDependencyInformation": "true"
 }]

@@ -1,5 +1,6 @@
 package fexcraft.tmt.slim;
 
+
 import net.minecraft.util.Vec3;
 
 /**
@@ -8,13 +9,15 @@ import net.minecraft.util.Vec3;
  * this is intended to replicate the Vec3d from minecraft 1.8+
  * mostly it just makes handling vector 3's simpler.
  */
-public class Vec3d extends Vec3 {
+public class Vec3d {
+
+    public double xCoord=0,yCoord=0,zCoord=0;
 
     public Vec3d(double x, double y, double z){
-        super(x,y,z);
+        xCoord=x;yCoord=y;zCoord=z;
     }
 
-    public Vec3d(Vec3 vec){super(vec.xCoord, vec.yCoord, vec.zCoord);}
+    public Vec3d(Vec3 vec){this(vec.xCoord, vec.yCoord, vec.zCoord);}
 
     public void add(Vec3d vec2){
         xCoord += vec2.xCoord;

@@ -3,8 +3,10 @@ package ebf.tim.utility;
 import codechicken.nei.PositionedStack;
 import codechicken.nei.api.API;
 import codechicken.nei.recipe.TemplateRecipeHandler;
+import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
+import train.blocks.TCBlocks;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,24 +40,25 @@ public class TiMTableNEIIntegration extends TemplateRecipeHandler {
         private PositionedStack result;
         private ArrayList<PositionedStack> ingredients;
         private Recipe recipe;
+        private Block table;
 
         public CachedTiMTableRecipe(Object _ingredient) {
             if (_ingredient instanceof ItemStack) {
-                this.recipe = RecipeManager.getRecipe((ItemStack) _ingredient);
-
-                if (recipe == null) { //Swift's guard statements would sure be nice here.
-                    DebugUtil.println("[NEI INTEGRATION] Could not get recipe from ingredient.");
-                } else if (recipe.getTier() != 0) {
+                this.recipe = RecipeManager.getRecipe((ItemStack) _ingredient, TCBlocks.partTable);
+                if(recipe!=null){
                     result = new PositionedStack(_ingredient, getOutputPosition()[0], getOutputPosition()[1]);
                     result.setMaxSize(recipe.getresult().get(0).stackSize);
-                    ingredients = setIngredients(recipe.getRecipeItems());
+                    this.ingredients = setIngredients(3,3, recipe.getRecipeItems());
+                    table=TCBlocks.partTable;
                 } else {
-                    result = new PositionedStack(_ingredient, getOutputPosition()[0], getOutputPosition()[1]);
-                    result.setMaxSize(recipe.getresult().get(0).stackSize);
-                    if (recipe instanceof SizedRecipe) { //sized recipe, have custom size.
-                        this.ingredients = setIngredients(((SizedRecipe) recipe).getCraftWidth(), ((SizedRecipe) recipe).getCraftHeight(), recipe.getRecipeItems());
-                    } else { //normal recipe class
-                        this.ingredients = setIngredients(3,3, recipe.getRecipeItems());
+                    this.recipe = RecipeManager.getRecipe((ItemStack) _ingredient, null);
+                    if (recipe == null) { //Swift's guard statements would sure be nice here.
+                        DebugUtil.println("[NEI INTEGRATION] Could not get recipe from ingredient.");
+                    } else {
+                        result = new PositionedStack(_ingredient, getOutputPosition()[0], getOutputPosition()[1]);
+                        result.setMaxSize(recipe.getresult().get(0).stackSize);
+                        ingredients = setIngredients(recipe.getRecipeItems());
+                        table=RecipeManager.getRecipeTable((ItemStack) _ingredient);
                     }
                 }
             }
@@ -68,6 +71,11 @@ public class TiMTableNEIIntegration extends TemplateRecipeHandler {
 
         public Recipe getRecipe() {
             return recipe;
+        }
+
+
+        public Block getRecipeTable() {
+            return table;
         }
 
         /**
@@ -141,9 +149,9 @@ public class TiMTableNEIIntegration extends TemplateRecipeHandler {
      */
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        Recipe recipe = RecipeManager.getRecipe(result);
+        Recipe recipe = RecipeManager.getRecipe(result, TCBlocks.partTable);
 
-        if(recipe != null && recipe.getTier() == 0) {
+        if(recipe != null) {
             CachedRecipe cachedRecipe = new CachedTiMTableRecipe(result);
             arecipes.add(cachedRecipe);
         }
@@ -165,7 +173,7 @@ public class TiMTableNEIIntegration extends TemplateRecipeHandler {
      */
     @Override
     public void loadUsageRecipes(ItemStack itemStack) {
-        List<Recipe> matchingRecipes = RecipeManager.getRecipesContaining(itemStack, 0);
+        List<Recipe> matchingRecipes = RecipeManager.getRecipesContaining(itemStack, TCBlocks.partTable);
         for (Recipe r : matchingRecipes) {
             for (ItemStack crafted : r.getresult()) {
                 CachedRecipe cr = new CachedTiMTableRecipe(crafted);

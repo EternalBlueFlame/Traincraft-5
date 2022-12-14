@@ -5,16 +5,12 @@ import ebf.tim.entities.EntityTrainCore;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.networking.PacketInteract;
 import ebf.tim.registry.URIRegistry;
-import ebf.tim.utility.ClientUtil;
-import ebf.tim.utility.CommonUtil;
-import ebf.tim.utility.ItemStackSlot;
-import ebf.tim.utility.TransportSlotManager;
+import ebf.tim.utility.*;
 import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.client.renderer.RenderBlocks;
-import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -22,7 +18,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.ForgeHooksClient;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -73,6 +68,10 @@ public class GUITransport extends GUIContainerNoNEI {
         if (transport.getTankCapacity()!=null && transport.getTankCapacity().length>0) {
             renderTankerInventory(mc, mouseX, mouseY);
         }
+        //draw hover text;
+        for (GUIButton b : buttons){
+            b.drawText(mouseX-(int)guiLeft,mouseY-(int)guiTop);
+        }
     }
 
     /**we draw the GUI here so it's under the item render*/
@@ -92,6 +91,10 @@ public class GUITransport extends GUIContainerNoNEI {
         }
 
 
+        //draw the buttons.
+        for (GUIButton b : buttons){
+            b.drawButton(mouseX,mouseY);
+        }
 
         //todo:there needs to be some way for custom GUI's from the train's class without breaking it's ability to be defined on server too.
 
@@ -117,14 +120,6 @@ public class GUITransport extends GUIContainerNoNEI {
         drawTextOutlined(fontRendererObj, CommonUtil.translate(transport.transportName()+ ".name"), 10, -30+yCenter, 16777215);
         drawTextOutlined(fontRendererObj, I18n.format("container.inventory", new Object()), guiLeft+120, guiTop+70, 16777215);
 
-        //draw the buttons.
-        for (GUIButton b : buttons){
-            b.drawButton(mouseX,mouseY);
-        }
-        //draw hover text;
-        for (GUIButton b : buttons){
-            b.drawText(mouseX,mouseY);
-        }
     }
 
 
@@ -158,6 +153,9 @@ public class GUITransport extends GUIContainerNoNEI {
                 public void onClick() {
                     TrainsInMotion.keyChannel.sendToServer(new PacketInteract(13, transport.getEntityId()));
                 }
+
+                @Override
+                public FontRenderer getFont(){return fontRendererObj;}
             });
         }
         this.buttons.add(new GUIButton((int)guiLeft + 130, (int)guiTop + 166, 18, 18){
@@ -184,6 +182,9 @@ public class GUITransport extends GUIContainerNoNEI {
             public void onClick() {
                 TrainsInMotion.keyChannel.sendToServer(new PacketInteract(6, transport.getEntityId()));
             }
+
+            @Override
+            public FontRenderer getFont(){return fontRendererObj;}
         });
 
         this.buttons.add(new GUIButton((int)guiLeft + 148, (int)guiTop + 166, 18, 18){
@@ -206,6 +207,9 @@ public class GUITransport extends GUIContainerNoNEI {
             public void onClick() {
                 TrainsInMotion.keyChannel.sendToServer(new PacketInteract(7, transport.getEntityId()));
             }
+
+            @Override
+            public FontRenderer getFont(){return fontRendererObj;}
         });
 
         this.buttons.add(new GUIButton((int)guiLeft + 238, (int)guiTop + 166, 18, 18){
@@ -227,6 +231,9 @@ public class GUITransport extends GUIContainerNoNEI {
             public void onClick() {
                 TrainsInMotion.keyChannel.sendToServer(new PacketInteract(5, transport.getEntityId()));
             }
+
+            @Override
+            public FontRenderer getFont(){return fontRendererObj;}
         });
 
         this.buttons.add(new GUIButton((int)guiLeft + 220, (int)guiTop + 166, 18, 18){
@@ -253,6 +260,9 @@ public class GUITransport extends GUIContainerNoNEI {
             public void onClick() {
                 TrainsInMotion.keyChannel.sendToServer(new PacketInteract(15, transport.getEntityId()));
             }
+
+            @Override
+            public FontRenderer getFont(){return fontRendererObj;}
         });
         //train specific
         if (transport instanceof EntityTrainCore) {
@@ -265,9 +275,20 @@ public class GUITransport extends GUIContainerNoNEI {
                     }
 
                     @Override
+                    public int[] getColor(){
+                        if(transport.getBoolean(GenericRailTransport.boolValues.CREATIVE)){
+                            return new int[]{150,255,150};
+                        }
+                        return null;
+                    }
+
+                    @Override
                     public void onClick() {
                         TrainsInMotion.keyChannel.sendToServer(new PacketInteract(10, transport.getEntityId()));
                     }
+
+                    @Override
+                    public FontRenderer getFont(){return fontRendererObj;}
                 });
             }
             if (transport.getTypes()!=null && !transport.getTypes().contains(TrainsInMotion.transportTypes.STEAM)) {
@@ -279,9 +300,20 @@ public class GUITransport extends GUIContainerNoNEI {
                     }
 
                     @Override
+                    public int[] getColor(){
+                        if(transport.getBoolean(GenericRailTransport.boolValues.RUNNING)){
+                            return new int[]{150,255,150};
+                        }
+                        return null;
+                    }
+
+                    @Override
                     public void onClick() {
                         TrainsInMotion.keyChannel.sendToServer(new PacketInteract(8, transport.getEntityId()));
                     }
+
+                    @Override
+                    public FontRenderer getFont(){return fontRendererObj;}
                 });
             }
             this.buttons.add(new GUIButton((int)guiLeft + 256, (int)guiTop + 166, 18, 18){
@@ -300,6 +332,9 @@ public class GUITransport extends GUIContainerNoNEI {
                 public void onClick() {
                     TrainsInMotion.keyChannel.sendToServer(new PacketInteract(9, transport.getEntityId()));
                 }
+
+                @Override
+                public FontRenderer getFont(){return fontRendererObj;}
             });
 
         }
@@ -345,7 +380,7 @@ public class GUITransport extends GUIContainerNoNEI {
         }
 
         drawTextOutlined(fontRendererObj, "burn time: " + transport.getDataWatcher().getWatchableObjectInt(13), 10, 70, 16777215);
-        drawTextOutlined(fontRendererObj, "boiler heat: " + transport.getDataWatcher().getWatchableObjectFloat(16), 10, 80, 16777215);
+        drawTextOutlined(fontRendererObj, "boiler heat: " + FuelHandler.getBoilerHeat(transport), 10, 80, 16777215);
         GL11.glEnable(GL11.GL_LIGHTING);
     }
 
@@ -446,7 +481,8 @@ public class GUITransport extends GUIContainerNoNEI {
                 Tessellator.bindTexture(URIRegistry.GUI_PREFIX.getResource("gui.png"));
                 ClientUtil.drawTexturedRect(186, 40 + (-20 * i), 16, 0, 90, 18, 16, 16);
 
-                if (transport.getTankInfo(null)[i] != null && transport.getTankInfo(null)[i].fluid.amount > 0) {
+                if (transport.getTankInfo(null)[i] != null && transport.getTankInfo(null)[i].fluid !=null &&
+                        transport.getTankInfo(null)[i].fluid.amount > 0) {
                     liquid = transport.getTankInfo(null)[i].fluid.amount;
                     if (liquid != 0) {
                         liquid /= transport.getTankInfo(null)[i].capacity;
@@ -457,40 +493,21 @@ public class GUITransport extends GUIContainerNoNEI {
                     GL11.glTranslatef(186, 40 + (-20 * i), 0);
                     GL11.glScalef(0.125f + liquid, 1.125f, 1);
                     //render fluid overlay
-                    if (!ForgeHooksClient.renderInventoryItem(RenderBlocks.getInstance(), mc.renderEngine,
-                            new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())),
-                            true, zLevel, 0, 0)) {
-                        RenderItem.getInstance().renderItemIntoGUI(fontRendererObj, mc.renderEngine,
-                                new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())), 0, 0, true);
-                    }
+                    EventManager.itemRender.renderItemIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(),
+                            new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())),0,0);
                     GL11.glTranslatef(16, 0, 0);
-                    if (!ForgeHooksClient.renderInventoryItem(RenderBlocks.getInstance(), mc.renderEngine,
-                            new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())),
-                            true, zLevel, 0, 0)) {
-                        RenderItem.getInstance().renderItemIntoGUI(fontRendererObj, mc.renderEngine,
-                                new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())), 0, 0, true);
-                    }
+                    EventManager.itemRender.renderItemIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(),
+                            new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())),0,0);
                     GL11.glTranslatef(16, 0, 0);
-                    if (!ForgeHooksClient.renderInventoryItem(RenderBlocks.getInstance(), mc.renderEngine,
-                            new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())),
-                            true, zLevel, 0, 0)) {
-                        RenderItem.getInstance().renderItemIntoGUI(fontRendererObj, mc.renderEngine,
-                                new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())), 0, 0, true);
-                    }
+                    EventManager.itemRender.renderItemIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(),
+                            new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())),0,0);
                     GL11.glTranslatef(16, 0, 0);
-                    if (!ForgeHooksClient.renderInventoryItem(RenderBlocks.getInstance(), mc.renderEngine,
-                            new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())),
-                            true, zLevel, 0, 0)) {
-                        RenderItem.getInstance().renderItemIntoGUI(fontRendererObj, mc.renderEngine,
-                                new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())), 0, 0, true);
-                    }
+                    EventManager.itemRender.renderItemIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(),
+                            new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())),0,0);
                     GL11.glTranslatef(16, 0, 0);
-                    if (!ForgeHooksClient.renderInventoryItem(RenderBlocks.getInstance(), mc.renderEngine,
-                            new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())),
-                            true, zLevel, 0, 0)) {
-                        RenderItem.getInstance().renderItemIntoGUI(fontRendererObj, mc.renderEngine,
-                                new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())), 0, 0, true);
-                    }
+                    EventManager.itemRender.renderItemIntoGUI(fontRendererObj, Minecraft.getMinecraft().getTextureManager(),
+                            new ItemStack(Item.getItemFromBlock(transport.getTankInfo(null)[i].fluid.getFluid().getBlock())),0,0);
+
 
                     GL11.glDisable(GL11.GL_LIGHTING);
                     GL11.glColor4f(1, 1, 1, 1);

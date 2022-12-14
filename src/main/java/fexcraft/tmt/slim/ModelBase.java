@@ -107,6 +107,47 @@ public class ModelBase extends ArrayList<ModelRendererTurbo> {
 		}
 	}
 
+	public void renderBlock(){
+		if(!init) {
+			initAllParts();
+		}
+		render(boxList);
+
+		ModelRendererTurbo part;
+		for(int i = 0; i< namedList.size(); i++){
+			//for animations to work we have to limit the displaylist cache to ONLY the geometry, and then
+			//    the position and offsets must be done manually every frame.
+			if(displayList.size()>i){
+				part= namedList.get(i);
+				if(!part.showModel){
+					continue;
+				}
+				GL11.glPushMatrix();
+				if (part.ignoresLighting){
+					Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+				}
+				GL11.glTranslatef(part.rotationPointX * 0.0625F, part.rotationPointY * 0.0625F, part.rotationPointZ * 0.0625F);
+				GL11.glRotatef(part.rotateAngleY, 0.0F, 1.0F, 0.0F);
+				GL11.glRotatef(part.rotateAngleZ, 0.0F, 0.0F, 1.0F);
+				GL11.glRotatef(part.rotateAngleX, 1.0F, 0.0F, 0.0F);
+				for (TexturedPolygon poly : namedList.get(i).faces) {
+					Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625F);
+				}
+
+				GL11.glTranslatef(-part.rotationPointX * 0.0625F, -part.rotationPointY * 0.0625F, -part.rotationPointZ * 0.0625F);
+				if (part.ignoresLighting){
+					Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+				}
+				GL11.glPopMatrix();
+
+			} else if(namedList.get(i)!=null) {
+				for (TexturedPolygon poly : namedList.get(i).faces) {
+					Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625F);
+				}
+			}
+		}
+	}
+
 	/** render sub-model array */
 	public void render(List<ModelRendererTurbo> model){
 		if(model==null){return;}
@@ -260,7 +301,6 @@ public class ModelBase extends ArrayList<ModelRendererTurbo> {
 	}
 
 	public List<ModelRendererTurbo> getnamedParts(){
-
 		if(init){
 			initAllParts();
 		}
@@ -270,8 +310,7 @@ public class ModelBase extends ArrayList<ModelRendererTurbo> {
 	public void addPart(ModelRendererTurbo part){
 		if(part==null) {
 			return;
-		}if(part.boxName!=null && part.boxName.length()>2 &&
-				(StaticModelAnimator.checkAnimators(part) || GroupedModelRender.canAdd(part))){
+		}if(part.boxName!=null && part.boxName.length()>2){
 			namedList.add(part);
 		} else {
 			boxList.add(part);

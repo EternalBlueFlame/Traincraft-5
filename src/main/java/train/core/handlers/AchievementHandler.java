@@ -7,17 +7,6 @@
 
 package train.core.handlers;
 
-import net.minecraft.block.Block;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
-import net.minecraftforge.common.AchievementPage;
-import train.blocks.TCBlocks;
-import train.entity.rollingStock.EntityFlatCar_DB;
-import train.entity.trains.EntityLocoSteamBR80_DB;
-import train.entity.trains.EntityLocoSteamCherepanov;
-import train.library.ItemIDs;
-
 public class AchievementHandler {
 
 	/*todo: make an achievement handler in TiM, branch add-ons off the core and then individual achievements off that.

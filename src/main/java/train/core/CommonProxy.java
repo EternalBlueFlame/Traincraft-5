@@ -3,24 +3,12 @@ package train.core;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import train.blocks.bench.ContainerTrainWorkbench;
-import train.blocks.bench.TileTrainWbench;
-import train.blocks.distil.ContainerDistil;
-import train.blocks.distil.TileEntityDistil;
-import train.blocks.generator.ContainerGeneratorDiesel;
-import train.blocks.generator.TileGeneratorDiesel;
-import train.blocks.hearth.ContainerOpenHearthFurnace;
-import train.blocks.hearth.TileEntityOpenHearthFurnace;
-import train.blocks.lantern.TileLantern;
-import train.blocks.signal.TileSignal;
 import train.core.handlers.WorldEvents;
 import train.core.util.MP3Player;
 import train.entity.inventory.InventoryJukeBoxCart;
@@ -35,54 +23,33 @@ import java.util.List;
 public class CommonProxy implements IGuiHandler {
 	public static List<MP3Player> playerList = new ArrayList<MP3Player>();
 
+	public static WorldEvents eventManager = new WorldEvents();
 
 	public void registerRenderInformation() {}
 
 	public void registerEvents(FMLPreInitializationEvent event){
-		registerEvent(new WorldEvents());
+		FMLCommonHandler.instance().bus().register(eventManager);
+		MinecraftForge.EVENT_BUS.register(eventManager);
 
-	}
-
-	public void registerEvent(Object o){
-		FMLCommonHandler.instance().bus().register(o);
-		MinecraftForge.EVENT_BUS.register(o);
 	}
 
 
 	@Override
 	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity te = world.getTileEntity(x, y, z);
-		EntityPlayer riddenByEntity = null;
-		Entity entity = player.ridingEntity;
 
-		if (player.ridingEntity != null) {
-			riddenByEntity = (EntityPlayer) entity.riddenByEntity;
+		if(ID==GuiIDs.ZEPPELIN){
+			Entity entity = player.ridingEntity;
+			if(entity!=null) {
+				return new InventoryZepp(player.inventory, (AbstractZeppelin) entity);
+			}
+		} else if (ID==GuiIDs.JUKEBOX){
+			Entity entity1 = getEntity(world, x);
+			if(entity1 instanceof EntityJukeBoxCart){
+				return new InventoryJukeBoxCart(player.inventory, (EntityJukeBoxCart) entity1);
+			}
 		}
 
-		Entity entity1 = null;
-		if (y == -1) {
-			entity1 = getEntity(world, x);
-		}
-
-		switch (ID) {
-		case (GuiIDs.DISTIL):
-			return te instanceof TileEntityDistil ? new ContainerDistil(player.inventory, (TileEntityDistil) te) : null;
-		case (GuiIDs.GENERATOR_DIESEL):
-			return te instanceof TileGeneratorDiesel ? new ContainerGeneratorDiesel(player.inventory, (TileGeneratorDiesel) te) : null;
-		case (GuiIDs.OPEN_HEARTH_FURNACE):
-			return te instanceof TileEntityOpenHearthFurnace ? new ContainerOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
-		case (GuiIDs.TRAIN_WORKBENCH):
-			return te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, (TileTrainWbench) te) : null;
-		case (GuiIDs.ZEPPELIN):
-			return riddenByEntity != null ? new InventoryZepp(player.inventory, (AbstractZeppelin) entity) : null;
-
-
-			/* Stationary entities while player is not riding. */
-		case (GuiIDs.JUKEBOX):
-			return entity1 instanceof EntityJukeBoxCart ? new InventoryJukeBoxCart(player.inventory, (EntityJukeBoxCart) entity1) : null;
-		default:
-			return null;
-		}
+		return null;
 	}
 
 	@Override

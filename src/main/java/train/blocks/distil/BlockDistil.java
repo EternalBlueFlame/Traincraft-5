@@ -3,22 +3,16 @@ package train.blocks.distil;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.blocks.BlockDynamic;
-import ebf.tim.blocks.TileRenderFacing;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import train.Traincraft;
 import train.blocks.TCBlocks;
-import train.library.GuiIDs;
 
 import java.util.Random;
 
@@ -35,18 +29,15 @@ public class BlockDistil extends BlockDynamic {
 		return Item.getItemFromBlock(TCBlocks.blockDistil);
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		TileEntity te = world.getTileEntity(i, j, k);
-		if (player.isSneaking()) {
-			return false;
-		}
-		if (!world.isRemote) {
-			if (te instanceof TileEntityDistil) {
-				player.openGui(Traincraft.instance, GuiIDs.DISTIL, world, i, j, k);
-			}
-		}
-		return true;
+	public Object getGUI(EntityPlayer player, TileEntity te){
+		return new train.blocks.distil.GuiDistil(player.inventory, (TileEntityDistil) te);
+	}
+
+	@Override
+	public Object getInventoryManager(EntityPlayer player, TileEntity te){
+		return new ContainerDistil(player.inventory, (TileEntityDistil) te);
 	}
 
 	@Override

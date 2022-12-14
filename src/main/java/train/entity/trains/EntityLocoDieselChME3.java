@@ -9,7 +9,6 @@ import ebf.tim.registry.TiMItems;
 import ebf.tim.registry.TiMOres;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -74,7 +73,7 @@ public class EntityLocoDieselChME3 extends EntityTrainCore {
         return new ItemStack[]{
                 new ItemStack(TiMItems.controlPanel, 1), new ItemStack(TiMItems.wheelSteel, 3), new ItemStack(TiMItems.frameSteel, 2),
                 new ItemStack(TiMOres.ingotSteel, 2), new ItemStack(TiMItems.chimneySteel, 1), new ItemStack(TiMItems.cabinSteel, 1),
-                new ItemStack(TiMItems.smallElectricEngine, 2), new ItemStack(TiMItems.smallDieselEngine, 2), new ItemStack(TiMItems.generator, 2)        };
+                new ItemStack(TiMItems.smallElectricEngine, 2), new ItemStack(TiMItems.mediumDieselEngine, 2), new ItemStack(TiMItems.generator, 2)        };
     }
 
 
@@ -98,6 +97,10 @@ public class EntityLocoDieselChME3 extends EntityTrainCore {
     }
     @Override
     public int[] getTankCapacity(){return new int[]{5000};}
+
+    public String[] setParticles(){return new String[]{
+            "smoke ,0,-0.15,1.55,0,0,0,0"
+    };}
 
 
 

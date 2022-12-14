@@ -4,18 +4,15 @@ import ebf.tim.entities.EntityBogie;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.entities.GenericRailTransport;
 import fexcraft.tmt.slim.Vec3d;
-import fexcraft.tmt.slim.Vec3f;
+import net.minecraft.block.BlockAir;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.Vec3;
 
 import java.util.ArrayList;
 import java.util.List;
 
 
 public class HitboxDynamic {
-    //shape code is depreciated, as cool as rotating hitboxes are, none of the rest of MC can be interacted through it.
-    //public Vec3f[] shape, pos = new Vec3f[6], renderShape;
 
     private float longest=0;
 
@@ -25,18 +22,6 @@ public class HitboxDynamic {
     public HitboxDynamic(float depth, float height, float width, GenericRailTransport entity){
         depth *=0.5f;
         width *=0.5f;
-        /*shape= new Vec3f[]{
-                new Vec3f(-depth,0,width)
-                ,new Vec3f(depth,0,width)
-                ,new Vec3f(depth,0,-width)
-                ,new Vec3f(-depth,0,-width),
-                new Vec3f(-depth,height,width),
-                new Vec3f(depth,height,width),
-                new Vec3f(depth,height,-width),
-                new Vec3f(-depth,height,-width)};
-        if(TrainsInMotion.proxy.isClient()) {
-            renderShape = shape.clone();
-        }*/
         if(Math.abs(depth)>longest){
             longest=Math.abs(depth);
         }
@@ -60,22 +45,6 @@ public class HitboxDynamic {
 
 
     public void position(double x, double y, double z, float pitch, float yaw){
-        /*pos[0] = CommonUtil.rotatePoint(shape[0].addVector(-0.25f,0,0.25f)
-                , pitch,  yaw, 0).addVector(f(x), f(y), f(z));
-        pos[1] = CommonUtil.rotatePoint(shape[1].addVector(0.25f,0,0.25f)
-                , pitch,  yaw, 0).addVector(f(x), f(y), f(z));
-        pos[2] = CommonUtil.rotatePoint(shape[6].addVector(0.25f,0.5f,-0.25f)
-                , pitch,  yaw, 0).addVector(f(x), f(y), f(z));
-        pos[3] = CommonUtil.rotatePoint(shape[0].addVector(-0.25f,0,0.25f)
-                , pitch,  yaw-180, 0).addVector(f(x), f(y), f(z));
-        pos[4] = CommonUtil.rotatePoint(shape[1].addVector(0.25f,0,0.25f)
-                , pitch,  yaw-180, 0).addVector(f(x), f(y), f(z));
-        pos[5] = CommonUtil.rotatePoint(shape[6].addVector(0.25f,0.5f,-0.25f)
-                , pitch,  yaw-180, 0).addVector(f(x), f(y), f(z));
-
-        for (int i = 0; i < 8; i++) {
-            renderShape[i] = CommonUtil.rotatePoint(shape[i], pitch, yaw, 0);
-        }*/
         for(int i=0; i<interactionBoxes.size();i++){
             Vec3d part = CommonUtil.rotateDistance(
                     (interactionBoxes.get(0).host.getHitboxSize()[0]*0.5f)-
@@ -84,163 +53,86 @@ public class HitboxDynamic {
             interactionBoxes.get(i).setLocationAndAngles(part.xCoord,part.yCoord,part.zCoord,0,0);
         }
 }
-    private static float f(double d){ return (float)d;}
 
 
     /**
      * AWT methods
      */
 
-    List<Entity> arraylist = new ArrayList<>();
-    List[] entities;
-    int i,j,k,l;
-    GenericRailTransport stock;
+    public List<Entity> collidingEntities = new ArrayList<>();
+    public List<int[]> collidingBlocks = new ArrayList<>();
+    private List[] entities;
+    private int x,xMax,z,zMax,y,yMax;
 
-    public List<Entity> getCollidingEntities(GenericRailTransport host){
-        arraylist = new ArrayList<>();
-        if(host.collisionHandler==null){
-            return arraylist;
-        }
-        i = CommonUtil.floorDouble((-longest+host.posX - 0.25) / 16.0D);
-        j = CommonUtil.floorDouble((longest+host.posX + 0.25) / 16.0D);
-        k = CommonUtil.floorDouble((-longest+host.posZ - 0.25) / 16.0D);
-        l = CommonUtil.floorDouble((longest+host.posZ + 0.25) / 16.0D);
+    public void updateCollidingEntities(GenericRailTransport host){
+        collidingEntities = new ArrayList<>();
+        collidingBlocks = new ArrayList<>();
+        if(host==null){return;}
 
-        for (int i1 = i; i1 <= j; ++i1) {
-            for (int j1 = k; j1 <= l; ++j1) {
-                if (host.worldObj.getChunkProvider().chunkExists(i1, j1)) {
-                    entities = host.worldObj.getChunkFromChunkCoords(i1, j1).entityLists;
+        x = CommonUtil.floorDouble((-longest+host.posX - 0.25) / 16.0D);
+        xMax = CommonUtil.floorDouble((longest+host.posX + 0.25) / 16.0D);
+        z = CommonUtil.floorDouble((-longest+host.posZ - 0.25) / 16.0D);
+        zMax = CommonUtil.floorDouble((longest+host.posZ + 0.25) / 16.0D);
+
+        y = CommonUtil.floorDouble(host.posY);
+        yMax = CommonUtil.floorDouble(host.getHitboxSize()[1]+0.25);
+
+        for (int i = x; i <= xMax; ++i) {
+            for (int j = z; j <= zMax; ++j) {
+                if (host.worldObj.getChunkProvider().chunkExists(i,j)) {
+                    entities = host.worldObj.getChunkFromChunkCoords(i, j).entityLists;
                     for (List olist: entities) {
                         for(Object obj : olist) {
-                            if(obj instanceof EntitySeat || obj instanceof EntityBogie || obj instanceof CollisionBox ||
-                                    ((Entity)obj).getEntityId()==host.getEntityId()){continue;}
-
-                            if(obj instanceof GenericRailTransport) {
-                                if(((GenericRailTransport) obj).getEntityId()==host.getEntityId()){
+                            //this shouldn't be possible, but it's forge, sooooo....
+                            if(!(obj instanceof Entity)){
+                                continue;
+                            }
+                            //generally we only want to collide with mobs/players/other collision boxes
+                            //EntityFX is client only, so we _shouldn't_ have to worry about it..?
+                            //we dont collide with passenger entities, we collide with the thing they are on.
+                            if(obj instanceof EntitySeat || obj instanceof EntityBogie ||
+                                    obj instanceof GenericRailTransport || ((Entity) obj).ridingEntity!=null) {
+                                continue;
+                            }
+                            //if it's another collision box, be sure it's not the current entity or a linked one
+                            if(obj instanceof CollisionBox){
+                                if(((CollisionBox) obj).host==null){
                                     continue;
-                                }
-                                stock=((GenericRailTransport) obj);
-                                if(host.frontLinkedID!=null && stock.getEntityId()==host.frontLinkedID){
-                                    continue;
-                                } else if(host.backLinkedID!=null && stock.getEntityId()==host.backLinkedID){
-                                    continue;
-                                }
-                                if(stock.collisionHandler!=null) {
-                                    Vec3 vec;
-                                    if(host.getBoolean(GenericRailTransport.boolValues.COUPLINGFRONT)) {
-                                        vec = CommonUtil.rotateDistance(longest+1.3f, host.rotationPitch, host.rotationYaw);
-                                        vec.addVector(host.posX, host.posY+0.1, host.posZ);
-                                        if (stock.collisionHandler.containsPoint(vec.xCoord, vec.yCoord, vec.zCoord)) {
-                                            if (transportCollide(host, stock, true)) {
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                    if(host.getBoolean(GenericRailTransport.boolValues.COUPLINGBACK)) {
-                                        vec = CommonUtil.rotateDistance(-longest - 1.3f, host.rotationPitch, host.rotationYaw);
-                                        vec.addVector(host.posX, host.posY+0.1, host.posZ);
-                                        if (stock.collisionHandler.containsPoint(vec.xCoord, vec.yCoord, vec.zCoord)) {
-                                            if (transportCollide(host, stock, false)) {
-                                                continue;
-                                            }
-                                        }
-                                    }
-                                    for (CollisionBox b : stock.collisionHandler.interactionBoxes) {
-                                        if (containsEntity(b)) {
-                                            arraylist.add(b);
-                                        }
-                                    }
                                 }
 
+
+                                //make sure not to interact with own consist.
+                                //we have to check against front and back link on top of entire consist,
+                                //    in case entire consist hasn't updated just yet
+                                if((host.frontLinkedID!=null && host.frontLinkedID==((CollisionBox) obj).host.getEntityId()) ||
+                                        (host.backLinkedID!=null && host.backLinkedID==((CollisionBox) obj).host.getEntityId())||
+                                        host.getConsist().contains(((CollisionBox) obj).host)){
+                                    continue;
+                                }
                             }
 
-                            else if(containsEntity((Entity) obj)){
-                                arraylist.add((Entity)obj);
+                            if(containsEntity((Entity) obj)){
+                                this.collidingEntities.add((Entity)obj);
                             }
+                        }
+                    }
+
+                    //block collisions won't happen on client due to positioning, so there's no reason to check.
+                    if(host.worldObj.isRemote){
+                        continue;
+                    }
+                    //this is basically a BlockPos for where the block is, so the entity can figure out what to do.
+                    // but that's not a 1.7 thing, so we do this heresy to keep code similarities for easier porting
+                    for(int k=y; k<yMax;k++) {
+                        if (!(CommonUtil.getBlockAt(host.worldObj, i, j, k) instanceof BlockAir)){
+                            collidingBlocks.add(new int[]{i,j,k});
                         }
                     }
                 }
             }
         }
-
-        return arraylist;
     }
 
-    public boolean transportCollide(GenericRailTransport host, GenericRailTransport target, boolean front){
-        if(front){
-            Vec3 vec = CommonUtil.rotateDistance(target.collisionHandler.longest+0.25f, target.rotationPitch, target.rotationYaw);
-            vec.addVector((target).posX,(target).posY+0.3,(target).posZ);
-            if(containsPoint(vec.xCoord,vec.yCoord,vec.zCoord)){
-                if(target.getBoolean(GenericRailTransport.boolValues.COUPLINGFRONT)){
-                    host.frontLinkedTransport=target.getUniqueID();
-                    target.frontLinkedTransport=host.getUniqueID();
-                    host.frontLinkedID=target.getEntityId();
-                    target.frontLinkedID=host.getEntityId();
-                    host.setBoolean(GenericRailTransport.boolValues.COUPLINGFRONT,false);
-                    target.setBoolean(GenericRailTransport.boolValues.COUPLINGFRONT,false);
-                    host.updateConsist();
-                    return true;
-                }
-            } else {
-                vec = CommonUtil.rotateDistance(-target.collisionHandler.longest-0.3f, target.rotationPitch, target.rotationYaw);
-                vec.addVector((target).posX,(target).posY+0.25,(target).posZ);
-                if(containsPoint(vec.xCoord,vec.yCoord,vec.zCoord)) {
-                    if (target.getBoolean(GenericRailTransport.boolValues.COUPLINGBACK)) {
-                        host.frontLinkedTransport=target.getUniqueID();
-                        target.backLinkedTransport=host.getUniqueID();
-                        host.frontLinkedID=target.getEntityId();
-                        target.backLinkedID=host.getEntityId();
-                        host.setBoolean(GenericRailTransport.boolValues.COUPLINGFRONT,false);
-                        target.setBoolean(GenericRailTransport.boolValues.COUPLINGBACK,false);
-                        host.updateConsist();
-                        return true;
-                    }
-                }
-            }
-        } else {
-            Vec3 vec = CommonUtil.rotateDistance(target.collisionHandler.longest+0.3f, target.rotationPitch, target.rotationYaw);
-            vec.addVector((target).posX,(target).posY+0.25,(target).posZ);
-            if(containsPoint(vec.xCoord,vec.yCoord,vec.zCoord)){
-                if(target.getBoolean(GenericRailTransport.boolValues.COUPLINGFRONT)){
-                    host.backLinkedTransport=target.getUniqueID();
-                    target.frontLinkedTransport=host.getUniqueID();
-                    host.backLinkedID=target.getEntityId();
-                    target.frontLinkedID=host.getEntityId();
-                    host.setBoolean(GenericRailTransport.boolValues.COUPLINGBACK,false);
-                    target.setBoolean(GenericRailTransport.boolValues.COUPLINGFRONT,false);
-                    host.updateConsist();
-                    return true;
-                }
-            } else {
-                vec = CommonUtil.rotateDistance(-target.collisionHandler.longest-0.3f, target.rotationPitch, target.rotationYaw);
-                vec.addVector((target).posX,(target).posY+0.25,(target).posZ);
-                if(containsPoint(vec.xCoord,vec.yCoord,vec.zCoord)) {
-                    if (target.getBoolean(GenericRailTransport.boolValues.COUPLINGBACK)) {
-                        host.backLinkedTransport=target.getUniqueID();
-                        target.backLinkedTransport=host.getUniqueID();
-                        host.backLinkedID=target.getEntityId();
-                        target.backLinkedID=host.getEntityId();
-                        host.setBoolean(GenericRailTransport.boolValues.COUPLINGBACK,false);
-                        target.setBoolean(GenericRailTransport.boolValues.COUPLINGBACK,false);
-                        host.updateConsist();
-                        return true;
-                    }
-                }
-            }
-        }
-        return false;
-
-    }
-    public boolean containsPoint(double x, double y, double z){
-        for(CollisionBox box : interactionBoxes){
-            if(x>=box.boundingBox.minX && x<=box.boundingBox.maxX &&
-                    y>=box.boundingBox.minY && y<=box.boundingBox.maxY &&
-                    z>=box.boundingBox.minZ && z<=box.boundingBox.maxZ){
-                return true;
-            }
-        }
-        return false;
-    }
 
     public boolean containsEntity(Entity e){
         for(CollisionBox box : interactionBoxes){
@@ -250,32 +142,6 @@ public class HitboxDynamic {
         }
         return false;
     }
-
-    public static boolean containsPoint(Vec3f A, Vec3f B, Vec3f C, Vec3f P){
-        if(P.yCoord>A.yCoord && P.yCoord<C.yCoord) {
-            // Compute vectors
-            Vec3f v0 = C.subtract(A);
-            Vec3f v1 = B.subtract(A);
-            Vec3f v2 = P.subtract(A);
-
-            // Compute dot products
-            float dot00 = v0.dot2D(v0);
-            float dot01 = v0.dot2D(v1);
-            float dot02 = v0.dot2D(v2);
-            float dot11 = v1.dot2D(v1);
-            float dot12 = v1.dot2D(v2);
-
-            // Compute barycentric coordinates
-            float invDenom = 1f / (dot00 * dot11 - dot01 * dot01);
-            float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
-            float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
-
-            // Check if point is in triangle
-            return (u > 0) && (v > 0) && (u + v < 1);
-        }
-        return false;
-    }
-
 
 
 

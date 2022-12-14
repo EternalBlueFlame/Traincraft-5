@@ -5,7 +5,7 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import ebf.tim.blocks.TileEntityStorage;
+import ebf.tim.blocks.BlockDynamic;
 import ebf.tim.entities.EntityBogie;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.entities.GenericRailTransport;
@@ -14,9 +14,7 @@ import ebf.tim.items.ItemCraftGuide;
 import ebf.tim.items.ItemPaintBucket;
 import ebf.tim.render.RenderWagon;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.renderer.entity.Render;
-import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
@@ -80,8 +78,8 @@ public class ClientProxy extends CommonProxy {
             raildevtoolLeft, raildevtoolRight, raildevtoolRaise, raildevtoolLower;
 
     public static KeyBinding raildevtoolNextPoint, raildevtoolLastPoint;
-
     public static KeyBinding raildevtoolQuality;
+    public static KeyBinding modeldevtoolReloadAll;
 
     /**
      * <h2> Client GUI Redirect </h2>
@@ -108,8 +106,9 @@ public class ClientProxy extends CommonProxy {
             if (player.worldObj.getEntityByID(ID) instanceof GenericRailTransport && !((GenericRailTransport) player.worldObj.getEntityByID(ID)).hasCustomGUI()) {
                 return new GUITransport(player.inventory, (GenericRailTransport) player.worldObj.getEntityByID(ID));
                 //tile entities
-            } else if (player.worldObj.getTileEntity(x,y,z) instanceof TileEntityStorage) {
-                return new GUITrainTable(player.inventory, player.worldObj, x, y, z);
+            }else if (CommonUtil.getBlockAt(world,x,y,z) instanceof BlockDynamic){
+                return ((BlockDynamic) CommonUtil.getBlockAt(world, x, y, z))
+                        .getGUI(player, world.getTileEntity(x,y,z));
             }
         }
         return null;
@@ -118,7 +117,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void adminGui(String datacsv){
         Minecraft.getMinecraft().displayGuiScreen(new GUIAdminBook(datacsv));
-    };
+    }
 
     @Override
     public boolean isClient(){return true;}
@@ -197,8 +196,6 @@ public class ClientProxy extends CommonProxy {
         RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, nullRender);
         //hitboxes
         RenderingRegistry.registerEntityRenderingHandler(CollisionBox.class, nullRender);
-        //player scaler
-        RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, playerRender);
 
 
 
@@ -210,7 +207,7 @@ public class ClientProxy extends CommonProxy {
         KeyInventory = new KeyBinding("Open Train/rollingstock GUI",  Keyboard.KEY_R, "Trains in Motion");
         ClientRegistry.registerKeyBinding(KeyInventory);
 
-        if(DebugUtil.dev()) {
+        if(DebugUtil.dev) {
             raildevtoolUp = new KeyBinding("Move Point Z+", Keyboard.KEY_UP, "Trains in Motion Dev");
             raildevtoolDown = new KeyBinding("Move Point Z-", Keyboard.KEY_DOWN, "Trains in Motion Dev");
             raildevtoolLeft = new KeyBinding("Move Point X+", Keyboard.KEY_LEFT, "Trains in Motion Dev");
@@ -223,6 +220,8 @@ public class ClientProxy extends CommonProxy {
 
             raildevtoolQuality = new KeyBinding("Track Model Quality", Keyboard.KEY_DIVIDE, "Trains in Motion Dev");
 
+            modeldevtoolReloadAll = new KeyBinding("Entity Model Reload", Keyboard.KEY_APOSTROPHE, "Trains in Motion Dev");
+
 
             ClientRegistry.registerKeyBinding(raildevtoolUp);
             ClientRegistry.registerKeyBinding(raildevtoolDown);
@@ -233,6 +232,7 @@ public class ClientProxy extends CommonProxy {
             ClientRegistry.registerKeyBinding(raildevtoolNextPoint);
             ClientRegistry.registerKeyBinding(raildevtoolLastPoint);
             ClientRegistry.registerKeyBinding(raildevtoolQuality);
+            ClientRegistry.registerKeyBinding(modeldevtoolReloadAll);
         }
 
 
@@ -281,35 +281,6 @@ public class ClientProxy extends CommonProxy {
         @Override
         protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
             return null;
-        }
-    };
-
-    private static final RenderPlayer playerRender= new RenderPlayer(){
-        GenericRailTransport t;
-        @Override
-        public void doRender(AbstractClientPlayer p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_){
-            if (p_76986_1_.ridingEntity instanceof GenericRailTransport) {
-                t=(GenericRailTransport) p_76986_1_.ridingEntity;
-                GL11.glPushMatrix();
-                GL11.glScalef(t.getPlayerScale(), t.getPlayerScale(), t.getPlayerScale());
-                super.doRender(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
-                GL11.glPopMatrix();
-
-            } else if (p_76986_1_.ridingEntity instanceof EntitySeat){
-                t=(GenericRailTransport) p_76986_1_.worldObj.getEntityByID(((EntitySeat) p_76986_1_.ridingEntity).parentId);
-                GL11.glPushMatrix();
-                GL11.glScalef(t.getPlayerScale(), t.getPlayerScale(), t.getPlayerScale());
-                if(p_76986_1_.ridingEntity.getLookVec() !=null) {
-                    GL11.glRotated(p_76986_1_.ridingEntity.getLookVec().xCoord, 0, 1, 0);
-                    GL11.glRotated(p_76986_1_.ridingEntity.getLookVec().yCoord, 0, 0, 1);
-                    GL11.glRotated(p_76986_1_.ridingEntity.getLookVec().zCoord, 1, 0, 0);
-                }
-                super.doRender(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
-                GL11.glPopMatrix();
-
-            } else {
-                super.doRender(p_76986_1_, p_76986_2_, p_76986_4_, p_76986_6_, p_76986_8_, p_76986_9_);
-            }
         }
     };
 }

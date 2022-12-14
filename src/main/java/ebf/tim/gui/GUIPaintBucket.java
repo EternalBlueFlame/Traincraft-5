@@ -9,6 +9,7 @@ import ebf.tim.utility.ClientProxy;
 import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.EventManager;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -96,12 +97,6 @@ public class GUIPaintBucket extends GuiScreen {
             case 0:{defineButtons();guiSkinSelect();break;}
         }
 
-        //draw button hover text
-        for (Object b : buttonList){
-            if(b instanceof GUIButton) {
-                ((GUIButton) b).drawText(parWidth, parHeight);
-            }
-        }
     }
 
 
@@ -125,6 +120,9 @@ public class GUIPaintBucket extends GuiScreen {
                             page = (page <= 0 ? entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).keySet().size() -1: page - 1);
                             currentTransportSkin =entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).get(skinList.get(page));
                         }
+
+                        @Override
+                        public FontRenderer getFont(){return fontRendererObj;}
                     }
                 );
 
@@ -139,6 +137,9 @@ public class GUIPaintBucket extends GuiScreen {
                                 page = (page+1 >= entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).keySet().size() ? 0 : page + 1);
                                 currentTransportSkin =entity.getSkinList(Minecraft.getMinecraft().thePlayer, true).get(skinList.get(page));
                             }
+
+                            @Override
+                            public FontRenderer getFont(){return fontRendererObj;}
                         }
                 );
 
@@ -160,6 +161,9 @@ public class GUIPaintBucket extends GuiScreen {
                                 }
                                 entity.renderData.needsModelUpdate=true;
                             }
+
+                            @Override
+                            public FontRenderer getFont(){return fontRendererObj;}
                         }
                 );
 
@@ -174,6 +178,9 @@ public class GUIPaintBucket extends GuiScreen {
                             public void onClick() {
                                 mc.displayGuiScreen(null);
                             }
+
+                            @Override
+                            public FontRenderer getFont(){return fontRendererObj;}
                         }
                 );
                 break;
@@ -220,17 +227,9 @@ public class GUIPaintBucket extends GuiScreen {
         EventManager.drawTooltipBox((int)(width*0.125f),(int)(height*0.2f),(int)(width*0.35f),(int)(height*0.35f),  ClientProxy.WAILA_BGCOLOR, ClientProxy.WAILA_GRADIENT1, ClientProxy.WAILA_GRADIENT2,100);
 
         GL11.glPopMatrix();
-        //check scaling Width vs scaling Height, we want the smaller of the two, however we scale them differently.
-        float scale = entity.getHitboxSize()[0];
-        if(scale!=0){
-           // scale = 0.25f/(scale /0.25f);
-        }
+        //check scaling Width vs scaling Height, we want the bigger of the two
+        float scale = 1.5f/(Math.max(entity.getHitboxSize()[0], entity.getHitboxSize()[1])/1.5f);
 
-        float scale2 =  entity.getHitboxSize()[1];
-        if(scale2!=0){
-          //  scale2 = 0.125f/(scale2 /0.125f);
-        }
-        scale=Math.min(scale,scale2);
         //now scale based on the resolution
         scale*=Math.min(mc.displayWidth/800f, mc.displayHeight/300f);
         scale *=0.004f;
@@ -242,15 +241,16 @@ public class GUIPaintBucket extends GuiScreen {
         GL11.glPushMatrix();
         GL11.glMatrixMode(GL11.GL_PROJECTION);
         GL11.glLoadIdentity();
-        GL11.glTranslatef(-0.4f,0.15f,-1f);
+        GL11.glTranslatef(-0.4f,(entity.getHitboxSize()[1]/ entity.getHitboxSize()[0])*1.3f,-1f);
 
-        Project.gluPerspective(45.0F, (float)Minecraft.getMinecraft().displayWidth/(float)Minecraft.getMinecraft().displayHeight, 0.05f, 2);
+        Project.gluPerspective(2.9F, (float)Minecraft.getMinecraft().displayWidth/(float)Minecraft.getMinecraft().displayHeight, 0.05f, 2);
         GL11.glMatrixMode(GL11.GL_MODELVIEW);
         GL11.glLoadIdentity();
         RenderHelper.enableStandardItemLighting();
         GL11.glTranslatef(0,0,-0.4f);
 
         GL11.glRotatef(15,1,0,0);
+        GL11.glRotatef(180,0,0,1);
         GL11.glRotatef(field_147073_u+=1,0,1,0);
         if (field_147073_u>360){
             field_147073_u=0;

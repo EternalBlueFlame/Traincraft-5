@@ -11,7 +11,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import train.library.Tracks;
+import train.library.RCTracks;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -21,8 +21,8 @@ public class BlockDisembarkTrack extends TrackBaseTraincraft implements ITrackEm
 	private byte delay = 0;
 
 	@Override
-	public Tracks getTrackType() {
-		return Tracks.DISEMBARK_TRACK;
+	public RCTracks getTrackType() {
+		return RCTracks.DISEMBARK_TRACK;
 	}
 	@Override
 	public void onMinecartPass(EntityMinecart cart) {

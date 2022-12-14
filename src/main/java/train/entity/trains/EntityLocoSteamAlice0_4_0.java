@@ -9,7 +9,6 @@ import ebf.tim.registry.TiMItems;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -79,7 +78,7 @@ public class EntityLocoSteamAlice0_4_0 extends EntityTrainCore {
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{1.3f,1.4f, -0.3f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{1.3f,1.35f, -0.3f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.8f,2.4f,1.1f};}
     @Override

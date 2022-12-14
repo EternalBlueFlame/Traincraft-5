@@ -19,10 +19,8 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import train.Traincraft;
-import train.library.GuiIDs;
 
 import java.util.Random;
 
@@ -50,18 +48,15 @@ public class BlockGeneratorDiesel extends BlockDynamic {
 		return RenderingRegistry.getNextAvailableRenderId();
 	}
 
+	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		TileEntity te = world.getTileEntity(i, j, k);
-		if (player.isSneaking()) {
-			return false;
-		}
-		if (!world.isRemote) {
-			if (te instanceof TileGeneratorDiesel) {
-				player.openGui(Traincraft.instance, GuiIDs.GENERATOR_DIESEL, world, i, j, k);
-			}
-		}
-		return true;
+	public Object getGUI(EntityPlayer player, TileEntity te){
+		return new train.blocks.generator.GuiGeneratorDiesel(player.inventory, (TileGeneratorDiesel) te);
+	}
+
+	@Override
+	public Object getInventoryManager(EntityPlayer player, TileEntity te){
+		return new ContainerGeneratorDiesel(player.inventory, (TileGeneratorDiesel) te);
 	}
 	/**
      * Lets the block know when one of its neighbor changes. Doesn't know which neighbor changed (coordinates passed are

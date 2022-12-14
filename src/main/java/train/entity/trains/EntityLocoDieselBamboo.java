@@ -8,7 +8,6 @@ import ebf.tim.items.ItemTransport;
 import ebf.tim.registry.TiMItems;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -102,7 +101,7 @@ public class EntityLocoDieselBamboo extends EntityTrainCore {
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
                 null, new ItemStack(TiMItems.wheelWood, 2), new ItemStack(TiMItems.frameWood, 1),
-                null, null, null, null, new ItemStack(TiMItems.smallDieselEngine, 1), null        };
+                null, null, null, null, new ItemStack(TiMItems.mediumDieselEngine, 1), null        };
     }
 
 

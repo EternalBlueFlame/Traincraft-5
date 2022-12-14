@@ -2,14 +2,15 @@ package ebf.tim.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.TrainsInMotion;
 import ebf.tim.blocks.RailTileEntity;
 import ebf.tim.blocks.rails.BlockRailCore;
 import ebf.tim.registry.TiMBlocks;
 import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.core.items.ITrackItem;
-import net.minecraft.block.*;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockRailBase;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -17,7 +18,6 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
@@ -38,27 +38,14 @@ public class ItemRail extends Item implements ITrackItem {
      */
     @Deprecated
     @Override
-    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int meta, float p_77648_8_, float p_77648_9_, float p_77648_10_) {
-        if(world.isRemote){return true;}
+    public boolean onItemUse(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float p_77648_8_, float p_77648_9_, float p_77648_10_) {
+        if(world.isRemote || player==null || stack.stackSize==0){return false;}
         net.minecraft.block.Block block = CommonUtil.getBlockAt(world, x, y, z);
 
-        if (block != Blocks.vine && block != Blocks.tallgrass && block != Blocks.deadbush) {
-            switch (meta) {
-                case 0:{--y;break;}
-                case 1:{++y;break;}
-                case 2:{--z;break;}
-                case 3:{++z;break;}
-                case 4:{--x;break;}
-                case 5:{++x;break;}
-            }
-        }
-
+        //for use from item, unlike external use, we want to give the player ability to "place ahead"
         if(block instanceof BlockRailBase){
-            if(meta==0) {
-                return false;
-            } else if (meta==1){
-                y--;
-                int rotation = MathHelper.floor_double((player!=null?player.rotationYawHead:p_77648_10_) * 4.0F / 360.0F + 0.5D) & 3;
+            if (side==1){//side 1/up
+                int rotation = CommonUtil.floorDouble(player.rotationYawHead * 4.0F / 360.0F + 0.5D) & 3;
                 switch (rotation){
                     case 0:{z++;
                     if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){z++;}
@@ -86,61 +73,22 @@ public class ItemRail extends Item implements ITrackItem {
                         if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockRailBase){return false;}}//east
                 }
 
+            } else {//only allow placing on top of a block
+                return false;
             }
+        } else {//if it's not a track block, then the Y position will be too low, raise it one.
+            y++;
         }
 
-        if (!player.canPlayerEdit(x,y,z, meta, stack) || stack.stackSize==0 ||
-        !world.getChunkProvider().chunkExists(
+        //now be sure the player can place there, and the chunk position is loaded
+        if (!player.canPlayerEdit(x,y,z, side, stack) || !world.getChunkProvider().chunkExists(
                 x>>4, z>>4)) {
             return false;
-        } else {
-            if(!(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockAir)){
-                //replaceable covers things like fluids, IPlantable and IGrowable cover things like grass and flowers
-                if(!CommonUtil.getBlockAt(world, x,y,z).isReplaceable(world,x,y,z)
-                        && !(block instanceof IPlantable) && !(block instanceof IGrowable)){
-                    return false;
-                } else {
-                    //if it is replaceable, try to spawn the dropped item.
-                    List<ItemStack> blockStacks = CommonUtil.getBlockAt(world, x,y,z).getDrops(world,x,y,z,world.getBlockMetadata(x,y,z),0);
-                    for(ItemStack stak : blockStacks){
-                        world.spawnEntityInWorld(new EntityItem(world,x,y+0.5,z, stak));
-                    }
-                }
-            }
-
-            if (world.setBlock(x,y,z, getPlacedBlock(), 0, 3)) {
-                int i1 = getPlacedBlock().onBlockPlaced(world, x,y,z, meta, p_77648_8_, p_77648_9_, p_77648_10_, 0);
-                if (CommonUtil.getBlockAt(world, x,y,z) == getPlacedBlock()) {
-                    getPlacedBlock().onBlockPlacedBy(world, x,y,z, player, stack);
-
-                    ((BlockRailCore)CommonUtil.getBlockAt(world, x,y,z)).updateShape(x,y,z,world,
-                            //set rail
-                            stack.getTagCompound().getTag("rail")!=null?
-                                    ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("rail")):
-                                    new ItemStack(Items.iron_ingot),
-                            //set ties
-                            stack.getTagCompound().getTag("ties")!=null?
-                                    ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("ties")):
-                                    null,
-
-                            //set ballast
-                            stack.getTagCompound().getTag("ballast")!=null?
-                                    ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("ballast")):
-                                    null,
-
-                            //set wires
-                            stack.getTagCompound().getTag("wires")!=null?
-                                    ItemStack.loadItemStackFromNBT(stack.getTagCompound().getCompoundTag("wires")):
-                                    null
-                            );
-                }
-
-                world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, getPlacedBlock().stepSound.func_150496_b(), (getPlacedBlock().stepSound.getVolume() + 1.0F) / 2.0F, getPlacedBlock().stepSound.getPitch() * 0.8F);
-                getPlacedBlock().onPostBlockPlaced(world, x,y,z, i1);
-                --stack.stackSize;
-            }
-            return true;
         }
+
+        //continue with normal placement
+        placeTrack(stack, world, x, y, z,player);
+        return true;
     }
 
     public boolean isPlacedTileEntity(ItemStack stack, TileEntity tile){
@@ -151,26 +99,36 @@ public class ItemRail extends Item implements ITrackItem {
         return TiMBlocks.railBlock;
     }
 
+    //redirect for 3rd party mods
     public boolean placeTrack(ItemStack stack, World world, int x, int y, int z){
+        return placeTrack(stack, world, x, y, z,null);
+    }
+
+    /**
+     * normal placement
+     * this is meant mainly for add-ons like railcraft, and tools like the track builder
+     */
+    public boolean placeTrack(ItemStack stack, World world, int x, int y, int z, EntityPlayer p){
         if(world.isRemote){return true;}
         net.minecraft.block.Block block = CommonUtil.getBlockAt(world, x, y, z);
 
-        if (!(World.doesBlockHaveSolidTopSurface(world ,x, y, z))){
+        if (!(World.doesBlockHaveSolidTopSurface(world ,x, y-1, z))){
             return false;
         }
 
-        if(block.isReplaceable(world, x, y+1, z) || block instanceof BlockFlower || block == Blocks.double_plant || block instanceof BlockMushroom){
-            block.dropBlockAsItem(world, x, y+1, z, world.getBlockMetadata(x, y+1, z), 0);
+        if(block.isReplaceable(world, x, y, z) || block instanceof IPlantable){
+            block.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+            world.setBlockToAir(x, y, z);
         }
+        world.removeTileEntity(x,y,z);
 
         int meta=world.getBlockMetadata(x,y,z);
 
-        if (world.canPlaceEntityOnSide(getPlacedBlock(),x,y,z, false, meta, null, stack)) {
-            int i1 = getPlacedBlock().onBlockPlaced(world, x, y, z, meta, 0, 0, 0, 0);
+        if (world.canPlaceEntityOnSide(getPlacedBlock(),x,y,z, false, meta, p, stack)) {
 
-            if (world.setBlock(x, y, z, getPlacedBlock(), 0, 3)) {
+            if (CommonUtil.setBlock(world, x, y, z, getPlacedBlock(), 0)) {
                 if (CommonUtil.getBlockAt(world, x, y, z) == getPlacedBlock()) {
-                    getPlacedBlock().onPostBlockPlaced(world, x, y, z, i1);
+                    getPlacedBlock().onBlockPlacedBy(world, x,y,z, world.getClosestPlayer(x,y,z,1000), stack);
                     ((BlockRailCore) CommonUtil.getBlockAt(world, x, y, z)).updateShape(x, y, z, world,
                             //set rail
                             stack.getTagCompound().getTag("rail")!=null?
@@ -195,6 +153,7 @@ public class ItemRail extends Item implements ITrackItem {
 
                 world.playSoundEffect(x + 0.5F, y + 0.5F, z + 0.5F, getPlacedBlock().stepSound.func_150496_b(), (getPlacedBlock().stepSound.getVolume() + 1.0F) / 2.0F, getPlacedBlock().stepSound.getPitch() * 0.8F);
                 --stack.stackSize;
+                getPlacedBlock().onPostBlockPlaced(world, x, y, z, meta);
             }
         }
 
@@ -240,32 +199,32 @@ public class ItemRail extends Item implements ITrackItem {
 
     public static ItemStack setStackData(ItemStack stack, ItemStack ingot, ItemStack ballast, ItemStack ties, ItemStack wires){
         //init stack NBT
-        stack.setTagCompound(new NBTTagCompound());
-        //add a tag for the stack then put the stack in it.
+        NBTTagCompound stackTag = new NBTTagCompound();
+        //make a blank tag, write the item to it, then put it into the stack tag
         if(ingot!=null && ingot.getItem()!=null) {
-            stack.getTagCompound().setTag("rail", new NBTTagCompound());
-            ingot.writeToNBT(stack.getTagCompound().getCompoundTag("rail"));
+            NBTTagCompound r =new NBTTagCompound();
+            ingot.writeToNBT(r);
+            stackTag.setTag("rail", r);
         }
 
         //rinse and repeat
         if(ties!=null && ties.getItem()!=null && !isItemBanned(ties)) {
-            stack.getTagCompound().setTag("ties",new NBTTagCompound());
-            ties.writeToNBT(stack.getTagCompound().getCompoundTag("ties"));
-        } else if(ties!=null && ties.getItem()!=null){
-            return null;
+            NBTTagCompound t =new NBTTagCompound();
+            ties.writeToNBT(t);
+            stackTag.setTag("ties", t);
         }
         if(ballast!=null && ballast.getItem()!=null && !isItemBanned(ballast)) {
-            stack.getTagCompound().setTag("ballast",new NBTTagCompound());
-            ballast.writeToNBT(stack.getTagCompound().getCompoundTag("ballast"));
-        } else if(ballast!=null && ballast.getItem()!=null){
-            return null;
+            NBTTagCompound b =new NBTTagCompound();
+            ballast.writeToNBT(b);
+            stackTag.setTag("ballast", b);
         }
         if(wires!=null && wires.getItem()!=null && !isItemWires(wires)) {
-            stack.getTagCompound().setTag("wires",new NBTTagCompound());
-            wires.writeToNBT(stack.getTagCompound().getCompoundTag("wires"));
-        } else if(wires!=null && wires.getItem()!=null){
-            return null;
+            NBTTagCompound w =new NBTTagCompound();
+            wires.writeToNBT(w);
+            stackTag.setTag("wires", w);
         }
+        //set the stack tag to the actual stack
+        stack.setTagCompound(stackTag);
         return stack;
     }
 
@@ -280,15 +239,17 @@ public class ItemRail extends Item implements ITrackItem {
     //adds custom versions of this to the creative menu, with the necessary NBT and metadata
     @SideOnly(Side.CLIENT)
     public void getSubItems(Item p_150895_1_, CreativeTabs p_150895_2_, List tabItems) {
-        if(p_150895_1_ instanceof ItemRail) {
-            for(Item ingot : new Item[]{Items.iron_ingot, Items.gold_ingot}){
-                for(Block b : new Block[]{null, Blocks.gravel, Blocks.stone}){
-                    for(Block t : new Block[]{Blocks.log, Blocks.planks, Blocks.double_stone_slab, null})
-                    tabItems.add(setStackData(new ItemStack(p_150895_1_),new ItemStack(ingot), new ItemStack(b),new ItemStack(t), null));
+        if(p_150895_2_==TrainsInMotion.creativeTab) {
+            if (p_150895_1_ instanceof ItemRail) {
+                for (Item ingot : new Item[]{Items.iron_ingot, Items.gold_ingot}) {
+                    for (Block b : new Block[]{null, Blocks.gravel, Blocks.stone}) {
+                        for (Block t : new Block[]{Blocks.log, Blocks.planks, Blocks.double_stone_slab, null})
+                            tabItems.add(setStackData(new ItemStack(p_150895_1_), new ItemStack(ingot), new ItemStack(b), new ItemStack(t), null));
+                    }
                 }
+            } else {
+                tabItems.add(new ItemStack(p_150895_1_));
             }
-        } else {
-            tabItems.add(new ItemStack(p_150895_1_));
         }
     }
 }

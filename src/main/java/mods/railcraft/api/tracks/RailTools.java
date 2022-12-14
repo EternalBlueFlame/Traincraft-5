@@ -8,6 +8,7 @@
 
 package mods.railcraft.api.tracks;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
@@ -43,7 +44,7 @@ public abstract class RailTools {
     }
 
     public static boolean isTrackFuzzyAt(World world, int x, int y, int z) {
-        return BlockRailBase.func_150049_b_(world, x, y, z) ? true : (BlockRailBase.func_150049_b_(world, x, y + 1, z) ? true : BlockRailBase.func_150049_b_(world, x, y - 1, z));
+        return CommonUtil.isRailBlockAt(world, x, y, z) || (CommonUtil.isRailBlockAt(world, x, y + 1, z) || CommonUtil.isRailBlockAt(world, x, y - 1, z));
     }
 
     public static <T> T getTrackObjectAt(World world, int x, int y, int z, Class<T> type) {

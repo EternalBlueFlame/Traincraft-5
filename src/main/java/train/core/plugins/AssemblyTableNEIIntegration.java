@@ -7,12 +7,14 @@ import codechicken.nei.recipe.TemplateRecipeHandler;
 import ebf.tim.utility.Recipe;
 import ebf.tim.utility.RecipeManager;
 import ebf.tim.utility.TiMTableNEIIntegration;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
+import train.blocks.TCBlocks;
 import train.library.Info;
 
 import java.util.ArrayList;
@@ -65,9 +67,21 @@ public class AssemblyTableNEIIntegration extends TiMTableNEIIntegration {
 
     @Override
     public void loadCraftingRecipes(ItemStack result) {
-        Recipe recipe = RecipeManager.getRecipe(result);
+        Recipe recipe = RecipeManager.getRecipe(result, TCBlocks.trainTableTier1);
 
-        if(recipe != null && recipe.getTier() > 0 && recipe.getTier() < 4) {
+        if(recipe != null) {
+            CachedRecipe cachedRecipe = new CachedAsmTableRecipe(result);
+            arecipes.add(cachedRecipe);
+        }
+        recipe = RecipeManager.getRecipe(result, TCBlocks.trainTableTier2);
+
+        if(recipe != null) {
+            CachedRecipe cachedRecipe = new CachedAsmTableRecipe(result);
+            arecipes.add(cachedRecipe);
+        }
+        recipe = RecipeManager.getRecipe(result, TCBlocks.trainTableTier3);
+
+        if(recipe != null) {
             CachedRecipe cachedRecipe = new CachedAsmTableRecipe(result);
             arecipes.add(cachedRecipe);
         }
@@ -75,9 +89,9 @@ public class AssemblyTableNEIIntegration extends TiMTableNEIIntegration {
 
     @Override
     public void loadUsageRecipes(ItemStack itemStack) {
-        List<Recipe> matchingRecipes = RecipeManager.getRecipesContaining(itemStack, 1);
-        matchingRecipes.addAll(RecipeManager.getRecipesContaining(itemStack, 2));
-        matchingRecipes.addAll(RecipeManager.getRecipesContaining(itemStack, 3));
+        List<Recipe> matchingRecipes = RecipeManager.getRecipesContaining(itemStack, TCBlocks.trainTableTier1);
+        matchingRecipes.addAll(RecipeManager.getRecipesContaining(itemStack, TCBlocks.trainTableTier2));
+        matchingRecipes.addAll(RecipeManager.getRecipesContaining(itemStack, TCBlocks.trainTableTier3));
         for (Recipe r : matchingRecipes) {
             for (ItemStack crafted : r.getresult()) {
                 CachedRecipe cr = new CachedAsmTableRecipe(crafted);
@@ -97,18 +111,13 @@ public class AssemblyTableNEIIntegration extends TiMTableNEIIntegration {
     public void drawExtras(int recipe) { //draws text showing correct tier.
         CachedRecipe crecipe = arecipes.get(recipe);
         if (crecipe instanceof CachedAsmTableRecipe) {
-            int tier = ((CachedAsmTableRecipe) crecipe).getRecipe().getTier();
+            Block tier = ((CachedAsmTableRecipe) crecipe).getRecipeTable();
             FontRenderer frenderer = Minecraft.getMinecraft().fontRenderer;
             String tierS = "I";
-            switch (tier) {
-                case 2:
-                    tierS = "II";
-                    break;
-                case 3:
-                    tierS = "III";
-                    break;
-                default:
-                    tierS = "I";
+            if(tier==TCBlocks.trainTableTier2){
+                tierS = "II";
+            } else if(tier==TCBlocks.trainTableTier3){
+                tierS = "III";
             }
             frenderer.drawString(I18n.format("tile.block.asmtable.name") + " " + tierS, 10, 6, 12241200);
         }
@@ -119,8 +128,15 @@ public class AssemblyTableNEIIntegration extends TiMTableNEIIntegration {
     public void drawBackground(int recipe) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         if (arecipes.get(recipe) instanceof CachedAsmTableRecipe) {
-            int tier = ((CachedAsmTableRecipe) arecipes.get(recipe)).getRecipe().getTier();
-            GuiDraw.changeTexture(asmTableGUIs[tier-1]);
+            Block tier = ((CachedAsmTableRecipe) arecipes.get(recipe)).getRecipeTable();
+
+            if(tier==TCBlocks.trainTableTier1){
+                GuiDraw.changeTexture(asmTableGUIs[0]);
+            } else if(tier==TCBlocks.trainTableTier2){
+                GuiDraw.changeTexture(asmTableGUIs[1]);
+            } else if(tier==TCBlocks.trainTableTier3){
+                GuiDraw.changeTexture(asmTableGUIs[2]);
+            }
             GuiDraw.drawTexturedModalRect(0, 0, 0, 0, 175, 170);
         } else {
             //default (slightly modified from TemplateRecipeHandler)

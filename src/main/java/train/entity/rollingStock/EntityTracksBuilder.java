@@ -14,7 +14,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
 import train.library.Info;
-import train.library.ItemIDs;
 
 import java.util.List;
 import java.util.UUID;
@@ -34,7 +33,7 @@ public class EntityTracksBuilder extends GenericRailTransport {
 
     //main stats
     @Override
-    public String transportName(){return "Tracks Builder";}
+    public String transportName(){return "RCTracks Builder";}
     @Override
     public String transportcountry(){return null;}
     @Override

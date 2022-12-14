@@ -9,7 +9,6 @@ import ebf.tim.registry.TiMItems;
 import ebf.tim.registry.TiMOres;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -54,7 +53,7 @@ public class EntityLocoSteamD51 extends EntityTrainCore {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelD51ShortStreamlining()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{2.9f, 0.7f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{2.9f, 0.675f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
@@ -82,7 +81,7 @@ public class EntityLocoSteamD51 extends EntityTrainCore {
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{2.8f,1.5f, 0.3f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{2.8f,1.67f, 0.3f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{6.7f,2.4f,1.3f};}
     @Override

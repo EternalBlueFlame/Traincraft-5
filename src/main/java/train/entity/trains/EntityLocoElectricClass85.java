@@ -54,7 +54,7 @@ public class EntityLocoElectricClass85 extends EntityTrainCore {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelClass85()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.45f, -0.45f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.45f, -0.45f, -0.03125f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, -90.0f, 0.0f}};}
     @Override

@@ -22,7 +22,7 @@ import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.core.handlers.ConfigHandler;
-import train.library.Tracks;
+import train.library.RCTracks;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -45,8 +45,8 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 	}
 
 	@Override
-	public Tracks getTrackType() {
-		return Tracks.ENERGY_TRACK;
+	public RCTracks getTrackType() {
+		return RCTracks.ENERGY_TRACK;
 	}
 
 	private Block getThisBlock() {

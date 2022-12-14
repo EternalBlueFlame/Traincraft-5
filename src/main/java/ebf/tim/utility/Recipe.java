@@ -25,26 +25,20 @@ public class Recipe {
      */
     public final List<List<ItemStack>> input;
 
-    /**
-     * A "tier" assigned to the table which decides which recipes can be crafted on it. This functions more like an ID
-     * for the recipe, and only crafting tables with the same tier as the recipe will allow the recipe to be crafted on it.
-     * Tier 0 is for the TiM table, tiers 1, 2, and 3 are for the TC assembly tables. If you are an addon developer and
-     * want to add your own tier, please choose a large 3-digit number rather than the next number to avoid colliding with
-     * other mods' ID numbers or potential future TiM IDs.
-     */
-    private int tier = 0; //a tier either 0, 1, 2, or 3
 
     private int[] displayItem=new int[]{0,0,0,0,0,0,0,0,0,0}; //idk what this for, but it will have to be changed for supporting 10 input slots
 
 
-    public Recipe(List<ItemStack> results, List<List<ItemStack>> cost, int tier) {
+    public Recipe(List<ItemStack> results, List<List<ItemStack>> cost) {
         this.result = results;
         this.input = cost;
-        this.tier = tier;
     }
-    public Recipe(List<ItemStack> results, List<List<ItemStack>> cost){
-        result=results;input=cost;tier=0;
+
+    public Recipe(ItemStack results, List<List<ItemStack>> cost) {
+        this.result = Collections.singletonList(results);
+        this.input = cost;
     }
+
     public void addResults(List<ItemStack> results){
         result.addAll(results);
     }
@@ -71,8 +65,6 @@ public class Recipe {
         recipeInProgress.add(Arrays.asList(bottomRight));
 
         this.input = recipeInProgress;
-
-        tier = 0;
     }
 
     @Deprecated
@@ -98,8 +90,6 @@ public class Recipe {
         recipeInProgress.add(Collections.singletonList(bottomRight));
 
         this.input = recipeInProgress;
-
-        tier = 0;
     }
 
     //gets the individual stacks to check for crafting matches
@@ -116,15 +106,6 @@ public class Recipe {
     public List<ItemStack> bottomRight(){return input.get(8);}
 
     public List<ItemStack> getresult(){return result;}
-
-    public int getTier() {
-        return tier;
-    }
-
-    public Recipe setTier(int tier) {
-        this.tier = tier;
-        return this;
-    }
 
     public List<List<ItemStack>> getRecipeItems() {
         return input;
@@ -164,13 +145,15 @@ public class Recipe {
         int i=0;
         for(List<ItemStack> slot : input){ //each ing
             boolean isMatching = false;
-            for(ItemStack s : slot){ //possible items for ing
+            if(slot!=null) {
+                for (ItemStack s : slot) { //possible items for ing
 
-                isMatching = compareItemsAndSize(s, stacks.get(i));
+                    isMatching = compareItemsAndSize(s, stacks.get(i));
 
-                if (isMatching) break;
+                    if (isMatching) break;
+                }
+                if (!isMatching) return false;
             }
-            if (!isMatching) return false;
             i++;
         }
         return true;
@@ -212,6 +195,8 @@ public class Recipe {
         if(target==null && toCompare == null) {
             //both must be null otherwise stacks.get(i) could have something and it falsely matches
             return true;
+        } else if (target == null || toCompare == null){
+            return false;
         }
 
         //items not equal or stack isn't big enough, or stack not big enough

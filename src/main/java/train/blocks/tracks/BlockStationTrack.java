@@ -11,7 +11,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
-import train.library.Tracks;
+import train.library.RCTracks;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -35,8 +35,8 @@ public class BlockStationTrack extends BlockTrackLockingBase implements ITrackLo
 		}
 		return getIcon(this.mode);
 	}
-	public Tracks getTrackType() {
-		return Tracks.STATION_TRACK;
+	public RCTracks getTrackType() {
+		return RCTracks.STATION_TRACK;
 	}
 	@Override
 	public void updateEntity() {

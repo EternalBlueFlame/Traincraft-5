@@ -40,7 +40,6 @@ public class RailShapeCore {
             shape.wires=overheadWires;
 
             ((RailTileEntity) dimension.getTileEntity(x, y, z)).setData(shape.toXML());
-            dimension.getTileEntity(x, y, z).markDirty();
         }
 
     }
@@ -55,7 +54,6 @@ public class RailShapeCore {
             shape.wires=builder.getItemStack("wires");
 
             ((RailTileEntity) dimension.getTileEntity(x, y, z)).setData(shape.toXML());
-            dimension.getTileEntity(x, y, z).markDirty();
         }
 
     }

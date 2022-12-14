@@ -40,24 +40,24 @@ public class AnimList {
      */
 
     /**tag for rods that move in a simple circle such as coupling rods.*/
-    public String tagCouplingRod(){ return " simplepiston ";}
+    public static String tagCouplingRod(){ return " simplepiston ";}
     /**tag for advanced pistons, ones that rotate and move in a simple circle.*/
-    public String tagAdvancedPiston(){return " advancedpiston ";}
+    public static String tagAdvancedPiston(){return " advancedpiston ";}
     /**tag for animatedPart, axles, and other geometry that just spins.*/
-    public String tagSimpleRotate(){return " simplerotate ";}
+    public static String tagSimpleRotate(){return " simplerotate ";}
     /**tag for wheels, adds support for the sparks on top of what tagSimpleRotate does.*/
-    public String tagWheel(){return " wheel ";}
+    public static String tagWheel(){return " wheel ";}
     /**tag for lamp bases to glow and ignore MC lighting*/
-    public String tagGlow(){return " glow ";}
+    public static String tagGlow(){return " glow ";}
     /**animation tag to prevent the part from rendering*/
-    public String tagHide(){return " cull ";}
+    public static String tagHide(){return " cull ";}
     /**animation tag to force geometry to render inside the cube*/
-    public String tagShowInside(){return " nocull ";}
+    public static String tagShowInside(){return " nocull ";}
 
 
-    public String tagDoorSlide(int direction){return "";}
+    public static String tagDoorSlide(int direction){return "";}
 
-    public String tagDoorSwing(int direction, boolean flip){return "";}
+    public static String tagDoorSwing(int direction, boolean flip){return "";}
     //todo: door types - swing, swing up, slide sideways, slide vertical(stair covers), slide out (retractable stairs).
 
 
@@ -72,15 +72,15 @@ public class AnimList {
      */
 
     /**Lamp tag for sphere lamps, usually things like decorative lights*/
-    public String lampSphere(int id){return " lamp sphere " + id;}
+    public static String lampSphere(int id){return " lamp sphere " + id;}
     /**Lamp tag for cone lamps, usually things like headlamps*/
-    public String lampCone(int id){return " lamp cone " + id;}
+    public static String lampCone(int id){return " lamp cone " + id;}
     /**Lamp tag for mars lamps, usually for headlamps that have a slight spin on them, often used on emergency vehicles*/
-    public String lampMars(int id){return " lamp mars " + id;}
+    public static String lampMars(int id){return " lamp mars " + id;}
     /**Lamp tag for siren lamps, that do a full rotation on one axis, often used on emergency vehicles*/
-    public String lampSiren(int id){return " lamp siren " + id;}
+    public static String lampSiren(int id){return " lamp siren " + id;}
     /**Lamp tag for lamp glare, usually things like tail lights that let off enough light to see but not actually emit*/
-    public String lampGlare(int id){return " lamp glare " + id;}
+    public static String lampGlare(int id){return " lamp glare " + id;}
     /**tag for smoke like on a chimney or diesel exhaust*/
     public static String tagSmoke(int id){return " smoke " + id;}
     /**Tag for steam like in a steam locomotive valve gear*/

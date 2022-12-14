@@ -2,24 +2,23 @@ package train.blocks.switchstand;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import ebf.tim.blocks.BlockDynamic;
-import ebf.tim.blocks.TileRenderFacing;
+import ebf.tim.blocks.BlockSwitch;
+import ebf.tim.blocks.TileSwitch;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ResourceLocation;
 import train.blocks.TCBlocks;
+import train.library.Info;
 
 import java.util.Random;
 
-public class TileSwitchStand extends TileRenderFacing {
+public class TileSwitchStand extends TileSwitch {
 
-    private int updateTicks = 0;
-    private static Random rand = new Random();
-
-    public TileSwitchStand(BlockDynamic host){
+    public TileSwitchStand(BlockSwitch host){
         super(host);
     }
 
@@ -30,36 +29,49 @@ public class TileSwitchStand extends TileRenderFacing {
     @Override
     public boolean canUpdate(){return true;}
 
-    @Override
-    public void updateEntity() {
-        super.updateEntity();
-        updateTicks++;
-        /**
-         * Remove any block on top of the wind mill
-         */
-        if (!worldObj.isRemote) {
-            if (updateTicks % 20 == 0) {
-                if (!this.worldObj.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
-                    Block block = CommonUtil.getBlockAt(worldObj, this.xCoord, this.yCoord + 1, this.zCoord);
-                    if (block != null) {
-                        EntityItem entityitem = new EntityItem(worldObj, this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(TCBlocks.highStarSwitch), 1));
-                        float f3 = 0.05F;
-                        entityitem.motionX = (float) rand.nextGaussian() * f3;
-                        entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
-                        entityitem.motionZ = (float) rand.nextGaussian() * f3;
-                        worldObj.spawnEntityInWorld(entityitem);
-                    }
-                    this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
-                }
-            }
-        }
-    }
-
-
     @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         return AxisAlignedBB.getBoundingBox(xCoord-1, yCoord-1, zCoord-1, xCoord + 2, yCoord + 2, zCoord + 2);
     }
 
+    @SideOnly(Side.CLIENT)
+    @Override
+    public void renderModel(){
+        //item render
+        if(getWorldObj()==null){
+            org.lwjgl.opengl.GL11.glTranslated( -0.2,  0,  0);
+            org.lwjgl.opengl.GL11.glScalef(0.65f,0.65f,0.65f);
+
+            new train.render.models.ModelSwitchStandOff().render();
+        }
+        //inworld render
+        else {
+            org.lwjgl.opengl.GL11.glTranslated(0, -0.2f, 0);
+
+            //extra offset for track height
+            if(ebf.tim.utility.ClientProxy.railSkin==3){
+                org.lwjgl.opengl.GL11.glTranslatef(0, 0.09f, 0);
+            } else {
+                org.lwjgl.opengl.GL11.glTranslatef(0, 0.01875f, 0);
+            }
+
+            //on
+            if (getEnabled()) {
+                new train.render.models.ModelSwitchStandOn().render();
+            } else {//off
+                new train.render.models.ModelSwitchStandOff().render();
+            }
+        }
+    }
+
+    @SideOnly(Side.CLIENT)
+    @Override
+    public ResourceLocation getTexture(int x, int y, int z){
+        if (getEnabled()) {
+            return new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "switchStand_uv_draw_1.png");
+        } else {
+            return new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "switchStand_uv_draw_2.png");
+        }
+    }
 }

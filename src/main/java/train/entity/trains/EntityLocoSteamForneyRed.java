@@ -53,7 +53,7 @@ public class EntityLocoSteamForneyRed extends EntityTrainCore {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelLocoForney()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.2f, 0.54f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.2f, 0.61f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 90.0f, -180.0f}};}
     @Override

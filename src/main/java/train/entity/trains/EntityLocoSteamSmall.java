@@ -54,7 +54,7 @@ public class EntityLocoSteamSmall extends EntityTrainCore {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelLoco3()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.6f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.62f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, -90.0f, -180.0f}};}
     @Override
@@ -88,7 +88,7 @@ public class EntityLocoSteamSmall extends EntityTrainCore {
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{1.0f,1.6f, 0.3f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{1.0f,1.5f, 0.3f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{worldObj==null?3.5f:2.7f,2.6f,1.3f};}
     @Override

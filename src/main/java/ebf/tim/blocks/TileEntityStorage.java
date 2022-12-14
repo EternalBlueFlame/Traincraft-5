@@ -2,6 +2,7 @@ package ebf.tim.blocks;
 
 
 import ebf.XmlBuilder;
+import ebf.tim.registry.TiMBlocks;
 import ebf.tim.registry.TiMFluids;
 import ebf.tim.utility.CommonProxy;
 import ebf.tim.utility.CommonUtil;
@@ -17,7 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
-import net.minecraftforge.oredict.OreDictionary;
+import train.blocks.TCBlocks;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -36,7 +37,7 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
     public int outputPage=1;
     public int pages=1;
 
-    public int assemblyTableTier = -1; //only applies if part of assemblyTable/traintable, no need to set otherwise.
+    public Block assemblyTableTier = TCBlocks.trainTableTier1; //only applies if part of assemblyTable/traintable, no need to set otherwise.
 
     public TileEntityStorage(){}
 
@@ -49,35 +50,35 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
     protected void initInventoryFromBlock( BlockDynamic block ){
         int s=400;
         inventory = new ArrayList<>();
-        if(block.getUnlocalizedName().equals("tile.block.traintabletier1") ||
-                block.getUnlocalizedName().equals("tile.block.traintabletier2") ||
-                block.getUnlocalizedName().equals("tile.block.traintabletier3") ||
-                block.getUnlocalizedName().equals("tile.block.traintable")) {
-
-            if (block.assemblyTableTier != -1) {
-                //if it's a traintable, it should be, things might break otherwise, this is temporary to see if I missed a case.
-                this.assemblyTableTier = block.assemblyTableTier;
-            } else {
-                DebugUtil.println("Did not set the tier of the assembly table/traintable!");
-                this.assemblyTableTier = 0;
+        this.assemblyTableTier = block;
+        if(block == TiMBlocks.trainTable) {
+            //inventory grid (left grid)
+            for (int l = 0; l < 3; ++l) {
+                for (int i1 = 0; i1 < 3; ++i1) {
+                    inventory.add(new ItemStackSlot(this, s, assemblyTableTier).setCoords(30 + i1 * 18, 17 + l * 18).setCraftingInput(true));
+                    s++;
+                }
             }
+            //tile entity's crafting grid (right hand grid)
+            for (int l = 0; l < 3; ++l) {
+                for (int i1 = 0; i1 < 3; ++i1) {
+                    inventory.add(new ItemStackSlot(this, s, assemblyTableTier).setCoords(106 + i1 * 18, 17 + l * 18).setCraftingOutput(true));
+                    s++;
+                }
+            }
+        } else if (block== TiMBlocks.railTable) {
+            inventory.add(new ItemStackSlot(this,400, assemblyTableTier).setCoords( 30 , -2).setCraftingInput(true).setOverlay(Items.iron_ingot)); //ingot
+            inventory.add(new ItemStackSlot(this,401, assemblyTableTier).setCoords( 30 , 18).setCraftingInput(true).setOverlay(Blocks.planks)); //ties
+            inventory.add(new ItemStackSlot(this,402, assemblyTableTier).setCoords( 30 , 37).setCraftingInput(true).setOverlay(Blocks.gravel)); //ballast
 
-            if (!CommonProxy.isTraincraft || block.getUnlocalizedName().equals("tile.block.traintable")) {
-                //inventory grid (left grid)
-                for (int l = 0; l < 3; ++l) {
-                    for (int i1 = 0; i1 < 3; ++i1) {
-                        inventory.add(new ItemStackSlot(this, s, assemblyTableTier).setCoords(30 + i1 * 18, 17 + l * 18).setCraftingInput(true));
-                        s++;
-                    }
-                }
-                //tile entity's crafting grid (right hand grid)
-                for (int l = 0; l < 3; ++l) {
-                    for (int i1 = 0; i1 < 3; ++i1) {
-                        inventory.add(new ItemStackSlot(this, s, assemblyTableTier).setCoords(106 + i1 * 18, 17 + l * 18).setCraftingOutput(true));
-                        s++;
-                    }
-                }
-            } else {
+            inventory.add(new ItemStackSlot(this,403, assemblyTableTier).setCoords( 50 , 7).setCraftingInput(true)); //wires
+            inventory.add(new ItemStackSlot(this,404, assemblyTableTier).setCoords( 50 , 27).setCraftingInput(true));//augment slot
+
+            inventory.add(new ItemStackSlot(this,405, assemblyTableTier).setCoords( 124 , -2).setCraftingInput(true).setOverlay(Blocks.rail));//old shape input
+
+            inventory.add(new ItemStackSlot(this,406, assemblyTableTier).setCoords( 124 , 33).setCraftingOutput(true)); //output
+            storageType=0;
+        } else {
                 //this is traincraft
                 //create the assembly table crafting slots (0-9)
                 inventory.add(new ItemStackSlot(this, s+0, assemblyTableTier).setCoords(25, 27).setCraftingInput(true));
@@ -105,23 +106,10 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
                 int storageSlot = 36;
                 for(int i = 0; i < 2; ++i) {
                     for (int j = 0; j < 4; ++j) {
-                        inventory.add(new ItemStackSlot(this, (storageSlot) + (j + i * 4)).setCoords(8 + j * 18, (128) + i * 18));
+                        inventory.add(new ItemStackSlot(this, (storageSlot) + (j + i * 4), assemblyTableTier).setCoords(8 + j * 18, (128) + i * 18));
                     }
                 }
-            }
             storageType=1;
-        } else {
-            inventory.add(new ItemStackSlot(this,400).setCoords( 30 , -2).setCraftingInput(true).setOverlay(Items.iron_ingot)); //ingot
-            inventory.add(new ItemStackSlot(this,401).setCoords( 30 , 18).setCraftingInput(true).setOverlay(Blocks.planks)); //ties
-            inventory.add(new ItemStackSlot(this,402).setCoords( 30 , 37).setCraftingInput(true).setOverlay(Blocks.gravel)); //ballast
-
-            inventory.add(new ItemStackSlot(this,403).setCoords( 50 , 7).setCraftingInput(true)); //wires
-            inventory.add(new ItemStackSlot(this,404).setCoords( 50 , 27).setCraftingInput(true));//augment slot
-
-            inventory.add(new ItemStackSlot(this,405).setCoords( 124 , -2).setCraftingInput(true).setOverlay(Blocks.rail));//old shape input
-
-            inventory.add(new ItemStackSlot(this,406).setCoords( 124 , 33).setCraftingOutput(true)); //output
-            storageType=0;
         }
     }
 
@@ -298,12 +286,20 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
     @Override
     public FluidStack drain(@Nullable ForgeDirection from, FluidStack resource, boolean doDrain){
         int leftoverDrain=resource.amount;
+        FluidStack value = resource.copy();
         for(FluidTankInfo stack : getTankInfo(null)) {
-            if (stack.fluid.amount > 0 && (stack.fluid.getFluid()==TiMFluids.nullFluid || stack.fluid.getFluid() == resource.getFluid())) {
+            if (stack.fluid.amount > 0 &&
+                    (value.getFluid()==TiMFluids.nullFluid ||
+                            stack.fluid.getFluid()==TiMFluids.nullFluid ||
+                            stack.fluid.getFluid() == value.getFluid())
+            ) {
                 if(leftoverDrain>stack.fluid.amount){
-                    leftoverDrain-=stack.fluid.amount;
+                    leftoverDrain -= stack.fluid.amount;
                     if(doDrain){
                         stack.fluid.amount=0;
+                    }
+                    if (value.getFluid()==TiMFluids.nullFluid){
+                        value=new FluidStack(stack.fluid.getFluid(), stack.fluid.amount);
                     }
                 } else {
                     if(doDrain){
@@ -313,7 +309,7 @@ public class TileEntityStorage extends TileRenderFacing implements IInventory, I
                 }
             }
         }
-        return resource;
+        return value;
 
     }
 

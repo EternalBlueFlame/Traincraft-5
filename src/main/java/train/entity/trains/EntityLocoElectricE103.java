@@ -9,7 +9,6 @@ import ebf.tim.registry.TiMItems;
 import ebf.tim.registry.TiMOres;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -54,7 +53,7 @@ public class EntityLocoElectricE103 extends EntityTrainCore {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelE103()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.25f, 0.05f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.25f, 0.1f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -82,7 +81,7 @@ public class EntityLocoElectricE103 extends EntityTrainCore {
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{2.2f,1.3f, 0.2f},{-2.2f,1.3f, -0.2f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{2.2f,1.2f, 0.2f},{-2.2f,1.2f, -0.2f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{6.1f,2.2f,1.5f};}
     @Override

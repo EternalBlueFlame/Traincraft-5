@@ -25,13 +25,11 @@ import net.minecraftforge.fluids.FluidStack;
 import train.blocks.TCBlocks;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class TileGeneratorDiesel extends TileEntityStorage implements IEnergyProvider {
 
     public boolean powered;
-    public EnergyStorage energy = new EnergyStorage(3000,80); //core energy value the first value is max storage and the second is transfer max.
-    private ForgeDirection[] sides = new ForgeDirection[]{}; //defines supported sides
+    public EnergyStorage energy = new EnergyStorage(320,80); //core energy value the first value is max storage and the second is transfer max.
 
     public int currentBurnTime;
 
@@ -40,9 +38,6 @@ public class TileGeneratorDiesel extends TileEntityStorage implements IEnergyPro
 
     public TileGeneratorDiesel(){
         super(TCBlocks.dieselGenerator);
-        this.energy.setCapacity(320);
-        this.energy.setMaxTransfer(80);
-        sides=new ForgeDirection[]{ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.UP, ForgeDirection.DOWN};
         //this.theTank = LiquidManager.getInstance().new FilteredTank(30000, LiquidManager.dieselFilter(), 1);
 
         inventory=new ArrayList<>();
@@ -127,32 +122,6 @@ public class TileGeneratorDiesel extends TileEntityStorage implements IEnergyPro
         return new int[]{30000};
     }
 
-    private boolean placeInInvent(ItemStack itemstack1, int i, boolean doAdd){
-        if(getSlotIndexByID(i).getStack() == null){
-            if(doAdd){
-                getSlotIndexByID(i).setStack(itemstack1);
-            }
-            return true;
-        }
-        else if(getSlotIndexByID(i).getStack() != null && getSlotIndexByID(i).getStack().getItem() == itemstack1.getItem()
-                && itemstack1.isStackable() && (!itemstack1.getHasSubtypes() ||
-                getSlotIndexByID(i).getStack().getItemDamage() == itemstack1.getItemDamage())
-                && ItemStack.areItemStackTagsEqual(getSlotIndexByID(i).getStack(), itemstack1)){
-            if(doAdd){
-                int var9 = getSlotIndexByID(i).getStack().stackSize+itemstack1.stackSize;
-                if(var9 <= itemstack1.getMaxStackSize()){
-                    getSlotIndexByID(i).getStack().stackSize = var9;
-                }
-                else if(getSlotIndexByID(i).getStack().stackSize < itemstack1.getMaxStackSize()){
-                    getSlotIndexByID(i).decrStackSize(-1);
-                }
-            }
-            return true;
-        }
-        return false;
-
-    }
-
     @Override
     public World getWorldObj(){
         return this.worldObj;
@@ -163,16 +132,10 @@ public class TileGeneratorDiesel extends TileEntityStorage implements IEnergyPro
         return false;
     }
 
-    public void setSides(ForgeDirection[] listOfSides){
-        this.sides = listOfSides;
-    }
-    public ForgeDirection[] getSides(){
-        return this.sides;
-    }
 
 
     public void pushEnergy(World world, int x, int y, int z, EnergyStorage storage){
-        for (ForgeDirection side : getSides()) {
+        for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
             TileEntity tile = world.getTileEntity(x + side.offsetX, y + side.offsetY, z + side.offsetZ);
             if (tile instanceof IEnergyReceiver && storage.getEnergyStored() > 0) {
                 if (((IEnergyReceiver) tile).canConnectEnergy(side.getOpposite())) {
@@ -187,7 +150,7 @@ public class TileGeneratorDiesel extends TileEntityStorage implements IEnergyPro
     //RF Overrides
     @Override
     public boolean canConnectEnergy(ForgeDirection dir) {
-        return Arrays.asList(sides).contains(dir);
+        return true;
     }
     @Override
     public int extractEnergy(ForgeDirection dir, int amount, boolean simulate) {

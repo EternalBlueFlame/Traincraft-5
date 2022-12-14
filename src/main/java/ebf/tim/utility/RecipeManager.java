@@ -14,70 +14,56 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 import train.core.handlers.ConfigHandler;
+import train.entity.rollingStock.EntityTracksBuilder;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 public class RecipeManager {
 
-    private static List<Recipe> recipeList = new ArrayList<>();
+    private static HashMap<Block, List<Recipe>> recipeList = new HashMap<>();
     //private static List<Item> ingotDirectory = new ArrayList<>();
 
 
-    public static void registerRecipe(Object[] recipe, ItemStack output, int tier){
-        registerRecipe(getRecipe(recipe, output).setTier(tier));
-    }
-    public static void registerRecipe(Object[] recipe, ItemStack output){
-        registerRecipe(getRecipe(recipe, output));
-    }
-    public static void registerRecipe(Object[] recipe, Item output){
-        registerRecipe(getRecipe(recipe, new ItemStack(output)));
+    public static void registerRecipe(Object[] recipe, ItemStack output, Block table){
+        registerRecipe(getRecipe(recipe, output), table);
     }
 
-    public static void registerRecipe(Recipe recipe){
-/*        DebugUtil.println("REGISTERING RECIPE"
-        , (recipe.topLeft()==null || recipe.topLeft().size()==0 || recipe.topLeft().get(0)==null?"null": recipe.topLeft().get(0).getDisplayName()),
-                recipe.getresult().get(0).getDisplayName());*/
-
-        // adds a result to the recipe if it already exists, rather than creating a new one.
-        for(Recipe r : recipeList){
-            if ((r instanceof SizedRecipe) == (recipe instanceof SizedRecipe)) { //either both sized or both not
-
-                if (r instanceof SizedRecipe) { //both sized
-                    if (((SizedRecipe) r).getCraftHeight() != ((SizedRecipe) recipe).getCraftHeight() ||
-                            ((SizedRecipe) r).getCraftWidth() != ((SizedRecipe) recipe).getCraftWidth()) {
-                        //one of dimensions don't match
-                        continue;
-                    } else {
-                        if (((SizedRecipe) r).recipeInputMatches(recipe.input, ((SizedRecipe) r).getCraftWidth(), ((SizedRecipe) r).getCraftHeight())) {
-                            if (r.getTier() == recipe.getTier()) {
-                                r.addResults(recipe.result);
-                                return;
-                            }
-                        }
-                    }
-                } else {
-                    //not sized
-                    if (r.recipeInputMatches(recipe.input)) {
-                        if (r.getTier() == recipe.getTier()) {
-                            r.addResults(recipe.result);
-                            return;
-                        }
-                    }
-                }
-            }
+    public static void registerRecipe(Recipe recipe, Block table){
+        if(!recipeList.containsKey(table)){
+            List<Recipe> r = new ArrayList<Recipe>();
+            r.add(recipe);
+            recipeList.put(table, r);
+        } else {
+            recipeList.get(table).add(recipe);
         }
-
-        recipeList.add(recipe);
 
         //todo: in later MC versions add function for IDE to write the recipe to a json in editor, and load it from json normally
     }
 
 
-    public static Recipe getRecipe(ItemStack result){
-        for(Recipe r : recipeList){
+    public static Recipe getRecipe(ItemStack result, Block table){
+        //if table is null, check all tables
+        if(table==null){
+            for(Block t : recipeList.keySet()){
+                if(t!=null) {
+                    Recipe r = getRecipe(result, t);
+                    if (r != null) {
+                        return r;
+                    }
+                }
+            }
+        }
+        //if list is null, return null
+        if(recipeList.get(table)==null){
+            return null;
+        }
+
+        //check table list for recipe
+        for(Recipe r : recipeList.get(table)){
             for(ItemStack stack : r.getresult()){
                 if(stack==null || result==null){
                     if(stack==null && result==null){
@@ -111,14 +97,50 @@ public class RecipeManager {
         return null;
     }
 
+    public static Block getRecipeTable(ItemStack result){
+        for(Block b : recipeList.keySet()) {
+            for (Recipe r : recipeList.get(b)) {
+                for (ItemStack stack : r.getresult()) {
+                    if (stack == null || result == null) {
+                        if (stack == null && result == null) {
+                            return b;
+                        }
+                    } else if (stack.getItem() == result.getItem()) {
+                        //TC enable/disable different types of stock functionality.
+                        //faster to check the bools first, then check if it's actually valid, since most wont use this feature.
+                        if ((!ConfigHandler.ENABLE_DIESEL || !ConfigHandler.ENABLE_ELECTRIC || !ConfigHandler.ENABLE_STEAM)
+                                && result.getItem() instanceof ItemTransport && ((ItemTransport) result.getItem()).types != null) {
+                            if (!ConfigHandler.ENABLE_DIESEL
+                                    && ((ItemTransport) result.getItem()).types.contains(TrainsInMotion.transportTypes.DIESEL)) {
+                                return null;
+                            }
+                            if (!ConfigHandler.ENABLE_ELECTRIC
+                                    && ((ItemTransport) result.getItem()).types.contains(TrainsInMotion.transportTypes.ELECTRIC)) {
+                                return null;
+                            }
+                            if (!ConfigHandler.ENABLE_STEAM
+                                    && ((ItemTransport) result.getItem()).types.contains(TrainsInMotion.transportTypes.STEAM)) {
+                                return null;
+                            }
+                        }
+
+                        return b;
+                    }
+                }
+
+            }
+        }
+        return null;
+    }
+
     /**Compares and returns a list of trains that are craftable with the given array of ItemStacks (the inputted recipe)
      * Funnily enough, in wanting to have a tier-less traintable, I implemented a fourth tier, tier 0.
      *
      * @param recipe An array of ItemStacks that could be a valid recipe.
-     * @param tier The tier to compare recipes against. Will only look for results in given tier.
+     * @param table The block that the crafting is being done on
      * @return A List of ItemStacks that are trains craftable with the recipe parameter. Null if nothing craftable.
      */
-    public static List<ItemStack> getResult(ItemStack[] recipe, int tier){
+    public static List<ItemStack> getResult(ItemStack[] recipe, Block table){
 
         //more advanced inventory empty check because of variable recipe size possible
         boolean empty = true;
@@ -131,10 +153,35 @@ public class RecipeManager {
         if (empty) return null;
 
         List<ItemStack> retStacks = new ArrayList<>();
-        for(Recipe r : recipeList){
-            if(r.getTier() == tier) { //compare tier first for speed (and to avoid incorrect dimensions)
-                if (r.inputMatches(Arrays.asList(recipe))) {
-                    retStacks.addAll(r.result);
+        boolean canAdd;
+
+        if(recipeList.get(table)==null){
+            return null;
+        }
+        for(Recipe r : recipeList.get(table)){
+            if (r.inputMatches(Arrays.asList(recipe))) {
+                for(ItemStack res : r.result) {
+                    canAdd=true;
+                    if(res.getItem() instanceof ItemTransport) {
+                        if (!ConfigHandler.ENABLE_STEAM) {
+                            canAdd=!((ItemTransport)res.getItem()).types.contains(TrainsInMotion.transportTypes.STEAM);
+                        }
+                        if (!ConfigHandler.ENABLE_DIESEL) {
+                            canAdd=!((ItemTransport)res.getItem()).types.contains(TrainsInMotion.transportTypes.DIESEL);
+                        }
+                        if (!ConfigHandler.ENABLE_ELECTRIC) {
+                            canAdd=!((ItemTransport)res.getItem()).types.contains(TrainsInMotion.transportTypes.ELECTRIC);
+                        }
+                        if (!ConfigHandler.ENABLE_TENDER) {
+                            canAdd=!((ItemTransport)res.getItem()).types.contains(TrainsInMotion.transportTypes.TENDER);
+                        }
+                        if (!ConfigHandler.ENABLE_BUILDER) {
+                            canAdd=res.getItem()!=EntityTracksBuilder.thisItem;
+                        }
+                    }
+                    if(canAdd) {
+                        retStacks.add(res);
+                    }
                 }
             }
         }
@@ -145,11 +192,10 @@ public class RecipeManager {
         }
     }
 
-    public static List<Recipe> getRecipesContaining(ItemStack itemStack, int tier) {
+    public static List<Recipe> getRecipesContaining(ItemStack itemStack, Block table) {
         ArrayList<Recipe> containing = new ArrayList<>();
-        for (Recipe recipe : recipeList) {
+        for (Recipe recipe : recipeList.get(table)) {
             boolean hasFound = false;
-            if (recipe.getTier() != tier) continue;
             for (List<ItemStack> ingredient : recipe.getRecipeItems()) {
                 if (ingredient == null) continue;
                 for (ItemStack permutation : ingredient) {
@@ -305,23 +351,6 @@ public class RecipeManager {
 //        );
 //        return r;
 //    }
-
-    //This is necessary because the GenericRegistry will have to set the tier on the recipe somehow, in case it is set on the class.
-    public static Recipe getRecipeWithTier(Object[] obj, ItemStack cartItem, int tier){
-        Recipe r = new Recipe(new ItemStack[]{cartItem},
-                getItem(obj[0]),
-                getItem(obj[1]),
-                getItem(obj[2]),
-                getItem(obj[3]),
-                getItem(obj[4]),
-                getItem(obj[5]),
-                getItem(obj[6]),
-                getItem(obj[7]),
-                getItem(obj[8])
-        );
-        r.setTier(tier);
-        return r;
-    }
 
     public static ItemStack[] getItem(Object itm){
         ItemStack[] list = new ItemStack[1];

@@ -1,11 +1,14 @@
 package train.generation;
 
+import ebf.tim.entities.GenericRailTransport;
+import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import train.blocks.TCBlocks;
+import train.entity.rollingStock.*;
 
 import java.util.List;
 import java.util.Random;
@@ -148,7 +151,7 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 		for (l = 0; l < 6; ++l) {
 			for (int i1 = 0; i1 < 9; ++i1) {
 				this.clearCurrentPositionBlocksUpwards(world, i1, 9, l, structureboundingbox);
-				this.func_151554_b(world, Blocks.brick_block, 0, i1, -1, l, structureboundingbox);
+				this.placeBlockByBiome(world, Blocks.brick_block, 0, i1, -1, l, structureboundingbox);
 			}
 		}
 
@@ -160,38 +163,45 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 
 		if (structureboundingbox.isVecInside(j1, k1, l1)) {
 			int rD = random.nextInt(8);
-			//todo:spawn in wagons when implemented
-			/*EntityRollingStock cart = new EntityCabooseLogging(world);
-			if (rD == 0)
+			GenericRailTransport cart;
+			if (rD == 0) {
 				cart = new EntityCaboose(world);
-			if (rD == 1)
+			}
+			else if (rD == 1){
 				cart = new EntityCaboose3(world);
-			if (rD == 2)
+			}
+			else if (rD == 2){
 				cart = new EntityFreightCart(world);
-			if (rD == 3)
+			}
+			else if (rD == 3){
 				cart = new EntityPassenger2(world);
-			if (rD == 4)
+			}
+			else if (rD == 4){
 				cart = new EntityStockCar(world);
-			if (rD == 5)
+			}
+			else if (rD == 5){
 				cart = new EntityBoxCartUS(world);
-			if (rD == 6)
+			}
+			else if (rD == 6) {
 				cart = new EntityFreightCartSmall(world);
+			}
+			else {
+				cart = new EntityCabooseLogging(world);
+			}
 
 			cart.setLocationAndAngles(j1 + 0.5D, k1, l1 + 0.5D, 90.0F, 0.0F);
-			cart.setTrainOwner("VillagerJoe");
-			cart.shouldChunkLoad=false;
 			if (rD == 4) {
-				cart.setColor(TraincraftUtil.getByteFromColor("Blue"));
+				cart.setSkin("Blue");
 			}
 			if (rD == 7) {
-				cart.setColor(TraincraftUtil.getByteFromColor("Red"));
+				cart.setSkin("Red");
 			}
 			if (rD == 5) {
-				cart.setColor(TraincraftUtil.getByteFromColor("Brown"));
+				cart.setSkin("Brown");
 			}
 			world.spawnEntityInWorld(cart);
-			cart.setInformation(cart.getTrainType(), "VillagerJoe", "VillagerJoe", cart.getCartItem().getItem().getItemStackDisplayName(cart.getCartItem()), -1);
-			*/
+			cart.entityData.putString("ownername","VillagerJoe");
+
 		}
 		int j2 = this.getXWithOffset(3, 8);
 		int k2 = this.getYWithOffset(1);
@@ -199,31 +209,40 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 
 		if (structureboundingbox.isVecInside(j2, k2, l2)) {
 			int rD = random.nextInt(8);
-			//todo:spawn in wagons when implemented
-			/*EntityRollingStock cart = new EntityFreightWood2(world);
-			if (rD == 0)
+			GenericRailTransport cart;
+			if (rD == 0) {
 				cart = new EntityCaboose(world);
-			if (rD == 1)
+			}
+			else if (rD == 1) {
 				cart = new EntityCaboose3(world);
-			if (rD == 2)
+			}
+			else if (rD == 2) {
 				cart = new EntityFreightCart(world);
-			if (rD == 3)
+			}
+			else if (rD == 3) {
 				cart = new EntityPassenger2(world);
-			if (rD == 4)
+			}
+			else if (rD == 4) {
 				cart = new EntityStockCar(world);
-			if (rD == 5)
+			}
+			else if (rD == 5) {
 				cart = new EntityBoxCartUS(world);
-			if (rD == 6)
+			}
+			else if (rD == 6) {
 				cart = new EntityFreightCartSmall(world);
+			}
+			else {
+				cart = new EntityFreightWood2(world);
+			}
 			cart.setLocationAndAngles(j2 + 0.5D, k2, l2 + 0.5D, 90.0F, 0.0F);
-			cart.setTrainOwner("VillagerJoe");
 			if (rD == 4) {
-				cart.setColor(TraincraftUtil.getByteFromColor("Blue"));
+				cart.setSkin("Blue");
 			}
 			if (rD == 5) {
-				cart.setColor(TraincraftUtil.getByteFromColor("Brown"));
+				cart.setSkin("Brown");
 			}
-			world.spawnEntityInWorld(cart);*/
+			world.spawnEntityInWorld(cart);
+			cart.entityData.putString("ownername","VillagerJoe");
 		}
 
 		return true;
@@ -235,5 +254,37 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 	@Override
 	protected int getVillagerType(int par1) {
 		return 86;
+	}
+
+	protected void placeBlockByBiome(World p_151554_1_, Block p_151554_2_, int p_151554_3_, int p_151554_4_, int p_151554_5_, int p_151554_6_, StructureBoundingBox p_151554_7_) {
+		Block block1 = this.biomeBlock(p_151554_1_,p_151554_4_, p_151554_5_, p_151554_6_,p_151554_2_);
+		int i1 = this.biomeID(p_151554_1_,p_151554_4_, p_151554_5_, p_151554_6_,p_151554_2_, p_151554_3_);
+		placeBlockAtCurrentPosition(p_151554_1_, block1, i1, p_151554_4_, p_151554_5_, p_151554_6_, p_151554_7_);
+	}
+
+	private Block biomeBlock(World world, int x, int y, int z, Block block) {
+		if (world.getBiomeGenForCoords(x,z).topBlock==Blocks.sand) {
+			if (block == Blocks.log || block == Blocks.log2
+					|| block == Blocks.cobblestone || block == Blocks.planks || block == Blocks.gravel) {
+				return Blocks.sandstone;
+			}
+			else if (block == Blocks.oak_stairs || block == Blocks.stone_stairs) {
+				return Blocks.sandstone_stairs;
+			}
+		}
+
+		return block;
+	}
+
+	private int biomeID(World world, int x, int y, int z, Block p_151557_1_, int p_151557_2_) {
+		if (world.getBiomeGenForCoords(x,z).topBlock==Blocks.sand) {
+			if (p_151557_1_ == Blocks.log || p_151557_1_ == Blocks.log2 || p_151557_1_== Blocks.cobblestone) {
+				return 0;
+			} else if (p_151557_1_ == Blocks.planks) {
+				return 2;
+			}
+		}
+
+		return p_151557_2_;
 	}
 }

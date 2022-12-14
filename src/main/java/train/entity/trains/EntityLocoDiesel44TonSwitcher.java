@@ -8,7 +8,6 @@ import ebf.tim.items.ItemTransport;
 import ebf.tim.registry.TiMItems;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -60,6 +59,9 @@ public class EntityLocoDiesel44TonSwitcher extends EntityTrainCore {
     public void registerSkins(){
         SkinRegistry.addSkin(this.getClass(),
             new TransportSkin(Info.modID,"textures/trains/loco_44tonswitcher.png","loco_44tonswitcher", "description.loco_44tonswitcher"));
+
+        //SkinRegistry.addSkin(this.getClass(),
+        //        new TransportSkin(Info.modID,"textures/trains/loco_44tonswitcher_Red.png","loco_44tonswitcher_Red", "description.loco_44tonswitcher_Red"));
     }
     @Override
     public String getDefaultSkin(){
@@ -73,7 +75,7 @@ public class EntityLocoDiesel44TonSwitcher extends EntityTrainCore {
         return new ItemStack[]{
                 new ItemStack(TiMItems.controlPanel, 1), new ItemStack(TiMItems.wheelSteel, 4), new ItemStack(TiMItems.frameSteel, 3),
                 null, null, new ItemStack(TiMItems.cabinSteel, 2),
-                new ItemStack(TiMItems.pneumaticTransmission, 1), new ItemStack(TiMItems.smallDieselEngine, 2), null        };
+                new ItemStack(TiMItems.hydraulicTransmission, 1), new ItemStack(TiMItems.mediumDieselEngine, 2), null        };
     }
 
 

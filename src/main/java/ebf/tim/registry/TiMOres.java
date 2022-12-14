@@ -84,7 +84,7 @@ public class TiMOres {
 
         //register copper for generation
         if (CommonProxy.doCopperGeneration) {
-            registerOreGen(3, new OreGen(oreCopper, 5, 50, 6, 4, 6));
+            registerOreGen(3, new OreGen(oreCopper, 5, 50, 6, 4, 6).setFiller(Blocks.stone));
         }
         if (CommonProxy.doSteelGeneration) {
             //nether ore, lava oceans gen at y=31
@@ -95,7 +95,7 @@ public class TiMOres {
             registerOreGen(5, steelGen2);
         }
         if (CommonProxy.doAluminumGeneration) {
-            registerOreGen(5, new OreGen(oreAluminum, 12, 30, 6, 3, 4));
+            registerOreGen(5, new OreGen(oreAluminum, 12, 30, 6, 3, 4).setFiller(Blocks.stone));
         }
     }
 

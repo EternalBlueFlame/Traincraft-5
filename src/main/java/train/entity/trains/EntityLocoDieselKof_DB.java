@@ -9,7 +9,6 @@ import ebf.tim.registry.TiMItems;
 import ebf.tim.registry.TiMOres;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -82,13 +81,13 @@ public class EntityLocoDieselKof_DB extends EntityTrainCore {
         return new ItemStack[]{
                 new ItemStack(TiMItems.controlPanel, 1), new ItemStack(TiMItems.wheelSteel, 2), new ItemStack(TiMItems.frameSteel, 1),
                 new ItemStack(TiMOres.ingotSteel, 2), new ItemStack(TiMItems.chimneySteel, 1), new ItemStack(TiMItems.cabinSteel, 1),
-                new ItemStack(TiMItems.pneumaticTransmission, 1), new ItemStack(TiMItems.smallDieselEngine, 2), null        };
+                new ItemStack(TiMItems.hydraulicTransmission, 1), new ItemStack(TiMItems.mediumDieselEngine, 2), null        };
     }
 
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{1f,1.0f, 0.35f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{1f,0.95f, 0.35f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{worldObj==null?3.25f:2.9f,1.9f,1.5f};}
     @Override
@@ -107,6 +106,10 @@ public class EntityLocoDieselKof_DB extends EntityTrainCore {
     @Override
     public int[] getTankCapacity(){return new int[]{5000};}
 
+    public String[] setParticles(){return new String[]{
+            "smoke ,0,1,1,1.15,0,0,0",
+            "smoke ,0,1,0.6,1.15,0,0,0"
+    };}
 
 
     //these only change in very specific use cases.

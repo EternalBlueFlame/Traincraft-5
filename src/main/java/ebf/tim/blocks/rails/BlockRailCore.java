@@ -33,7 +33,7 @@ import java.util.List;
  */
 public class BlockRailCore extends BlockRail implements ITileEntityProvider {
 
-    private static final int[] updateMatrix = {-2,-1,0,1,2};
+    private static final int[] matrixXZ = {0,-1,1,-2,2}, matrixY = {0,-1,+1};
 
 
 
@@ -98,11 +98,6 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
         return 0.4f;//getTile(world, x, y, z)!=null?getTile(world, x, y, z).getRailSpeed():0.4f;
     }
 
-    @SideOnly(Side.CLIENT)
-    public int colorMultiplier(IBlockAccess p_149720_1_, int p_149720_2_, int p_149720_3_, int p_149720_4_) {
-        return super.colorMultiplier(p_149720_1_, p_149720_2_, p_149720_3_, p_149720_4_);
-    }
-
     @Override
     public boolean canCollideCheck(int p_149678_1_, boolean p_149678_2_){
         return true;
@@ -115,24 +110,17 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
 
 
     public void setBlockBoundsBasedOnState(IBlockAccess world, int x, int y, int z) {
-        int meta = getBasicRailMetadata(world, null, x, y, z);
+        int meta = CommonUtil.getRailMeta(world, null, x, y, z);
         if (meta >1 && meta <6) {
-            this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1f, 1.0F);
+            this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.5f, 1.0F);
         } else {
             this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
         }
     }
 
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB hitboxSelf, List p_149743_6_, Entity collidingEntity) {
-        int meta = getBasicRailMetadata(world, null, x, y, z);
-        if (meta > 1 && meta < 6) {
-            //todo: return twi hitboxes so it can be climbed like stairs
-            this.setBlockBoundsBasedOnState(world, x, y, z);
-            super.addCollisionBoxesToList(world, x, y, z, hitboxSelf, p_149743_6_, collidingEntity);
-        } else {
-            this.setBlockBoundsBasedOnState(world, x, y, z);
-            super.addCollisionBoxesToList(world, x, y, z, hitboxSelf, p_149743_6_, collidingEntity);
-        }
+        this.setBlockBoundsBasedOnState(world, x, y, z);
+        super.addCollisionBoxesToList(world, x, y, z, hitboxSelf, p_149743_6_, collidingEntity);
 
     }
 
@@ -308,10 +296,6 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
     @Override
     public void onBlockAdded(World p_149726_1_, int p_149726_2_, int p_149726_3_, int p_149726_4_) {
         updateNearbyShapes(p_149726_1_, p_149726_2_, p_149726_3_, p_149726_4_);
-
-        if (this.field_150053_a) {
-            this.onNeighborBlockChange(p_149726_1_, p_149726_2_, p_149726_3_, p_149726_4_, this);
-        }
     }
 
 
@@ -351,7 +335,9 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
 
     @Override
     public void onNeighborBlockChange(World worldObj, int x, int y, int z, Block b) {
-        updateNearbyShapes(worldObj,x,y,z);
+        if(!(b instanceof BlockRailBase)) {
+            updateNearbyShapes(worldObj,x,y,z);
+        }
     }
 
 
@@ -370,37 +356,23 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
             p_149749_1_.getChunkFromChunkCoords(p_149749_2_ >> 4, p_149749_4_ >> 4)
                     .removeTileEntity(p_149749_2_ & 15, p_149749_3_, p_149749_4_ & 15);
         }
-    }
-
-    @Override
-    public int onBlockPlaced(World p_149660_1_, int p_149660_2_, int p_149660_3_, int p_149660_4_, int p_149660_5_, float p_149660_6_, float p_149660_7_, float p_149660_8_, int p_149660_9_) {
-        //updateNearbyShapes(p_149660_1_, p_149660_2_, p_149660_3_, p_149660_4_);
-        return p_149660_9_;
+        CommonUtil.markBlockForUpdate(p_149749_1_, p_149749_2_,p_149749_3_,p_149749_4_);
+        p_149749_1_.func_147453_f(p_149749_2_,p_149749_3_,p_149749_4_, Blocks.air);
+        updateNearbyShapes(p_149749_1_, p_149749_2_,p_149749_3_,p_149749_4_);
     }
 
     public void updateNearbyShapes(World world, int xCoord, int yCoord, int zCoord){
-        //update the meta of just this rail
-        new RailData(world,xCoord,yCoord,zCoord).rebuildRailMeta();
-
-        //rails above and below the current rail don't always get updated because of how vanilla handles updating nearby blocks.
-        // force it.
-        for(int x : updateMatrix) {
-            for (int z : updateMatrix) {
-                new RailData(world,xCoord+x,yCoord+1,zCoord+z).rebuildRailMeta();
-                new RailData(world,xCoord+x,yCoord-1,zCoord+z).rebuildRailMeta();
-            }
-        }
-
+        //todo: right idea, but somehow doesnt force updates outside a 1x1 range. probably a related update somewhere else.
         //update all the other nearby rails.
         TileEntity te;
-        for(int x : updateMatrix){
-            for(int z : updateMatrix){
-                for(int y : updateMatrix){
+        for(int x : matrixXZ){
+            for(int z : matrixXZ){
+                for(int y : matrixY){
                     te=world.getTileEntity(x+xCoord,y+yCoord,z+zCoord);
                     if(te instanceof RailTileEntity && ((RailTileEntity) te).getData()!=null){
+                        new RailData(world,xCoord+x,yCoord+y,zCoord+z).rebuildRailMeta();
                         RailShapeCore.processPoints(x+xCoord,y+yCoord, z+zCoord,world,
-                                getShape(world, x+xCoord,y+yCoord, z+zCoord),
-                                ((RailTileEntity) te).getData());
+                                getShape(world, x+xCoord,y+yCoord, z+zCoord),((RailTileEntity) te).getData());
                     }
                 }
             }
@@ -415,15 +387,13 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
 
 
     public static RailSimpleShape getShape(World worldObj, int xPos, int yPos, int zPos){
-        if(!(CommonUtil.getBlockAt(worldObj, xPos,yPos,zPos) instanceof BlockRailCore)){
-            return null;
-        }
         TileEntity te= worldObj.getTileEntity(xPos, yPos, zPos);
         if(!(te instanceof RailTileEntity)){
             te = new RailTileEntity();
             te.xCoord=xPos;
             te.yCoord=yPos;
             te.zCoord=zPos;
+            worldObj.addTileEntity(te);
         }
         switch (((RailTileEntity)te).getMeta()){
             //Z straight
@@ -489,13 +459,13 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
 
     /**
      * Simplifies getting rail metadata for a block, returns -1 is the block is not a rail.
-     * in 1.8+ this will have to change to returning the expected int based on the block state, or the getBasicRailMetadata for TiM rails
+     * in 1.8+ this will have to change to returning the expected int based on the block state, or the CommonUtil.getRailMeta for TiM rails
      */
     public static int getRailMeta(IBlockAccess world, int x, int y, int z, @Nullable EntityMinecart cart){
         if(!(world.getBlock(x,y,z) instanceof BlockRailBase)){
             return -1;
         }
-        return ((BlockRailBase) world.getBlock(x,y,z)).getBasicRailMetadata(world, cart,x,y,z);
+        return CommonUtil.getRailMeta(world, cart,x,y,z);
     }
 
 
@@ -517,18 +487,6 @@ public class BlockRailCore extends BlockRail implements ITileEntityProvider {
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int p_149691_1_, int p_149691_2_) {
         return Blocks.rail.getIcon(0, 0);
-    }
-
-
-    @SideOnly(Side.CLIENT)
-    @Override
-    public boolean shouldSideBeRendered(IBlockAccess world, int x, int y, int z, int p_149646_5_) {
-        return false;
-    }
-
-    @Override
-    public int getLightOpacity(IBlockAccess world, int x, int y, int z) {
-        return 0;
     }
 
 

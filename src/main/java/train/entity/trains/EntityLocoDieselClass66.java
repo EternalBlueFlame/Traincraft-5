@@ -9,7 +9,6 @@ import ebf.tim.registry.TiMItems;
 import ebf.tim.registry.TiMOres;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -34,7 +33,7 @@ public class EntityLocoDieselClass66 extends EntityTrainCore {
 
     //main stats
     @Override
-    public String transportName(){return "Loco Electric EWS Class 66";}
+    public String transportName(){return "Loco Diesel EWS Class 66";}
     @Override
     public String transportcountry(){return "uk";}
     @Override
@@ -78,13 +77,13 @@ public class EntityLocoDieselClass66 extends EntityTrainCore {
         return new ItemStack[]{
                 new ItemStack(TiMItems.controlPanel, 2), new ItemStack(TiMItems.wheelSteel, 3), new ItemStack(TiMItems.frameSteel, 2),
                 new ItemStack(TiMOres.ingotSteel, 2), new ItemStack(TiMItems.chimneySteel, 1), new ItemStack(TiMItems.cabinSteel, 1),
-                new ItemStack(TiMItems.smallElectricEngine, 4), new ItemStack(TiMItems.smallDieselEngine, 4), new ItemStack(TiMItems.generator, 2)        };
+                new ItemStack(TiMItems.smallElectricEngine, 4), new ItemStack(TiMItems.mediumDieselEngine, 4), new ItemStack(TiMItems.generator, 2)        };
     }
 
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{-3,1.2f, 0.2f},{2.9f,1.2f, -0.15f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{-3,1.25f, 0.2f},{2.9f,1.25f, -0.15f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{7.4f,2.2f,1.4f};}
     @Override
@@ -108,7 +107,7 @@ public class EntityLocoDieselClass66 extends EntityTrainCore {
     //these only change in very specific use cases.
     @Override
     public boolean shouldRiderSit(){
-        return false;
+        return true;
     }
     @Override
     public Item getItem(){return thisItem;}

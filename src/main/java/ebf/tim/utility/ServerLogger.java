@@ -78,7 +78,7 @@ public class ServerLogger {
             //if it's a train we can get the fuel from the fuel handler
             if(wagon instanceof EntityTrainCore){
                 sb.append((((EntityTrainCore) wagon).fuelHandler.burnHeat!=0?
-                        (int)(((EntityTrainCore) wagon).fuelHandler.burnHeat/((EntityTrainCore) wagon).getEfficiency())*0.000625//casting as an int rounds down
+                        (int)(((EntityTrainCore) wagon).fuelHandler.burnHeat/((EntityTrainCore) wagon).getFuelEfficiency())*0.000625//casting as an int rounds down
                         :0));
                 sb.append("</fuel>");
             } else {

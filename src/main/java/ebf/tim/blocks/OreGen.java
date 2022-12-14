@@ -61,24 +61,38 @@ public class OreGen implements IWorldGenerator{
 		if ((dimensions==null || Arrays.asList(dimensions).contains(world.provider.dimensionId))
 				//be sure it's the correct biome
 				&& (biomes==null || Arrays.asList(biomes).contains(world.getBiomeGenForCoords(chunkX,chunkZ).biomeName))) {
-			//define the vein data
-			WorldGenMinable vein = new WorldGenMinable(ore, Math.max(minOres,random.nextInt(veinSize)), notOre);
 
 			//calculate the max ore veins per chunk
 			int maxVeins=random.nextInt(maxVeinsPerChunk);
+			//height offset defines how far above bedrock it should spawn,
 			int spawnHeightOffset=0;
-			if(heightOffset==1){
+			if(heightOffset==1){//defines only in lans above water level
 				spawnHeightOffset=63;//defined in ChunkProvider around the use of BlockWater, seems hardcoded to 63
-			} else if (heightOffset==2){
-				spawnHeightOffset= world.getChunkFromChunkCoords(chunkX,chunkZ).heightMapMinimum;
+			} else if (heightOffset==2){//defined only in areas that are above the minimum of the chunk heightmap
+				spawnHeightOffset= world.getChunkFromChunkCoords(chunkX,chunkZ).heightMapMinimum-1;
 			}
 			for(int i=0; i<maxVeins;i++) {
 				//actually generate the vein
-				vein.generate(world, random,
+				makeVein(world,random).generate(world, random,
 						(chunkX * 16) + random.nextInt(16),
 						minY+spawnHeightOffset+random.nextInt(maxY-minY),
 						chunkZ * 16 + random.nextInt(16));
 			}
+		}
+	}
+
+	//NOTE: 1.12 does not use blocks directly, instead use BlockMatcher.forBlock(notOre)
+	private WorldGenMinable makeVein(World world, Random random){
+		if(world.provider.dimensionId==-1){
+			if(notOre==Blocks.stone) {
+				return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), Blocks.netherrack);
+			} else if(notOre==Blocks.sand){
+				return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), Blocks.soul_sand);
+			} else {
+				return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), notOre);
+			}
+		} else {
+			return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), notOre);
 		}
 	}
 

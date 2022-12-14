@@ -28,7 +28,9 @@ public class BitList {
     /*set the value of the array from an array of bytes*/
     public void set(byte[] values){
         for (int i=0; i<16; i++){
-            bits[i]= values[i]==1;
+            if(values.length>i) {
+                bits[i] = values[i] == 1;
+            }
         }
     }
 

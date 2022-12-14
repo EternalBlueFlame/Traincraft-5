@@ -9,11 +9,13 @@ import ebf.tim.registry.TiMItems;
 import ebf.tim.registry.TiMOres;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
+import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.Traincraft;
+import train.blocks.TCBlocks;
 import train.library.Info;
 
 import java.util.List;
@@ -54,7 +56,7 @@ public class EntityLocoSteamUSATCUK extends EntityTrainCore {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelUSATCUK()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.95f, 0.35f, -0.8375f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.95f, 0.375f, -0.8375f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override
@@ -69,8 +71,8 @@ public class EntityLocoSteamUSATCUK extends EntityTrainCore {
 
 
     @Override
-    public int getTier() {
-        return 1;
+    public Block getCraftingTable() {
+        return TCBlocks.trainTableTier2;
     }
 
     @Override
@@ -84,7 +86,7 @@ public class EntityLocoSteamUSATCUK extends EntityTrainCore {
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{1.1f,1.3f, -0.25f},{1.1f,1.3f, 0.25f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{1.1f,1.2f, -0.25f},{1.1f,1.2f, 0.25f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.9f,2.1f,1.3f};}
     @Override

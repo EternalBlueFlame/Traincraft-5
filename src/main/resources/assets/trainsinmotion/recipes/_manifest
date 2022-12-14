@@ -10,7 +10,7 @@ generator.json
 graphite.json
 ironFirebox.json
 mediumDieselEngine.json
-smallDieselEngine.json
+#smallDieselEngine.json
 smallElectricEngine.json
 stake.json
 steelFirebox.json

@@ -46,15 +46,10 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     @Override
     public void onUpdate(){
         if(worldObj.isRemote && ticksExisted%10==0){
-            if(Minecraft.getMinecraft().thePlayer.ridingEntity instanceof GenericRailTransport ||
-                    Minecraft.getMinecraft().thePlayer.ridingEntity instanceof EntitySeat){
-                this.boundingBox.maxX =0;
-                this.boundingBox.maxZ =0;
-                this.boundingBox.maxY =0;
+            if(Minecraft.getMinecraft().thePlayer.ridingEntity instanceof EntitySeat){
+                this.boundingBox.maxY=0;
             } else {
-                this.boundingBox.maxX = this.boundingBox.minX + (double)this.width;
-                this.boundingBox.maxZ = this.boundingBox.minZ + (double)this.width;
-                this.boundingBox.maxY = this.boundingBox.minY + (double)this.height;
+                this.boundingBox.maxY=this.boundingBox.minY+this.height;
             }
         }
         if(ticksExisted%100==0){

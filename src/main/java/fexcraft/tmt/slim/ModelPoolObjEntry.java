@@ -4,14 +4,11 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.List;
 
 public class ModelPoolObjEntry extends ModelPoolEntry {
-	
-	public ModelPoolObjEntry(){
-		fileExtensions = new String[] {"obj"};
-	}
-	
+
+	public ModelPoolObjEntry(){}
+
 	public void getModel(File file){
 		try{
 			BufferedReader in = new BufferedReader(new FileReader(file));
@@ -29,6 +26,7 @@ public class ModelPoolObjEntry extends ModelPoolEntry {
 					continue;
 				}
 				if(s.startsWith("g ")){
+					setTextureGroup(s.substring(s.indexOf(" ") + 1).trim());
 					continue;
 				}
 				if(s.startsWith("v ")){
@@ -83,16 +81,19 @@ public class ModelPoolObjEntry extends ModelPoolEntry {
 					v[2] = v[1];
 					v[1] = flt;
 					normals.add(new float[] {v[0], v[1], v[2]});
-					continue;					
+					continue;
 				}
 				if(s.startsWith("f ")){
 					s = s.substring(s.indexOf(" ") + 1).trim();
 					ArrayList<TexturedVertex> v = new ArrayList<TexturedVertex>();
 					String s1;
 					int finalPhase = 0;
+					float[] normal = new float[] {0F, 0F, 0F};
+					ArrayList<Vec3f> iNormal = new ArrayList<Vec3f>();
 					do{
 						int vInt;
 						float[] curUV;
+						float[] curNormals;
 						int ind = s.indexOf(" ");
 						s1 = s;
 						if(ind > -1){
@@ -111,10 +112,21 @@ public class ModelPoolObjEntry extends ModelPoolEntry {
 							else{
 								curUV = new float[] {0, 0};
 							}
+							int vnInt = 0;
 							if(f.length == 3){
 								if(f[2].equals("")){
 									f[2] = f[0];
 								}
+								vnInt = Integer.parseInt(f[2]) - 1;
+							}
+							else{
+								vnInt = Integer.parseInt(f[0]) - 1;
+							}
+							if(normals.size() > vnInt){
+								curNormals = normals.get(vnInt);
+							}
+							else{
+								curNormals = new float[] {0, 0, 0};
 							}
 						}
 						else{
@@ -125,7 +137,17 @@ public class ModelPoolObjEntry extends ModelPoolEntry {
 							else{
 								curUV = new float[] {0, 0};
 							}
+							if(normals.size() > vInt){
+								curNormals = normals.get(vInt);
+							}
+							else{
+								curNormals = new float[] {0, 0, 0};
+							}
 						}
+						iNormal.add(new Vec3f(curNormals[0], curNormals[1], curNormals[2]));
+						normal[0]+= curNormals[0];
+						normal[1]+= curNormals[1];
+						normal[2]+= curNormals[2];
 						if(vInt < verts.size()){
 							v.add(verts.get(vInt).setTexturePosition(curUV[0], curUV[1]));
 						}
@@ -137,11 +159,23 @@ public class ModelPoolObjEntry extends ModelPoolEntry {
 						}
 					}
 					while(finalPhase < 1);
-					List<TexturedVertex> vToArr = new ArrayList<>(v);
+					float d = (float)Math.sqrt(normal[0] * normal[0] + normal[1] * normal[1] + normal[2] * normal[2]);
+					normal[0]/= d;
+					normal[1]/= d;
+					normal[2]/= d;
+					TexturedVertex[] vToArr = new TexturedVertex[v.size()];
+					for(int i = 0; i < v.size(); i++){
+						vToArr[i] = v.get(i);
+					}
 					TexturedPolygon poly = new TexturedPolygon(vToArr);
 					face.add(poly);
-					continue;					
+					texture.addPoly(poly);
+					continue;
 				}
+			}
+			vertices = new TexturedVertex[verts.size()];
+			for(int i = 0; i < verts.size(); i++){
+				vertices[i] = verts.get(i);
 			}
 			faces = new TexturedPolygon[face.size()];
 			for(int i = 0; i < face.size(); i++){
@@ -153,5 +187,5 @@ public class ModelPoolObjEntry extends ModelPoolEntry {
 			//
 		}
 	}
-	
+
 }

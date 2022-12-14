@@ -8,8 +8,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import train.Traincraft;
-import train.items.ItemWrench;
-import train.library.GuiIDs;
 
 import java.util.Random;
 
@@ -62,16 +60,15 @@ public class BlockLantern extends BlockDynamic {
 		par1World.spawnParticle("flame", d0, par3 + d3, d2, 0.0D, 0.0D, 0.0D);
 
 	}
+
+	@SideOnly(Side.CLIENT)
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		TileEntity te = world.getTileEntity(i, j, k);
-		if (player.isSneaking()) {
-			return false;
-		}
-		if(player.getCurrentEquippedItem()!=null && player.getCurrentEquippedItem().getItem() instanceof ItemWrench)
-		if (te instanceof TileLantern) {
-			player.openGui(Traincraft.instance, GuiIDs.LANTERN, world, i, j, k);
-		}
-		return true;
+	public Object getGUI(EntityPlayer player, TileEntity te){
+		return new train.blocks.lantern.GuiLantern(player, (TileLantern) te);
+	}
+
+	@Override
+	public Object getInventoryManager(EntityPlayer player, TileEntity te){
+		return null;//lantern has no server-sided inventory, GUI works from packets to the tile directly
 	}
 }

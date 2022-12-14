@@ -32,6 +32,8 @@ public abstract class GUIButton extends GuiButton {
         super(-1,p_i1021_2_,p_i1021_3_,p_i1021_4_,p_i1021_5_,text);
     }
 
+    public abstract FontRenderer getFont();
+
     /**
      * @return the RGB tint for the button background, values should be from 0 to 255, null for no recolor
      */
@@ -70,6 +72,7 @@ public abstract class GUIButton extends GuiButton {
     /** draws the button*/
     public void drawButton(int mouseX, int mouseY) {
         GL11.glPushMatrix();
+        RenderHelper.enableStandardItemLighting();
         TextureManager.bindTexture(buttonTextures);
         if(getColor()!=null){
             GL11.glColor4f(getColor()[0]*0.00392156862f, getColor()[1]*0.00392156862f, getColor()[2]*0.00392156862f, 1.0F);
@@ -106,34 +109,35 @@ public abstract class GUIButton extends GuiButton {
         }
 
         this.drawCenteredString(Minecraft.getMinecraft().fontRenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, l);
+
+        RenderHelper.disableStandardItemLighting();
         GL11.glPopMatrix();
     }
 
     public void drawText(int mouseX, int mouseY){
-        if(getHoverText()!=null) {
-            GL11.glPushMatrix();
-            if (field_146123_n) {
-                drawHoveringText(CommonUtil.translate(getHoverText()), mouseX, mouseY, Minecraft.getMinecraft().fontRenderer);
-            }
-            GL11.glPopMatrix();
+        if(getHoverText()!=null && field_146123_n) {
+            drawHoveringText(CommonUtil.translate(getHoverText()), mouseX, mouseY);
         }
     }
 
     /** checks if the button has hover text, if true the button's hover text is drawn*/
-    protected void drawHoveringText(String p_146283_1_, int p_146283_2_, int p_146283_3_, FontRenderer font) {
+    protected void drawHoveringText(String p_146283_1_, int p_146283_2_, int p_146283_3_) {
         if (!p_146283_1_.isEmpty()) {
             GL11.glDisable(GL12.GL_RESCALE_NORMAL);
             RenderHelper.disableStandardItemLighting();
             GL11.glDisable(GL11.GL_LIGHTING);
             GL11.glDisable(GL11.GL_DEPTH_TEST);
-            int k = font.getStringWidth(p_146283_1_);
+            int k = getFont().getStringWidth(p_146283_1_);
 
-            int j2 = p_146283_2_ + 12;
+            int j2 = p_146283_2_ + 36+k;
             int k2 = p_146283_3_ - 12;
             int i1 = 8;
 
             if (j2 + k > this.width) {
                 j2 -= 28 + k;
+            }
+            if(j2+150>Minecraft.getMinecraft().displayWidth*0.4){
+                j2-=k;
             }
 
             this.zLevel = 300.0F;
@@ -150,7 +154,7 @@ public abstract class GUIButton extends GuiButton {
             this.drawGradientRect(j2 - 3, k2 - 3, j2 + k + 3, k2 - 3 + 1, k1, k1);
             this.drawGradientRect(j2 - 3, k2 + i1 + 2, j2 + k + 3, k2 + i1 + 3, l1, l1);
 
-            font.drawStringWithShadow(p_146283_1_, j2, k2, -1);
+            getFont().drawStringWithShadow(p_146283_1_, j2, k2, 0xffffff);
 
 
             this.zLevel = 0.0F;

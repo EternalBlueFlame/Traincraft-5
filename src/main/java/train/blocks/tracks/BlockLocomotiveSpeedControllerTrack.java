@@ -16,7 +16,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
-import train.library.Tracks;
+import train.library.RCTracks;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -31,8 +31,8 @@ public class BlockLocomotiveSpeedControllerTrack extends TrackBaseTraincraft imp
 	}
 
 	@Override
-	public Tracks getTrackType() {
-		return Tracks.LOCO_SPEED_CONTROLLER;
+	public RCTracks getTrackType() {
+		return RCTracks.LOCO_SPEED_CONTROLLER;
 	}
 	@Override
 	public boolean blockActivated(EntityPlayer player) {

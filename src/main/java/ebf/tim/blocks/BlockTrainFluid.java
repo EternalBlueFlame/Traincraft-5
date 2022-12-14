@@ -124,7 +124,7 @@ public class BlockTrainFluid extends BlockFluidClassic {
                 fluidHeight = newHeight;
 
                 if (newHeight <= 0) {
-                    world.setBlock(x, y, z, Blocks.air);
+                    CommonUtil.setBlock(world, x, y, z, Blocks.air);
                 } else {
                     world.setBlockMetadataWithNotify(x, y, z, quantaPerBlock - newHeight, 3);
                     world.scheduleBlockUpdate(x, y, z, this, tickRate);
@@ -239,7 +239,7 @@ public class BlockTrainFluid extends BlockFluidClassic {
     @Override
     protected void flowIntoBlock(World world, int x, int y, int z, int meta) {
         if (meta>=0 && displaceIfPossible(world, x, y, z)) {
-            world.setBlock(x, y, z, this, meta, 3);
+            CommonUtil.setBlock(world, x, y, z, this, meta);
         }
     }
 

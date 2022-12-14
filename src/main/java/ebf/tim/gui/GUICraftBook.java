@@ -11,6 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
@@ -55,7 +56,6 @@ public class GUICraftBook extends GuiScreen {
             modids.add(0,TrainsInMotion.MODID);//make sure core mod entries are at start
 
             for (String mod : modids) {
-                DebugUtil.println(mod);
                 if(infoPages.containsKey(mod)) {
                     for(bookPage p : infoPages.get(mod)){
                         pages.add(p);//Collections.addAll does not work with this. i have no idea why.
@@ -90,8 +90,8 @@ public class GUICraftBook extends GuiScreen {
         ClientUtil.drawTexturedRect(percentLeft(50),percentTop(15),26,0,percentLeft(40),percentTop(60),140,192);
         GL11.glPopMatrix();
 
-        renderpage(true, mouseX, mouseY);
-        renderpage(false, mouseX, mouseY);
+        renderpage(true, mouseX, mouseY, itemRender);
+        renderpage(false, mouseX, mouseY, itemRender);
 
         GL11.glEnable(GL11.GL_LIGHTING);
 
@@ -117,7 +117,7 @@ public class GUICraftBook extends GuiScreen {
         }
     }
 
-    public static void renderpage(boolean leftPage, int mouseX, int mouseY){
+    public static void renderpage(boolean leftPage, int mouseX, int mouseY, RenderItem itmRender){
         if(getPage(leftPage?page:page+1)==null){return;}
         if(getPage(leftPage?page:page+1) instanceof Recipe) {
 
@@ -139,7 +139,7 @@ public class GUICraftBook extends GuiScreen {
             GL11.glPushMatrix();
             GL11.glColor4f(1,1,1,1);
             GL11.glDisable(GL11.GL_CULL_FACE);
-            ClientUtil.drawSlots(slots,null, slotx,sloty,mouseX,mouseY,guiLeft,guiTop,itemRender);
+            ClientUtil.drawSlots(slots,null, slotx,sloty,mouseX,mouseY,guiLeft,guiTop,itmRender);
             GL11.glPopMatrix();
         } else if(getPage(leftPage?page:page+1) instanceof bookPage){
             String[] disp = ((bookPage)getPage(leftPage?page:page+1)).text.split("\n");

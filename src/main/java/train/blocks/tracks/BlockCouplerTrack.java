@@ -11,7 +11,7 @@ import mods.railcraft.api.tracks.ITrackPowered;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
-import train.library.Tracks;
+import train.library.RCTracks;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -22,8 +22,8 @@ public class BlockCouplerTrack extends TrackBaseTraincraft implements ITrackPowe
 	private boolean powered = false;
 
 	@Override
-	public Tracks getTrackType() {
-		return Tracks.COUPLER_TRACK;
+	public RCTracks getTrackType() {
+		return RCTracks.COUPLER_TRACK;
 	}
 	@Override
 	public IIcon getIcon() {

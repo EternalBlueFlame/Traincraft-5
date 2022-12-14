@@ -6,6 +6,8 @@ import org.lwjgl.util.vector.Vector3f;
 
 import java.io.Serializable;
 
+import static ebf.tim.utility.CommonUtil.radianF;
+
 /**
  * basically the same as Vec3D, but a float. Usually used for storing rotations.
  * @author Ferdinand
@@ -71,8 +73,19 @@ public class Vec3f implements Serializable {
         return this.addVector(vec.xCoord, vec.yCoord, vec.zCoord);
     }
 
+    //todo: this probably broke everything, undo
     public Vec3f addVector(float x, float y, float z){
-        return new Vec3f(xCoord + x,yCoord + y,zCoord + z);
+        xCoord+=x;
+        yCoord+=y;
+        zCoord+=z;
+        return this;
+    }
+
+    public Vec3f addVector(double x, double y, double z){
+        xCoord+=x;
+        yCoord+=y;
+        zCoord+=z;
+        return this;
     }
 
     public Vec3f subtract(Vec3f vec){
@@ -187,5 +200,47 @@ public class Vec3f implements Serializable {
         Matrix4f.rotate(yCoord * 3.14159265F / 180, new Vector3f(0F, 0F, 1F), mat, mat);
         Matrix4f.rotate(xCoord   * 3.14159265F / 180, new Vector3f(0F, 1F, 0F), mat, mat);
         return new Vec3f(mat.m00, mat.m10, mat.m20);
+    }
+
+    public Vec3f rotatePoint(float pitch, float yaw, float roll) {
+        float cos,sin,x=xCoord,y=yCoord,z=zCoord;
+        //rotate pitch
+        if (pitch != 0.0F) {
+            cos = (float)Math.cos(pitch*radianF);
+            sin = (float)Math.sin(pitch*radianF);
+
+            xCoord = (y * sin) + (x * cos);
+            yCoord = (y * cos) - (x * sin);
+        }
+        //rotate yaw
+        if (yaw != 0.0F) {
+            cos = (float)Math.cos(yaw*radianF);
+            sin = (float)Math.sin(yaw*radianF);
+
+            xCoord = (x * cos) - (z * sin);
+            zCoord = (x * sin) + (z * cos);
+        }
+        //rotate roll
+        if (roll != 0.0F) {
+            cos = (float)Math.cos(roll*radianF);
+            sin = (float)Math.sin(roll*radianF);
+
+            yCoord = (z * cos) - (y * sin);
+            zCoord = (z * sin) + (y * cos);
+        }
+        return this;
+    }
+
+    public Vec3f rotateOnYaw(float yaw) {
+        float cos,sin,x=xCoord,z=zCoord;
+        //rotate yaw
+        if (yaw != 0.0F) {
+            cos = (float)Math.cos(yaw*radianF);
+            sin = (float)Math.sin(yaw*radianF);
+
+            xCoord = (x * cos) - (z * sin);
+            zCoord = (x * sin) + (z * cos);
+        }
+        return this;
     }
 }

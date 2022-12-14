@@ -4,7 +4,7 @@ package ebf.tim.utility;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import ebf.tim.api.SkinRegistry;
-import ebf.tim.blocks.TileEntityStorage;
+import ebf.tim.blocks.BlockDynamic;
 import ebf.tim.entities.GenericRailTransport;
 import ebf.tim.registry.TiMBlocks;
 import ebf.tim.registry.TiMFluids;
@@ -56,11 +56,13 @@ public class CommonProxy implements IGuiHandler {
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         //Trains
         if (player != null && y!=0) {
-            if (player.worldObj.getEntityByID(ID) instanceof GenericRailTransport && !((GenericRailTransport) player.worldObj.getEntityByID(ID)).hasCustomGUI()) {
+            if (player.worldObj.getEntityByID(ID) instanceof GenericRailTransport
+                    && !((GenericRailTransport) player.worldObj.getEntityByID(ID)).hasCustomGUI()) {
                 return new TransportSlotManager(player.inventory, (GenericRailTransport) player.worldObj.getEntityByID(ID));
                 //tile entities
-            } else if (world.getTileEntity(x,y,z) instanceof TileEntityStorage){
-                return new TransportSlotManager(player.inventory, (TileEntityStorage) world.getTileEntity(x,y,z));
+            } else if (CommonUtil.getBlockAt(world,x,y,z) instanceof BlockDynamic){
+                return ((BlockDynamic) CommonUtil.getBlockAt(world, x, y, z))
+                        .getInventoryManager(player, world.getTileEntity(x,y,z));
             }
         }
         return null;

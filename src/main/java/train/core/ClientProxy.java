@@ -9,21 +9,11 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import train.blocks.bench.GuiTrainCraftingBlock;
-import train.blocks.bench.TileTrainWbench;
-import train.blocks.distil.GuiDistil;
-import train.blocks.distil.TileEntityDistil;
-import train.blocks.generator.GuiGeneratorDiesel;
-import train.blocks.generator.TileGeneratorDiesel;
-import train.blocks.hearth.GuiOpenHearthFurnace;
-import train.blocks.hearth.TileEntityOpenHearthFurnace;
-import train.blocks.lantern.GuiLantern;
-import train.blocks.lantern.TileLantern;
+import net.minecraftforge.common.MinecraftForge;
 import train.core.handlers.ClientTickHandler;
-import train.core.handlers.TCInputHandler;
+import train.core.handlers.ZeppInputHandler;
 import train.core.helpers.JLayerHook;
 import train.entity.gui.GuiJukebox;
 import train.entity.gui.GuiZepp;
@@ -34,16 +24,13 @@ import train.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.library.GuiIDs;
 import train.library.Info;
 import train.render.RenderZeppelins;
-import train.render.models.ModelSwitchStandOff;
-import train.render.models.ModelSwitchStandOn;
 
 import java.util.Calendar;
 
 public class ClientProxy extends CommonProxy {
 
-	//NOTE: these had to be moved here rather than the render, because they wouldn't init soon enough in the TESR and crashed
-    public static ModelSwitchStandOn modelSwitch = new ModelSwitchStandOn();
-    public static ModelSwitchStandOff modelSwitch2 = new ModelSwitchStandOff();
+	ClientTickHandler clientTickHandler = new ClientTickHandler();
+	HUDloco hud = new HUDloco();
 
     public static boolean isHoliday() {
 		Calendar cal = Calendar.getInstance();
@@ -53,8 +40,11 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerEvents(FMLPreInitializationEvent event) {
 		super.registerEvents(event);
-		registerEvent(new ClientTickHandler());
-		registerEvent(new HUDloco());
+
+		FMLCommonHandler.instance().bus().register(clientTickHandler);
+		FMLCommonHandler.instance().bus().register(hud);
+		MinecraftForge.EVENT_BUS.register(clientTickHandler);
+		MinecraftForge.EVENT_BUS.register(hud);
 	}
 
 	@Deprecated //TESR should be handled as noted in TCBlocks.init()
@@ -69,41 +59,19 @@ public class ClientProxy extends CommonProxy {
 
 	@Override
 	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-		TileEntity te = world.getTileEntity(x, y, z);
-		EntityPlayer riddenByEntity = null;
-		Entity entity = player.ridingEntity;
-		if (player.ridingEntity != null) {
-			riddenByEntity = (EntityPlayer) entity.riddenByEntity;
-		}
+    	if(player==null){return null;}
 
-		Entity entity1 = null;
-		if (y == -1) {
-			for (Object ent : world.loadedEntityList) {
-				if (((Entity) ent).getEntityId() == x)
-					entity1 = (Entity) ent;
+		if(ID==GuiIDs.ZEPPELIN){
+			Entity entity = player.ridingEntity;
+			return new GuiZepp(player.inventory, entity);
+		} else if (ID==GuiIDs.JUKEBOX){
+			Entity entity1 = getEntity(world, x);
+			if(entity1 instanceof EntityJukeBoxCart) {
+				return new GuiJukebox(player, (EntityJukeBoxCart) entity1);
 			}
 		}
-		switch (ID) {
-		case (GuiIDs.DISTIL):
-			return te instanceof TileEntityDistil ? new GuiDistil(player.inventory, (TileEntityDistil) te) : null;
-		case (GuiIDs.GENERATOR_DIESEL):
-			return te instanceof TileGeneratorDiesel ? new GuiGeneratorDiesel(player.inventory, (TileGeneratorDiesel) te) : null;
-		case (GuiIDs.OPEN_HEARTH_FURNACE):
-			return te instanceof TileEntityOpenHearthFurnace ? new GuiOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
-		case GuiIDs.TRAIN_WORKBENCH:
-			return te instanceof TileTrainWbench ? new GuiTrainCraftingBlock(player.inventory, (TileTrainWbench) te) : null;
-		case (GuiIDs.ZEPPELIN):
-			return riddenByEntity != null ? new GuiZepp(riddenByEntity.inventory, entity) : null;
-			//Stationary entities while player is not riding.
-		/*case (GuiIDs.RECIPE_BOOK2):
-			return te != null && te instanceof TileBook ? new GuiRecipeBook2(player, player.getCurrentEquippedItem()) : new GuiRecipeBook2(player, player.getCurrentEquippedItem());*/
-		case (GuiIDs.LANTERN):
-			return new GuiLantern(player, (TileLantern)te);
-		case (GuiIDs.JUKEBOX):
-			return entity1 != null ? new GuiJukebox(player,(EntityJukeBoxCart)entity1) : null;
-		default:
-			return null;
-		}
+
+		return null;
 	}
 
 	@Override
@@ -133,8 +101,9 @@ public class ClientProxy extends CommonProxy {
 	}
 	@Override
 	public void registerKeyBindingHandler() {
-		FMLCommonHandler.instance().bus().register(new TCInputHandler());
-	}
+            FMLCommonHandler.instance().bus().register(ZeppInputHandler.instance);
+            MinecraftForge.EVENT_BUS.register(ZeppInputHandler.instance);
+    }
 	
 	@Override
 	public void setHook() {

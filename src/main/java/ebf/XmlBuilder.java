@@ -34,6 +34,7 @@ public class XmlBuilder {
     public XmlBuilder(String str){
         super();
         buildString=str;
+        buildXML();
     }
     public XmlBuilder(){}
     /*
@@ -218,7 +219,7 @@ public class XmlBuilder {
     public boolean containsFloatArray(String id){buildXML(); return floatArrayMap.containsKey(id);}
     public boolean containsDouble(String id){buildXML(); return doubleMap.containsKey(id);}
     public boolean containsItemStack(String id){buildXML(); return itemMap.containsKey(id);}
-    public boolean containsFluidStack(String id){buildXML(); return fluidMap.containsKey(id);}
+    public boolean containsFluidStack(String id){buildXML(); return fluidMap.containsKey(id) && fluidMap.get(id)!=null;}
     public boolean containsUUID(String id){buildXML(); return uuidMap.containsKey(id);}
     public boolean containsXml(String id){buildXML(); return xmlMap.containsKey(id);}
 
@@ -432,7 +433,7 @@ public class XmlBuilder {
             data.append(stringMap.get(key));
             tag(key, data);
         }
-        for(String key : intMap.keySet()){
+        for(String key : uuidMap.keySet()){
             tag(key, data, "uuid");
             data.append(uuidMap.get(key).toString());
             tag(key, data);

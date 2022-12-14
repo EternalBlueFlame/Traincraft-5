@@ -12,6 +12,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.input.Keyboard;
+import train.blocks.TCBlocks;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -48,12 +49,12 @@ public class TransportSlotManager extends net.minecraft.inventory.Container {
         }
         //player toolbar
         for (int iT = 0; iT < 9; iT++) {
-            addSlots(new ItemStackSlot(iinventory, iT).setCoords( 113 + (iT * 18), 142));
+            addSlots(new ItemStackSlot(iinventory, iT, null).setCoords( 113 + (iT * 18), 142).setPlayerSlot());
         }
         //player inventory
         for (int ic = 0; ic < 9; ic++) {
             for (int ir = 0; ir < 3; ir++) {
-                addSlots(new ItemStackSlot(iinventory, ((ir * 9) + ic) + 9, 113 + (ic * 18), 84 + (ir * 18)));
+                addSlots(new ItemStackSlot(iinventory, ((ir * 9) + ic) + 9, 113 + (ic * 18), 84 + (ir * 18)).setPlayerSlot());
             }
         }
     }
@@ -62,28 +63,32 @@ public class TransportSlotManager extends net.minecraft.inventory.Container {
         //tile entity reference
         hostInventory = block;
 
-        if (block.assemblyTableTier > 0 && CommonProxy.isTraincraft) { //it is an assembly table, move slots lower. (but only for the traincraft asm tables)
+        //train table layout
+        if (block.assemblyTableTier==TCBlocks.trainTableTier1 || block.assemblyTableTier==TCBlocks.trainTableTier2
+        || block.assemblyTableTier==TCBlocks.trainTableTier3) { //it is an assembly table, move slots lower. (but only for the traincraft asm tables)
             //player hotbar
             for (int iT = 0; iT < 9; iT++) {
-                addSlots(new ItemStackSlot(iinventory, iT, 8 + iT * 18, 232));
+                addSlots(new ItemStackSlot(iinventory, iT, 8 + iT * 18, 232).setPlayerSlot());
             }
 
             //player inventory
             for (int ir = 0; ir < 3; ir++) {
                 for (int ic = 0; ic < 9; ic++) {
-                    addSlots(new ItemStackSlot(iinventory, ((ir * 9) + ic) + 9, 8 + (ic * 18), 174 + (ir * 18)));
+                    addSlots(new ItemStackSlot(iinventory, ((ir * 9) + ic) + 9, 8 + (ic * 18), 174 + (ir * 18)).setPlayerSlot());
                 }
             }
-        } else {
+        }
+        //train crafter layout
+        else {
             //player toolbar
             for (int iT = 0; iT < 9; iT++) {
-                addSlots(new ItemStackSlot(iinventory, iT, 8 + iT * 18, 142));
+                addSlots(new ItemStackSlot(iinventory, iT, 8 + iT * 18, 142).setPlayerSlot());
             }
 
             //player inventory
             for (int ir = 0; ir < 3; ir++) {
                 for (int ic = 0; ic < 9; ic++) {
-                    addSlots(new ItemStackSlot(iinventory, ((ir * 9) + ic) + 9, 8 + (ic * 18), 84 + (ir * 18)));
+                    addSlots(new ItemStackSlot(iinventory, ((ir * 9) + ic) + 9, 8 + (ic * 18), 84 + (ir * 18)).setPlayerSlot());
                 }
             }
         }
@@ -106,6 +111,16 @@ public class TransportSlotManager extends net.minecraft.inventory.Container {
         return this.inventory.get(p_75139_1_);
     }
 
+    @Override
+    public List getInventory() {
+        ArrayList arraylist = new ArrayList();
+
+        for (ItemStackSlot inventorySlot : this.inventory) {
+            arraylist.add(inventorySlot.getStack());
+        }
+
+        return arraylist;
+    }
 
 
     /**
@@ -167,9 +182,23 @@ public class TransportSlotManager extends net.minecraft.inventory.Container {
     @Override
     public ItemStack slotClick(int slotId, int dragType, int clickTypeIn, EntityPlayer player) {
 
-        if (hostInventory instanceof TileEntityStorage && ((TileEntityStorage) hostInventory).assemblyTableTier >= 0) {
+        if (hostInventory instanceof TileEntityStorage &&
+                ((TileEntityStorage) hostInventory).assemblyTableTier != TCBlocks.partTable) {
             this.detectAndSendChanges();
         }
+
+        /*
+        switch (clickType){
+            case PICKUP: {clickTypeIn=0; break;}//normal pickup and put down
+            case QUICK_MOVE: {clickTypeIn=1; break;}//shift click
+            case SWAP: {clickTypeIn=2; break;}//how does this work?
+            case CLONE: {clickTypeIn=3; break;}//middle mouse button
+            case THROW: {clickTypeIn=4; break;}//click outside GUI
+            case QUICK_CRAFT: {clickTypeIn=5; break;}//click and drag?
+            case PICKUP_ALL: {clickTypeIn=6; break;}//double-click item to pickup all
+        }
+         */
+
         if (clickTypeIn == 4){
             clickTypeIn = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) || Keyboard.isKeyDown(Keyboard.KEY_RSHIFT) ? 1 ://cover shift click
                     player.inventory.getItemStack() != null ? 4 : //cover if the cursor is carrying an item
@@ -312,13 +341,19 @@ public class TransportSlotManager extends net.minecraft.inventory.Container {
                     }
 
                 } else if(!slot.isCraftingOutput()){//if the selected slot is in the tileentity but not an output
-                    for (int k = 0; k < 2; k++) { //loop twice. once to combine, the next to put in any available slots
+                    for (int k = 0; k < 4; k++) { //loop twice. once to combine, the next to put in any available slots
                         for (int l = 0; l < this.inventory.size(); l++) {
                             Slot slotToAddInto = getSlot(l);
 
                             if (slotToAddInto instanceof ItemStackSlot && ((ItemStackSlot) slotToAddInto).isCraftingOutput()) continue;
 
-                            if (k == 0) {
+                            //if the slots are in the same inventory during the first two loops, skip the slot
+                            //for the last two loops we let it merge into the same inventory because there's nowhere else to go.
+                            if(k<2 && slotToAddInto instanceof ItemStackSlot
+                                    && slot.isPlayerSlot()==((ItemStackSlot)slotToAddInto).isPlayerSlot()){continue;}
+
+                            //during the first and third loop, see if there's an existing stack we can merge with.
+                            if (k == 0 || k==2) {
                                 if (slotToAddInto != null
                                         && slotToAddInto.getHasStack()
                                         && canAddItemToSlot(slotToAddInto, slot.getStack())
@@ -332,6 +367,8 @@ public class TransportSlotManager extends net.minecraft.inventory.Container {
                                     if (amountToAdd == slot.getStackSize()) {
                                         slot.setStack(null);
                                         slotToAddInto.getStack().stackSize += amountToAdd;
+                                        //if merged, end loop.
+                                        k=4;
                                     } else {
                                         slotToAddInto.getStack().stackSize += amountToAdd;
                                         slot.getStack().stackSize -= amountToAdd;
@@ -343,6 +380,8 @@ public class TransportSlotManager extends net.minecraft.inventory.Container {
                                     if (slot.getStackSize() <= slotToAddInto.getSlotStackLimit()) {
                                         slotToAddInto.putStack(slot.getStack().copy());
                                         slot.setStack(null);
+                                        //if merged, end loop.
+                                        k=4;
                                     } else {
                                         //put as much as can into it.
                                         int amountToAdd = slotToAddInto.getSlotStackLimit();

@@ -54,7 +54,7 @@ public class EntityLocoElectricVL10 extends EntityTrainCore {
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.render.models.ModelVL10()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.62f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.65f, 0.0f}};}
 @Override
     public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
     @Override
@@ -80,7 +80,7 @@ public class EntityLocoElectricVL10 extends EntityTrainCore {
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{-1.1f,1.35f, 0.2f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{-1.0f,1.35f, 0.2f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{3.5f,2.7f,1.3f};}
     @Override

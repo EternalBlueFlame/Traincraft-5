@@ -10,13 +10,13 @@ import ebf.tim.entities.EntityTrainCore;
 import ebf.tim.entities.GenericRailTransport;
 import mods.railcraft.api.tracks.ITrackEmitter;
 import net.minecraft.entity.item.EntityMinecart;
-import train.library.Tracks;
+import train.library.RCTracks;
 
 public class BlockDetectorDieselLocomotiveTrack extends BlockDetectorTrack implements ITrackEmitter {
 
 	@Override
-	public Tracks getTrackType() {
-		return Tracks.DETECTOR_DIESEL_LOCOMOTIVES;
+	public RCTracks getTrackType() {
+		return RCTracks.DETECTOR_DIESEL_LOCOMOTIVES;
 	}
 
 	@Override

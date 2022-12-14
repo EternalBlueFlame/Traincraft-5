@@ -11,14 +11,14 @@ public class TransportSkin {
     public int id;
 
     public TransportSkin(String modId, String[] texture, String name, String description){
-        this.texture=texture;
+        setTexture(texture);
         this.modid=modId;
         this.description=description;
         this.name=name;
     }
 
     public TransportSkin(String modId, String texture, String name, String description){
-        this.texture=new String[]{texture};
+        this.texture=new String[]{texture.contains(".")?texture:texture+".png"};
         this.modid=modId;
         this.description=description;
         this.name=name;
@@ -64,8 +64,8 @@ public class TransportSkin {
 
     public ResourceLocation getTexture(int id){return new ResourceLocation(modid,id>=texture.length?texture[0]:texture[id]);}
 
-    public TransportSkin setBogieTextures(String textures){
-        bogieTextures=resourceList(modid,new String[]{textures});
+    public TransportSkin setBogieTextures(String texture){
+        bogieTextures=resourceList(modid,new String[]{texture.contains(".")?texture:texture+".png"});
         return this;
     }
 
@@ -75,6 +75,13 @@ public class TransportSkin {
     }
     public TransportSkin setBogieTextures(ResourceLocation... textures){
         bogieTextures=textures;
+        if(bogieTextures!=null) {
+            for (int i = 0; i < textures.length; i++) {
+                if (!bogieTextures[i].getResourcePath().contains(".")) {
+                    bogieTextures[i] = new ResourceLocation(bogieTextures[i].getResourceDomain(), bogieTextures[i].getResourcePath() + ".png");
+                }
+            }
+        }
         return this;
     }
     public TransportSkin setSubBogieTextures(String... textures){
@@ -83,6 +90,13 @@ public class TransportSkin {
     }
     public TransportSkin setSubBogieTextures(ResourceLocation... textures){
         subBogieTextures=textures;
+        if(subBogieTextures!=null) {
+            for (int i = 0; i < textures.length; i++) {
+                if (!subBogieTextures[i].getResourcePath().contains(".")) {
+                    subBogieTextures[i] = new ResourceLocation(subBogieTextures[i].getResourceDomain(), subBogieTextures[i].getResourcePath() + ".png");
+                }
+            }
+        }
         return this;
     }
     public TransportSkin setRecolorsTo(int... recolorsTo){
@@ -95,14 +109,24 @@ public class TransportSkin {
         return this;
     }
 
-    public TransportSkin setTexture(String[] texture){
-        this.texture=texture;
+    public TransportSkin setTexture(String[] textures){
+        this.texture=textures;
+        for(int i=0;i<texture.length;i++){
+            if(!texture[i].contains(".")){
+                texture[i]+=".png";
+            }
+        }
         return this;
     }
 
 
-    public TransportSkin setTexture(String modId, String[] texture){
-        this.texture=texture;
+    public TransportSkin setTexture(String modId, String[] textures){
+        this.texture=textures;
+        for(int i=0;i<texture.length;i++){
+            if(!texture[i].contains(".")){
+                texture[i]+=".png";
+            }
+        }
         this.modid=modId;
         return this;
     }
@@ -125,6 +149,10 @@ public class TransportSkin {
     private static ResourceLocation[] resourceList(String modid, String[] URIs){
         ResourceLocation[] value = new ResourceLocation[URIs.length];
         for (int i=0; i< URIs.length; i++){
+            if(!URIs[i].contains(".")){
+                URIs[i]+=".png";
+            }
+
             if(URIs[i].contains(":")){
                 value[i] = new ResourceLocation(URIs[i]);
             } else {

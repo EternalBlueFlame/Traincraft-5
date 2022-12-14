@@ -239,7 +239,7 @@ item.EMDF7BUnit.name=EMD F7 B-unit
 item.EMDF3BUnit.name=EMD F3 B-unit
 item.LocoElectricBR185.name=BR 185
 item.LocoElectricClass85.name=Class 85
-item.LocoElectricEWSClass66.name=Class 66
+item.LocoDieselEWSClass66.name=Class 66
 item.LocoDieselDeltic.name=Deltic
 item.LocoSteamCoranationClass.name=Coronation Class
 item.TenderCoranationClass.name=Coronation Class Tender
@@ -309,7 +309,8 @@ item.Fowler4FTender.name=Fowler 4F Tender
 item.LocoSteamC410-8-0.name=C41 0-8-0
 item.LocoSteamAlcoSC4.name=Alco SC4
 item.FreightL.name=Freight Car L
-
+item.American(Remastered).name=American (Remastered)
+item.AmericanTender(Remastered).name=American Tender (Remastered)
 
 <!-- ## Achievements ## -->
 achievement.traincraft:engineer=Engineers clothes
@@ -523,7 +524,7 @@ entity.trainsinmotion.EMDF7BUnit.entity.name=EMD F7 B-unit
 entity.trainsinmotion.EMDF3BUnit.entity.name=EMD F3 B-unit
 entity.trainsinmotion.LocoElectricBR185.entity.name=BR 185
 entity.trainsinmotion.LocoElectricClass85.entity.name=Class 85
-entity.trainsinmotion.LocoElectricEWSClass66.entity.name=Class 66
+entity.trainsinmotion.LocoDieselEWSClass66.entity.name=Class 66
 entity.trainsinmotion.LocoDieselDeltic.entity.name=Deltic
 entity.trainsinmotion.TenderCoranationClass.entity.name=Coronation Class Tender
 entity.trainsinmotion.LocoSteamCoranationClass.entity.name=Coronation Class

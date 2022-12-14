@@ -3,54 +3,26 @@ package train.blocks.waterwheel;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
-import ebf.tim.blocks.BlockDynamic;
-import ebf.tim.blocks.TileRenderFacing;
+import ebf.tim.blocks.TileEntityStorage;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import train.blocks.TCBlocks;
 
-public class TileWaterWheel extends TileRenderFacing implements IEnergyProvider {
-	public EnergyStorage energy = new EnergyStorage(3000,80); //core energy value the first value is max storage and the second is transfer max.
-	private ForgeDirection[] sides = new ForgeDirection[]{}; //defines supported sides
-
-	public TileWaterWheel(BlockDynamic host) {
-		super(host);
-		setSides(new ForgeDirection[]{ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH});
-
-		this.energy.setCapacity(80);
-		this.energy.setMaxTransfer(80);
+public class TileWaterWheel extends TileEntityStorage implements IEnergyProvider {
+	public EnergyStorage energy= new EnergyStorage(80,80);
+	public TileWaterWheel() {
+		super(TCBlocks.waterWheel);
 	}
-
-	@Override
-	public void readFromNBT(NBTTagCompound nbtTag){
-		super.readFromNBT(nbtTag);
-		this.energy.readFromNBT(nbtTag);
-	}
-
-	@Override
-	public void writeToNBT(NBTTagCompound nbtTag){
-		super.writeToNBT(nbtTag);
-		this.energy.writeToNBT(nbtTag);
-	}
-
-	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
-		this.readFromNBT(pkt.func_148857_g());
-	}
-
-	@Override
-	public boolean canUpdate(){return true;}
 
 	@Override
 	public void updateEntity() {
-		super.updateEntity();
 
 		if(!worldObj.isRemote) {
 
@@ -87,7 +59,7 @@ public class TileWaterWheel extends TileRenderFacing implements IEnergyProvider 
 			}else if(blockBottom instanceof BlockLiquid && blockBottom.getMaterial().isLiquid() &&worldObj.getBlockMetadata(xCoord, yCoord-1, zCoord)!= 0 && blockBottom.getMaterial() != Material.lava){
 				this.energy.receiveEnergy(5, false);
 			} else {
-				setWaterDir(-1);
+				setFacing(-1);
 			}
 
 			if (this.energy.getEnergyStored() >0) {
@@ -99,14 +71,41 @@ public class TileWaterWheel extends TileRenderFacing implements IEnergyProvider 
 		}
 
 	}
-	
-	private void setWaterDir(int i) {
-		setFacing(i);
-		
+
+	public int getWaterDir() {
+		return facing;
 	}
 
+	@Override
+	public void readFromNBT(NBTTagCompound nbtTag){
+		super.readFromNBT(nbtTag);
+		this.energy.readFromNBT(nbtTag);
+	}
+
+	@Override
+	public void writeToNBT(NBTTagCompound nbtTag){
+		super.writeToNBT(nbtTag);
+		this.energy.writeToNBT(nbtTag);
+	}
+
+	public int[] getTankCapacity(){
+		return new int[]{30000};
+	}
+
+	@Override
+	public World getWorldObj(){
+		return this.worldObj;
+	}
+
+	@Override
+	public boolean canDrain(ForgeDirection from, Fluid fluid){
+		return false;
+	}
+
+
+
 	public void pushEnergy(World world, int x, int y, int z, EnergyStorage storage){
-		for (ForgeDirection side : getSides()) {
+		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
 			TileEntity tile = world.getTileEntity(x + side.offsetX, y + side.offsetY, z + side.offsetZ);
 			if (tile instanceof IEnergyReceiver && storage.getEnergyStored() > 0) {
 				if (((IEnergyReceiver) tile).canConnectEnergy(side.getOpposite())) {
@@ -117,28 +116,12 @@ public class TileWaterWheel extends TileRenderFacing implements IEnergyProvider 
 		}
 	}
 
-	public int getWaterDir() {
-		return facing;
-	}
-
-	@Override
-	public boolean canConnectEnergy(ForgeDirection direction){
-		if((this.getBlockMetadata()==1||this.getBlockMetadata()==3) && (direction == ForgeDirection.WEST||direction == ForgeDirection.EAST)) {
-			return true;
-		}else if((this.getBlockMetadata()==0||this.getBlockMetadata()==2) && (direction == ForgeDirection.NORTH||direction == ForgeDirection.SOUTH)){
-			return true;
-		} else {return false;}
-	}
-
-
-	public void setSides(ForgeDirection[] listOfSides){
-		this.sides = listOfSides;
-	}
-	public ForgeDirection[] getSides(){
-		return this.sides;
-	}
 
 	//RF Overrides
+	@Override
+	public boolean canConnectEnergy(ForgeDirection dir) {
+		return true;
+	}
 	@Override
 	public int extractEnergy(ForgeDirection dir, int amount, boolean simulate) {
 		return energy.extractEnergy(amount, simulate);
@@ -151,4 +134,6 @@ public class TileWaterWheel extends TileRenderFacing implements IEnergyProvider 
 	public int getMaxEnergyStored(ForgeDirection dir) {
 		return this.energy.getMaxEnergyStored();
 	}
+
+
 }

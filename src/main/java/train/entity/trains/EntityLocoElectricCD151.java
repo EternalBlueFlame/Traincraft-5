@@ -9,7 +9,6 @@ import ebf.tim.registry.TiMItems;
 import ebf.tim.registry.TiMOres;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -78,13 +77,13 @@ public class EntityLocoElectricCD151 extends EntityTrainCore {
         return new ItemStack[]{
                 new ItemStack(TiMItems.controlPanel, 2), new ItemStack(TiMItems.wheelSteel, 2), new ItemStack(TiMItems.frameSteel, 1),
                 new ItemStack(TiMOres.ingotSteel, 2), null, new ItemStack(TiMItems.cabinSteel, 2),
-                new ItemStack(TiMItems.smallElectricEngine, 3), new ItemStack(TiMItems.smallDieselEngine, 3), new ItemStack(TiMItems.generator, 2)        };
+                new ItemStack(TiMItems.smallElectricEngine, 3), new ItemStack(TiMItems.mediumDieselEngine, 3), new ItemStack(TiMItems.generator, 2)        };
     }
 
 
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{2.15f,1.4f, 0.3f},{-2.15f,1.4f, 0.3f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{-2.15f,1.4f, 0.3f},{2.15f,1.4f, 0.3f}};}
     @Override
     public float[] getHitboxSize(){return new float[]{5.5f,2.6f,1.4f};}
     @Override

@@ -7,12 +7,13 @@ import fexcraft.tmt.slim.Vec3d;
 import fexcraft.tmt.slim.Vec3f;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.StatCollector;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.codec.binary.Base64;
@@ -56,6 +57,39 @@ public class CommonUtil {
         return world.getBlock(x,y,z);
     }
 
+    public static boolean setBlock(World w, int x, int y, int z, Block b){
+        return w.setBlock(x,y,z,b);
+    }
+
+    public static void setBlockMeta(World w, int x, int y, int z, int meta){
+        w.setBlockMetadataWithNotify(x,y,z,meta,2);
+        w.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
+        w.notifyBlocksOfNeighborChange(x, y, z, getBlockAt(w,x,y,z));
+        w.scheduleBlockUpdate(x, y, z, getBlockAt(w,x,y,z), getBlockAt(w,x,y,z).tickRate(w));
+
+        w.func_147453_f(x, y, z, getBlockAt(w,x,y,z));
+    }
+
+    public static void markBlockForUpdate(World w, int x, int y, int z){
+        w.markBlockForUpdate(x,y,z);
+    }
+
+    public static int getBlockFacing(IBlockAccess w, int x, int y, int z){
+        return w.getBlockMetadata(x,y,z);
+    }
+
+    public static int getRailMeta(IBlockAccess w, EntityMinecart cart, int x, int y, int z){
+        return ((BlockRailBase)w.getBlock(x,y,z)).getBasicRailMetadata(w,cart,x,y,z);
+    }
+
+    public static boolean setBlock(World w, int x, int y, int z, Block b, int meta){
+        boolean set =setBlock(w,x,y,z,b);
+        if(set) {
+            setBlockMeta(w, x, y, z, meta);
+        }
+        return set;
+    }
+
     public static float getMaxRailSpeed(World world, BlockRailBase rail, GenericRailTransport host, double x, double y, double z){
         return (rail.getRailMaxSpeed(world, host, floorDouble(x), floorDouble(y),floorDouble(z)));
     }
@@ -91,7 +125,7 @@ public class CommonUtil {
 
     public static int parseInt(String str, Class host) throws NumberFormatException{
         if (str == null || str.length()==0) {
-            throw new NumberFormatException("the string: \"" + str + "\" was not a number, please check " + host.getName());
+            return 0;
         }
 
         int result = 0;
@@ -109,19 +143,18 @@ public class CommonUtil {
                 case '7':{result = (result * 10)+7;break;}
                 case '8':{result = (result * 10)+8;break;}
                 case '9':{result = (result * 10)+9;break;}
+                case ' ':{break;}
+                default:{throw new NumberFormatException("the string: \"" + str + "\" was not a number, please check " + host.getName());}
             }
         }
         return negative?-result:result;
     }
 
     public static String translate(String text){
-        if (StatCollector.translateToLocal(text).equals(text) && !loggedLangChecks.contains(text)){
-            DebugUtil.println("Missing lang entry for: ",text,Thread.currentThread().getStackTrace()[2]);
-            loggedLangChecks.add(text);
-            return text;
-        } else {
-            return StatCollector.translateToLocal(text);
+        if(TrainsInMotion.proxy.isClient()){
+            return ClientUtil.translate(text);
         }
+        return text;
     }
 
     public static String[]multiTranslate(String[] s){
@@ -440,6 +473,7 @@ public class CommonUtil {
         return xyz;
     }
 
+    @Deprecated //todo: a LOT of calls for this dont use pitch, for efficiency sake there should be a method that doesnt take it
     public static Vec3d rotateDistance(double distance, float pitch, float yaw) {
         Vec3d xyz = new Vec3d(distance, 0,0);
         //rotate pitch
@@ -469,6 +503,18 @@ public class CommonUtil {
         }
     }
 
+    public static float wrapAngleTo180(double input) {
+        input %= 360.0d;
+
+        if (input >= 180.0d) {
+            input -= 360.0d;
+        } else if (input < -180.0d) {
+            input += 360.0d;
+        }
+
+        return (float)input;
+    }
+
     /**
      * <h2>rail placement from item</h2>
      * basic functionality to place a train or rollingstock on the rails on item use.
@@ -478,7 +524,7 @@ public class CommonUtil {
         //be sure there is a rail at the location
         if (isRailBlockAt(worldObj, posX,posY,posZ) && !worldObj.isRemote) {
             //define the direction of the track
-            int railMeta=((BlockRailBase)getBlockAt(worldObj,posX,posY,posZ)).getBasicRailMetadata(worldObj, null,posX,posY,posZ);
+            int railMeta=CommonUtil.getRailMeta(worldObj, null,posX,posY,posZ);
             //define the angle between the player and the track.
             // this is more reliable than player direction because player goes from -360 to 360 for no real reason.
             float rotation =atan2degreesf(posX-playerEntity.posX, posZ-playerEntity.posZ);
@@ -497,6 +543,7 @@ public class CommonUtil {
                 } else {
                     entity.rotationYaw= 90;
                 }
+                entity.posX+=0.03125f;
 
             } else if (railMeta==1){
                 //check if the train fits on the track
@@ -512,10 +559,13 @@ public class CommonUtil {
                 } else {
                     entity.rotationYaw= 0;
                 }
+                entity.posZ+=0.03125f;
             }
             //actually place the entity
             worldObj.spawnEntityInWorld(entity);
             entity.entityFirstInit(stack);
+            //force first update to spawn entity in faster
+            entity.onUpdate();
             return true;
         }
 

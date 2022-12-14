@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.TrainsInMotion;
 import ebf.tim.utility.CommonUtil;
+import ebf.tim.utility.TransportSlotManager;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -28,17 +29,11 @@ public class BlockDynamic extends BlockContainer {
 
     public ModelBase model=null;
     public Object tesr=null;
-    public int assemblyTableTier = -1; //only applies if it is an assembly table/traintable. no need to set otherwise. -1 unless set.
-
-    public BlockDynamic(Material material, boolean isStorage, int tier) {
-        super(material);
-        this.isBlockContainer=isStorage;
-        this.assemblyTableTier = tier;
-    }
+    public boolean isContainer=true;
 
     public BlockDynamic(Material material, boolean isStorage) {
         super(material);
-        this.isBlockContainer=isStorage;
+        this.isContainer=isStorage;
     }
 
     @Override//1.7 version of getting if block is opaque, used for server side checks like if creatures can spawn on it
@@ -104,7 +99,7 @@ public class BlockDynamic extends BlockContainer {
 
     @Override
     public TileEntity createNewTileEntity(World world, int meta) {
-        return isBlockContainer?new TileEntityStorage(this):new TileRenderFacing(this);
+        return isContainer?new TileEntityStorage(this):new TileRenderFacing(this);
     }
 
 
@@ -127,7 +122,7 @@ public class BlockDynamic extends BlockContainer {
 
     @Override
     public boolean onBlockActivated(World worldOBJ, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
-        if (player.isSneaking() || !isBlockContainer) {
+        if (player.isSneaking() || !isContainer) {
             return false;
         } else if (worldOBJ.isRemote) {
             return true;
@@ -139,9 +134,16 @@ public class BlockDynamic extends BlockContainer {
         } else {
             return false;
         }
-
     }
 
+    @SideOnly(Side.CLIENT)
+    public Object getGUI(EntityPlayer player, TileEntity te){
+        return new ebf.tim.gui.GUITrainTable(player.inventory, (TileEntityStorage) te);
+    }
+
+    public Object getInventoryManager(EntityPlayer player, TileEntity te){
+        return new TransportSlotManager(player.inventory, (TileEntityStorage) te);
+    }
 
 
     public class particleTexture extends TextureAtlasSprite {

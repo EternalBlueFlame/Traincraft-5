@@ -8,7 +8,6 @@ import ebf.tim.items.ItemTransport;
 import ebf.tim.registry.TiMItems;
 import ebf.tim.utility.ItemStackSlot;
 import fexcraft.tmt.slim.ModelBase;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -85,7 +84,7 @@ public class EntityLocoDieselEMDF7 extends EntityTrainCore {
         return new ItemStack[]{
                 new ItemStack(TiMItems.controlPanel, 2), new ItemStack(TiMItems.wheelSteel, 2), new ItemStack(TiMItems.frameSteel, 2),
                 null, null, new ItemStack(TiMItems.cabinSteel, 1),
-                new ItemStack(TiMItems.smallElectricEngine, 4), new ItemStack(TiMItems.smallDieselEngine, 6), new ItemStack(TiMItems.generator, 4)        };
+                new ItemStack(TiMItems.smallElectricEngine, 4), new ItemStack(TiMItems.mediumDieselEngine, 6), new ItemStack(TiMItems.generator, 4)        };
     }
 
 

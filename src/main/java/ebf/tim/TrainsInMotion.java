@@ -21,6 +21,7 @@ import ebf.tim.items.TiMTab;
 import ebf.tim.networking.*;
 import ebf.tim.registry.TiMGenericRegistry;
 import ebf.tim.utility.*;
+import net.minecraft.launchwrapper.Launch;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Level;
@@ -117,6 +118,7 @@ public class TrainsInMotion {
      */
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
+        DebugUtil.dev = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
 
         proxy.loadConfig(event);
         ForgeChunkManager.setForcedChunkLoadingCallback(TrainsInMotion.instance, chunkHandler);
@@ -189,7 +191,7 @@ public class TrainsInMotion {
         if(event.getSide().isClient()) {
             //register the event handler
             FMLCommonHandler.instance().bus().register(ClientProxy.eventManager);
-            fexcraft.tmt.slim.TextureManager.collectIngotColors();
+            MinecraftForge.EVENT_BUS.register(ClientProxy.eventManager);
         }
         FMLCommonHandler.instance().bus().register(CommonProxy.eventManagerServer);
 
@@ -199,7 +201,7 @@ public class TrainsInMotion {
 
     @Mod.EventHandler
     public void postinit(FMLPostInitializationEvent event) {
-        if (Loader.isModLoaded("NotEnoughItems")) {
+        if (TrainsInMotion.proxy.isClient() && Loader.isModLoaded("NotEnoughItems")) {
             TiMTableNEIIntegration.setupNEIintegration();
         }
 

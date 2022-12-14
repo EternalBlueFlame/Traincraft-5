@@ -79,7 +79,7 @@ public class GroupedModelRender {
      */
     public GroupedModelRender add(ModelRendererTurbo boxToRender){
         boxRefrence.add(boxToRender);
-        isBlock = (CommonUtil.stringContains(boxToRender.boxName,tagRenderBlockCargo) || CommonUtil.stringContains(boxToRender.boxName,tagBlockScaleInventory));;
+        isBlock = (CommonUtil.stringContains(boxToRender.boxName,tagRenderBlockCargo) || CommonUtil.stringContains(boxToRender.boxName,tagBlockScaleInventory));
         isScaled = (CommonUtil.stringContains(boxToRender.boxName,tagScaleInventory) || CommonUtil.stringContains(boxToRender.boxName,tagBlockScaleInventory));
         return this;
     }
@@ -138,25 +138,35 @@ public class GroupedModelRender {
                 GL11.glRotated(block.rotateAngleY * CommonUtil.degreesD, 0, 1, 0);
                 GL11.glRotated((block.rotateAngleZ * CommonUtil.degreesD)+90, 0, 0, 1);
                 //define scale based on the model
-                GL11.glScaled(0.0625f*block.width, (0.0625f*block.height)*yScale, (0.0625f*block.depth));
+                GL11.glScalef(0.0625f*block.width, (0.0625f*block.height)*yScale, (0.0625f*block.depth));
                 //now actually render the block.
                 field_147909_c.renderBlockAsItem( Block.getBlockFromItem(blockStack.getItem()), blockStack.getItemDamage(), 1.0f);
                 GL11.glPopMatrix();
             }
            // GL11.glPopMatrix();
         } else {
+            float yScale=1;
+            if(isScaled){
+                yScale = transport.calculatePercentageOfSlotsUsed(100)*0.01f;
+                if (yScale == 0) {
+                    return;
+                }
+            }
             //render the geometry normally if it's not a block.
             Tessellator.bindTexture(transport.getTexture(Minecraft.getMinecraft().thePlayer).getTexture(0));
-            int liveryIndex=-1;
             String lastLivery="";
             for (ModelRendererTurbo block : boxRefrence) {
                 if (isLivery(block)){
                     if (!block.boxName.equals(lastLivery)){
-                        liveryIndex++;lastLivery = block.boxName;
+                        lastLivery = block.boxName;
                     }
                     //Tessellator.bindTexture(transport.getLivery(liveryIndex));
                 }
+                block.showModel=true;
+                GL11.glPushMatrix();
+                GL11.glScalef(1,yScale,1);
                 block.render(entityRenderScale);
+                GL11.glPopMatrix();
             }
         }
     }

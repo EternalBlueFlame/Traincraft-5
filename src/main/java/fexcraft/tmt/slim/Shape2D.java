@@ -58,7 +58,7 @@ public class Shape2D {
 					y + vecCoord.yCoord - extrudeVector.yCoord,
 					z + vecCoord.zCoord - extrudeVector.zCoord, texU2, texV);
 			vertsTop[idx] = new TexturedVertex(verts[idx].vector3F, verts[idx].textureX, verts[idx].textureY);
-			vertsBottom[coords.size() - idx - 1] = new TexturedVertex(verts[idx + coords.size()].vector3F,verts[idx + coords.size()].textureX,verts[idx + coords.size()].textureY);
+			vertsBottom[coords.size() - idx - 1] = new TexturedVertex(verts[idx + coords.size()].vector3F, verts[idx + coords.size()].textureX, verts[idx + coords.size()].textureY);
 			if(faceLengths != null){
 				totalLength+= faceLengths[idx];
 			}

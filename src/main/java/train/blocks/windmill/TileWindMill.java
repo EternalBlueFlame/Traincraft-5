@@ -4,8 +4,7 @@ package train.blocks.windmill;
 import cofh.api.energy.EnergyStorage;
 import cofh.api.energy.IEnergyProvider;
 import cofh.api.energy.IEnergyReceiver;
-import ebf.tim.blocks.BlockDynamic;
-import ebf.tim.blocks.TileRenderFacing;
+import ebf.tim.blocks.TileEntityStorage;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
@@ -19,34 +18,18 @@ import train.blocks.TCBlocks;
 import train.core.handlers.ConfigHandler;
 import train.core.handlers.WorldEvents;
 
-import java.util.Arrays;
 import java.util.Random;
 
-public class TileWindMill extends TileRenderFacing implements IEnergyProvider {
+public class TileWindMill extends TileEntityStorage implements IEnergyProvider  {
 	private int updateTicks = 0;
 	private static Random rand = new Random();
 	public int windClient = 0;
     public int standsOpen = 0;
+	public EnergyStorage energy=new EnergyStorage(240,80);
 
-	public EnergyStorage energy = new EnergyStorage(3000,80); //core energy value the first value is max storage and the second is transfer max.
-	private ForgeDirection[] sides = new ForgeDirection[]{}; //defines supported sides
-
-
-	public TileWindMill(BlockDynamic host) {
-		super(host);
-		this.energy.setCapacity(240);
-		this.energy.setMaxTransfer(80);
-		setSides(new ForgeDirection[]{ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.SOUTH, ForgeDirection.NORTH, ForgeDirection.DOWN});
+	public TileWindMill() {
+		super(TCBlocks.windmill);
 	}
-
-
-	public void setSides(ForgeDirection[] listOfSides){
-		this.sides = listOfSides;
-	}
-	public ForgeDirection[] getSides(){
-		return this.sides;
-	}
-
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -63,9 +46,6 @@ public class TileWindMill extends TileRenderFacing implements IEnergyProvider {
         nbt.setInteger("standsOpen", this.standsOpen);
 		this.energy.writeToNBT(nbt);
 	}
-
-	@Override
-	public boolean canUpdate(){return true;}
 
 	@Override
 	public void updateEntity() {
@@ -129,9 +109,18 @@ public class TileWindMill extends TileRenderFacing implements IEnergyProvider {
 		}
 	}
 
+	public int[] getTankCapacity(){
+		return new int[]{30000};
+	}
+
+	@Override
+	public World getWorldObj(){
+		return this.worldObj;
+	}
+
 
 	public void pushEnergy(World world, int x, int y, int z, EnergyStorage storage){
-		for (ForgeDirection side : getSides()) {
+		for (ForgeDirection side : ForgeDirection.VALID_DIRECTIONS) {
 			TileEntity tile = world.getTileEntity(x + side.offsetX, y + side.offsetY, z + side.offsetZ);
 			if (tile instanceof IEnergyReceiver && storage.getEnergyStored() > 0) {
 				if (((IEnergyReceiver) tile).canConnectEnergy(side.getOpposite())) {
@@ -142,10 +131,11 @@ public class TileWindMill extends TileRenderFacing implements IEnergyProvider {
 		}
 	}
 
+
 	//RF Overrides
 	@Override
 	public boolean canConnectEnergy(ForgeDirection dir) {
-		return Arrays.asList(sides).contains(dir);
+		return true;
 	}
 	@Override
 	public int extractEnergy(ForgeDirection dir, int amount, boolean simulate) {
@@ -159,4 +149,5 @@ public class TileWindMill extends TileRenderFacing implements IEnergyProvider {
 	public int getMaxEnergyStored(ForgeDirection dir) {
 		return this.energy.getMaxEnergyStored();
 	}
+
 }

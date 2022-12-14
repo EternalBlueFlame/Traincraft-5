@@ -1,18 +1,14 @@
 package fexcraft.tmt.slim;
 
-import ebf.tim.utility.DebugUtil;
 import fexcraft.fvtm.TurboList;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+
 /**
  * An extension to the ModelRenderer class. It basically is a copy to ModelRenderer,
  * however, it contains various new methods to make your models.
@@ -94,10 +90,11 @@ public class ModelRendererTurbo {
     }
 
 
-    private TexturedPolygon addPolygonReturn(TexturedVertex vert1, TexturedVertex vert2, TexturedVertex vert3, TexturedVertex vert4, float f, float g, float h, float j){
+    private TexturedPolygon textureQuad(TexturedVertex vert1, TexturedVertex vert2, TexturedVertex vert3, TexturedVertex vert4, float f, float g, float h, float j){
         float uOffs = 1.0F / (textureWidth * 10.0F);
         float vOffs = 1.0F / (textureHeight * 10.0F);
         List<TexturedVertex> verts = new ArrayList<>();
+        //todo: use the longest, or shortest for that side for h/f g/j respectively
         verts.add(vert1.setTexturePosition(h / textureWidth - uOffs, g / textureHeight + vOffs));
         verts.add(vert2.setTexturePosition(f / textureWidth + uOffs, g / textureHeight + vOffs));
         verts.add(vert3.setTexturePosition(f / textureWidth + uOffs, j / textureHeight - vOffs));
@@ -131,21 +128,21 @@ public class ModelRendererTurbo {
         TexturedVertex vert6 = new TexturedVertex(v6[0], v6[1], v6[2], 8.0F, 8.0F);
         TexturedVertex vert7 = new TexturedVertex(v7[0], v7[1], v7[2], 8.0F, 0.0F);
         if(sides == null){
-            poly.add(addPolygonReturn(vert5, vert1, vert2, vert6, textureOffsetX + d + w, textureOffsetY + d, textureOffsetX + d + w + d, textureOffsetY + d + h));
-            poly.add(addPolygonReturn(vert0, vert4, vert7, vert3, textureOffsetX, textureOffsetY + d, textureOffsetX + d, textureOffsetY + d + h));
-            poly.add(addPolygonReturn(vert5, vert4, vert0, vert1, textureOffsetX + d, textureOffsetY, textureOffsetX + d + w, textureOffsetY + d));
-            poly.add(addPolygonReturn(vert2, vert3, vert7, vert6, textureOffsetX + d + w, textureOffsetY, textureOffsetX + d + w + w, textureOffsetY + d));
-            poly.add(addPolygonReturn(vert1, vert0, vert3, vert2, textureOffsetX + d, textureOffsetY + d, textureOffsetX + d + w, textureOffsetY + d + h));
-            poly.add(addPolygonReturn(vert4, vert5, vert6, vert7, textureOffsetX + d + w + d, textureOffsetY + d, textureOffsetX + d + w + d + w, textureOffsetY + d + h));
+            poly.add(textureQuad(vert5, vert1, vert2, vert6, textureOffsetX + d + w, textureOffsetY + d, textureOffsetX + d + w + d, textureOffsetY + d + h));
+            poly.add(textureQuad(vert0, vert4, vert7, vert3, textureOffsetX, textureOffsetY + d, textureOffsetX + d, textureOffsetY + d + h));
+            poly.add(textureQuad(vert5, vert4, vert0, vert1, textureOffsetX + d, textureOffsetY, textureOffsetX + d + w, textureOffsetY + d));
+            poly.add(textureQuad(vert2, vert3, vert7, vert6, textureOffsetX + d + w, textureOffsetY, textureOffsetX + d + w + w, textureOffsetY + d));
+            poly.add(textureQuad(vert1, vert0, vert3, vert2, textureOffsetX + d, textureOffsetY + d, textureOffsetX + d + w, textureOffsetY + d + h));
+            poly.add(textureQuad(vert4, vert5, vert6, vert7, textureOffsetX + d + w + d, textureOffsetY + d, textureOffsetX + d + w + d + w, textureOffsetY + d + h));
         } else{
             float v0 = sides[2] && sides[3] ? 0 : d;
             float u0 = sides[1] ? 0 : d, u1 = sides[2] ? 0 : w, u2 = sides[4] ? 0 : w, u3 = sides[0] ? 0 : d;
-            if(!sides[0]){poly.add(addPolygonReturn(vert5, vert1, vert2, vert6, textureOffsetX + u0 + u2, textureOffsetY + v0, textureOffsetX + u0 + u2 + d, textureOffsetY + v0 + h));}
-            if(!sides[1]){poly.add(addPolygonReturn(vert0, vert4, vert7, vert3, textureOffsetX, textureOffsetY + v0, textureOffsetX + d, textureOffsetY + v0 + h));}
-            if(!sides[2]){poly.add(addPolygonReturn(vert5, vert4, vert0, vert1, textureOffsetX + u0, textureOffsetY, textureOffsetX + u0 + w, textureOffsetY + d));}
-            if(!sides[3]){poly.add(addPolygonReturn(vert2, vert3, vert7, vert6, textureOffsetX + u0 + u1, textureOffsetY, textureOffsetX + u0 + u1 + w, textureOffsetY + d));}
-            if(!sides[4]){poly.add(addPolygonReturn(vert1, vert0, vert3, vert2, textureOffsetX + u0, textureOffsetY + v0, textureOffsetX + u0 + w, textureOffsetY + v0 + h));}
-            if(sides.length > 5 && !sides[5]){poly.add(addPolygonReturn(vert4, vert5, vert6, vert7, textureOffsetX + u0 + u2 + u3, textureOffsetY + v0, textureOffsetX + u0 + u2 + u3 + w, textureOffsetY + v0 + h));}
+            if(!sides[0]){poly.add(textureQuad(vert5, vert1, vert2, vert6, textureOffsetX + u0 + u2, textureOffsetY + v0, textureOffsetX + u0 + u2 + d, textureOffsetY + v0 + h));}
+            if(!sides[1]){poly.add(textureQuad(vert0, vert4, vert7, vert3, textureOffsetX, textureOffsetY + v0, textureOffsetX + d, textureOffsetY + v0 + h));}
+            if(!sides[2]){poly.add(textureQuad(vert5, vert4, vert0, vert1, textureOffsetX + u0, textureOffsetY, textureOffsetX + u0 + w, textureOffsetY + d));}
+            if(!sides[3]){poly.add(textureQuad(vert2, vert3, vert7, vert6, textureOffsetX + u0 + u1, textureOffsetY, textureOffsetX + u0 + u1 + w, textureOffsetY + d));}
+            if(!sides[4]){poly.add(textureQuad(vert1, vert0, vert3, vert2, textureOffsetX + u0, textureOffsetY + v0, textureOffsetX + u0 + w, textureOffsetY + v0 + h));}
+            if(sides.length > 5 && !sides[5]){poly.add(textureQuad(vert4, vert5, vert6, vert7, textureOffsetX + u0 + u2 + u3, textureOffsetY + v0, textureOffsetX + u0 + u2 + u3 + w, textureOffsetY + v0 + h));}
         }
         if(mirror){
             for(TexturedPolygon p : poly){
@@ -586,7 +583,7 @@ public class ModelRendererTurbo {
      * @param faceLengths An array with the length of each face. Used to set
      * the texture width of each face on the side manually.
      */
-    public void addShape3D(float x, float y, float z, Shape2D shape, float depth, int shapeTextureWidth, int shapeTextureHeight, int sideTextureWidth, int sideTextureHeight, int direction, float[] faceLengths){
+    public ModelRendererTurbo addShape3D(float x, float y, float z, Shape2D shape, float depth, int shapeTextureWidth, int shapeTextureHeight, int sideTextureWidth, int sideTextureHeight, int direction, float[] faceLengths){
         float rotX = 0;
         float rotY = 0;
         float rotZ = 0;
@@ -609,7 +606,7 @@ public class ModelRendererTurbo {
             case MR_BACK:
                 break;
         }
-        addShape3D(x, y, z, shape, depth, shapeTextureWidth, shapeTextureHeight, sideTextureWidth, sideTextureHeight, rotX, rotY, rotZ, faceLengths);
+        return addShape3D(x, y, z, shape, depth, shapeTextureWidth, shapeTextureHeight, sideTextureWidth, sideTextureHeight, rotX, rotY, rotZ, faceLengths);
     }
 
     /**
@@ -638,8 +635,9 @@ public class ModelRendererTurbo {
      * NOTE2: Also let's rotate by 180 degrees for whatever reason.
      * @Ferdinand
      */
-    public void addShape3D(float x, float y, float z, Shape2D shape, float depth, int shapeTextureWidth, int shapeTextureHeight, int sideTextureWidth, int sideTextureHeight, float rotX, float rotY, float rotZ, float[] faceLengths){
+    public ModelRendererTurbo addShape3D(float x, float y, float z, Shape2D shape, float depth, int shapeTextureWidth, int shapeTextureHeight, int sideTextureWidth, int sideTextureHeight, float rotX, float rotY, float rotZ, float[] faceLengths){
         faces.addAll(Arrays.asList(shape.extrude(-x, y, -z, rotX, rotY, rotZ, depth, textureOffsetX, textureOffsetY, textureWidth, textureHeight, shapeTextureWidth, shapeTextureHeight, sideTextureWidth, sideTextureHeight, faceLengths)));
+        return this;
     }
 
 
@@ -1170,8 +1168,9 @@ public class ModelRendererTurbo {
      * @param file the location of the .obj file. The location is relative to the base directories,
      * which are either resources/models or resources/mods/models.
      */
-    public void addObj(String file){
+    public ModelRendererTurbo addObj(String file){
         addModel(file, ModelPool.OBJ);
+        return this;
     }
 
     public void addObjF(String file){
@@ -1194,6 +1193,11 @@ public class ModelRendererTurbo {
         if(entry == null){
             return;
         }
+        if(mirror){
+            for (TexturedPolygon face : entry.faces) {
+                face.flipFace();
+            }
+        }
         faces.addAll(Arrays.asList(entry.faces));
     }
 
@@ -1201,6 +1205,11 @@ public class ModelRendererTurbo {
         ModelPoolEntry entry = ModelPool.addFileF(file, modelFormat);
         if(entry == null){
             return;
+        }
+        if(mirror){
+            for (TexturedPolygon face : entry.faces) {
+                face.flipFace();
+            }
         }
         faces.addAll(Arrays.asList(entry.faces));
     }

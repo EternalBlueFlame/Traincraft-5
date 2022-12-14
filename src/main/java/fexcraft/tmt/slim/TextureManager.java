@@ -2,35 +2,25 @@ package fexcraft.tmt.slim;
 
 import ebf.tim.TrainsInMotion;
 import ebf.tim.utility.ClientProxy;
+import ebf.tim.utility.ClientUtil;
 import ebf.tim.utility.DebugUtil;
 import ebf.tim.utility.RecipeManager;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderBlocks;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.*;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
-import sun.awt.image.InputStreamImageSource;
-import sun.awt.image.PNGImageDecoder;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.awt.image.DataBufferByte;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.*;
@@ -149,47 +139,31 @@ public class TextureManager {
     /**
      * Ingot color textures
      */
-    public static void collectIngotColors(){
-        List<ItemStack> Ores= RecipeManager.getAcceptedRailItems();
+    public static void collectIngotColors() {
+        List<ItemStack> Ores = RecipeManager.getAcceptedRailItems();
 
-        int red,green,blue,divisor;
-        int[]rgb, colorBuff;
-        ResourceLocation texture;
-        for (ItemStack s : Ores){
+        int red, green, blue, divisor;
+        int[] rgb, colorBuff;
+        for (ItemStack s : Ores) {
+            if (s != null && s.getItem() != null) {
 
-            texture=null;
-            red =0;green=0;blue=0;divisor=0;
-            Item item = s.getItem();
-            String textureName = item.getIcon(s,0)!=null?item.getIcon(s,0).getIconName():null;
-            if(textureName != null){
-                if(textureName.split(":").length == 1){
-                    textureName = "minecraft:" + textureName;
+                red = 0;
+                green = 0;
+                blue = 0;
+                divisor = 0;
+                //this is less efficient than doing it directly, but if i promote the functionality for
+                // getting the array of bytes to something reuseable, it returns a blank spritez
+                colorBuff = renderItemViewport(s, 32);
+                for (int c : colorBuff) {
+                    rgb = hexToargb(c);
+                    red += rgb[3];
+                    green += rgb[1];
+                    blue += rgb[2];
+                    divisor++;
                 }
-                texture = new ResourceLocation(textureName.split(":")[0], "textures/items/" + textureName.split(":")[1] + ".png");
-            }
-
-            if(texture != null){
-                try {
-                    colorBuff = TextureUtil.readImageData(Minecraft.getMinecraft().getResourceManager(), texture);
-                    for(int c : colorBuff){
-                        rgb=hexTorgba(c);
-                        if(rgb[3]>128) {
-                            if(rgb[0]+rgb[1]+rgb[2]>20) {
-                                red+=25+rgb[2];
-                                blue+=25+rgb[1];
-                                green+=25+rgb[0];
-                                divisor++;
-                            }
-                        }
-                    }
-                    ingotColors.put(s, new int[]{red/divisor,blue/divisor,green/divisor});
-                } catch (IOException e) {
-                    DebugUtil.println("Caught exception while parsing texture to get color: ");
-                    e.printStackTrace();
-                }
+                ingotColors.put(s, new int[]{red / divisor, blue / divisor, green / divisor});
 
             }
-
         }
     }
 
@@ -206,6 +180,9 @@ public class TextureManager {
 
     public static int[] hexTorgba(int hex){
         return new int[]{hex&0xFF, (hex>>8)&0xFF, (hex>>16)&0xFF, (hex>>24)&0xFF};
+    }
+    public static int[] hexToargb(int hex) {
+        return new int[]{(hex >> 24) & 0xFF, hex & 0xFF, (hex >> 8) & 0xFF, (hex >> 16) & 0xFF};
     }
 
     public static int[] hexTorgb(int hex){
@@ -421,4 +398,124 @@ public class TextureManager {
                 substring(0, res.getResourcePath().lastIndexOf(".")));
     }
 
+    /*
+    gets an item texture as an array of pixels, with 0x00000000 as "empty" pixels
+    scale is based off 32. so for example entering 64 will be double scale.
+     */
+    public static int[] renderItemViewport(ItemStack stack, int scale) {
+        int[] pixels = new int[scale*scale];
+        GL11.glPushMatrix();
+
+        GL11.glTranslatef(0,(Minecraft.getMinecraft().displayHeight*0.5f)-(scale*0.5f),500);
+
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glColor4f(0.75f,0.75f,0.75f,1);
+        ClientUtil.drawTexturedRect(0,0,0,0,scale,scale);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glColor4f(1,1,1,1);
+
+        GL11.glScalef(scale/32f,scale/32f,scale/32f);
+        RenderHelper.enableGUIStandardItemLighting();
+        new RenderItem().renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer,
+                Minecraft.getMinecraft().getTextureManager(),stack, 0, 0);
+        ByteBuffer buffer = BufferUtils.createByteBuffer(scale * scale * 4);
+        GL11.glReadPixels(0, 0, scale, scale, GL11.GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
+        int i,r,g,b;
+
+        for(int x=0; x<scale;x++) {
+            for(int y=0; y<scale;y++) {
+                i = (x + (scale * y)) * 4;
+                r = buffer.get(i) & 0xff;
+                g = buffer.get(i + 1) & 0xff;
+                b = buffer.get(i + 2) & 0xff;
+
+                //y is flipped for some gods forsaken reason.
+                // so we need to count Y backwards from the end of the array.
+                if(r>=254 && g>=254 && b>=254){
+                    pixels[(x + ((scale * (scale-1)) - (scale * y)))] = 0xffffffff;
+                } else {
+                    pixels[(x + ((scale * (scale-1)) - (scale * y)))] = (255 << 24) | (r << 16) | (g << 8) | b;
+                }
+            }
+        }
+        RenderHelper.disableStandardItemLighting();
+        GL11.glPopMatrix();
+        return pixels;
+    }
+
+    /*
+    Writes an item texture to a specified file, good for making icons and stuff.
+    clone of the above method with slight alterations for having a different use case
+    be sure to check if TrainsInMotion.proxy.isClient() or a similar check, is true before running.
+    scale is based off 32. so for example entering 64 will be double scale.
+     */
+    public static void renderItemViewportToFile(ItemStack stack, ResourceLocation path, int scale) {
+        if (!new File(ClientProxy.configDirectory + "/TrainsInMotion/TextureCache/" +
+                resourceLocation(path)).exists()) {
+            new File(ClientProxy.configDirectory + "/TrainsInMotion/TextureCache/" +
+                    resourceLocation(path)).mkdirs();
+        }
+        GL11.glPushMatrix();
+
+        GL11.glTranslatef(0,(Minecraft.getMinecraft().displayHeight*0.5f)-(scale*0.5f),500);
+
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glColor4f(1,1,1,1);
+        ClientUtil.drawTexturedRect(0,0,0,0,scale,scale);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+
+        GL11.glScalef(scale/32f,scale/32f,scale/32f);
+        RenderHelper.enableGUIStandardItemLighting();
+        new RenderItem().renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer,
+                Minecraft.getMinecraft().getTextureManager(),stack, 0, 0);
+        new RenderItem().renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer,
+                Minecraft.getMinecraft().getTextureManager(), stack, 0, 0, "");
+        ByteBuffer buffer = BufferUtils.createByteBuffer(scale * scale * 4);
+        GL11.glReadPixels(0, 0, scale, scale, GL11.GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
+        try {
+            if(!new File(TextureManager.getID(new ResourceLocation(TrainsInMotion.MODID,"testexture.png"),
+                    null, null, null, null, true)).exists()){
+
+                int i,r,g,b,a;
+
+                //create a buffered image and push the data to it
+                BufferedImage skin = new BufferedImage(64, 64, BufferedImage.TYPE_INT_ARGB);
+
+                for(int x=0; x<scale;x++) {
+                    for(int y=0; y<scale;y++) {
+                        i = (x + (scale * y)) * 4;
+                        r = buffer.get(i) & 0xff;
+                        g = buffer.get( + 1) & 0xff;
+                        b = buffer.get(i + 2) & 0xff;
+
+                        if(r>=254 && g>=254 && b>=254){
+                            a=0;
+                        } else {
+                            a=255;
+                        }
+
+                        //y is flipped for some gods forsaken reason.
+                        // so we need to count Y backwards from the end of the array.
+                        if(a==0){
+                            skin.setRGB(x, scale - y, 0x00000000);
+                        } else {
+                            skin.setRGB(x, scale - y,(a << 24) | (r << 16) | (g << 8) | b);
+                        }
+                    }
+                }
+
+                try {
+                    ImageIO.write(skin, "PNG", new File(TextureManager.getID(new ResourceLocation(TrainsInMotion.MODID,"testexture.png"),
+                            null, null, null, null, true)));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
 }

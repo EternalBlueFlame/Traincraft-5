@@ -11,7 +11,7 @@ public class EventManagerServer {
     @SubscribeEvent
     @SuppressWarnings("unused")
     public void playerQuitEvent(PlayerEvent.PlayerLoggedOutEvent event){
-        if (event.player.ridingEntity instanceof GenericRailTransport || event.player.ridingEntity instanceof EntitySeat){
+        if (event.player.ridingEntity instanceof EntitySeat){
             event.player.dismountEntity(event.player.ridingEntity);
         }
     }
