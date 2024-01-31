@@ -14,6 +14,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
+import ebf.tim.utility.DebugUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.launchwrapper.Launch;
@@ -108,7 +109,7 @@ public class Traincraft {
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        TraincraftUtil.dev = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
+        DebugUtil.dev = (Boolean) Launch.blackboard.get("fml.deobfuscatedEnvironment");
         tcLog.info("Starting Traincraft " + Info.modVersion + "!");
         /* Config handler */
         configDirectory = event.getModConfigurationDirectory();
@@ -129,7 +130,6 @@ public class Traincraft {
         trainCompositeSuit = proxy.addArmor("CompositeSuit");
         TCBlocks.init();
         TCItems.init();
-        EntityHandler.init();
         proxy.registerTileEntities();
         proxy.registerSounds();
         proxy.setHook(); // Moved file needed to run JLayer, we need to set a hook in order to retrieve it
@@ -196,6 +196,7 @@ public class Traincraft {
         /* Register the liquids */
         tcLog.info("Initialize Fluids");
         LiquidManager.getInstance().registerLiquids();
+        EntityHandler.init();
 
         /* Liquid FX */
         proxy.registerTextureFX();
