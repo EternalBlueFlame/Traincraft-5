@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import train.common.api.blocks.TileTraincraft;
 import train.common.blocks.BlockOpenHearthFurnace;
 import train.common.inventory.TrainCraftingManager;
 import train.common.library.BlockIDs;
@@ -20,9 +21,8 @@ import train.common.library.ItemIDs;
 
 import java.util.Random;
 
-public class TileEntityOpenHearthFurnace extends TileTraincraft{
+public class TileEntityOpenHearthFurnace extends TileTraincraft {
 
-	private ForgeDirection facing;
 	public int furnaceBurnTime;
 	public int currentItemBurnTime;
 	public int furnaceCookTime;
@@ -30,12 +30,16 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft{
 	private Random random;
 
 	public TileEntityOpenHearthFurnace() {
-		super(4, "Open Hearth Furnace");
+		super(4);
 		furnaceBurnTime = 0;
 		currentItemBurnTime = 0;
 		furnaceCookTime = 0;
 		cookDuration = 600;//default is 200
 		random = new Random();
+	}
+	@Override
+	public String getInventoryName(){
+		return "Open Hearth Furnace";
 	}
 
 	@Override
@@ -206,19 +210,9 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft{
 		return GameRegistry.getFuelValue(it);
 	}
 
-	public ForgeDirection getFacing() {
-		if(facing!=null)return this.facing;
-		return ForgeDirection.NORTH;
-	}
-
-	public void setFacing(ForgeDirection face) {
-		this.facing = face;
-	}
-
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt, boolean forSyncing){
 		super.writeToNBT(nbt, forSyncing);
-		nbt.setByte("Orientation", (byte) getFacing().ordinal());
 		nbt.setShort("BurnTime", (short) furnaceBurnTime);
 		nbt.setShort("CookTime", (short) furnaceCookTime);
 		nbt.setShort("ItemBurnTime", (short) currentItemBurnTime);
@@ -228,7 +222,6 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft{
 	@Override
 	public void readFromNBT(NBTTagCompound nbt, boolean forSyncing){
 		super.readFromNBT(nbt, forSyncing);
-		facing = ForgeDirection.getOrientation(nbt.getByte("Orientation"));
 		furnaceBurnTime = nbt.getShort("BurnTime");
 		furnaceCookTime = nbt.getShort("CookTime");
 		currentItemBurnTime = nbt.getShort("ItemBurnTime");

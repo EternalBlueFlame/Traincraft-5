@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import train.common.tile.TileTraincraft;
+import train.common.api.blocks.TileTraincraft;
 
 import java.util.Arrays;
 
@@ -15,8 +15,8 @@ public class Energy extends TileTraincraft implements IEnergyProvider {
     public EnergyStorage energy = new EnergyStorage(3000, 80); //core energy value the first value is max storage and the second is transfer max.
     private ForgeDirection[] sides = new ForgeDirection[]{}; //defines supported sides
 
-    public Energy(int inventorySlots, String name, int maxEnergy, int maxTransfer) {
-        super(inventorySlots, name);
+    public Energy(int inventorySlots, int maxEnergy, int maxTransfer) {
+        super(inventorySlots);
         this.energy.setCapacity(maxEnergy);
         this.energy.setMaxTransfer(maxTransfer);
     }

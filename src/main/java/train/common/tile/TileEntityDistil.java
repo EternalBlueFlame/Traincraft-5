@@ -11,6 +11,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import train.common.api.LiquidManager;
 import train.common.api.LiquidManager.StandardTank;
+import train.common.api.blocks.TileTraincraft;
 import train.common.blocks.BlockDistil;
 import train.common.library.BlockIDs;
 import train.common.recipes.DistilRecipes;
@@ -19,7 +20,6 @@ import java.util.Random;
 
 public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 
-	private ForgeDirection facing;
 	public int distilBurnTime;
 	public int currentItemBurnTime;
 	public int distilCookTime;
@@ -33,7 +33,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 
 	public TileEntityDistil() {
 		//slots 0=input 1=fuel 3=output 2=input canister ?=filled canister
-		super(5, "Distillation tower");
+		super(5);
 		distilBurnTime = 0;
 		currentItemBurnTime = 0;
 		distilCookTime = 0;
@@ -41,6 +41,10 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 		random = new Random();
 		this.maxTank = 30000;
 		this.theTank = LiquidManager.getInstance().new FilteredTank(maxTank, LiquidManager.getInstance().dieselFilter(), 1);
+	}
+	@Override
+	public String getInventoryName(){
+		return "Distillation tower";
 	}
 
 	/**
@@ -67,7 +71,6 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTag, boolean forSyncing) {
 		super.readFromNBT(nbtTag, forSyncing);
-		facing = ForgeDirection.getOrientation(nbtTag.getInteger("Orientation"));
 		distilBurnTime = nbtTag.getShort("BurnTime");
 		distilCookTime = nbtTag.getShort("CookTime");
 		currentItemBurnTime = nbtTag.getShort("CurrentItemBurn");
@@ -83,7 +86,6 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbtTag, boolean forSyncing) {
 		super.writeToNBT(nbtTag, forSyncing);
-		nbtTag.setInteger("Orientation", getFacing().ordinal());
 		nbtTag.setShort("BurnTime", (short) distilBurnTime);
 		nbtTag.setShort("CookTime", (short) distilCookTime);
 		nbtTag.setInteger("Amount", this.amount);
@@ -309,17 +311,6 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			slots[3].stackSize += plasticStack.stackSize;
 		}
 		this.markDirty();
-	}
-
-	public ForgeDirection getFacing() {
-		if(facing!=null){
-			return this.facing;
-		}
-		return ForgeDirection.NORTH;
-	}
-
-	public void setFacing(ForgeDirection face) {
-		this.facing = face;
 	}
 
 	@Override

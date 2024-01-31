@@ -36,6 +36,7 @@ public class ModelBase extends ArrayList<ModelRendererTurbo> {
 
 	public int textureWidth=512, textureHeight=512;
 
+	//todo:config option to disable render caching and animations
 	public static boolean disableCache=false, EnableAnimations=true;
 
 	public void render(){
@@ -350,4 +351,7 @@ public class ModelBase extends ArrayList<ModelRendererTurbo> {
 		}
 		return null;
 	}
+
+	public float[] getTrans(){return null;}
+	public float[] getRotate(){return null;}
 }

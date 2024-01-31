@@ -19,7 +19,6 @@ import train.common.core.util.Energy;
 public class TileGeneratorDiesel extends Energy implements IFluidHandler{
 
     public boolean powered;
-    private ForgeDirection direction;
     public FluidTank theTank;
 
     public int currentBurnTime;
@@ -28,18 +27,9 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
     private int lastBurnTime;
 
     public TileGeneratorDiesel(){
-        super(2, "Diesel Generator", 320, 80);
+        super(2, 320, 80);
         super.setSides(new ForgeDirection[]{ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH, ForgeDirection.UP, ForgeDirection.DOWN});
-        direction = ForgeDirection.getOrientation(this.blockMetadata);
         this.theTank = LiquidManager.getInstance().new FilteredTank(30000, LiquidManager.dieselFilter(), 1);
-    }
-
-    public int getFacing(){
-        return direction.ordinal();
-    }
-
-    public void setFacing(int facing){
-        direction = ForgeDirection.getOrientation(facing);
     }
 
     @Override
@@ -86,7 +76,6 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
         if(!forSyncing){
             this.powered = nbtTag.getBoolean("Powered");
         }
-        this.direction = ForgeDirection.values()[nbtTag.getInteger("direction")];
         this.currentBurnTime = nbtTag.getInteger("BurnTime");
         this.theTank.readFromNBT(nbtTag);
     }
@@ -97,7 +86,6 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
         if(!forSyncing){
             nbtTag.setBoolean("Powered", this.powered);
         }
-        nbtTag.setInteger("direction", direction.ordinal());
         nbtTag.setInteger("BurnTime", this.currentBurnTime);
         this.theTank.writeToNBT(nbtTag);
         return nbtTag;
@@ -174,4 +162,6 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
         return new FluidTankInfo[]{theTank.getInfo()};
     }
 
+    @Override
+    public String getInventoryName(){return "Diesel Generator";}
 }

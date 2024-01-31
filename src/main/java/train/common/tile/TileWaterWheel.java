@@ -12,35 +12,15 @@ import net.minecraftforge.common.util.ForgeDirection;
 import train.common.core.util.Energy;
 
 public class TileWaterWheel extends Energy implements IEnergyProvider {
-	
-	public int facingMeta;
 
 	public TileWaterWheel() {
-		super(0, "WaterWheel", 80, 80);
+		super(0, 80, 80);
 		super.setSides(new ForgeDirection[]{ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH});
-		facingMeta = this.blockMetadata;
 	}
 
 	@Override
-	public void readFromNBT(NBTTagCompound nbtTag, boolean forSyncing){
-		super.readFromNBT(nbtTag, forSyncing);
-		facingMeta = nbtTag.getByte("Orientation");
-	}
+	public String getInventoryName(){return "WaterWheel";}
 
-	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbtTag, boolean forSyncing){
-		super.writeToNBT(nbtTag, forSyncing);
-		nbtTag.setByte("Orientation", (byte) facingMeta);
-		return  nbtTag;
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-		NBTTagCompound nbt = new NBTTagCompound();
-		this.writeToNBT(nbt);
-
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
-	}
 	@Override
 	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
 		this.readFromNBT(pkt.func_148857_g());
@@ -85,7 +65,7 @@ public class TileWaterWheel extends Energy implements IEnergyProvider {
 			}else if(blockBottom instanceof BlockLiquid && blockBottom.getMaterial().isLiquid() &&worldObj.getBlockMetadata(xCoord, yCoord-1, zCoord)!= 0 && blockBottom.getMaterial() != Material.lava){
 				this.energy.receiveEnergy(5, false);
 			} else {
-				setWaterDir(-1);
+				setFacing(-1);
 			}
 
 			if (this.energy.getEnergyStored() >0) {
@@ -96,15 +76,6 @@ public class TileWaterWheel extends Energy implements IEnergyProvider {
 			this.syncTileEntity();
 		}
 
-	}
-	
-	private void setWaterDir(int i) {
-		facingMeta = i;
-		
-	}
-	
-	public int getWaterDir() {
-		return facingMeta;
 	}
 
 	@Override

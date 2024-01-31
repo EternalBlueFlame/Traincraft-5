@@ -6,6 +6,7 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
+import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileWaterWheel;
@@ -15,7 +16,6 @@ public class ModelWaterWheel extends ModelBase {
 	private IModelCustom modelWaterWheel;
 	private long lastframe;
 	private float wheel;
-	private int l;
 	public float wheel1 = 0.4188790204786391F;
 
 	public ModelWaterWheel() {
@@ -63,13 +63,13 @@ public class ModelWaterWheel extends ModelBase {
 			GL11.glScalef(0.36f, 0.36f, 1f);
 			GL11.glRotatef(180, 0, 1, 0);
 		}
-		if (waterWheel.getWaterDir() > -1001) {
+		if (waterWheel.getFacing()!= ForgeDirection.UNKNOWN) {
 			long now = System.nanoTime();
 			int elapsed = (int) ((now - lastframe) / (1000 * 100));
 			wheel -= (float) elapsed / 300.0f;
 			lastframe = now;
 			//System.out.println(facing);
-			if (waterWheel.getWaterDir() == 0 || waterWheel.getWaterDir() == -3 || waterWheel.getWaterDir() == -1 || waterWheel.getWaterDir() == 1 || waterWheel.getWaterDir() == -2) {
+			if (waterWheel.getFacing().ordinal() == 0 || waterWheel.getFacing().ordinal() == -3 || waterWheel.getFacing().ordinal() == -1 || waterWheel.getFacing().ordinal() == 1 || waterWheel.getFacing().ordinal() == -2) {
 				GL11.glRotatef(-(wheel + wheel1), 0F, 0F, 1F);
 			}
 		}

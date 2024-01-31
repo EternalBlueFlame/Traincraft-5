@@ -18,7 +18,6 @@ import train.common.library.BlockIDs;
 import java.util.Random;
 
 public class TileWindMill extends Energy implements IEnergyProvider {
-	private int facingMeta;
 	private int updateTicks = 0;
 	private static Random rand = new Random();
 	public int windClient = 0;
@@ -26,23 +25,17 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 
 
 	public TileWindMill() {
-		super(0,"Wind Mill", 240, 80);
+		super(0, 240, 80);
 		super.setSides(new ForgeDirection[]{ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.SOUTH, ForgeDirection.NORTH, ForgeDirection.DOWN});
-		facingMeta = this.blockMetadata;
 	}
 
-	public int getFacing() {
-		return facingMeta;
-	}
+	@Override
+	public String getInventoryName(){return "Wind Mill";}
 
-	public void setFacing(int facing) {
-		this.facingMeta = facing;
-	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt, boolean synced) {
 		super.readFromNBT(nbt, synced);
-		facingMeta = nbt.getByte("Orientation");
 		this.windClient = nbt.getInteger("Wind");
         this.standsOpen = nbt.getInteger("standsOpen");
 	}
@@ -50,19 +43,9 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt, boolean synced) {
 		super.writeToNBT(nbt, synced);
-		nbt.setByte("Orientation", (byte) facingMeta);
 		nbt.setInteger("Wind", this.windClient);
         nbt.setInteger("standsOpen", this.standsOpen);
 		return nbt;
-	}
-
-	@Override
-	public Packet getDescriptionPacket() {
-
-		NBTTagCompound nbt = new NBTTagCompound();
-		this.writeToNBT(nbt);
-
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
 	}
 
 	@Override

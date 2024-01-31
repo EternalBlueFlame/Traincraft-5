@@ -5,7 +5,7 @@
  * @author Mrbrutal
  ******************************************************************************/
 
-package train.common.tile;
+package train.common.api.blocks;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -19,17 +19,14 @@ import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 
-//TODO Does this class even have ANY purpose? If it's supposed to identify TileEntities of this certain mod, use an interface. PLEASE. NO!
-public class TileTraincraft extends TileEntity implements ISidedInventory{
+public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
 
     public ItemStack[] slots;
-    public String invName;
 
     public TileTraincraft(){}
 
-    public TileTraincraft(int slotAmount, String inventoryname){
+    public TileTraincraft(int slotAmount){
         this.slots = new ItemStack[slotAmount];
-        this.invName = inventoryname;
     }
 
     @Override
@@ -104,7 +101,7 @@ public class TileTraincraft extends TileEntity implements ISidedInventory{
 
     @Override
     public String getInventoryName(){
-        return this.invName;
+        return "traincraft.tile.generic";
     }
 
     @Override
@@ -191,7 +188,7 @@ public class TileTraincraft extends TileEntity implements ISidedInventory{
     }
 
     @Override
-    public Packet getDescriptionPacket() {
+    public S35PacketUpdateTileEntity getDescriptionPacket() {
         NBTTagCompound nbt = new NBTTagCompound();
         this.writeToNBT(nbt, true);
         return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);

@@ -31,7 +31,7 @@ public class RenderGeneratorDiesel extends TileEntitySpecialRenderer {
 
         //System.out.println(((TileStopper) var1).getFacing());
         GL11.glTranslatef(0.5F, 0.0F, 0.5F);
-        modelGenerator.render(0.0625F, ((TileGeneratorDiesel) var1).getFacing());
+        modelGenerator.render(0.0625F, ((TileGeneratorDiesel) var1).getFacing().ordinal());
 
         GL11.glPopMatrix();
     }

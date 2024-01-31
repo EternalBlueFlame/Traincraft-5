@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.library.BlockIDs;
-import train.common.tile.TileTraincraft;
+import train.common.api.blocks.TileTraincraft;
 
 import java.util.Random;
 
@@ -18,15 +18,6 @@ public class TileautoSwitchStand extends TileTraincraft {
 
     private int updateTicks = 0;
     private static Random rand = new Random();
-    private ForgeDirection facing;
-
-    @Override
-    public void readFromNBT(NBTTagCompound nbtTag, boolean forSyncing) {
-        //super.readFromNBT(nbtTag, false);
-
-        facing = ForgeDirection.getOrientation(nbtTag.getByte("Orientation"));
-    }
-
     @Override
     public void updateEntity() {
         super.updateEntity();
@@ -52,33 +43,6 @@ public class TileautoSwitchStand extends TileTraincraft {
                 syncTileEntity();
             }
         }
-    }
-
-    @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbtTag, boolean forSyncing) {
-        //super.writeToNBT(nbtTag, forSyncing);
-        if (facing != null) {
-
-            nbtTag.setByte("Orientation", (byte) facing.ordinal());
-        } else {
-
-            nbtTag.setByte("Orientation", (byte) ForgeDirection.NORTH.ordinal());
-        }
-        return nbtTag;
-    }
-
-    public ForgeDirection getFacing() {
-        if (facing != null) {
-            return this.facing;
-        }
-        return ForgeDirection.UNKNOWN;
-    }
-
-
-    public void setFacing(ForgeDirection face) {
-
-        if (facing != face)
-            this.facing = face;
     }
 
     @SideOnly(Side.CLIENT)
