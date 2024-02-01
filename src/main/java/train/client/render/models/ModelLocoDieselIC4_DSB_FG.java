@@ -11,12 +11,12 @@
 
 package train.client.render.models;
 
+import fexcraft.tmt.slim.ModelConverter;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
-import fexcraft.tmt.slim.ModelBase;
 
-public class ModelLocoDieselIC4_DSB_FG extends ModelBase
+public class ModelLocoDieselIC4_DSB_FG extends ModelConverter
 {
   //fields
   ModelRendererTurbo Left1;
