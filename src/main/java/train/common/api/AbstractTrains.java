@@ -65,7 +65,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      */
     private TrainRecord trainSpec = null;
 
-    @SideOnly(Side.CLIENT)
     private TrainRenderRecord render = null;
 
     public TrainRecord getSpec() {
@@ -178,7 +177,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
 
         if (getSpec() != null) {
-            this.setDefaultMass(weightKg());
+            this.setDefaultMass(weightKg()*0.1);
             this.setSize(0.98f, 1.98f);
             this.setMinecartName(transportName());
         }
