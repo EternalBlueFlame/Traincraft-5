@@ -37,7 +37,6 @@ import java.util.List;
 public class ItemRollingStock extends ItemMinecart implements IMinecart, IMinecartItem {
 
 	private String iconName = "";
-	private final String trainName;
 	private String trainCreator;
 
 	private AbstractTrains entity=null;
@@ -53,7 +52,6 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		super(1);
 		this.iconName = iconName;
 		maxStackSize = 1;
-		trainName = this.getUnlocalizedName();
 		if(!ConfigHandler.SPLIT_CREATIVE) {
 			setCreativeTab(Traincraft.tcTab);
 		} else {
@@ -65,10 +63,13 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		super(1);
 		this.iconName = iconName;
 		maxStackSize = 1;
-		trainName = this.getUnlocalizedName();
 		setCreativeTab(tab);
 	}
 
+	public ItemRollingStock(AbstractTrains train, String modid, CreativeTabs tab){
+		this(modid+"."+train.transportName(),tab);
+		entity=train;
+	}
 
 
 	public int setNewUniqueID(ItemStack stack, EntityPlayer player, int numberOfTrains) {
@@ -105,14 +106,12 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 		if(getEntity()!=null){
 			//year is the tell for if the TC4.5 API was used in favor of 4.3's.
-			if(!getEntity().transportYear().equals("")) {
-				if (getEntity().transportYear() != null) {
-					par3List.add(EnumChatFormatting.GRAY + t("menu.item.year") + ": " + getEntity().transportYear());
-				}
-				if(getEntity().transportcountry()!=null) {
-					par3List.add(EnumChatFormatting.GRAY + t("menu.item.country") + ": " +
-							t("menu.item." + getEntity().transportcountry().toLowerCase()));
-				}
+			if(getEntity().transportYear() != null && !getEntity().transportYear().equals("")) {
+				par3List.add(EnumChatFormatting.GRAY + t("menu.item.year") + ": " + getEntity().transportYear());
+			}
+			if(getEntity().transportcountry()!=null) {
+				par3List.add(EnumChatFormatting.GRAY + t("menu.item.country") + ": " +
+						t("menu.item." + getEntity().transportcountry().toLowerCase()));
 			}
 
 			StringBuilder s = new StringBuilder();
@@ -703,10 +702,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		ItemStack stack = oldStack;
 
 		if (train != null){
-			TrainRecord trainRecord = Traincraft.instance.traincraftRegistry.getTrainRecord(train.getClass());
-			if (trainRecord != null) {
-				stack = (new ItemStack(trainRecord.getItem()));
-			}
+			stack = (new ItemStack(train.getItem()));
 		}
 		if(stack!=null) {
 			NBTTagCompound tag = stack.getTagCompound();

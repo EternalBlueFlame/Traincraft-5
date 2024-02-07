@@ -14,6 +14,7 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -658,6 +659,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 	}
 
 
+	public Item getItem(){return getSpec().getItem();}
     /**
      * Functionality imported from TC5
      */
@@ -682,7 +684,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     public boolean isFictional(){return false;}
 
-    public String[] additionalItemText(){return getSpec().getAdditionnalTooltip().split("\n");}
+    public String[] additionalItemText(){return getSpec()==null?null:getSpec().getAdditionnalTooltip().split("\n");}
     /**the top speed in km/h for the transport.
      * not used tor rollingstock.*/
     public float transportTopSpeed(){return getSpec().getMaxSpeed();}

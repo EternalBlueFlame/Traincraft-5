@@ -1,7 +1,13 @@
 package train.common.library;
 
 import java.util.ArrayList;
-import train.common.api.TrainRecord;
+
+import cpw.mods.fml.common.registry.EntityRegistry;
+import cpw.mods.fml.common.registry.GameRegistry;
+import fexcraft.tmt.slim.ModelBase;
+import net.minecraft.util.ResourceLocation;
+import train.common.Traincraft;
+import train.common.api.*;
 
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
@@ -10,8 +16,8 @@ import java.util.List;
 import java.util.Map;
 import net.minecraft.item.Item;
 import train.client.render.RenderEnum;
-import train.common.api.TrainRenderRecord;
-import train.common.api.TrainSoundRecord;
+import train.common.core.handlers.EntityHandler;
+import train.common.items.ItemRollingStock;
 
 public class TraincraftRegistry {
 
@@ -89,5 +95,127 @@ public class TraincraftRegistry {
                 record.skins.add(name);
             }
         }
+    }
+
+
+    public static void registerTransports(String MODID, List<AbstractTrains> entities) {
+        registerTransports(MODID,entities.toArray(new AbstractTrains[]{}));
+    }
+
+    public static void registerTransports(String MODID, AbstractTrains[] entities) {
+        for(final AbstractTrains trains : entities){
+            EntityRegistry.registerModEntity(trains.getClass(), MODID+":"+trains.transportName(), EntityHandler.trainID, Traincraft.instance, 512, 1, true);
+            trains.registerSkins();
+            GameRegistry.registerItem(trains.getItem(), MODID+":entity/"+trains.transportName());
+            EntityHandler.trainID+=1;
+            //todo:this part should be unnecessary? double-check.
+            if(Traincraft.proxy.isClient()){
+                Traincraft.instance.traincraftRegistry.registerTrainRenderRecord(new TrainRenderRecord() {
+                    @Override
+                    public Class<? extends AbstractTrains> getEntityClass() {
+                        return trains.getClass();
+                    }
+
+                    @Override
+                    public ModelBase getModel() {
+                        return trains.getModel()[0];
+                    }
+
+                    @Override
+                    public boolean hasSmoke() {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean hasSmokeOnSlopes() {
+                        return false;
+                    }
+
+                    @Override
+                    public String getSmokeType() {
+                        return null;
+                    }
+
+                    @Override
+                    public ArrayList<double[]> getSmokeFX() {
+                        return null;
+                    }
+
+                    @Override
+                    public String getExplosionType() {
+                        return null;
+                    }
+
+                    @Override
+                    public boolean hasExplosion() {
+                        return false;
+                    }
+
+                    @Override
+                    public ArrayList<double[]> getExplosionFX() {
+                        return null;
+                    }
+
+                    @Override
+                    public float[] getTrans() {
+                        return new float[]{0,0,0};
+                    }
+
+                    @Override
+                    public float[] getRotate() {
+                        return new float[]{0,0,0};
+                    }
+
+                    @Override
+                    public float[] getScale() {
+                        return new float[]{0,0,0};
+                    }
+
+                    @Override
+                    public ResourceLocation getTextureFile(String colorString) {
+                        return null;
+                    }
+
+                    @Override
+                    public int getSmokeIterations() {
+                        return 0;
+                    }
+
+                    @Override
+                    public int getExplosionFXIterations() {
+                        return 0;
+                    }
+                });
+            }
+        }
+    }
+
+    private static String typeDecor="decorative",typeDiesel="diesel", typeSteam="steam",typeElectric="electric",typePassenger="passenger",typeTender="tender", typeWork="work",typeFreight="freight",typeTank="tank";
+    public static String findTrainType(AbstractTrains t){
+        if(t instanceof SteamTrain){
+            return typeSteam;
+        }
+        if(t instanceof DieselTrain){
+            return typeDiesel;
+        }
+        if(t instanceof ElectricTrain){
+            return typeElectric;
+        }
+        if(t instanceof Tender){
+            return typeTender;
+        }
+        if(t instanceof AbstractWorkCart){
+            return typeWork;
+        }
+        if(t instanceof Freight){
+            return typeFreight;
+        }
+        if(t instanceof IPassenger){
+            return typePassenger;
+        }
+        if(t instanceof LiquidTank){
+            return typeTank;
+        }
+        return typeDecor;
     }
 }

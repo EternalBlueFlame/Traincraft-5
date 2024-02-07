@@ -157,6 +157,9 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         if (serverUUID != "") {
             attemptConnection(serverUUID);
         }
+
+        fuelTrain = 0;
+        locoInvent = new ItemStack[getSizeInventory()];
     }
 
     /**
@@ -1529,5 +1532,22 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
             this.serverUUID = "";
             isConnected = false;
         }
+    }
+
+
+    @Override
+    public int getSizeInventory() {
+        return inventorySize;
+    }
+
+
+    @Override
+    public String getInventoryName() {
+        return getTrainName();
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
+        return true;
     }
 }

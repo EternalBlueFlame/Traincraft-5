@@ -24,6 +24,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import train.common.api.AbstractTrains;
 import train.common.api.LiquidManager;
 import train.common.blocks.TCBlocks;
 import train.common.core.CommonProxy;
@@ -32,6 +33,7 @@ import train.common.core.CreativeTabTraincraftTrains;
 import train.common.core.TrainModCore;
 import train.common.core.handlers.*;
 import train.common.core.util.TraincraftUtil;
+import train.common.entity.EntityLocoDieselFOLM1;
 import train.common.generation.ComponentVillageTrainstation;
 import train.common.generation.WorldGenWorld;
 import train.common.items.TCItems;
@@ -197,6 +199,8 @@ public class Traincraft {
         tcLog.info("Initialize Fluids");
         LiquidManager.getInstance().registerLiquids();
         EntityHandler.init();
+
+
 
         /* Liquid FX */
         proxy.registerTextureFX();
