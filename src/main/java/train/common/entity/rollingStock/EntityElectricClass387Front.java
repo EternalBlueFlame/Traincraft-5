@@ -138,7 +138,7 @@ public class EntityElectricClass387Front extends ElectricTrain {
     }
     @Override
     public float getOptimalDistance(EntityMinecart cart) {
-        return 0.85F;
+        return 0.84F;
     }
 
     @Override
