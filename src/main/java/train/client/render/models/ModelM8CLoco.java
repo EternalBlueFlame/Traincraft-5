@@ -1814,7 +1814,7 @@ public class ModelM8CLoco extends ModelConverter //Same as Filename
 		bodyModel[439].addBox(0F, 0F, 0F, 1, 2, 18, 0F); // Box 447
 		bodyModel[439].setRotationPoint(6F, 5F, -9F);
 
-		bodyModel[440].addShapeBox(0F, 0F, 0F, 47, 5, 2, 0F,0F, -0.75F, -0.7F, 0F, -0.75F, -0.7F, 0F, -0.75F, 1F, 0F, -0.75F, 1F, 0F, 0F, 0.1F, 0F, 0F, 0.1F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 447
+		bodyModel[440].addShapeBox(0F, 0F, 0F, 47, 5, 2, 0F,0F, -0.55F, -0.7F, 0F, -0.55F, -0.7F, 0F, -0.55F, 1F, 0F, -0.55F, 1F, 0F, 0F, 0.1F, 0F, 0F, 0.1F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 447
 		bodyModel[440].setRotationPoint(-16F, -19F, -9.5F);
 
 		bodyModel[441].addShapeBox(0F, 0F, 0F, 47, 5, 2, 0F,0F, -0.55F, 1F, 0F, -0.55F, 1F, 0F, -0.55F, -0.7F, 0F, -0.55F, -0.7F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0.1F, 0F, 0F, 0.1F); // Box 448
