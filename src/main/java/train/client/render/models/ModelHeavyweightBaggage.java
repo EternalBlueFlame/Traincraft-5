@@ -347,16 +347,17 @@ public class ModelHeavyweightBaggage extends ModelBase
 		heavyweightboxcarModel[78].setRotationPoint(-16F, 3F, -11F);
 
 
+		fixRotation(heavyweightboxcarModel, false, true, true);
+
+		fixRotation(heavyweightboxcarModel);
+		bodyModel=heavyweightboxcarModel;
 	}
 	ModelHeavyweightBogie bogie = new ModelHeavyweightBogie();
 
 	@Override
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
-		for(int i = 0; i < 79; i++)
-		{
-			heavyweightboxcarModel[i].render(f5);
-		}
+		super.render(entity, f, f1, f2, f3, f4, f5);
 
 		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/HeavyweightBogie.png"));
 
