@@ -323,7 +323,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
                 GL11.glColor4f(1, 1, 1, 1);
                 GL11.glPushMatrix();
                 GL11.glTranslated(offsetX + 205 + (i * 95), offsetY + 82, 400);
-                float scale = renderEntity.getHitboxSize()[0];
+                float scale = Math.max(renderEntity.getHitboxSize()[1],renderEntity.getHitboxSize()[0]);
                 if(scale!=0){
                     scale = 5.8f/(scale /5.8f);
                 }
