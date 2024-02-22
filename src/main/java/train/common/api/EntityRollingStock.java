@@ -1771,12 +1771,18 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
         if (par1Entity instanceof EntityBogie) {
             if (((EntityBogie) par1Entity).entityMainTrainID == this.uniqueID) return;
+            if(cartLinked1!=null) {
+                if (((EntityBogie) par1Entity).entityMainTrainID == cartLinked1.uniqueID) return;
+            }
+            if(cartLinked2!=null) {
+                if (((EntityBogie) par1Entity).entityMainTrainID == cartLinked2.uniqueID) return;
+            }
         }
         if (par1Entity == bogieLoco) {
             return;
         }
-        if (par1Entity instanceof EntityRollingStock && ((EntityRollingStock) par1Entity).bogieLoco != null) {
-            if (par1Entity == ((EntityRollingStock) par1Entity).bogieLoco) return;
+        if (par1Entity instanceof EntityRollingStock) {
+            if (par1Entity == cartLinked1 || par1Entity == cartLinked2) return;
         }
 
         MinecraftForge.EVENT_BUS.post(new MinecartCollisionEvent(this, par1Entity));

@@ -7,6 +7,7 @@ import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import fexcraft.tmt.slim.ModelBase;
+import train.common.core.util.TraincraftUtil;
 
 public class ModelLocoDieselIC4_DSB_FH extends ModelBase
 {
@@ -561,9 +562,9 @@ public class ModelLocoDieselIC4_DSB_FH extends ModelBase
 
 	private void setRotation(ModelRendererTurbo model, float x, float y, float z)
 	{
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
+		model.rotateAngleX = x* TraincraftUtil.degreesF;
+		model.rotateAngleY = y* TraincraftUtil.degreesF;
+		model.rotateAngleZ = z* TraincraftUtil.degreesF;
 	}
 
 }

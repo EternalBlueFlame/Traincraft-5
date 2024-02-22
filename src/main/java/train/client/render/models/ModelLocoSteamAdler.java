@@ -11,6 +11,7 @@ import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import fexcraft.tmt.slim.ModelBase;
+import train.common.core.util.TraincraftUtil;
 
 public class ModelLocoSteamAdler extends ModelBase {
 
@@ -2204,9 +2205,10 @@ public class ModelLocoSteamAdler extends ModelBase {
 		Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
 	}
 
-	private void setRotation(ModelRendererTurbo model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
+	private void setRotation(ModelRendererTurbo model, float x, float y, float z)
+	{
+		model.rotateAngleX = x* TraincraftUtil.degreesF;
+		model.rotateAngleY = y* TraincraftUtil.degreesF;
+		model.rotateAngleZ = z* TraincraftUtil.degreesF;
 	}
 }

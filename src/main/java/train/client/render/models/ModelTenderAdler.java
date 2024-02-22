@@ -11,6 +11,7 @@ package train.client.render.models;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.entity.Entity;
 import fexcraft.tmt.slim.ModelBase;
+import train.common.core.util.TraincraftUtil;
 
 public class ModelTenderAdler extends ModelBase {
 
@@ -1456,9 +1457,10 @@ public class ModelTenderAdler extends ModelBase {
 	    Shape180.render(f5);
 	}
 	
-	private void setRotation(ModelRendererTurbo model, float x, float y, float z) {
-		model.rotateAngleX = x;
-		model.rotateAngleY = y;
-		model.rotateAngleZ = z;
+	private void setRotation(ModelRendererTurbo model, float x, float y, float z)
+	{
+		model.rotateAngleX = x* TraincraftUtil.degreesF;
+		model.rotateAngleY = y* TraincraftUtil.degreesF;
+		model.rotateAngleZ = z* TraincraftUtil.degreesF;
 	}
 }

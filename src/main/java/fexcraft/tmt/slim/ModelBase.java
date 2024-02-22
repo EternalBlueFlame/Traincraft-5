@@ -6,6 +6,7 @@ import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import train.common.core.handlers.ConfigHandler;
+import train.common.core.util.TraincraftUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
