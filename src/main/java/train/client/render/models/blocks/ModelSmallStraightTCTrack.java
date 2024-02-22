@@ -49,12 +49,6 @@ public class ModelSmallStraightTCTrack extends ModelBase {
 
 	public void render( String type, int facing, double x, double y, double z, float r, float g, float b, float a )
 	{
-		// Push a blank matrix onto the stack
-		GL11.glPushMatrix();
-
-		// Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
-		GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
-		GL11.glColor4f(r, g, b, a);
 
 		// Bind the texture, so that OpenGL properly textures our block.
 		if (type.equals("normal")) {
@@ -73,6 +67,12 @@ public class ModelSmallStraightTCTrack extends ModelBase {
 		if (type.equals("crossing2")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_roadcrossing_2.png"));
 		}
+		// Push a blank matrix onto the stack
+		GL11.glPushMatrix();
+
+		// Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
+		GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
+		GL11.glColor4f(r, g, b, a);
 
 		GL11.glRotatef(90 * facing , 0, 1, 0);
 

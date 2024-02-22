@@ -31,6 +31,10 @@ public class ModelSmallDiagonalStraightTCTrack extends ModelBase {
 
     public void render( String type, int facing, double x, double y, double z, float r, float g, float b, float a )
     {
+        // Bind the texture, so that OpenGL properly textures our block.
+        if (type.contains("embedded"))
+            fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
+        else fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
         // Push a blank matrix onto the stack
         GL11.glPushMatrix();
 
@@ -38,13 +42,6 @@ public class ModelSmallDiagonalStraightTCTrack extends ModelBase {
         GL11.glTranslatef((float) x + 0f, (float) y, (float) z + 0f);
         GL11.glColor4f(r, g, b, a);
 
-
-
-        // Bind the texture, so that OpenGL properly textures our block.
-
-        if (type.contains("embedded"))
-            fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
-        else fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
 
         if (facing == 4 || facing == 6) {
             GL11.glTranslatef(0f,0,1f);

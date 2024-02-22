@@ -46,15 +46,16 @@ public class ModelTwoWaysCrossingTCTrack extends ModelBase {
 
 	public void render(String type , double x, double y, double z, int facing, float r, float g, float b, float a) {
 		// Push a blank matrix onto the stack
-		GL11.glPushMatrix();
-
-		// Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
-		GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
 
 		// Bind the texture, so that OpenGL properly textures our block.
 		if (type.contains("embedded"))
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
 		else  fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
+		GL11.glPushMatrix();
+
+		// Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
+		GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
+
 		GL11.glColor4f(r, g, b, a);
 		//GL11.glScalef(0.5f, 0.5f, 0.5f);
 

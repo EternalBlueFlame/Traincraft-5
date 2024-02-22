@@ -33,17 +33,16 @@ public class ModelRightParallelCurveTCTrack extends ModelBase {
     }
 
     public void render(String type, String variant, int facing, double x, double y, double z, float r, float g, float b, float a) {
-
+        // Bind the texture, so that OpenGL properly textures our block.
+        if (variant.contains("embedded"))
+            fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
+        else  fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
         // Push a blank matrix onto the stack
         GL11.glPushMatrix();
 
         // Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
         GL11.glTranslatef((float) x + 1.5f, (float) y, (float) z + 5.5f);
 
-        // Bind the texture, so that OpenGL properly textures our block.
-        if (variant.contains("embedded"))
-            fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
-        else  fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
         GL11.glColor4f(r, g, b, a);
         //GL11.glScalef(0.5f, 0.5f, 0.5f);
         /** where l = 0 is SOUTH
