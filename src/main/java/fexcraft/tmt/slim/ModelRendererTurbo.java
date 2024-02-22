@@ -1422,6 +1422,9 @@ public class ModelRendererTurbo {
             z -= 0.005f;
             d=0.005f;
         }
+        w+=0.0001f;
+        h+=0.0001f;
+        d+=0.0001f;
         float f4 = x + w, f5 = y + h, f6 = z + d;
         x -= scale; y -= scale; z -= scale;
         f4 += scale; f5 += scale; f6 += scale;
