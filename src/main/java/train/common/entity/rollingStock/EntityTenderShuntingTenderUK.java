@@ -1,3 +1,10 @@
+/*******************************************************************************
+ * Copyright (c) 2014 Mrbrutal. All rights reserved.
+ *
+ * @name Traincraft
+ * @author Mrbrutal
+ ******************************************************************************/
+
 package train.common.entity.rollingStock;
 
 import net.minecraft.entity.item.EntityMinecart;
@@ -15,10 +22,9 @@ import train.common.api.Tender;
 import train.common.library.EnumTrains;
 import train.common.library.GuiIDs;
 
-public class EntityTenderShuntingTenderUK extends Tender implements IInventory {
-
+public class EntityTenderShuntingTenderUK extends Tender implements IInventory  {
 	public int freightInventorySize;
-	EntityPlayer playerEntity;
+	public int numFreightSlots;
 
 	public EntityTenderShuntingTenderUK(World world) {
 		super(world, FluidRegistry.WATER, 0, LiquidManager.WATER_FILTER);
@@ -26,7 +32,7 @@ public class EntityTenderShuntingTenderUK extends Tender implements IInventory {
 	}
 
 	public void initFreightTender() {
-		freightInventorySize = 16;
+		freightInventorySize = 36;
 		tenderItems = new ItemStack[freightInventorySize];
 	}
 
@@ -85,7 +91,7 @@ public class EntityTenderShuntingTenderUK extends Tender implements IInventory {
 	}
 	@Override
 	public String getInventoryName() {
-		return "Shunting Tender UK";
+		return "Shunting Tender";
 	}
 
 	@Override
@@ -104,6 +110,7 @@ public class EntityTenderShuntingTenderUK extends Tender implements IInventory {
 		}
 		return true;
 	}
+
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 1.5F;
