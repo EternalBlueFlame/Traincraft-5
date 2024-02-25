@@ -3210,6 +3210,15 @@ public class ItemTCRail extends ItemPart {
                     tempType = TrackTypes.EMBEDDED_SUPER_LARGE_LEFT_TURN;
                 }
             }
+            if (type == TrackTypes.EMBEDDED_TURN_29X29) {
+                if (getTrackOrientation(l, yaw).equals("right")) {
+                    tempType = TrackTypes.EMBEDDED_RIGHT_TURN_29X29;
+                }
+                if (getTrackOrientation(l, yaw).equals("left")) {
+                    tempType = TrackTypes.EMBEDDED_LEFT_TURN_29X29;
+
+                }
+            }
             if (type == TrackTypes.EMBEDDED_TURN_32X32) {
                 if (getTrackOrientation(l, yaw).equals("right")) {
                     tempType = TrackTypes.EMBEDDED_RIGHT_TURN_32X32;

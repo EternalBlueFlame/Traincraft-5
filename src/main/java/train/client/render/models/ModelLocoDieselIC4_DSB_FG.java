@@ -15,6 +15,7 @@ import fexcraft.tmt.slim.ModelConverter;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
+import train.common.core.util.TraincraftUtil;
 
 public class ModelLocoDieselIC4_DSB_FG extends ModelConverter
 {
