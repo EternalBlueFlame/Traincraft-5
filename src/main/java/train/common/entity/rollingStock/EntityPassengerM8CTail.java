@@ -30,7 +30,7 @@ public class EntityPassengerM8CTail extends EntityRollingStock implements IPasse
         if (riddenByEntity == null) {return;}
         double pitchRads = this.anglePitchClient * Math.PI / 180.0D;
         double distance = 1.5f;
-        double yOffset = 0.0f;
+        double yOffset = -0.2f;
         float rotationCos1 = (float) Math.cos(Math.toRadians(this.renderYaw + 90));
         float rotationSin1 = (float) Math.sin(Math.toRadians((this.renderYaw + 90)));
         if(side.isServer()){
@@ -103,6 +103,6 @@ public class EntityPassengerM8CTail extends EntityRollingStock implements IPasse
 
     @Override
     public float getOptimalDistance(EntityMinecart cart) {
-        return 0.75f;
+        return 0.95f;
     }
 }
