@@ -337,6 +337,13 @@ public class CustomRenderHandler {
                 out_1_0 = 0;
                 out_1_1 = 0;
             }
+            else if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_45DEGREE_SWITCH) {
+                switchType = "large_45degree";
+                out_0_start = 0;
+                out_0_end = 0;
+                out_1_0 = 0;
+                out_1_1 = 0;
+            }
 
             Vector2f dir_1 = ItemTCRail.getDirectionVector(facing_1);
             float dx_1 = dir_1.getX();
@@ -352,12 +359,15 @@ public class CustomRenderHandler {
                 RenderTCRail.modelSmallStraight.render(variant, facing, dx * out_1_0 + dx_1 * out_1_1, 0, dz * out_1_0 + dz_1 * out_1_1, r, g, b, a);
             }
 
-            else if (!(item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_45DEGREE_SWITCH)) {
+            else if (!(item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.LARGE_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_45DEGREE_SWITCH)) {
 
                 RenderTCRail.modelSmallStraight.render(variant, facing, 0, 0, 0, r, g, b, a);
                 RenderTCRail.modelSmallStraight.render(variant, facing_1, dx * out_1_0 + dx_1 * out_1_1, 0, dz * out_1_0 + dz_1 * out_1_1, r, g, b, a);
             }
 
+            else{
+
+            }
             // Render switch
             if (isLeftTurn) {
                 RenderTCRail.modelLeftSwitchTurn.render(switchType, variant, facing, false, dx, 0, dz, r, g, b, a);

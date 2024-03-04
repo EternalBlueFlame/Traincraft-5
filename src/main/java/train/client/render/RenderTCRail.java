@@ -138,6 +138,7 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                         model45DegreeLeftTurn.render("medium", "", railTile, x, y, z);
                         break;
                     }
+
                     case LARGE_45DEGREE_TURN:
                     case LARGE_RIGHT_45DEGREE_TURN: {
                         model45DegreeRightTurn.render("large", "", railTile, x, y, z);
@@ -261,6 +262,15 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                     }
                     case MEDIUM_LEFT_45DEGREE_SWITCH: {
                         modelLeftSwitchTurn.render("medium_45degree", "", railTile, x, y, z);
+                        break;
+                    }
+                    case LARGE_45DEGREE_SWITCH:
+                    case LARGE_RIGHT_45DEGREE_SWITCH: {
+                        modelRightSwitchTurn.render("large_45degree", "", railTile, x, y, z);
+                        break;
+                    }
+                    case LARGE_LEFT_45DEGREE_SWITCH: {
+                        modelLeftSwitchTurn.render("large_45degree", "", railTile, x, y, z);
                         break;
                     }
                     case SLOPE_WOOD: {
@@ -594,6 +604,15 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                     }
                     case EMBEDDED_MEDIUM_LEFT_45DEGREE_SWITCH: {
                         modelLeftSwitchTurn.render("medium_45degree", "embedded", railTile, x, y, z);
+                        break;
+                    }
+                    case EMBEDDED_LARGE_45DEGREE_SWITCH:
+                    case EMBEDDED_LARGE_RIGHT_45DEGREE_SWITCH: {
+                        modelRightSwitchTurn.render("large_45degree", "embedded", railTile, x, y, z);
+                        break;
+                    }
+                    case EMBEDDED_LARGE_LEFT_45DEGREE_SWITCH: {
+                        modelLeftSwitchTurn.render("large_45degree", "embedded", railTile, x, y, z);
                         break;
                     }
                     case EMBEDDED_LARGE_CURVED_SLOPE_DYNAMIC:

@@ -118,6 +118,8 @@ public class RecipeHandler {
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailVeryLargeSwitch.item, 1), "H  ", "HIG", "H  ", 'G', ItemIDs.tcRailSmallStraight.item, 'H', ItemIDs.tcRailMediumStraight.item, 'I', ItemIDs.tcRailVeryLargeTurn.item);
 
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailMedium45DegreeSwitch.item, 1), "G D", "GH ", "G  ", 'G', ItemIDs.tcRailSmallStraight.item, 'H', ItemIDs.tcRailMedium45DegreeTurn.item, 'D', ItemIDs.tcRailSmallDiagonalStraight.item);
+        GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailLarge45DegreeSwitch.item, 1), "G D", "GH ", "G  ", 'G', ItemIDs.tcRailSmallStraight.item, 'H', ItemIDs.tcRailLarge45DegreeTurn.item, 'D', ItemIDs.tcRailSmallDiagonalStraight.item);
+
 
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailSlopeWood.item, 1), " TP", "TPP", "PPP", 'T', ItemIDs.tcRailMediumStraight.item, 'P', Blocks.planks);
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailLargeSlopeWood.item, 1), "   ", "  T", " T ", 'T', ItemIDs.tcRailSlopeWood.item);
@@ -184,6 +186,7 @@ public class RecipeHandler {
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedVeryLargeSwitch.item, 1), "H  ", "HIG", "H  ", 'G', ItemIDs.tcRailEmbeddedSmallStraight.item, 'H', ItemIDs.tcRailEmbeddedMediumStraight.item, 'I', ItemIDs.tcRailEmbeddedLargeTurn.item);
 
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedMedium45DegreeSwitch.item, 1), "G D", "GH ", "G  ", 'G', ItemIDs.tcRailEmbeddedSmallStraight.item, 'H', ItemIDs.tcRailEmbeddedMedium45DegreeTurn.item, 'D', ItemIDs.tcRailEmbeddedSmallDiagonalStraight.item);
+        GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedLarge45DegreeSwitch.item, 1), "G D", "GH ", "G  ", 'G', ItemIDs.tcRailEmbeddedSmallStraight.item, 'H', ItemIDs.tcRailEmbeddedLarge45DegreeTurn.item, 'D', ItemIDs.tcRailEmbeddedSmallDiagonalStraight.item);
 
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedSlopeDynamic.item, 1), " TG", "TGG", "GGG", 'T', ItemIDs.tcRailEmbeddedMediumStraight.item, 'G', new ItemStack(Items.dye, 1, 1));
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedLargeSlopeDynamic.item, 1), "   ", "  S", " S ", 'S', ItemIDs.tcRailEmbeddedSlopeDynamic.item);

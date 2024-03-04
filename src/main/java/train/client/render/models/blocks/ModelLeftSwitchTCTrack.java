@@ -23,6 +23,8 @@ public class ModelLeftSwitchTCTrack extends ModelBase {
 	private IModelCustom modelVeryLargeLeftSwitchInactive;
 	private IModelCustom modelMediumLeft45degreeSwitchActive;
 	private IModelCustom modelMediumLeft45degreeSwitchInActive;
+	private IModelCustom modelLargeLeft45degreeSwitchActive;
+	private IModelCustom modelLargeLeft45degreeSwitchInActive;
 
 	public ModelLeftSwitchTCTrack() {
 		modelMediumLeftSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_small_active_left.obj"));
@@ -33,6 +35,8 @@ public class ModelLeftSwitchTCTrack extends ModelBase {
 		modelLargeLeftSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_medium_inactive_left.obj"));
 		modelMediumLeft45degreeSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_medium_45degree_active_left.obj"));
 		modelMediumLeft45degreeSwitchInActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_medium_45degree_inactive_left.obj"));
+		modelLargeLeft45degreeSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_large_45degree_active_left.obj"));
+		modelLargeLeft45degreeSwitchInActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_large_45degree_inactive_left.obj"));
 		modelVeryLargeLeftSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_very_large_active_left.obj"));
 		modelVeryLargeLeftSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_very_large_left.obj"));
 
@@ -66,6 +70,9 @@ public class ModelLeftSwitchTCTrack extends ModelBase {
 
 	public void renderMedium45degreeActive() {modelMediumLeft45degreeSwitchActive.renderAll();}
 	public void renderMedium45degreeInActive() {modelMediumLeft45degreeSwitchInActive.renderAll();}
+
+	public void renderLarge45degreeActive() {modelLargeLeft45degreeSwitchActive.renderAll();}
+	public void renderLarge45degreeInActive() {modelLargeLeft45degreeSwitchInActive.renderAll();}
 
 	public void render(String type, String variant, TileTCRail tcRail, double x, double y, double z) {
 		int facing = tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord);
@@ -106,6 +113,10 @@ public class ModelLeftSwitchTCTrack extends ModelBase {
 				GL11.glRotatef(-90, 0, 1, 0);
 				GL11.glTranslatef(0.0f, 0.0f, 0);
 			}
+			if(type.equals("large_45degree")){
+				GL11.glRotatef(-90, 0, 1, 0);
+				GL11.glTranslatef(-0.5f, 0.0f, 1.5f);
+			}
 
 		}
 		if (facing == 1) {
@@ -128,6 +139,10 @@ public class ModelLeftSwitchTCTrack extends ModelBase {
 				GL11.glRotatef(90, 0, 1, 0);
 				GL11.glTranslatef(0.0f, 0.0f, 0);
 			}
+			if(type.equals("large_45degree")){
+				GL11.glRotatef(90, 0, 1, 0);
+				GL11.glTranslatef(-0.5f, 0.0f, 1.5f);
+			}
 		}
 		if(facing == 2){
 			if(type.equals("medium")){
@@ -146,6 +161,10 @@ public class ModelLeftSwitchTCTrack extends ModelBase {
 			if(type.equals("medium_45degree")){
 				GL11.glRotatef(0, 0, 1, 0);
 				GL11.glTranslatef(0.0f, 0.0f, 0f);
+			}
+			if(type.equals("large_45degree")){
+				GL11.glRotatef(0, 0, 1, 0);
+				GL11.glTranslatef(-0.5f, 0.0f, 1.5f);
 			}
 		}
 		if(facing == 0){
@@ -169,6 +188,10 @@ public class ModelLeftSwitchTCTrack extends ModelBase {
 				GL11.glRotatef(180, 0, 1, 0);
 				GL11.glTranslatef(0f, 0.0f, 0);
 			}
+			if(type.equals("large_45degree")){
+				GL11.glRotatef(180, 0, 1, 0);
+				GL11.glTranslatef(-0.5f, 0.0f, 1.5f);
+			}
 		}
 		if(type.equals("medium")&&!active)this.renderMediumInactive();
 		if(type.equals("medium")&&active)this.renderMediumActive();
@@ -180,6 +203,8 @@ public class ModelLeftSwitchTCTrack extends ModelBase {
 		if(type.equals("very_large_90")&&active)this.renderVeryLarge90Active();
 		if(type.equals("medium_45degree")&&!active)this.renderMedium45degreeInActive();
 		if(type.equals("medium_45degree")&&active)this.renderMedium45degreeActive();
+		if(type.equals("large_45degree")&&!active)this.renderLarge45degreeInActive();
+		if(type.equals("large_45degree")&&active)this.renderLarge45degreeActive();
 		//if(type.equals("large"))this.renderLarge();
 
 		// Pop this matrix from the stack.
