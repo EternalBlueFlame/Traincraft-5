@@ -5,9 +5,9 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ 1.7-Community-4.3 ]
+    branches: [ TC4.5-1.7.10 ]
   pull_request:
-    branches: [ 1.7-Community-4.3 ]
+    branches: [ TC4.5-1.7.10 ]
 
 jobs:
   build:
@@ -42,5 +42,5 @@ jobs:
     - name: Create artifact
       uses: actions/upload-artifact@v2
       with:
-        name: TCCE-Experimental
+        name: TC4-5-Experimental
         path: build/libs/*
