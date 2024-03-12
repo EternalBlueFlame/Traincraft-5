@@ -126,6 +126,7 @@ public enum ItemIDs {
 
 	tcRailMediumParallelSwitch("ItemTCRail", "item_rail_switch_parallel", 5),
 	tcRailMedium45DegreeSwitch("ItemTCRail","item_rail_switch_45degree_medium", 5 ),
+	tcRailLarge45DegreeSwitch("ItemTCRail", "item_rail_switch_45degree_large", 5),
 
 	tcRailSlopeWood("ItemTCRail", "item_rail_straight_slope_wood", 3),
 	tcRailSlopeGravel("ItemTCRail", "item_rail_straight_slope_gravel", 3),
@@ -189,6 +190,7 @@ public enum ItemIDs {
 	tcRailEmbeddedVeryLargeSwitch("ItemTCRail", "item_rail_embedded_switch_large", 5),
 	tcRailEmbeddedMediumParallelSwitch("ItemTCRail", "item_rail_embedded_switch_parallel", 5),
 	tcRailEmbeddedMedium45DegreeSwitch("ItemTCRail","item_rail_embedded_switch_45degree_medium", 5 ),
+	tcRailEmbeddedLarge45DegreeSwitch("ItemTCRail", "item_rail_embedded_switch_45degree_large", 5),
 
 	tcRailEmbeddedSlopeDynamic("ItemTCRail", "item_rail_embedded_slope_dynamic", 5),
 	tcRailEmbeddedLargeSlopeDynamic("ItemTCRail", "item_rail_embedded_slope_dynamic", 5),

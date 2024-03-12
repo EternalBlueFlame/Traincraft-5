@@ -33,7 +33,6 @@ import train.common.core.CreativeTabTraincraftTrains;
 import train.common.core.TrainModCore;
 import train.common.core.handlers.*;
 import train.common.core.util.TraincraftUtil;
-import train.common.entity.EntityLocoDieselFOLM1;
 import train.common.generation.ComponentVillageTrainstation;
 import train.common.generation.WorldGenWorld;
 import train.common.items.TCItems;

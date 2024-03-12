@@ -310,7 +310,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	private void updateOnTrack(int i, int j, int k, Block l) {
 
 		if (canUseRail() && BlockRailBase.func_150051_a(l)) {
-
+			super.onUpdate();
 			int i1 = ((BlockRailBase) l).getBasicRailMetadata(worldObj, this, i, j, k);
 			meta = i1;
 			posY = j;
@@ -948,6 +948,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 				|| tile.getType().equals(TrackTypes.VERY_LARGE_RIGHT_TURN.getLabel())
 				|| tile.getType().equals(TrackTypes.MEDIUM_RIGHT_45DEGREE_TURN.getLabel())
 				|| tile.getType().equals(TrackTypes.MEDIUM_LEFT_45DEGREE_TURN.getLabel())
+				|| tile.getType().equals(TrackTypes.LARGE_RIGHT_45DEGREE_TURN.getLabel())
+				|| tile.getType().equals(TrackTypes.LARGE_LEFT_45DEGREE_TURN.getLabel())
 				|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_TURN.getLabel())
 				|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_TURN.getLabel())
 				|| tile.getType().equals(TrackTypes.EMBEDDED_LARGE_LEFT_TURN.getLabel())
@@ -956,6 +958,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 				|| tile.getType().equals(TrackTypes.EMBEDDED_VERY_LARGE_RIGHT_TURN.getLabel())
 				|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_45DEGREE_TURN.getLabel())
 				|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_45DEGREE_TURN.getLabel())
+				|| tile.getType().equals(TrackTypes.EMBEDDED_LARGE_RIGHT_45DEGREE_TURN.getLabel())
+				|| tile.getType().equals(TrackTypes.EMBEDDED_LARGE_LEFT_45DEGREE_TURN.getLabel())
 
 				&& tile.canTypeBeModifiedBySwitch) {
 			if (meta == 2) {

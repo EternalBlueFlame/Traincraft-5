@@ -1176,6 +1176,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 || tile.getType().equals(TrackTypes.VERY_LARGE_RIGHT_TURN.getLabel())
                 || tile.getType().equals(TrackTypes.MEDIUM_RIGHT_45DEGREE_TURN.getLabel())
                 || tile.getType().equals(TrackTypes.MEDIUM_LEFT_45DEGREE_TURN.getLabel())
+                || tile.getType().equals(TrackTypes.LARGE_RIGHT_45DEGREE_TURN.getLabel())
+                || tile.getType().equals(TrackTypes.LARGE_LEFT_45DEGREE_TURN.getLabel())
                 || tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_TURN.getLabel())
                 || tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_TURN.getLabel())
                 || tile.getType().equals(TrackTypes.EMBEDDED_LARGE_LEFT_TURN.getLabel())
@@ -1184,6 +1186,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 || tile.getType().equals(TrackTypes.EMBEDDED_VERY_LARGE_RIGHT_TURN.getLabel())
                 || tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_45DEGREE_TURN.getLabel())
                 || tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_45DEGREE_TURN.getLabel())
+                || tile.getType().equals(TrackTypes.EMBEDDED_LARGE_RIGHT_45DEGREE_TURN.getLabel())
+                || tile.getType().equals(TrackTypes.EMBEDDED_LARGE_LEFT_45DEGREE_TURN.getLabel())
 
                 && tile.canTypeBeModifiedBySwitch) {
 
@@ -1192,8 +1196,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 if (motionZ > 0 && Math.abs(motionX) < 0.01) {
                     TileEntity tile2 = worldObj.getTileEntity(i, j, k + 1);
                     if (tile2 instanceof TileTCRail) {
-                        ((TileTCRail) tile2).setSwitchState(false, true);
-                    }
+                        ((TileTCRail) tile2).setSwitchState(false, true);}
                     return true;
                 }
             } else if (meta == 0) {
