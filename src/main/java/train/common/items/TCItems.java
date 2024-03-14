@@ -159,6 +159,7 @@ public class TCItems {
 		ItemIDs.tcRailLargeSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.LARGE_SWITCH);
 		ItemIDs.tcRailVeryLargeSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.VERY_LARGE_SWITCH);
 		ItemIDs.tcRailMediumParallelSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.MEDIUM_PARALLEL_SWITCH);
+		ItemIDs.tcRailLargeParallelSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.LARGE_PARALLEL_SWITCH);
 		ItemIDs.tcRailMedium45DegreeSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.MEDIUM_45DEGREE_SWITCH);
 		ItemIDs.tcRailLarge45DegreeSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.LARGE_45DEGREE_SWITCH);
 
@@ -167,6 +168,7 @@ public class TCItems {
 		ItemIDs.tcRailEmbeddedLargeSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.EMBEDDED_LARGE_SWITCH);
 		ItemIDs.tcRailEmbeddedVeryLargeSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.EMBEDDED_VERY_LARGE_SWITCH);
 		ItemIDs.tcRailEmbeddedMediumParallelSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_PARALLEL_SWITCH);
+		ItemIDs.tcRailEmbeddedLargeParallelSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.EMBEDDED_LARGE_PARALLEL_SWITCH);
 		ItemIDs.tcRailEmbeddedMedium45DegreeSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_45DEGREE_SWITCH);
 		ItemIDs.tcRailEmbeddedLarge45DegreeSwitch.item = new ItemTCRail(ItemTCRail.TrackTypes.EMBEDDED_LARGE_45DEGREE_SWITCH);
 

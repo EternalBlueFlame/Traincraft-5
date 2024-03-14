@@ -317,7 +317,13 @@ public class CustomRenderHandler {
                 out_0_start = 5;
                 out_0_end = 10;
                 out_1_0 = 10;
-            } else if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_SWITCH) {
+            }
+            if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_PARALLEL_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_PARALLEL_SWITCH) {
+                switchType = "large_parallel";
+                out_0_start = 0;
+                out_0_end = 0;
+                out_1_0 = 0;
+            }else if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_SWITCH) {
                 switchType = "large_90";
                 out_0_start = 5;
                 out_0_end = 5;
@@ -359,7 +365,7 @@ public class CustomRenderHandler {
                 RenderTCRail.modelSmallStraight.render(variant, facing, dx * out_1_0 + dx_1 * out_1_1, 0, dz * out_1_0 + dz_1 * out_1_1, r, g, b, a);
             }
 
-            else if (!(item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.LARGE_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_45DEGREE_SWITCH)) {
+            else if (!(item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.LARGE_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.LARGE_PARALLEL_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_PARALLEL_SWITCH)) {
 
                 RenderTCRail.modelSmallStraight.render(variant, facing, 0, 0, 0, r, g, b, a);
                 RenderTCRail.modelSmallStraight.render(variant, facing_1, dx * out_1_0 + dx_1 * out_1_1, 0, dz * out_1_0 + dz_1 * out_1_1, r, g, b, a);
