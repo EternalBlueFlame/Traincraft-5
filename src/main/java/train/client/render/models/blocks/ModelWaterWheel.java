@@ -69,7 +69,7 @@ public class ModelWaterWheel extends ModelBase {
 			wheel -= (float) elapsed / 300.0f;
 			lastframe = now;
 			//System.out.println(facing);
-			if (waterWheel.getFacing().ordinal() == 0 || waterWheel.getFacing().ordinal() == -3 || waterWheel.getFacing().ordinal() == -1 || waterWheel.getFacing().ordinal() == 1 || waterWheel.getFacing().ordinal() == -2) {
+			if (waterWheel.getFacing().ordinal() == 0 || waterWheel.getFacing().ordinal() == 3 || waterWheel.getFacing().ordinal() == 1 || waterWheel.getFacing().ordinal() == 1 || waterWheel.getFacing().ordinal() == 2) {
 				GL11.glRotatef(-(wheel + wheel1), 0F, 0F, 1F);
 			}
 		}

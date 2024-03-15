@@ -152,14 +152,18 @@ public class ModelGeneratorDiesel extends ModelBase {
 	public void render(float f5, int meta) {
 		if (meta != -1) {
 			switch (meta) {
-			case 0:
-				GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
-			case 1:
-				GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
 			case 2:
-				GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+				GL11.glRotatef(180.0F, 0.0F, 1.0F, 0.0F);
+				break;
 			case 3:
+				GL11.glRotatef(0F, 0.0F, 1.0F, 0.0F);
+				break;
+			case 4:
 				GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
+				break;
+			case 5:
+				GL11.glRotatef(-90.0F, 0.0F, 1.0F, 0.0F);
+				break;
 			}
 		}
 		box.render(f5);

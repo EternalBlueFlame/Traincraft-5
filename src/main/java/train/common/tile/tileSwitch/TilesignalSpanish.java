@@ -9,16 +9,44 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraftforge.common.util.ForgeDirection;
+import train.common.api.blocks.TileSwitch;
 import train.common.library.BlockIDs;
 import train.common.api.blocks.TileTraincraft;
 
 import java.util.Random;
 
-public class TilesignalSpanish extends TileTraincraft {
+public class TilesignalSpanish extends TileSwitch {
 
-    public int state;// 0=red 1=green
+    public int state = 1;// 0=red 1=green
     private int updateTicks = 0;
     private static Random rand = new Random();
+
+
+    public void setState(int st){
+        state = st;
+        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+    }
+
+    public int getState(){
+       return state;
+    }
+
+
+    @Override
+    public void writeToNBT(NBTTagCompound tag){
+        super.writeToNBT(tag);
+        tag.setInteger("state", state);
+    }
+
+    @Override
+    public void readFromNBT(NBTTagCompound tag){
+        super.readFromNBT(tag);
+        state = tag.getInteger("state");
+    }
+
+
+
+
 
     @Override
     public void updateEntity() {

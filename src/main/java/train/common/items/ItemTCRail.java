@@ -753,12 +753,10 @@ public class ItemTCRail extends ItemPart {
         int blockID = Block.getIdFromBlock(block);
         tcRail.setBallastMaterial(blockID);
         tcRail.ballastMetadata = world.getBlockMetadata(x, y, z);
-        System.out.println(tcRail.cx + " ," + tcRail.cz + " , " + tcRail.r);
         /** Gag rails containing reference to first turn rail */
         for (int gag = 1; gag <= posX.length - 1; gag++) {
             placeTrack(world, posX[gag], y + 1, posZ[gag], BlockIDs.tcRailGag.block, 0);
             tileGag[gag - 1] = (TileTCRailGag) world.getTileEntity(posX[gag], y + 1, posZ[gag]);
-            //tileGag[gag - 1].bbHeight = Math.max(0.125f, Math.min(1f, (gag - 1) / (float) (posX.length - 1)));
             tileGag[gag - 1].bbHeight = Math.max(0.125f, Math.min(1f, gag / (float) (posX.length - 1)));
 
         }

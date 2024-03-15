@@ -147,6 +147,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     public NBTTagCompound writeToNBT(NBTTagCompound nbt, boolean forSyncing){
+        super.writeToNBT(nbt);
         if(!forSyncing){
             NBTTagList nbttaglist = new NBTTagList();
             for (int i = 0; i < this.slots.length; i++) {
@@ -163,6 +164,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     public void readFromNBT(NBTTagCompound nbt, boolean forSyncing){
+        super.readFromNBT(nbt);
         if(!forSyncing){
             NBTTagList nbttaglist = nbt.getTagList("Items", Constants.NBT.TAG_COMPOUND);
             this.slots = new ItemStack[getSizeInventory()];
