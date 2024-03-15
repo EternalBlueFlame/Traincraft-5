@@ -75,7 +75,7 @@ public class ModelDuewagGT6ERLoco extends ModelConverter //Same as Filename
 		bodyModel[37] = new ModelRendererTurbo(this, 481, 25, textureX, textureY); // Box 5
 		bodyModel[38] = new ModelRendererTurbo(this, 265, 33, textureX, textureY); // Box 6
 		bodyModel[39] = new ModelRendererTurbo(this, 217, 1, textureX, textureY); // Box 294
-		bodyModel[40] = new ModelRendererTurbo(this, 281, 33, textureX, textureY); // Box 170 lamp
+		bodyModel[40] = new ModelRendererTurbo(this, 281, 33, textureX, textureY,"lamp"); // Box 170 lamp
 		bodyModel[41] = new ModelRendererTurbo(this, 379, 22, textureX, textureY); // Box 97
 		bodyModel[42] = new ModelRendererTurbo(this, 337, 33, textureX, textureY); // Box 98
 		bodyModel[43] = new ModelRendererTurbo(this, 369, 33, textureX, textureY); // Box 99
@@ -228,25 +228,25 @@ public class ModelDuewagGT6ERLoco extends ModelConverter //Same as Filename
 		bodyModel[190] = new ModelRendererTurbo(this, 177, 1, textureX, textureY); // Box 349
 		bodyModel[191] = new ModelRendererTurbo(this, 177, 1, textureX, textureY); // Box 376
 		bodyModel[192] = new ModelRendererTurbo(this, 313, 57, textureX, textureY); // Box 379
-		bodyModel[193] = new ModelRendererTurbo(this, 222, 91, textureX, textureY); // Box 328 lamp
+		bodyModel[193] = new ModelRendererTurbo(this, 222, 91, textureX, textureY,"lamp"); // Box 328 lamp
 		bodyModel[194] = new ModelRendererTurbo(this, 444, 62, textureX, textureY); // Box 333
 		bodyModel[195] = new ModelRendererTurbo(this, 169, 38, textureX, textureY); // Box 336
-		bodyModel[196] = new ModelRendererTurbo(this, 49, 1, textureX, textureY); // Sta_Light_1
-		bodyModel[197] = new ModelRendererTurbo(this, 49, 1, textureX, textureY); // Sta_Light_2
-		bodyModel[198] = new ModelRendererTurbo(this, 49, 1, textureX, textureY); // Sta_Light_4
-		bodyModel[199] = new ModelRendererTurbo(this, 49, 1, textureX, textureY); // Sta_Light_3
-		bodyModel[200] = new ModelRendererTurbo(this, 41, 1, textureX, textureY); // Box 381 lamp
-		bodyModel[201] = new ModelRendererTurbo(this, 41, 1, textureX, textureY); // Box 382 lamp
-		bodyModel[202] = new ModelRendererTurbo(this, 41, 1, textureX, textureY); // Box 383 lamp
-		bodyModel[203] = new ModelRendererTurbo(this, 41, 1, textureX, textureY); // Box 384 lamp
-		bodyModel[204] = new ModelRendererTurbo(this, 41, 5, textureX, textureY); // Box 385 lamp
-		bodyModel[205] = new ModelRendererTurbo(this, 41, 5, textureX, textureY); // Box 386 lamp
-		bodyModel[206] = new ModelRendererTurbo(this, 41, 5, textureX, textureY); // Box 387 lamp
-		bodyModel[207] = new ModelRendererTurbo(this, 41, 5, textureX, textureY); // Box 388 lamp
-		bodyModel[208] = new ModelRendererTurbo(this, 49, 5, textureX, textureY); // Box 389 lamp
-		bodyModel[209] = new ModelRendererTurbo(this, 49, 5, textureX, textureY); // Box 390 lamp
-		bodyModel[210] = new ModelRendererTurbo(this, 49, 5, textureX, textureY); // Box 391 lamp
-		bodyModel[211] = new ModelRendererTurbo(this, 49, 5, textureX, textureY); // Box 392 lamp
+		bodyModel[196] = new ModelRendererTurbo(this, 49, 1, textureX, textureY,"lamp"); // Sta_Light_1
+		bodyModel[197] = new ModelRendererTurbo(this, 49, 1, textureX, textureY,"lamp"); // Sta_Light_2
+		bodyModel[198] = new ModelRendererTurbo(this, 49, 1, textureX, textureY,"lamp"); // Sta_Light_4
+		bodyModel[199] = new ModelRendererTurbo(this, 49, 1, textureX, textureY,"lamp"); // Sta_Light_3
+		bodyModel[200] = new ModelRendererTurbo(this, 41, 1, textureX, textureY,"lamp"); // Box 381 lamp
+		bodyModel[201] = new ModelRendererTurbo(this, 41, 1, textureX, textureY,"lamp"); // Box 382 lamp
+		bodyModel[202] = new ModelRendererTurbo(this, 41, 1, textureX, textureY,"lamp"); // Box 383 lamp
+		bodyModel[203] = new ModelRendererTurbo(this, 41, 1, textureX, textureY,"lamp"); // Box 384 lamp
+		bodyModel[204] = new ModelRendererTurbo(this, 41, 5, textureX, textureY,"lamp"); // Box 385 lamp
+		bodyModel[205] = new ModelRendererTurbo(this, 41, 5, textureX, textureY,"lamp"); // Box 386 lamp
+		bodyModel[206] = new ModelRendererTurbo(this, 41, 5, textureX, textureY,"lamp"); // Box 387 lamp
+		bodyModel[207] = new ModelRendererTurbo(this, 41, 5, textureX, textureY,"lamp"); // Box 388 lamp
+		bodyModel[208] = new ModelRendererTurbo(this, 49, 5, textureX, textureY,"lamp"); // Box 389 lamp
+		bodyModel[209] = new ModelRendererTurbo(this, 49, 5, textureX, textureY,"lamp"); // Box 390 lamp
+		bodyModel[210] = new ModelRendererTurbo(this, 49, 5, textureX, textureY,"lamp"); // Box 391 lamp
+		bodyModel[211] = new ModelRendererTurbo(this, 49, 5, textureX, textureY,"lamp"); // Box 392 lamp
 		bodyModel[212] = new ModelRendererTurbo(this, 198, 65, textureX, textureY); // Box 361
 		bodyModel[213] = new ModelRendererTurbo(this, 198, 76, textureX, textureY); // Box 362
 		bodyModel[214] = new ModelRendererTurbo(this, 198, 52, textureX, textureY); // Box 363
@@ -334,7 +334,7 @@ public class ModelDuewagGT6ERLoco extends ModelConverter //Same as Filename
 		bodyModel[296] = new ModelRendererTurbo(this, 57, 124, textureX, textureY); // Box 171
 		bodyModel[297] = new ModelRendererTurbo(this, 42, 126, textureX, textureY); // Box 437
 		bodyModel[298] = new ModelRendererTurbo(this, 60, 126, textureX, textureY); // Box 438
-		bodyModel[299] = new ModelRendererTurbo(this, 51, 127, textureX, textureY); // Box 169 lamp
+		bodyModel[299] = new ModelRendererTurbo(this, 51, 127, textureX, textureY,"lamp"); // Box 169 lamp
 		bodyModel[300] = new ModelRendererTurbo(this, 29, 9, textureX, textureY); // Box 314
 		bodyModel[301] = new ModelRendererTurbo(this, 29, 9, textureX, textureY); // Box 315
 		bodyModel[302] = new ModelRendererTurbo(this, 29, 9, textureX, textureY); // Box 318
@@ -365,16 +365,16 @@ public class ModelDuewagGT6ERLoco extends ModelConverter //Same as Filename
 		bodyModel[327] = new ModelRendererTurbo(this, 29, 20, textureX, textureY); // Box 345
 		bodyModel[328] = new ModelRendererTurbo(this, 29, 20, textureX, textureY); // Box 346
 		bodyModel[329] = new ModelRendererTurbo(this, 29, 20, textureX, textureY); // Box 347
-		bodyModel[330] = new ModelRendererTurbo(this, 34, 20, textureX, textureY); // Box 356 lamp
-		bodyModel[331] = new ModelRendererTurbo(this, 34, 20, textureX, textureY); // Box 357 lamp
-		bodyModel[332] = new ModelRendererTurbo(this, 34, 20, textureX, textureY); // Box 358 lamp
-		bodyModel[333] = new ModelRendererTurbo(this, 34, 20, textureX, textureY); // Box 359 lamp
-		bodyModel[334] = new ModelRendererTurbo(this, 34, 20, textureX, textureY); // Box 359 lamp
-		bodyModel[335] = new ModelRendererTurbo(this, 34, 20, textureX, textureY); // Box 360 lamp
+		bodyModel[330] = new ModelRendererTurbo(this, 34, 20, textureX, textureY,"lamp"); // Box 356 lamp
+		bodyModel[331] = new ModelRendererTurbo(this, 34, 20, textureX, textureY,"lamp"); // Box 357 lamp
+		bodyModel[332] = new ModelRendererTurbo(this, 34, 20, textureX, textureY,"lamp"); // Box 358 lamp
+		bodyModel[333] = new ModelRendererTurbo(this, 34, 20, textureX, textureY,"lamp"); // Box 359 lamp
+		bodyModel[334] = new ModelRendererTurbo(this, 34, 20, textureX, textureY,"lamp"); // Box 359 lamp
+		bodyModel[335] = new ModelRendererTurbo(this, 34, 20, textureX, textureY,"lamp"); // Box 360 lamp
 		bodyModel[336] = new ModelRendererTurbo(this, 29, 20, textureX, textureY); // Box 361
 		bodyModel[337] = new ModelRendererTurbo(this, 29, 20, textureX, textureY); // Box 362
-		bodyModel[338] = new ModelRendererTurbo(this, 34, 20, textureX, textureY); // Box 363 lamp
-		bodyModel[339] = new ModelRendererTurbo(this, 34, 20, textureX, textureY); // Box 364 lamp
+		bodyModel[338] = new ModelRendererTurbo(this, 34, 20, textureX, textureY,"lamp"); // Box 363 lamp
+		bodyModel[339] = new ModelRendererTurbo(this, 34, 20, textureX, textureY,"lamp"); // Box 364 lamp
 		bodyModel[340] = new ModelRendererTurbo(this, 29, 20, textureX, textureY); // Box 365
 		bodyModel[341] = new ModelRendererTurbo(this, 29, 20, textureX, textureY); // Box 366
 		bodyModel[342] = new ModelRendererTurbo(this, 141, 169, textureX, textureY); // Box 359
@@ -527,7 +527,7 @@ public class ModelDuewagGT6ERLoco extends ModelConverter //Same as Filename
 		bodyModel[19].addShapeBox(0F, 0F, 0F, 2, 21, 1, 0F,0F, 1F, 0.25F, 0F, 1F, -0.5F, 0F, 1F, 0.3F, 0F, 1F, -0.25F, 0F, 0F, 0.25F, 0F, 0F, -0.5F, 0F, 0F, 0.3F, 0F, 0F, -0.25F); // Box 184
 		bodyModel[19].setRotationPoint(-28.5F, -15F, 7F);
 
-		bodyModel[20].addShapeBox(0F, 0F, 0F, 1, 1, 11, 0F,-0.5F, 0F, -2F, 0F, 0F, -0.5F, 0F, 0F, -1.5F, -0.5F, 0F, -3F, -0.5F, 0.5F, -2F, 0F, 0.5F, -0.5F, 0F, 0.5F, -1.5F, -0.5F, 0.5F, -3F); // Box 186
+		bodyModel[20].addShapeBox(0F, 0F, 0F, 1, 1, 11, 0F,-0.5F, 0F, -2F, 0F, 0F, -0.5F, 0F, 0F, -1.5F, -0.5F, 0F, -3F, -0.5F, 1F, -2F, 0F, 1F, -0.5F, 0F, 1F, -1.5F, -0.5F, 1F, -3F); // Box 186
 		bodyModel[20].setRotationPoint(-32.7F, 4F, -5F);
 
 		bodyModel[21].addShapeBox(0F, 0F, -0.5F, 2, 20, 1, 0F,0F, 1F, -0.25F, 0.5F, 1F, -1F, 0.5F, 1F, 0.5F, 0F, 1F, -0.25F, 0F, 0F, -0.25F, 0.5F, 0F, -1F, 0.5F, 0F, 0.5F, 0F, 0F, -0.25F); // Box 82
@@ -842,10 +842,10 @@ public class ModelDuewagGT6ERLoco extends ModelConverter //Same as Filename
 		bodyModel[124].addShapeBox(0F, 0F, 0F, 2, 2, 2, 0F,0F, 0F, 0F, 0F, 0F, 0F, -0.5F, 0F, -0.5F, 0F, 0F, 0F, 0F, -0.3F, 0F, 0F, -0.3F, 0F, -0.5F, 0F, -0.4F, 0F, 0F, 0.1F); // Box 569
 		bodyModel[124].setRotationPoint(21.5F, -21F, 6.2F);
 
-		bodyModel[125].addShapeBox(0F, 0F, 0F, 1, 1, 1, 0F,0F, 0F, -1.5F, 0F, 0F, 0.25F, 0F, 0F, 0F, 0F, 0F, 2.5F, 0F, 0.5F, -1.5F, 0F, 0.5F, 0.25F, 0F, 0.5F, 0F, 0F, 0.5F, 2.5F); // Box 279
+		bodyModel[125].addShapeBox(0F, 0F, 0F, 1, 1, 1, 0F,0F, 0F, -1.5F, 0F, 0F, 0.25F, 0F, 0F, 0F, 0F, 0F, 2.5F, 0F, 1F, -1.5F, 0F, 1F, 0.25F, 0F, 1F, 0F, 0F, 1F, 2.5F); // Box 279
 		bodyModel[125].setRotationPoint(-31.7F, 4F, -6F);
 
-		bodyModel[126].addShapeBox(0F, 0F, 0F, 1, 1, 1, 0F,0F, 0F, 2.5F, 0F, 0F, 0F, 0F, 0F, 0.25F, 0F, 0F, -1.5F, 0F, 0.5F, 2.5F, 0F, 0.5F, 0F, 0F, 0.5F, 0.25F, 0F, 0.5F, -1.5F); // Box 280
+		bodyModel[126].addShapeBox(0F, 0F, 0F, 1, 1, 1, 0F,0F, 0F, 2.5F, 0F, 0F, 0F, 0F, 0F, 0.25F, 0F, 0F, -1.5F, 0F, 1F, 2.5F, 0F, 1F, 0F, 0F, 1F, 0.25F, 0F, 1F, -1.5F); // Box 280
 		bodyModel[126].setRotationPoint(-31.7F, 4F, 5F);
 
 		bodyModel[127].addBox(0F, 0F, 0F, 1, 1, 12, 0F); // Box 284
@@ -1277,10 +1277,10 @@ public class ModelDuewagGT6ERLoco extends ModelConverter //Same as Filename
 		bodyModel[269].addShapeBox(0F, 0F, 0F, 0, 13, 1, 0F,0F, 0F, -0.5F, 0F, 0F, -0.5F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.5F, 0F, 0F, -0.5F, 0F, 0F, 0F, 0F, 0F, 0F); // Box 420
 		bodyModel[269].setRotationPoint(24.25F, -18F, 4F);
 
-		bodyModel[270].addShapeBox(0F, 0F, 0F, 1, 10, 10, 0F,0.2F, 0F, -0.25F, 0F, 0F, 2F, 0F, 0F, 2F, 0.2F, 0F, -0.25F, 0.2F, 0F, -0.25F, 0F, 0F, 2F, 0F, 0F, 2F, 0.2F, 0F, -0.25F); // Box 46
+		bodyModel[270].addShapeBox(0F, 0F, 0F, 1, 10, 10, 0F,0.2F, 0F, -0.25F, 0F, 0F, 2F, 0F, 0F, 2F, 0.2F, 0F, -0.25F, 0.2F, 0.5F, -0.25F, 0F, 0.5F, 2F, 0F, 0.5F, 2F, 0.2F, 0.5F, -0.25F); // Box 46
 		bodyModel[270].setRotationPoint(-31F, -4.5F, -5F);
 
-		bodyModel[271].addShapeBox(0F, 0F, 0F, 2, 10, 10, 0F,-0.38F, 0F, -3.5F, -1F, 0F, -0.25F, -1F, 0F, -0.25F, -0.38F, 0F, -3.5F, -0.38F, 0F, -3.5F, -1F, 0F, -0.25F, -1F, 0F, -0.25F, -0.38F, 0F, -3.5F); // Box 186
+		bodyModel[271].addShapeBox(0F, 0F, 0F, 2, 10, 10, 0F,-0.38F, 0F, -3.5F, -1F, 0F, -0.25F, -1F, 0F, -0.25F, -0.38F, 0F, -3.5F, -0.38F, 0.5F, -3.5F, -1F, 0.5F, -0.25F, -1F, 0.5F, -0.25F, -0.38F, 0.5F, -3.5F); // Box 186
 		bodyModel[271].setRotationPoint(-32.2F, -4.5F, -5F);
 
 		bodyModel[272].addShapeBox(0F, 0F, 0F, 2, 1, 3, 0F,-0.2F, 0.25F, -2F, -0.5F, 0.25F, -2F, -0.5F, 0.25F, 0F, -0.5F, 0.25F, -0.5F, 1F, 0F, -0.35F, -0.5F, 0F, -2F, -0.5F, 0F, 0F, 0F, 0F, -0.75F); // Box 339
@@ -1289,10 +1289,10 @@ public class ModelDuewagGT6ERLoco extends ModelConverter //Same as Filename
 		bodyModel[273].addShapeBox(0F, 0F, 0F, 2, 1, 3, 0F,-0.8F, -0.4F, -2.45F, -1F, -0.4F, -2.3F, -0.5F, -0.4F, 0F, -0.9F, -0.4F, -0.25F, -0.2F, 1F, -1.95F, -1F, 1F, -2F, -0.5F, 1F, 0F, -0.5F, 1F, -0.5F); // Box 340
 		bodyModel[273].setRotationPoint(-30F, -7.75F, 4.75F);
 
-		bodyModel[274].addShapeBox(0F, 0F, 0F, 1, 10, 1, 0F,0F, 0F, 0.5F, 0.5F, 0F, 1.25F, 0.5F, 0F, -1F, 0F, 0F, 0F, 0F, 0F, 0.5F, 0.5F, 0F, 1.25F, 0.5F, 0F, -1F, 0F, 0F, 0F); // Box 310
+		bodyModel[274].addShapeBox(0F, 0F, 0F, 1, 10, 1, 0F,0F, 0F, 0.5F, 0.5F, 0F, 1.25F, 0.5F, 0F, -1F, 0F, 0F, 0F, 0F, 0.5F, 0.5F, 0.5F, 0.5F, 1.25F, 0.5F, 0.5F, -1F, 0F, 0.5F, 0F); // Box 310
 		bodyModel[274].setRotationPoint(-30F, -4.5F, -6.5F);
 
-		bodyModel[275].addShapeBox(0F, 0F, 0F, 1, 10, 1, 0F,0F, 0F, 0F, 0.5F, 0F, -1F, 0.5F, 0F, 1F, 0F, 0F, 0.25F, 0F, 0F, 0F, 0.5F, 0F, -1F, 0.5F, 0F, 1F, 0F, 0F, 0.25F); // Box 312
+		bodyModel[275].addShapeBox(0F, 0F, 0F, 1, 10, 1, 0F,0F, 0F, 0F, 0.5F, 0F, -1F, 0.5F, 0F, 1F, 0F, 0F, 0.25F, 0F, 0.5F, 0F, 0.5F, 0.5F, -1F, 0.5F, 0.5F, 1F, 0F, 0.5F, 0.25F); // Box 312
 		bodyModel[275].setRotationPoint(-30F, -4.5F, 5.75F);
 
 		bodyModel[276].addShapeBox(0F, 0F, 0F, 2, 2, 3, 0F,0.3F, -0.875F, -0.5F, 0.1F, -1.25F, 0.25F, -0.5F, -0.55F, 0F, -0.08F, -0.75F, -0.6F, -0.15F, -0.6F, -1.95F, 0.1F, -0.2F, -0.45F, -0.5F, -0.2F, 0F, -0.25F, -0.6F, -0.5F); // Box 313
@@ -1572,7 +1572,7 @@ public class ModelDuewagGT6ERLoco extends ModelConverter //Same as Filename
 		bodyModel[367].addShapeBox(0F, 0F, 0F, 5, 1, 5, 0F,0F, -1.5F, -0.5F, 0F, -1F, 0F, 0F, -0.2F, 0F, 0F, -1.5F, 0F, 0F, 0.5F, -0.5F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0.5F, 0F); // Box 382
 		bodyModel[367].setRotationPoint(-26.5F, -20F, -8F);
 
-		bodyModel[368].addShapeBox(0F, 0F, 0F, 2, 1, 3, 0F,-0.25F, 1.3F, -0.5F, -0.5F, 0.9F, 0F, 0.1F, 0.9F, -0.45F, -0.15F, 1.3F, -1.95F, -0.9F, 0.65F, -0.25F, -0.5F, 0.65F, 0F, -0.6F, 0.65F, -2.1F, -0.8F, 0.65F, -2.4F); // Box 383
+		bodyModel[368].addShapeBox(0F, 0F, 0F, 2, 1, 3, 0F,-0.25F, 1.3F, -0.5F, -0.5F, 0.9F, 0F, 0.1F, 0.9F, -0.45F, -0.15F, 1.3F, -1.95F, -0.9F, 0.65F, -0.25F, -0.5F, 0.65F, 0F, -0.6F, 0.65F, -1.9F, -0.8F, 0.65F, -2.4F); // Box 383
 		bodyModel[368].setRotationPoint(-30F, -11F, -7.75F);
 
 		bodyModel[369].addShapeBox(0F, 0F, 0F, 1, 1, 2, 0F,0F, -1.5F, 0F, 0F, -1.5F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, -0.25F, 1F, 0F, -0.25F, 1F, 0F, -0.25F, 0F, 0F, -0.25F, 0F, 0F); // Box 583
@@ -1734,13 +1734,13 @@ public class ModelDuewagGT6ERLoco extends ModelConverter //Same as Filename
 		bodyModel[421].addShapeBox(0F, 0F, 0F, 1, 3, 1, 0F,0F, -0.85F, -0.5F, 0F, -0.7F, -0.25F, 0F, -0.6F, -0.25F, 0F, -0.65F, -0.25F, 0F, -0.7F, -0.5F, 0F, -0.35F, -0.25F, 0F, -0.3F, -0.25F, 0F, -0.5F, -0.25F); // Box 648
 		bodyModel[421].setRotationPoint(-31.75F, -0.7F, 2.25F);
 
-		bodyModel[422].addShapeBox(0F, 0F, 0F, 2, 1, 1, 0F,-0.9F, 0.35F, -0.25F, -0.5F, 0.35F, 0F, -0.65F, 0.35F, -0.15F, -0.8F, 0.35F, -0.4F, -0.9F, 0.65F, -0.25F, -0.5F, 0.65F, 0F, -1F, 0.65F, -0.3F, -0.8F, 0.65F, -0.45F); // Box 431
+		bodyModel[422].addShapeBox(0F, 0F, 0F, 2, 1, 1, 0F,-0.9F, 0.35F, -0.25F, -0.5F, 0.35F, 0F, -0.65F, 0.35F, 0.05F, -0.8F, 0.35F, -0.4F, -0.9F, 0.65F, -0.25F, -0.5F, 0.65F, 0F, -1F, 0.65F, -0.3F, -0.8F, 0.65F, -0.45F); // Box 431
 		bodyModel[422].setRotationPoint(-30F, -9F, -7.75F);
 
-		bodyModel[423].addShapeBox(0F, 0F, 0F, 2, 1, 3, 0F,-0.15F, 1.3F, -1.95F, 0.1F, 0.9F, -0.45F, -0.5F, 0.9F, 0F, -0.25F, 1.3F, -0.5F, -0.8F, 0.65F, -2.4F, -0.6F, 0.65F, -2.1F, -0.5F, 0.65F, 0F, -0.9F, 0.65F, -0.25F); // Box 432
+		bodyModel[423].addShapeBox(0F, 0F, 0F, 2, 1, 3, 0F,-0.15F, 1.3F, -1.95F, 0.1F, 0.9F, -0.45F, -0.5F, 0.9F, 0F, -0.25F, 1.3F, -0.5F, -0.8F, 0.65F, -2.4F, -0.6F, 0.65F, -1.9F, -0.5F, 0.65F, 0F, -0.9F, 0.65F, -0.25F); // Box 432
 		bodyModel[423].setRotationPoint(-30F, -11F, 4.75F);
 
-		bodyModel[424].addShapeBox(0F, 0F, 0F, 2, 1, 1, 0F,-0.8F, 0.35F, -0.4F, -0.65F, 0.35F, -0.15F, -0.5F, 0.35F, 0F, -0.9F, 0.35F, -0.25F, -0.8F, 0.65F, -0.45F, -1F, 0.65F, -0.3F, -0.5F, 0.65F, 0F, -0.9F, 0.65F, -0.25F); // Box 433
+		bodyModel[424].addShapeBox(0F, 0F, 0F, 2, 1, 1, 0F,-0.8F, 0.35F, -0.4F, -0.65F, 0.35F, 0.05F, -0.5F, 0.35F, 0F, -0.9F, 0.35F, -0.25F, -0.8F, 0.65F, -0.45F, -1F, 0.65F, -0.3F, -0.5F, 0.65F, 0F, -0.9F, 0.65F, -0.25F); // Box 433
 		bodyModel[424].setRotationPoint(-30F, -9F, 6.75F);
 
 		bodyModel[425].addShapeBox(0F, 0F, 0F, 1, 1, 3, 0F,0F, 0F, 0F, 0F, 0F, 0F, 0F, 0F, 0.2F, 0F, 0F, 0.2F, 0F, 0.1F, 0F, 0F, 0.1F, 0F, 0F, 0.7F, 0.2F, 0F, 0.7F, 0.2F); // Box 651
