@@ -211,6 +211,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					|| tile.getType().equals(TrackTypes.SMALL_ROAD_CROSSING.getLabel())
 					|| tile.getType().equals(TrackTypes.SMALL_ROAD_CROSSING_1.getLabel())
 					|| tile.getType().equals(TrackTypes.SMALL_ROAD_CROSSING_2.getLabel())
+					|| tile.getType().equals(TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC.getLabel())
 					|| tile.getType().equals(TrackTypes.SMALL_DIAGONAL_STRAIGHT.getLabel())
 					|| tile.getType().equals(TrackTypes.MEDIUM_DIAGONAL_STRAIGHT.getLabel())
 					|| tile.getType().equals(TrackTypes.LONG_DIAGONAL_STRAIGHT.getLabel())

@@ -138,6 +138,7 @@ public class TCItems {
 		ItemIDs.tcRailSmallRoadCrossing.item = new ItemTCRail(ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING);
 		ItemIDs.tcRailSmallRoadCrossing1.item = new ItemTCRail(ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING_1);
 		ItemIDs.tcRailSmallRoadCrossing2.item = new ItemTCRail(ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING_2);
+		ItemIDs.tcRailSmallRoadCrossingDynamic.item = new ItemTCRail(ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC);
 
 		/* Normal Crossways*/
 		ItemIDs.tcRailTwoWaysCrossing.item = new ItemTCRail(ItemTCRail.TrackTypes.TWO_WAYS_CROSSING);

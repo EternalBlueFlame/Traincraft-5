@@ -70,9 +70,13 @@ public class CustomRenderHandler {
         GL11.glTranslated(x - px, y + 1 - py, z - pz);
         GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
         GL11.glEnable(GL11.GL_BLEND);
-
+        blockInfo();
         // Straights
         if (item.getTrackType().getType() == TCRailTypes.STRAIGHT) {
+
+            if (item.getTrackType() == ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC) {
+                blockInfo();
+            }
             int length = 1;
             if (item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_STRAIGHT || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_STRAIGHT)
                 length = 3;
@@ -85,8 +89,8 @@ public class CustomRenderHandler {
                 float dx = dir.getX() * i;
                 float dz = dir.getY() * i;
                 if (item.getTrackType().getLabel().contains("EMBEDDED"))
-                    RenderTCRail.modelSmallStraight.render("embedded", facing, dx, 0, dz, r, g, b, a);
-                else RenderTCRail.modelSmallStraight.render("normal", facing, dx, 0, dz, r, g, b, a);
+                    RenderTCRail.modelSmallStraight.render("embedded", facing, dx, 0, dz, r, g, b, a, ballastMaterial, 16777215);
+                else RenderTCRail.modelSmallStraight.render("normal", facing, dx, 0, dz, r, g, b, a,ballastMaterial, 16777215);
             }
         }
 
@@ -122,11 +126,14 @@ public class CustomRenderHandler {
 
             // Crossings
         } else if (item.getTrackType() == ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING) {
-            RenderTCRail.modelSmallStraight.render("crossing", facing, 0, 0, 0, r, g, b, a);
+            RenderTCRail.modelSmallStraight.render("crossing", facing, 0, 0, 0, r, g, b, a, null, 16777215);
         } else if (item.getTrackType() == ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING_1) {
-            RenderTCRail.modelSmallStraight.render("crossing1", facing, 0, 0, 0, r, g, b, a);
+            RenderTCRail.modelSmallStraight.render("crossing1", facing, 0, 0, 0, r, g, b, a, null, 16777215);
         } else if (item.getTrackType() == ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING_2) {
-            RenderTCRail.modelSmallStraight.render("crossing2", facing, 0, 0, 0, r, g, b, a);
+            RenderTCRail.modelSmallStraight.render("crossing2", facing, 0, 0, 0, r, g, b, a, null, 16777215);
+        } else if (item.getTrackType() == ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC) {
+            blockInfo();
+            RenderTCRail.modelSmallStraight.render("dynamic", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
         } else if (item.getTrackType() == ItemTCRail.TrackTypes.DOUBLE_DIAMOND_CROSSING || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_DOUBLE_DIAMOND_CROSSING) {
             float dx = dir.getX();
             float dz = dir.getY();
@@ -150,10 +157,10 @@ public class CustomRenderHandler {
             float dz = dir.getY();
 
             RenderTCRail.modelTwoWaysCrossing.render(labelType + "_crossing", dx, 0, dz, facing, r, g, b, a);
-            RenderTCRail.modelSmallStraight.render(labelType, 0, dx, 0, dz + 1, r, g, b, a);
-            RenderTCRail.modelSmallStraight.render(labelType, 1, dx + 1, 0, dz, r, g, b, a);
-            RenderTCRail.modelSmallStraight.render(labelType, 2, dx, 0, dz - 1, r, g, b, a);
-            RenderTCRail.modelSmallStraight.render(labelType, 3, dx - 1, 0, dz, r, g, b, a);
+            RenderTCRail.modelSmallStraight.render(labelType, 0, dx, 0, dz + 1, r, g, b, a, null, 16777215);
+            RenderTCRail.modelSmallStraight.render(labelType, 1, dx + 1, 0, dz, r, g, b, a, null, 16777215);
+            RenderTCRail.modelSmallStraight.render(labelType, 2, dx, 0, dz - 1, r, g, b, a, null, 16777215);
+            RenderTCRail.modelSmallStraight.render(labelType, 3, dx - 1, 0, dz, r, g, b, a, null, 16777215);
 
             // Slopes
         } else if (item.getTrackType() == ItemTCRail.TrackTypes.SLOPE_BALLAST) {
@@ -357,18 +364,18 @@ public class CustomRenderHandler {
 
             // Render straight tracks
             for (int out_0 = out_0_start; out_0 < out_0_end + 1; out_0++) {
-                RenderTCRail.modelSmallStraight.render(variant, facing, dx * out_0, 0, dz * out_0, r, g, b, a);
+                RenderTCRail.modelSmallStraight.render(variant, facing, dx * out_0, 0, dz * out_0, r, g, b, a, null, 16777215);
             }
 
             if (item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_PARALLEL_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_PARALLEL_SWITCH) {
-                RenderTCRail.modelSmallStraight.render(variant, facing, 0, 0, 0, r, g, b, a);
-                RenderTCRail.modelSmallStraight.render(variant, facing, dx * out_1_0 + dx_1 * out_1_1, 0, dz * out_1_0 + dz_1 * out_1_1, r, g, b, a);
+                RenderTCRail.modelSmallStraight.render(variant, facing, 0, 0, 0, r, g, b, a, null, 16777215);
+                RenderTCRail.modelSmallStraight.render(variant, facing, dx * out_1_0 + dx_1 * out_1_1, 0, dz * out_1_0 + dz_1 * out_1_1, r, g, b, a, null, 16777215);
             }
 
             else if (!(item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.LARGE_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.LARGE_PARALLEL_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_PARALLEL_SWITCH)) {
 
-                RenderTCRail.modelSmallStraight.render(variant, facing, 0, 0, 0, r, g, b, a);
-                RenderTCRail.modelSmallStraight.render(variant, facing_1, dx * out_1_0 + dx_1 * out_1_1, 0, dz * out_1_0 + dz_1 * out_1_1, r, g, b, a);
+                RenderTCRail.modelSmallStraight.render(variant, facing, 0, 0, 0, r, g, b, a, null, 16777215);
+                RenderTCRail.modelSmallStraight.render(variant, facing_1, dx * out_1_0 + dx_1 * out_1_1, 0, dz * out_1_0 + dz_1 * out_1_1, r, g, b, a, null, 16777215);
             }
 
             else{

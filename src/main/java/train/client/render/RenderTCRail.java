@@ -395,6 +395,10 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                         modelRoadCrossing.render("crossing2", railTile, x, y, z);
                         break;
                     }
+                    case SMALL_ROAD_CROSSING_DYNAMIC:{
+                        modelRoadCrossing.render("dynamic", railTile, x, y, z);
+                        break;
+                    }
                     case EMBEDDED_MEDIUM_STRAIGHT:
                     case EMBEDDED_LONG_STRAIGHT:
                     case EMBEDDED_VERY_LONG_STRAIGHT: {
@@ -459,20 +463,20 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                     }
                     case EMBEDDED_TURN_29X29:
                     case EMBEDDED_RIGHT_TURN_29X29: {
-                        modelRightTurn.render("29x", railTile, x, y, z);
+                        modelRightTurn.render("embedded_29x", railTile, x, y, z);
                         break;
                     }
                     case EMBEDDED_LEFT_TURN_29X29: {
-                        modelLeftTurn.render("29x", railTile, x, y, z);
+                        modelLeftTurn.render("embedded_29x", railTile, x, y, z);
                         break;
                     }
                     case EMBEDDED_TURN_32X32:
                     case EMBEDDED_RIGHT_TURN_32X32: {
-                        modelRightTurn.render("32x", railTile, x, y, z);
+                        modelRightTurn.render("embedded_32x", railTile, x, y, z);
                         break;
                     }
                     case EMBEDDED_LEFT_TURN_32X32: {
-                        modelLeftTurn.render("32x", railTile, x, y, z);
+                        modelLeftTurn.render("embedded_32x", railTile, x, y, z);
                         break;
                     }
                     case EMBEDDED_MEDIUM_45DEGREE_TURN:

@@ -10,6 +10,7 @@ package train.common.library;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
 import train.common.items.*;
+import train.common.items.slabs.*;
 import train.common.wellcar.ItemFortyFootContainer;
 
 public enum BlockIDs {
@@ -32,7 +33,35 @@ public enum BlockIDs {
 
 	openFurnaceIdle(false, null),
 	openFurnaceActive(false, null),
+
 	oreTC(true, ItemBlockOreTC.class),
+	dirtyBallast(false,null),
+	dirtierBallast(false,null),
+	highSpeedBallast(false, null),
+	poweredGravel(false,null),
+	snowGravel(false,null),
+	asphalt(false, null),
+
+	ballastSlab(true, ItemBallastSlab.class),
+	ballastDoubleSlab(true, ItemBallastSlab.class),
+	dirtyBallastSlab(true, ItemDirtyBallastSlab.class),
+	dirtyBallastDoubleSlab(true, ItemDirtyBallastSlab.class),
+	dirtierBallastSlab(true, ItemDirtierBallastSlab.class),
+	dirtierBallastDoubleSlab(true, ItemDirtierBallastSlab.class),
+	highSpeedBallastSlab(true, ItemHighSpeedBallastSlab.class),
+	highSpeedBallastDoubleSlab(true, ItemHighSpeedBallastSlab.class),
+	snowGravelSlab(true, ItemSnowGravelSlab.class),
+	snowGravelDoubleSlab(true, ItemSnowGravelSlab.class),
+	asphaltSlab(true, ItemAsphaltSlab.class),
+	asphaltDoubleSlab(true, ItemAsphaltSlab.class),
+
+	ballastStairs(false, null),
+	dirtyBallastStairs(false, null),
+	dirtierBallastStairs(false, null),
+	highSpeedBallastStairs(false, null),
+	snowGravelStairs(false, null),
+	asphaltStairs(false, null),
+
 	lantern(false, null),
 	switchStand(false, null),
 	MFPBWigWag(false, null),
@@ -60,12 +89,6 @@ public enum BlockIDs {
 	owoYardSwitchStand(true,ItemBlockOWOYardSwitch.class),
 	overheadWire(false,null),
 	overheadWireDouble(false,null),
-	poweredGravel(false,null),
-	snowGravel(false,null),
-	dirtyBallast(false,null),
-	dirtierBallast(false,null),
-	asphalt(false, null),
-	highSpeedBallast(false, null),
 	signalSpanish(false,null),//ItemsignalSpanish.class
 	kSignal(false,null),
 	metroMadridPole(false, null),
@@ -73,13 +96,6 @@ public enum BlockIDs {
 	speedSign(false, null),
 
 
-
-	//Slabs
-	asphaltSlab(true, ItemAsphaltSlab.class),
-	asphaltDoubleSlab(true, ItemAsphaltSlab.class),
-
-	//Stairs
-	asphaltStairs(false, null),
 
 	;
 

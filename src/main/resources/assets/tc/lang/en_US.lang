@@ -79,8 +79,20 @@ tile.tc:overheadWireDouble.name=Double Overhead Wires
 tile.tc:poweredGravel.name=Powered Gravel
 tile.tc:snowGravel.name=Snowy Gravel
 tile.tc:asphalt.name=Asphalt Block
+tile.tc:ballastSlab.name=Ballast Slab
+tile.tc:dirtyBallastSlab.name=Dirty Ballast Slab
+tile.tc:dirtierBallastSlab.name=Dirtier Ballast Slab
+tile.tc:highSpeedBallastSlab.name=High Speed Ballast Slab
+tile.tc:snowGravelSlab.name=Snow Gravel Slab
 tile.tc:asphaltSlab.name=Asphalt Slab
+
+tile.tc:ballastStairs.name=Ballast Stairs
+tile.tc:dirtyBallastStairs.name=Dirty Ballast Stairs
+tile.tc:dirtierBallastStairs.name=Dirtier Ballast Stairs
+tile.tc:highSpeedBallastStairs.name=High Speed Ballst Stairs
+tile.tc:snowGravelStairs.name=Snow Gravel Stairs
 tile.tc:asphaltStairs.name=Asphalt Stairs
+
 tile.tc:highSpeedBallast.name=High Speed Ballast
 tile.tc:signalSpanish.name=Spanish Signal
 tile.tc:kSignal.name=Ks Signal
@@ -205,6 +217,7 @@ item.tc:tcRailEmbeddedFourWaysCrossing.name=Embedded Four Ways Crossing
 item.tc:tcRailSmallRoadCrossing.name=RailRoad Crossing (Black Asphalt)
 item.tc:tcRailSmallRoadCrossing1.name=RailRoad Crossing (Clean Asphalt)
 item.tc:tcRailSmallRoadCrossing2.name=RailRoad Crossing (light Gray Asphalt)
+item.tc:tcRailSmallRoadCrossingDynamic.name=RailRoad Crossing (Dynamic)
 
 item.tc:tcRailSlopeWood.name=Slope Track (Wood, 1x6)
 item.tc:tcRailSlopeGravel.name=Slope Track (Gravel, 1x6)

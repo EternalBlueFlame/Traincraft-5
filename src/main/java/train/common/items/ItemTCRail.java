@@ -35,6 +35,8 @@ public class ItemTCRail extends ItemPart {
     private String typeVariantDiagonal = TrackTypes.SMALL_DIAGONAL_STRAIGHT.getLabel();
     private String typeVariant90Turn;
     private String typeVariantCrossing;
+
+
     private Item idVariantSwitch;
     TrackTypes tempType;
 
@@ -306,7 +308,9 @@ public class ItemTCRail extends ItemPart {
 
         SMALL_ROAD_CROSSING("SMALL_ROAD_CROSSING", STRAIGHT, ItemIDs.tcRailSmallRoadCrossing, "1x1"),
         SMALL_ROAD_CROSSING_1("SMALL_ROAD_CROSSING_1", STRAIGHT, ItemIDs.tcRailSmallRoadCrossing1, "1x1"),
-        SMALL_ROAD_CROSSING_2("SMALL_ROAD_CROSSING_2", STRAIGHT, ItemIDs.tcRailSmallRoadCrossing2, "1x1");
+        SMALL_ROAD_CROSSING_2("SMALL_ROAD_CROSSING_2", STRAIGHT, ItemIDs.tcRailSmallRoadCrossing2, "1x1"),
+
+        SMALL_ROAD_CROSSING_DYNAMIC("SMALL_ROAD_CROSSING_DYNAMIC", STRAIGHT, ItemIDs.tcRailSmallRoadCrossingDynamic, "1x1");
 
         private final String label;
         private final TCRailTypes type;
@@ -846,6 +850,7 @@ public class ItemTCRail extends ItemPart {
                 || type == TrackTypes.SMALL_ROAD_CROSSING
                 || type == TrackTypes.SMALL_ROAD_CROSSING_1
                 || type == TrackTypes.SMALL_ROAD_CROSSING_2
+                || type == TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC
                 || type == TrackTypes.EMBEDDED_SMALL_STRAIGHT
                 || type == TrackTypes.TURN_1X1
                 || type == TrackTypes.EMBEDDED_TURN_1X1)
@@ -1093,7 +1098,7 @@ public class ItemTCRail extends ItemPart {
             }
             return true;*/
 
-            if (type == TrackTypes.SMALL_STRAIGHT || type == TrackTypes.EMBEDDED_SMALL_STRAIGHT || type == TrackTypes.SMALL_ROAD_CROSSING || type == TrackTypes.SMALL_ROAD_CROSSING_1 || type == TrackTypes.SMALL_ROAD_CROSSING_2) {
+            if (type == TrackTypes.SMALL_STRAIGHT || type == TrackTypes.EMBEDDED_SMALL_STRAIGHT || type == TrackTypes.SMALL_ROAD_CROSSING || type == TrackTypes.SMALL_ROAD_CROSSING_1 || type == TrackTypes.SMALL_ROAD_CROSSING_2 || type == TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC) {
 
                 if (!smallStraight(player, world, x, y, z, l, type))
                     return false;
@@ -2346,6 +2351,14 @@ public class ItemTCRail extends ItemPart {
             }
 
             else if (tempType == TrackTypes.LARGE_LEFT_PARALLEL_SWITCH || tempType == TrackTypes.EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH){
+                switch (tempType) {
+                    case LARGE_LEFT_PARALLEL_SWITCH:
+                        typeVariantStraight = TrackTypes.SMALL_STRAIGHT.getLabel();
+                        break;
+                    case EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH:
+                        typeVariantStraight = TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel();
+                        break;
+                }
                 if (!largeLeftParallelSwitch(player, world, x, y, z, l, tempType, typeVariantStraight)){
                     return false;
                 }
@@ -3233,6 +3246,13 @@ public class ItemTCRail extends ItemPart {
         tcRail.cz = z;
         tcRail.setType(type.getLabel());
         tcRail.idDrop = this.type.getItem().item;
+
+        if (type == TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC){
+            Block block = world.getBlock(x, y, z);
+            int blockID = Block.getIdFromBlock(block);
+            tcRail.setBallastMaterial(blockID);
+            tcRail.ballastMetadata = world.getBlockMetadata(x, y, z);
+        }
         return true;
     }
 
