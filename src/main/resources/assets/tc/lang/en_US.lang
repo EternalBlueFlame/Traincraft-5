@@ -909,6 +909,17 @@ menu.item.types=Type
 menu.item.mhp=MHP
 menu.item.speed=Top Speed
 menu.item.weight=Weight
+menu.item.country=Country
+
+<!-- ## GUI ## -->
+menu.item.=N/A
+menu.item.be=Belgium
+menu.item.uk=United Kingdom
+menu.item.us=United States
+menu.item.cz=Czech Republic
+menu.item.de=Germany
+menu.item.es=Spain
+
 
 train.owner.name=You are not the owner!
 train.locked.name=Locked

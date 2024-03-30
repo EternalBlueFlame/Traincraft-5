@@ -76,4 +76,8 @@ public class EntityPassengerBR_MK3_Pantograph extends EntityRollingStock impleme
     public float getOptimalDistance(EntityMinecart cart) {
         return  3.05F;
     }
+    @Override
+    public String transportcountry() {
+        return "uk";
+    }
 }
