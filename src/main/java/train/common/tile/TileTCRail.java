@@ -15,6 +15,7 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.blocks.TCBlocks;
+import train.common.core.handlers.ConfigHandler;
 import train.common.items.ItemTCRail;
 import train.common.library.BlockIDs;
 
@@ -66,19 +67,9 @@ public class TileTCRail extends TileEntity {
 	}
 
 	public double getMaxRenderDistanceSquared() {
-		/*if(FMLClientHandler.instance()!=null && FMLClientHandler.instance().getClient()!=null && FMLClientHandler.instance().getClient().gameSettings!=null){
-			if (FMLClientHandler.instance().getClient().gameSettings.renderDistanceChunks == 12) {
-				return 30000.0D;
-			}
-			else if (FMLClientHandler.instance().getClient().gameSettings.renderDistanceChunks == 1) {
-				return 15900.0D;
-			}
-			else if (FMLClientHandler.instance().getClient().gameSettings.renderDistanceChunks == 2) {
-				return 4000.0D;
-			} else return 4096.0;
-		}else{*/
-			return 16384.0;
-		//}
+		int render = ConfigHandler.TRACK_RENDER_DISTANCE;
+		int roundedRender = render / 16 * 16;
+		return roundedRender * roundedRender;
 	}
 
 
