@@ -12,8 +12,6 @@ import train.common.api.TrainRenderRecord;
 import train.common.library.Info;
 import net.minecraft.util.ResourceLocation;
 
-import java.util.ArrayList;
-
 public enum RenderEnum implements TrainRenderRecord {
 
     /**
