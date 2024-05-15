@@ -533,7 +533,7 @@ public class EnumTrains {
 				TrainRecord.makeEntry("BRBrakeVan", "BRBrakeVan", EntityCabooseBRBrakeVan.class, ItemIDs.minecartBRBrakeVan.item, "passenger", 1.5, new String[]{"Grey", "Blue", "Brown", "Yellow", "Red", "LightBlue", "LightGrey", "Pink"}, 18, 36, "Pack: B.I.P."),
 
 				/** TCCE 7 */
-				TrainRecord.makeEntry("DuewagT4ER", "DuewagT4ER", EntityElectricDuewagT4ER.class, ItemIDs.minecartDuewagT4ER.item, "electric", 200, 70, 0, 20, 0, 100, 0.7, 0.8, 1000, new String[]{"Grey", "Red", "Yellow", "Green"}, 18, -2, "Pack: Trams In Motion"),
+				TrainRecord.makeEntry("DuewagT4ER", "DuewagT4ER", EntityElectricDuewagT4ER.class, ItemIDs.minecartDuewagT4ER.item, "electric", 200, 70, 0, 20, 0, 100, 0.7, 0.8, 1000, new String[]{"Grey", "Red", "Yellow", "Green","Blue"}, 18, -2, "Pack: Trams In Motion"),
 				TrainRecord.makeEntry("DuewagGT6ZRLoco", "DuewagGT6ZRLoco", EntityElectricDuewagGT6ZRLoco.class, ItemIDs.minecartDuewagGT6ZRLoco.item, "electric", 250, 70, 0, 20, 0, 100, 0.7, 0.8, 1000, new String[]{"Green", "Blue", "Grey", "Orange", "Lime"}, 18, -1.95, "Pack: Trams In Motion"),
 				TrainRecord.makeEntry("DuewagGT6ZRTail", "DuewagGT6ZRTail", EntityPassengerDuewagGT6ZRTail.class, ItemIDs.minecartDuewagGT6ZRTail.item, "passenger", 0, 0, 1, 0, 0, 0, 0, 0, 0, new String[]{"Green", "Blue", "Grey", "Orange", "Lime"}, 18, -1.35, "Pack: Trams In Motion"),
 				TrainRecord.makeEntry("M8CLoco", "M8CLoco", EntityElectricM8CLoco.class, ItemIDs.minecartM8CLoco.item, "electric", 250, 70, 0, 20, 0, 100, 0.7, 0.8, 1000, new String[]{"Red", "Grey", "Black", "Orange","LightBlue"}, 18, -2.3, "Pack: Trams In Motion"),
