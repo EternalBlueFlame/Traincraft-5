@@ -58,7 +58,9 @@ public class RenderRollingStock extends Render {
         GL11.glLightModelf(GL_LIGHT_MODEL_TWO_SIDE, GL_FALSE);
         GL11.glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
         GL11.glShadeModel(GL_SMOOTH);
-        GL11.glEnable(GL_NORMALIZE);
+        GL11.glEnable(GL_NORMALIZE);GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+
 
         double var15 = cart.lastTickPosX + (cart.posX - cart.lastTickPosX) * time;
         double var17 = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * time;

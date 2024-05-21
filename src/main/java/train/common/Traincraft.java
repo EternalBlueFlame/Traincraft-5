@@ -222,7 +222,7 @@ public class Traincraft {
     @EventHandler
     public void postInit(FMLPostInitializationEvent evt) {
         tcLog.info("Start to PostInitialize");
-        tcLog.info("Register ChunkHandler");
+        TraincraftRegistry.endRegistration();
 
         tcLog.info("Activation Mod Compatibility");
         TrainModCore.ModsLoaded();

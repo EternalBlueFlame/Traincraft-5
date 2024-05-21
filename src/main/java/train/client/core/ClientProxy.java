@@ -11,6 +11,8 @@ import javazoom.jl.decoder.JavaLayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.entity.Render;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -21,6 +23,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Level;
+import org.lwjgl.opengl.GL11;
 import train.client.core.handlers.ClientTickHandler;
 import train.client.core.handlers.CustomRenderHandler;
 import train.client.core.handlers.RecipeBookHandler;
@@ -55,6 +58,8 @@ import java.util.Calendar;
 
 public class ClientProxy extends CommonProxy {
 
+    public static boolean hdTransportItems=false;
+    public static boolean preRenderModels=false;
     /**
      * Checks if the month is December or January
      *
@@ -209,6 +214,46 @@ public class ClientProxy extends CommonProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileFortyFootContainer.class, new FortyFootContainerRender());
 		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.FortyFootContainer.block), new ItemRenderFortyFootContainer());*/
     }
+
+
+    @Override
+    public Object getTESR(){return specialRenderer;}
+
+    @Override
+    public Render getEntityRender(){return transportRenderer;}
+    @Override
+    public Object getNullRender(){return nullRender;}
+
+
+    public static final TileEntitySpecialRenderer specialRenderer = new TileEntitySpecialRenderer() {
+        @Override
+        public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float p_147500_8_) {
+            GL11.glPushMatrix();
+            GL11.glTranslated(x,y, z);
+            tileEntity.func_145828_a(null);
+            GL11.glPopMatrix();
+        }
+
+        @Override
+        protected void bindTexture(ResourceLocation p_147499_1_){}
+    };
+
+
+    public static final RenderRollingStock transportRenderer = new RenderRollingStock();
+
+    /**
+     * <h3>null render</h3>
+     * this is just a simple render that never draws anything, since its static it only ever needs to exist once, which makes it lighter on the render.
+     */
+    private static final Render nullRender = new Render() {
+        @Override
+        public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_) {}
+
+        @Override
+        protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
+            return null;
+        }
+    };
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
