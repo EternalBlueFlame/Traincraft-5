@@ -76,4 +76,8 @@ public class EntityPassengerBR_MK3_Buffet extends EntityRollingStock implements 
     public float getOptimalDistance(EntityMinecart cart) {
         return 3.02F;
     }
+    @Override
+    public String transportcountry() {
+        return "uk";
+    }
 }

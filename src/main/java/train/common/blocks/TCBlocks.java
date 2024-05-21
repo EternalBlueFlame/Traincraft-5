@@ -14,6 +14,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import train.common.Traincraft;
 import train.common.blocks.blockSwitch.*;
+import train.common.blocks.slabs.*;
+import train.common.blocks.stairs.*;
 import train.common.library.BlockIDs;
 import train.common.library.Info;
 import train.common.mtc.*;
@@ -42,7 +44,39 @@ public class TCBlocks {
 
 		BlockIDs.openFurnaceIdle.block = new BlockOpenHearthFurnace(false).setHardness(3.5F).setStepSound(Block.soundTypeStone);
 		BlockIDs.openFurnaceActive.block = new BlockOpenHearthFurnace(true).setHardness(3.5F).setStepSound(Block.soundTypeStone);
+
+
 		BlockIDs.oreTC.block = new BlockOreTC().setHardness(3.0F).setResistance(5F).setStepSound(Block.soundTypeStone);
+		BlockIDs.dirtyBallast.block = new baseBlock("Dirty Gravel", 1f, 1f, "shovel", 1, Material.ground, Block.soundTypeGravel, "dirtygravel");
+		BlockIDs.dirtierBallast.block = new baseBlock("Dirtier Gravel", 1f, 1f, "shovel", 1, Material.ground, Block.soundTypeGravel, "blackgravel");
+		BlockIDs.highSpeedBallast.block = new BlockHighSpeedBallast(Material.ground).setHardness(1F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:ballasthighspeed").setBlockName("tc.ballastHighSpeed").setResistance(10F).setCreativeTab(Traincraft.tcTab);
+		BlockIDs.snowGravel.block = new BlocksnowGravel(Material.ground).setHardness(1F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:snowgravel").setBlockName("snowGravel").setCreativeTab(Traincraft.tcTab);
+		BlockIDs.poweredGravel.block = new BlockpoweredGravel(Material.rock).setHardness(0F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:poweredGravel").setBlockName("poweredGravel").setCreativeTab(Traincraft.tcTab);
+		BlockIDs.asphalt.block = new Blockasphalt(Material.ground).setHardness(2F).setStepSound(Block.soundTypeStone).setBlockTextureName("tc:asphalt").setBlockName("tc.asphalt").setResistance(10F).setCreativeTab(Traincraft.tcTab);
+
+
+		BlockIDs.ballastSlab.block = new BlockBallastSlab(false).setCreativeTab(Traincraft.tcTab).setBlockTextureName("tc:ballast_test");
+		BlockIDs.ballastDoubleSlab.block = new BlockBallastSlab(true).setBlockTextureName("tc:ballast_test");
+		BlockIDs.dirtyBallastSlab.block = new BlockDirtyBallastSlab(false).setCreativeTab(Traincraft.tcTab).setBlockTextureName("tc:dirtygravel");
+		BlockIDs.dirtyBallastDoubleSlab.block = new BlockDirtyBallastSlab(true).setBlockTextureName("tc:dirtygravel");
+		BlockIDs.dirtierBallastSlab.block = new BlockDirtierBallastSlab(false).setCreativeTab(Traincraft.tcTab).setBlockTextureName("tc:blackgravel");
+		BlockIDs.dirtierBallastDoubleSlab.block = new BlockDirtierBallastSlab(true).setBlockTextureName("tc:blackgravel");
+		BlockIDs.highSpeedBallastSlab.block = new BlockHighSpeedBallastSlab(false).setCreativeTab(Traincraft.tcTab).setBlockTextureName("tc:ballasthighspeed");
+		BlockIDs.highSpeedBallastDoubleSlab.block = new BlockHighSpeedBallastSlab(true).setBlockTextureName("tc:ballasthighspeed");
+		BlockIDs.snowGravelSlab.block = new BlockSnowGravelSlab(false).setCreativeTab(Traincraft.tcTab).setBlockTextureName("tc:snowgravel");
+		BlockIDs.snowGravelDoubleSlab.block = new BlockSnowGravelSlab(true).setBlockTextureName("tc:snowgravel");
+		BlockIDs.asphaltSlab.block = new BlockAsphaltSlab(false).setCreativeTab(Traincraft.tcTab).setBlockTextureName("tc:asphalt");
+		BlockIDs.asphaltDoubleSlab.block = new BlockAsphaltSlab(true).setBlockTextureName("tc:asphalt");
+
+
+		BlockIDs.ballastStairs.block = new BlockBaseStairs(BlockIDs.oreTC.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+		BlockIDs.dirtyBallastStairs.block = new BlockBaseStairs(BlockIDs.dirtyBallast.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("dirty ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+		BlockIDs.dirtierBallastStairs.block = new BlockBaseStairs(BlockIDs.dirtierBallast.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("dirtier ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+		BlockIDs.highSpeedBallastStairs.block = new BlockBaseStairs(BlockIDs.highSpeedBallast.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("high speed ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+		BlockIDs.snowGravelStairs.block = new BlockBaseStairs(BlockIDs.snowGravel.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("snow gravel stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+		BlockIDs.asphaltStairs.block = new BlockBaseStairs(BlockIDs.asphalt.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("asphalt stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+
+
 
 		BlockIDs.lantern.block = new BlockLantern().setHardness(1.7F).setStepSound(Block.soundTypeMetal).setLightLevel(0.98F);
 		BlockIDs.switchStand.block = new BlockSwitchStand().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
@@ -63,10 +97,6 @@ public class TCBlocks {
 		BlockIDs.owoYardSwitchStand.block = new BlockowoYardSwitchStand().setHardness(4F).setStepSound(Block.soundTypeLadder);
 		BlockIDs.overheadWire.block = new BlockoverheadWire().setHardness(2F);
 		BlockIDs.overheadWireDouble.block = new BlockoverheadWireDouble().setHardness(2F);
-		BlockIDs.poweredGravel.block = new BlockpoweredGravel(Material.rock).setHardness(0F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:poweredGravel").setBlockName("poweredGravel").setCreativeTab(Traincraft.tcTab);
-		BlockIDs.snowGravel.block = new BlocksnowGravel(Material.ground).setHardness(1F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:snowgravel").setBlockName("snowGravel").setCreativeTab(Traincraft.tcTab);
-		BlockIDs.asphalt.block = new Blockasphalt(Material.ground).setHardness(2F).setStepSound(Block.soundTypeStone).setBlockTextureName("tc:asphalt").setBlockName("tc.asphalt").setResistance(10F).setCreativeTab(Traincraft.tcTab);
-		BlockIDs.highSpeedBallast.block = new BlockHighSpeedBallast(Material.ground).setHardness(1F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:ballasthighspeed").setBlockName("tc.ballastHighSpeed").setResistance(10F).setCreativeTab(Traincraft.tcTab);
 		BlockIDs.signalSpanish.block = new BlocksignalSpanish().setHardness(1F).setResistance(10F).setLightLevel(0.2F).setCreativeTab(Traincraft.tcTab).setStepSound(Block.soundTypeMetal);
 		BlockIDs.kSignal.block = new BlockkSignal().setHardness(1F).setResistance(10F).setLightLevel(0.2F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
 		BlockIDs.speedSign.block = new BlockSpeedSign().setCreativeTab(Traincraft.tcTab);
@@ -83,12 +113,7 @@ public class TCBlocks {
 		}
 
 		//BlockIDs.book.block = new BlockBook(BlockIDs.book.blockID);
-		BlockIDs.dirtyBallast.block = new baseBlock("Dirty Gravel", 1f, 1f, "shovel", 1, Material.ground, Block.soundTypeGravel, "dirtygravel");
-		BlockIDs.dirtierBallast.block = new baseBlock("Dirtier Gravel", 1f, 1f, "shovel", 1, Material.ground, Block.soundTypeGravel, "blackgravel");
-		BlockIDs.asphaltSlab.block = new BlockAsphaltSlab(false).setCreativeTab(Traincraft.tcTab).setBlockTextureName("tc:asphalt");
-		BlockIDs.asphaltDoubleSlab.block = new BlockAsphaltSlab(true).setBlockTextureName("tc:asphalt");;
-		BlockIDs.asphaltStairs.block = new BlockAsphaltStairs().setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("asphalt stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);;
-	}
+		}
 
 	public static void registerBlocks() {
 		for (BlockIDs blocks : BlockIDs.values()) {

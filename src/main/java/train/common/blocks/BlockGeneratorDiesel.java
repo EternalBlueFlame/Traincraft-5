@@ -18,6 +18,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -92,7 +93,7 @@ public class BlockGeneratorDiesel extends BlockContainer {
 	public void onBlockPlacedBy(World world, int par2, int par3, int par4, EntityLivingBase living, ItemStack stack) {
 		TileGeneratorDiesel te = (TileGeneratorDiesel) world.getTileEntity(par2, par3, par4);
 		int var6 = MathHelper.floor_double((double) (living.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int var7 = world.getBlockMetadata(par2, par3, par4) >> 2;
+		int var7 = world.getBlockMetadata(par2, par3, par4);
 		++var6;
 		var6 %= 4;
 
@@ -123,6 +124,7 @@ public class BlockGeneratorDiesel extends BlockContainer {
 				world.setBlockMetadataWithNotify(par2, par3, par4, 1 | var7 << 2, 2);
 			}
 		}
+
 
 	}
 	@SideOnly(Side.CLIENT)

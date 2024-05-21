@@ -125,6 +125,7 @@ public enum ItemIDs {
 	tcRailVeryLargeSwitch("ItemTCRail", "item_rail_switch_large", 5),
 
 	tcRailMediumParallelSwitch("ItemTCRail", "item_rail_switch_parallel", 5),
+	tcRailLargeParallelSwitch("ItemTCRail", "item_rail_switch_parallel", 5),
 	tcRailMedium45DegreeSwitch("ItemTCRail","item_rail_switch_45degree_medium", 5 ),
 	tcRailLarge45DegreeSwitch("ItemTCRail", "item_rail_switch_45degree_large", 5),
 
@@ -189,6 +190,7 @@ public enum ItemIDs {
 	tcRailEmbeddedLargeSwitch("ItemTCRail", "item_rail_embedded_switch_large", 5),
 	tcRailEmbeddedVeryLargeSwitch("ItemTCRail", "item_rail_embedded_switch_large", 5),
 	tcRailEmbeddedMediumParallelSwitch("ItemTCRail", "item_rail_embedded_switch_parallel", 5),
+	tcRailEmbeddedLargeParallelSwitch("ItemTCRail", "item_rail_embedded_switch_parallel", 5),
 	tcRailEmbeddedMedium45DegreeSwitch("ItemTCRail","item_rail_embedded_switch_45degree_medium", 5 ),
 	tcRailEmbeddedLarge45DegreeSwitch("ItemTCRail", "item_rail_embedded_switch_45degree_large", 5),
 
@@ -203,6 +205,7 @@ public enum ItemIDs {
 	tcRailSmallRoadCrossing("ItemTCRail", "item_rail_small_road_crossing", 5),
 	tcRailSmallRoadCrossing1("ItemTCRail", "item_rail_small_road_crossing_1", 5),
 	tcRailSmallRoadCrossing2("ItemTCRail", "item_rail_small_road_crossing_2", 5),
+	tcRailSmallRoadCrossingDynamic("ItemTCRail", "item_rail_small_road_crossing_dynamic", 5),
 
 	/**RollingStock*/
 	atoCard("ItemATOCard", "ato_card", 5),

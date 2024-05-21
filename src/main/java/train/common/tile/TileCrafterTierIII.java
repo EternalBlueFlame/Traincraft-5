@@ -6,11 +6,10 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
+import train.common.api.blocks.TileRenderFacing;
 import train.common.core.interfaces.ITier;
 import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
@@ -20,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class TileCrafterTierIII extends TileEntity implements IInventory, ITier {
+public class TileCrafterTierIII extends TileRenderFacing implements IInventory, ITier {
 	private Random rand;
 	private ItemStack[] crafterInventory;
 
@@ -199,14 +198,6 @@ public class TileCrafterTierIII extends TileEntity implements IInventory, ITier 
 		return player.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
 	}
 
-	public ForgeDirection getFacing() {
-		if(facing!=null)return this.facing;
-		return ForgeDirection.NORTH;
-	}
-
-	public void setFacing(ForgeDirection face) {
-		this.facing = face;
-	}
 
 	@Override
 	public void openInventory() {}
@@ -215,7 +206,7 @@ public class TileCrafterTierIII extends TileEntity implements IInventory, ITier 
 	public void closeInventory() {}
 
 	@Override
-	public Packet getDescriptionPacket() {
+	public S35PacketUpdateTileEntity getDescriptionPacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);

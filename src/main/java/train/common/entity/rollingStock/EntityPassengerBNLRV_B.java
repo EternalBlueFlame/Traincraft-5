@@ -73,4 +73,9 @@ public class EntityPassengerBNLRV_B extends EntityRollingStock implements IPasse
     public float getOptimalDistance(EntityMinecart cart) {
         return 2.5F;
     }
+
+    @Override
+    public String transportcountry() {
+        return "be";
+    }
 }

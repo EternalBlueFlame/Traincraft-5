@@ -255,6 +255,15 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                         modelLeftSwitchTurn.render("medium_parallel", "", railTile, x, y, z);
                         break;
                     }
+                    case LARGE_PARALLEL_SWITCH:
+                    case LARGE_RIGHT_PARALLEL_SWITCH: {
+                        modelRightSwitchTurn.render("large_parallel", "", railTile, x, y, z);
+                        break;
+                    }
+                    case LARGE_LEFT_PARALLEL_SWITCH: {
+                        modelLeftSwitchTurn.render("large_parallel", "", railTile, x, y, z);
+                        break;
+                    }
                     case MEDIUM_45DEGREE_SWITCH:
                     case MEDIUM_RIGHT_45DEGREE_SWITCH: {
                         modelRightSwitchTurn.render("medium_45degree", "", railTile, x, y, z);
@@ -390,6 +399,10 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                         modelRoadCrossing.render("crossing2", railTile, x, y, z);
                         break;
                     }
+                    case SMALL_ROAD_CROSSING_DYNAMIC:{
+                        modelRoadCrossing.render("dynamic", railTile, x, y, z);
+                        break;
+                    }
                     case EMBEDDED_MEDIUM_STRAIGHT:
                     case EMBEDDED_LONG_STRAIGHT:
                     case EMBEDDED_VERY_LONG_STRAIGHT: {
@@ -454,20 +467,20 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                     }
                     case EMBEDDED_TURN_29X29:
                     case EMBEDDED_RIGHT_TURN_29X29: {
-                        modelRightTurn.render("29x", railTile, x, y, z);
+                        modelRightTurn.render("embedded_29x", railTile, x, y, z);
                         break;
                     }
                     case EMBEDDED_LEFT_TURN_29X29: {
-                        modelLeftTurn.render("29x", railTile, x, y, z);
+                        modelLeftTurn.render("embedded_29x", railTile, x, y, z);
                         break;
                     }
                     case EMBEDDED_TURN_32X32:
                     case EMBEDDED_RIGHT_TURN_32X32: {
-                        modelRightTurn.render("32x", railTile, x, y, z);
+                        modelRightTurn.render("embedded_32x", railTile, x, y, z);
                         break;
                     }
                     case EMBEDDED_LEFT_TURN_32X32: {
-                        modelLeftTurn.render("32x", railTile, x, y, z);
+                        modelLeftTurn.render("embedded_32x", railTile, x, y, z);
                         break;
                     }
                     case EMBEDDED_MEDIUM_45DEGREE_TURN:
@@ -534,7 +547,6 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                         modelLeftParallelCurve.render("large", "embedded", railTile, x, y, z);
                         break;
                     }
-
                     case EMBEDDED_TWO_WAYS_CROSSING: {
                         modelTwoWaysCrossing.render("embedded_crossing", railTile, x, y, z);
                         break;
@@ -547,7 +559,6 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                         modelTwoWaysCrossing.render("embedded_diagonal_crossing", railTile, x, y, z);
                         break;
                     }
-
                     case EMBEDDED_DIAMOND_CROSSING:
                     case EMBEDDED_RIGHT_DIAMOND_CROSSING: {
                         modelRightDiamondCrossing.render("embedded", railTile, x, y, z);
@@ -597,6 +608,15 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                         modelLeftSwitchTurn.render("medium_parallel", "embedded", railTile, x, y, z);
                         break;
                     }
+                    case EMBEDDED_LARGE_PARALLEL_SWITCH:
+                    case EMBEDDED_LARGE_RIGHT_PARALLEL_SWITCH: {
+                        modelRightSwitchTurn.render("large_parallel", "embedded", railTile, x, y, z);
+                        break;
+                    }
+                    case EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH: {
+                        modelLeftSwitchTurn.render("large_parallel", "embedded", railTile, x, y, z);
+                        break;
+                    }
                     case EMBEDDED_MEDIUM_45DEGREE_SWITCH:
                     case EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH: {
                         modelRightSwitchTurn.render("medium_45degree", "embedded", railTile, x, y, z);
@@ -615,6 +635,7 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                         modelLeftSwitchTurn.render("large_45degree", "embedded", railTile, x, y, z);
                         break;
                     }
+
                     case EMBEDDED_LARGE_CURVED_SLOPE_DYNAMIC:
                     case EMBEDDED_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC: {
                         modelRightCurvedSlope.render("embedded_large", railTile, x, y, z);

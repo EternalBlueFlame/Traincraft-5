@@ -21,6 +21,7 @@ import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
 
 import javax.annotation.Nullable;
+import javax.sound.midi.Track;
 import java.util.List;
 
 import static train.common.items.TCRailTypes.*;
@@ -34,6 +35,8 @@ public class ItemTCRail extends ItemPart {
     private String typeVariantDiagonal = TrackTypes.SMALL_DIAGONAL_STRAIGHT.getLabel();
     private String typeVariant90Turn;
     private String typeVariantCrossing;
+
+
     private Item idVariantSwitch;
     TrackTypes tempType;
 
@@ -133,6 +136,10 @@ public class ItemTCRail extends ItemPart {
         MEDIUM_PARALLEL_SWITCH("MEDIUM_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailMediumParallelSwitch, "4x11"),
         MEDIUM_RIGHT_PARALLEL_SWITCH("MEDIUM_RIGHT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailMediumParallelSwitch, ""),
         MEDIUM_LEFT_PARALLEL_SWITCH("MEDIUM_LEFT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailMediumParallelSwitch, ""),
+
+        LARGE_PARALLEL_SWITCH("LARGE_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailLargeParallelSwitch, "4x17"),
+        LARGE_RIGHT_PARALLEL_SWITCH("LARGE_RIGHT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailLargeParallelSwitch, ""),
+        LARGE_LEFT_PARALLEL_SWITCH("LARGE_LEFT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailLargeParallelSwitch, ""),
 
         MEDIUM_45DEGREE_SWITCH("MEDIUM_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailMedium45DegreeSwitch, "3x5 hold sneak to attach to the back of another curve"),
         MEDIUM_RIGHT_45DEGREE_SWITCH("MEDIUM_RIGHT_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailMedium45DegreeSwitch, ""),
@@ -266,9 +273,14 @@ public class ItemTCRail extends ItemPart {
         EMBEDDED_VERY_LARGE_SWITCH("EMBEDDED_VERY_LARGE_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedVeryLargeSwitch, "11x11"),
         EMBEDDED_VERY_LARGE_RIGHT_SWITCH("EMBEDDED_VERY_LARGE_RIGHT_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedVeryLargeSwitch, ""),
         EMBEDDED_VERY_LARGE_LEFT_SWITCH("EMBEDDED_VERY_LARGE_LEFT_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedVeryLargeSwitch, ""),
+
         EMBEDDED_MEDIUM_PARALLEL_SWITCH("EMBEDDED_", SWITCH, ItemIDs.tcRailEmbeddedMediumParallelSwitch, "4x11"),
         EMBEDDED_MEDIUM_RIGHT_PARALLEL_SWITCH("EMBEDDED_MEDIUM_RIGHT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMediumParallelSwitch, ""),
         EMBEDDED_MEDIUM_LEFT_PARALLEL_SWITCH("EMBEDDED_MEDIUM_LEFT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMediumParallelSwitch, ""),
+
+        EMBEDDED_LARGE_PARALLEL_SWITCH("EMBEDDED_LARGE_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLargeParallelSwitch, "4x17"),
+        EMBEDDED_LARGE_RIGHT_PARALLEL_SWITCH("EMBEDDED_LARGE_RIGHT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLargeParallelSwitch, ""),
+        EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH("EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLargeParallelSwitch, ""),
 
         EMBEDDED_MEDIUM_45DEGREE_SWITCH("EMBEDDED_MEDIUM_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMedium45DegreeSwitch, "3x5 hold sneak to attach to the back of another curve"),
         EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH("EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMedium45DegreeSwitch, ""),
@@ -296,8 +308,9 @@ public class ItemTCRail extends ItemPart {
 
         SMALL_ROAD_CROSSING("SMALL_ROAD_CROSSING", STRAIGHT, ItemIDs.tcRailSmallRoadCrossing, "1x1"),
         SMALL_ROAD_CROSSING_1("SMALL_ROAD_CROSSING_1", STRAIGHT, ItemIDs.tcRailSmallRoadCrossing1, "1x1"),
-        SMALL_ROAD_CROSSING_2("SMALL_ROAD_CROSSING_2", STRAIGHT, ItemIDs.tcRailSmallRoadCrossing2, "1x1");
+        SMALL_ROAD_CROSSING_2("SMALL_ROAD_CROSSING_2", STRAIGHT, ItemIDs.tcRailSmallRoadCrossing2, "1x1"),
 
+        SMALL_ROAD_CROSSING_DYNAMIC("SMALL_ROAD_CROSSING_DYNAMIC", STRAIGHT, ItemIDs.tcRailSmallRoadCrossingDynamic, "1x1");
 
         private final String label;
         private final TCRailTypes type;
@@ -341,6 +354,8 @@ public class ItemTCRail extends ItemPart {
                 || (tile.getType().equals(TrackTypes.VERY_LARGE_RIGHT_SWITCH.getLabel()) && tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.MEDIUM_RIGHT_PARALLEL_SWITCH.getLabel()) && tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.MEDIUM_LEFT_PARALLEL_SWITCH.getLabel()) && tile.getSwitchState())
+                || (tile.getType().equals(TrackTypes.LARGE_RIGHT_PARALLEL_SWITCH.getLabel()) && tile.getSwitchState())
+                || (tile.getType().equals(TrackTypes.LARGE_LEFT_PARALLEL_SWITCH.getLabel()) && tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.MEDIUM_RIGHT_45DEGREE_SWITCH.getLabel()) && tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.MEDIUM_LEFT_45DEGREE_SWITCH.getLabel()) && tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.LARGE_RIGHT_45DEGREE_SWITCH.getLabel()) && tile.getSwitchState())
@@ -381,6 +396,8 @@ public class ItemTCRail extends ItemPart {
                 || (tile.getType().equals(TrackTypes.EMBEDDED_VERY_LARGE_RIGHT_SWITCH.getLabel()) && tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_PARALLEL_SWITCH.getLabel()) && tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_PARALLEL_SWITCH.getLabel()) && tile.getSwitchState())
+                || (tile.getType().equals(TrackTypes.EMBEDDED_LARGE_RIGHT_PARALLEL_SWITCH.getLabel()) && tile.getSwitchState())
+                || (tile.getType().equals(TrackTypes.EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH.getLabel()) && tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH.getLabel()) && tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_45DEGREE_SWITCH.getLabel()) && tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.EMBEDDED_LARGE_RIGHT_45DEGREE_SWITCH.getLabel()) && tile.getSwitchState())
@@ -430,6 +447,8 @@ public class ItemTCRail extends ItemPart {
                 || (tile.getType().equals(TrackTypes.VERY_LARGE_RIGHT_SWITCH.getLabel()) && !tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.MEDIUM_RIGHT_PARALLEL_SWITCH.getLabel()) && !tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.MEDIUM_LEFT_PARALLEL_SWITCH.getLabel()) && !tile.getSwitchState())
+                || (tile.getType().equals(TrackTypes.LARGE_RIGHT_PARALLEL_SWITCH.getLabel()) && !tile.getSwitchState())
+                || (tile.getType().equals(TrackTypes.LARGE_LEFT_PARALLEL_SWITCH.getLabel()) && !tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.MEDIUM_RIGHT_45DEGREE_SWITCH.getLabel()) && !tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.MEDIUM_LEFT_45DEGREE_SWITCH.getLabel()) && !tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.LARGE_RIGHT_45DEGREE_SWITCH.getLabel()) && !tile.getSwitchState())
@@ -446,6 +465,8 @@ public class ItemTCRail extends ItemPart {
                 || (tile.getType().equals(TrackTypes.EMBEDDED_VERY_LARGE_RIGHT_SWITCH.getLabel()) && !tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_PARALLEL_SWITCH.getLabel()) && !tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_PARALLEL_SWITCH.getLabel()) && !tile.getSwitchState())
+                || (tile.getType().equals(TrackTypes.EMBEDDED_LARGE_RIGHT_PARALLEL_SWITCH.getLabel()) && !tile.getSwitchState())
+                || (tile.getType().equals(TrackTypes.EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH.getLabel()) && !tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH.getLabel()) && !tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_45DEGREE_SWITCH.getLabel()) && !tile.getSwitchState())
                 || (tile.getType().equals(TrackTypes.EMBEDDED_LARGE_RIGHT_45DEGREE_SWITCH.getLabel()) && !tile.getSwitchState())
@@ -460,6 +481,10 @@ public class ItemTCRail extends ItemPart {
 
                 ;
     }
+
+
+
+
 
     public static boolean isTCTwoWaysCrossingTrack(TileTCRail tile) {
         if (tile == null || tile.getType() == null) {
@@ -497,6 +522,8 @@ public class ItemTCRail extends ItemPart {
                 || (tile.getType().equals(TrackTypes.VERY_LARGE_RIGHT_SWITCH.getLabel()))
                 || (tile.getType().equals(TrackTypes.MEDIUM_RIGHT_PARALLEL_SWITCH.getLabel()))
                 || (tile.getType().equals(TrackTypes.MEDIUM_LEFT_PARALLEL_SWITCH.getLabel()))
+                || (tile.getType().equals(TrackTypes.LARGE_RIGHT_PARALLEL_SWITCH.getLabel()))
+                || (tile.getType().equals(TrackTypes.LARGE_LEFT_PARALLEL_SWITCH.getLabel()))
                 || (tile.getType().equals(TrackTypes.MEDIUM_RIGHT_45DEGREE_SWITCH.getLabel()))
                 || (tile.getType().equals(TrackTypes.MEDIUM_LEFT_45DEGREE_SWITCH.getLabel()))
                 || (tile.getType().equals(TrackTypes.LARGE_RIGHT_45DEGREE_SWITCH.getLabel()))
@@ -509,6 +536,8 @@ public class ItemTCRail extends ItemPart {
                 || (tile.getType().equals(TrackTypes.EMBEDDED_VERY_LARGE_RIGHT_SWITCH.getLabel()))
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_PARALLEL_SWITCH.getLabel()))
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_PARALLEL_SWITCH.getLabel()))
+                || (tile.getType().equals(TrackTypes.EMBEDDED_LARGE_RIGHT_PARALLEL_SWITCH.getLabel()))
+                || (tile.getType().equals(TrackTypes.EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH.getLabel()))
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH.getLabel()))
                 || (tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_45DEGREE_SWITCH.getLabel()))
                 || (tile.getType().equals(TrackTypes.EMBEDDED_LARGE_RIGHT_45DEGREE_SWITCH.getLabel()))
@@ -728,12 +757,10 @@ public class ItemTCRail extends ItemPart {
         int blockID = Block.getIdFromBlock(block);
         tcRail.setBallastMaterial(blockID);
         tcRail.ballastMetadata = world.getBlockMetadata(x, y, z);
-        System.out.println(tcRail.cx + " ," + tcRail.cz + " , " + tcRail.r);
         /** Gag rails containing reference to first turn rail */
         for (int gag = 1; gag <= posX.length - 1; gag++) {
             placeTrack(world, posX[gag], y + 1, posZ[gag], BlockIDs.tcRailGag.block, 0);
             tileGag[gag - 1] = (TileTCRailGag) world.getTileEntity(posX[gag], y + 1, posZ[gag]);
-            //tileGag[gag - 1].bbHeight = Math.max(0.125f, Math.min(1f, (gag - 1) / (float) (posX.length - 1)));
             tileGag[gag - 1].bbHeight = Math.max(0.125f, Math.min(1f, gag / (float) (posX.length - 1)));
 
         }
@@ -823,6 +850,7 @@ public class ItemTCRail extends ItemPart {
                 || type == TrackTypes.SMALL_ROAD_CROSSING
                 || type == TrackTypes.SMALL_ROAD_CROSSING_1
                 || type == TrackTypes.SMALL_ROAD_CROSSING_2
+                || type == TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC
                 || type == TrackTypes.EMBEDDED_SMALL_STRAIGHT
                 || type == TrackTypes.TURN_1X1
                 || type == TrackTypes.EMBEDDED_TURN_1X1)
@@ -913,6 +941,8 @@ public class ItemTCRail extends ItemPart {
         else if (type == TrackTypes.MEDIUM_PARALLEL_SWITCH || type == TrackTypes.EMBEDDED_MEDIUM_PARALLEL_SWITCH)
             return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0}, {7, 0}, {8, 0}, {9, 0}, {10, 0},
                     {2, 1}, {3, 1}, {4, 1}, {5, 1}, {4, 2}, {5, 2}, {6, 2}, {7, 2}, {8, 2}, {6, 3}, {7, 3}, {8, 3}, {9, 3}, {10, 3}};
+        else if (type == TrackTypes.LARGE_PARALLEL_SWITCH || type == TrackTypes.EMBEDDED_LARGE_PARALLEL_SWITCH)
+            return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {6, 0}, {7, 0}, {8, 0}, {9, 0}, {10, 0},{11, 0},{12, 0},{13, 0},{14, 0},{15, 0},{16, 0}, {14, 3},{15, 3},{16, 3},{3, 1}, {4, 1}, {5, 1}, {6, 1}, {6, 2}, {7, 1}, {7, 2}, {8, 2}, {9, 2}, {10, 2}, {11, 2}, {9, 3}, {10, 3}, {11, 3}, {12, 3}, {13, 3}};
         else if (type == TrackTypes.MEDIUM_SWITCH || type == TrackTypes.EMBEDDED_MEDIUM_SWITCH)
             return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {2, 1}, {3, 1}, {3, 2}, {3, 3}};
         else if (type == TrackTypes.LARGE_SWITCH || type == TrackTypes.EMBEDDED_LARGE_SWITCH)
@@ -1068,7 +1098,7 @@ public class ItemTCRail extends ItemPart {
             }
             return true;*/
 
-            if (type == TrackTypes.SMALL_STRAIGHT || type == TrackTypes.EMBEDDED_SMALL_STRAIGHT || type == TrackTypes.SMALL_ROAD_CROSSING || type == TrackTypes.SMALL_ROAD_CROSSING_1 || type == TrackTypes.SMALL_ROAD_CROSSING_2) {
+            if (type == TrackTypes.SMALL_STRAIGHT || type == TrackTypes.EMBEDDED_SMALL_STRAIGHT || type == TrackTypes.SMALL_ROAD_CROSSING || type == TrackTypes.SMALL_ROAD_CROSSING_1 || type == TrackTypes.SMALL_ROAD_CROSSING_2 || type == TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC) {
 
                 if (!smallStraight(player, world, x, y, z, l, type))
                     return false;
@@ -1330,715 +1360,61 @@ public class ItemTCRail extends ItemPart {
 
             }
 
+            else if (tempType == TrackTypes.MEDIUM_RIGHT_45DEGREE_SWITCH || tempType == TrackTypes.EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH) {
+
+                typeVariantStraight = tempType.getLabel().contains("EMBEDDED") ? TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel() : TrackTypes.SMALL_STRAIGHT.getLabel();
+                typeVariant90Turn = tempType.getLabel().contains("EMBEDDED") ? TrackTypes.EMBEDDED_MEDIUM_RIGHT_TURN.getLabel() : TrackTypes.MEDIUM_RIGHT_TURN.getLabel();
+                if (!mediumRight45DegreeSwitch(player, world, x, y, z, l, tempType, typeVariantStraight, typeVariant90Turn)){
+                    return false;
+                }
+
+                if (player == null || !player.capabilities.isCreativeMode) {
+                    --itemstack.stackSize;
+                }
+                return true;
+            }
+
+            else if (tempType == TrackTypes.MEDIUM_LEFT_45DEGREE_SWITCH || tempType == TrackTypes.EMBEDDED_MEDIUM_LEFT_45DEGREE_SWITCH) {
+                typeVariantStraight = tempType.getLabel().contains("EMBEDDED") ? TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel() : TrackTypes.SMALL_STRAIGHT.getLabel();
+                typeVariant90Turn = tempType.getLabel().contains("EMBEDDED") ? TrackTypes.EMBEDDED_LARGE_LEFT_TURN.getLabel() : TrackTypes.LARGE_LEFT_TURN.getLabel();
+                if (!mediumLeft45DegreeSwitch(player, world, x, y, z, l, tempType, typeVariantStraight, typeVariant90Turn)){
+                    return false;
+                }
+
+                if (player == null || !player.capabilities.isCreativeMode) {
+                    --itemstack.stackSize;
+                }
+                return true;
+            }
+
+
             else if (tempType == TrackTypes.LARGE_RIGHT_45DEGREE_SWITCH || tempType == TrackTypes.EMBEDDED_LARGE_RIGHT_45DEGREE_SWITCH) {
-                switch (tempType) {
-                    case LARGE_RIGHT_45DEGREE_SWITCH:
-                        typeVariantStraight = TrackTypes.SMALL_STRAIGHT.getLabel();
-                        typeVariant90Turn = TrackTypes.LARGE_RIGHT_TURN.getLabel();
-                        idVariantSwitch = ItemIDs.tcRailLarge45DegreeSwitch.item;
-                        break;
-                    case EMBEDDED_LARGE_RIGHT_45DEGREE_SWITCH:
-                        typeVariantStraight = TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel();
-                        typeVariant90Turn = TrackTypes.EMBEDDED_LARGE_RIGHT_TURN.getLabel();
-                        idVariantSwitch = ItemIDs.tcRailEmbeddedLarge45DegreeSwitch.item;
-                        break;
+
+                typeVariantStraight = tempType.getLabel().contains("EMBEDDED") ? TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel() : TrackTypes.SMALL_STRAIGHT.getLabel();
+                typeVariant90Turn = tempType.getLabel().contains("EMBEDDED") ? TrackTypes.EMBEDDED_LARGE_RIGHT_TURN.getLabel() : TrackTypes.LARGE_RIGHT_TURN.getLabel();
+                if (!largeRight45DegreeSwitch(player, world, x, y, z, l, tempType, typeVariantStraight, typeVariant90Turn)){
+                    return false;
                 }
 
-                int dx = 0;
-                int dz = 0;
-
-                if (l == 0) dz = 1;
-                if (l == 1) dx = -1;
-                if (l == 2) dz = -1;
-                if (l == 3) dx = 1;
-
-                for (int i = 0; i <= 6 ; i++){
-                    if (!canPlaceTrack(player, world, x + (dx * i), y + 1, z + (dz * i))){
-                        return false;
-                    }
+                if (player == null || !player.capabilities.isCreativeMode) {
+                    --itemstack.stackSize;
                 }
-
-
-                int[] xArray;
-                int[] zArray;
-
-                if (player.isSneaking()){
-                   xArray = new int[] {1, 1, 1, 1, 2, 2 };
-                   zArray = new int[] {3, 4, 5, 6, 5, 6};
-                }
-                else {
-                    xArray = new int[] {1, 1, 1, 1, 2, 2, 2, 3};
-                    zArray = new int[] {3, 4, 5, 6, 5, 6, 7, 6};
-                }
-
-                    if (l == 2) {
-
-                        if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, true), l, false, 3, x, z - 7, 8.49, x + 8.99,
-                                y + 1, z, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z - 3);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-
-                        world.setBlockMetadataWithNotify(x + 1, y + 1, z - 3, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x, y + 1, z - 1 , l, x + 8.99, y + 1, z , 8.49, tempType.getLabel(), true, x + 1, y + 1, z - 3, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x, y + 1, z - 2, l, x + 8.99, y + 1, z , 8.49, typeVariantStraight, false, x + 1, y + 1, z - 3, true, false);
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x, y + 1, z - 3 , l, x + 8.99, y + 1, z , 8.49, typeVariantStraight, false, x + 1, y + 1, z - 3, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x, y + 1, z - 4, l, x + 8.99, y + 1, z , 8.49, typeVariantStraight, false, x + 1, y + 1, z - 3, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x, y + 1, z - 5, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z - 3, false, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x, y + 1, z - 6, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z - 3, false, false);
-                    }
-
-                if (l == 0) {
-
-                    if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, false), l, false, 1, x, z + 7, 8.49, x - 7.99,
-                            y + 1, z + 1, typeVariant90Turn, idVariantSwitch))
-                        return false;
-                    TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z + 3);
-                    if (tcRailTurn != null) {
-                        tcRailTurn.hasModel = false;
-                    }
-
-
-                    world.setBlockMetadataWithNotify(x - 1, y + 1, z + 3, l, 0);//to force client update
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x, y + 1, z + 1 , l, x - 7.99, y + 1, z + 1, 8.49, tempType.getLabel(), true, x - 1, y + 1, z + 3, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x, y + 1, z + 2, l, x - 7.99, y + 1, z + 1 , 8.49, typeVariantStraight, false, x - 1, y + 1, z + 3, true, false);
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x, y + 1, z + 3 , l, x - 7.99, y + 1, z + 1 , 8.49, typeVariantStraight, false, x - 1, y + 1, z + 3, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x, y + 1, z + 4, l, x - 7.99, y + 1, z + 1, 8.49, typeVariantStraight, false, x - 1, y + 1, z + 3, true, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x, y + 1, z + 5, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z + 3, false, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x, y + 1, z + 6, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z + 3, false, false);
-                }
-
-                if (l == 1) {
-
-                    if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, true), l, false, 2, x - 7, z , 8.49, x ,
-                            y + 1, z - 7.99, typeVariant90Turn, idVariantSwitch))
-                        return false;
-                    TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 3, y + 1, z - 1);
-                    if (tcRailTurn != null) {
-                        tcRailTurn.hasModel = false;
-                    }
-
-
-                    world.setBlockMetadataWithNotify(x - 3, y + 1, z - 1, l, 1);//to force client update
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x - 1, y + 1, z  , l, x , y + 1, z - 7.99, 8.49, tempType.getLabel(), true, x - 3, y + 1, z - 1, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x - 2, y + 1, z , l, x , y + 1, z - 7.99 , 8.49, typeVariantStraight, false, x - 3, y + 1, z - 1, true, false);
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x - 3, y + 1, z , l, x , y + 1, z - 7.99 , 8.49, typeVariantStraight, false, x - 3, y + 1, z - 1, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x - 4, y + 1, z , l, x , y + 1, z - 7.99, 8.49, typeVariantStraight, false, x - 3, y + 1, z - 1, true, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x - 5, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z - 1, false, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x - 6, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z - 1, false, false);
-                }
-
-                if (l == 3) {
-
-                    if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, false), l, false, 0, x + 7, z , 8.49, x + 1 ,
-                            y + 1, z + 8.99, typeVariant90Turn, idVariantSwitch))
-                        return false;
-                    TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 3, y + 1, z + 1);
-                    if (tcRailTurn != null) {
-                        tcRailTurn.hasModel = false;
-                    }
-
-
-                    world.setBlockMetadataWithNotify(x + 3, y + 1, z + 1, l, 3);//to force client update
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x + 1, y + 1, z  , l, x + 1 , y + 1, z + 8.99, 8.49, tempType.getLabel(), true, x + 3, y + 1, z + 1, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x + 2, y + 1, z , l, x + 1 , y + 1, z + 8.99 , 8.49, typeVariantStraight, false, x + 3, y + 1, z + 1, true, false);
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x + 3, y + 1, z , l, x + 1 , y + 1, z + 8.99 , 8.49, typeVariantStraight, false, x + 3, y + 1, z + 1, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x + 4, y + 1, z , l, x + 1 , y + 1, z + 8.99, 8.49, typeVariantStraight, false, x + 3, y + 1, z + 1, true, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x + 5, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z + 1, false, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x + 6, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z + 1, false, false);
-                }
-
-
-
-
-
-
-                    if (player == null || !player.capabilities.isCreativeMode) {
-                        --itemstack.stackSize;
-                    }
-                    return true;
-
-
-
+                return true;
             }
 
             else if (tempType == TrackTypes.LARGE_LEFT_45DEGREE_SWITCH || tempType == TrackTypes.EMBEDDED_LARGE_LEFT_45DEGREE_SWITCH) {
-                switch (tempType) {
-                    case LARGE_LEFT_45DEGREE_SWITCH:
-                        typeVariantStraight = TrackTypes.SMALL_STRAIGHT.getLabel();
-                        typeVariant90Turn = TrackTypes.LARGE_LEFT_TURN.getLabel();
-                        idVariantSwitch = ItemIDs.tcRailLarge45DegreeSwitch.item;
-                        break;
-                    case EMBEDDED_LARGE_LEFT_45DEGREE_SWITCH:
-                        typeVariantStraight = TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel();
-                        typeVariant90Turn = TrackTypes.EMBEDDED_LARGE_LEFT_TURN.getLabel();
-                        idVariantSwitch = ItemIDs.tcRailEmbeddedLarge45DegreeSwitch.item;
-                        break;
+                typeVariantStraight = tempType.getLabel().contains("EMBEDDED") ? TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel() : TrackTypes.SMALL_STRAIGHT.getLabel();
+                typeVariant90Turn = tempType.getLabel().contains("EMBEDDED") ? TrackTypes.EMBEDDED_LARGE_LEFT_TURN.getLabel() : TrackTypes.LARGE_LEFT_TURN.getLabel();
+                if (!largeLeft45DegreeSwitch(player, world, x, y, z, l, tempType, typeVariantStraight, typeVariant90Turn)){
+                    return false;
                 }
-
-
-                int dx = 0;
-                int dz = 0;
-
-                if (l == 0) dz = 1;
-                if (l == 1) dx = -1;
-                if (l == 2) dz = -1;
-                if (l == 3) dx = 1;
-
-                for (int i = 0; i <= 6 ; i++){
-                    if (!canPlaceTrack(player, world, x + (dx * i), y + 1, z + (dz * i))){
-                        return false;
-                    }
-                }
-
-
-                int[] xArray;
-                int[] zArray;
-
-                if (player.isSneaking()){
-                    xArray = new int[] {1, 1, 1, 1, 2, 2 };
-                    zArray = new int[] {3, 4, 5, 6, 5, 6};
-                }
-                else {
-                    xArray = new int[] {1, 1, 1, 1, 2, 2, 2, 3};
-                    zArray = new int[] {3, 4, 5, 6, 5, 6, 7, 6};
-                }
-
-                if (l == 2) {
-
-                    if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, true), l, false, 1, x, z - 7, 8.49, x - 7.99,
-                            y + 1, z, typeVariant90Turn, idVariantSwitch))
-                        return false;
-                    TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z - 3);
-                    if (tcRailTurn != null) {
-                        tcRailTurn.hasModel = false;
-                    }
-
-
-                    world.setBlockMetadataWithNotify(x - 1, y + 1, z - 3, l, 2);//to force client update
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x, y + 1, z - 1 , l, x - 7.99, y + 1, z , 8.49, tempType.getLabel(), true, x - 1, y + 1, z - 3, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x, y + 1, z - 2, l, x - 7.99, y + 1, z , 8.49, typeVariantStraight, false, x - 1, y + 1, z - 3, true, false);
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x, y + 1, z - 3 , l, x - 7.99, y + 1, z , 8.49, typeVariantStraight, false, x - 1, y + 1, z - 3, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x, y + 1, z - 4, l, x - 7.99, y + 1, z , 8.49, typeVariantStraight, false, x - 1, y + 1, z - 3, true, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x, y + 1, z - 5, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z - 3, false, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x, y + 1, z - 6, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z - 3, false, false);
-                }
-
-                if (l == 0) {
-
-                    if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, false), l, false, 3, x, z + 7, 8.49, x + 8.99,
-                            y + 1, z + 1, typeVariant90Turn, idVariantSwitch))
-                        return false;
-                    TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z + 3);
-                    if (tcRailTurn != null) {
-                        tcRailTurn.hasModel = false;
-                    }
-
-
-                    world.setBlockMetadataWithNotify(x + 1, y + 1, z + 3, l, 0);//to force client update
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x, y + 1, z + 1 , l, x + 8.99, y + 1, z + 1, 8.49, tempType.getLabel(), true, x + 1, y + 1, z + 3, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x, y + 1, z + 2, l, x + 8.99, y + 1, z + 1 , 8.49, typeVariantStraight, false, x + 1, y + 1, z + 3, true, false);
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x, y + 1, z + 3 , l, x + 8.99, y + 1, z + 1 , 8.49, typeVariantStraight, false, x + 1, y + 1, z + 3, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x, y + 1, z + 4, l, x + 8.99, y + 1, z + 1, 8.49, typeVariantStraight, false, x + 1, y + 1, z + 3, true, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x, y + 1, z + 5, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z + 3, false, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x, y + 1, z + 6, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z + 3, false, false);
-                }
-
-                if (l == 1) {
-
-                    if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, false), l, false, 0, x - 7, z , 8.49, x ,
-                            y + 1, z + 8.99, typeVariant90Turn, idVariantSwitch))
-                        return false;
-                    TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 3, y + 1, z + 1);
-                    if (tcRailTurn != null) {
-                        tcRailTurn.hasModel = false;
-                    }
-
-
-                    world.setBlockMetadataWithNotify(x - 3, y + 1, z + 1, l, 1);//to force client update
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x - 1, y + 1, z  , l, x , y + 1, z + 8.99, 8.49, tempType.getLabel(), true, x - 3, y + 1, z + 1, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x - 2, y + 1, z , l, x , y + 1, z + 8.99 , 8.49, typeVariantStraight, false, x - 3, y + 1, z + 1, true, false);
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x - 3, y + 1, z , l, x , y + 1, z + 8.99 , 8.49, typeVariantStraight, false, x - 3, y + 1, z + 1, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x - 4, y + 1, z , l, x , y + 1, z + 8.99, 8.49, typeVariantStraight, false, x - 3, y + 1, z + 1, true, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x - 5, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z + 1, false, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x - 6, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z + 1, false, false);
-                }
-
-                if (l == 3) {
-
-                    if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, true), l, false, 2, x + 7, z , 8.49, x + 1 ,
-                            y + 1, z - 7.99, typeVariant90Turn, idVariantSwitch))
-                        return false;
-                    TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 3, y + 1, z - 1);
-                    if (tcRailTurn != null) {
-                        tcRailTurn.hasModel = false;
-                    }
-
-
-                    world.setBlockMetadataWithNotify(x + 3, y + 1, z - 1, l, 3);//to force client update
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x + 1, y + 1, z  , l, x + 1 , y + 1, z - 7.99, 8.49, tempType.getLabel(), true, x + 3, y + 1, z - 1, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x + 2, y + 1, z , l, x + 1 , y + 1, z - 7.99 , 8.49, typeVariantStraight, false, x + 3, y + 1, z - 1, true, false);
-                    /** Switch rail 1 **/
-                    putDownSingleRail(world, x + 3, y + 1, z , l, x + 1 , y + 1, z - 7.99 , 8.49, typeVariantStraight, false, x + 3, y + 1, z - 1, true, false);
-                    /** Switch rail 2 **/
-                    putDownSingleRail(world, x + 4, y + 1, z , l, x + 1 , y + 1, z - 7.99, 8.49, typeVariantStraight, false, x + 3, y + 1, z - 1, true, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x + 5, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z - 1, false, false);
-                    /** Put down straight exit **/
-                    putDownSingleRail(world, x + 6, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z - 1, false, false);
-                }
-
-
-
-
-
 
                 if (player == null || !player.capabilities.isCreativeMode) {
                     --itemstack.stackSize;
                 }
                 return true;
-
-
-
             }
-
-
-
-
-            else if (tempType == TrackTypes.MEDIUM_RIGHT_45DEGREE_SWITCH || tempType == TrackTypes.EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH) {
-                switch (tempType) {
-                    case MEDIUM_RIGHT_45DEGREE_SWITCH:
-                        typeVariantStraight = TrackTypes.SMALL_STRAIGHT.getLabel();
-                        typeVariant90Turn = TrackTypes.MEDIUM_RIGHT_TURN.getLabel();
-                        idVariantSwitch = ItemIDs.tcRailMedium45DegreeSwitch.item;
-                        break;
-                    case EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH:
-                        typeVariantStraight = TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel();
-                        typeVariant90Turn = TrackTypes.EMBEDDED_MEDIUM_RIGHT_TURN.getLabel();
-                        idVariantSwitch = ItemIDs.tcRailEmbeddedMedium45DegreeSwitch.item;
-                        break;
-                }
-
-                int dx = 0;
-                int dz = 0;
-
-                if (l == 0) dz = 1;
-                if (l == 1) dx = -1;
-                if (l == 2) dz = -1;
-                if (l == 3) dx = 1;
-
-                for (int i = 0; i <= 3 ; i++){
-                    if (!canPlaceTrack(player, world, x + (dx * i), y + 1, z + (dz * i))){
-                        return false;
-                    }
-                }
-
-                if (player.isSneaking()) {
-                    if (l == 2) {
-                        int[] xArray = {x + 1, x + 1};
-                        int[] zArray = {z - 2, z - 3};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 3, x + 1, z - 3, 3.75, x + 4.25, y + 1,
-                                z, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z - 2);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x + 1, y + 1, z - 2, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x, y + 1, z - 1, l, x + 4.25, y + 1, z, 3.75, tempType.getLabel(), true, x + 1, y + 1, z - 2, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x, y + 1, z - 2, l, x + 4.25, y + 1, z, 3.75, typeVariantStraight, false, x + 1, y + 1, z - 2, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x, y + 1, z - 3, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z - 2, true, false);
-                    }
-
-                    if (l == 0) {
-                        int[] xArray = {x - 1, x - 1};
-                        int[] zArray = {z + 2, z + 3};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 1, x - 1, z + 3, 3.75, x - 3.25, y + 1,
-                                z + 1, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z + 2);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x - 1, y + 1, z + 2, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x, y + 1, z + 1, l, x - 3.25, y + 1, z + 1, 3.75, tempType.getLabel(), true, x - 1, y + 1, z + 2, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x, y + 1, z + 2, l, x - 3.25, y + 1, z + 1, 3.75, typeVariantStraight, false, x - 1, y + 1, z + 2, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x, y + 1, z + 3, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z + 2, true, false);
-                    }
-                    if (l == 1) {
-                        int[] xArray = {x - 2, x - 3};
-                        int[] zArray = {z - 1, z - 1};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 2, x - 3, z - 1, 3.75, x, y + 1,
-                                z - 3.25, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z - 1);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x - 2, y + 1, z - 1, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z - 3.25, 3.75, tempType.getLabel(), true, x - 2, y + 1, z - 1, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x - 2, y + 1, z, l, x, y + 1, z - 3.25, 3.75, typeVariantStraight, false, x - 2, y + 1, z - 1, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x - 3, y + 1, z, l, x, y + 1, z, 0, typeVariantStraight, false, x - 2, y + 1, z - 1, true, false);
-                    }
-                    if (l == 3) {
-                        int[] xArray = {x + 2, x + 3};
-                        int[] zArray = {z + 1, z + 1};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 2, x + 3, z + 1, 3.75, x + 1, y + 1,
-                                z + 4.25, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z + 1);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x + 2, y + 1, z + 1, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z + 4.25, 3.75, tempType.getLabel(), true, x + 2, y + 1, z + 1, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x + 2, y + 1, z, l, x + 1, y + 1, z + 4.25, 3.75, typeVariantStraight, false, x + 2, y + 1, z + 1, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x + 3, y + 1, z, l, x + 1, y + 1, z, 0, typeVariantStraight, false, x + 2, y + 1, z + 1, true, false);
-                    }
-                } else {
-                    if (l == 2) {
-                        int[] xArray = {x + 1, x + 1, x + 1, x + 2};
-                        int[] zArray = {z - 2, z - 3, z - 4, z - 3};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 3, x + 1, z - 3, 3.75, x + 4.25, y + 1,
-                                z, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z - 2);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x + 1, y + 1, z - 2, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x, y + 1, z - 1, l, x + 4.25, y + 1, z, 3.75, tempType.getLabel(), true, x + 1, y + 1, z - 2, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x, y + 1, z - 2, l, x + 4.25, y + 1, z, 3.75, typeVariantStraight, false, x + 1, y + 1, z - 2, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x, y + 1, z - 3, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z - 2, true, false);
-                    }
-
-                    if (l == 0) {
-                        int[] xArray = {x - 1, x - 1, x - 1, x - 2};
-                        int[] zArray = {z + 2, z + 3, z + 4, z + 3};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 1, x - 1, z + 3, 3.75, x - 3.25, y + 1,
-                                z + 1, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z + 2);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x - 1, y + 1, z + 2, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x, y + 1, z + 1, l, x - 3.25, y + 1, z + 1, 3.75, tempType.getLabel(), true, x - 1, y + 1, z + 2, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x, y + 1, z + 2, l, x - 3.25, y + 1, z + 1, 3.75, typeVariantStraight, false, x - 1, y + 1, z + 2, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x, y + 1, z + 3, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z + 2, true, false);
-                    }
-                    if (l == 1) {
-                        int[] xArray = {x - 2, x - 3, x - 4, x - 3};
-                        int[] zArray = {z - 1, z - 1, z - 1, z - 2};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 2, x - 3, z - 1, 3.75, x, y + 1,
-                                z - 3.25, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z - 1);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x - 2, y + 1, z - 1, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z - 3.25, 3.75, tempType.getLabel(), true, x - 2, y + 1, z - 1, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x - 2, y + 1, z, l, x, y + 1, z - 3.25, 3.75, typeVariantStraight, false, x - 2, y + 1, z - 1, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x - 3, y + 1, z, l, x, y + 1, z, 0, typeVariantStraight, false, x - 2, y + 1, z - 1, true, false);
-                    }
-                    if (l == 3) {
-                        int[] xArray = {x + 2, x + 3, x + 4, x + 3};
-                        int[] zArray = {z + 1, z + 1, z + 1, z + 2};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 0, x + 3, z + 1, 3.75, x + 1, y + 1,
-                                z + 4.25, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z + 1);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x + 2, y + 1, z + 1, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z + 4.25, 3.75, tempType.getLabel(), true, x + 2, y + 1, z + 1, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x + 2, y + 1, z, l, x + 1, y + 1, z + 4.25, 3.75, typeVariantStraight, false, x + 2, y + 1, z + 1, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x + 3, y + 1, z, l, x + 1, y + 1, z, 0, typeVariantStraight, false, x + 2, y + 1, z + 1, true, false);
-                    }
-
-                }
-
-
-                if (player == null || !player.capabilities.isCreativeMode) {
-                    --itemstack.stackSize;
-                }
-                return true;
-            } else if (tempType == TrackTypes.MEDIUM_LEFT_45DEGREE_SWITCH || tempType == TrackTypes.EMBEDDED_MEDIUM_LEFT_45DEGREE_SWITCH) {
-                switch (tempType) {
-                    case MEDIUM_LEFT_45DEGREE_SWITCH:
-                        typeVariantStraight = TrackTypes.SMALL_STRAIGHT.getLabel();
-                        typeVariant90Turn = TrackTypes.MEDIUM_LEFT_TURN.getLabel();
-                        idVariantSwitch = ItemIDs.tcRailMedium45DegreeSwitch.item;
-                        break;
-                    case EMBEDDED_MEDIUM_LEFT_45DEGREE_SWITCH:
-                        typeVariantStraight = TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel();
-                        typeVariant90Turn = TrackTypes.EMBEDDED_MEDIUM_LEFT_TURN.getLabel();
-                        idVariantSwitch = ItemIDs.tcRailEmbeddedMedium45DegreeSwitch.item;
-                        break;
-                }
-
-                int dx = 0;
-                int dz = 0;
-
-                if (l == 0) dz = 1;
-                if (l == 1) dx = -1;
-                if (l == 2) dz = -1;
-                if (l == 3) dx = 1;
-
-                for (int i = 0; i <= 3 ; i++){
-                    if (!canPlaceTrack(player, world, x + (dx * i), y + 1, z + (dz * i))){
-                        return false;
-                    }
-                }
-
-
-
-
-                if (player.isSneaking()) {
-                    if (l == 2) {
-                        int[] xArray = {x - 1, x - 1};
-                        int[] zArray = {z - 2, z - 3};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 1, x - 1, z - 3, 3.75, x - 3.25, y + 1,
-                                z, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z - 2);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x - 1, y + 1, z - 2, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x, y + 1, z - 1, l, x - 3.25, y + 1, z, 3.75, tempType.getLabel(), true, x - 1, y + 1, z - 2, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x, y + 1, z - 2, l, x - 3.25, y + 1, z, 3.75, typeVariantStraight, false, x - 1, y + 1, z - 2, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x, y + 1, z - 3, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z - 2, true, false);
-                    }
-
-                    if (l == 0) {
-                        int[] xArray = {x + 1, x + 1};
-                        int[] zArray = {z + 2, z + 3};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 3, x + 1, z + 3, 3.75, x + 4.25, y + 1,
-                                z + 1, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z + 2);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x + 1, y + 1, z + 2, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x, y + 1, z + 1, l, x + 4.25, y + 1, z + 1, 3.75, tempType.getLabel(), true, x + 1, y + 1, z + 2, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x, y + 1, z + 2, l, x + 4.25, y + 1, z + 1, 3.75, typeVariantStraight, false, x + 1, y + 1, z + 2, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x, y + 1, z + 3, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z + 2, true, false);
-                    }
-                    if (l == 1) {
-                        int[] xArray = {x - 2, x - 3};
-                        int[] zArray = {z + 1, z + 1};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 0, x - 3, z + 1, 3.75, x, y + 1,
-                                z + 4.25, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z + 1);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x - 2, y + 1, z + 1, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z + 4.25, 3.75, tempType.getLabel(), true, x - 2, y + 1, z + 1, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x - 2, y + 1, z, l, x, y + 1, z + 4.25, 3.75, typeVariantStraight, false, x - 2, y + 1, z + 1, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x - 3, y + 1, z, l, x, y + 1, z, 0, typeVariantStraight, false, x - 2, y + 1, z + 1, true, false);
-                    }
-                    if (l == 3) {
-                        int[] xArray = {x + 2, x + 3};
-                        int[] zArray = {z - 1, z - 1};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 2, x + 3, z - 1, 3.75, x + 1, y + 1,
-                                z - 3.25, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z - 1);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x + 2, y + 1, z + 1, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z - 3.25, 3.75, tempType.getLabel(), true, x + 2, y + 1, z - 1, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x + 2, y + 1, z, l, x + 1, y + 1, z - 3.25, 3.75, typeVariantStraight, false, x + 2, y + 1, z - 1, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x + 3, y + 1, z, l, x + 1, y + 1, z, 0, typeVariantStraight, false, x + 2, y + 1, z - 1, true, false);
-                    }
-                } else {
-                    if (l == 2) {
-                        int[] xArray = {x - 1, x - 1, x - 1, x - 2};
-                        int[] zArray = {z - 2, z - 3, z - 4, z - 3};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 1, x - 1, z - 3, 3.75, x - 3.25, y + 1,
-                                z, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z - 2);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x - 1, y + 1, z - 2, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x, y + 1, z - 1, l, x - 3.25, y + 1, z, 3.75, tempType.getLabel(), true, x - 1, y + 1, z - 2, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x, y + 1, z - 2, l, x - 3.25, y + 1, z, 3.75, typeVariantStraight, false, x - 1, y + 1, z - 2, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x, y + 1, z - 3, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z - 2, true, false);
-                    }
-
-                    if (l == 0) {
-                        int[] xArray = {x + 1, x + 1, x + 1, x + 2};
-                        int[] zArray = {z + 2, z + 3, z + 4, z + 3};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 3, x + 1, z + 3, 3.75, x + 4.25, y + 1,
-                                z + 1, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z + 2);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x + 1, y + 1, z + 2, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x, y + 1, z + 1, l, x + 4.25, y + 1, z + 1, 3.75, tempType.getLabel(), true, x + 1, y + 1, z + 2, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x, y + 1, z + 2, l, x + 4.25, y + 1, z + 1, 3.75, typeVariantStraight, false, x + 1, y + 1, z + 2, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x, y + 1, z + 3, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z + 2, true, false);
-                    }
-                    if (l == 1) {
-                        int[] xArray = {x - 2, x - 3, x - 4, x - 3};
-                        int[] zArray = {z + 1, z + 1, z + 1, z + 2};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 0, x - 3, z + 1, 3.75, x, y + 1,
-                                z + 4.25, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z + 1);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x - 2, y + 1, z + 1, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z + 4.25, 3.75, tempType.getLabel(), true, x - 2, y + 1, z + 1, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x - 2, y + 1, z, l, x, y + 1, z + 4.25, 3.75, typeVariantStraight, false, x - 2, y + 1, z + 1, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x - 3, y + 1, z, l, x, y + 1, z, 0, typeVariantStraight, false, x - 2, y + 1, z + 1, true, false);
-                    }
-                    if (l == 3) {
-                        int[] xArray = {x + 2, x + 3, x + 4, x + 3};
-                        int[] zArray = {z - 1, z - 1, z - 1, z - 2};
-                        if (!putDownTurn(player, world, true, x, y, z, xArray, zArray, l, false, 2, x + 3, z - 1, 3.75, x + 1, y + 1,
-                                z - 3.25, typeVariant90Turn, idVariantSwitch))
-                            return false;
-                        TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z - 1);
-                        if (tcRailTurn != null) {
-                            tcRailTurn.hasModel = false;
-                        }
-
-                        world.setBlockMetadataWithNotify(x + 2, y + 1, z + 1, l, 2);//to force client update
-                        /** Switch rail 1 **/
-                        putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z - 3.25, 3.75, tempType.getLabel(), true, x + 2, y + 1, z - 1, true, false);
-                        /** Switch rail 2 **/
-                        putDownSingleRail(world, x + 2, y + 1, z, l, x + 1, y + 1, z - 3.25, 3.75, typeVariantStraight, false, x + 2, y + 1, z - 1, true, false);
-                        /** Put down straight exit **/
-                        putDownSingleRail(world, x + 3, y + 1, z, l, x + 1, y + 1, z, 0, typeVariantStraight, false, x + 2, y + 1, z - 1, true, false);
-                    }
-                }
-
-
-                if (player == null || !player.capabilities.isCreativeMode) {
-                    --itemstack.stackSize;
-                }
-                return true;
-            } else if (tempType == TrackTypes.MEDIUM_RIGHT_SWITCH || tempType == TrackTypes.EMBEDDED_MEDIUM_RIGHT_SWITCH) {
+            else if (tempType == TrackTypes.MEDIUM_RIGHT_SWITCH || tempType == TrackTypes.EMBEDDED_MEDIUM_RIGHT_SWITCH) {
 
                 switch (tempType) {
                     case MEDIUM_RIGHT_SWITCH:
@@ -2953,6 +2329,54 @@ public class ItemTCRail extends ItemPart {
                 }
                 return true;
             }
+
+            else if (tempType == TrackTypes.LARGE_RIGHT_PARALLEL_SWITCH || tempType == TrackTypes.EMBEDDED_LARGE_RIGHT_PARALLEL_SWITCH){
+                switch (tempType) {
+                    case LARGE_RIGHT_PARALLEL_SWITCH:
+                        typeVariantStraight = TrackTypes.SMALL_STRAIGHT.getLabel();
+                        break;
+                    case EMBEDDED_LARGE_RIGHT_PARALLEL_SWITCH:
+                        typeVariantStraight = TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel();
+                        break;
+                }
+
+                if (!largeRightParallelSwitch(player, world, x, y, z, l, tempType, typeVariantStraight)){
+                    return false;
+                }
+
+                if (player == null || !player.capabilities.isCreativeMode){
+                    --itemstack.stackSize;
+                }
+                return true;
+            }
+
+            else if (tempType == TrackTypes.LARGE_LEFT_PARALLEL_SWITCH || tempType == TrackTypes.EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH){
+                switch (tempType) {
+                    case LARGE_LEFT_PARALLEL_SWITCH:
+                        typeVariantStraight = TrackTypes.SMALL_STRAIGHT.getLabel();
+                        break;
+                    case EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH:
+                        typeVariantStraight = TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel();
+                        break;
+                }
+                if (!largeLeftParallelSwitch(player, world, x, y, z, l, tempType, typeVariantStraight)){
+                    return false;
+                }
+
+                if (player == null || !player.capabilities.isCreativeMode){
+                    --itemstack.stackSize;
+                }
+                return true;
+            }
+
+
+
+
+
+
+
+
+
             else if (tempType == TrackTypes.RIGHT_TURN_1X1 || tempType == TrackTypes.EMBEDDED_RIGHT_TURN_1X1) {
                 if (!turn1XRight(player, world, x, y, z, l, tempType)) {
                     return false;
@@ -3534,6 +2958,14 @@ public class ItemTCRail extends ItemPart {
                     tempType = TrackTypes.MEDIUM_LEFT_PARALLEL_SWITCH;
                 }
             }
+            if (type == TrackTypes.LARGE_PARALLEL_SWITCH) {
+                if (getTrackOrientation(l, yaw).equals("right")) {
+                    tempType = TrackTypes.LARGE_RIGHT_PARALLEL_SWITCH;
+                }
+                if (getTrackOrientation(l, yaw).equals("left")) {
+                    tempType = TrackTypes.LARGE_LEFT_PARALLEL_SWITCH;
+                }
+            }
             if (type == TrackTypes.MEDIUM_45DEGREE_SWITCH) {
                 if (getTrackOrientation(l, yaw).equals("right")) {
                     tempType = TrackTypes.MEDIUM_RIGHT_45DEGREE_SWITCH;
@@ -3702,6 +3134,14 @@ public class ItemTCRail extends ItemPart {
                     tempType = TrackTypes.EMBEDDED_MEDIUM_LEFT_PARALLEL_SWITCH;
                 }
             }
+            if (type == TrackTypes.EMBEDDED_LARGE_PARALLEL_SWITCH) {
+                if (getTrackOrientation(l, yaw).equals("right")) {
+                    tempType = TrackTypes.EMBEDDED_LARGE_RIGHT_PARALLEL_SWITCH;
+                }
+                if (getTrackOrientation(l, yaw).equals("left")) {
+                    tempType = TrackTypes.EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH;
+                }
+            }
             if (type == TrackTypes.EMBEDDED_MEDIUM_45DEGREE_SWITCH) {
                 if (getTrackOrientation(l, yaw).equals("right")) {
                     tempType = TrackTypes.EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH;
@@ -3806,6 +3246,13 @@ public class ItemTCRail extends ItemPart {
         tcRail.cz = z;
         tcRail.setType(type.getLabel());
         tcRail.idDrop = this.type.getItem().item;
+
+        if (type == TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC){
+            Block block = world.getBlock(x, y, z);
+            int blockID = Block.getIdFromBlock(block);
+            tcRail.setBallastMaterial(blockID);
+            tcRail.ballastMetadata = world.getBlockMetadata(x, y, z);
+        }
         return true;
     }
 
@@ -5976,6 +5423,977 @@ public class ItemTCRail extends ItemPart {
         }
         return true;
     }
+
+    private boolean mediumRight45DegreeSwitch(EntityPlayer player, World world, int x, int y, int z, int l, TrackTypes tempType, String typeVariantStraight, String typeVariant90Turn){
+        int dx = 0;
+        int dz = 0;
+
+        if (l == 0) dz = 1;
+        if (l == 1) dx = -1;
+        if (l == 2) dz = -1;
+        if (l == 3) dx = 1;
+
+        for (int i = 0; i <= 3 ; i++){
+            if (!canPlaceTrack(player, world, x + (dx * i), y + 1, z + (dz * i))){
+                return false;
+            }
+        }
+        int[] xArray;
+        int[] zArray;
+
+        if (player.isSneaking()) {
+            xArray = new int[]{1, 1};
+            zArray = new int[]{2, 3};
+        }
+
+        else {
+            xArray = new int[]{1, 1, 1, 2};
+            zArray = new int[]{2, 3, 4, 3};
+        }
+
+        if (l == 2) {
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, true), l, false, 3, x + 1, z - 3, 3.75, x + 4.25, y + 1,
+                    z, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z - 2);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+            world.setBlockMetadataWithNotify(x + 1, y + 1, z - 2, l, 2);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x, y + 1, z - 1, l, x + 4.25, y + 1, z, 3.75, tempType.getLabel(), true, x + 1, y + 1, z - 2, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x, y + 1, z - 2, l, x + 4.25, y + 1, z, 3.75, typeVariantStraight, false, x + 1, y + 1, z - 2, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x, y + 1, z - 3, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z - 2, true, false);
+        }
+
+        if (l == 0) {
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, false), l, false, 1, x - 1, z + 3, 3.75, x - 3.25, y + 1,
+                    z + 1, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z + 2);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+            world.setBlockMetadataWithNotify(x - 1, y + 1, z + 2, l, 0);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x, y + 1, z + 1, l, x - 3.25, y + 1, z + 1, 3.75, tempType.getLabel(), true, x - 1, y + 1, z + 2, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x, y + 1, z + 2, l, x - 3.25, y + 1, z + 1, 3.75, typeVariantStraight, false, x - 1, y + 1, z + 2, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x, y + 1, z + 3, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z + 2, true, false);
+        }
+        if (l == 1) {
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, true), l, false, 2, x - 3, z - 1, 3.75, x, y + 1,
+                    z - 3.25, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z - 1);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+            world.setBlockMetadataWithNotify(x - 2, y + 1, z - 1, l, 2);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z - 3.25, 3.75, tempType.getLabel(), true, x - 2, y + 1, z - 1, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x - 2, y + 1, z, l, x, y + 1, z - 3.25, 3.75, typeVariantStraight, false, x - 2, y + 1, z - 1, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x - 3, y + 1, z, l, x, y + 1, z, 0, typeVariantStraight, false, x - 2, y + 1, z - 1, true, false);
+        }
+        if (l == 3) {
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, false), l, false, 2, x + 3, z + 1, 3.75, x + 1, y + 1,
+                    z + 4.25, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z + 1);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+            world.setBlockMetadataWithNotify(x + 2, y + 1, z + 1, l, 2);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z + 4.25, 3.75, tempType.getLabel(), true, x + 2, y + 1, z + 1, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x + 2, y + 1, z, l, x + 1, y + 1, z + 4.25, 3.75, typeVariantStraight, false, x + 2, y + 1, z + 1, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x + 3, y + 1, z, l, x + 1, y + 1, z, 0, typeVariantStraight, false, x + 2, y + 1, z + 1, true, false);
+        }
+
+
+        return true;
+    }
+
+    private boolean mediumLeft45DegreeSwitch(EntityPlayer player, World world, int x, int y, int z, int l, TrackTypes tempType, String typeVariantStraight, String typeVariant90Turn){
+        int dx = 0;
+        int dz = 0;
+
+        if (l == 0) dz = 1;
+        if (l == 1) dx = -1;
+        if (l == 2) dz = -1;
+        if (l == 3) dx = 1;
+
+        for (int i = 0; i <= 3 ; i++){
+            if (!canPlaceTrack(player, world, x + (dx * i), y + 1, z + (dz * i))){
+                return false;
+            }
+        }
+        int[] xArray;
+        int[] zArray;
+        if (player.isSneaking()) {
+            xArray = new int[]{1, 1};
+            zArray = new int[]{2, 3};
+        }
+        else {
+            xArray = new int[]{1, 1, 1, 2};
+            zArray = new int[]{2, 3, 4, 3};
+        }
+            if (l == 2) {
+
+                if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, true), l, false, 1, x - 1, z - 3, 3.75, x - 3.25, y + 1,
+                        z, typeVariant90Turn, tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z - 2);
+                if (tcRailTurn != null) {
+                    tcRailTurn.hasModel = false;
+                }
+
+                world.setBlockMetadataWithNotify(x - 1, y + 1, z - 2, l, 2);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x, y + 1, z - 1, l, x - 3.25, y + 1, z, 3.75, tempType.getLabel(), true, x - 1, y + 1, z - 2, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x, y + 1, z - 2, l, x - 3.25, y + 1, z, 3.75, typeVariantStraight, false, x - 1, y + 1, z - 2, true, false);
+                /** Put down straight exit **/
+                putDownSingleRail(world, x, y + 1, z - 3, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z - 2, true, false);
+            }
+
+            if (l == 0) {
+                if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, false), l, false, 3, x + 1, z + 3, 3.75, x + 4.25, y + 1,
+                        z + 1, typeVariant90Turn, tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z + 2);
+                if (tcRailTurn != null) {
+                    tcRailTurn.hasModel = false;
+                }
+
+                world.setBlockMetadataWithNotify(x + 1, y + 1, z + 2, l, 2);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x, y + 1, z + 1, l, x + 4.25, y + 1, z + 1, 3.75, tempType.getLabel(), true, x + 1, y + 1, z + 2, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x, y + 1, z + 2, l, x + 4.25, y + 1, z + 1, 3.75, typeVariantStraight, false, x + 1, y + 1, z + 2, true, false);
+                /** Put down straight exit **/
+                putDownSingleRail(world, x, y + 1, z + 3, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z + 2, true, false);
+            }
+            if (l == 1) {
+                if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, false), l, false, 0, x - 3, z + 1, 3.75, x, y + 1,
+                        z + 4.25, typeVariant90Turn, tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z + 1);
+                if (tcRailTurn != null) {
+                    tcRailTurn.hasModel = false;
+                }
+
+                world.setBlockMetadataWithNotify(x - 2, y + 1, z + 1, l, 2);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z + 4.25, 3.75, tempType.getLabel(), true, x - 2, y + 1, z + 1, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x - 2, y + 1, z, l, x, y + 1, z + 4.25, 3.75, typeVariantStraight, false, x - 2, y + 1, z + 1, true, false);
+                /** Put down straight exit **/
+                putDownSingleRail(world, x - 3, y + 1, z, l, x, y + 1, z, 0, typeVariantStraight, false, x - 2, y + 1, z + 1, true, false);
+            }
+            if (l == 3) {
+                if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, true), l, false, 2, x + 3, z - 1, 3.75, x + 1, y + 1,
+                        z - 3.25, typeVariant90Turn, tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z - 1);
+                if (tcRailTurn != null) {
+                    tcRailTurn.hasModel = false;
+                }
+
+                world.setBlockMetadataWithNotify(x + 2, y + 1, z + 1, l, 2);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z - 3.25, 3.75, tempType.getLabel(), true, x + 2, y + 1, z - 1, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x + 2, y + 1, z, l, x + 1, y + 1, z - 3.25, 3.75, typeVariantStraight, false, x + 2, y + 1, z - 1, true, false);
+                /** Put down straight exit **/
+                putDownSingleRail(world, x + 3, y + 1, z, l, x + 1, y + 1, z, 0, typeVariantStraight, false, x + 2, y + 1, z - 1, true, false);
+            }
+
+
+        return true;
+    }
+
+
+    private boolean largeRight45DegreeSwitch(EntityPlayer player, World world, int x, int y, int z, int l, TrackTypes tempType, String typeVariantStraight, String typeVariant90Turn){
+
+        int dx = 0;
+        int dz = 0;
+
+        if (l == 0) dz = 1;
+        if (l == 1) dx = -1;
+        if (l == 2) dz = -1;
+        if (l == 3) dx = 1;
+
+        for (int i = 0; i <= 6 ; i++){
+            if (!canPlaceTrack(player, world, x + (dx * i), y + 1, z + (dz * i))){
+                return false;
+            }
+        }
+
+
+        int[] xArray;
+        int[] zArray;
+
+        if (player.isSneaking()){
+            xArray = new int[] {1, 1, 1, 1, 2, 2 };
+            zArray = new int[] {3, 4, 5, 6, 5, 6};
+        }
+        else {
+            xArray = new int[] {1, 1, 1, 1, 2, 2, 2, 3};
+            zArray = new int[] {3, 4, 5, 6, 5, 6, 7, 6};
+        }
+
+        if (l == 2) {
+
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, true), l, false, 3, x, z - 7, 8.49, x + 8.99,
+                    y + 1, z, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z - 3);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+
+            world.setBlockMetadataWithNotify(x + 1, y + 1, z - 3, l, 2);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x, y + 1, z - 1 , l, x + 8.99, y + 1, z , 8.49, tempType.getLabel(), true, x + 1, y + 1, z - 3, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x, y + 1, z - 2, l, x + 8.99, y + 1, z , 8.49, typeVariantStraight, false, x + 1, y + 1, z - 3, true, false);
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x, y + 1, z - 3 , l, x + 8.99, y + 1, z , 8.49, typeVariantStraight, false, x + 1, y + 1, z - 3, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x, y + 1, z - 4, l, x + 8.99, y + 1, z , 8.49, typeVariantStraight, false, x + 1, y + 1, z - 3, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x, y + 1, z - 5, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z - 3, false, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x, y + 1, z - 6, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z - 3, false, false);
+        }
+
+        if (l == 0) {
+
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, false), l, false, 1, x, z + 7, 8.49, x - 7.99,
+                    y + 1, z + 1, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z + 3);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+
+            world.setBlockMetadataWithNotify(x - 1, y + 1, z + 3, l, 0);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x, y + 1, z + 1 , l, x - 7.99, y + 1, z + 1, 8.49, tempType.getLabel(), true, x - 1, y + 1, z + 3, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x, y + 1, z + 2, l, x - 7.99, y + 1, z + 1 , 8.49, typeVariantStraight, false, x - 1, y + 1, z + 3, true, false);
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x, y + 1, z + 3 , l, x - 7.99, y + 1, z + 1 , 8.49, typeVariantStraight, false, x - 1, y + 1, z + 3, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x, y + 1, z + 4, l, x - 7.99, y + 1, z + 1, 8.49, typeVariantStraight, false, x - 1, y + 1, z + 3, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x, y + 1, z + 5, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z + 3, false, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x, y + 1, z + 6, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z + 3, false, false);
+        }
+
+        if (l == 1) {
+
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, true), l, false, 2, x - 7, z , 8.49, x ,
+                    y + 1, z - 7.99, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 3, y + 1, z - 1);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+
+            world.setBlockMetadataWithNotify(x - 3, y + 1, z - 1, l, 1);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x - 1, y + 1, z  , l, x , y + 1, z - 7.99, 8.49, tempType.getLabel(), true, x - 3, y + 1, z - 1, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x - 2, y + 1, z , l, x , y + 1, z - 7.99 , 8.49, typeVariantStraight, false, x - 3, y + 1, z - 1, true, false);
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x - 3, y + 1, z , l, x , y + 1, z - 7.99 , 8.49, typeVariantStraight, false, x - 3, y + 1, z - 1, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x - 4, y + 1, z , l, x , y + 1, z - 7.99, 8.49, typeVariantStraight, false, x - 3, y + 1, z - 1, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x - 5, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z - 1, false, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x - 6, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z - 1, false, false);
+        }
+
+        if (l == 3) {
+
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, false), l, false, 0, x + 7, z , 8.49, x + 1 ,
+                    y + 1, z + 8.99, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 3, y + 1, z + 1);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+
+            world.setBlockMetadataWithNotify(x + 3, y + 1, z + 1, l, 3);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x + 1, y + 1, z  , l, x + 1 , y + 1, z + 8.99, 8.49, tempType.getLabel(), true, x + 3, y + 1, z + 1, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x + 2, y + 1, z , l, x + 1 , y + 1, z + 8.99 , 8.49, typeVariantStraight, false, x + 3, y + 1, z + 1, true, false);
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x + 3, y + 1, z , l, x + 1 , y + 1, z + 8.99 , 8.49, typeVariantStraight, false, x + 3, y + 1, z + 1, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x + 4, y + 1, z , l, x + 1 , y + 1, z + 8.99, 8.49, typeVariantStraight, false, x + 3, y + 1, z + 1, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x + 5, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z + 1, false, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x + 6, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z + 1, false, false);
+        }
+        return true;
+    }
+
+    private boolean largeLeft45DegreeSwitch(EntityPlayer player, World world, int x, int y, int z, int l, TrackTypes tempType, String typeVariantStraight, String typeVariant90Turn){
+
+        int dx = 0;
+        int dz = 0;
+
+        if (l == 0) dz = 1;
+        if (l == 1) dx = -1;
+        if (l == 2) dz = -1;
+        if (l == 3) dx = 1;
+
+        for (int i = 0; i <= 6 ; i++){
+            if (!canPlaceTrack(player, world, x + (dx * i), y + 1, z + (dz * i))){
+                return false;
+            }
+        }
+
+
+        int[] xArray;
+        int[] zArray;
+
+        if (player.isSneaking()){
+            xArray = new int[] {1, 1, 1, 1, 2, 2 };
+            zArray = new int[] {3, 4, 5, 6, 5, 6};
+        }
+        else {
+            xArray = new int[] {1, 1, 1, 1, 2, 2, 2, 3};
+            zArray = new int[] {3, 4, 5, 6, 5, 6, 7, 6};
+        }
+
+        if (l == 2) {
+
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, true), l, false, 1, x, z - 7, 8.49, x - 7.99,
+                    y + 1, z, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z - 3);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+
+            world.setBlockMetadataWithNotify(x - 1, y + 1, z - 3, l, 2);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x, y + 1, z - 1 , l, x - 7.99, y + 1, z , 8.49, tempType.getLabel(), true, x - 1, y + 1, z - 3, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x, y + 1, z - 2, l, x - 7.99, y + 1, z , 8.49, typeVariantStraight, false, x - 1, y + 1, z - 3, true, false);
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x, y + 1, z - 3 , l, x - 7.99, y + 1, z , 8.49, typeVariantStraight, false, x - 1, y + 1, z - 3, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x, y + 1, z - 4, l, x - 7.99, y + 1, z , 8.49, typeVariantStraight, false, x - 1, y + 1, z - 3, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x, y + 1, z - 5, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z - 3, false, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x, y + 1, z - 6, l, x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z - 3, false, false);
+        }
+
+        if (l == 0) {
+
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, false), l, false, 3, x, z + 7, 8.49, x + 8.99,
+                    y + 1, z + 1, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z + 3);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+
+            world.setBlockMetadataWithNotify(x + 1, y + 1, z + 3, l, 0);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x, y + 1, z + 1 , l, x + 8.99, y + 1, z + 1, 8.49, tempType.getLabel(), true, x + 1, y + 1, z + 3, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x, y + 1, z + 2, l, x + 8.99, y + 1, z + 1 , 8.49, typeVariantStraight, false, x + 1, y + 1, z + 3, true, false);
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x, y + 1, z + 3 , l, x + 8.99, y + 1, z + 1 , 8.49, typeVariantStraight, false, x + 1, y + 1, z + 3, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x, y + 1, z + 4, l, x + 8.99, y + 1, z + 1, 8.49, typeVariantStraight, false, x + 1, y + 1, z + 3, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x, y + 1, z + 5, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z + 3, false, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x, y + 1, z + 6, l, x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z + 3, false, false);
+        }
+
+        if (l == 1) {
+
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, false), l, false, 0, x - 7, z , 8.49, x ,
+                    y + 1, z + 8.99, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 3, y + 1, z + 1);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+
+            world.setBlockMetadataWithNotify(x - 3, y + 1, z + 1, l, 1);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x - 1, y + 1, z  , l, x , y + 1, z + 8.99, 8.49, tempType.getLabel(), true, x - 3, y + 1, z + 1, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x - 2, y + 1, z , l, x , y + 1, z + 8.99 , 8.49, typeVariantStraight, false, x - 3, y + 1, z + 1, true, false);
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x - 3, y + 1, z , l, x , y + 1, z + 8.99 , 8.49, typeVariantStraight, false, x - 3, y + 1, z + 1, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x - 4, y + 1, z , l, x , y + 1, z + 8.99, 8.49, typeVariantStraight, false, x - 3, y + 1, z + 1, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x - 5, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z + 1, false, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x - 6, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z + 1, false, false);
+        }
+
+        if (l == 3) {
+
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, true), l, false, 2, x + 7, z , 8.49, x + 1 ,
+                    y + 1, z - 7.99, typeVariant90Turn, tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 3, y + 1, z - 1);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+            }
+
+
+            world.setBlockMetadataWithNotify(x + 3, y + 1, z - 1, l, 3);//to force client update
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x + 1, y + 1, z  , l, x + 1 , y + 1, z - 7.99, 8.49, tempType.getLabel(), true, x + 3, y + 1, z - 1, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x + 2, y + 1, z , l, x + 1 , y + 1, z - 7.99 , 8.49, typeVariantStraight, false, x + 3, y + 1, z - 1, true, false);
+            /** Switch rail 1 **/
+            putDownSingleRail(world, x + 3, y + 1, z , l, x + 1 , y + 1, z - 7.99 , 8.49, typeVariantStraight, false, x + 3, y + 1, z - 1, true, false);
+            /** Switch rail 2 **/
+            putDownSingleRail(world, x + 4, y + 1, z , l, x + 1 , y + 1, z - 7.99, 8.49, typeVariantStraight, false, x + 3, y + 1, z - 1, true, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x + 5, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z - 1, false, false);
+            /** Put down straight exit **/
+            putDownSingleRail(world, x + 6, y + 1, z , l, x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z - 1, false, false);
+        }
+        return true;
+    }
+
+
+    private boolean largeRightParallelSwitch(EntityPlayer player, World world, int x, int y, int z, int l, TrackTypes tempType, String typeVariantStraight){
+
+        int dx = 0;
+        int dz = 0;
+        int dx2 = 0;
+        int dz2 = 0;
+
+        if (l == 0) {
+            dz = 1;
+            dx2 = -1;
+        }
+        if (l == 1) {
+            dx = -1;
+            dz2 = -1;
+        }
+        if (l == 2) {
+            dz = -1;
+            dx2 = 1;
+
+        }
+        if (l == 3) {
+            dx = 1;
+            dz2 = 1;
+        }
+
+       for (int i = 0; i < 17 ; i++){
+           if (!canPlaceTrack(player, world, x + (dx * i), y + 1, z + (dz * i))){
+                return false;
+           }
+       }
+        for (int i = 14; i < 17 ; i++){
+            if (!canPlaceTrack(player, world, x + ((dx * i) + (dx2 * 3)), y + 1, z + ((dz * i) + (dz2 * 3)))){
+                return false;
+            }
+        }
+
+
+        int[] xArray = new int[] {1,1,1,1,2};
+        int[] zArray = new int[] {3,4,5,6,6};
+        int[] xArray2 = new int[] {1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3};
+        int[] zArray2 = new int[] {7, 7, 8, 9, 10, 11, 9, 10, 11, 12, 13};
+
+
+        if (l == 2) {
+            for (int gag = 0; gag < xArray2.length; gag++) {
+                if (!canPlaceTrack(player, world, x + xArray2[gag] , y + 1, z -  zArray2[gag] )) {
+                    return false;
+                }
+            }
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, true), l, false, 2, x + 2, z - 17, 18, x + 18.48,
+                    y + 1, z + 0.95, TrackTypes.MEDIUM_RIGHT_TURN.getLabel(), tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z - 3);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+                world.setBlockMetadataWithNotify(x + 1, y + 1, z - 3, l, 2);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x, y + 1, z - 1, l, x + 18.48, y + 1, z + 0.95, 18, tempType.getLabel(), true, x + 1, y + 1, z - 3, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x, y + 1, z - 2, l, x + 18.48, y + 1, z + 0.95, 18, typeVariantStraight, false, x + 1, y + 1, z - 3, true, false);
+                /** Switch rail 3 **/
+                putDownSingleRail(world, x, y + 1, z - 3, l, x + 18.48, y + 1, z + 0.95, 18, typeVariantStraight, false, x + 1, y + 1, z - 3, true, false);
+                /** Switch rail 4 **/
+                putDownSingleRail(world, x, y + 1, z - 4, l, x + 18.48, y + 1, z + 0.95, 18, typeVariantStraight, false, x + 1, y + 1, z - 3, true, false);
+
+                if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray2, x, false), flipArraySign(zArray2, z, true), l, false, 2, x + 2, z - 20, 18, x - 14.5,
+                        y + 1, z - 13.5, TrackTypes.MEDIUM_LEFT_TURN.getLabel(), tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn2 = (TileTCRail) world.getTileEntity(x + 1, y + 1, z - 7);
+                if (tcRailTurn2 != null) {
+                    tcRailTurn2.hasModel = false;
+                    tcRailTurn2.isLinkedToRail = true;
+                    tcRailTurn2.linkedX = x + 1;
+                    tcRailTurn2.linkedY = y + 1;
+                    tcRailTurn2.linkedZ = z - 3;
+                }
+                tcRailTurn.isLinkedToRail = true;
+                tcRailTurn.linkedX = x + 1;
+                tcRailTurn.linkedY = y + 1;
+                tcRailTurn.linkedZ = z - 7;
+
+            }
+            /** Straight rail exit**/
+            for (int i = 5; i < 17 ; i++){
+                putDownSingleRail(world, x, y + 1, z - i, l , x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z - 3, false, false);
+            }
+            for (int i = 14; i < 17 ; i++){
+                putDownSingleRail(world, x + 3, y + 1, z - i, l , x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z - 3, false, false);
+            }
+            return true;
+
+        }
+
+        if (l == 0) {
+            for (int gag = 0; gag < xArray2.length; gag++) {
+                if (!canPlaceTrack(player, world, x - xArray2[gag] , y + 1, z + zArray2[gag] )) {
+                    return false;
+                }
+            }
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, false), l, false, 0, x - 2, z + 17, 18, x - 17.48,
+                    y + 1, z + 0.05 , TrackTypes.MEDIUM_RIGHT_TURN.getLabel(), tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z + 3);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+                world.setBlockMetadataWithNotify(x - 1, y + 1, z + 3, l, 0);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x, y + 1, z + 1, l, x - 17.48, y + 1, z + 0.05, 18, tempType.getLabel(), true, x - 1, y + 1, z + 3, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x, y + 1, z + 2, l, x - 17.48, y + 1, z + 0.05, 18, typeVariantStraight, false, x - 1, y + 1, z + 3, true, false);
+                /** Switch rail 3 **/
+                putDownSingleRail(world, x, y + 1, z + 3, l, x - 17.48, y + 1, z + 0.05, 18, typeVariantStraight, false, x - 1, y + 1, z + 3, true, false);
+                /** Switch rail 4 **/
+                putDownSingleRail(world, x, y + 1, z + 4, l, x - 17.48, y + 1, z + 0.05, 18, typeVariantStraight, false, x - 1, y + 1, z + 3, true, false);
+
+                if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray2, x, true), flipArraySign(zArray2, z, false), l, false, 0, x - 2, z + 17, 18, x + 15.48,
+                        y + 1, z + 14.5, TrackTypes.MEDIUM_LEFT_TURN.getLabel(), tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn2 = (TileTCRail) world.getTileEntity(x - 1, y + 1, z + 7);
+                if (tcRailTurn2 != null) {
+                    tcRailTurn2.hasModel = false;
+                    tcRailTurn2.isLinkedToRail = true;
+                    tcRailTurn2.linkedX = x - 1;
+                    tcRailTurn2.linkedY = y + 1;
+                    tcRailTurn2.linkedZ = z + 3;
+                }
+                tcRailTurn.isLinkedToRail = true;
+                tcRailTurn.linkedX = x - 1;
+                tcRailTurn.linkedY = y + 1;
+                tcRailTurn.linkedZ = z + 7;
+
+            }
+            /** Straight rail exit**/
+            for (int i = 5; i < 17 ; i++){
+                putDownSingleRail(world, x, y + 1, z + i, l , x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z + 3, false, false);
+            }
+            for (int i = 14; i < 17 ; i++){
+                putDownSingleRail(world, x - 3, y + 1, z + i, l , x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z + 3, false, false);
+            }
+            return true;
+
+        }
+
+        if (l == 1) {
+            for (int gag = 0; gag < xArray2.length; gag++) {
+                if (!canPlaceTrack(player, world, x - zArray2[gag] , y + 1, z -  xArray2[gag] )) {
+                    return false;
+                }
+            }
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, true), l, false, 1, x - 2, z - 17, 18, x + 0.95,
+                    y + 1, z - 17.48 , TrackTypes.MEDIUM_RIGHT_TURN.getLabel(), tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 3, y + 1, z - 1);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+                world.setBlockMetadataWithNotify(x - 3, y + 1, z - 1, l, 1);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x - 1, y + 1, z , l, x + 0.95, y + 1, z - 17.48, 18, tempType.getLabel(), true, x - 3, y + 1, z - 1, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x - 2, y + 1, z , l, x + 0.95, y + 1, z - 17.48, 18, typeVariantStraight, false, x - 3, y + 1, z - 1, true, false);
+                /** Switch rail 3 **/
+                putDownSingleRail(world, x - 3, y + 1, z , l, x + 0.95, y + 1, z - 17.48, 18, typeVariantStraight, false, x - 3, y + 1, z - 1, true, false);
+                /** Switch rail 4 **/
+                putDownSingleRail(world, x - 4, y + 1, z , l, x + 0.95, y + 1, z - 17.48, 18, typeVariantStraight, false, x - 3, y + 1, z - 1, true, false);
+
+                if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray2, x, true), flipArraySign(xArray2, z, true), l, false, 1, x - 17, z - 3, 18, x - 13.5,
+                        y + 1, z + 15.5, TrackTypes.MEDIUM_LEFT_TURN.getLabel(), tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn2 = (TileTCRail) world.getTileEntity(x - 7, y + 1, z - 1);
+                if (tcRailTurn2 != null) {
+                    tcRailTurn2.hasModel = false;
+                    tcRailTurn2.isLinkedToRail = true;
+                    tcRailTurn2.linkedX = x - 3;
+                    tcRailTurn2.linkedY = y + 1;
+                    tcRailTurn2.linkedZ = z - 1;
+                }
+                tcRailTurn.isLinkedToRail = true;
+                tcRailTurn.linkedX = x - 7;
+                tcRailTurn.linkedY = y + 1;
+                tcRailTurn.linkedZ = z - 1;
+
+            }
+            /** Straight rail exit**/
+            for (int i = 5; i < 17 ; i++){
+                putDownSingleRail(world, x - i, y + 1, z, l , x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z - 1, false, false);
+            }
+            for (int i = 14; i < 17 ; i++){
+                putDownSingleRail(world, x - i, y + 1, z - 3, l , x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z - 1, false, false);
+            }
+            return true;
+
+        }
+
+        if (l == 3) {
+            for (int gag = 0; gag < xArray2.length; gag++) {
+                if (!canPlaceTrack(player, world, x + zArray2[gag] , y + 1, z +  xArray2[gag] )) {
+                    return false;
+                }
+            }
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, false), l, false, 3, x + 2, z + 17, 18, x + 0.05,
+                    y + 1, z + 18.48 , TrackTypes.MEDIUM_RIGHT_TURN.getLabel(), tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 3, y + 1, z + 1);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+                world.setBlockMetadataWithNotify(x + 3, y + 1, z + 1, l, 3);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x + 1, y + 1, z , l, x + 0.05, y + 1, z + 18.48, 18, tempType.getLabel(), true, x + 3, y + 1, z + 1, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x + 2, y + 1, z , l, x + 0.05, y + 1, z + 18.48, 18, typeVariantStraight, false, x + 3, y + 1, z + 1, true, false);
+                /** Switch rail 3 **/
+                putDownSingleRail(world, x + 3, y + 1, z , l, x + 0.05, y + 1, z + 18.48, 18, typeVariantStraight, false, x + 3, y + 1, z + 1, true, false);
+                /** Switch rail 4 **/
+                putDownSingleRail(world, x + 4, y + 1, z , l, x + 0.05, y + 1, z + 18.48, 18, typeVariantStraight, false, x + 3, y + 1, z + 1, true, false);
+
+                if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray2, x, false), flipArraySign(xArray2, z, false), l, false, 3, x + 17, z + 3, 18, x + 14.5,
+                        y + 1, z - 14.5, TrackTypes.MEDIUM_LEFT_TURN.getLabel(), tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn2 = (TileTCRail) world.getTileEntity(x + 7, y + 1, z + 1);
+                if (tcRailTurn2 != null) {
+                    tcRailTurn2.hasModel = false;
+                    tcRailTurn2.isLinkedToRail = true;
+                    tcRailTurn2.linkedX = x + 3;
+                    tcRailTurn2.linkedY = y + 1;
+                    tcRailTurn2.linkedZ = z + 1;
+                }
+                tcRailTurn.isLinkedToRail = true;
+                tcRailTurn.linkedX = x + 7;
+                tcRailTurn.linkedY = y + 1;
+                tcRailTurn.linkedZ = z + 1;
+
+            }
+            /** Straight rail exit**/
+            for (int i = 5; i < 17 ; i++){
+                putDownSingleRail(world, x + i, y + 1, z, l , x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z + 1, false, false);
+            }
+            for (int i = 14; i < 17 ; i++){
+                putDownSingleRail(world, x + i, y + 1, z + 3, l , x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z + 1, false, false);
+            }
+            return true;
+
+        }
+
+
+
+        return false;
+
+    }
+
+    private boolean largeLeftParallelSwitch(EntityPlayer player, World world, int x, int y, int z, int l, TrackTypes tempType, String typeVariantStraight){
+
+        int dx = 0;
+        int dz = 0;
+        int dx2 = 0;
+        int dz2 = 0;
+
+        if (l == 0) {
+            dz = 1;
+            dx2 = 1;
+        }
+        if (l == 1) {
+            dx = -1;
+            dz2 = 1;
+        }
+        if (l == 2) {
+            dz = -1;
+            dx2 = -1;
+
+        }
+        if (l == 3) {
+            dx = 1;
+            dz2 = -1;
+        }
+
+        for (int i = 0; i < 17 ; i++){
+            if (!canPlaceTrack(player, world, x + (dx * i), y + 1, z + (dz * i))){
+                return false;
+            }
+        }
+        for (int i = 14; i < 17 ; i++){
+            if (!canPlaceTrack(player, world, x + ((dx * i) + (dx2 * 3)), y + 1, z + ((dz * i) + (dz2 * 3)))){
+                return false;
+            }
+        }
+
+
+        int[] xArray = new int[] {1,1,1,1,2};
+        int[] zArray = new int[] {3,4,5,6,6};
+        int[] xArray2 = new int[] {1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3};
+        int[] zArray2 = new int[] {7, 7, 8, 9, 10, 11, 9, 10, 11, 12, 13};
+
+
+        if (l == 2) {
+            for (int gag = 0; gag < xArray2.length; gag++) {
+                if (!canPlaceTrack(player, world, x - xArray2[gag] , y + 1, z -  zArray2[gag] )) {
+                    return false;
+                }
+            }
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, true), l, false, 2, x - 2, z - 17, 18, x -17.48,
+                    y + 1, z + 0.95, TrackTypes.MEDIUM_LEFT_TURN.getLabel(), tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z - 3);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+                world.setBlockMetadataWithNotify(x - 1, y + 1, z - 3, l, 2);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x, y + 1, z - 1, l, x - 17.48, y + 1, z + 0.95, 18, tempType.getLabel(), true, x - 1, y + 1, z - 3, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x, y + 1, z - 2, l, x - 17.48, y + 1, z + 0.95, 18, typeVariantStraight, false, x - 1, y + 1, z - 3, true, false);
+                /** Switch rail 3 **/
+                putDownSingleRail(world, x, y + 1, z - 3, l, x - 17.48, y + 1, z + 0.95, 18, typeVariantStraight, false, x - 1, y + 1, z - 3, true, false);
+                /** Switch rail 4 **/
+                putDownSingleRail(world, x, y + 1, z - 4, l, x - 17.48, y + 1, z + 0.95, 18, typeVariantStraight, false, x - 1, y + 1, z - 3, true, false);
+
+                if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray2, x, true), flipArraySign(zArray2, z, true), l, false, 2, x - 2, z - 17, 18, x + 15.5,
+                        y + 1, z - 13.5, TrackTypes.MEDIUM_RIGHT_TURN.getLabel(), tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn2 = (TileTCRail) world.getTileEntity(x - 1, y + 1, z - 7);
+                if (tcRailTurn2 != null) {
+                    tcRailTurn2.hasModel = false;
+                    tcRailTurn2.isLinkedToRail = true;
+                    tcRailTurn2.linkedX = x - 1;
+                    tcRailTurn2.linkedY = y + 1;
+                    tcRailTurn2.linkedZ = z - 3;
+                }
+                tcRailTurn.isLinkedToRail = true;
+                tcRailTurn.linkedX = x - 1;
+                tcRailTurn.linkedY = y + 1;
+                tcRailTurn.linkedZ = z - 7;
+
+            }
+            /** Straight rail exit**/
+            for (int i = 5; i < 17 ; i++){
+                putDownSingleRail(world, x, y + 1, z - i, l , x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z - 3, false, false);
+            }
+            for (int i = 14; i < 17 ; i++){
+                putDownSingleRail(world, x - 3, y + 1, z - i, l , x, y + 1, z, 0, typeVariantStraight, false, x - 1, y + 1, z - 3, false, false);
+            }
+            return true;
+
+        }
+
+        if (l == 0) {
+            for (int gag = 0; gag < xArray2.length; gag++) {
+                if (!canPlaceTrack(player, world, x + xArray2[gag] , y + 1, z + zArray2[gag] )) {
+                    return false;
+                }
+            }
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, false), l, false, 0, x + 2, z + 17, 18, x + 18.48,
+                    y + 1, z + 0.05 , TrackTypes.MEDIUM_LEFT_TURN.getLabel(), tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z + 3);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+                world.setBlockMetadataWithNotify(x + 1, y + 1, z + 3, l, 0);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x, y + 1, z + 1, l, x + 18.48, y + 1, z + 0.05, 18, tempType.getLabel(), true, x + 1, y + 1, z + 3, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x, y + 1, z + 2, l, x + 18.48, y + 1, z + 0.05, 18, typeVariantStraight, false, x + 1, y + 1, z + 3, true, false);
+                /** Switch rail 3 **/
+                putDownSingleRail(world, x, y + 1, z + 3, l, x + 18.48, y + 1, z + 0.05, 18, typeVariantStraight, false, x + 1, y + 1, z + 3, true, false);
+                /** Switch rail 4 **/
+                putDownSingleRail(world, x, y + 1, z + 4, l, x + 18.48, y + 1, z + 0.05, 18, typeVariantStraight, false, x + 1, y + 1, z + 3, true, false);
+
+                if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray2, x, false), flipArraySign(zArray2, z, false), l, false, 0, x - 2, z + 17, 18, x -14.48,
+                        y + 1, z + 14.5, TrackTypes.MEDIUM_RIGHT_TURN.getLabel(), tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn2 = (TileTCRail) world.getTileEntity(x + 1, y + 1, z + 7);
+                if (tcRailTurn2 != null) {
+                    tcRailTurn2.hasModel = false;
+                    tcRailTurn2.isLinkedToRail = true;
+                    tcRailTurn2.linkedX = x + 1;
+                    tcRailTurn2.linkedY = y + 1;
+                    tcRailTurn2.linkedZ = z + 3;
+                }
+                tcRailTurn.isLinkedToRail = true;
+                tcRailTurn.linkedX = x + 1;
+                tcRailTurn.linkedY = y + 1;
+                tcRailTurn.linkedZ = z + 7;
+
+            }
+            /** Straight rail exit**/
+            for (int i = 5; i < 17 ; i++){
+                putDownSingleRail(world, x, y + 1, z + i, l , x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z + 3, false, false);
+            }
+            for (int i = 14; i < 17 ; i++){
+                putDownSingleRail(world, x + 3, y + 1, z + i, l , x, y + 1, z, 0, typeVariantStraight, false, x + 1, y + 1, z + 3, false, false);
+            }
+            return true;
+
+        }
+
+        if (l == 1) {
+            for (int gag = 0; gag < xArray2.length; gag++) {
+                if (!canPlaceTrack(player, world, x - zArray2[gag] , y + 1, z +  xArray2[gag] )) {
+                    return false;
+                }
+            }
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, false), l, false, 1, x - 2, z - 17, 18, x + 0.95,
+                    y + 1, z + 18.48 , TrackTypes.MEDIUM_LEFT_TURN.getLabel(), tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 3, y + 1, z + 1);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+                world.setBlockMetadataWithNotify(x - 3, y + 1, z + 1, l, 1);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x - 1, y + 1, z , l, x + 0.95, y + 1, z + 18.48, 18, tempType.getLabel(), true, x - 3, y + 1, z + 1, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x - 2, y + 1, z , l, x + 0.95, y + 1, z + 18.48, 18, typeVariantStraight, false, x - 3, y + 1, z + 1, true, false);
+                /** Switch rail 3 **/
+                putDownSingleRail(world, x - 3, y + 1, z , l, x + 0.95, y + 1, z + 18.48, 18, typeVariantStraight, false, x - 3, y + 1, z + 1, true, false);
+                /** Switch rail 4 **/
+                putDownSingleRail(world, x - 4, y + 1, z , l, x + 0.95, y + 1, z + 18.48, 18, typeVariantStraight, false, x - 3, y + 1, z + 1, true, false);
+
+                if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray2, x, true), flipArraySign(xArray2, z, false), l, false, 1, x - 17, z + 3, 18, x - 13.5,
+                        y + 1, z - 14.5, TrackTypes.MEDIUM_RIGHT_TURN.getLabel(), tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn2 = (TileTCRail) world.getTileEntity(x - 7, y + 1, z + 1);
+                if (tcRailTurn2 != null) {
+                    tcRailTurn2.hasModel = false;
+                    tcRailTurn2.isLinkedToRail = true;
+                    tcRailTurn2.linkedX = x - 3;
+                    tcRailTurn2.linkedY = y + 1;
+                    tcRailTurn2.linkedZ = z + 1;
+                }
+                tcRailTurn.isLinkedToRail = true;
+                tcRailTurn.linkedX = x - 7;
+                tcRailTurn.linkedY = y + 1;
+                tcRailTurn.linkedZ = z + 1;
+
+            }
+            /** Straight rail exit**/
+            for (int i = 5; i < 17 ; i++){
+                putDownSingleRail(world, x - i, y + 1, z, l , x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z + 1, false, false);
+            }
+            for (int i = 14; i < 17 ; i++){
+                putDownSingleRail(world, x - i, y + 1, z + 3, l , x, y + 1, z, 0, typeVariantStraight, false, x - 3, y + 1, z + 1, false, false);
+            }
+            return true;
+
+        }
+
+        if (l == 3) {
+            for (int gag = 0; gag < xArray2.length; gag++) {
+                if (!canPlaceTrack(player, world, x + zArray2[gag] , y + 1, z -  xArray2[gag] )) {
+                    return false;
+                }
+            }
+            if (!putDownTurn(player, world, true, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, true), l, false, 3, x + 2, z + 17, 18, x + 0.05,
+                    y + 1, z - 17.48 , TrackTypes.MEDIUM_LEFT_TURN.getLabel(), tempType.getItem().item))
+                return false;
+            TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 3, y + 1, z - 1);
+            if (tcRailTurn != null) {
+                tcRailTurn.hasModel = false;
+                world.setBlockMetadataWithNotify(x + 3, y + 1, z - 1, l, 3);//to force client update
+                /** Switch rail 1 **/
+                putDownSingleRail(world, x + 1, y + 1, z , l, x + 0.05, y + 1, z - 17.48, 18, tempType.getLabel(), true, x + 3, y + 1, z - 1, true, false);
+                /** Switch rail 2 **/
+                putDownSingleRail(world, x + 2, y + 1, z , l, x + 0.05, y + 1, z - 17.48, 18, typeVariantStraight, false, x + 3, y + 1, z - 1, true, false);
+                /** Switch rail 3 **/
+                putDownSingleRail(world, x + 3, y + 1, z , l, x + 0.05, y + 1, z - 17.48, 18, typeVariantStraight, false, x + 3, y + 1, z - 1, true, false);
+                /** Switch rail 4 **/
+                putDownSingleRail(world, x + 4, y + 1, z , l, x + 0.05, y + 1, z - 17.48, 18, typeVariantStraight, false, x + 3, y + 1, z - 1, true, false);
+
+                if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray2, x, false), flipArraySign(xArray2, z, true), l, false, 3, x + 17, z + 3, 18, x + 14.5,
+                        y + 1, z + 15.5, TrackTypes.MEDIUM_RIGHT_TURN.getLabel(), tempType.getItem().item))
+                    return false;
+                TileTCRail tcRailTurn2 = (TileTCRail) world.getTileEntity(x + 7, y + 1, z - 1);
+                if (tcRailTurn2 != null) {
+                    tcRailTurn2.hasModel = false;
+                    tcRailTurn2.isLinkedToRail = true;
+                    tcRailTurn2.linkedX = x + 3;
+                    tcRailTurn2.linkedY = y + 1;
+                    tcRailTurn2.linkedZ = z - 1;
+                }
+                tcRailTurn.isLinkedToRail = true;
+                tcRailTurn.linkedX = x + 7;
+                tcRailTurn.linkedY = y + 1;
+                tcRailTurn.linkedZ = z - 1;
+
+            }
+            /** Straight rail exit**/
+            for (int i = 5; i < 17 ; i++){
+                putDownSingleRail(world, x + i, y + 1, z, l , x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z - 1, false, false);
+            }
+            for (int i = 14; i < 17 ; i++){
+                putDownSingleRail(world, x + i, y + 1, z - 3, l , x, y + 1, z, 0, typeVariantStraight, false, x + 3, y + 1, z - 1, false, false);
+            }
+            return true;
+
+        }
+
+
+
+        return false;
+
+    }
+
     private boolean mediumRightParallelCurve(EntityPlayer player, World world, int x, int y, int z, int l, TrackTypes tempType) {
 
         int[] xArray = {0, 0, 0, 0, 0, 1, 1, 1};

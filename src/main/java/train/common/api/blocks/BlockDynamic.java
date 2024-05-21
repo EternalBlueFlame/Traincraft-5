@@ -138,10 +138,10 @@ public class BlockDynamic extends BlockContainer {
         world.setTileEntity(x,y,z,createNewTileEntity(world,0));
         if(world.getTileEntity(x,y,z) instanceof TileRenderFacing){
             switch ((CommonUtil.floorDouble(((entity.rotationYaw-45)%360) / 90.0F)&3)){
-                case 0: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.WEST);break;
-                case 1: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.NORTH);break;
-                case 2: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.EAST);break;
-                case 3: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.SOUTH);break;
+                case 0: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.SOUTH);break;
+                case 1: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.EAST);break;
+                case 2: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.NORTH);break;
+                case 3: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.WEST);break;
 
             }
 

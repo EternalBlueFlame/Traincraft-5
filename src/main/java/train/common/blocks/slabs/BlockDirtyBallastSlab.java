@@ -1,4 +1,4 @@
-package train.common.blocks;
+package train.common.blocks.slabs;
 
 import java.util.List;
 import java.util.Random;
@@ -16,16 +16,16 @@ import cpw.mods.fml.relauncher.SideOnly;
 import train.common.Traincraft;
 import train.common.library.BlockIDs;
 
-public class BlockAsphaltSlab extends BlockSlab
+public class BlockDirtyBallastSlab extends BlockSlab
 {
-    public BlockAsphaltSlab(boolean par2)
+    public BlockDirtyBallastSlab(boolean par2)
     {
         super(par2, Material.rock);
         this.useNeighborBrightness = true;
         this.setStepSound(soundTypeStone);
         this.setResistance(5.0F);
         this.setHardness(2.0F);
-        this.setBlockName("asphalt slab");
+        this.setBlockName("dirty ballast slab");
     }
 
     /************
@@ -35,7 +35,7 @@ public class BlockAsphaltSlab extends BlockSlab
     @SideOnly(Side.CLIENT)
     public void getSubBlocks(Item item, CreativeTabs tab, List list)
     {
-        if (item != Item.getItemFromBlock(BlockIDs.asphaltDoubleSlab.block))
+        if (item != Item.getItemFromBlock(BlockIDs.dirtyBallastDoubleSlab.block))
         {
             list.add(new ItemStack(item, 1, 0));
         }
@@ -50,14 +50,14 @@ public class BlockAsphaltSlab extends BlockSlab
     @SideOnly(Side.CLIENT)
     private static boolean isBlockSingleSlab(Block block)
     {
-        return block == BlockIDs.asphaltSlab.block;
+        return block == BlockIDs.dirtyBallastSlab.block;
     }
 
     @Override
     @SideOnly(Side.CLIENT)
     public Item getItem(World par1World, int par2, int par3, int par4)
     {
-        return isBlockSingleSlab(this) ? Item.getItemFromBlock(this) : (this == BlockIDs.asphaltDoubleSlab.block ? Item.getItemFromBlock(BlockIDs.asphaltSlab.block) : Item.getItemFromBlock(BlockIDs.asphalt.block));
+        return isBlockSingleSlab(this) ? Item.getItemFromBlock(this) : (this == BlockIDs.dirtyBallastDoubleSlab.block ? Item.getItemFromBlock(BlockIDs.dirtyBallastSlab.block) : Item.getItemFromBlock(BlockIDs.dirtyBallast.block));
     }
 
     /************
@@ -66,12 +66,12 @@ public class BlockAsphaltSlab extends BlockSlab
     @Override
     public Item getItemDropped(int par1, Random par2Random, int par3)
     {
-        return Item.getItemFromBlock(BlockIDs.asphaltSlab.block);
+        return Item.getItemFromBlock(BlockIDs.dirtyBallastSlab.block);
     }
 
     protected ItemStack createStackedBlock(int par1)
     {
-        return new ItemStack(BlockIDs.asphaltSlab.block, 2, 0);
+        return new ItemStack(BlockIDs.dirtyBallastSlab.block, 2, 0);
     }
 
     /************
@@ -81,6 +81,6 @@ public class BlockAsphaltSlab extends BlockSlab
     @SideOnly(Side.CLIENT)
     public IIcon getIcon(int side, int meta)
     {
-        return BlockIDs.asphalt.block.getIcon(side, 2);
+        return BlockIDs.dirtyBallast.block.getIcon(side, 2);
     }
 }

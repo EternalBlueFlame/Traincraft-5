@@ -15,7 +15,7 @@ public class TileWaterWheel extends Energy implements IEnergyProvider {
 
 	public TileWaterWheel() {
 		super(0, 80, 80);
-		super.setSides(new ForgeDirection[]{ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH});
+		//super.setSides(new ForgeDirection[]{ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.NORTH, ForgeDirection.SOUTH});
 	}
 
 	@Override

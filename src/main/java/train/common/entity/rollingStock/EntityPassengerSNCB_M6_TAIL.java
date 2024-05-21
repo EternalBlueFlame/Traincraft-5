@@ -105,4 +105,9 @@ public class EntityPassengerSNCB_M6_TAIL extends EntityRollingStock implements I
     public float getOptimalDistance(EntityMinecart cart) {
         return 1.15f;
     }
+
+    @Override
+    public String transportcountry() {
+        return "be";
+    }
 }

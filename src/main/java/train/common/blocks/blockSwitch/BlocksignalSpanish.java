@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -186,19 +187,17 @@ public class BlocksignalSpanish extends Block {
 
     @Override
     public void onNeighborBlockChange(World world, int i, int j, int k, Block l) {
+
         TilesignalSpanish te = (TilesignalSpanish) world.getTileEntity(i, j, k);
         if (te == null)
             return;
-        if (te.state == 1 && !world.isBlockIndirectlyGettingPowered(i, j, k)) {
-            world.scheduleBlockUpdate(i, j, k, this, 4);
+        if (te.getState() == 1 && !world.isBlockIndirectlyGettingPowered(i, j, k)) {
+            te.setState(0);
         }
-        else if (te.state == 0 && world.isBlockIndirectlyGettingPowered(i, j, k)) {
-            // world.setBlockWithNotify(i, j, k,Train.ActiveSignalBlock.blockID);
-
-            te.state = 1;
-            // world.setBlockMetadata(i, j, k,l);
+        if (te.getState() == 0 && world.isBlockIndirectlyGettingPowered(i, j, k)) {
+            te.setState(1);
         }
-        updateTick(world, i, j, k);
+        world.markBlockForUpdate(i, j, k);
     }
 
     public void updateTick(World world, int i, int j, int k) {

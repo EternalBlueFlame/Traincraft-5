@@ -76,4 +76,8 @@ public class EntityPassengerBR_MK2C_BSO extends EntityRollingStock implements IP
     public float getOptimalDistance(EntityMinecart cart) {
         return 2.7F;
     }
+    @Override
+    public String transportcountry() {
+        return "uk";
+    }
 }

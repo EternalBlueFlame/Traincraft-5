@@ -12,13 +12,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
+import train.common.api.blocks.TileRenderFacing;
 
-public class TileTrainWbench extends TileEntity implements IInventory {
+public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 	private ItemStack[] workbenchItemStacks;
 	private ForgeDirection facing;
@@ -182,18 +181,10 @@ public class TileTrainWbench extends TileEntity implements IInventory {
 		return player.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64.0D;
 	}
 
-	public ForgeDirection getFacing() {
 
-		return (facing != null ? this.facing : ForgeDirection.NORTH);
-	}
-
-	public void setFacing(ForgeDirection face) {
-
-		this.facing = face;
-	}
 
 	@Override
-	public Packet getDescriptionPacket() {
+	public S35PacketUpdateTileEntity getDescriptionPacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
