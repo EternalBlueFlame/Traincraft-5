@@ -106,14 +106,11 @@ public class ModelRendererTurbo {
 
 
     private TexturedPolygon textureQuad(TexturedVertex vert1, TexturedVertex vert2, TexturedVertex vert3, TexturedVertex vert4, float f, float g, float h, float j){
-        float uOffs = 1.0F / (textureWidth * 10.0F);
-        float vOffs = 1.0F / (textureHeight * 10.0F);
         List<TexturedVertex> verts = new ArrayList<>();
-        //todo: use the longest, or shortest for that side for h/f g/j respectively
-        verts.add(vert1.setTexturePosition(h / textureWidth - uOffs, g / textureHeight + vOffs));
-        verts.add(vert2.setTexturePosition(f / textureWidth + uOffs, g / textureHeight + vOffs));
-        verts.add(vert3.setTexturePosition(f / textureWidth + uOffs, j / textureHeight - vOffs));
-        verts.add(vert4.setTexturePosition(h / textureWidth - uOffs, j / textureHeight - vOffs));
+        verts.add(vert1.setTexturePosition(h / textureWidth, g / textureHeight));
+        verts.add(vert2.setTexturePosition(f / textureWidth, g / textureHeight));
+        verts.add(vert3.setTexturePosition(f / textureWidth, j / textureHeight));
+        verts.add(vert4.setTexturePosition(h / textureWidth, j / textureHeight));
         return new TexturedPolygon(verts);
     }
 
