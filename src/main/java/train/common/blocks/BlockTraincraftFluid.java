@@ -17,7 +17,13 @@ public class BlockTraincraftFluid extends BlockFluidClassic {
 	@SideOnly(Side.CLIENT)
 	protected IIcon[] theIcon;
 	protected boolean flammable;
-	protected int flammability = 0;	
+	protected int flammability = 0;
+
+	public String MODID=Info.modID;
+
+	public void setModID(String i){
+		MODID=i;
+	}
 
 	public BlockTraincraftFluid(Fluid fluid, Material material) {
 		super(fluid, material);
@@ -31,7 +37,7 @@ public class BlockTraincraftFluid extends BlockFluidClassic {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.theIcon = new IIcon[]{iconRegister.registerIcon(Info.modID.toLowerCase() + ":liquid_" + fluidName), iconRegister.registerIcon(Info.modID.toLowerCase() +":liquid_" + fluidName + "_flow")};
+		this.theIcon = new IIcon[]{iconRegister.registerIcon(MODID.toLowerCase() + ":liquid_" + fluidName), iconRegister.registerIcon(Info.modID.toLowerCase() +":liquid_" + fluidName + "_flow")};
 	}
 
 	public BlockTraincraftFluid setFlammable(boolean flammable) {
@@ -76,6 +82,6 @@ public class BlockTraincraftFluid extends BlockFluidClassic {
 	
 	@Override
 	public String getUnlocalizedName() {
-		return "fluid." + Info.modID + ":" + fluidName;
+		return "fluid." + MODID + ":" + fluidName;
 	}
 }

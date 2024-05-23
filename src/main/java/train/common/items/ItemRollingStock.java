@@ -19,6 +19,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.api.*;
@@ -37,9 +38,10 @@ import java.util.List;
 public class ItemRollingStock extends ItemMinecart implements IMinecart, IMinecartItem {
 
 	private String iconName = "";
+	private ResourceLocation itemTexture;
 	private String trainCreator;
 
-	private AbstractTrains entity=null;
+	public AbstractTrains entity=null;
 
 	private AbstractTrains getEntity(){
 		if(entity==null){
@@ -51,12 +53,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	public ItemRollingStock(String iconName) {
 		super(1);
 		this.iconName = iconName;
+		itemTexture=new ResourceLocation(iconName);
 		maxStackSize = 1;
 		if(!ConfigHandler.SPLIT_CREATIVE) {
 			setCreativeTab(Traincraft.tcTab);
 		} else {
 			setCreativeTab(Traincraft.tcTrainTab);
 		}
+	}
+
+	public ResourceLocation getIconResource() {
+		return itemTexture;
 	}
 
 	public ItemRollingStock(String iconName, CreativeTabs tab) {

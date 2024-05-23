@@ -268,4 +268,10 @@ public class CommonProxy implements IGuiHandler {
 
     public void setHook() {
     }
+
+
+    public Object getTESR(){return null;}
+    public Object getEntityRender(){return null;}
+    public Object getNullRender(){return null;}
+
 }

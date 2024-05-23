@@ -103,13 +103,13 @@ public class LiquidManager {
 	}
 
 	public boolean isDieselLocoFuel(ItemStack stack) {
-		FluidStack[] multiFilter;
+		String[] multiFilter;
 		FluidStack bucketLiquid = getFluidInContainer(stack);
 		LiquidManager.getInstance();
 		multiFilter = LiquidManager.dieselFilter();
 		if (multiFilter != null) {
-			for(FluidStack aMultiFilter : multiFilter){
-				if(aMultiFilter != null && bucketLiquid != null && aMultiFilter.isFluidEqual(bucketLiquid))
+			for(String aMultiFilter : multiFilter){
+				if(aMultiFilter != null && bucketLiquid != null && bucketLiquid.getUnlocalizedName().toLowerCase().contains(aMultiFilter))
 					return true;
 				if(isEmptyContainer(stack))
 					return true;
@@ -118,21 +118,8 @@ public class LiquidManager {
 		return false;
 	}
 
-	public static FluidStack[] dieselFilter() {
-		FluidStack[] fuels = new FluidStack[4];
-		if (DIESEL != null)
-			fuels[0] = new FluidStack(DIESEL, 1);
-		if (REFINED_FUEL != null)
-			fuels[1] = new FluidStack(REFINED_FUEL, 1);
-		if (biofuel != null)
-			fuels[2] = new FluidStack(biofuel, 1);
-		if (bioDiesel != null)
-			fuels[2] = new FluidStack(bioDiesel, 1);
-		if (fuel != null)
-			fuels[3] = new FluidStack(fuel, 1);
-		if (bioethanol != null)
-			fuels[2] = new FluidStack(bioethanol, 1);
-		return fuels;
+	public static String[] dieselFilter() {
+		return new String[]{"diesel","fuel"};
 	}
 
 	public boolean isContainer(ItemStack stack) {
@@ -243,7 +230,7 @@ public class LiquidManager {
 
 	public class FilteredTank extends StandardTank {
 		private final FluidStack filter;
-		private final FluidStack[] multiFilter;
+		private final String[] multiFilter;
 
 		public FilteredTank(int capacity, FluidStack filter) {
 			super(capacity);
@@ -255,27 +242,26 @@ public class LiquidManager {
 			this(capacity, filter);
 		}
 
-		public FilteredTank(int capacity, FluidStack[] filter) {
+		public FilteredTank(int capacity, String[] filter) {
 			super(capacity);
 			this.multiFilter = filter;
 			this.filter = null;
 		}
 
-		public FilteredTank(int capacity, FluidStack[] filter, int pressure) {
+		public FilteredTank(int capacity, String[] filter, int pressure) {
 			this(capacity, filter);
 		}
 
 		@Override
 		public int fill(FluidStack resource, boolean doFill) {
 			if (multiFilter != null) {
-				for (int i = 0; i < multiFilter.length; i++) {
-					if (multiFilter[i] != null && isFluidEqual(this.multiFilter[i], resource)) {
+				for (String s : multiFilter) {
+					if (s != null && resource.getUnlocalizedName().toLowerCase().contains(s)) {
 						return super.fill(resource, doFill);
 					}
 				}
 			}
-			else
-			if (this.filter.isFluidEqual(resource)) {
+			else if (this.filter.isFluidEqual(resource)) {
 				return super.fill(resource, doFill);
 			}
 			return 0;

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
 @SideOnly(Side.CLIENT)
 public class RenderRollingStock extends Render {
@@ -59,6 +60,11 @@ public class RenderRollingStock extends Render {
         GL11.glLightModelf(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
         GL11.glShadeModel(GL_SMOOTH);
         GL11.glEnable(GL_NORMALIZE);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL_REPEAT);
+        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL_REPEAT);
+
 
         double var15 = cart.lastTickPosX + (cart.posX - cart.lastTickPosX) * time;
         double var17 = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * time;

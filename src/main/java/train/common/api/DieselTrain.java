@@ -30,11 +30,11 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 		this(world, filter, null);
 	}
 
-	public DieselTrain(World world, FluidStack[] multiFilter) {
+	public DieselTrain(World world, String[] multiFilter) {
 		this(world, null, multiFilter);
 	}
 
-	private DieselTrain(World world, FluidStack filter, FluidStack[] multiFilter) {
+	private DieselTrain(World world, FluidStack filter, String[] multiFilter) {
 		super(world);
 		this.maxTank = getTankCapacity()[0];
 		if (filter == null && multiFilter == null) {

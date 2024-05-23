@@ -129,9 +129,33 @@ public class Traincraft {
         trainArmor = proxy.addArmor("armor");
         trainCloth = proxy.addArmor("Paintable");
         trainCompositeSuit = proxy.addArmor("CompositeSuit");
+
+        if (Loader.isModLoaded("ComputerCraft")) {
+            try {
+                proxy.registerComputerCraftPeripherals();
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+
+        /* Other Proxy init */
+        tcLog.info("Initialize Renderer and Events");
+        proxy.registerEvents(event);
+
+
+        tcLog.info("Finished PreInitialization");
+    }
+
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        tcLog.info("Start Initialization");
         TCBlocks.init();
         TCItems.init();
         proxy.registerTileEntities();
+
+        tcLog.info("Initialize Fluids");
+        LiquidManager.getInstance().registerLiquids();
+
         proxy.registerSounds();
         proxy.setHook(); // Moved file needed to run JLayer, we need to set a hook in order to retrieve it
 
@@ -146,36 +170,6 @@ public class Traincraft {
         FMLCommonHandler.instance().bus().register(retroGen);
 
         MapGenStructureIO.func_143031_a(ComponentVillageTrainstation.class, "Trainstation");
-
-        if (Loader.isModLoaded("ComputerCraft")) {
-            try {
-                proxy.registerComputerCraftPeripherals();
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-        }
-
-        /* Other Proxy init */
-        tcLog.info("Initialize Renderer and Events");
-        proxy.registerRenderInformation();
-        proxy.registerEvents(event);
-
-        traincraftRegistry.init();
-
-
-        tcLog.info("Finished PreInitialization");
-    }
-
-    @Mod.EventHandler
-    public void init(FMLInitializationEvent event) {
-
-        /* Networking and Packet initialisation, apparently this needs to be in init to prevent conflicts */
-        PacketHandler.init();
-    }
-
-    @EventHandler
-    public void load(FMLInitializationEvent event) {
-        tcLog.info("Start Initialization");
 
         //proxy.getCape();
 
@@ -195,8 +189,6 @@ public class Traincraft {
         AssemblyTableRecipes.recipes();
 
         /* Register the liquids */
-        tcLog.info("Initialize Fluids");
-        LiquidManager.getInstance().registerLiquids();
         EntityHandler.init();
 
 
@@ -215,6 +207,13 @@ public class Traincraft {
 
         proxy.registerBookHandler();
 
+        /* Networking and Packet initialisation, apparently this needs to be in init to prevent conflicts */
+        PacketHandler.init();
+        proxy.registerRenderInformation();
+
+
+
+        traincraftRegistry.init();
 
         tcLog.info("Finished Initialization");
     }
@@ -222,7 +221,7 @@ public class Traincraft {
     @EventHandler
     public void postInit(FMLPostInitializationEvent evt) {
         tcLog.info("Start to PostInitialize");
-        tcLog.info("Register ChunkHandler");
+        TraincraftRegistry.endRegistration();
 
         tcLog.info("Activation Mod Compatibility");
         TrainModCore.ModsLoaded();
