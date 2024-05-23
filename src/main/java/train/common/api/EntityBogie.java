@@ -24,7 +24,8 @@ import train.common.Traincraft;
 import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
 import train.common.items.ItemTCRail;
-import train.common.items.ItemTCRail.TrackTypes;
+import train.common.items.TCRailTypes;
+import train.common.library.EnumTracks;
 import train.common.library.BlockIDs;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
@@ -440,28 +441,27 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			TileTCRail tileRail = (TileTCRail) worldObj.getTileEntity(i, j, k);
 			int meta = tileRail.getBlockMetadata();
 
-			if (ItemTCRail.isTCStraightTrack(tileRail)) {
+			if (TCRailTypes.isStraightTrack(tileRail) || (TCRailTypes.isSwitchTrack(tileRail) && !tileRail.getSwitchState())) {
 				moveOnTCStraight(j, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata());
 			}
-			else if (ItemTCRail.isTCTurnTrack(tileRail)) {
+			else if (TCRailTypes.isTurnTrack(tileRail) || (TCRailTypes.isSwitchTrack(tileRail) && !tileRail.getSwitchState())) {
 				if (shouldIgnoreSwitch(tileRail, i, j, k, meta)) {
 					moveOnTCStraight(j, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata());
 				}
 				else {
-					if (ItemTCRail.isTCTurnTrack(tileRail)) {
+					if (TCRailTypes.isTurnTrack(tileRail) || (TCRailTypes.isSwitchTrack(tileRail) && tileRail.getSwitchState())) {
 						moveOnTC90TurnRail(j, tileRail.r, tileRail.cx, tileRail.cz);
 					}
 				}
-			} else if (ItemTCRail.isTCTwoWaysCrossingTrack(tileRail)) {
+			} else if (TCRailTypes.isCrossingTrack(tileRail)) {
 				moveOnTCTwoWaysCrossing();
-			} else if (ItemTCRail.isTCSlopeTrack(tileRail)) {
+			} else if (TCRailTypes.isSlopeTrack(tileRail)) {
 				moveOnTCSlope(j, tileRail.xCoord, tileRail.zCoord, tileRail.slopeAngle, tileRail.slopeHeight, tileRail.getBlockMetadata());
-			} else if (ItemTCRail.isTCDiagonalCrossingTrack(tileRail)) {
+			} else if (TCRailTypes.isDiagonalCrossingTrack(tileRail)) {
 				moveOnTCDiamondCrossing(i, j, k, tileRail.xCoord,  tileRail.zCoord );
-			} else if (ItemTCRail.isTCDiagonalStraightTrack(tileRail)) {
+			} else if (TCRailTypes.isDiagonalCrossingTrack(tileRail)) {
 				moveOnTCDiagonal(i, j, k, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata(), tileRail.getRailLength());
-			}
-			else if (ItemTCRail.isTCCurvedSlopeTrack(tileRail)) {
+			} else if (TCRailTypes.isCurvedSlopeTrack(tileRail)) {
 				moveOnTCCurvedSlope(i, j, k, tileRail.r, tileRail.cx, tileRail.cz, tileRail.xCoord, tileRail.zCoord, meta, 1, tileRail.slopeAngle);
 			}
 
@@ -472,22 +472,22 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			if (worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ) instanceof TileTCRail) {
 				TileTCRail tile = (TileTCRail) worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
 
-				if (ItemTCRail.isTCTurnTrack(tile)) {
+				if (TCRailTypes.isTurnTrack(tile)) {
 					moveOnTC90TurnRail(j, tile.r, tile.cx, tile.cz);
 				}
-				if (ItemTCRail.isTCStraightTrack(tile)) {
+				if (TCRailTypes.isStraightTrack(tile)) {
 					moveOnTCStraight(j, tile.xCoord, tile.zCoord, tile.getBlockMetadata());
 				}
-				if (ItemTCRail.isTCSlopeTrack(tile)) {
+				if (TCRailTypes.isSlopeTrack(tile)) {
 					moveOnTCSlope(j, tile.xCoord, tile.zCoord, tile.slopeAngle, tile.slopeHeight, tile.getBlockMetadata());
 				}
-				else if (ItemTCRail.isTCDiagonalCrossingTrack(tile)) {
+				else if (TCRailTypes.isDiagonalCrossingTrack(tile)) {
 					moveOnTCDiamondCrossing(i, j, k, tile.xCoord,  tile.zCoord );
 				}
-				if (ItemTCRail.isTCDiagonalStraightTrack(tile)) {
+				if (TCRailTypes.isDiagonalTrack(tile)) {
 					moveOnTCDiagonal(i, j, k, tile.xCoord, tile.zCoord, tile.getBlockMetadata(), tile.getRailLength());
 				}
-				if (ItemTCRail.isTCCurvedSlopeTrack(tile)) {
+				if (TCRailTypes.isCurvedSlopeTrack(tile)) {
 					moveOnTCCurvedSlope(i, j, k, tile.r, tile.cx, tile.cz, tile.xCoord, tile.zCoord, tile.getBlockMetadata(), 1, tile.slopeAngle);
 				}
 			}
@@ -939,29 +939,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 	}
 	private boolean shouldIgnoreSwitch(TileTCRail tile, int i, int j, int k, int meta) {
-		if (tile != null
-				&&(tile.getType().equals(TrackTypes.MEDIUM_RIGHT_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.MEDIUM_LEFT_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.LARGE_LEFT_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.LARGE_RIGHT_TURN.getLabel()))
-				|| tile.getType().equals(TrackTypes.VERY_LARGE_LEFT_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.VERY_LARGE_RIGHT_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.MEDIUM_RIGHT_45DEGREE_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.MEDIUM_LEFT_45DEGREE_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.LARGE_RIGHT_45DEGREE_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.LARGE_LEFT_45DEGREE_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.EMBEDDED_LARGE_LEFT_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.EMBEDDED_LARGE_RIGHT_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.EMBEDDED_VERY_LARGE_LEFT_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.EMBEDDED_VERY_LARGE_RIGHT_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_RIGHT_45DEGREE_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_LEFT_45DEGREE_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.EMBEDDED_LARGE_RIGHT_45DEGREE_TURN.getLabel())
-				|| tile.getType().equals(TrackTypes.EMBEDDED_LARGE_LEFT_45DEGREE_TURN.getLabel())
-
-				&& tile.canTypeBeModifiedBySwitch) {
+		if (tile != null && TCRailTypes.isTurnTrack(tile) && tile.canTypeBeModifiedBySwitch) {
 			if (meta == 2) {
 				if (motionZ > 0 && Math.abs(motionX) < 0.01) {
 					TileEntity tile2 = worldObj.getTileEntity(i, j, k + 1);

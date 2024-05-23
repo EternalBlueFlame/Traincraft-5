@@ -1,0 +1,334 @@
+package train.common.library;
+
+import train.common.api.TrackRecord;
+import train.common.items.TCRailTypes;
+import static train.common.items.TCRailTypes.RailTypes.*;
+
+
+
+
+public enum EnumTracks implements TrackRecord {
+
+    /**
+     * Tooltip gets shown when hovering over item.
+     * switchSize is the amount of tile entities that change when activating a switch, used in TileTCRail > changeSwitchState
+     */
+
+
+    SMALL_STRAIGHT("SMALL_STRAIGHT", STRAIGHT, ItemIDs.tcRailSmallStraight, 0, "1x1"),
+    MEDIUM_STRAIGHT("MEDIUM_STRAIGHT", STRAIGHT, ItemIDs.tcRailMediumStraight, 0, "1x3"),
+    LONG_STRAIGHT("LONG_STRAIGHT", STRAIGHT, ItemIDs.tcRailLongStraight,0, "1x6"),
+    VERY_LONG_STRAIGHT("VERY_LONG_STRAIGHT", STRAIGHT, ItemIDs.tcRailVeryLongStraight, 0,"1x12"),
+
+    SMALL_DIAGONAL_STRAIGHT("SMALL_DIAGONAL_STRAIGHT", DIAGONAL, ItemIDs.tcRailSmallDiagonalStraight,0, "1x1"),
+    MEDIUM_DIAGONAL_STRAIGHT("MEDIUM_DIAGONAL_STRAIGHT", DIAGONAL, ItemIDs.tcRailMediumDiagonalStraight,0, "1x3"),
+    LONG_DIAGONAL_STRAIGHT("LONG_DIAGONAL_STRAIGHT", DIAGONAL, ItemIDs.tcRailLongDiagonalStraight, 0,"1x6"),
+    VERY_LONG_DIAGONAL_STRAIGHT("VERY_LONG_DIAGONAL_STRAIGHT", DIAGONAL, ItemIDs.tcRailVeryLongDiagonalStraight, 0,"1x12"),
+
+    TURN_1X1("TURN_1X1", TURN, ItemIDs.tcRail1X1Turn, 0,"1x1"),
+    LEFT_TURN_1X1("LEFT_TURN_1X1", TURN, ItemIDs.tcRail1X1Turn, 0,""),
+    RIGHT_TURN_1X1("RIGHT_TURN_1X1", TURN, ItemIDs.tcRail1X1Turn,0, ""),
+
+    MEDIUM_TURN("MEDIUM_TURN", TURN, ItemIDs.tcRailMediumTurn,0, "3x3"),
+    MEDIUM_RIGHT_TURN("MEDIUM_RIGHT_TURN", TURN, ItemIDs.tcRailMediumTurn, 0,""),
+    MEDIUM_LEFT_TURN("MEDIUM_LEFT_TURN", TURN, ItemIDs.tcRailMediumTurn,0, ""),
+
+    LARGE_TURN("LARGE_TURN", TURN, ItemIDs.tcRailLargeTurn,0, "5x5"),
+    LARGE_RIGHT_TURN("LARGE_RIGHT_TURN", TURN, ItemIDs.tcRailLargeTurn, 0,""),
+    LARGE_LEFT_TURN("LARGE_LEFT_TURN", TURN, ItemIDs.tcRailLargeTurn, 0,""),
+
+    VERY_LARGE_TURN("VERY_LARGE_TURN", TURN, ItemIDs.tcRailVeryLargeTurn,0, "10x10"),
+    VERY_LARGE_RIGHT_TURN("VERY_LARGE_RIGHT_TURN", TURN, ItemIDs.tcRailVeryLargeTurn, 0,""),
+    VERY_LARGE_LEFT_TURN("VERY_LARGE_LEFT_TURN", TURN, ItemIDs.tcRailVeryLargeTurn,0, ""),
+
+    SUPER_LARGE_TURN("SUPER_LARGE_TURN", TURN, ItemIDs.tcRailSuperLargeTurn,0, "16x16"),
+    SUPER_LARGE_LEFT_TURN("SUPER_LARGE_LEFT_TURN", TURN, ItemIDs.tcRailSuperLargeTurn,0, ""),
+    SUPER_LARGE_RIGHT_TURN("SUPER_LARGE_RIGHT_TURN", TURN, ItemIDs.tcRailSuperLargeTurn, 0,""),
+
+    TURN_29X29("TURN_29X29", TURN, ItemIDs.tcRail29X29Turn, 0,"29x29"),
+    LEFT_TURN_29X29("LEFT_TURN_29X29", TURN, ItemIDs.tcRail29X29Turn,0, ""),
+    RIGHT_TURN_29X29("RIGHT_TURN_29X29", TURN, ItemIDs.tcRail29X29Turn, 0,""),
+
+    TURN_32X32("TURN_32X32", TURN, ItemIDs.tcRail32X32Turn,0, "32x32"),
+    LEFT_TURN_32X32("LEFT_TURN_32X32", TURN, ItemIDs.tcRail32X32Turn, 0,""),
+    RIGHT_TURN_32X32("RIGHT_TURN_32X32", TURN, ItemIDs.tcRail32X32Turn, 0,""),
+
+    MEDIUM_45DEGREE_TURN("MEDIUM_45DEGREE_TURN", TURN, ItemIDs.tcRailMedium45DegreeTurn, 0,"3x4 hold sneak to attach to the back of another curve"),
+    MEDIUM_RIGHT_45DEGREE_TURN("MEDIUM_RIGHT_45DEGREE_TURN", TURN, ItemIDs.tcRailMedium45DegreeTurn,0, ""),
+    MEDIUM_LEFT_45DEGREE_TURN("MEDIUM_LEFT_45DEGREE_TURN", TURN, ItemIDs.tcRailMedium45DegreeTurn, 0,""),
+
+    LARGE_45DEGREE_TURN("LARGE_45DEGREE_TURN", TURN, ItemIDs.tcRailLarge45DegreeTurn,0, "3x6 hold sneak to attach to the back of another curve"),
+    LARGE_RIGHT_45DEGREE_TURN("LARGE_RIGHT_45DEGREE_TURN", TURN, ItemIDs.tcRailLarge45DegreeTurn, 0,""),
+    LARGE_LEFT_45DEGREE_TURN("LARGE_LEFT_45DEGREE_TURN", TURN, ItemIDs.tcRailLarge45DegreeTurn,0, ""),
+
+    VERY_LARGE_45DEGREE_TURN("VERY_LARGE_45DEGREE_TURN", TURN, ItemIDs.tcRailVeryLarge45DegreeTurn, 0,"4x8 hold sneak to attach to the back of another curve"),
+    VERY_LARGE_RIGHT_45DEGREE_TURN("VERY_LARGE_RIGHT_45DEGREE_TURN", TURN, ItemIDs.tcRailVeryLarge45DegreeTurn, 0,""),
+    VERY_LARGE_LEFT_45DEGREE_TURN("VERY_LARGE_LEFT_45DEGREE_TURN", TURN, ItemIDs.tcRailVeryLarge45DegreeTurn,0, ""),
+
+
+
+    SUPER_LARGE_45DEGREE_TURN("SUPER_LARGE_45DEGREE_TURN", TURN, ItemIDs.tcRailSuperLarge45DegreeTurn,0, "5x11 hold sneak to attach to the back of another curve"),
+    SUPER_LARGE_RIGHT_45DEGREE_TURN("SUPER_LARGE_RIGHT_45DEGREE_TURN", TURN, ItemIDs.tcRailSuperLarge45DegreeTurn, 0,""),
+    SUPER_LARGE_LEFT_45DEGREE_TURN("SUPER_LARGE_LEFT_45DEGREE_TURN", TURN, ItemIDs.tcRailSuperLarge45DegreeTurn,0, ""),
+
+    SMALL_PARALLEL_CURVE("SMALL_PARALLEL_CURVE", TURN, ItemIDs.tcRailSmallParallelCurve, 0,"2x8"),
+    SMALL_RIGHT_PARALLEL_CURVE("SMALL_RIGHT_PARALLEL_CURVE", TURN , ItemIDs.tcRailSmallParallelCurve, 0,""),
+    SMALL_LEFT_PARALLEL_CURVE("SMALL_LEFT_PARALLEL_CURVE", TURN, ItemIDs.tcRailSmallParallelCurve, 0,""),
+
+    MEDIUM_PARALLEL_CURVE("MEDIUM_PARALLEL_CURVE", TURN, ItemIDs.tcRailMediumParallelCurve, 0,"3x12"),
+    MEDIUM_RIGHT_PARALLEL_CURVE("MEDIUM_RIGHT_PARALLEL_CURVE", TURN, ItemIDs.tcRailMediumParallelCurve, 0,""),
+    MEDIUM_LEFT_PARALLEL_CURVE("MEDIUM_LEFT_PARALLEL_CURVE", TURN, ItemIDs.tcRailMediumParallelCurve, 0,""),
+
+    LARGE_PARALLEL_CURVE("LARGE_PARALLEL_CURVE", TURN, ItemIDs.tcRailLargeParallelCurve,0, "4x16"),
+    LARGE_RIGHT_PARALLEL_CURVE("LARGE_RIGHT_PARALLEL_CURVE", TURN, ItemIDs.tcRailLargeParallelCurve, 0,""),
+    LARGE_LEFT_PARALLEL_CURVE("LARGE_LEFT_PARALLEL_CURVE", TURN , ItemIDs.tcRailLargeParallelCurve, 0,""),
+
+    TWO_WAYS_CROSSING("TWO_WAYS_CROSSING", CROSSING, ItemIDs.tcRailTwoWaysCrossing, 0,"3x3"),
+
+    DIAMOND_CROSSING("DIAMOND_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailDiamondCrossing, 0,"3x3"),
+    RIGHT_DIAMOND_CROSSING("RIGHT_DIAMOND_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailDiamondCrossing,0, "3x3"),
+    LEFT_DIAMOND_CROSSING("LEFT_DIAMOND_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailDiamondCrossing, 0,"3x3"),
+
+    DOUBLE_DIAMOND_CROSSING("DOUBLE_DIAMOND_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailDoubleDiamondCrossing, 0,"3x3"),
+    DIAGONAL_TWO_WAYS_CROSSING("DIAGONAL_TWO_WAYS_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailDiagonalTwoWaysCrossing, 0,"3x3"),
+    FOUR_WAYS_CROSSING("FOUR_WAYS_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailFourWaysCrossing, 0,"3x3"),
+
+    MEDIUM_SWITCH("MEDIUM_SWITCH", SWITCH, ItemIDs.tcRailMediumSwitch, 1, "4x4"),
+    MEDIUM_RIGHT_SWITCH("MEDIUM_RIGHT_SWITCH", SWITCH, ItemIDs.tcRailMediumSwitch, 1,""),
+    MEDIUM_LEFT_SWITCH("MEDIUM_LEFT_SWITCH", SWITCH, ItemIDs.tcRailMediumSwitch,1, ""),
+
+    LARGE_SWITCH("LARGE_SWITCH", SWITCH, ItemIDs.tcRailLargeSwitch, 2,"6x6"),
+    LARGE_RIGHT_SWITCH("LARGE_RIGHT_SWITCH", SWITCH, ItemIDs.tcRailLargeSwitch, 2,""),
+    LARGE_LEFT_SWITCH("LARGE_LEFT_SWITCH", SWITCH, ItemIDs.tcRailLargeSwitch, 2,""),
+
+    VERY_LARGE_SWITCH("VERY_LARGE_SWITCH", SWITCH, ItemIDs.tcRailVeryLargeSwitch, 3,"11x11"),
+    VERY_LARGE_RIGHT_SWITCH("VERY_LARGE_RIGHT_SWITCH", SWITCH, ItemIDs.tcRailVeryLargeSwitch,3, ""),
+    VERY_LARGE_LEFT_SWITCH("VERY_LARGE_LEFT_SWITCH", SWITCH, ItemIDs.tcRailVeryLargeSwitch, 3,""),
+
+    MEDIUM_PARALLEL_SWITCH("MEDIUM_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailMediumParallelSwitch, 2,"4x11"),
+    MEDIUM_RIGHT_PARALLEL_SWITCH("MEDIUM_RIGHT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailMediumParallelSwitch, 2,""),
+    MEDIUM_LEFT_PARALLEL_SWITCH("MEDIUM_LEFT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailMediumParallelSwitch, 2, ""),
+
+    LARGE_PARALLEL_SWITCH("LARGE_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailLargeParallelSwitch, 4,"4x17"),
+    LARGE_RIGHT_PARALLEL_SWITCH("LARGE_RIGHT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailLargeParallelSwitch, 4,""),
+    LARGE_LEFT_PARALLEL_SWITCH("LARGE_LEFT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailLargeParallelSwitch, 4, ""),
+
+    MEDIUM_45DEGREE_SWITCH("MEDIUM_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailMedium45DegreeSwitch, 2 ,"3x5 hold sneak to attach to the back of another curve"),
+    MEDIUM_RIGHT_45DEGREE_SWITCH("MEDIUM_RIGHT_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailMedium45DegreeSwitch, 2,""),
+    MEDIUM_LEFT_45DEGREE_SWITCH("MEDIUM_LEFT_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailMedium45DegreeSwitch, 2,""),
+
+    LARGE_45DEGREE_SWITCH("LARGE_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailLarge45DegreeSwitch, 4,"4x8 hold sneak to attach to the back of another curve"),
+    LARGE_RIGHT_45DEGREE_SWITCH("LARGE_RIGHT_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailLarge45DegreeSwitch,4, ""),
+    LARGE_LEFT_45DEGREE_SWITCH("LARGE_LEFT_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailLarge45DegreeSwitch,4, ""),
+
+    SLOPE_WOOD("SLOPE_WOOD", SLOPE, ItemIDs.tcRailSlopeWood, 0,"1x6"),
+    LARGE_SLOPE_WOOD("LARGE_SLOPE_WOOD", SLOPE, ItemIDs.tcRailLargeSlopeWood, 0,"1x12"),
+    VERY_LARGE_SLOPE_WOOD("VERY_LARGE_SLOPE_WOOD", SLOPE, ItemIDs.tcRailVeryLargeSlopeWood, 0,"1x18"),
+
+    SLOPE_GRAVEL("SLOPE_GRAVEL", SLOPE, ItemIDs.tcRailSlopeGravel, 0,"1x6"),
+    LARGE_SLOPE_GRAVEL("LARGE_SLOPE_GRAVEL", SLOPE, ItemIDs.tcRailLargeSlopeGravel, 0,"1x12"),
+    VERY_LARGE_SLOPE_GRAVEL("VERY_LARGE_SLOPE_GRAVEL", SLOPE, ItemIDs.tcRailVeryLargeSlopeGravel, 0,"1x18"),
+
+    SLOPE_BALLAST("SLOPE_BALLAST", SLOPE, ItemIDs.tcRailSlopeBallast, 0,"1x6"),
+    LARGE_SLOPE_BALLAST("LARGE_SLOPE_BALLAST", SLOPE, ItemIDs.tcRailLargeSlopeBallast,0, "1x12"),
+    VERY_LARGE_SLOPE_BALLAST("VERY_LARGE_SLOPE_BALLAST", SLOPE, ItemIDs.tcRailVeryLargeSlopeBallast, 0,"1x18"),
+
+    SLOPE_SNOW_GRAVEL("SLOPE_SNOW_GRAVEL", SLOPE, ItemIDs.tcRailSlopeSnowGravel, 0,"1x6"),
+    LARGE_SLOPE_SNOW_GRAVEL("LARGE_SLOPE_SNOW_GRAVEL", SLOPE, ItemIDs.tcRailLargeSlopeSnowGravel, 0,"1x12"),
+    VERY_LARGE_SLOPE_SNOW_GRAVEL("VERY_LARGE_SLOPE_SNOW_GRAVEL", SLOPE, ItemIDs.tcRailVeryLargeSlopeSnowGravel,0, "1x18"),
+
+    SLOPE_DYNAMIC("SLOPE_DYNAMIC", SLOPE, ItemIDs.tcRailSlopeDynamic, 0,"1x6"),
+    LARGE_SLOPE_DYNAMIC("LARGE_SLOPE_DYNAMIC", SLOPE, ItemIDs.tcRailLargeSlopeDynamic, 0,"1x12" ),
+    VERY_LARGE_SLOPE_DYNAMIC("VERY_LARGE_SLOPE_DYNAMIC", SLOPE, ItemIDs.tcRailVeryLargeSlopeDynamic, 0,"1x18"),
+
+    LARGE_CURVED_SLOPE_DYNAMIC("LARGE_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailLargeCurvedSlopeDynamic,0, "5x5"),
+    LARGE_RIGHT_CURVED_SLOPE_DYNAMIC("LARGE_RIGHT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailLargeCurvedSlopeDynamic, 0,"xxx"),
+    LARGE_LEFT_CURVED_SLOPE_DYNAMIC("LARGE_LEFT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailLargeCurvedSlopeDynamic, 0,"xxx"),
+
+    VERY_LARGE_CURVED_SLOPE_DYNAMIC("VERY_LARGE_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailVeryLargeCurvedSlopeDynamic,0, "9x9"),
+    VERY_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC("VERY_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailVeryLargeSlopeDynamic, 0,"xxx"),
+    VERY_LARGE_LEFT_CURVED_SLOPE_DYNAMIC("VERY_LARGE_LEFT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailVeryLargeCurvedSlopeDynamic, 0,"xxx"),
+
+    SUPER_LARGE_CURVED_SLOPE_DYNAMIC("SUPER_LARGE_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailSuperLargeCurvedSlopeDynamic, 0,"16x16"),
+    SUPER_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC("SUPER_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailSuperLargeCurvedSlopeDynamic, 0,"xxx"),
+    SUPER_LARGE_LEFT_CURVED_SLOPE_DYNAMIC("SUPER_LARGE_LEFT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailSuperLargeCurvedSlopeDynamic,0, "xxx"),
+    /**
+     * Embedded Tracks
+     */
+
+    EMBEDDED_SMALL_STRAIGHT("EMBEDDED_SMALL_STRAIGHT", STRAIGHT, ItemIDs.tcRailEmbeddedSmallStraight, 0,"1x1"),
+    EMBEDDED_MEDIUM_STRAIGHT("EMBEDDED_MEDIUM_STRAIGHT", STRAIGHT, ItemIDs.tcRailEmbeddedMediumStraight, 0,"1x3"),
+    EMBEDDED_LONG_STRAIGHT("EMBEDDED_LONG_STRAIGHT", STRAIGHT, ItemIDs.tcRailEmbeddedLongStraight, 0,"1x6"),
+    EMBEDDED_VERY_LONG_STRAIGHT("EMBEDDED_VERY_LONG_STRAIGHT", STRAIGHT, ItemIDs.tcRailEmbeddedVeryLongStraight, 0,"1x12"),
+
+    EMBEDDED_SMALL_DIAGONAL_STRAIGHT("EMBEDDED_SMALL_DIAGONAL_STRAIGHT", DIAGONAL, ItemIDs.tcRailEmbeddedSmallDiagonalStraight, 0,"1x1"),
+    EMBEDDED_MEDIUM_DIAGONAL_STRAIGHT("EMBEDDED_MEDIUM_DIAGONAL_STRAIGHT", DIAGONAL, ItemIDs.tcRailEmbeddedMediumDiagonalStraight, 0,"1x3"),
+    EMBEDDED_LONG_DIAGONAL_STRAIGHT("EMBEDDED_LONG_DIAGONAL_STRAIGHT", DIAGONAL, ItemIDs.tcRailEmbeddedLongDiagonalStraight, 0,"1x6"),
+    EMBEDDED_VERY_LONG_DIAGONAL_STRAIGHT("EMBEDDED_VERY_LONG_DIAGONAL_STRAIGHT", DIAGONAL, ItemIDs.tcRailEmbeddedVeryLongDiagonalStraight, 0,"1x12"),
+
+
+    EMBEDDED_TURN_1X1("EMBEDDED_TURN_1X1", TURN, ItemIDs.tcRailEmbedded1X1Turn, 0,"1x1"),
+    EMBEDDED_LEFT_TURN_1X1("EMBEDDED_LEFT_TURN_1X1", TURN, ItemIDs.tcRailEmbedded1X1Turn, 0,""),
+    EMBEDDED_RIGHT_TURN_1X1("EMBEDDED_RIGHT_TURN_1X1", TURN, ItemIDs.tcRailEmbedded1X1Turn, 0,""),
+
+    EMBEDDED_MEDIUM_TURN("EMBEDDED_MEDIUM_TURN", TURN, ItemIDs.tcRailEmbeddedMediumTurn,0, "3x3"),
+    EMBEDDED_MEDIUM_RIGHT_TURN("EMBEDDED_MEDIUM_RIGHT_TURN", TURN, ItemIDs.tcRailEmbeddedMediumTurn, 0,""),
+    EMBEDDED_MEDIUM_LEFT_TURN("EMBEDDED_MEDIUM_LEFT_TURN", TURN, ItemIDs.tcRailEmbeddedMediumTurn, 0,""),
+
+    EMBEDDED_LARGE_TURN("EMBEDDED_LARGE_TURN", TURN, ItemIDs.tcRailEmbeddedLargeTurn, 0,"5x5"),
+    EMBEDDED_LARGE_RIGHT_TURN("EMBEDDED_LARGE_RIGHT_TURN", TURN, ItemIDs.tcRailEmbeddedLargeTurn, 0,""),
+    EMBEDDED_LARGE_LEFT_TURN("EMBEDDED_LARGE_LEFT_TURN", TURN, ItemIDs.tcRailEmbeddedLargeTurn, 0,""),
+
+    EMBEDDED_VERY_LARGE_TURN("EMBEDDED_VERY_LARGE_TURN", TURN, ItemIDs.tcRailEmbeddedVeryLargeTurn, 0,"10x10"),
+    EMBEDDED_VERY_LARGE_RIGHT_TURN("EMBEDDED_VERY_LARGE_RIGHT_TURN", TURN, ItemIDs.tcRailEmbeddedVeryLargeTurn,0, ""),
+    EMBEDDED_VERY_LARGE_LEFT_TURN("EMBEDDED_VERY_LARGE_LEFT_TURN", TURN, ItemIDs.tcRailEmbeddedVeryLargeTurn, 0,""),
+
+    EMBEDDED_SUPER_LARGE_TURN("EMBEDDED_SUPER_LARGE_TURN", TURN, ItemIDs.tcRailEmbeddedSuperLargeTurn,0, "16x16"),
+    EMBEDDED_SUPER_LARGE_RIGHT_TURN("EMBEDDED_SUPER_LARGE_RIGHT_TURN", TURN, ItemIDs.tcRailEmbeddedSuperLargeTurn,0, ""),
+    EMBEDDED_SUPER_LARGE_LEFT_TURN("EMBEDDED_SUPER_LARGE_LEFT_TURN", TURN, ItemIDs.tcRailEmbeddedSuperLargeTurn, 0,""),
+
+    EMBEDDED_TURN_29X29("EMBEDDED_TURN_29X29", TURN, ItemIDs.tcRailEmbedded29X29Turn, 0,"29x29"),
+    EMBEDDED_LEFT_TURN_29X29("EMBEDDED_LEFT_TURN_29X29", TURN, ItemIDs.tcRailEmbedded29X29Turn, 0,""),
+    EMBEDDED_RIGHT_TURN_29X29("EMBEDDED_RIGHT_TURN_29X29", TURN, ItemIDs.tcRailEmbedded29X29Turn, 0,""),
+
+    EMBEDDED_TURN_32X32("EMBEDDED_TURN_32X32", TURN, ItemIDs.tcRailEmbedded32X32Turn, 0,"32x32"),
+    EMBEDDED_LEFT_TURN_32X32("EMBEDDED_LEFT_TURN_32X32", TURN, ItemIDs.tcRailEmbedded32X32Turn, 0,""),
+    EMBEDDED_RIGHT_TURN_32X32("EMBEDDED_RIGHT_TURN_32X32", TURN, ItemIDs.tcRailEmbedded32X32Turn, 0,""),
+
+    EMBEDDED_MEDIUM_45DEGREE_TURN("EMBEDDED_MEDIUM_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedMedium45DegreeTurn, 0,"3x4 hold sneak to attach to the back of another curve"),
+    EMBEDDED_MEDIUM_RIGHT_45DEGREE_TURN("EMBEDDED_MEDIUM_RIGHT_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedMedium45DegreeTurn, 0,""),
+    EMBEDDED_MEDIUM_LEFT_45DEGREE_TURN("EMBEDDED_MEDIUM_LEFT_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedMedium45DegreeTurn,0, ""),
+
+    EMBEDDED_LARGE_45DEGREE_TURN("EMBEDDED_LARGE_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedLarge45DegreeTurn, 0,"3x6 hold sneak to attach to the back of another curve"),
+    EMBEDDED_LARGE_RIGHT_45DEGREE_TURN("EMBEDDED_LARGE_RIGHT_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedLarge45DegreeTurn, 0,""),
+    EMBEDDED_LARGE_LEFT_45DEGREE_TURN("EMBEDDED_LARGE_LEFT_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedLarge45DegreeTurn, 0,""),
+
+
+
+    EMBEDDED_VERY_LARGE_45DEGREE_TURN("EMBEDDED_VERY_LARGE_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedVeryLarge45DegreeTurn, 0,"4x8 hold sneak to attach to the back of another curve"),
+    EMBEDDED_VERY_LARGE_RIGHT_45DEGREE_TURN("EMBEDDED_VERY_LARGE_RIGHT_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedVeryLarge45DegreeTurn, 0,""),
+    EMBEDDED_VERY_LARGE_LEFT_45DEGREE_TURN("EMBEDDED_VERY_LARGE_LEFT_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedVeryLarge45DegreeTurn,0, ""),
+
+
+    EMBEDDED_SUPER_LARGE_45DEGREE_TURN("EMBEDDED_SUPER_LARGE_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedSuperLarge45DegreeTurn, 0,"5x11 hold sneak to attach to the back of another curve"),
+    EMBEDDED_SUPER_LARGE_RIGHT_45DEGREE_TURN("EMBEDDED_SUPER_LARGE_RIGHT_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedSuperLarge45DegreeTurn, 0,""),
+    EMBEDDED_SUPER_LARGE_LEFT_45DEGREE_TURN("EMBEDDED_SUPER_LARGE_LEFT_45DEGREE_TURN", TURN, ItemIDs.tcRailEmbeddedSuperLarge45DegreeTurn,0, ""),
+
+    EMBEDDED_SMALL_PARALLEL_CURVE("EMBEDDED_SMALL_PARALLEL_CURVE", TURN, ItemIDs.tcRailEmbeddedSmallParallelCurve, 0,"2x8"),
+    EMBEDDED_SMALL_RIGHT_PARALLEL_CURVE("EMBEDDED_SMALL_RIGHT_PARALLEL_CURVE", TURN, ItemIDs.tcRailEmbeddedSmallParallelCurve, 0,""),
+    EMBEDDED_SMALL_LEFT_PARALLEL_CURVE("EMBEDDED_SMALL_LEFT_PARALLEL_CURVE", TURN, ItemIDs.tcRailEmbeddedSmallParallelCurve, 0,""),
+
+    EMBEDDED_MEDIUM_PARALLEL_CURVE("EMBEDDED_MEDIUM_PARALLEL_CURVE", TURN, ItemIDs.tcRailEmbeddedMediumParallelCurve, 0,"3x12"),
+    EMBEDDED_MEDIUM_RIGHT_PARALLEL_CURVE("EMBEDDED_MEDIUM_RIGHT_PARALLEL_CURVE", TURN, ItemIDs.tcRailEmbeddedMediumParallelCurve,0, ""),
+    EMBEDDED_MEDIUM_LEFT_PARALLEL_CURVE("EMBEDDED_MEDIUM_LEFT_PARALLEL_CURVE", TURN, ItemIDs.tcRailEmbeddedMediumParallelCurve, 0,""),
+
+    EMBEDDED_LARGE_PARALLEL_CURVE("EMBEDDED_LARGE_PARALLEL_CURVE", TURN, ItemIDs.tcRailEmbeddedLargeParallelCurve, 0,"4x16"),
+    EMBEDDED_LARGE_RIGHT_PARALLEL_CURVE("EMBEDDED_LARGE_RIGHT_PARALLEL_CURVE", TURN, ItemIDs.tcRailEmbeddedLargeParallelCurve,0, ""),
+    EMBEDDED_LARGE_LEFT_PARALLEL_CURVE("EMBEDDED_LARGE_LEFT_PARALLEL_CURVE", TURN, ItemIDs.tcRailEmbeddedLargeParallelCurve, 0,""),
+
+    EMBEDDED_TWO_WAYS_CROSSING("EMBEDDED_TWO_WAYS_CROSSING", CROSSING, ItemIDs.tcRailEmbeddedTwoWaysCrossing, 0,"3x3"),
+    EMBEDDED_DIAGONAL_TWO_WAYS_CROSSING("EMBEDDED_DIAGONAL_TWO_WAYS_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailEmbeddedDiagonalTwoWaysCrossing, 0,"3x3"),
+    EMBEDDED_FOUR_WAYS_CROSSING("EMBEDDED_FOUR_WAYS_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailEmbeddedFourWaysCrossing,0, "3x3"),
+
+    EMBEDDED_DIAMOND_CROSSING("EMBEDDED_DIAMOND_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailEmbeddedDiamondCrossing, 0,"3x3"),
+    EMBEDDED_RIGHT_DIAMOND_CROSSING("EMBEDDED_RIGHT_DIAMOND_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailEmbeddedDiamondCrossing,0, "3x3"),
+    EMBEDDED_LEFT_DIAMOND_CROSSING("EMBEDDED_LEFT_DIAMOND_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailEmbeddedDiamondCrossing,0, "3x3"),
+    EMBEDDED_DOUBLE_DIAMOND_CROSSING("EMBEDDED_DOUBLE_DIAMOND_CROSSING", DIAGONAL_CROSSING, ItemIDs.tcRailEmbeddedDoubleDiamondCrossing, 0,"3x3"),
+
+
+    EMBEDDED_MEDIUM_SWITCH("EMBEDDED_MEDIUM_RIGHT_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMediumSwitch, 1,"4x4"),
+    EMBEDDED_MEDIUM_RIGHT_SWITCH("EMBEDDED_MEDIUM_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMediumSwitch, 1, ""),
+    EMBEDDED_MEDIUM_LEFT_SWITCH("EMBEDDED_MEDIUM_LEFT_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMediumSwitch, 1, ""),
+
+    EMBEDDED_LARGE_SWITCH("EMBEDDED_LARGE_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLargeSwitch, 2, "6x6"),
+    EMBEDDED_LARGE_RIGHT_SWITCH("EMBEDDED_LARGE_RIGHT_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLargeSwitch, 2, ""),
+    EMBEDDED_LARGE_LEFT_SWITCH("EMBEDDED_LARGE_LEFT_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLargeSwitch, 2, ""),
+
+    EMBEDDED_VERY_LARGE_SWITCH("EMBEDDED_VERY_LARGE_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedVeryLargeSwitch, 3, "11x11"),
+    EMBEDDED_VERY_LARGE_RIGHT_SWITCH("EMBEDDED_VERY_LARGE_RIGHT_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedVeryLargeSwitch, 3, ""),
+    EMBEDDED_VERY_LARGE_LEFT_SWITCH("EMBEDDED_VERY_LARGE_LEFT_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedVeryLargeSwitch, 3, ""),
+
+    EMBEDDED_MEDIUM_PARALLEL_SWITCH("EMBEDDED_", SWITCH, ItemIDs.tcRailEmbeddedMediumParallelSwitch, 2, "4x11"),
+    EMBEDDED_MEDIUM_RIGHT_PARALLEL_SWITCH("EMBEDDED_MEDIUM_RIGHT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMediumParallelSwitch, 2,  ""),
+    EMBEDDED_MEDIUM_LEFT_PARALLEL_SWITCH("EMBEDDED_MEDIUM_LEFT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMediumParallelSwitch, 2,  ""),
+
+    EMBEDDED_LARGE_PARALLEL_SWITCH("EMBEDDED_LARGE_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLargeParallelSwitch, 4, "4x17"),
+    EMBEDDED_LARGE_RIGHT_PARALLEL_SWITCH("EMBEDDED_LARGE_RIGHT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLargeParallelSwitch, 4, ""),
+    EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH("EMBEDDED_LARGE_LEFT_PARALLEL_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLargeParallelSwitch, 4, ""),
+
+    EMBEDDED_MEDIUM_45DEGREE_SWITCH("EMBEDDED_MEDIUM_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMedium45DegreeSwitch, 2,  "3x5 hold sneak to attach to the back of another curve"),
+    EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH("EMBEDDED_MEDIUM_RIGHT_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMedium45DegreeSwitch, 2,  ""),
+    EMBEDDED_MEDIUM_LEFT_45DEGREE_SWITCH("EMBEDDED_MEDIUM_LEFT_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedMedium45DegreeSwitch, 2,  ""),
+
+    EMBEDDED_LARGE_45DEGREE_SWITCH("EMBEDDED_LARGE_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLarge45DegreeSwitch, 4, "4x8 hold sneak to attach to the back of another curve"),
+    EMBEDDED_LARGE_RIGHT_45DEGREE_SWITCH("EMBEDDED_LARGE_RIGHT_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLarge45DegreeSwitch, 4, ""),
+    EMBEDDED_LARGE_LEFT_45DEGREE_SWITCH("EMBEDDED_LARGE_LEFT_45DEGREE_SWITCH", SWITCH, ItemIDs.tcRailEmbeddedLarge45DegreeSwitch, 4,  ""),
+
+    EMBEDDED_SLOPE_DYNAMIC("EMBEDDED_SLOPE_DYNAMIC", SLOPE, ItemIDs.tcRailEmbeddedSlopeDynamic, 0, "1x6"),
+    EMBEDDED_LARGE_SLOPE_DYNAMIC("EMBEDDED_LARGE_SLOPE_DYNAMIC", SLOPE, ItemIDs.tcRailEmbeddedLargeSlopeDynamic, 0,"1x12"),
+    EMBEDDED_VERY_LARGE_SLOPE_DYNAMIC("EMBEDDED_VERY_LARGE_SLOPE_DYNAMIC", SLOPE, ItemIDs.tcRailEmbeddedVeryLargeSlopeDynamic, 0,"1x18"),
+
+    EMBEDDED_LARGE_CURVED_SLOPE_DYNAMIC("EMBEDDED_LARGE_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailEmbeddedLargeCurvedSlopeDynamic, 0,"5x5"),
+    EMBEDDED_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC("EMBEDDED_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailEmbeddedLargeCurvedSlopeDynamic, 0,"xxx"),
+    EMBEDDED_LARGE_LEFT_CURVED_SLOPE_DYNAMIC("EMBEDDED_LARGE_LEFT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailEmbeddedLargeCurvedSlopeDynamic, 0,"xxx"),
+
+    EMBEDDED_VERY_LARGE_CURVED_SLOPE_DYNAMIC("EMBEDDED_VERY_LARGE_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailEmbeddedVeryLargeCurvedSlopeDynamic,0, "9x9"),
+    EMBEDDED_VERY_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC("EMBEDDED_VERY_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailEmbeddedVeryLargeCurvedSlopeDynamic, 0,"xxx"),
+    EMBEDDED_VERY_LARGE_LEFT_CURVED_SLOPE_DYNAMIC("EMBEDDED_VERY_LARGE_LEFT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailEmbeddedVeryLargeCurvedSlopeDynamic, 0,"xxx"),
+
+    EMBEDDED_SUPER_LARGE_CURVED_SLOPE_DYNAMIC("EMBEDDED_SUPER_LARGE_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailEmbeddedSuperLargeCurvedSlopeDynamic, 0,"16x16"),
+    EMBEDDED_SUPER_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC("EMBEDDED_SUPER_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailEmbeddedSuperLargeCurvedSlopeDynamic, 0,"xxx"),
+    EMBEDDED_SUPER_LARGE_LEFT_CURVED_SLOPE_DYNAMIC("EMBEDDED_SUPER_LARGE_LEFT_CURVED_SLOPE_DYNAMIC", CURVED_SLOPE, ItemIDs.tcRailEmbeddedSuperLargeCurvedSlopeDynamic, 0,"xxx"),
+
+    SMALL_ROAD_CROSSING("SMALL_ROAD_CROSSING", STRAIGHT, ItemIDs.tcRailSmallRoadCrossing, 0,"1x1"),
+    SMALL_ROAD_CROSSING_1("SMALL_ROAD_CROSSING_1", STRAIGHT, ItemIDs.tcRailSmallRoadCrossing1, 0,"1x1"),
+    SMALL_ROAD_CROSSING_2("SMALL_ROAD_CROSSING_2", STRAIGHT, ItemIDs.tcRailSmallRoadCrossing2,0, "1x1"),
+
+    SMALL_ROAD_CROSSING_DYNAMIC("SMALL_ROAD_CROSSING_DYNAMIC", STRAIGHT, ItemIDs.tcRailSmallRoadCrossingDynamic, 0,"1x1");
+
+
+
+    private final String label;
+    private final TCRailTypes.RailTypes railType;
+    private final ItemIDs item;
+    private final int switchSize;
+    private final String toolTip;
+
+    EnumTracks(String label, TCRailTypes.RailTypes railType, ItemIDs item, int switchSize, String tooltip){
+        this.label = label;
+        this.railType = railType;
+        this.item = item;
+        this.switchSize = switchSize;
+        this.toolTip = tooltip;
+
+    }
+
+
+
+
+    @Override
+    public String getLabel() {
+        return label;
+    }
+
+    @Override
+    public TCRailTypes.RailTypes getRailType() {
+        return railType;
+    }
+
+    @Override
+    public ItemIDs getItem() {
+        return item;
+    }
+
+    @Override
+    public int getSwitchSize() {
+        return switchSize;
+    }
+    @Override
+    public String getItemToolTip() {
+        return toolTip;
+    }
+
+
+}

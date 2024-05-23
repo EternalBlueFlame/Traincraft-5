@@ -27,7 +27,7 @@ import train.common.core.handlers.ConfigHandler;
 import train.common.core.util.DepreciatedUtil;
 import train.common.core.util.TraincraftUtil;
 import train.common.entity.rollingStock.EntityTracksBuilder;
-import train.common.items.ItemTCRail.TrackTypes;
+import train.common.library.EnumTracks;
 import train.common.library.BlockIDs;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
@@ -207,26 +207,26 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		}
 		if(tileentity instanceof TileTCRail){
 			TileTCRail tile = (TileTCRail) tileentity;
-			if (tile.getType().equals(TrackTypes.SMALL_STRAIGHT.getLabel())
-					||tile.getType().equals(TrackTypes.MEDIUM_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.LONG_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.VERY_LONG_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_SMALL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_LONG_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_VERY_LONG_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.SMALL_ROAD_CROSSING.getLabel())
-					|| tile.getType().equals(TrackTypes.SMALL_ROAD_CROSSING_1.getLabel())
-					|| tile.getType().equals(TrackTypes.SMALL_ROAD_CROSSING_2.getLabel())
-					|| tile.getType().equals(TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC.getLabel())
-					|| tile.getType().equals(TrackTypes.SMALL_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.MEDIUM_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.LONG_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.VERY_LONG_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_SMALL_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_LONG_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_VERY_LONG_DIAGONAL_STRAIGHT.getLabel())
+			if (tile.getType().equals(EnumTracks.SMALL_STRAIGHT.getLabel())
+					||tile.getType().equals(EnumTracks.MEDIUM_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.LONG_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.VERY_LONG_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_SMALL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_MEDIUM_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_LONG_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_VERY_LONG_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.SMALL_ROAD_CROSSING.getLabel())
+					|| tile.getType().equals(EnumTracks.SMALL_ROAD_CROSSING_1.getLabel())
+					|| tile.getType().equals(EnumTracks.SMALL_ROAD_CROSSING_2.getLabel())
+					|| tile.getType().equals(EnumTracks.SMALL_ROAD_CROSSING_DYNAMIC.getLabel())
+					|| tile.getType().equals(EnumTracks.SMALL_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.MEDIUM_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.LONG_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.VERY_LONG_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_SMALL_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_MEDIUM_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_LONG_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_VERY_LONG_DIAGONAL_STRAIGHT.getLabel())
 
 			)
 			{
@@ -242,18 +242,18 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 			TileTCRailGag tileGag = (TileTCRailGag) tileentity;
 			TileTCRail tile = (TileTCRail) par3World.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
 
-			if(tile!=null  && (tile.getType().equals(TrackTypes.MEDIUM_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.LONG_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.VERY_LONG_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_LONG_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_VERY_LONG_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.MEDIUM_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.LONG_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.VERY_LONG_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_MEDIUM_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_LONG_DIAGONAL_STRAIGHT.getLabel())
-					|| tile.getType().equals(TrackTypes.EMBEDDED_VERY_LONG_DIAGONAL_STRAIGHT.getLabel()))){
+			if(tile!=null  && (tile.getType().equals(EnumTracks.MEDIUM_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.LONG_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.VERY_LONG_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_MEDIUM_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_LONG_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_VERY_LONG_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.MEDIUM_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.LONG_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.VERY_LONG_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_MEDIUM_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_LONG_DIAGONAL_STRAIGHT.getLabel())
+					|| tile.getType().equals(EnumTracks.EMBEDDED_VERY_LONG_DIAGONAL_STRAIGHT.getLabel()))){
 				if (tile.getTrackType().getLabel().contains("DIAGONAL")){
 					if (tileGag.canPlaceRollingstock) {
 						this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
