@@ -40,7 +40,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 		cookDuration = 400;//default is 200
 		random = new Random();
 		this.maxTank = 30000;
-		this.theTank = LiquidManager.getInstance().new FilteredTank(maxTank, LiquidManager.getInstance().dieselFilter(), 1);
+		this.theTank = LiquidManager.getInstance().new FilteredTank(maxTank, LiquidManager.dieselFilter(), 1);
 	}
 	@Override
 	public String getInventoryName(){

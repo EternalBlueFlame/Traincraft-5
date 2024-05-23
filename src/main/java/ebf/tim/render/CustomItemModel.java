@@ -182,9 +182,9 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
             }
             GL11.glScalef(0.95f,0.95f,0.95f);
             GL11.glTranslatef(0,-0.1f,0);
-            if(blockTextures.get(item.getItem()).host.tesr instanceof TileEntitySpecialRenderer){
-                ((TileEntitySpecialRenderer)blockTextures.get(item.getItem()).host.tesr)
-                        .renderTileEntityAt(blockTextures.get(item.getItem()),0,0,0,0);
+            if (blockTextures.get(item.getItem()).host!=null && blockTextures.get(item.getItem()).host.tesr instanceof TileEntitySpecialRenderer) {
+                ((TileEntitySpecialRenderer) blockTextures.get(item.getItem()).host.tesr)
+                        .renderTileEntityAt(blockTextures.get(item.getItem()), 0, 0, 0, 0);
             } else {
                 blockTextures.get(item.getItem()).func_145828_a(null);
             }
