@@ -15,10 +15,13 @@ public class ItemPart extends Item{
     protected String iconName = "";
     protected String folder = "parts";
 
-    public ItemPart(String iconName){
+    protected String modID = "";
+
+    public ItemPart(String iconName, String modID){
         this.iconName = iconName;
         this.setMaxStackSize(64);
         this.setCreativeTab(Traincraft.tcTab);
+        this.modID = modID;
     }
 
     public ItemPart overridePath(String newFolder){
@@ -29,7 +32,7 @@ public class ItemPart extends Item{
     @Override
     @SideOnly(Side.CLIENT)
     public void registerIcons(IIconRegister iconRegister) {
-        this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":" + this.folder + "/" + this.iconName);
+        this.itemIcon = iconRegister.registerIcon(this.modID.toLowerCase() + ":" + this.folder + "/" + this.iconName);
     }
 
 }

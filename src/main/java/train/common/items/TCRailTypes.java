@@ -10,6 +10,8 @@ public class TCRailTypes {
         STRAIGHT(),
         DIAGONAL(),
         TURN(),
+        PARALEL(),
+        DIAGONALTURN(),
         CROSSING(),
         DIAGONAL_CROSSING(),
         SWITCH(),
@@ -31,7 +33,7 @@ public class TCRailTypes {
     public static boolean isTurnTrack(TileTCRail tile){
         if (tile == null || tile.getRailType() == null)
             return false;
-        return (tile.getRailType() == RailTypes.TURN);
+        return (tile.getRailType() == RailTypes.TURN || tile.getRailType() == RailTypes.DIAGONALTURN || tile.getRailType() == RailTypes.PARALEL);
     }
     public static boolean isCrossingTrack(TileTCRail tile){
         if (tile == null || tile.getRailType() == null)

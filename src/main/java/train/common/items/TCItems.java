@@ -26,7 +26,7 @@ public class TCItems {
 		for (ItemIDs items : ItemIDs.values()) {
 			if (items.className != null) {
 				if (items.className.equals("ItemTrain")) {
-					items.item = new ItemPart(items.iconName);
+					items.item = new ItemPart(items.iconName, Info.modID);
 				}
 				else if (items.className.equals("ItemRollingStock")) {
 					items.item = new ItemRollingStock(Info.modID.toLowerCase() + ":trains/" + items.iconName);

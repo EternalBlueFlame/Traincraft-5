@@ -17,6 +17,7 @@ import org.lwjgl.util.vector.Matrix2f;
 import org.lwjgl.util.vector.Vector2f;
 import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
+import train.common.library.Info;
 import train.common.library.ItemIDs;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
@@ -46,7 +47,7 @@ public class ItemTCRail extends ItemPart {
 
 
     public ItemTCRail(EnumTracks t) {
-        super(t.getItem().iconName);
+        super(t.getItem().iconName, Info.modID);
         this.overridePath("tracks");
         this.type = t;
     }
@@ -68,7 +69,6 @@ public class ItemTCRail extends ItemPart {
         return block == null || block.isReplaceable(world, x, y, z) || block instanceof BlockFlower
                 || block == Blocks.double_plant || block instanceof BlockMushroom;
     }
-
     /**
      * @param world
      * @param x
@@ -89,11 +89,6 @@ public class ItemTCRail extends ItemPart {
     private boolean putDownTurn(@Nullable EntityPlayer player, World world, boolean putDownEnterTrack, int x, int y, int z, int[] posX, int[] posZ,
                                 int l, boolean putDownExitTrack, int exitFacing, int posExitX, int posExitZ, double r, double cx, double cy,
                                 double cz, String type, Item idDrop) {
-
-
-        if (type.contains("EMBEDDED")) {
-            typeVariantStraight = EnumTracks.EMBEDDED_SMALL_STRAIGHT.getLabel();
-        }
 
 
         TileTCRailGag[] tileGag = new TileTCRailGag[posX.length - 1];
@@ -167,9 +162,9 @@ public class ItemTCRail extends ItemPart {
                                       int l, double r, double cx, double cy, double cz, float slopeAngle, double slopeLength, String type, Item idDrop) {
 
 
-        if (world.getBlock(x, y, z) == BlockIDs.bridgePillar.block) {
+        /*if (world.getBlock(x, y, z) == BlockIDs.bridgePillar.block) {
             return false;
-        }
+        }*/
 
         TileTCRailGag[] tileGag = new TileTCRailGag[posX.length - 1];
 
@@ -234,7 +229,7 @@ public class ItemTCRail extends ItemPart {
         if (shouldDrop) tcRail.idDrop = ItemIDs.tcRailSmallStraight.item;
     }
 
-    public String getTrackOrientation(int l, float yaw) {
+    public static String getTrackOrientation(int l, float yaw) {
         if (l == 2 && yaw >= -180 && yaw <= -135) {
             return "right";
         }
@@ -450,7 +445,7 @@ public class ItemTCRail extends ItemPart {
         Vector2f dir0 = ItemTCRail.getDirectionVector(facing0);
 
         float yaw = MathHelper.wrapAngleTo180_float(player.rotationYaw);
-        boolean isLeftTurn = item.getTrackOrientation(facing0, yaw).equals("left");
+        boolean isLeftTurn = getTrackOrientation(facing0, yaw).equals("left");
         int facing1 = isLeftTurn ? (facing0 + 4 - 1) % 4 : (facing0 + 1) % 4;
         Vector2f dir1 = getDirectionVector(facing1);
 

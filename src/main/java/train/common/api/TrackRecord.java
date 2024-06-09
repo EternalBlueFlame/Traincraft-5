@@ -10,7 +10,8 @@ public interface TrackRecord  {
 
     TCRailTypes.RailTypes getRailType();
 
-    ItemIDs getItem();
+    String getVariant();
+    Object getItem();
 
     int getSwitchSize();
 

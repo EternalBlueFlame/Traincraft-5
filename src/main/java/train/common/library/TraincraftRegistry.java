@@ -56,7 +56,7 @@ public class TraincraftRegistry {
     private Map<Item, TrainRecord> trainRecordsByItem = new HashMap<>();
 
     private List<TrackRecord> trackRecords = new ArrayList<>();
-    private Map<Item, TrackRecord> trackRecordByItem = new HashMap<>();
+    private Map<Object, TrackRecord> trackRecordByItem = new HashMap<Object, TrackRecord>();
     private Map<Class<?>, TrainRenderRecord> trainRenderRecords = new HashMap<>();
     private List<TrainSoundRecord> trainSoundRecords = new ArrayList<>();
 
@@ -117,7 +117,7 @@ public class TraincraftRegistry {
 
     public void registerTrackRecord(TrackRecord trackRecord){
         trackRecords.add(trackRecord);
-        trackRecordByItem.put(trackRecord.getItem().item, trackRecord);
+        trackRecordByItem.put(trackRecord.getItem(), trackRecord);
     }
 
     public TrainRecord findTrainRecordByItem(Item item) {

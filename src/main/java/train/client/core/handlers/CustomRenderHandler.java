@@ -243,7 +243,7 @@ public class CustomRenderHandler {
             }
 
             // Normal Parallel Curves
-        } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.TURN) {
+        } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.PARALEL) {
             String turnSize = "small";
             if (item.getTrackType() == EnumTracks.MEDIUM_PARALLEL_CURVE || item.getTrackType() == EnumTracks.EMBEDDED_MEDIUM_PARALLEL_CURVE) {
                 turnSize = "medium";
@@ -258,7 +258,7 @@ public class CustomRenderHandler {
             }
 
             // 45 Degree Turns
-        } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.TURN) {
+        } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.DIAGONALTURN) {
             String turnSize = "medium";
             if (item.getTrackType() == EnumTracks.LARGE_45DEGREE_TURN || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_45DEGREE_TURN) {
                 turnSize = "large";
