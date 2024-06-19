@@ -26,7 +26,7 @@ public class EntityLUpassenger extends EntityRollingStock implements IPassenger 
     @Override
     public void updateRiderPosition() {
         if(riddenByEntity!=null) {
-            riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.0, posZ);
+            riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() - 0.3, posZ);
         }//ew yucky rider position code, good thing its a passenger car so it doesnt matter! Wheeze.png
     }
 
@@ -72,6 +72,6 @@ public class EntityLUpassenger extends EntityRollingStock implements IPassenger 
 
     @Override
     public float getOptimalDistance(EntityMinecart cart) {
-        return 1.7F;
+        return 2.05F;
     }
 }
