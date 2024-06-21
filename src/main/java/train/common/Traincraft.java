@@ -24,6 +24,7 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import train.client.core.ClientProxy;
 import train.common.api.AbstractTrains;
 import train.common.api.LiquidManager;
 import train.common.blocks.TCBlocks;
@@ -206,6 +207,12 @@ public class Traincraft {
 
 
         proxy.registerBookHandler();
+
+        if (event.getSide().isClient()) {
+            //register the event handler
+            FMLCommonHandler.instance().bus().register(ClientProxy.eventManager);
+            MinecraftForge.EVENT_BUS.register(ClientProxy.eventManager);
+        }
 
         /* Networking and Packet initialisation, apparently this needs to be in init to prevent conflicts */
         PacketHandler.init();

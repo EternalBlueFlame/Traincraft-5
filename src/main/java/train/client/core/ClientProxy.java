@@ -7,6 +7,7 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry;
+import ebf.tim.utility.EventManager;
 import javazoom.jl.decoder.JavaLayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
@@ -57,6 +58,8 @@ import java.lang.reflect.Method;
 import java.util.Calendar;
 
 public class ClientProxy extends CommonProxy {
+
+    public static EventManager eventManager = new EventManager();
 
     public static boolean hdTransportItems=false;
     public static boolean preRenderModels=false;

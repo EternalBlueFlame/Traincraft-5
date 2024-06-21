@@ -118,6 +118,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     public boolean isClientInReverse = false;
     public boolean serverInReverseSignPositive = false;
     public float serverRealPitch;
+    public float playerScale = 1;
     private double rollingPitch;
     public float oldClientYaw = 0;//used in rendering class
     @SideOnly(Side.CLIENT)
@@ -499,6 +500,16 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     public void pressKey(int i) {
     }
+
+
+    public float getPlayerScale() {
+        return playerScale;
+    }
+
+    public void setPlayerScale(float t) {
+        this.playerScale = t;
+    }
+
 
     /**
      * gets packet from server and distribute for GUI handles motion
