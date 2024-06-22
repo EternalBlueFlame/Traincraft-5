@@ -7,7 +7,6 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry;
-import ebf.tim.utility.EventManager;
 import javazoom.jl.decoder.JavaLayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
@@ -59,7 +58,36 @@ import java.util.Calendar;
 
 public class ClientProxy extends CommonProxy {
 
-    public static EventManager eventManager = new EventManager();
+    public static final net.minecraft.client.renderer.entity.RenderPlayer playerRender = new net.minecraft.client.renderer.entity.RenderPlayer(){
+        EntityRollingStock stock;
+        @Override
+        public void doRender(net.minecraft.client.entity.AbstractClientPlayer player, double x, double y, double z, float f0, float f1){
+            if(player.ridingEntity instanceof EntityRollingStock){
+                stock = (EntityRollingStock) player.ridingEntity;
+                GL11.glPushMatrix();
+                float scale = stock.getPlayerScale();
+                scale = player.height * scale / player.height;
+                GL11.glTranslated(x, (y+.35), z);
+                GL11.glScalef(scale, scale, scale);
+                GL11.glTranslated(-x, -(y+.35), -z);
+                if (player != Minecraft.getMinecraft().thePlayer && stock.getPlayerScale() != 1) {
+                    GL11.glTranslated(0, 1-(stock.getPlayerScale()-0.2), 0); //rough approx. but gets the job done for everything in range 0.5-1
+                } else {
+                    GL11.glTranslated(0, (1-stock.getPlayerScale()) * -1,0); //rough approx. but gets the job done for everything in range 0.5-1
+                }
+                super.doRender(player, x, y, z, f0, f1);
+                GL11.glPopMatrix();
+                return;
+
+            }
+            super.doRender(player, x, y, z, f0, f1);
+        }
+    };
+
+    @Override
+    public void registerPlayerScaler(){
+        RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, playerRender);
+    }
 
     public static boolean hdTransportItems=false;
     public static boolean preRenderModels=false;

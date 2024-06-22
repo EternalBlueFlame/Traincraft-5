@@ -53,6 +53,8 @@ public class CommonProxy implements IGuiHandler {
 	public void setKeyBinding(String name, int value) {
     }
 
+    public void registerPlayerScaler(){}
+
     public void registerRenderInformation() {
     }
 
