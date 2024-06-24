@@ -24,7 +24,7 @@ tile.tc:tcRail.name=Tor Traincraft
 tile.tc:tcRailGag.name=Tor Traincraft
 fluid.tc:fluid.diesel.name=Olej napędowy
 fluid.tc:fluid.refinedfuel.name=Przetworzone paliwo
-tile.tc:bridgePillar.name=Filar mostu
+tile.bridgePillar.name=Filar mostu
 tile.tc:switchStand.name=Podstawa przełącznika
 
 <!-- ## Fluids ## -->

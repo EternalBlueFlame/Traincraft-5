@@ -24,7 +24,7 @@ tile.tc:tcRail.name=Binario di Traincraft
 tile.tc:tcRailGag.name=Binario di Traincraft
 fluid.tc:fluid.diesel.name=Carburante diesel
 fluid.tc:fluid.refinedfuel.name=Carburante raffinato
-tile.tc:bridgePillar.name=Pilone del ponte
+tile.bridgePillar.name=Pilone del ponte
 tile.tc:switchStand.name=Supporto del deviatore a stella
 
 <!-- ## FLUIDS ## -->

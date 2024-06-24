@@ -285,6 +285,14 @@ public class TraincraftRegistry {
         }
     }
 
+    public static Block registerBlock(Block block, CreativeTabs tab, String modid, String unlocalizedName) {
+        return registerBlock(block, tab, modid, unlocalizedName, null, Traincraft.proxy.getTESR());
+    }
+
+    public static Block registerBlock(Block block, CreativeTabs tab, String modid, String unlocalizedName, @Nullable String oreDictionaryName) {
+        return registerBlock(block, tab, modid, unlocalizedName, oreDictionaryName, Traincraft.proxy.getTESR());
+    }
+
     public static Block registerBlock(Block block, CreativeTabs tab, String unlocalizedName, @Nullable String oreDictionaryName, @Nullable Object render) {
         return registerBlock(block, tab, null, unlocalizedName, oreDictionaryName, render);
     }

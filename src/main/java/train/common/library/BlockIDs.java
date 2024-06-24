@@ -80,7 +80,6 @@ public enum BlockIDs {
 	
 	tcRailGag(false,null),
 	tcRail(false,null),
-	bridgePillar(false,null),
 
 	MILWSwitchStand(false, null),
 	autoSwtichStand(false, null),

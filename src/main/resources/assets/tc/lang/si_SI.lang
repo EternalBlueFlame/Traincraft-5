@@ -24,7 +24,7 @@ tile.tc:tcRail.name=Traincraft tirnice
 tile.tc:tcRailGag.name=Traincraft tirnice
 fluid.tc:fluid.diesel.name=Dizelsko gorivo
 fluid.tc:fluid.refinedfuel.name=Refinirano gorivo
-tile.tc:bridgePillar.name=Podpornik mostu
+tile.bridgePillar.name=Podpornik mostu
 
 <!-- ## Fluids ## -->
 fluid.diesel.name=Dizelsko gorivo

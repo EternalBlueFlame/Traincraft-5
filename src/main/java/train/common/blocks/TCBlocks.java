@@ -18,6 +18,7 @@ import train.common.blocks.slabs.*;
 import train.common.blocks.stairs.*;
 import train.common.library.BlockIDs;
 import train.common.library.Info;
+import train.common.library.TraincraftRegistry;
 import train.common.mtc.*;
 
 public class TCBlocks {
@@ -28,7 +29,11 @@ public class TCBlocks {
 		setHarvestLevels();
 	}
 
+	public static Block bridgePillar=new BlockBridgePillar().setHardness(3.5F).setStepSound(Block.soundTypeWood);
+
 	public static void loadBlocks() {
+		TraincraftRegistry.registerBlock(bridgePillar,Traincraft.tcTab, Info.modID,"bridgePillar");
+
 		BlockIDs.distilIdle.block = new BlockDistil(2, false).setHardness(3.5F).setStepSound(Block.soundTypeStone);
 		BlockIDs.distilActive.block = new BlockDistil(2, true).setHardness(3.5F).setStepSound(Block.soundTypeStone).setLightLevel(0.8F);
 		//BlockIDs.signal.block = new BlockSignal(BlockIDs.signal.block, 16).setHardness(1.7F).setStepSound(Block.soundTypeMetal);
@@ -87,8 +92,6 @@ public class TCBlocks {
 		
 		BlockIDs.tcRail.block = new BlockTCRail().setHardness(1.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
 		BlockIDs.tcRailGag.block = new BlockTCRailGag().setHardness(1.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
-		
-		BlockIDs.bridgePillar.block = new BlockBridgePillar().setHardness(3.5F).setStepSound(Block.soundTypeWood);
 
 		BlockIDs.MILWSwitchStand.block = new BlockMILWSwitchStand().setHardness(1F).setStepSound(Block.soundTypeStone);
 		BlockIDs.autoSwtichStand.block = new BlockautoSwitchStand().setHardness(1F).setStepSound(Block.soundTypeAnvil);
@@ -135,7 +138,6 @@ public class TCBlocks {
 		BlockIDs.assemblyTableIII.block.setHarvestLevel("axe", 0);
 		BlockIDs.waterWheel.block.setHarvestLevel("axe", 0);
 		BlockIDs.windMill.block.setHarvestLevel("axe", 0);
-		BlockIDs.bridgePillar.block.setHarvestLevel("axe", 0);
 		BlockIDs.oreTC.block.setHarvestLevel("pickaxe", 1);
 		BlockIDs.snowGravel.block.setHarvestLevel("shovel",0);
 		BlockIDs.poweredGravel.block.setHarvestLevel("shovel",0);

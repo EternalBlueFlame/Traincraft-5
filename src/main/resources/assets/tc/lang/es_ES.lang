@@ -23,7 +23,7 @@ tile.tc:tcRail.name=Vía
 Traincraft tile.tc:tcRailGag.name=Vía Traincraft  
 fluid.tc:fluid.diesel.name=Gasoil 
 fluid.tc:fluid.refinedfuel.name=Fuel
-tile.tc:bridgePillar.name=Pilar de puente
+tile.bridgePillar.name=Pilar de puente
 tile.tc:switchStand.name=Palanca de conmutador
 
 <!-- ## Fluids ## -->
