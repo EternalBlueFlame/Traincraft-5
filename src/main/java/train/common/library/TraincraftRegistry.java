@@ -54,6 +54,9 @@ public class TraincraftRegistry {
 
     private List<TrainRecord> trainRecords = new ArrayList<>();
     private Map<Item, TrainRecord> trainRecordsByItem = new HashMap<>();
+
+    private List<TrackRecord> trackRecords = new ArrayList<>();
+    private Map<Object, TrackRecord> trackRecordByItem = new HashMap<Object, TrackRecord>();
     private Map<Class<?>, TrainRenderRecord> trainRenderRecords = new HashMap<>();
     private List<TrainSoundRecord> trainSoundRecords = new ArrayList<>();
 
@@ -64,6 +67,11 @@ public class TraincraftRegistry {
         for (TrainRecord train : EnumTrains.trains()) {
             TraincraftRegistry.this.registerTrainRecord(train);
         }
+
+        for (EnumTracks tracks : EnumTracks.values()){
+            TraincraftRegistry.this.registerTrackRecord(tracks);
+        }
+
 
         Side side = FMLCommonHandler.instance().getEffectiveSide();
         if (side == Side.CLIENT) {
@@ -76,6 +84,8 @@ public class TraincraftRegistry {
             TraincraftRegistry.this.registerTrainSoundRecord(sound);
         }
     }
+
+
 
     public TrainRecord getTrainRecord(Class<?> entityClass) {
         if (entityClass == null) return null;
@@ -97,6 +107,17 @@ public class TraincraftRegistry {
             }
         }
         return null;
+    }
+
+
+    public TrackRecord findTrackRecordByItem(Item item){
+        return trackRecordByItem.get(item);
+    }
+
+
+    public void registerTrackRecord(TrackRecord trackRecord){
+        trackRecords.add(trackRecord);
+        trackRecordByItem.put(trackRecord.getItem(), trackRecord);
     }
 
     public TrainRecord findTrainRecordByItem(Item item) {

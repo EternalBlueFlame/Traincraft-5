@@ -16,6 +16,7 @@ import org.lwjgl.util.vector.Vector2f;
 import train.client.render.RenderTCRail;
 import train.common.items.ItemTCRail;
 import train.common.items.TCRailTypes;
+import train.common.library.EnumTracks;
 
 public class CustomRenderHandler {
     String ballastMaterial;
@@ -59,7 +60,7 @@ public class CustomRenderHandler {
         double px = TileEntityRendererDispatcher.staticPlayerX;
         double py = TileEntityRendererDispatcher.staticPlayerY;
         double pz = TileEntityRendererDispatcher.staticPlayerZ;
-        int facing = item.getTrackType().getType() == TCRailTypes.DIAGONAL
+        int facing = item.getTrackType().getRailType() == TCRailTypes.RailTypes.DIAGONAL
                 ? (MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F) & 3) + 4
                 : MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         Vector2f dir = ItemTCRail.getDirectionVector(facing);
@@ -72,17 +73,17 @@ public class CustomRenderHandler {
         GL11.glEnable(GL11.GL_BLEND);
         blockInfo();
         // Straights
-        if (item.getTrackType().getType() == TCRailTypes.STRAIGHT) {
+        if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.STRAIGHT) {
 
-            if (item.getTrackType() == ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC) {
+            if (item.getTrackType() == EnumTracks.SMALL_ROAD_CROSSING_DYNAMIC) {
                 blockInfo();
             }
             int length = 1;
-            if (item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_STRAIGHT || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_STRAIGHT)
+            if (item.getTrackType() == EnumTracks.MEDIUM_STRAIGHT || item.getTrackType() == EnumTracks.EMBEDDED_MEDIUM_STRAIGHT)
                 length = 3;
-            if (item.getTrackType() == ItemTCRail.TrackTypes.LONG_STRAIGHT || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LONG_STRAIGHT)
+            if (item.getTrackType() == EnumTracks.LONG_STRAIGHT || item.getTrackType() == EnumTracks.EMBEDDED_LONG_STRAIGHT)
                 length = 6;
-            else if (item.getTrackType() == ItemTCRail.TrackTypes.VERY_LONG_STRAIGHT || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_VERY_LONG_STRAIGHT)
+            else if (item.getTrackType() == EnumTracks.VERY_LONG_STRAIGHT || item.getTrackType() == EnumTracks.EMBEDDED_VERY_LONG_STRAIGHT)
                 length = 12;
 
             for (int i = 0; i < length; i++) {
@@ -96,7 +97,7 @@ public class CustomRenderHandler {
 
         String labelType = item.getTrackType().getLabel().contains("EMBEDDED") ? "embedded" : "normal";
 
-        if (item.getTrackType().getType() == TCRailTypes.DIAGONAL) {
+        if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.DIAGONAL) {
             int length = getLength(item);
             float dx = 0;
             float dz = 0;
@@ -125,25 +126,25 @@ public class CustomRenderHandler {
             }
 
             // Crossings
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING) {
+        } else if (item.getTrackType() == EnumTracks.SMALL_ROAD_CROSSING) {
             RenderTCRail.modelSmallStraight.render("crossing", facing, 0, 0, 0, r, g, b, a, null, 16777215);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING_1) {
+        } else if (item.getTrackType() == EnumTracks.SMALL_ROAD_CROSSING_1) {
             RenderTCRail.modelSmallStraight.render("crossing1", facing, 0, 0, 0, r, g, b, a, null, 16777215);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING_2) {
+        } else if (item.getTrackType() == EnumTracks.SMALL_ROAD_CROSSING_2) {
             RenderTCRail.modelSmallStraight.render("crossing2", facing, 0, 0, 0, r, g, b, a, null, 16777215);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.SMALL_ROAD_CROSSING_DYNAMIC) {
+        } else if (item.getTrackType() == EnumTracks.SMALL_ROAD_CROSSING_DYNAMIC) {
             blockInfo();
             RenderTCRail.modelSmallStraight.render("dynamic", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.DOUBLE_DIAMOND_CROSSING || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_DOUBLE_DIAMOND_CROSSING) {
+        } else if (item.getTrackType() == EnumTracks.DOUBLE_DIAMOND_CROSSING || item.getTrackType() == EnumTracks.EMBEDDED_DOUBLE_DIAMOND_CROSSING) {
             float dx = dir.getX();
             float dz = dir.getY();
 
             RenderTCRail.modelTwoWaysCrossing.render(labelType + "_diamond", dx, 0, dz, facing, r, g, b, a);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.DIAGONAL_TWO_WAYS_CROSSING || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_DIAGONAL_TWO_WAYS_CROSSING) {
+        } else if (item.getTrackType() == EnumTracks.DIAGONAL_TWO_WAYS_CROSSING || item.getTrackType() == EnumTracks.EMBEDDED_DIAGONAL_TWO_WAYS_CROSSING) {
             RenderTCRail.modelTwoWaysCrossing.render(labelType + "_diagonal_crossing", 0, 0, 0, facing, r, g, b, a);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.FOUR_WAYS_CROSSING || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_FOUR_WAYS_CROSSING) {
+        } else if (item.getTrackType() == EnumTracks.FOUR_WAYS_CROSSING || item.getTrackType() == EnumTracks.EMBEDDED_FOUR_WAYS_CROSSING) {
             RenderTCRail.modelTwoWaysCrossing.render(labelType + "_universal_crossing", 0, 0, 0, facing, r, g, b, a);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.DIAMOND_CROSSING || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_DIAMOND_CROSSING) {
+        } else if (item.getTrackType() == EnumTracks.DIAMOND_CROSSING || item.getTrackType() == EnumTracks.EMBEDDED_DIAMOND_CROSSING) {
             float dx = dir.getX();
             float dz = dir.getY();
 
@@ -152,7 +153,7 @@ public class CustomRenderHandler {
             } else {
                 RenderTCRail.modelRightDiamondCrossing.render(labelType, dx, 0, dz, facing, r, g, b, a);
             }
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.TWO_WAYS_CROSSING || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_TWO_WAYS_CROSSING) {
+        } else if (item.getTrackType() == EnumTracks.TWO_WAYS_CROSSING || item.getTrackType() == EnumTracks.EMBEDDED_TWO_WAYS_CROSSING) {
             float dx = dir.getX();
             float dz = dir.getY();
 
@@ -163,73 +164,73 @@ public class CustomRenderHandler {
             RenderTCRail.modelSmallStraight.render(labelType, 3, dx - 1, 0, dz, r, g, b, a, null, 16777215);
 
             // Slopes
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.SLOPE_BALLAST) {
+        } else if (item.getTrackType() == EnumTracks.SLOPE_BALLAST) {
             blockInfo();
             RenderTCRail.modelSlope.render("ballast", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.SLOPE_GRAVEL) {
+        } else if (item.getTrackType() == EnumTracks.SLOPE_GRAVEL) {
             blockInfo();
             RenderTCRail.modelSlope.render("gravel", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.SLOPE_WOOD) {
+        } else if (item.getTrackType() == EnumTracks.SLOPE_WOOD) {
             blockInfo();
             RenderTCRail.modelSlope.render("wood", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.SLOPE_SNOW_GRAVEL) {
+        } else if (item.getTrackType() == EnumTracks.SLOPE_SNOW_GRAVEL) {
             blockInfo();
             RenderTCRail.modelSlope.render("snow", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.SLOPE_DYNAMIC) {
+        } else if (item.getTrackType() == EnumTracks.SLOPE_DYNAMIC) {
             blockInfo();
             RenderTCRail.modelSlope.render("dynamic", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_SLOPE_BALLAST) {
+        } else if (item.getTrackType() == EnumTracks.LARGE_SLOPE_BALLAST) {
             blockInfo();
             RenderTCRail.modelLargeSlope.render("ballast", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_SLOPE_GRAVEL) {
+        } else if (item.getTrackType() == EnumTracks.LARGE_SLOPE_GRAVEL) {
             blockInfo();
             RenderTCRail.modelLargeSlope.render("gravel", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_SLOPE_WOOD) {
+        } else if (item.getTrackType() == EnumTracks.LARGE_SLOPE_WOOD) {
             blockInfo();
             RenderTCRail.modelLargeSlope.render("wood", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_SLOPE_SNOW_GRAVEL) {
+        } else if (item.getTrackType() == EnumTracks.LARGE_SLOPE_SNOW_GRAVEL) {
             blockInfo();
             RenderTCRail.modelLargeSlope.render("snow", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_SLOPE_DYNAMIC) {
+        } else if (item.getTrackType() == EnumTracks.LARGE_SLOPE_DYNAMIC) {
             blockInfo();
             RenderTCRail.modelLargeSlope.render("dynamic", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.VERY_LARGE_SLOPE_BALLAST) {
+        } else if (item.getTrackType() == EnumTracks.VERY_LARGE_SLOPE_BALLAST) {
             blockInfo();
             RenderTCRail.modelVeryLargeSlope.render("ballast", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.VERY_LARGE_SLOPE_GRAVEL) {
+        } else if (item.getTrackType() == EnumTracks.VERY_LARGE_SLOPE_GRAVEL) {
             blockInfo();
             RenderTCRail.modelVeryLargeSlope.render("gravel", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.VERY_LARGE_SLOPE_WOOD) {
+        } else if (item.getTrackType() == EnumTracks.VERY_LARGE_SLOPE_WOOD) {
             blockInfo();
             RenderTCRail.modelVeryLargeSlope.render("wood", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.VERY_LARGE_SLOPE_SNOW_GRAVEL) {
+        } else if (item.getTrackType() == EnumTracks.VERY_LARGE_SLOPE_SNOW_GRAVEL) {
             blockInfo();
             RenderTCRail.modelVeryLargeSlope.render("snow", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.VERY_LARGE_SLOPE_DYNAMIC) {
+        } else if (item.getTrackType() == EnumTracks.VERY_LARGE_SLOPE_DYNAMIC) {
             blockInfo();
             RenderTCRail.modelVeryLargeSlope.render("dynamic", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_SLOPE_DYNAMIC) {
+        } else if (item.getTrackType() == EnumTracks.EMBEDDED_SLOPE_DYNAMIC) {
             blockInfo();
             RenderTCRail.modelSlope.render("embedded_dynamic", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_SLOPE_DYNAMIC) {
+        } else if (item.getTrackType() == EnumTracks.EMBEDDED_LARGE_SLOPE_DYNAMIC) {
             blockInfo();
             RenderTCRail.modelLargeSlope.render("embedded_dynamic", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_VERY_LARGE_SLOPE_DYNAMIC) {
+        } else if (item.getTrackType() == EnumTracks.EMBEDDED_VERY_LARGE_SLOPE_DYNAMIC) {
             blockInfo();
             RenderTCRail.modelVeryLargeSlope.render("embedded_dynamic", facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
-        } else if (item.getTrackType().getType() == TCRailTypes.CURVED_SLOPE) {
-            if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_CURVED_SLOPE_DYNAMIC || item.getTrackType() == ItemTCRail.TrackTypes.VERY_LARGE_CURVED_SLOPE_DYNAMIC || item.getTrackType() == ItemTCRail.TrackTypes.SUPER_LARGE_CURVED_SLOPE_DYNAMIC
-                    || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_CURVED_SLOPE_DYNAMIC || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_VERY_LARGE_CURVED_SLOPE_DYNAMIC || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_SUPER_LARGE_CURVED_SLOPE_DYNAMIC) {
+        } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.CURVED_SLOPE) {
+            if (item.getTrackType() == EnumTracks.LARGE_CURVED_SLOPE_DYNAMIC || item.getTrackType() == EnumTracks.VERY_LARGE_CURVED_SLOPE_DYNAMIC || item.getTrackType() == EnumTracks.SUPER_LARGE_CURVED_SLOPE_DYNAMIC
+                    || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_CURVED_SLOPE_DYNAMIC || item.getTrackType() == EnumTracks.EMBEDDED_VERY_LARGE_CURVED_SLOPE_DYNAMIC || item.getTrackType() == EnumTracks.EMBEDDED_SUPER_LARGE_CURVED_SLOPE_DYNAMIC) {
                 String turnSize = "large";
-                if (item.getTrackType() == ItemTCRail.TrackTypes.VERY_LARGE_CURVED_SLOPE_DYNAMIC) {
+                if (item.getTrackType() == EnumTracks.VERY_LARGE_CURVED_SLOPE_DYNAMIC) {
                     turnSize = "verylarge";
-                } else if (item.getTrackType() == ItemTCRail.TrackTypes.SUPER_LARGE_CURVED_SLOPE_DYNAMIC) {
+                } else if (item.getTrackType() == EnumTracks.SUPER_LARGE_CURVED_SLOPE_DYNAMIC) {
                     turnSize = "superlarge";
-                } else if (item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_CURVED_SLOPE_DYNAMIC) {
+                } else if (item.getTrackType() == EnumTracks.EMBEDDED_LARGE_CURVED_SLOPE_DYNAMIC) {
                     turnSize = "embedded_large";
-                } else if (item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_VERY_LARGE_CURVED_SLOPE_DYNAMIC) {
+                } else if (item.getTrackType() == EnumTracks.EMBEDDED_VERY_LARGE_CURVED_SLOPE_DYNAMIC) {
                     turnSize = "embedded_verylarge";
-                } else if (item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_SUPER_LARGE_CURVED_SLOPE_DYNAMIC) {
+                } else if (item.getTrackType() == EnumTracks.EMBEDDED_SUPER_LARGE_CURVED_SLOPE_DYNAMIC) {
                     turnSize = "embedded_superlarge";
                 }
                 blockInfo();
@@ -242,11 +243,11 @@ public class CustomRenderHandler {
             }
 
             // Normal Parallel Curves
-        } else if (item.getTrackType().getType() == TCRailTypes.CURVE) {
+        } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.PARALEL) {
             String turnSize = "small";
-            if (item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_PARALLEL_CURVE || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_PARALLEL_CURVE) {
+            if (item.getTrackType() == EnumTracks.MEDIUM_PARALLEL_CURVE || item.getTrackType() == EnumTracks.EMBEDDED_MEDIUM_PARALLEL_CURVE) {
                 turnSize = "medium";
-            } else if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_PARALLEL_CURVE || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_PARALLEL_CURVE) {
+            } else if (item.getTrackType() == EnumTracks.LARGE_PARALLEL_CURVE || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_PARALLEL_CURVE) {
                 turnSize = "large";
             }
 
@@ -257,17 +258,17 @@ public class CustomRenderHandler {
             }
 
             // 45 Degree Turns
-        } else if (item.getTrackType().getType() == TCRailTypes.SHARP_TURN) {
+        } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.DIAGONALTURN) {
             String turnSize = "medium";
-            if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_45DEGREE_TURN || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_45DEGREE_TURN) {
+            if (item.getTrackType() == EnumTracks.LARGE_45DEGREE_TURN || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_45DEGREE_TURN) {
                 turnSize = "large";
             }
 
-            if (item.getTrackType() == ItemTCRail.TrackTypes.VERY_LARGE_45DEGREE_TURN || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_VERY_LARGE_45DEGREE_TURN) {
+            if (item.getTrackType() == EnumTracks.VERY_LARGE_45DEGREE_TURN || item.getTrackType() == EnumTracks.EMBEDDED_VERY_LARGE_45DEGREE_TURN) {
                 turnSize = "verylarge";
             }
 
-            if (item.getTrackType() == ItemTCRail.TrackTypes.SUPER_LARGE_45DEGREE_TURN || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_SUPER_LARGE_45DEGREE_TURN) {
+            if (item.getTrackType() == EnumTracks.SUPER_LARGE_45DEGREE_TURN || item.getTrackType() == EnumTracks.EMBEDDED_SUPER_LARGE_45DEGREE_TURN) {
                 turnSize = "superlarge";
             }
 
@@ -278,26 +279,26 @@ public class CustomRenderHandler {
             }
 
             // Turns
-        } else if (item.getTrackType().getType() == TCRailTypes.TURN) {
-            if (item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_TURN || item.getTrackType() == ItemTCRail.TrackTypes.LARGE_TURN
-                    || item.getTrackType() == ItemTCRail.TrackTypes.VERY_LARGE_TURN || item.getTrackType() == ItemTCRail.TrackTypes.SUPER_LARGE_TURN
-                    || item.getTrackType() == ItemTCRail.TrackTypes.TURN_1X1 || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_TURN_1X1
-                    || item.getTrackType() == ItemTCRail.TrackTypes.TURN_29X29 || item.getTrackType() == ItemTCRail.TrackTypes.TURN_32X32
-                    || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_TURN || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_TURN
-                    || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_VERY_LARGE_TURN || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_SUPER_LARGE_TURN
-                    || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_TURN_29X29 || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_TURN_32X32) {
+        } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.TURN) {
+            if (item.getTrackType() == EnumTracks.MEDIUM_TURN || item.getTrackType() == EnumTracks.LARGE_TURN
+                    || item.getTrackType() == EnumTracks.VERY_LARGE_TURN || item.getTrackType() == EnumTracks.SUPER_LARGE_TURN
+                    || item.getTrackType() == EnumTracks.TURN_1X1 || item.getTrackType() == EnumTracks.EMBEDDED_TURN_1X1
+                    || item.getTrackType() == EnumTracks.TURN_29X29 || item.getTrackType() == EnumTracks.TURN_32X32
+                    || item.getTrackType() == EnumTracks.EMBEDDED_MEDIUM_TURN || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_TURN
+                    || item.getTrackType() == EnumTracks.EMBEDDED_VERY_LARGE_TURN || item.getTrackType() == EnumTracks.EMBEDDED_SUPER_LARGE_TURN
+                    || item.getTrackType() == EnumTracks.EMBEDDED_TURN_29X29 || item.getTrackType() == EnumTracks.EMBEDDED_TURN_32X32) {
                 String turnSize = "medium";
-                if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_TURN || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_TURN)
+                if (item.getTrackType() == EnumTracks.LARGE_TURN || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_TURN)
                     turnSize = "large";
-                else if (item.getTrackType() == ItemTCRail.TrackTypes.VERY_LARGE_TURN || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_VERY_LARGE_TURN)
+                else if (item.getTrackType() == EnumTracks.VERY_LARGE_TURN || item.getTrackType() == EnumTracks.EMBEDDED_VERY_LARGE_TURN)
                     turnSize = "very_large";
-                else if (item.getTrackType() == ItemTCRail.TrackTypes.SUPER_LARGE_TURN || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_SUPER_LARGE_TURN)
+                else if (item.getTrackType() == EnumTracks.SUPER_LARGE_TURN || item.getTrackType() == EnumTracks.EMBEDDED_SUPER_LARGE_TURN)
                     turnSize = "super_large";
-                else if (item.getTrackType() == ItemTCRail.TrackTypes.TURN_29X29 || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_TURN_29X29)
+                else if (item.getTrackType() == EnumTracks.TURN_29X29 || item.getTrackType() == EnumTracks.EMBEDDED_TURN_29X29)
                     turnSize = "29x";
-                else if (item.getTrackType() == ItemTCRail.TrackTypes.TURN_32X32 || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_TURN_32X32)
+                else if (item.getTrackType() == EnumTracks.TURN_32X32 || item.getTrackType() == EnumTracks.EMBEDDED_TURN_32X32)
                     turnSize = "32x";
-                else if (item.getTrackType() == ItemTCRail.TrackTypes.TURN_1X1 || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_TURN_1X1)
+                else if (item.getTrackType() == EnumTracks.TURN_1X1 || item.getTrackType() == EnumTracks.EMBEDDED_TURN_1X1)
                     turnSize = "1x";
 
                 if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
@@ -308,7 +309,7 @@ public class CustomRenderHandler {
             }
 
             // Switches
-        } else if (item.getTrackType().getType() == TCRailTypes.SWITCH) {
+        } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.SWITCH) {
             boolean isLeftTurn = item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left");
             float dx = dir.getX();
             float dz = dir.getY();
@@ -319,38 +320,38 @@ public class CustomRenderHandler {
             int out_1_1 = 3;
 
             String switchType = "medium";
-            if (item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_PARALLEL_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_PARALLEL_SWITCH) {
+            if (item.getTrackType() == EnumTracks.MEDIUM_PARALLEL_SWITCH || item.getTrackType() == EnumTracks.EMBEDDED_MEDIUM_PARALLEL_SWITCH) {
                 switchType = "medium_parallel";
                 out_0_start = 5;
                 out_0_end = 10;
                 out_1_0 = 10;
             }
-            if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_PARALLEL_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_PARALLEL_SWITCH) {
+            if (item.getTrackType() == EnumTracks.LARGE_PARALLEL_SWITCH || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_PARALLEL_SWITCH) {
                 switchType = "large_parallel";
                 out_0_start = 0;
                 out_0_end = 0;
                 out_1_0 = 0;
-            }else if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_SWITCH) {
+            }else if (item.getTrackType() == EnumTracks.LARGE_SWITCH || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_SWITCH) {
                 switchType = "large_90";
                 out_0_start = 5;
                 out_0_end = 5;
                 out_1_0 = 5;
                 out_1_1 = 5;
 
-            } else if (item.getTrackType() == ItemTCRail.TrackTypes.VERY_LARGE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_VERY_LARGE_SWITCH) {
+            } else if (item.getTrackType() == EnumTracks.VERY_LARGE_SWITCH || item.getTrackType() == EnumTracks.EMBEDDED_VERY_LARGE_SWITCH) {
                 switchType = "very_large_90";
                 out_0_start = 0;
                 out_0_end = 0;
                 out_1_0 = 10;
                 out_1_1 = 10;
-            } else if (item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_45DEGREE_SWITCH) {
+            } else if (item.getTrackType() == EnumTracks.MEDIUM_45DEGREE_SWITCH || item.getTrackType() == EnumTracks.EMBEDDED_MEDIUM_45DEGREE_SWITCH) {
                 switchType = "medium_45degree";
                 out_0_start = 0;
                 out_0_end = 0;
                 out_1_0 = 0;
                 out_1_1 = 0;
             }
-            else if (item.getTrackType() == ItemTCRail.TrackTypes.LARGE_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_45DEGREE_SWITCH) {
+            else if (item.getTrackType() == EnumTracks.LARGE_45DEGREE_SWITCH || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_45DEGREE_SWITCH) {
                 switchType = "large_45degree";
                 out_0_start = 0;
                 out_0_end = 0;
@@ -367,12 +368,12 @@ public class CustomRenderHandler {
                 RenderTCRail.modelSmallStraight.render(variant, facing, dx * out_0, 0, dz * out_0, r, g, b, a, null, 16777215);
             }
 
-            if (item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_PARALLEL_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_PARALLEL_SWITCH) {
+            if (item.getTrackType() == EnumTracks.MEDIUM_PARALLEL_SWITCH || item.getTrackType() == EnumTracks.EMBEDDED_MEDIUM_PARALLEL_SWITCH) {
                 RenderTCRail.modelSmallStraight.render(variant, facing, 0, 0, 0, r, g, b, a, null, 16777215);
                 RenderTCRail.modelSmallStraight.render(variant, facing, dx * out_1_0 + dx_1 * out_1_1, 0, dz * out_1_0 + dz_1 * out_1_1, r, g, b, a, null, 16777215);
             }
 
-            else if (!(item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.LARGE_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_45DEGREE_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.LARGE_PARALLEL_SWITCH || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LARGE_PARALLEL_SWITCH)) {
+            else if (!(item.getTrackType() == EnumTracks.MEDIUM_45DEGREE_SWITCH || item.getTrackType() == EnumTracks.EMBEDDED_MEDIUM_45DEGREE_SWITCH || item.getTrackType() == EnumTracks.LARGE_45DEGREE_SWITCH || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_45DEGREE_SWITCH || item.getTrackType() == EnumTracks.LARGE_PARALLEL_SWITCH || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_PARALLEL_SWITCH)) {
 
                 RenderTCRail.modelSmallStraight.render(variant, facing, 0, 0, 0, r, g, b, a, null, 16777215);
                 RenderTCRail.modelSmallStraight.render(variant, facing_1, dx * out_1_0 + dx_1 * out_1_1, 0, dz * out_1_0 + dz_1 * out_1_1, r, g, b, a, null, 16777215);
@@ -393,13 +394,13 @@ public class CustomRenderHandler {
 
     private static int getLength(ItemTCRail item) {
         int length = 1;
-        if (item.getTrackType() == ItemTCRail.TrackTypes.MEDIUM_DIAGONAL_STRAIGHT || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_MEDIUM_DIAGONAL_STRAIGHT) {
+        if (item.getTrackType() == EnumTracks.MEDIUM_DIAGONAL_STRAIGHT || item.getTrackType() == EnumTracks.EMBEDDED_MEDIUM_DIAGONAL_STRAIGHT) {
             length = 3;
         }
 
-        if (item.getTrackType() == ItemTCRail.TrackTypes.LONG_DIAGONAL_STRAIGHT || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_LONG_DIAGONAL_STRAIGHT) {
+        if (item.getTrackType() == EnumTracks.LONG_DIAGONAL_STRAIGHT || item.getTrackType() == EnumTracks.EMBEDDED_LONG_DIAGONAL_STRAIGHT) {
             length = 6;
-        } else if (item.getTrackType() == ItemTCRail.TrackTypes.VERY_LONG_DIAGONAL_STRAIGHT || item.getTrackType() == ItemTCRail.TrackTypes.EMBEDDED_VERY_LONG_DIAGONAL_STRAIGHT) {
+        } else if (item.getTrackType() == EnumTracks.VERY_LONG_DIAGONAL_STRAIGHT || item.getTrackType() == EnumTracks.EMBEDDED_VERY_LONG_DIAGONAL_STRAIGHT) {
             length = 12;
         }
         return length;

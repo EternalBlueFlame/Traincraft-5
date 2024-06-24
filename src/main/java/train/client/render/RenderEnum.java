@@ -768,7 +768,7 @@ public enum RenderEnum implements TrainRenderRecord {
             add(new double[]{2D, -0.4D, 0D});
         }
     }, 2, true),
-    locoMRcompound(EntitylocoSteamMRCompound.class, new ModelMidlandcompound(), "LMS_4p_", true, new float[]{-1.95f, 0.1f, 0}, new float[]{0, 180, 180}, null, "largesmoke", 2, new ArrayList<double[]>() {
+    locoMRcompound(EntitylocoSteamMRCompound.class, new ModelMidlandcompound(), "LMS_4p_", true, new float[]{-1.55f, 0.15f, 0}, new float[]{0, 180, 180}, null, "largesmoke", 2, new ArrayList<double[]>() {
         {
             add(new double[]{3.5D, 1.5D, 0D});
         }
@@ -818,8 +818,8 @@ public enum RenderEnum implements TrainRenderRecord {
     pch120Coach(EntityPassengerPCH120Coach.class, new ModelPCH120Car(), "pch120car_", true, new float[]{0F, 0.01F, 0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
     Class345(EntityElectricClass345.class, new ModelClass345(), "Class345_", true, new float[]{-1.5F, 0.17F, 0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
     Class345Coach(EntityClass345Coach.class, new ModelClass345Coach(), "Class345_Passenger_", true, new float[]{0F, 0.05F, 0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
-    LUengine(EntityElectricLUengine.class, new ModelLUengine(), "lu_engine", false, new float[]{-1.0F, 0.16F, 0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
-    LUpassenger(EntityLUpassenger.class, new ModelLUpassenger(), "lu_passenger", false, new float[]{0F, 0.16F, 0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
+    LUengine(EntityElectricLUengine.class, new ModelLUengine(), "LU_96_Stock_", true, new float[]{-3.25F, -0.09F, 0.7F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
+    LUpassenger(EntityLUpassenger.class, new ModelLUpassenger(), "LU_96_Stock_", true, new float[]{-2.12F, -0.09F, 0.7F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
     DstockEngine(EntityElectricDstockEngine.class, new ModelDstockEngine(), "D_stock_engine_", true, new float[]{-1.0F, 0.16F, 0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
     DstockCar(EntityDstockPassenger.class, new ModelDstockPassenger(), "D_stock_passenger_", true, new float[]{0F, 0.16F, 0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
     passengerPS52SeatCoach(EntityPassengerPS52SeatCoach.class, new ModelPS52SeatCoach(), "PS_lightweight_52seat_", true, new float[]{0F, 0.15F, 0.0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
