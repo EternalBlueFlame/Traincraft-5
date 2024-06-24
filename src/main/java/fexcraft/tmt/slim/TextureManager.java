@@ -43,6 +43,7 @@ public class TextureManager {
     private static Map<ResourceLocation, Integer> tmtMap = new HashMap<>();
 
     private static ITextureObject object;
+    private static Integer id;
 
     /**
      * custom texture binding method, generally same as vanilla, but possible to improve performance later.
@@ -68,8 +69,8 @@ public class TextureManager {
             GL11.glBindTexture(GL_TEXTURE_2D, object.getGlTextureId());
             return object.getGlTextureId();
         } else {
-            Integer id;
-            if (!tmtMap.containsKey(textureURI)){
+            id= tmtMap.get(textureURI);
+            if (id==null){
                 object = Minecraft.getMinecraft().getTextureManager().getTexture(textureURI);
                 if (object == null) {
                     object = new SimpleTexture(textureURI);
@@ -77,8 +78,6 @@ public class TextureManager {
                 }
                 id=object.getGlTextureId();
                 tmtMap.put(textureURI, id);
-            } else {
-                id= tmtMap.get(textureURI);
             }
             if(GL11.glGetInteger(GL_TEXTURE_2D) !=id) {
                 GL11.glBindTexture(GL_TEXTURE_2D, id);
