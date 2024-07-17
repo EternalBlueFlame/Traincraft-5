@@ -1,6 +1,7 @@
 package train.client.core.handlers;
 
 import net.minecraft.item.Item;
+import train.common.blocks.TCBlocks;
 import train.common.core.interfaces.ITCRecipe;
 import train.common.core.managers.TierRecipe;
 import train.common.library.BlockIDs;
@@ -23,7 +24,7 @@ public class RecipeBookHandler {
         vanillaWorkTableRecipes[0] = BlockIDs.assemblyTableI.block.getUnlocalizedName();
         vanillaWorkTableRecipes[1] = BlockIDs.assemblyTableII.block.getUnlocalizedName();
         vanillaWorkTableRecipes[2] = BlockIDs.assemblyTableIII.block.getUnlocalizedName();
-        vanillaWorkTableRecipes[3] = BlockIDs.distilIdle.block.getUnlocalizedName();
+        vanillaWorkTableRecipes[3] = TCBlocks.distilIdle.getUnlocalizedName();
         vanillaWorkTableRecipes[4] = BlockIDs.openFurnaceIdle.block.getUnlocalizedName();
         vanillaWorkTableRecipes[5] = BlockIDs.trainWorkbench.block.getUnlocalizedName();
         vanillaWorkTableRecipes[6] = ItemIDs.overalls.item.getUnlocalizedName();

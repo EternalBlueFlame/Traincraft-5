@@ -173,6 +173,7 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
                 case EQUIPPED:{break;}
                 case FIRST_PERSON_MAP:{break;}
                 case ENTITY:{
+                    GL11.glRotatef(180,0,1,0);
                     GL11.glTranslatef(-0.5f,-0.4f,-0.5f);
                     break;
                 }

@@ -2,9 +2,11 @@ package train.common.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -14,10 +16,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
+import train.common.api.blocks.BlockDynamic;
 import train.common.library.BlockIDs;
 import train.common.library.GuiIDs;
 import train.common.library.Info;
@@ -26,7 +30,7 @@ import train.common.tile.TileHelper;
 
 import java.util.Random;
 
-public class BlockDistil extends BlockContainer {
+public class BlockDistil extends BlockDynamic {
 
 	private final boolean isActive;
 	private static boolean keepDistilInventory = false;
@@ -40,7 +44,7 @@ public class BlockDistil extends BlockContainer {
 	private IIcon textureBack;
 
 	public BlockDistil(int j, boolean flag) {
-		super(Material.anvil);
+		super(Material.anvil,j);
 		isActive = flag;
 		distilRand = new Random();
 		//setRequiresSelfNotify();
@@ -54,7 +58,7 @@ public class BlockDistil extends BlockContainer {
 
 	@Override
 	public Item getItemDropped(int i, Random random, int j) {
-		return Item.getItemFromBlock(BlockIDs.distilIdle.block);
+		return Item.getItemFromBlock(TCBlocks.distilIdle);
 	}
 
 	@Override
@@ -160,10 +164,10 @@ public class BlockDistil extends BlockContainer {
 		TileEntity tileentity = world.getTileEntity(i, j, k);
 		keepDistilInventory = true;
 		if (flag) {
-			world.setBlock(i, j, k, BlockIDs.distilActive.block);
+			world.setBlock(i, j, k, TCBlocks.distilActive);
 		}
 		else {
-			world.setBlock(i, j, k, BlockIDs.distilIdle.block);
+			world.setBlock(i, j, k, TCBlocks.distilIdle);
 		}
 		keepDistilInventory = false;
 		world.setBlockMetadataWithNotify(i, j, k, l, 2);
@@ -225,7 +229,18 @@ public class BlockDistil extends BlockContainer {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTexture(int x, int y, int z){
+		return new ResourceLocation(Info.modID,
+				((x==0&&y==0&&z==0)||CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)==TCBlocks.distilActive)?
+					"textures/blocks/distil_on.png":"textures/blocks/distil_off.png");
+	}
+	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
+		return new TileEntityDistil();
+	}
+	@Override
+	public TileEntity createTileEntity(World world, int metadata) {
 		return new TileEntityDistil();
 	}
 

@@ -97,9 +97,9 @@ public class TileRenderFacing extends TileEntity {
             org.lwjgl.opengl.GL11.glTranslatef(0.5f,0.5f,0.5f);
             switch (facing){
                 //north
-                case 0:{ org.lwjgl.opengl.GL11.glRotatef(180,0,1,0);break;}
+                case 0:{ org.lwjgl.opengl.GL11.glRotatef(90,0,1,0);break;}
                 //east
-                case 1:{org.lwjgl.opengl.GL11.glRotatef(90,0,1,0);break;}
+                case 1:{org.lwjgl.opengl.GL11.glRotatef(180,0,1,0);break;}
                 //south
                 case 2:{ org.lwjgl.opengl.GL11.glRotatef(270,0,1,0);break;}
                 //west
@@ -121,7 +121,7 @@ public class TileRenderFacing extends TileEntity {
 
     @SideOnly(Side.CLIENT)
     public void renderModel(){
-        if(host.model!=null) {
+        if(host!=null && host.model!=null) {
             host.model.render();
         } else {
             if(blockGLID ==null) {

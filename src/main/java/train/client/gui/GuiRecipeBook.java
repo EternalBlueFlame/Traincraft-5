@@ -15,6 +15,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import train.client.core.handlers.RecipeBookHandler;
+import train.common.blocks.TCBlocks;
 import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
 import train.common.inventory.TrainCraftingManager;
@@ -290,8 +291,8 @@ public class GuiRecipeBook extends GuiScreen {
 
 		addPage("Making diesel:\nDiesel is made in a distillation tower using petroleum or oil sands found in the world.\nInsert petroleum in the top slot and fuel in the bottom slot, also try reed.\nIt will cook into liquid diesel and give you plastic with a random chance depending on the input.\nTo get diesel into canisters, you must first craft them using plastic. Then put an empty one in the top right slot.", "", "right", new ArrayList<StackToDraw>() {
 			{
-				add(new StackToDraw(new ItemStack(BlockIDs.distilIdle.block), 20, 16));
-				add(new StackToDraw(new ItemStack(BlockIDs.distilActive.block), 150, 40));
+				add(new StackToDraw(new ItemStack(TCBlocks.distilIdle), 20, 16));
+				add(new StackToDraw(new ItemStack(TCBlocks.distilActive), 150, 40));
 				add(new StackToDraw(new ItemStack(BlockIDs.oreTC.block, 1, 1), 150, 20));
 				add(new StackToDraw(new ItemStack(Items.coal), 150, 60));
 				add(new StackToDraw(new ItemStack(ItemIDs.diesel.item), 167, 40));

@@ -53,7 +53,7 @@ public class RecipeHandler {
                 addDictRecipe(new ItemStack(BlockIDs.trainWorkbench.block, 1), "###", "IFI", "###", '#', "plankWood", 'F', Blocks.furnace, 'I', ironingot);
             }
         }
-        addDictRecipe(new ItemStack(BlockIDs.distilIdle.block, 1), "###", "#F#", "###", '#', "ingotSteel", 'F', ItemIDs.firebox.item);
+        addDictRecipe(new ItemStack(TCBlocks.distilIdle, 1), "###", "#F#", "###", '#', "ingotSteel", 'F', ItemIDs.firebox.item);
 
         /* Open Hearth Furnace */
         if (!ConfigHandler.MAKE_MODPACKS_GREAT_AGAIN) {
@@ -433,7 +433,7 @@ public class RecipeHandler {
 
                 TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.composite_wrench.item, 1), "S S", " R ", " R ", 'R', ItemIDs.reinforcedPlastic.item, 'S', steelItem);
                 TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.steelcab.item, 2), "###", "X X", "XXX", 'X', steelItem, '#', plankItem);// Steel cab
-                TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.distilIdle.block, 1), "###", "#F#", "###", '#', steelItem, 'F', ItemIDs.firebox.item);
+                TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.distilIdle, 1), "###", "#F#", "###", '#', steelItem, 'F', ItemIDs.firebox.item);
                 for (ItemStack rs : redstone) {
                     TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.transformer.item, 1), "# #", "XEX", "###", '#', steelItem, 'E', ItemIDs.electronicCircuit.item, 'X', rs.getItem());// transformer
                 }

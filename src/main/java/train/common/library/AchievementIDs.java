@@ -2,6 +2,7 @@ package train.common.library;
 
 import net.minecraft.item.Item;
 import net.minecraft.stats.Achievement;
+import train.common.blocks.TCBlocks;
 
 public enum AchievementIDs {
 	steel(new Item[] { ItemIDs.steel.item }),
@@ -71,7 +72,7 @@ public enum AchievementIDs {
 	caboose(new Item[] { ItemIDs.minecartCaboose.item, ItemIDs.minecartCaboose3.item,
 			ItemIDs.minecartCabooseWork.item }),
 	stockCar(new Item[] { ItemIDs.minecartStockCar.item, ItemIDs.minecartDRWGStockCar.item }),
-	distilationTower(new Item[] { Item.getItemFromBlock(BlockIDs.distilIdle.block) }),
+	distilationTower(new Item[] { Item.getItemFromBlock(TCBlocks.distilIdle) }),
 	mtg(new Item[] {ItemIDs.minecartLUengine.item}),
 	massTransit(new Item[] { ItemIDs.minecartClass345engine.item, ItemIDs.minecartDstockEngine.item, ItemIDs.minecartLocoRenfe446Motor.item }),
 	cercanias(new Item[] { ItemIDs.minecartLocoRenfe446Motor.item,}),

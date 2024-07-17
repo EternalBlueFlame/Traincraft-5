@@ -37,6 +37,7 @@ import train.common.generation.ComponentVillageTrainstation;
 import train.common.generation.WorldGenWorld;
 import train.common.items.TCItems;
 import train.common.library.Info;
+import train.common.library.ItemIDs;
 import train.common.library.TraincraftRegistry;
 import train.common.recipes.AssemblyTableRecipes;
 
@@ -96,7 +97,7 @@ public class Traincraft {
     public static File configDirectory;
 
     /* Creative tab for Traincraft */
-    public static CreativeTabs tcTab, tcTrainTab;
+    public static CreativeTabTraincraft tcTab, tcTrainTab;
 
     public ArmorMaterial armor = EnumHelper.addArmorMaterial("Armor", 5, new int[]{1, 2, 2, 1}, 25);
     public ArmorMaterial armorCloth = EnumHelper.addArmorMaterial("TCcloth", 5, new int[]{1, 2, 2, 1}, 25);
@@ -122,9 +123,9 @@ public class Traincraft {
 
         /* Register Items, Blocks, ... */
         tcLog.info("Initialize Blocks, Items, ...");
-        tcTab = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft");
+        tcTab = new CreativeTabTraincraft("Traincraft", Info.modID, "trains/train_br80");
         if (ConfigHandler.SPLIT_CREATIVE) {
-            tcTrainTab = new CreativeTabTraincraftTrains(CreativeTabs.getNextID(), "Traincraft Trains");
+            tcTrainTab = new CreativeTabTraincraft("Traincraft Trains",  Info.modID,"trains/train_br01");
         }
         trainArmor = proxy.addArmor("armor");
         trainCloth = proxy.addArmor("Paintable");

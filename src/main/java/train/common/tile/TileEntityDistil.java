@@ -2,18 +2,25 @@ package train.common.tile;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
+import ebf.tim.utility.DebugUtil;
 import net.minecraft.block.Block;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.ITickable;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import train.common.api.LiquidManager;
 import train.common.api.LiquidManager.StandardTank;
 import train.common.api.blocks.TileTraincraft;
 import train.common.blocks.BlockDistil;
+import train.common.blocks.TCBlocks;
 import train.common.library.BlockIDs;
+import train.common.library.Info;
 import train.common.recipes.DistilRecipes;
 
 import java.util.Random;
@@ -112,6 +119,11 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 		return distilBurnTime > 0;
 	}
 
+	@Override
+	public boolean canUpdate()
+	{
+		return true;
+	}
 	@Override
 	public void updateEntity() {
 		if(!worldObj.isRemote){
@@ -245,6 +257,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	}
 
 	private boolean canSmelt() {
+		DebugUtil.println(slots[0] == null);
 		if (slots[0] == null || (slots[3] != null && slots[3].stackSize==64) || (slots[4] != null && slots[4].stackSize==64)) {
 			return false;
 		}
@@ -379,4 +392,11 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 		return side != 1 && slot == 3;
 	}
 
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTexture(int x, int y, int z){
+		return new ResourceLocation(Info.modID,
+				(worldObj==null|| CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)== TCBlocks.distilActive)?
+						"textures/blocks/distil_on.png":"textures/blocks/distil_off.png");
+	}
 }

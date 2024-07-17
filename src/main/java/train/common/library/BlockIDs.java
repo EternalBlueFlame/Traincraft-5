@@ -19,8 +19,6 @@ public enum BlockIDs {
 	assemblyTableII(false, null),
 	assemblyTableIII(false, null),
 
-	distilIdle(false, null),
-	distilActive(false, null),
 	signal(false, null),
 	
 	//book(true, ItemBlockBook.class),
