@@ -15,11 +15,11 @@ tile.tc:openFurnaceActive.name=Мартеновская печь (работаю
 tile.tc:openFurnaceIdle.name=Мартеновская печь
 tile.tc:stopper.name=Тупик
 tile.tc:trainWorkbench.name=Железнодорожный верстак
-tile.tc:distilActive.name=Ректификационная колонна (работающая)
-tile.tc:distilIdle.name=Ректификационная колонна
-tile.tc:assemblyTableI.name=Сборочный стол I уровня
-tile.tc:assemblyTableII.name=Сборочный стол II уровня
-tile.tc:assemblyTableIII.name=Сборочный стол III уровня
+tile.distilActive.name=Ректификационная колонна (работающая)
+tile.distilIdle.name=Ректификационная колонна
+tile.assemblyTableI.name=Сборочный стол I уровня
+tile.assemblyTableII.name=Сборочный стол II уровня
+tile.assemblyTableIII.name=Сборочный стол III уровня
 fluid.tc:fluid.diesel.name=Дизельное топливо
 fluid.tc:fluid.refinedfuel.name=Бензин
 

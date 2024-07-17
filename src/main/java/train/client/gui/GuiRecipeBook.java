@@ -92,7 +92,7 @@ public class GuiRecipeBook extends GuiScreen {
         addPage("Modelers:\nDAYdiecast,\nhelldiver,\nBlockStormTwo,\nChandlerBingUA.\n\nGitHub 1.7.10 port Team: \nEternal BlueFlame,\nNitroxydeX,\nFirEmerald,\nHagurd\n \nWebsite:\nhttp://traincraft-mod.\nblogspot.com", "", "right", new ArrayList<StackToDraw>() {
             {
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartLocoSteamAdler.item), 20, 16));
-                add(new StackToDraw(new ItemStack(BlockIDs.assemblyTableII.block), 170, 16));
+                add(new StackToDraw(new ItemStack(TCBlocks.assemblyTableII), 170, 16));
 
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartLocoForneyRed.item), 20, 175));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartPassengerBlue.item), 40, 175));
@@ -273,9 +273,9 @@ public class GuiRecipeBook extends GuiScreen {
         addPage("Crafting:\nAll train parts are crafted in the train workbench,\n\nthen trains have to be assembled in the assembly tables.\n\nThere are three assembly tables:\n\nTierI - Iron age\nTierII - Steel age\nTierIII - Advanced age\n", "", "right", new ArrayList<StackToDraw>() {
             {
                 add(new StackToDraw(new ItemStack(BlockIDs.trainWorkbench.block), 20, 16));
-                add(new StackToDraw(new ItemStack(BlockIDs.assemblyTableI.block), 40, 165));
-                add(new StackToDraw(new ItemStack(BlockIDs.assemblyTableII.block), 80, 165));
-                add(new StackToDraw(new ItemStack(BlockIDs.assemblyTableIII.block), 140, 165));
+                add(new StackToDraw(new ItemStack(TCBlocks.assemblyTableI), 40, 165));
+                add(new StackToDraw(new ItemStack(TCBlocks.assemblyTableII), 80, 165));
+                add(new StackToDraw(new ItemStack(TCBlocks.assemblyTableIII), 140, 165));
             }
         });
         addPage("Crafting steel:\nSteel is crafted in Open Hearth Furnace, supply iron ingots and graphite in the top slots, fuel in the bottom slot, \nand it will cook slowly into steel.\nYou can also use steel from other mods or use this steel in other mods.\n", "", "left", new ArrayList<StackToDraw>() {

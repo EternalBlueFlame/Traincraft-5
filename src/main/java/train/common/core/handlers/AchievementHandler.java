@@ -67,7 +67,7 @@ public class AchievementHandler {
 
 		AchievementIDs.engineer.achievement = achievement("engineer", -2, -2, ItemIDs.overalls.item, null);
 
-		AchievementIDs.assemblyTable.achievement = achievement("assemblyTable", 6, 0, BlockIDs.assemblyTableI.block, null);
+		AchievementIDs.assemblyTable.achievement = achievement("assemblyTable", 6, 0, TCBlocks.assemblyTableI, null);
 		AchievementIDs.passenger.achievement = achievement("passenger", 5, 2, ItemIDs.minecartPassenger2.item, AchievementIDs.assemblyTable.achievement);
 		AchievementIDs.freight.achievement = achievement("freight", 7, 2, ItemIDs.minecartChest.item, AchievementIDs.assemblyTable.achievement);
 		AchievementIDs.liquid.achievement = achievement("liquid", 5, 4, ItemIDs.minecartWatertransp.item, AchievementIDs.assemblyTable.achievement);

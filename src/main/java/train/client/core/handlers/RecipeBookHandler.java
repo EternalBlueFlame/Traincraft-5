@@ -21,9 +21,9 @@ public class RecipeBookHandler {
     public static String[] vanillaWorkTableRecipes = new String[21];
 
     public RecipeBookHandler() {
-        vanillaWorkTableRecipes[0] = BlockIDs.assemblyTableI.block.getUnlocalizedName();
-        vanillaWorkTableRecipes[1] = BlockIDs.assemblyTableII.block.getUnlocalizedName();
-        vanillaWorkTableRecipes[2] = BlockIDs.assemblyTableIII.block.getUnlocalizedName();
+        vanillaWorkTableRecipes[0] = TCBlocks.assemblyTableI.getUnlocalizedName();
+        vanillaWorkTableRecipes[1] = TCBlocks.assemblyTableII.getUnlocalizedName();
+        vanillaWorkTableRecipes[2] = TCBlocks.assemblyTableIII.getUnlocalizedName();
         vanillaWorkTableRecipes[3] = TCBlocks.distilIdle.getUnlocalizedName();
         vanillaWorkTableRecipes[4] = BlockIDs.openFurnaceIdle.block.getUnlocalizedName();
         vanillaWorkTableRecipes[5] = BlockIDs.trainWorkbench.block.getUnlocalizedName();

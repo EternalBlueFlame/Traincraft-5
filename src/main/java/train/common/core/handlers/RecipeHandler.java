@@ -43,10 +43,10 @@ public class RecipeHandler {
         TrainCraftingManager.instance.getRecipeList().add(new RecipesArmorDyes());
         /* Assembly tables */
         for (ItemStack ironingot : iron) {
-            GameRegistry.addRecipe(new ItemStack(BlockIDs.assemblyTableI.block, 1), "IPI", "S S", "SPS", 'I', ironingot, 'P', Blocks.piston, 'S', Blocks.stone);
+            GameRegistry.addRecipe(new ItemStack(TCBlocks.assemblyTableI, 1), "IPI", "S S", "SPS", 'I', ironingot, 'P', Blocks.piston, 'S', Blocks.stone);
         }
-        GameRegistry.addRecipe(new ItemStack(BlockIDs.assemblyTableII.block, 1), "GPG", "O O", "OPO", 'G', Items.gold_ingot, 'P', Blocks.piston, 'O', Blocks.obsidian);
-        GameRegistry.addRecipe(new ItemStack(BlockIDs.assemblyTableIII.block, 1), "GPG", "DLD", "OPO", 'G', Items.gold_ingot, 'P', Blocks.piston, 'D', Items.diamond, 'L', Blocks.glowstone, 'O', Blocks.obsidian);
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.assemblyTableII, 1), "GPG", "O O", "OPO", 'G', Items.gold_ingot, 'P', Blocks.piston, 'O', Blocks.obsidian);
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.assemblyTableIII, 1), "GPG", "DLD", "OPO", 'G', Items.gold_ingot, 'P', Blocks.piston, 'D', Items.diamond, 'L', Blocks.glowstone, 'O', Blocks.obsidian);
 
         if (!ConfigHandler.DISABLE_TRAIN_WORKBENCH) {
             for (ItemStack ironingot : iron) {
@@ -333,10 +333,10 @@ public class RecipeHandler {
         /* Assembly tables */
 
         for (ItemStack ironingot : iron) {
-            TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.assemblyTableI.block, 1), "IPI", "S S", "SPS", 'I', ironingot, 'P', Blocks.piston, 'S', Blocks.stone);
+            TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.assemblyTableI, 1), "IPI", "S S", "SPS", 'I', ironingot, 'P', Blocks.piston, 'S', Blocks.stone);
         }
-        TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.assemblyTableII.block, 1), "GPG", "O O", "OPO", 'G', Items.gold_ingot, 'P', Blocks.piston, 'O', Blocks.obsidian);
-        TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.assemblyTableIII.block, 1), "GPG", "DLD", "OPO", 'G', Items.gold_ingot, 'P', Blocks.piston, 'D', Items.diamond, 'L', Blocks.glowstone, 'O', Blocks.obsidian);
+        TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.assemblyTableII, 1), "GPG", "O O", "OPO", 'G', Items.gold_ingot, 'P', Blocks.piston, 'O', Blocks.obsidian);
+        TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.assemblyTableIII, 1), "GPG", "DLD", "OPO", 'G', Items.gold_ingot, 'P', Blocks.piston, 'D', Items.diamond, 'L', Blocks.glowstone, 'O', Blocks.obsidian);
 
         /* Open Hearth Furnace */
         TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.openFurnaceIdle.block, 1), "#L#", "#B#", "#I#", '#', Blocks.nether_brick, 'L', Items.lava_bucket, 'B', Items.bucket, 'I', Blocks.iron_block);

@@ -32,19 +32,25 @@ public class TCBlocks {
 	public static Block bridgePillar=new BlockBridgePillar().setHardness(3.5F).setStepSound(Block.soundTypeWood);
 	public static Block distilIdle=new BlockDistil(2, false).setHardness(3.5F).setStepSound(Block.soundTypeStone);
 	public static Block distilActive=new BlockDistil(2,true).setHardness(3.5F).setStepSound(Block.soundTypeStone).setLightLevel(0.8F);
+	public static Block assemblyTableI=new BlockAssemblyTableI(Material.wood).setHardness(3.5F).setStepSound(Block.soundTypeWood);
+	public static Block assemblyTableII=new BlockAssemblyTableII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
+	public static Block assemblyTableIII=new BlockAssemblyTableIII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
 
 	public static void loadBlocks() {
 		TraincraftRegistry.registerBlock(bridgePillar,Traincraft.tcTab, Info.modID,"bridgePillar");
 		TraincraftRegistry.registerBlock(distilIdle,Traincraft.tcTab, Info.modID,"distilIdle");
 		TraincraftRegistry.registerBlock(distilActive,null, Info.modID,"distilActive");
+		TraincraftRegistry.registerBlock(assemblyTableI,null, Info.modID,"assemblyTableI");
+		TraincraftRegistry.registerBlock(assemblyTableII,null, Info.modID,"assemblyTableII");
+		TraincraftRegistry.registerBlock(assemblyTableIII,null, Info.modID,"assemblyTableIII");
 
 		//TCBlocks.distilIdle.block = new BlockDistil(2, false).setHardness(3.5F).setStepSound(Block.soundTypeStone);
 		//BlockIDs.distilActive.block = new BlockDistil(2, true).setHardness(3.5F).setStepSound(Block.soundTypeStone).setLightLevel(0.8F);
 		//BlockIDs.signal.block = new BlockSignal(BlockIDs.signal.block, 16).setHardness(1.7F).setStepSound(Block.soundTypeMetal);
 
-		BlockIDs.assemblyTableI.block = new BlockAssemblyTableI(Material.wood).setHardness(3.5F).setStepSound(Block.soundTypeWood);
-		BlockIDs.assemblyTableII.block = new BlockAssemblyTableII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
-		BlockIDs.assemblyTableIII.block = new BlockAssemblyTableIII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
+		//TCBlocks.assemblyTableI = new BlockAssemblyTableI(Material.wood).setHardness(3.5F).setStepSound(Block.soundTypeWood);
+		//TCBlocks.assemblyTableII = new BlockAssemblyTableII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
+		//TCBlocks.assemblyTableIII = new BlockAssemblyTableIII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
 
 		BlockIDs.trainWorkbench.block = new BlockTrainWorkbench(16).setHardness(1.7F).setStepSound(Block.soundTypeWood);
 		BlockIDs.stopper.block = new BlockStopper().setHardness(1.7F).setStepSound(Block.soundTypeWood);
@@ -137,9 +143,8 @@ public class TCBlocks {
 
 	public static void setHarvestLevels() {
 		BlockIDs.trainWorkbench.block.setHarvestLevel("axe", 0);
-		BlockIDs.assemblyTableI.block.setHarvestLevel("axe", 0);
-		BlockIDs.assemblyTableII.block.setHarvestLevel("axe", 0);
-		BlockIDs.assemblyTableIII.block.setHarvestLevel("axe", 0);
+		TCBlocks.assemblyTableII.setHarvestLevel("axe", 0);
+		TCBlocks.assemblyTableIII.setHarvestLevel("axe", 0);
 		BlockIDs.waterWheel.block.setHarvestLevel("axe", 0);
 		BlockIDs.windMill.block.setHarvestLevel("axe", 0);
 		BlockIDs.oreTC.block.setHarvestLevel("pickaxe", 1);

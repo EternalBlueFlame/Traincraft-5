@@ -14,11 +14,11 @@ tile.tc:openFurnaceActive.name=Four Martin-Siemens actif
 tile.tc:openFurnaceIdle.name=Four Martin-Siemens
 tile.tc:stopper.name=Heurtoir
 tile.tc:trainWorkbench.name=Établi
-tile.tc:distilActive.name=Tour de distillation active
-tile.tc:distilIdle.name=Tour de distillation
-tile.tc:assemblyTableI.name=Table d'assemblage I
-tile.tc:assemblyTableII.name=Table d'assemblage II
-tile.tc:assemblyTableIII.name=Table d'assemblage III
+tile.distilActive.name=Tour de distillation active
+tile.distilIdle.name=Tour de distillation
+tile.assemblyTableI.name=Table d'assemblage I
+tile.assemblyTableII.name=Table d'assemblage II
+tile.assemblyTableIII.name=Table d'assemblage III
 
 <!-- ## Fluids ## -->
 fluid.diesel.name=Bidon de diesel

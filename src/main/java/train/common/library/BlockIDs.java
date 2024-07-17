@@ -15,10 +15,6 @@ import train.common.wellcar.ItemFortyFootContainer;
 
 public enum BlockIDs {
 
-	assemblyTableI(false, null),
-	assemblyTableII(false, null),
-	assemblyTableIII(false, null),
-
 	signal(false, null),
 	
 	//book(true, ItemBlockBook.class),

@@ -48,9 +48,9 @@ public enum AchievementIDs {
 
 	openHearth(new Item[] { Item.getItemFromBlock(BlockIDs.openFurnaceIdle.block) }),
 	trainWB(new Item[] { Item.getItemFromBlock(BlockIDs.trainWorkbench.block) }),
-	assemblyTable(new Item[] { Item.getItemFromBlock(BlockIDs.assemblyTableI.block),
-			Item.getItemFromBlock(BlockIDs.assemblyTableII.block),
-			Item.getItemFromBlock(BlockIDs.assemblyTableIII.block) }),
+	assemblyTable(new Item[] { Item.getItemFromBlock(TCBlocks.assemblyTableI),
+			Item.getItemFromBlock(TCBlocks.assemblyTableII),
+			Item.getItemFromBlock(TCBlocks.assemblyTableIII) }),
 	engineer(new Item[] { ItemIDs.overalls.item, ItemIDs.hat.item, ItemIDs.jacket.item }),
 	woodenParts(new Item[] { ItemIDs.woodenBogie.item, ItemIDs.woodenCab.item, ItemIDs.woodenFrame.item,
 			ItemIDs.seats.item }),
