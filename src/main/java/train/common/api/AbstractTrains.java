@@ -708,7 +708,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      *example:
      * return new int[]{11000, 1000};
      * may return null*/
-    public int[] getTankCapacity(){return new int[]{getSpec().getTankCapacity()};}
+    public int[] getTankCapacity(){return getSpec()==null?new int[]{0}:new int[]{getSpec().getTankCapacity()};}
 
     /**defines the rider position offsets, with 0 being the center of the entity.
      * Each set of coords represents a new rider seat, with the first one being the "driver"

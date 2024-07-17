@@ -257,7 +257,6 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	}
 
 	private boolean canSmelt() {
-		DebugUtil.println(slots[0] == null);
 		if (slots[0] == null || (slots[3] != null && slots[3].stackSize==64) || (slots[4] != null && slots[4].stackSize==64)) {
 			return false;
 		}
@@ -395,8 +394,14 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getTexture(int x, int y, int z){
-		return new ResourceLocation(Info.modID,
-				(worldObj==null|| CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)== TCBlocks.distilActive)?
-						"textures/blocks/distil_on.png":"textures/blocks/distil_off.png");
+		return (worldObj==null|| CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)== TCBlocks.distilActive)?
+						textureOn:textureOff;
 	}
+
+	@SideOnly(Side.CLIENT)
+	static final ResourceLocation textureOn = new ResourceLocation(Info.modID, "textures/blocks/distil_on.png");
+
+	@SideOnly(Side.CLIENT)
+	static final ResourceLocation textureOff = new ResourceLocation(Info.modID, "textures/blocks/distil_off.png");
+
 }

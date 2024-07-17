@@ -3,9 +3,6 @@ package train.common.tile;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.crash.CrashReport;
-import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import train.common.api.blocks.TileRenderFacing;
 import train.common.library.Info;
@@ -38,17 +35,17 @@ public class TileBridgePillar extends TileRenderFacing {
 	static final train.client.render.models.blocks.ModelBridgePillar modelBridgePillar = new train.client.render.models.blocks.ModelBridgePillar();
 	@SideOnly(Side.CLIENT)
 	static final ResourceLocation texture = new ResourceLocation(Info.modID, Info.modelTexPrefix + "bridgePillar.png");
+
 	@Override
-	public void func_145828_a(CrashReportCategory r){
-		if(r==null) {
-			fexcraft.tmt.slim.Tessellator.bindTexture(texture);
-			org.lwjgl.opengl.GL11.glTranslated(0.5, 0, 0.5);
-			org.lwjgl.opengl.GL11.glRotatef(180f, 180f, 1f, 0f);
-
-			modelBridgePillar.render();
-		} else {
-			super.func_145828_a(r);
-		}
-
+	@SideOnly(Side.CLIENT)
+	public void renderModel(){
+		org.lwjgl.opengl.GL11.glTranslated(0, 0.5, 0);
+		org.lwjgl.opengl.GL11.glRotatef(180f, 0f, 1f, 0f);
+		modelBridgePillar.renderBlock();
+	}
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTexture(int x, int y, int z){
+		return texture;
 	}
 }

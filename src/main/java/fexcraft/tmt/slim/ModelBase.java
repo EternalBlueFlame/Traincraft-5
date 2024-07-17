@@ -5,8 +5,6 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
-import train.common.core.handlers.ConfigHandler;
-import train.common.core.util.TraincraftUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -113,40 +111,17 @@ public class ModelBase extends ArrayList<ModelRendererTurbo> {
 	}
 
 	public void renderBlock(){
-		if(!init) {
+		if(init){
 			initAllParts();
 		}
+
 		render(boxList);
 
-		ModelRendererTurbo part;
-		for(int i = 0; i< namedList.size(); i++){
-			//for animations to work we have to limit the displaylist cache to ONLY the geometry, and then
-			//    the position and offsets must be done manually every frame.
-			if(displayList.size()>i){
-				part= namedList.get(i);
-				if(!part.showModel){
-					continue;
-				}
-				GL11.glPushMatrix();
-				if (part.ignoresLighting){
-					Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
-				}
-				GL11.glTranslatef(part.rotationPointX * 0.0625F, part.rotationPointY * 0.0625F, part.rotationPointZ * 0.0625F);
-				GL11.glRotatef(part.rotateAngleY, 0.0F, 1.0F, 0.0F);
-				GL11.glRotatef(part.rotateAngleZ, 0.0F, 0.0F, 1.0F);
-				GL11.glRotatef(part.rotateAngleX, 1.0F, 0.0F, 0.0F);
-				for (TexturedPolygon poly : namedList.get(i).faces) {
-					Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625F);
-				}
 
-				GL11.glTranslatef(-part.rotationPointX * 0.0625F, -part.rotationPointY * 0.0625F, -part.rotationPointZ * 0.0625F);
-				if (part.ignoresLighting){
-					Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
-				}
-				GL11.glPopMatrix();
-
-			} else if(namedList.get(i)!=null) {
-				for (TexturedPolygon poly : namedList.get(i).faces) {
+		if(namedList ==null){return;}
+		for (ModelRendererTurbo named : namedList) {
+			if (named != null) {
+				for (TexturedPolygon poly : named.faces) {
 					Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625F);
 				}
 			}
