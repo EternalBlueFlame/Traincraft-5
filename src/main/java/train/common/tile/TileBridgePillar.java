@@ -31,9 +31,9 @@ public class TileBridgePillar extends TileRenderFacing {
 		return false;
 	}
 
-	@SideOnly(Side.CLIENT)
+
 	static final train.client.render.models.blocks.ModelBridgePillar modelBridgePillar = new train.client.render.models.blocks.ModelBridgePillar();
-	@SideOnly(Side.CLIENT)
+
 	static final ResourceLocation texture = new ResourceLocation(Info.modID, Info.modelTexPrefix + "bridgePillar.png");
 
 	@Override

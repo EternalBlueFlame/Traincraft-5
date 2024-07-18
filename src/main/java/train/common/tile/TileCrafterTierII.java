@@ -305,7 +305,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 		return texture;
 	}
 
-	@SideOnly(Side.CLIENT)
+
 	static final ResourceLocation texture = new ResourceLocation(Info.modID, "textures/blocks/assembly_2.png");
 
 }

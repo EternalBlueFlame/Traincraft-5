@@ -398,10 +398,10 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 						textureOn:textureOff;
 	}
 
-	@SideOnly(Side.CLIENT)
+
 	static final ResourceLocation textureOn = new ResourceLocation(Info.modID, "textures/blocks/distil_on.png");
 
-	@SideOnly(Side.CLIENT)
+
 	static final ResourceLocation textureOff = new ResourceLocation(Info.modID, "textures/blocks/distil_off.png");
 
 }
