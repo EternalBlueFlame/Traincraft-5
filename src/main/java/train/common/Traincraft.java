@@ -14,6 +14,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
+import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -72,6 +73,7 @@ public class Traincraft {
     public static SimpleNetworkWrapper builderChannel;
     public static SimpleNetworkWrapper updateTrainIDChannel = NetworkRegistry.INSTANCE.newSimpleChannel("TrainIDChannel");
     public static SimpleNetworkWrapper updateDestinationChannel = NetworkRegistry.INSTANCE.newSimpleChannel("updateDestnChannel");
+    public static SimpleNetworkWrapper updateChannel = NetworkRegistry.INSTANCE.newSimpleChannel("updateChannel");
     public static SimpleNetworkWrapper paintbrushColorChannel;
     public static SimpleNetworkWrapper overlayTextureChannel;
 
@@ -175,6 +177,7 @@ public class Traincraft {
         //proxy.getCape();
 
         /* GUI handler initiation */
+        cpw.mods.fml.common.registry.EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 16, Traincraft.instance,80,3,true);
         tcLog.info("Initialize Gui");
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
         FMLCommonHandler.instance().bus().register(new CraftingHandler());

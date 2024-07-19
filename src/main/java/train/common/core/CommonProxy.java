@@ -5,6 +5,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
+import ebf.tim.entities.EntitySeat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
@@ -142,12 +143,21 @@ public class CommonProxy implements IGuiHandler {
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity te = world.getTileEntity(x, y, z);
         EntityPlayer riddenByEntity = null;
-        Entity entity = player.ridingEntity;
+        Entity entity = null;
 
-        if (player.ridingEntity != null) {
-            riddenByEntity = (EntityPlayer) entity.riddenByEntity;
+        if (player.ridingEntity instanceof EntityRollingStock || player.ridingEntity instanceof AbstractZeppelin
+                || player.ridingEntity instanceof EntityRotativeDigger) {
+            entity = player.ridingEntity;
+            if (entity.riddenByEntity instanceof EntityPlayer) {
+                riddenByEntity = (EntityPlayer) entity.riddenByEntity;
+            }
         }
-
+        if (player.ridingEntity instanceof EntitySeat) {
+            entity = ((EntitySeat) player.ridingEntity).parent;
+            if (((EntityRollingStock)entity).seats.get(0).getPassenger() instanceof EntityPlayer) {
+                riddenByEntity = (EntityPlayer) ((EntityRollingStock)entity).seats.get(0).getPassenger();
+            }
+        }
         Entity entity1 = null;
         if (y == -1) {
             entity1 = getEntity(world, x);
@@ -169,19 +179,27 @@ public class CommonProxy implements IGuiHandler {
             case (GuiIDs.TRAIN_WORKBENCH):
                 return te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
             case (GuiIDs.LOCO):
-                return riddenByEntity != null ? new InventoryLoco(riddenByEntity.inventory, (EntityRollingStock) entity) : null;
+                if (entity instanceof EntityRollingStock) {
+                    return riddenByEntity != null ? new InventoryLoco(riddenByEntity.inventory,(EntityRollingStock)entity) : null;
+                }
             case (GuiIDs.FORNEY):
-                return riddenByEntity != null ? new InventoryForney(player.inventory, (EntityRollingStock) entity) : null;
+                if (entity instanceof EntityRollingStock) {
+                    return riddenByEntity != null ? new InventoryForney(player.inventory, (EntityRollingStock) entity) : null;
+                }
             case (GuiIDs.CRAFTING_CART):
                 return new ContainerWorkbenchCart(player.inventory, player.worldObj);
             case (GuiIDs.FURNACE_CART):
                 return riddenByEntity != null ? new InventoryWorkCart(player.inventory, entity) : null;
             case (GuiIDs.ZEPPELIN):
-                return riddenByEntity != null ? new InventoryZepp(player.inventory, (AbstractZeppelin) entity) : null;
+                if (entity instanceof AbstractZeppelin) {
+                    return riddenByEntity != null ? new InventoryZepp(player.inventory, (AbstractZeppelin) entity) : null;
+                }
             case (GuiIDs.DIGGER):
-                return riddenByEntity != null ? new InventoryRotativeDigger(player.inventory, (EntityRotativeDigger) entity) : null;
+                if (entity instanceof EntityRotativeDigger) {
+                    return riddenByEntity != null ? new InventoryRotativeDigger(player.inventory, (EntityRotativeDigger) entity) : null;
+                }
 
-            /* Stationary entities while player is not riding. */
+                /* Stationary entities while player is not riding. */
             case (GuiIDs.FREIGHT):
                 //System.out.println("Freight: " + ID + " | " + entity1.getEntityName() + " | " + x + ":" + y + ":" + z);
                 return entity1 instanceof Freight ? new InventoryFreight(player.inventory, (Freight) entity1) : null;

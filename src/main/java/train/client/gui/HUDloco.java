@@ -1,6 +1,7 @@
 package train.client.gui;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import ebf.tim.entities.EntitySeat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
@@ -18,12 +19,18 @@ public class HUDloco extends GuiScreen {
     @SubscribeEvent
     public void onGameRender(RenderGameOverlayEvent.Text event) {
         if (game != null
-                && game.thePlayer != null
-                && game.thePlayer.ridingEntity != null
-                && game.thePlayer.ridingEntity instanceof Locomotive
-                && Minecraft.isGuiEnabled()
-                && game.currentScreen == null) {
-            renderSkillHUD(event, (Locomotive) game.thePlayer.ridingEntity);
+                && game.thePlayer != null && game.thePlayer.ridingEntity != null
+                && (game.thePlayer.ridingEntity instanceof Locomotive || (game.thePlayer.ridingEntity instanceof EntitySeat
+                && ((EntitySeat) game.thePlayer.ridingEntity).parent instanceof Locomotive))
+                && Minecraft.isGuiEnabled() && game.currentScreen == null) {
+            if (game.thePlayer.ridingEntity instanceof EntitySeat) {
+                EntitySeat seat = (EntitySeat) game.thePlayer.ridingEntity;
+                if (seat.isControlSeat()) {
+                    renderSkillHUD(event, (Locomotive) ((EntitySeat) game.thePlayer.ridingEntity).parent);
+                }
+            } else {
+                renderSkillHUD(event, (Locomotive) game.thePlayer.ridingEntity);
+            }
         } else {
             this.game = this.mc = Minecraft.getMinecraft();
             this.fontRendererObj = this.game.fontRenderer;

@@ -3,6 +3,7 @@ package train.common.core.network;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import ebf.tim.entities.EntitySeat;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import train.common.api.Locomotive;
@@ -34,12 +35,15 @@ public class PacketSetLocoTurnedOn implements IMessage {
     public static class Handler implements IMessageHandler<PacketSetLocoTurnedOn, IMessage> {
         @Override
         public IMessage onMessage(PacketSetLocoTurnedOn message, MessageContext context) {
-            Entity TrainEntity = context.getServerHandler().playerEntity.ridingEntity;
+            Entity trainEntity = context.getServerHandler().playerEntity.ridingEntity;
+            if (trainEntity instanceof EntitySeat) {
+                trainEntity = ((EntitySeat)context.getServerHandler().playerEntity.ridingEntity).parent;
+            }
 
             /* "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks for when the value is null anyways. */
-            if (TrainEntity != null) {
-                if (TrainEntity instanceof Locomotive) {
-                    ((Locomotive) TrainEntity).setLocoTurnedOnFromPacket(message.LocoOn);
+            if (trainEntity != null) {
+                if (trainEntity instanceof Locomotive) {
+                    ((Locomotive) trainEntity).setLocoTurnedOnFromPacket(message.LocoOn);
                 }
             }
 

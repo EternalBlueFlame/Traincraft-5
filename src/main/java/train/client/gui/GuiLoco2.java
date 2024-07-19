@@ -108,9 +108,12 @@ public class GuiLoco2 extends GuiContainer {
                 this.initGui();
             }
         }
-
+        EntityPlayer p = (EntityPlayer) loco.riddenByEntity;
+        if (loco.seats.size() != 0 && loco.seats.get(0).getPassenger() instanceof EntityPlayer) {
+            p = (EntityPlayer) loco.seats.get(0).getPassenger();
+        }
         if (guibutton.id == 3) {
-            if (loco.riddenByEntity instanceof EntityPlayer && ((EntityPlayer) loco.riddenByEntity).getDisplayName().equals(loco.getTrainOwner())) {
+            if (!loco.isNotOwner()) {
                 if ((!loco.getTrainLockedFromPacket())) {
                     Traincraft.lockChannel.sendToServer(new PacketSetTrainLockedToClient(true, loco.getEntityId()));
                     loco.locked = true;
@@ -122,8 +125,8 @@ public class GuiLoco2 extends GuiContainer {
                     guibutton.displayString = "UnLocked";
                     this.initGui();
                 }
-            } else if (loco.riddenByEntity instanceof EntityPlayer) {
-                ((EntityPlayer) loco.riddenByEntity).addChatMessage(new ChatComponentText("You are not the owner"));
+            } else {
+                p.addChatMessage(new ChatComponentText("You are not the owner"));
             }
         }
 
@@ -140,7 +143,7 @@ public class GuiLoco2 extends GuiContainer {
                     loco.isBraking = true;
                     this.initGui();
                 } else {
-                    ((EntityPlayer) loco.riddenByEntity).addChatMessage(new ChatComponentText("Stop before turning it Off!"));
+                    p.addChatMessage(new ChatComponentText("Stop before turning it Off!"));
                 }
             } else {
                 Traincraft.ignitionChannel.sendToServer(new PacketSetLocoTurnedOn(true));
