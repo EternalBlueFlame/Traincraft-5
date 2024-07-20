@@ -13,10 +13,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
+import train.common.api.blocks.BlockDynamic;
 import train.common.library.GuiIDs;
 import train.common.library.Info;
 import train.common.tile.TileHelper;
@@ -24,41 +26,15 @@ import train.common.tile.TileTrainWbench;
 
 import java.util.Random;
 
-public class BlockTrainWorkbench extends BlockContainer {
+public class BlockTrainWorkbench extends BlockDynamic {
 
-	private IIcon textureTop;
-	private IIcon textureBottom;
-	private IIcon textureFront;
-	private IIcon textureSide;
 
 	public BlockTrainWorkbench(int j) {
-		super(Material.wood);
+		super(Material.wood,0);
 		setCreativeTab(Traincraft.tcTab);
+		setHarvestLevel("axe", 0);
 	}
 
-	@Override
-	public IIcon getIcon(int i, int j) {
-		if (i == 1) {
-			return textureTop;
-		}
-		if (i == 0) {
-			return textureBottom;
-		}
-		if (i == 3) {
-			return textureFront;
-		}
-		else {
-			return textureSide;
-		}
-	}
-
-	@Override
-	public IIcon getIcon(IBlockAccess worldAccess, int i, int j, int k, int side) {
-		if (((TileTrainWbench) worldAccess.getTileEntity(i, j, k)).getFacing() != null) {
-			side = TileHelper.getOrientationFromSide(((TileTrainWbench) worldAccess.getTileEntity(i, j, k)).getFacing(), ForgeDirection.getOrientation(side)).ordinal();
-		}
-		return side == 1 ? textureTop : side == 0 ? textureBottom : side == 3 ? textureFront : textureSide;
-	}
 
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
@@ -128,13 +104,9 @@ public class BlockTrainWorkbench extends BlockContainer {
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileTrainWbench();
 	}
-
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		textureTop = iconRegister.registerIcon(Info.modID.toLowerCase() + ":train_table_top");
-		textureBottom = iconRegister.registerIcon(Info.modID.toLowerCase() + ":train_table_bottom");
-		textureFront = iconRegister.registerIcon(Info.modID.toLowerCase() + ":train_table_front");
-		textureSide = iconRegister.registerIcon(Info.modID.toLowerCase() + ":train_table_side");
+	public TileEntity createTileEntity(World world, int meta) {
+		return new TileTrainWbench();
 	}
+
 }

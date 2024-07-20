@@ -80,7 +80,7 @@ public class GuiRecipeBook extends GuiScreen {
         addPage("Welcome to the Traincraft guide! \nThis book contains everything you need to know about Traincraft.\n\nAuthors:\nSpitfire4466,\nMrbrutal\n\nBukkit port: \nDV8FromTheWorld\n\nThanks to CovertJaguar for his help and a great API.\n", "", "left", new ArrayList<StackToDraw>() {
             {
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartLocoBR80_DB.item), 20, 16));
-                add(new StackToDraw(new ItemStack(BlockIDs.trainWorkbench.block), 170, 16));
+                add(new StackToDraw(new ItemStack(TCBlocks.trainWorkbench), 170, 16));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartCabooseWork.item), 60, 175));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartTankWagon_DB.item), 80, 175));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartFlatCartRail_DB.item), 100, 175));
@@ -272,7 +272,7 @@ public class GuiRecipeBook extends GuiScreen {
         });
         addPage("Crafting:\nAll train parts are crafted in the train workbench,\n\nthen trains have to be assembled in the assembly tables.\n\nThere are three assembly tables:\n\nTierI - Iron age\nTierII - Steel age\nTierIII - Advanced age\n", "", "right", new ArrayList<StackToDraw>() {
             {
-                add(new StackToDraw(new ItemStack(BlockIDs.trainWorkbench.block), 20, 16));
+                add(new StackToDraw(new ItemStack(TCBlocks.trainWorkbench), 20, 16));
                 add(new StackToDraw(new ItemStack(TCBlocks.assemblyTableI), 40, 165));
                 add(new StackToDraw(new ItemStack(TCBlocks.assemblyTableII), 80, 165));
                 add(new StackToDraw(new ItemStack(TCBlocks.assemblyTableIII), 140, 165));
@@ -280,8 +280,8 @@ public class GuiRecipeBook extends GuiScreen {
         });
         addPage("Crafting steel:\nSteel is crafted in Open Hearth Furnace, supply iron ingots and graphite in the top slots, fuel in the bottom slot, \nand it will cook slowly into steel.\nYou can also use steel from other mods or use this steel in other mods.\n", "", "left", new ArrayList<StackToDraw>() {
             {
-                add(new StackToDraw(new ItemStack(BlockIDs.openFurnaceIdle.block), 20, 16));
-                add(new StackToDraw(new ItemStack(BlockIDs.openFurnaceActive.block), 80, 155));
+                add(new StackToDraw(new ItemStack(TCBlocks.openFurnaceIdle), 20, 16));
+                add(new StackToDraw(new ItemStack(TCBlocks.openFurnaceActive), 80, 155));
                 add(new StackToDraw(new ItemStack(ItemIDs.graphite.item), 70, 135));
                 add(new StackToDraw(new ItemStack(Items.iron_ingot), 90, 135));
                 add(new StackToDraw(new ItemStack(Items.coal), 80, 175));
@@ -374,7 +374,7 @@ public class GuiRecipeBook extends GuiScreen {
 
 		addPage("On the following pages you will find all the train workbench recipes and assembly table recipes.\nIt is however strongly suggested to try to discover the recipes by yourself...\n\nWe hope you will enjoy the mod!\n\nSpitfire4466 and MrBrutal", "", "left", new ArrayList<StackToDraw>() {
 			{
-				add(new StackToDraw(new ItemStack(BlockIDs.trainWorkbench.block), 20, 16));
+				add(new StackToDraw(new ItemStack(TCBlocks.trainWorkbench), 20, 16));
 				add(new StackToDraw(new ItemStack(ItemIDs.hat.item), 40, 155));
 				add(new StackToDraw(new ItemStack(ItemIDs.jacket.item), 90, 155));
 				add(new StackToDraw(new ItemStack(ItemIDs.overalls.item), 140, 155));

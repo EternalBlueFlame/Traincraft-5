@@ -25,8 +25,8 @@ public class RecipeBookHandler {
         vanillaWorkTableRecipes[1] = TCBlocks.assemblyTableII.getUnlocalizedName();
         vanillaWorkTableRecipes[2] = TCBlocks.assemblyTableIII.getUnlocalizedName();
         vanillaWorkTableRecipes[3] = TCBlocks.distilIdle.getUnlocalizedName();
-        vanillaWorkTableRecipes[4] = BlockIDs.openFurnaceIdle.block.getUnlocalizedName();
-        vanillaWorkTableRecipes[5] = BlockIDs.trainWorkbench.block.getUnlocalizedName();
+        vanillaWorkTableRecipes[4] = TCBlocks.openFurnaceIdle.getUnlocalizedName();
+        vanillaWorkTableRecipes[5] = TCBlocks.trainWorkbench.getUnlocalizedName();
         vanillaWorkTableRecipes[6] = ItemIDs.overalls.item.getUnlocalizedName();
         vanillaWorkTableRecipes[7] = ItemIDs.jacket.item.getUnlocalizedName();
         vanillaWorkTableRecipes[8] = ItemIDs.hat.item.getUnlocalizedName();

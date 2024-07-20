@@ -50,14 +50,14 @@ public class RecipeHandler {
 
         if (!ConfigHandler.DISABLE_TRAIN_WORKBENCH) {
             for (ItemStack ironingot : iron) {
-                addDictRecipe(new ItemStack(BlockIDs.trainWorkbench.block, 1), "###", "IFI", "###", '#', "plankWood", 'F', Blocks.furnace, 'I', ironingot);
+                addDictRecipe(new ItemStack(TCBlocks.trainWorkbench, 1), "###", "IFI", "###", '#', "plankWood", 'F', Blocks.furnace, 'I', ironingot);
             }
         }
         addDictRecipe(new ItemStack(TCBlocks.distilIdle, 1), "###", "#F#", "###", '#', "ingotSteel", 'F', ItemIDs.firebox.item);
 
         /* Open Hearth Furnace */
         if (!ConfigHandler.MAKE_MODPACKS_GREAT_AGAIN) {
-            GameRegistry.addRecipe(new ItemStack(BlockIDs.openFurnaceIdle.block, 1), "#L#", "#B#", "#I#",
+            GameRegistry.addRecipe(new ItemStack(TCBlocks.openFurnaceIdle, 1), "#L#", "#B#", "#I#",
                     '#', Blocks.nether_brick, 'L', Items.lava_bucket,
                     'B', Items.bucket, 'I', Blocks.iron_block);
         }
@@ -311,7 +311,7 @@ public class RecipeHandler {
         /* I placed it here because workbench should be one of the first recipe shown in the recipe book */
         for (ItemStack plank : planks) {
             for (ItemStack ironingot : iron) {
-                TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.trainWorkbench.block, 1), "###", "IFI", "###", '#', plank, 'F', Blocks.furnace, 'I', ironingot);
+                TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.trainWorkbench, 1), "###", "IFI", "###", '#', plank, 'F', Blocks.furnace, 'I', ironingot);
             }
         }
 
@@ -339,7 +339,7 @@ public class RecipeHandler {
         TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.assemblyTableIII, 1), "GPG", "DLD", "OPO", 'G', Items.gold_ingot, 'P', Blocks.piston, 'D', Items.diamond, 'L', Blocks.glowstone, 'O', Blocks.obsidian);
 
         /* Open Hearth Furnace */
-        TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.openFurnaceIdle.block, 1), "#L#", "#B#", "#I#", '#', Blocks.nether_brick, 'L', Items.lava_bucket, 'B', Items.bucket, 'I', Blocks.iron_block);
+        TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.openFurnaceIdle, 1), "#L#", "#B#", "#I#", '#', Blocks.nether_brick, 'L', Items.lava_bucket, 'B', Items.bucket, 'I', Blocks.iron_block);
 
         /* Lantern */
         for (ItemStack ironingot : iron) {

@@ -6,6 +6,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import train.common.api.EntityRollingStock;
+import train.common.blocks.TCBlocks;
 import train.common.core.util.DepreciatedUtil;
 import train.common.entity.rollingStock.*;
 import train.common.library.BlockIDs;
@@ -139,7 +140,7 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 		this.placeBlockAtCurrentPosition(world, Blocks.oak_stairs, k, 2, 1, 4, structureboundingbox);
 		this.placeBlockAtCurrentPosition(world, Blocks.fence, 0, 2, 1, 3, structureboundingbox);
 		this.placeBlockAtCurrentPosition(world, Blocks.wooden_pressure_plate, 0, 2, 2, 3, structureboundingbox);
-		this.placeBlockAtCurrentPosition(world, BlockIDs.trainWorkbench.block, 0, 7, 1, 1, structureboundingbox);
+		this.placeBlockAtCurrentPosition(world, TCBlocks.trainWorkbench, 0, 7, 1, 1, structureboundingbox);
 		this.placeBlockAtCurrentPosition(world, Blocks.air, 0, 1, 1, 0, structureboundingbox);
 		this.placeBlockAtCurrentPosition(world, Blocks.air, 0, 1, 2, 0, structureboundingbox);
 		this.placeDoorAtCurrentPosition(world, structureboundingbox, random, 1, 1, 0, this.getMetadataWithOffset(Blocks.wooden_door, 1));

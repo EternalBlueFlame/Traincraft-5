@@ -35,25 +35,11 @@ public class BlockDistil extends BlockDynamic {
 	private final boolean isActive;
 	private static boolean keepDistilInventory = false;
 	private Random distilRand;
-
-	private IIcon textureTop;
-	private IIcon textureBottom;
-	private IIcon textureFront_off;
-	private IIcon textureFront_on;
-	private IIcon textureSide;
-	private IIcon textureBack;
-
 	public BlockDistil(int j, boolean flag) {
 		super(Material.anvil,j);
 		isActive = flag;
 		distilRand = new Random();
 		//setRequiresSelfNotify();
-
-		if (isActive) {
-			setLightLevel(0.8F);
-		} else {
-			setCreativeTab(Traincraft.tcTab);
-		}
 	}
 
 	@Override
@@ -61,56 +47,6 @@ public class BlockDistil extends BlockDynamic {
 		return Item.getItemFromBlock(TCBlocks.distilIdle);
 	}
 
-	@Override
-	public IIcon getIcon(int i, int j) {
-		if (!this.isActive) {
-			if (i == 1) {
-				return textureTop;
-			}
-			if (i == 0) {
-				return textureBottom;
-			}
-			if (i == 4) {
-				return textureBack;
-			}
-			if (i == 3) {
-				return textureFront_off;
-			}
-			else {
-				return textureSide;
-			}
-		}
-		else {
-			if (i == 1) {
-				return textureTop;
-			}
-			if (i == 0) {
-				return textureBottom;
-			}
-			if (i == 4) {
-				return textureBack;
-			}
-			if (i == 3) {
-				return textureFront_on;
-			}
-			else {
-				return textureSide;
-			}
-		}
-	}
-
-	@Override
-	public IIcon getIcon(IBlockAccess worldAccess, int i, int j, int k, int side) {
-		if (((TileEntityDistil) worldAccess.getTileEntity(i, j, k)).getFacing() != null) {
-			side = TileHelper.getOrientationFromSide(((TileEntityDistil) worldAccess.getTileEntity(i, j, k)).getFacing(), ForgeDirection.getOrientation(side)).ordinal();
-		}
-		if (!this.isActive) {
-			return side == 1 ? textureTop : side == 0 ? textureBottom : side == 4 ? textureSide : side == 5 ? textureSide : side == 3 ? textureFront_off : textureBack;
-		}
-		else {
-			return side == 1 ? textureTop : side == 0 ? textureBottom : side == 4 ? textureSide : side == 5 ? textureSide : side == 3 ? textureFront_on : textureBack;
-		}
-	}
 
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
@@ -244,14 +180,4 @@ public class BlockDistil extends BlockDynamic {
 		return new TileEntityDistil();
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		textureTop = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_top");
-		textureBottom = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_bottom");
-		textureFront_off = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_off_front");
-		textureFront_on = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_on_front");
-		textureSide = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_side");
-		textureBack = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_bottom");
-	}
 }

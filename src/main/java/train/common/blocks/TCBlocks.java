@@ -32,33 +32,37 @@ public class TCBlocks {
 	public static Block bridgePillar=new BlockBridgePillar().setHardness(3.5F).setStepSound(Block.soundTypeWood);
 	public static Block distilIdle=new BlockDistil(2, false).setHardness(3.5F).setStepSound(Block.soundTypeStone);
 	public static Block distilActive=new BlockDistil(2,true).setHardness(3.5F).setStepSound(Block.soundTypeStone).setLightLevel(0.8F);
+	public static Block openFurnaceIdle=new BlockOpenHearthFurnace(false).setHardness(3.5F).setStepSound(Block.soundTypeStone);
+	public static Block openFurnaceActive=new BlockOpenHearthFurnace(true).setHardness(3.5F).setStepSound(Block.soundTypeStone).setLightLevel(0.8F);
 	public static Block assemblyTableI=new BlockAssemblyTableI(Material.wood).setHardness(3.5F).setStepSound(Block.soundTypeWood);
 	public static Block assemblyTableII=new BlockAssemblyTableII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
 	public static Block assemblyTableIII=new BlockAssemblyTableIII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
+	public static Block trainWorkbench=new BlockTrainWorkbench(16).setHardness(1.7F).setStepSound(Block.soundTypeWood);
 
 	public static void loadBlocks() {
 		TraincraftRegistry.registerBlock(bridgePillar,Traincraft.tcTab, Info.modID,"bridgePillar");
 		TraincraftRegistry.registerBlock(distilIdle,Traincraft.tcTab, Info.modID,"distilIdle");
 		TraincraftRegistry.registerBlock(distilActive,null, Info.modID,"distilActive");
-		TraincraftRegistry.registerBlock(assemblyTableI,null, Info.modID,"assemblyTableI");
-		TraincraftRegistry.registerBlock(assemblyTableII,null, Info.modID,"assemblyTableII");
-		TraincraftRegistry.registerBlock(assemblyTableIII,null, Info.modID,"assemblyTableIII");
+		TraincraftRegistry.registerBlock(assemblyTableI,Traincraft.tcTab, Info.modID,"assemblyTableI");
+		TraincraftRegistry.registerBlock(assemblyTableII,Traincraft.tcTab, Info.modID,"assemblyTableII");
+		TraincraftRegistry.registerBlock(assemblyTableIII,Traincraft.tcTab, Info.modID,"assemblyTableIII");
+		TraincraftRegistry.registerBlock(trainWorkbench,Traincraft.tcTab, Info.modID,"trainWorkbench");
+		TraincraftRegistry.registerBlock(openFurnaceIdle,Traincraft.tcTab, Info.modID,"openFurnaceIdle");
+		TraincraftRegistry.registerBlock(openFurnaceActive,null, Info.modID,"openFurnaceActive");
 
-		//TCBlocks.distilIdle.block = new BlockDistil(2, false).setHardness(3.5F).setStepSound(Block.soundTypeStone);
-		//BlockIDs.distilActive.block = new BlockDistil(2, true).setHardness(3.5F).setStepSound(Block.soundTypeStone).setLightLevel(0.8F);
-		//BlockIDs.signal.block = new BlockSignal(BlockIDs.signal.block, 16).setHardness(1.7F).setStepSound(Block.soundTypeMetal);
 
-		//TCBlocks.assemblyTableI = new BlockAssemblyTableI(Material.wood).setHardness(3.5F).setStepSound(Block.soundTypeWood);
-		//TCBlocks.assemblyTableII = new BlockAssemblyTableII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
-		//TCBlocks.assemblyTableIII = new BlockAssemblyTableIII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
 
-		BlockIDs.trainWorkbench.block = new BlockTrainWorkbench(16).setHardness(1.7F).setStepSound(Block.soundTypeWood);
+
+		BlockIDs.lantern.block = new BlockLantern().setHardness(1.7F).setStepSound(Block.soundTypeMetal).setLightLevel(0.98F);
+		BlockIDs.switchStand.block = new BlockSwitchStand().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
+		BlockIDs.MFPBWigWag.block = new BlockMFPBWigWag().setHardness(2.5F).setStepSound(Block.soundTypeMetal);
+		BlockIDs.waterWheel.block = new BlockWaterWheel().setHardness(1.7F).setStepSound(Block.soundTypeWood);
+		BlockIDs.windMill.block = new BlockWindMill().setHardness(1.7F).setStepSound(Block.soundTypeWood);
+		BlockIDs.generatorDiesel.block = new BlockGeneratorDiesel().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
+
 		BlockIDs.stopper.block = new BlockStopper().setHardness(1.7F).setStepSound(Block.soundTypeWood);
 		BlockIDs.embeddedStopper.block = new BlockEmbeddedStopper().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
 		BlockIDs.americanstopper.block = new BlockAmericanStopper().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
-
-		BlockIDs.openFurnaceIdle.block = new BlockOpenHearthFurnace(false).setHardness(3.5F).setStepSound(Block.soundTypeStone);
-		BlockIDs.openFurnaceActive.block = new BlockOpenHearthFurnace(true).setHardness(3.5F).setStepSound(Block.soundTypeStone);
 
 
 		BlockIDs.oreTC.block = new BlockOreTC().setHardness(3.0F).setResistance(5F).setStepSound(Block.soundTypeStone);
@@ -92,14 +96,6 @@ public class TCBlocks {
 		BlockIDs.asphaltStairs.block = new BlockBaseStairs(BlockIDs.asphalt.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("asphalt stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
 
 
-
-		BlockIDs.lantern.block = new BlockLantern().setHardness(1.7F).setStepSound(Block.soundTypeMetal).setLightLevel(0.98F);
-		BlockIDs.switchStand.block = new BlockSwitchStand().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
-		BlockIDs.MFPBWigWag.block = new BlockMFPBWigWag().setHardness(2.5F).setStepSound(Block.soundTypeMetal);
-		BlockIDs.waterWheel.block = new BlockWaterWheel().setHardness(1.7F).setStepSound(Block.soundTypeWood);
-		BlockIDs.windMill.block = new BlockWindMill().setHardness(1.7F).setStepSound(Block.soundTypeWood);
-		BlockIDs.generatorDiesel.block = new BlockGeneratorDiesel().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
-		
 		BlockIDs.tcRail.block = new BlockTCRail().setHardness(1.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
 		BlockIDs.tcRailGag.block = new BlockTCRailGag().setHardness(1.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
 
@@ -125,8 +121,7 @@ public class TCBlocks {
 			BlockIDs.pdmInstructionBlock.block = new BlockPDMInstructionRadio(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:pdmradio").setBlockName("pdmradio").setCreativeTab(Traincraft.tcTab);
 		}
 
-		//BlockIDs.book.block = new BlockBook(BlockIDs.book.blockID);
-		}
+	}
 
 	public static void registerBlocks() {
 		for (BlockIDs blocks : BlockIDs.values()) {
@@ -142,7 +137,6 @@ public class TCBlocks {
 	}
 
 	public static void setHarvestLevels() {
-		BlockIDs.trainWorkbench.block.setHarvestLevel("axe", 0);
 		TCBlocks.assemblyTableII.setHarvestLevel("axe", 0);
 		TCBlocks.assemblyTableIII.setHarvestLevel("axe", 0);
 		BlockIDs.waterWheel.block.setHarvestLevel("axe", 0);

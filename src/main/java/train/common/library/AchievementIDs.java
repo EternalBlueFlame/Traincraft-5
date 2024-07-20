@@ -46,8 +46,8 @@ public enum AchievementIDs {
 	builder(new Item[] { ItemIDs.minecartBuilder.item }),
 	jukebox(new Item[] { ItemIDs.minecartJukeBoxCart.item }),
 
-	openHearth(new Item[] { Item.getItemFromBlock(BlockIDs.openFurnaceIdle.block) }),
-	trainWB(new Item[] { Item.getItemFromBlock(BlockIDs.trainWorkbench.block) }),
+	openHearth(new Item[] { Item.getItemFromBlock(TCBlocks.openFurnaceIdle) }),
+	trainWB(new Item[] { Item.getItemFromBlock(TCBlocks.trainWorkbench) }),
 	assemblyTable(new Item[] { Item.getItemFromBlock(TCBlocks.assemblyTableI),
 			Item.getItemFromBlock(TCBlocks.assemblyTableII),
 			Item.getItemFromBlock(TCBlocks.assemblyTableIII) }),

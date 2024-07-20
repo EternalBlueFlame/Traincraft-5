@@ -119,11 +119,14 @@ public class BlockDynamic extends BlockContainer {
     @Override
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB hitboxSelf, List p_149743_6_, Entity collidingEntity) {
         this.setBlockBoundsBasedOnState(world, x, y, z);
-        p_149743_6_.add(this.getCollisionBoundingBoxFromPool(world, x, y, z));
+        //if there's multiple hitboxes, ex stairs, this needs to be done for each
+        if(hitboxSelf.intersectsWith(this.getCollisionBoundingBoxFromPool(world, x, y, z))) {
+            p_149743_6_.add(this.getCollisionBoundingBoxFromPool(world, x, y, z));
+        }
     }
     @Override
     public boolean getBlocksMovement(IBlockAccess p_149655_1_, int p_149655_2_, int p_149655_3_, int p_149655_4_) {
-        return hitboxShape()[4]>1;
+        return hitboxShape()[4]>=1;
     }
 
     @Override

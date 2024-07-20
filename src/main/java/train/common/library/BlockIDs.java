@@ -19,14 +19,10 @@ public enum BlockIDs {
 	
 	//book(true, ItemBlockBook.class),
 
-	trainWorkbench(false, null),
-
 	stopper(false, null),
 	embeddedStopper(false, null),
 	americanstopper(false, null),
 
-	openFurnaceIdle(false, null),
-	openFurnaceActive(false, null),
 
 	oreTC(true, ItemBlockOreTC.class),
 	dirtyBallast(false,null),

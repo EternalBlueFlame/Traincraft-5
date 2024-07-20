@@ -7,15 +7,19 @@
 
 package train.common.tile;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.api.blocks.TileRenderFacing;
+import train.common.library.Info;
 
 public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
@@ -197,4 +201,14 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 		return true;
 	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTexture(int x, int y, int z){
+		return texture;
+	}
+
+
+	static final ResourceLocation texture = new ResourceLocation(Info.modID, "textures/blocks/train_table.png");
+
 }
