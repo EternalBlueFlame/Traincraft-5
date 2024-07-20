@@ -10,7 +10,7 @@ tile.tc:oreTC.ballast.name=Balast
 tile.tc:generatorDiesel.name=Generator Dieslowy
 tile.tc:windMill.name=Wiatrak
 tile.tc:waterWheel.name=Młyn wodny
-tile.tc:lantern.name=Latarnia
+tile.lantern.name=Latarnia
 tile.openFurnaceActive.name=Palenisko (aktywne)
 tile.openFurnaceIdle.name=Palenisko
 tile.tc:stopper.name=Bufor Pociągu
@@ -25,7 +25,7 @@ tile.tc:tcRailGag.name=Tor Traincraft
 fluid.tc:fluid.diesel.name=Olej napędowy
 fluid.tc:fluid.refinedfuel.name=Przetworzone paliwo
 tile.bridgePillar.name=Filar mostu
-tile.tc:switchStand.name=Podstawa przełącznika
+tile.switchStand.name=Podstawa przełącznika
 
 <!-- ## Fluids ## -->
 fluid.diesel.name=Olej napędowy

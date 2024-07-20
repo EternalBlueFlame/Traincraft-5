@@ -15,26 +15,23 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
+import train.common.api.blocks.BlockDynamic;
 import train.common.library.Info;
 import train.common.tile.TileMFPBWigWag;
 
 import java.util.List;
 import java.util.Random;
 
-public class BlockMFPBWigWag extends Block {
-	private IIcon texture;
+public class BlockMFPBWigWag extends BlockDynamic {
 
 	public BlockMFPBWigWag() {
-		super(Material.rock);
+		super(Material.rock,0);
 		setCreativeTab(Traincraft.tcTab);
 		this.setTickRandomly(true);
-		//this.setBlockBounds(0.5F , 0.0F, 0.5F , 0.5F ,  2.0F, 0.5F);
 	}
 
 	@Override
-	public void addCollisionBoxesToList(World p_149743_1_, int p_149743_2_, int p_149743_3_, int p_149743_4_, AxisAlignedBB p_149743_5_, List p_149743_6_, Entity p_149743_7_)
-	{
-	}
+	public float[] hitboxShape(){return new float[]{0,0,0,1,2,1};}
 
 	@Override
 	public boolean hasTileEntity(int metadata) {
@@ -61,14 +58,6 @@ public class BlockMFPBWigWag extends Block {
 		return -1;
 	}
 
-	@SideOnly(Side.CLIENT)
-	/**
-	 * A randomly called display update to be able to add particles or other items for display
-	 */
-	@Override
-	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
-
-	}
 
 
 	@Override
@@ -80,16 +69,5 @@ public class BlockMFPBWigWag extends Block {
 			te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
 			world.markBlockForUpdate(i, j, k);
 		}
-	}
-
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		texture = iconRegister.registerIcon(Info.modID.toLowerCase() + ":assembly_1_bottom");
-	}
-
-	@Override
-	public IIcon getIcon(int i, int j) {
-		return texture;
 	}
 }

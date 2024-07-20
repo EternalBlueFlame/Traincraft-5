@@ -95,6 +95,11 @@ public class TraincraftRegistry {
                 return record;
             }
         }
+        for(TrainRecord fallback : EnumTrains.trains()){
+            if (entityClass.equals(fallback.getEntityClass())) {
+                return fallback;
+            }
+        }
         return null;
     }
 
@@ -353,7 +358,7 @@ public class TraincraftRegistry {
         if (oreDictionaryName != null) {
             OreDictionary.registerOre(oreDictionaryName, block);
         }
-        if (DebugUtil.dev && Traincraft.proxy.isClient() && block.getUnlocalizedName().equals(StatCollector.translateToLocal(block.getUnlocalizedName()))) {
+        if (DebugUtil.dev && Traincraft.proxy.isClient() && block.getUnlocalizedName().equals(StatCollector.translateToLocal(block.getUnlocalizedName() +".name"))) {
             DebugUtil.println("Block missing lang entry: " + block.getUnlocalizedName());
         }
         if (block instanceof ITileEntityProvider) {
@@ -411,7 +416,7 @@ public class TraincraftRegistry {
         if (oreDictionaryName != null) {
             OreDictionary.registerOre(oreDictionaryName, itm);
         }
-        if (DebugUtil.dev && Traincraft.proxy != null && Traincraft.proxy.isClient() && itm.getUnlocalizedName().equals(StatCollector.translateToLocal(itm.getUnlocalizedName()))) {
+        if (DebugUtil.dev && Traincraft.proxy != null && Traincraft.proxy.isClient() && itm.getUnlocalizedName().equals(StatCollector.translateToLocal(itm.getUnlocalizedName()+".name"))) {
             DebugUtil.println("Item missing lang entry: " + itm.getUnlocalizedName());
         }
         if (Traincraft.proxy.isClient() && itemRender != null) {

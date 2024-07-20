@@ -89,11 +89,7 @@ public class BlockautoSwitchStand extends BlockLever {
         return true;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        texture = iconRegister.registerIcon(Info.modID.toLowerCase() + ":assembly_1_bottom");
-    }
+
 
     @Override
     public IIcon getIcon(int i, int j) {

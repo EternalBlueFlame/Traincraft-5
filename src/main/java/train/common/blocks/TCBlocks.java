@@ -38,6 +38,9 @@ public class TCBlocks {
 	public static Block assemblyTableII=new BlockAssemblyTableII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
 	public static Block assemblyTableIII=new BlockAssemblyTableIII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
 	public static Block trainWorkbench=new BlockTrainWorkbench(16).setHardness(1.7F).setStepSound(Block.soundTypeWood);
+	public static Block lantern=new BlockLantern().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
+	public static Block switchStand=new BlockSwitchStand().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
+	public static Block MFPBWigWag=new BlockMFPBWigWag().setHardness(2.5F).setStepSound(Block.soundTypeMetal);
 
 	public static void loadBlocks() {
 		TraincraftRegistry.registerBlock(bridgePillar,Traincraft.tcTab, Info.modID,"bridgePillar");
@@ -49,13 +52,12 @@ public class TCBlocks {
 		TraincraftRegistry.registerBlock(trainWorkbench,Traincraft.tcTab, Info.modID,"trainWorkbench");
 		TraincraftRegistry.registerBlock(openFurnaceIdle,Traincraft.tcTab, Info.modID,"openFurnaceIdle");
 		TraincraftRegistry.registerBlock(openFurnaceActive,null, Info.modID,"openFurnaceActive");
+		TraincraftRegistry.registerBlock(lantern,Traincraft.tcTab, Info.modID,"lantern");
+		TraincraftRegistry.registerBlock(switchStand,Traincraft.tcTab, Info.modID,"switchStand");
+		TraincraftRegistry.registerBlock(MFPBWigWag,Traincraft.tcTab, Info.modID,"MFPBWigWag");
 
 
 
-
-		BlockIDs.lantern.block = new BlockLantern().setHardness(1.7F).setStepSound(Block.soundTypeMetal).setLightLevel(0.98F);
-		BlockIDs.switchStand.block = new BlockSwitchStand().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
-		BlockIDs.MFPBWigWag.block = new BlockMFPBWigWag().setHardness(2.5F).setStepSound(Block.soundTypeMetal);
 		BlockIDs.waterWheel.block = new BlockWaterWheel().setHardness(1.7F).setStepSound(Block.soundTypeWood);
 		BlockIDs.windMill.block = new BlockWindMill().setHardness(1.7F).setStepSound(Block.soundTypeWood);
 		BlockIDs.generatorDiesel.block = new BlockGeneratorDiesel().setHardness(1.7F).setStepSound(Block.soundTypeMetal);

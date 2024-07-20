@@ -3,6 +3,7 @@ package train.common.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockLever;
+import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -14,26 +15,25 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
+import train.common.api.blocks.BlockDynamic;
+import train.common.api.blocks.BlockSwitch;
 import train.common.library.Info;
 import train.common.tile.TileSwitchStand;
 
 import java.util.List;
 import java.util.Random;
 
-public class BlockSwitchStand extends BlockLever {
-	private IIcon texture;
+public class BlockSwitchStand extends BlockSwitch {
 
 	public BlockSwitchStand() {
-		super();
+		super(Material.wood, 0);
 		setCreativeTab(Traincraft.tcTab);
 		this.setTickRandomly(true);
-		//this.setBlockBounds(0.5F , 0.0F, 0.5F , 0.5F ,  2.0F, 0.5F);
 	}
 
 	@Override
-	public void addCollisionBoxesToList(World p_149743_1_, int p_149743_2_, int p_149743_3_, int p_149743_4_, AxisAlignedBB p_149743_5_, List p_149743_6_, Entity p_149743_7_)
-	{
-	}
+	public float[] hitboxShape(){return new float[]{0,0,0,1,2,1};}
+
 
 	@Override
 	public boolean hasTileEntity(int metadata) {
@@ -54,6 +54,10 @@ public class BlockSwitchStand extends BlockLever {
 	public TileEntity createTileEntity(World world, int metadata) {
 		return new TileSwitchStand();
 	}
+	@Override
+	public TileEntity createNewTileEntity(World world, int metadata) {
+		return new TileSwitchStand();
+	}
 
 	@Override
 	public int getRenderType() {
@@ -61,13 +65,7 @@ public class BlockSwitchStand extends BlockLever {
 	}
 
 	@SideOnly(Side.CLIENT)
-	/**
-	 * A randomly called display update to be able to add particles or other items for display
-	 */
-	@Override
-	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
 
-	}
 
 
 	@Override
@@ -89,14 +87,4 @@ public class BlockSwitchStand extends BlockLever {
 		return true;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		texture = iconRegister.registerIcon(Info.modID.toLowerCase() + ":assembly_1_bottom");
-	}
-
-	@Override
-	public IIcon getIcon(int i, int j) {
-		return texture;
-	}
 }

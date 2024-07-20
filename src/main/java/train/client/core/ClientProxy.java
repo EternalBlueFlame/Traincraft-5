@@ -37,6 +37,7 @@ import train.common.Traincraft;
 import train.common.adminbook.GUIAdminBook;
 import train.common.api.EntityBogie;
 import train.common.api.EntityRollingStock;
+import train.common.blocks.TCBlocks;
 import train.common.core.CommonProxy;
 import train.common.core.Traincraft_EventSounds;
 import train.common.core.handlers.ConfigHandler;
@@ -183,13 +184,13 @@ public class ClientProxy extends CommonProxy {
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.signal.block), new ItemRenderSignal());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileLantern.class, new RenderLantern());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.lantern.block), new ItemRenderLantern());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.lantern), new ItemRenderLantern());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileSwitchStand.class, new RenderSwitchStand());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.switchStand.block), new ItemRenderSwitchStand());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.switchStand), new ItemRenderSwitchStand());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileMFPBWigWag.class, new RenderMFPBWigWag());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.MFPBWigWag.block), new ItemRenderMFPBWigWag());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.MFPBWigWag), new ItemRenderMFPBWigWag());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileWaterWheel.class, new RenderWaterWheel());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.waterWheel.block), new ItemRenderWaterWheel());

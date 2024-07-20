@@ -64,7 +64,7 @@ public class RecipeHandler {
 
         /* Lantern */
         for (ItemStack ironingot : iron) {
-            GameRegistry.addRecipe(new ItemStack(BlockIDs.lantern.block, 4), "III", "PTP", "III", 'I', ironingot, 'P', Blocks.glass_pane, 'T', Blocks.torch);
+            GameRegistry.addRecipe(new ItemStack(TCBlocks.lantern, 4), "III", "PTP", "III", 'I', ironingot, 'P', Blocks.glass_pane, 'T', Blocks.torch);
         }
 
         /* Clothes */
@@ -278,9 +278,9 @@ public class RecipeHandler {
         GameRegistry.addShapelessRecipe(new ItemStack(BlockIDs.dirtierBallast.block, 16), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), Blocks.dirt);
 
         for (ItemStack ironingot : iron) {
-            addDictRecipe(new ItemStack(BlockIDs.switchStand.block, 1), " W ", " I ", " R ", 'W', Blocks.lever, 'R', Items.stick, 'I', ironingot);
+            addDictRecipe(new ItemStack(TCBlocks.switchStand, 1), " W ", " I ", " R ", 'W', Blocks.lever, 'R', Items.stick, 'I', ironingot);
             addDictRecipe(new ItemStack(BlockIDs.MILWSwitchStand.block, 1), " RW", "BWR", "AAA", 'A', new ItemStack(Items.stick), 'B', Blocks.iron_bars, 'R', new ItemStack(Items.dye, 1, 1), 'W', new ItemStack(Items.dye, 1, 15));
-            addDictRecipe(new ItemStack(BlockIDs.MFPBWigWag.block, 1), "IWI", " I ", " I ", 'W', Blocks.lever, 'I', ironingot);
+            addDictRecipe(new ItemStack(TCBlocks.MFPBWigWag, 1), "IWI", " I ", " I ", 'W', Blocks.lever, 'I', ironingot);
             /*Buffer*/
             addDictRecipe(new ItemStack(BlockIDs.stopper.block, 1), "WWW", "I I", "RRR", 'W', "plankWood", 'R', Blocks.rail, 'I', ironingot);
             addDictRecipe(new ItemStack(BlockIDs.embeddedStopper.block, 1), "   ", "I I", "RRR", 'R', Blocks.rail, 'I', ironingot);
@@ -343,7 +343,7 @@ public class RecipeHandler {
 
         /* Lantern */
         for (ItemStack ironingot : iron) {
-            TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.lantern.block, 4), "III", "PTP", "III", 'I', ironingot, 'P', Blocks.glass_pane, 'T', Blocks.torch);
+            TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.lantern, 4), "III", "PTP", "III", 'I', ironingot, 'P', Blocks.glass_pane, 'T', Blocks.torch);
         }
         /* Clothes */
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.overalls.item, 1), " # ", "X$X", "X X", 'X', new ItemStack(Items.dye, 1, 4), '$', Items.leather_leggings, '#', new ItemStack(Items.dye, 1, 1));
@@ -483,8 +483,8 @@ public class RecipeHandler {
                 TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.ironFrame.item, 2), "   ", "# #", "AAA", 'A', ironingot, '#', plankItem);// iron Frame
                 TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.ironCab.item, 2), "###", "X X", "XXX", 'X', ironingot, '#', plankItem);// iron cab
                 TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.stopper.block, 1), "WWW", "I I", "RRR", 'W', plankItem, 'R', Blocks.rail, 'I', ironingot);// stopper
-                TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.switchStand.block, 1), " W ", " I ", " R ", 'W', Blocks.lever, 'R', Items.stick, 'I', ironingot);//switchstand
-                TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.MFPBWigWag.block, 1), "IWI", " I ", " I ", 'W', Blocks.lever, 'I', ironingot);//wigwag
+                TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.switchStand, 1), " W ", " I ", " R ", 'W', Blocks.lever, 'R', Items.stick, 'I', ironingot);//switchstand
+                TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.MFPBWigWag, 1), "IWI", " I ", " I ", 'W', Blocks.lever, 'I', ironingot);//wigwag
             }
             // Short Wood Slope
             TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailSlopeWood.item, 1),

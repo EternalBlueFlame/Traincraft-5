@@ -52,9 +52,6 @@ public enum BlockIDs {
 	snowGravelStairs(false, null),
 	asphaltStairs(false, null),
 
-	lantern(false, null),
-	switchStand(false, null),
-	MFPBWigWag(false, null),
 	waterWheel(true, ItemBlockGeneratorWaterWheel.class),
 	windMill(true, ItemBlockGeneratorWindMill.class),
 	generatorDiesel(true, ItemBlockGeneratorDiesel.class),

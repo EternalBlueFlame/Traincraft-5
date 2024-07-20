@@ -31,14 +31,14 @@ public class RecipeBookHandler {
         vanillaWorkTableRecipes[7] = ItemIDs.jacket.item.getUnlocalizedName();
         vanillaWorkTableRecipes[8] = ItemIDs.hat.item.getUnlocalizedName();
         vanillaWorkTableRecipes[11] = ItemIDs.recipeBook.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[12] = BlockIDs.lantern.block.getUnlocalizedName();
+        vanillaWorkTableRecipes[12] = TCBlocks.lantern.getUnlocalizedName();
         vanillaWorkTableRecipes[14] = ItemIDs.pants_driver_paintable.item.getUnlocalizedName();
         vanillaWorkTableRecipes[15] = ItemIDs.pants_ticketMan_paintable.item.getUnlocalizedName();
         vanillaWorkTableRecipes[16] = ItemIDs.hat_driver_paintable.item.getUnlocalizedName();
         vanillaWorkTableRecipes[17] = ItemIDs.hat_ticketMan_paintable.item.getUnlocalizedName();
         vanillaWorkTableRecipes[18] = ItemIDs.jacket_driver_paintable.item.getUnlocalizedName();
         vanillaWorkTableRecipes[19] = ItemIDs.jacket_ticketMan_paintable.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[20] = BlockIDs.switchStand.block.getUnlocalizedName();
+        vanillaWorkTableRecipes[20] = TCBlocks.switchStand.getUnlocalizedName();
     }
 
     // TODO: Make parameters more specific than List
