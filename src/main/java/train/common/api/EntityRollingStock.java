@@ -518,7 +518,23 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      *
      * @param i
      */
+    public boolean isLockedAndNotOwner() {
+        if (this.getTrainLockedFromPacket()) {
+            if (this.riddenByEntity instanceof EntityPlayer && !((EntityPlayer) this.riddenByEntity).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
+                return true;
+            }
+            if (this.seats.size() > 0 && this.seats.get(0).getPassenger() instanceof EntityPlayer && !((EntityPlayer) this.seats.get(0).getPassenger()).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
+                return true;
+            }
+        }
+        return false;
+    }
     public void keyHandlerFromPacket(int i) {
+        if (this.getTrainLockedFromPacket()) {
+            if (isLockedAndNotOwner()) {
+                return;
+            }
+        }
         this.pressKey(i);
         if (i == 7) {
             if (this instanceof AbstractWorkCart) {

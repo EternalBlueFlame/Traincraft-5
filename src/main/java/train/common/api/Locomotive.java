@@ -477,7 +477,8 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         }
 
         if (i == 7) {
-            ((EntityPlayer) seats.get(0).getPassenger()).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+            if (seats.size() != 0)
+                ((EntityPlayer) seats.get(0).getPassenger()).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
         }
 
         if (i == 12) {
@@ -968,18 +969,6 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
                 }
             }
         }
-    }
-
-    public boolean isLockedAndNotOwner() {
-        if (this.getTrainLockedFromPacket()) {
-            if (this.riddenByEntity instanceof EntityPlayer && !((EntityPlayer) this.riddenByEntity).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
-                return true;
-            }
-            if (this.seats.size() > 0 && this.seats.get(0).getPassenger() instanceof EntityPlayer && !((EntityPlayer) this.seats.get(0).getPassenger()).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
-                return true;
-            }
-        }
-        return false;
     }
 
 
