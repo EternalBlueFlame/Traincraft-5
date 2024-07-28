@@ -230,7 +230,6 @@ public class Traincraft {
 
         tcLog.info("Activation Mod Compatibility");
         TrainModCore.ModsLoaded();
-        LiquidManager.getLiquidsFromDictionnary();
 
         tcLog.info("Finished PostInitialization");
     }
