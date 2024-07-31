@@ -69,8 +69,12 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     private TrainRenderRecord render = null;
 
     public TrainRecord getSpec() {
-        if (trainSpec == null) {
+        if(trainSpec==null){
             trainSpec = Traincraft.instance.traincraftRegistry.getTrainRecord(this.getClass());
+            //fallback if that failed
+            if (trainSpec == null) {
+                Traincraft.instance.traincraftRegistry.findTrainRecordByItem(getCartItem().getItem());
+            }
         }
         return trainSpec;
     }
@@ -324,10 +328,9 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public void setColor(String color) {
-        TrainRecord trainRecord = Traincraft.instance.traincraftRegistry.findTrainRecordByItem(getCartItem().getItem());
-        if (trainRecord != null && trainRecord.getLiveries() != null && trainRecord.getLiveries().size()>0) {
-            if (color.equals("-1") || !trainRecord.getLiveries().contains(color)) {
-                color = (trainRecord.getLiveries().get(trainRecord.getLiveries().indexOf(color)+1>trainRecord.getLiveries().size()-1?0:trainRecord.getLiveries().indexOf(color)+1));
+        if (getSpec() != null && getSpec().getLiveries() != null && getSpec().getLiveries().size()>0) {
+            if (color.equals("-1") || !getSpec().getLiveries().contains(color)) {
+                color = (getSpec().getLiveries().get(getSpec().getLiveries().indexOf(color)+1>getSpec().getLiveries().size()-1?0:getSpec().getLiveries().indexOf(color)+1));
             }
         }
 

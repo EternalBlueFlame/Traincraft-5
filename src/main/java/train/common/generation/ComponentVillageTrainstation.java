@@ -183,15 +183,8 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 			cart.setLocationAndAngles(j1 + 0.5D, k1, l1 + 0.5D, 90.0F, 0.0F);
 			cart.setTrainOwner("VillagerJoe");
 			cart.shouldChunkLoad=false;
-			if (rD == 4) {
-				cart.setColor("Blue");
-			}
-			if (rD == 7) {
-				cart.setColor("Red");
-			}
-			if (rD == 5) {
-				cart.setColor("Brown");
-			}
+			List<String> skins = cart.getSpec().skins;
+			cart.setColor(skins.get(new Random().nextInt(skins.size()-1)));
 			world.spawnEntityInWorld(cart);
 			cart.setInformation(cart.getTrainType(), "VillagerJoe", "VillagerJoe", cart.getCartItem().getItem().getItemStackDisplayName(cart.getCartItem()), -1);
 		}
