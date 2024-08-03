@@ -14,6 +14,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
+import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -37,6 +38,7 @@ import train.common.generation.ComponentVillageTrainstation;
 import train.common.generation.WorldGenWorld;
 import train.common.items.TCItems;
 import train.common.library.Info;
+import train.common.library.ItemIDs;
 import train.common.library.TraincraftRegistry;
 import train.common.recipes.AssemblyTableRecipes;
 
@@ -71,6 +73,7 @@ public class Traincraft {
     public static SimpleNetworkWrapper builderChannel;
     public static SimpleNetworkWrapper updateTrainIDChannel = NetworkRegistry.INSTANCE.newSimpleChannel("TrainIDChannel");
     public static SimpleNetworkWrapper updateDestinationChannel = NetworkRegistry.INSTANCE.newSimpleChannel("updateDestnChannel");
+    public static SimpleNetworkWrapper updateChannel = NetworkRegistry.INSTANCE.newSimpleChannel("updateChannel");
     public static SimpleNetworkWrapper paintbrushColorChannel;
     public static SimpleNetworkWrapper overlayTextureChannel;
 
@@ -96,7 +99,7 @@ public class Traincraft {
     public static File configDirectory;
 
     /* Creative tab for Traincraft */
-    public static CreativeTabs tcTab, tcTrainTab;
+    public static CreativeTabTraincraft tcTab, tcTrainTab;
 
     public ArmorMaterial armor = EnumHelper.addArmorMaterial("Armor", 5, new int[]{1, 2, 2, 1}, 25);
     public ArmorMaterial armorCloth = EnumHelper.addArmorMaterial("TCcloth", 5, new int[]{1, 2, 2, 1}, 25);
@@ -122,9 +125,9 @@ public class Traincraft {
 
         /* Register Items, Blocks, ... */
         tcLog.info("Initialize Blocks, Items, ...");
-        tcTab = new CreativeTabTraincraft(CreativeTabs.getNextID(), "Traincraft");
+        tcTab = new CreativeTabTraincraft("Traincraft", Info.modID, "trains/train_br80");
         if (ConfigHandler.SPLIT_CREATIVE) {
-            tcTrainTab = new CreativeTabTraincraftTrains(CreativeTabs.getNextID(), "Traincraft Trains");
+            tcTrainTab = new CreativeTabTraincraft("Traincraft Trains",  Info.modID,"trains/train_br01");
         }
         trainArmor = proxy.addArmor("armor");
         trainCloth = proxy.addArmor("Paintable");
@@ -174,6 +177,7 @@ public class Traincraft {
         //proxy.getCape();
 
         /* GUI handler initiation */
+        cpw.mods.fml.common.registry.EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 16, Traincraft.instance,80,3,true);
         tcLog.info("Initialize Gui");
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
         FMLCommonHandler.instance().bus().register(new CraftingHandler());
@@ -206,6 +210,7 @@ public class Traincraft {
 
 
         proxy.registerBookHandler();
+        proxy.registerPlayerScaler();
 
         /* Networking and Packet initialisation, apparently this needs to be in init to prevent conflicts */
         PacketHandler.init();
@@ -225,7 +230,6 @@ public class Traincraft {
 
         tcLog.info("Activation Mod Compatibility");
         TrainModCore.ModsLoaded();
-        LiquidManager.getLiquidsFromDictionnary();
 
         tcLog.info("Finished PostInitialization");
     }

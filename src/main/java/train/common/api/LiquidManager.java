@@ -23,17 +23,9 @@ import train.common.library.ItemIDs;
 
 public class LiquidManager {
 
-	public static final int BUCKET_VOLUME = 1000;
 	private static LiquidManager instance;
 	public static FluidStack WATER_FILTER = new FluidStack(FluidRegistry.WATER, 1);
 	public static FluidStack LAVA_FILTER = new FluidStack(FluidRegistry.LAVA, 1);
-	public static Fluid oil;
-	public static Fluid steam;
-	public static Fluid fuel;
-	public static Fluid biomass;
-	public static Fluid biofuel;
-	public static Fluid bioDiesel;
-	public static Fluid bioethanol;
 
 	public static final Fluid DIESEL = new Fluid("Diesel").setUnlocalizedName("diesel.name").setDensity(860);
 	public static final Fluid REFINED_FUEL = new Fluid("RefinedFuel").setDensity(820).setUnlocalizedName("refinedfuel.name");
@@ -58,7 +50,6 @@ public class LiquidManager {
 		REFINED_FUEL.setBlock(BlockIDs.refinedFuel.block);
 		FluidContainerRegistry.registerFluidContainer(DIESEL, new ItemStack(ItemIDs.diesel.item), new ItemStack(ItemIDs.emptyCanister.item));
 		FluidContainerRegistry.registerFluidContainer(REFINED_FUEL, new ItemStack(ItemIDs.refinedFuel.item), new ItemStack(ItemIDs.emptyCanister.item));
-		dieselFilter();
 		if (Loader.isModLoaded("Railcraft")) {
 			addRCFluids();
 		}
@@ -90,16 +81,6 @@ public class LiquidManager {
 			DIESEL.setIcons(BlockIDs.diesel.block.getBlockTextureFromSide(1), BlockIDs.diesel.block.getBlockTextureFromSide(2));
 			REFINED_FUEL.setIcons(BlockIDs.refinedFuel.block.getBlockTextureFromSide(1), BlockIDs.refinedFuel.block.getBlockTextureFromSide(2));
 		}
-	}
-
-	public static void getLiquidsFromDictionnary() {
-		oil = FluidRegistry.getFluid("oil");
-		steam = FluidRegistry.getFluid("steam");
-		fuel = FluidRegistry.getFluid("fuel");
-		biomass = FluidRegistry.getFluid("biomass");
-		bioethanol = FluidRegistry.getFluid("bioethanol");
-		biofuel = FluidRegistry.getFluid("biofuel");
-		bioDiesel = FluidRegistry.getFluid("biodiesel");
 	}
 
 	public boolean isDieselLocoFuel(ItemStack stack) {
@@ -148,36 +129,6 @@ public class LiquidManager {
 		return FluidContainerRegistry.containsFluid(stack, liquid);
 	}
 
-	public boolean isFluidEqual(FluidStack L1, FluidStack L2) {
-		return !((L1 == null) || (L2 == null)) && L1.isFluidEqual(L2);
-	}
-
-	public ItemStack processContainer(IInventory inventory, IFluidTank tank, ItemStack itemstack, int tankIndex) {
-		FluidStack bucketLiquid = getFluidInContainer(itemstack);
-		ItemStack emptyItem = itemstack.getItem().getContainerItem(itemstack);
-
-		if ((bucketLiquid != null) && (emptyItem == null)) {
-			int used = tank.fill(bucketLiquid, false);
-			if (used >= bucketLiquid.amount) {
-				tank.fill(bucketLiquid, true);
-				inventory.decrStackSize(0, 1);
-				return null;
-			}
-		}
-		else if ((getInstance().isEmptyContainer(itemstack))) {
-			ItemStack filled = getInstance().fillFluidContainer(tank.getFluid(), itemstack);
-			if ((filled != null)) {
-				FluidStack liquid = getFluidInContainer(filled);
-				FluidStack drain = tank.drain(liquid.amount, false);
-				if ((drain != null) && (drain.amount > 0)) {
-					tank.drain(liquid.amount, true);
-					inventory.decrStackSize(0, 1);
-					return filled;
-				}
-			}
-		}
-		return null;
-	}
 
 	public ItemStack processContainer(IInventory inventory, int inventoryIndex, IFluidHandler tank, ItemStack itemstack) {
 		FluidStack bucketLiquid = getFluidInContainer(itemstack);
@@ -273,54 +224,6 @@ public class LiquidManager {
 
 		public boolean liquidMatchesFilter(FluidStack resource) {
 			return !((resource == null) || (this.filter == null)) && this.filter.isFluidEqual(resource);
-		}
-	}
-
-	public class ReverseFilteredTank extends StandardTank {
-		private final FluidStack filter;
-		private final FluidStack[] multiFilter;
-
-		public ReverseFilteredTank(int capacity, FluidStack filter) {
-			super(capacity);
-			this.filter = filter;
-			this.multiFilter = null;
-		}
-
-		public ReverseFilteredTank(int capacity, FluidStack filter, int pressure) {
-			this(capacity, filter);
-		}
-
-		public ReverseFilteredTank(int capacity, FluidStack[] filter) {
-			super(capacity);
-			this.multiFilter = filter;
-			this.filter = null;
-		}
-
-		public ReverseFilteredTank(int capacity, FluidStack[] filter, int pressure) {
-			this(capacity, filter);
-		}
-
-		@Override
-		public int fill(FluidStack resource, boolean doFill) {
-			if (multiFilter != null) {
-				for (int i = 0; i < multiFilter.length; i++) {
-					if (multiFilter[i] != null && (resource.getFluidID() != multiFilter[i].getFluidID())) {
-						return super.fill(resource, doFill);
-					}
-				}
-			}
-			else if (filter.getFluidID() != resource.getFluidID()) {
-				return super.fill(resource, doFill);
-			}
-			return 0;
-		}
-
-		public FluidStack getFilter() {
-			return filter.copy();
-		}
-
-		public boolean liquidMatchesFilter(FluidStack resource) {
-			return !((resource == null) || (filter == null)) && filter.isFluidEqual(resource);
 		}
 	}
 }

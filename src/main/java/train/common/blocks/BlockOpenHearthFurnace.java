@@ -9,9 +9,11 @@ package train.common.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -21,10 +23,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
+import train.common.api.blocks.BlockDynamic;
 import train.common.library.BlockIDs;
 import train.common.library.GuiIDs;
 import train.common.library.Info;
@@ -33,80 +37,23 @@ import train.common.tile.TileHelper;
 
 import java.util.Random;
 
-public class BlockOpenHearthFurnace extends BlockContainer {
+public class BlockOpenHearthFurnace extends BlockDynamic {
 
-	private final boolean isActive;
 	private static boolean keepFurnaceInventory = false;
 	private Random furnaceRand;
 
-	private IIcon textureTop_off;
-	private IIcon textureTop_on;
-	private IIcon textureBottom;
-	private IIcon textureFront_off;
-	private IIcon textureFront_on;
-	private IIcon textureSide;
 
 	protected BlockOpenHearthFurnace(boolean active) {
-		super(Material.rock);
+		super(Material.rock,0);
 		furnaceRand = new Random();
 		//setRequiresSelfNotify();
-		isActive = active;
-		if (isActive) {
-			setLightLevel(0.8F);
-		} else {
-			setCreativeTab(Traincraft.tcTab);
-		}
 	}
 
 	@Override
 	public Item getItemDropped(int i, Random random, int j) {
-		return Item.getItemFromBlock(BlockIDs.openFurnaceIdle.block);
+		return Item.getItemFromBlock(TCBlocks.openFurnaceIdle);
 	}
 
-	@Override
-	public IIcon getIcon(int i, int j) {
-		if (!this.isActive) {
-			if (i == 1) {
-				return textureTop_off;
-			}
-			if (i == 0) {
-				return textureBottom;
-			}
-			if (i == 3) {
-				return textureFront_off;
-			}
-			else {
-				return textureSide;
-			}
-		}
-		else {
-			if (i == 1) {
-				return textureTop_on;
-			}
-			if (i == 0) {
-				return textureBottom;
-			}
-			if (i == 3) {
-				return textureFront_on;
-			}
-			else {
-				return textureSide;
-			}
-		}
-	}
-
-	@Override
-	public IIcon getIcon(IBlockAccess worldAccess, int i, int j, int k, int side) {
-		if (((TileEntityOpenHearthFurnace) worldAccess.getTileEntity(i, j, k)).getFacing() != null) {
-			side = TileHelper.getOrientationFromSide(((TileEntityOpenHearthFurnace) worldAccess.getTileEntity(i, j, k)).getFacing(), ForgeDirection.getOrientation(side)).ordinal();
-		}
-		if (!this.isActive) {
-			return side == 1 ? textureTop_off : side == 0 ? textureBottom : side == 3 ? textureFront_off : textureSide;
-		}
-		else {
-			return side == 1 ? textureTop_on : side == 0 ? textureBottom : side == 3 ? textureFront_on : textureSide;
-		}
-	}
 
 	public static void updateHearthFurnaceBlockState(boolean flag, World world, int i, int j, int k, Random random) {
 		int l = world.getBlockMetadata(i, j, k);
@@ -115,10 +62,10 @@ public class BlockOpenHearthFurnace extends BlockContainer {
 		keepFurnaceInventory = true;
 
 		if (flag) {
-			world.setBlock(i, j, k, BlockIDs.openFurnaceActive.block);
+			world.setBlock(i, j, k, TCBlocks.openFurnaceActive);
 		}
 		else {
-			world.setBlock(i, j, k, BlockIDs.openFurnaceIdle.block);
+			world.setBlock(i, j, k, TCBlocks.openFurnaceIdle);
 		}
 		keepFurnaceInventory = false;
 		world.setBlockMetadataWithNotify(i, j, k, l, 0);
@@ -199,13 +146,15 @@ public class BlockOpenHearthFurnace extends BlockContainer {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		textureTop_off = iconRegister.registerIcon(Info.modID.toLowerCase() + ":furnace_off_top");
-		textureTop_on = iconRegister.registerIcon(Info.modID.toLowerCase() + ":furnace_on_top");
-		textureBottom = iconRegister.registerIcon(Info.modID.toLowerCase() + ":furnace_bottom");
-		textureFront_off = iconRegister.registerIcon(Info.modID.toLowerCase() + ":furnace_off_front");
-		textureFront_on = iconRegister.registerIcon(Info.modID.toLowerCase() + ":furnace_on_front");
-		textureSide = iconRegister.registerIcon(Info.modID.toLowerCase() + ":furnace_side");
+	public TileEntity createTileEntity(World var1, int i) {
+		return new TileEntityOpenHearthFurnace();
 	}
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTexture(int x, int y, int z){
+		return new ResourceLocation(Info.modID,
+				((x==0&&y==0&&z==0)|| CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)==TCBlocks.distilActive)?
+						"textures/blocks/furnace_on.png":"textures/blocks/furnace_off.png");
+	}
+
 }

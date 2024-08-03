@@ -2,6 +2,7 @@ package train.common.library;
 
 import net.minecraft.item.Item;
 import net.minecraft.stats.Achievement;
+import train.common.blocks.TCBlocks;
 
 public enum AchievementIDs {
 	steel(new Item[] { ItemIDs.steel.item }),
@@ -45,11 +46,11 @@ public enum AchievementIDs {
 	builder(new Item[] { ItemIDs.minecartBuilder.item }),
 	jukebox(new Item[] { ItemIDs.minecartJukeBoxCart.item }),
 
-	openHearth(new Item[] { Item.getItemFromBlock(BlockIDs.openFurnaceIdle.block) }),
-	trainWB(new Item[] { Item.getItemFromBlock(BlockIDs.trainWorkbench.block) }),
-	assemblyTable(new Item[] { Item.getItemFromBlock(BlockIDs.assemblyTableI.block),
-			Item.getItemFromBlock(BlockIDs.assemblyTableII.block),
-			Item.getItemFromBlock(BlockIDs.assemblyTableIII.block) }),
+	openHearth(new Item[] { Item.getItemFromBlock(TCBlocks.openFurnaceIdle) }),
+	trainWB(new Item[] { Item.getItemFromBlock(TCBlocks.trainWorkbench) }),
+	assemblyTable(new Item[] { Item.getItemFromBlock(TCBlocks.assemblyTableI),
+			Item.getItemFromBlock(TCBlocks.assemblyTableII),
+			Item.getItemFromBlock(TCBlocks.assemblyTableIII) }),
 	engineer(new Item[] { ItemIDs.overalls.item, ItemIDs.hat.item, ItemIDs.jacket.item }),
 	woodenParts(new Item[] { ItemIDs.woodenBogie.item, ItemIDs.woodenCab.item, ItemIDs.woodenFrame.item,
 			ItemIDs.seats.item }),
@@ -71,7 +72,7 @@ public enum AchievementIDs {
 	caboose(new Item[] { ItemIDs.minecartCaboose.item, ItemIDs.minecartCaboose3.item,
 			ItemIDs.minecartCabooseWork.item }),
 	stockCar(new Item[] { ItemIDs.minecartStockCar.item, ItemIDs.minecartDRWGStockCar.item }),
-	distilationTower(new Item[] { Item.getItemFromBlock(BlockIDs.distilIdle.block) }),
+	distilationTower(new Item[] { Item.getItemFromBlock(TCBlocks.distilIdle) }),
 	mtg(new Item[] {ItemIDs.minecartLUengine.item}),
 	massTransit(new Item[] { ItemIDs.minecartClass345engine.item, ItemIDs.minecartDstockEngine.item, ItemIDs.minecartLocoRenfe446Motor.item }),
 	cercanias(new Item[] { ItemIDs.minecartLocoRenfe446Motor.item,}),

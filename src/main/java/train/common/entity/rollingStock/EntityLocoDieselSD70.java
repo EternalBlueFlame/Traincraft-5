@@ -37,21 +37,15 @@ public class EntityLocoDieselSD70 extends DieselTrain {
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		TraincraftUtil.updateRider(this,2.3, 0.3);
+	public float[][] getRiderOffsets() {
+
+		return new float[][]{{2.45f,0,-0.15f}};
 	}
 
 	@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
-	}
-
-	@Override
-	public void pressKey(int i) {
-		if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
-		}
 	}
 
 	@Override

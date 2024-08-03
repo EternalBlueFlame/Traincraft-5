@@ -21,6 +21,7 @@ import train.common.Traincraft;
 public class TileRenderFacing extends TileEntity {
     public int facing =-1;
     private Integer blockGLID =null;
+    private int uiTexture=0;
     public BlockDynamic host;
 
     public TileRenderFacing(BlockDynamic block){
@@ -80,7 +81,7 @@ public class TileRenderFacing extends TileEntity {
     @Override
     public void func_145828_a(CrashReportCategory r){
         if(r==null){
-            int boundTexture =  org.lwjgl.opengl.GL11.glGetInteger( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
+            uiTexture =  org.lwjgl.opengl.GL11.glGetInteger( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
             if(getTexture(xCoord,yCoord,zCoord)!=null) {
                 org.lwjgl.opengl.GL11.glEnable( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
                 TextureManager.bindTexture(getTexture(xCoord,yCoord,zCoord));
@@ -89,31 +90,55 @@ public class TileRenderFacing extends TileEntity {
             }
 
 
-            if(worldObj==null) {
-                Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
-            } else {
-                Minecraft.getMinecraft().entityRenderer.enableLightmap(1);
-            }
-            org.lwjgl.opengl.GL11.glTranslatef(0.5f,0.5f,0.5f);
-            switch (facing){
-                //north
-                case 0:{ org.lwjgl.opengl.GL11.glRotatef(180,0,1,0);break;}
-                //east
-                case 1:{org.lwjgl.opengl.GL11.glRotatef(90,0,1,0);break;}
-                //south
-                case 2:{ org.lwjgl.opengl.GL11.glRotatef(270,0,1,0);break;}
-                //west
-                case 3:{break;}
-            }
-            org.lwjgl.opengl.GL11.glRotatef(180,1,0,0);
+            if(blockGLID ==null) {
+                blockGLID = net.minecraft.client.renderer.GLAllocation.generateDisplayLists(1);
+                org.lwjgl.opengl.GL11.glNewList(blockGLID, org.lwjgl.opengl.GL11.GL_COMPILE);
+                if (worldObj == null) {
+                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
+                } else {
+                    Minecraft.getMinecraft().entityRenderer.enableLightmap(1);
+                }
+                org.lwjgl.opengl.GL11.glTranslatef(0.5f, 0.5f, 0.5f);
+                switch (facing) {
+                    //north
+                    case 0: {
+                        org.lwjgl.opengl.GL11.glRotatef(90, 0, 1, 0);
+                        break;
+                    }
+                    //east
+                    case 1: {
+                        org.lwjgl.opengl.GL11.glRotatef(180, 0, 1, 0);
+                        break;
+                    }
+                    //south
+                    case 2: {
+                        org.lwjgl.opengl.GL11.glRotatef(270, 0, 1, 0);
+                        break;
+                    }
+                    //west
+                    case 3: {
+                        break;
+                    }
+                }
+                org.lwjgl.opengl.GL11.glRotatef(180, 1, 0, 0);
 
-            renderModel();
+                renderModel();
+                if (worldObj == null) {
+                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
+                }
+                org.lwjgl.opengl.GL11.glEndList();
+            }
+
+            if(blockGLID!=null){
+                org.lwjgl.opengl.GL11.glCallList(blockGLID);
+                if(false){//todo:config option to disable render caching
+                    org.lwjgl.opengl.GL11.glDeleteLists(blockGLID,1);
+                    blockGLID =null;
+                }
+            }
             //be sure to re-enable the texture biding, because the UI wont
             org.lwjgl.opengl.GL11.glEnable( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
-            org.lwjgl.opengl.GL11.glBindTexture( org.lwjgl.opengl.GL11.GL_TEXTURE_2D,boundTexture);
-            if(worldObj==null) {
-                Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
-            }
+            org.lwjgl.opengl.GL11.glBindTexture( org.lwjgl.opengl.GL11.GL_TEXTURE_2D,uiTexture);
         } else{
             super.func_145828_a(r);
         }
@@ -121,32 +146,11 @@ public class TileRenderFacing extends TileEntity {
 
     @SideOnly(Side.CLIENT)
     public void renderModel(){
-        if(host.model!=null) {
+        if(host!=null && host.model!=null) {
             host.model.render();
         } else {
-            if(blockGLID ==null) {
-                for (TexturedPolygon poly : cube.faces) {
-                    Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625f);
-                }
-                if(!false) {//todo:config option to disable render caching
-                    blockGLID = org.lwjgl.opengl.GL11.glGenLists(1);
-                    org.lwjgl.opengl.GL11.glNewList(blockGLID, org.lwjgl.opengl.GL11.GL_COMPILE);
-                    for (TexturedPolygon poly : cube.faces) {
-                        Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625f);
-                    }
-                    org.lwjgl.opengl.GL11.glEndList();
-                }
-            } else {
-
-                if(!org.lwjgl.opengl.GL11.glIsList(blockGLID)){
-                    blockGLID=null;
-                    return;
-                }
-                org.lwjgl.opengl.GL11.glCallList(blockGLID);
-                if(false){//todo:config option to disable render caching
-                    org.lwjgl.opengl.GL11.glDeleteLists(blockGLID,1);
-                    blockGLID =null;
-                }
+            for (TexturedPolygon poly : cube.faces) {
+                Tessellator.getInstance().drawTexturedVertsWithNormal(poly, 0.0625f);
             }
         }
     }
@@ -175,8 +179,8 @@ public class TileRenderFacing extends TileEntity {
             worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
             this.worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, host);
             if (worldObj.isRemote && blockGLID != null) {
-                org.lwjgl.opengl.GL11.glDeleteLists(blockGLID, 1);
-                blockGLID = null;
+            //    org.lwjgl.opengl.GL11.glDeleteLists(blockGLID, 1);
+            //    blockGLID = null;
             }
         }
     }

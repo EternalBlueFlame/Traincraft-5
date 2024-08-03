@@ -23,11 +23,10 @@ public class EntityPassengerHighSpeedCarZeroED extends EntityRollingStock implem
 		prevPosY = d1;
 		prevPosZ = d2;
 	}
-
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ);
+	public float[][] getRiderOffsets() {
+
+		return new float[][]{{0,(float)getMountedYOffset(),0}};
 	}
 
 	@Override

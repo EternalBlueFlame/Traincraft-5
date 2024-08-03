@@ -128,11 +128,7 @@ public class BlockoverheadWireDouble extends Block {
      * Can this block provide power. Only wire currently seems to have this change based on its state.
      */
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        texture = iconRegister.registerIcon(Info.modID.toLowerCase() + ":assembly_1_bottom");
-    }
+
 
     @Override
     public IIcon getIcon(int i, int j) {

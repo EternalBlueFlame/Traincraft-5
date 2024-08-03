@@ -1,5 +1,6 @@
 package train.common.entity.rollingStock;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -34,30 +35,15 @@ public class EntityWorkCart extends AbstractWorkCart implements IInventory {
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.15F, posZ);
+	public float[][] getRiderOffsets() {
+
+		return new float[][]{{0f,-0.15f,0f}};
 	}
 
 	@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
-	}
-
-	@Override
-	public void pressKey(int i) {
-		if (riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			if (locked && !((EntityPlayer) riddenByEntity).getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
-				return;
-			}
-			if (i == 7) {
-				((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
-			}
-			if (i == 9) {
-				((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
-			}
-		}
 	}
 
 	@Override

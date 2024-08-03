@@ -1,5 +1,9 @@
 package train.common.tile;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -7,9 +11,11 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.api.blocks.TileRenderFacing;
+import train.common.blocks.TCBlocks;
 import train.common.core.interfaces.ITier;
 import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
@@ -20,7 +26,6 @@ import java.util.List;
 import java.util.Random;
 
 public class TileCrafterTierI extends TileRenderFacing implements IInventory, ITier {
-	private Random rand;
 	private ItemStack[] crafterInventory;
 
 	private ForgeDirection facing;
@@ -31,7 +36,6 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 
 	public TileCrafterTierI() {
 		crafterInventory = new ItemStack[26];
-		this.rand = new Random();
 		this.resultList = new ArrayList<Item>();
 		slotSelected = new int[8];
 	}
@@ -299,9 +303,13 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 		return false;
 	}
 
-	/*
-	@Override // Just no.
-	public void updateEntity() {
-		super.updateEntity();
-	}*/
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTexture(int x, int y, int z){
+		return texture;
+	}
+
+
+	static final ResourceLocation texture = new ResourceLocation(Info.modID, "textures/blocks/assembly_1.png");
+
 }

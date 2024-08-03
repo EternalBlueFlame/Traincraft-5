@@ -1,5 +1,6 @@
 package train.common.core.handlers;
 
+import ebf.tim.entities.EntitySeat;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityMinecart;
@@ -76,11 +77,12 @@ public class CollisionHandler {
 						return;
 					}
 					if (entity != entity.riddenByEntity && (entity instanceof EntityPlayer) && (entityOne instanceof AbstractTrains)) {
-
+						if (entity.ridingEntity instanceof EntitySeat && ((EntitySeat)entity.ridingEntity).parent == entityOne) {
+							return;
+						}
 						applyEntityCollision(entity, entityOne);
 						return;
 					}
-
 				}
 
 			}
@@ -300,7 +302,7 @@ public class CollisionHandler {
 
 	/**
 	 * Mobs can't ride carts except if it is a stock car
-	 * 
+	 *
 	 * @param entity: the mob
 	 * @param entityOne: the cart
 	 * @return

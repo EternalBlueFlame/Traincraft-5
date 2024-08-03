@@ -15,24 +15,14 @@ import train.common.wellcar.ItemFortyFootContainer;
 
 public enum BlockIDs {
 
-	assemblyTableI(false, null),
-	assemblyTableII(false, null),
-	assemblyTableIII(false, null),
-
-	distilIdle(false, null),
-	distilActive(false, null),
 	signal(false, null),
 	
 	//book(true, ItemBlockBook.class),
-
-	trainWorkbench(false, null),
 
 	stopper(false, null),
 	embeddedStopper(false, null),
 	americanstopper(false, null),
 
-	openFurnaceIdle(false, null),
-	openFurnaceActive(false, null),
 
 	oreTC(true, ItemBlockOreTC.class),
 	dirtyBallast(false,null),
@@ -62,9 +52,6 @@ public enum BlockIDs {
 	snowGravelStairs(false, null),
 	asphaltStairs(false, null),
 
-	lantern(false, null),
-	switchStand(false, null),
-	MFPBWigWag(false, null),
 	waterWheel(true, ItemBlockGeneratorWaterWheel.class),
 	windMill(true, ItemBlockGeneratorWindMill.class),
 	generatorDiesel(true, ItemBlockGeneratorDiesel.class),
@@ -80,7 +67,6 @@ public enum BlockIDs {
 	
 	tcRailGag(false,null),
 	tcRail(false,null),
-	bridgePillar(false,null),
 
 	MILWSwitchStand(false, null),
 	autoSwtichStand(false, null),

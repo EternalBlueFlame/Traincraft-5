@@ -166,13 +166,12 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
                 return;
             }
             switch (type){
-                case EQUIPPED_FIRST_PERSON:{
-                    break;
-                }
+                case EQUIPPED_FIRST_PERSON:{break;}
                 case INVENTORY:{break;}
                 case EQUIPPED:{break;}
                 case FIRST_PERSON_MAP:{break;}
                 case ENTITY:{
+                    GL11.glRotatef(180,0,1,0);
                     GL11.glTranslatef(-0.5f,-0.4f,-0.5f);
                     break;
                 }
@@ -180,8 +179,6 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
                     break;
                 }
             }
-            GL11.glScalef(0.95f,0.95f,0.95f);
-            GL11.glTranslatef(0,-0.1f,0);
             if (blockTextures.get(item.getItem()).host!=null && blockTextures.get(item.getItem()).host.tesr instanceof TileEntitySpecialRenderer) {
                 ((TileEntitySpecialRenderer) blockTextures.get(item.getItem()).host.tesr)
                         .renderTileEntityAt(blockTextures.get(item.getItem()), 0, 0, 0, 0);

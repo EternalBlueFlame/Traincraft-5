@@ -2,9 +2,11 @@ package train.common.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -14,10 +16,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
+import train.common.api.blocks.BlockDynamic;
 import train.common.library.BlockIDs;
 import train.common.library.GuiIDs;
 import train.common.library.Info;
@@ -26,87 +30,23 @@ import train.common.tile.TileHelper;
 
 import java.util.Random;
 
-public class BlockDistil extends BlockContainer {
+public class BlockDistil extends BlockDynamic {
 
 	private final boolean isActive;
 	private static boolean keepDistilInventory = false;
 	private Random distilRand;
-
-	private IIcon textureTop;
-	private IIcon textureBottom;
-	private IIcon textureFront_off;
-	private IIcon textureFront_on;
-	private IIcon textureSide;
-	private IIcon textureBack;
-
 	public BlockDistil(int j, boolean flag) {
-		super(Material.anvil);
+		super(Material.anvil,j);
 		isActive = flag;
 		distilRand = new Random();
 		//setRequiresSelfNotify();
-
-		if (isActive) {
-			setLightLevel(0.8F);
-		} else {
-			setCreativeTab(Traincraft.tcTab);
-		}
 	}
 
 	@Override
 	public Item getItemDropped(int i, Random random, int j) {
-		return Item.getItemFromBlock(BlockIDs.distilIdle.block);
+		return Item.getItemFromBlock(TCBlocks.distilIdle);
 	}
 
-	@Override
-	public IIcon getIcon(int i, int j) {
-		if (!this.isActive) {
-			if (i == 1) {
-				return textureTop;
-			}
-			if (i == 0) {
-				return textureBottom;
-			}
-			if (i == 4) {
-				return textureBack;
-			}
-			if (i == 3) {
-				return textureFront_off;
-			}
-			else {
-				return textureSide;
-			}
-		}
-		else {
-			if (i == 1) {
-				return textureTop;
-			}
-			if (i == 0) {
-				return textureBottom;
-			}
-			if (i == 4) {
-				return textureBack;
-			}
-			if (i == 3) {
-				return textureFront_on;
-			}
-			else {
-				return textureSide;
-			}
-		}
-	}
-
-	@Override
-	public IIcon getIcon(IBlockAccess worldAccess, int i, int j, int k, int side) {
-		if (((TileEntityDistil) worldAccess.getTileEntity(i, j, k)).getFacing() != null) {
-			side = TileHelper.getOrientationFromSide(((TileEntityDistil) worldAccess.getTileEntity(i, j, k)).getFacing(), ForgeDirection.getOrientation(side)).ordinal();
-		}
-		if (!this.isActive) {
-			return side == 1 ? textureTop : side == 0 ? textureBottom : side == 4 ? textureSide : side == 5 ? textureSide : side == 3 ? textureFront_off : textureBack;
-		}
-		else {
-			return side == 1 ? textureTop : side == 0 ? textureBottom : side == 4 ? textureSide : side == 5 ? textureSide : side == 3 ? textureFront_on : textureBack;
-		}
-	}
 
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
@@ -160,10 +100,10 @@ public class BlockDistil extends BlockContainer {
 		TileEntity tileentity = world.getTileEntity(i, j, k);
 		keepDistilInventory = true;
 		if (flag) {
-			world.setBlock(i, j, k, BlockIDs.distilActive.block);
+			world.setBlock(i, j, k, TCBlocks.distilActive);
 		}
 		else {
-			world.setBlock(i, j, k, BlockIDs.distilIdle.block);
+			world.setBlock(i, j, k, TCBlocks.distilIdle);
 		}
 		keepDistilInventory = false;
 		world.setBlockMetadataWithNotify(i, j, k, l, 2);
@@ -225,18 +165,19 @@ public class BlockDistil extends BlockContainer {
 	}
 
 	@Override
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTexture(int x, int y, int z){
+		return new ResourceLocation(Info.modID,
+				((x==0&&y==0&&z==0)||CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)==TCBlocks.distilActive)?
+					"textures/blocks/distil_on.png":"textures/blocks/distil_off.png");
+	}
+	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
 		return new TileEntityDistil();
 	}
-
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		textureTop = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_top");
-		textureBottom = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_bottom");
-		textureFront_off = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_off_front");
-		textureFront_on = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_on_front");
-		textureSide = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_side");
-		textureBack = iconRegister.registerIcon(Info.modID.toLowerCase() + ":distil_bottom");
+	public TileEntity createTileEntity(World world, int metadata) {
+		return new TileEntityDistil();
 	}
+
 }

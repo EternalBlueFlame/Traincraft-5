@@ -17,6 +17,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
+import train.common.api.blocks.BlockDynamic;
 import train.common.library.GuiIDs;
 import train.common.library.Info;
 import train.common.tile.TileCrafterTierI;
@@ -24,16 +25,13 @@ import train.common.tile.TileHelper;
 
 import java.util.Random;
 
-public class BlockAssemblyTableI extends BlockContainer {
+public class BlockAssemblyTableI extends BlockDynamic {
 
-	private IIcon textureTop;
-	private IIcon textureBottom;
-	private IIcon textureFront;
-	private IIcon textureSide;
 
 	public BlockAssemblyTableI(Material material) {
-		super(material);
+		super(material,0);
 		setCreativeTab(Traincraft.tcTab);
+		setHarvestLevel("axe", 0);
 	}
 
 	@Override
@@ -62,29 +60,6 @@ public class BlockAssemblyTableI extends BlockContainer {
 		return true;
 	}
 
-	@Override
-	public IIcon getIcon(int i, int j) {
-		if (i == 1) {
-			return textureTop;
-		}
-		if (i == 0) {
-			return textureBottom;
-		}
-		if (i == 3) {
-			return textureFront;
-		}
-		else {
-			return textureSide;
-		}
-	}
-
-	@Override
-	public IIcon getIcon(IBlockAccess worldAccess, int i, int j, int k, int side) {
-		if (((TileCrafterTierI) worldAccess.getTileEntity(i, j, k)).getFacing() != null) {
-			side = TileHelper.getOrientationFromSide(((TileCrafterTierI) worldAccess.getTileEntity(i, j, k)).getFacing(), ForgeDirection.getOrientation(side)).ordinal();
-		}
-		return side == 1 ? textureTop : side == 0 ? textureBottom : side == 3 ? textureFront : textureSide;
-	}
 	
 	@Override
 	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
@@ -142,11 +117,7 @@ public class BlockAssemblyTableI extends BlockContainer {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		textureTop = iconRegister.registerIcon(Info.modID.toLowerCase() + ":assembly_1_top");
-		textureBottom = iconRegister.registerIcon(Info.modID.toLowerCase() + ":assembly_1_bottom");
-		textureFront = iconRegister.registerIcon(Info.modID.toLowerCase() + ":assembly_1_front");
-		textureSide = iconRegister.registerIcon(Info.modID.toLowerCase() + ":assembly_1_side");
+	public TileEntity createTileEntity(World var1, int meta) {
+		return new TileCrafterTierI();
 	}
 }

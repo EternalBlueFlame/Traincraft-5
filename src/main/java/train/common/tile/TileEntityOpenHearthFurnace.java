@@ -3,20 +3,25 @@ package train.common.tile;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.Minecraft;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.api.blocks.TileTraincraft;
 import train.common.blocks.BlockOpenHearthFurnace;
+import train.common.blocks.TCBlocks;
 import train.common.inventory.TrainCraftingManager;
 import train.common.library.BlockIDs;
+import train.common.library.Info;
 import train.common.library.ItemIDs;
 
 import java.util.Random;
@@ -64,6 +69,11 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 		return furnaceBurnTime > 0;
 	}
 
+	@Override
+	public boolean canUpdate()
+	{
+		return true;
+	}
 	@Override
 	public void updateEntity() {
 		boolean flag = furnaceBurnTime > 0;
@@ -225,5 +235,12 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 		furnaceBurnTime = nbt.getShort("BurnTime");
 		furnaceCookTime = nbt.getShort("CookTime");
 		currentItemBurnTime = nbt.getShort("ItemBurnTime");
+	}
+	@Override
+	@SideOnly(Side.CLIENT)
+	public ResourceLocation getTexture(int x, int y, int z){
+		return new ResourceLocation(Info.modID,
+				((x==0&&y==0&&z==0)|| CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)== TCBlocks.distilActive)?
+						"textures/blocks/furnace_on.png":"textures/blocks/furnace_off.png");
 	}
 }

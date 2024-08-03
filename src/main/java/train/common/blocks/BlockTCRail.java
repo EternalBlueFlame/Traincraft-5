@@ -113,7 +113,7 @@ public class BlockTCRail extends Block {
 				world.func_147480_a(i, j, k, false);
 			}
 		}
-		if (!World.doesBlockHaveSolidTopSurface(world, i, j - 1, k) && world.getBlock(i, j-1, k) != BlockIDs.bridgePillar.block) {
+		if (!World.doesBlockHaveSolidTopSurface(world, i, j - 1, k) && world.getBlock(i, j-1, k) != TCBlocks.bridgePillar) {
 			// NOTE: func_147480_a = destroyBlock
 			world.func_147480_a(i, j, k, false);
 			world.removeTileEntity(i, j, k);

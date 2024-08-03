@@ -24,6 +24,17 @@ public class EntityPassengerRheingoldPanorama extends EntityRollingStock impleme
 		prevPosY = d1;
 		prevPosZ = d2;
 	}
+
+	@Override
+	public float getPlayerScale() {
+		return 0.65f;
+	}
+
+	@Override
+	public float[][] getRiderOffsets() {
+		return new float[][]{
+				{1.0f,0.4f,0f},{-1.0f,0.4f,0f},{-3.05f,-0.25f,0f},{3.05f,-0.25f,0f}};
+	}
 	@Override
 	public void updateRiderPosition() {
 		TraincraftUtil.updateRider(this,-0.5, 0.4);

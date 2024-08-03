@@ -90,12 +90,6 @@ public class BlockMILWSwitchStand extends BlockLever {
 	}
 
 	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		texture = iconRegister.registerIcon(Info.modID.toLowerCase() + ":assembly_1_bottom");
-	}
-
-	@Override
 	public IIcon getIcon(int i, int j) {
 		return texture;
 	}

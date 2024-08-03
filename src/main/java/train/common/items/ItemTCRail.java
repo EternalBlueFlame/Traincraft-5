@@ -15,6 +15,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import org.lwjgl.util.vector.Matrix2f;
 import org.lwjgl.util.vector.Vector2f;
+import train.common.blocks.TCBlocks;
 import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
 import train.common.library.Info;
@@ -61,7 +62,7 @@ public class ItemTCRail extends ItemPart {
             return false;
         }
 
-        return canBeReplaced(world, x, y, z) && (World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) || l1 == BlockIDs.bridgePillar.block);
+        return canBeReplaced(world, x, y, z) && (World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) || l1 == TCBlocks.bridgePillar);
     }
 
     private boolean canBeReplaced(World world, int x, int y, int z) {
@@ -438,7 +439,7 @@ public class ItemTCRail extends ItemPart {
         y = getPlacementHeight(world, x, y, z);
 
         ItemTCRail item = (ItemTCRail) itemStack.getItem();
-        if (world.getBlock(x, y, z) == BlockIDs.bridgePillar.block && item.getTrackType().getLabel().contains("DYNAMIC")) {
+        if (world.getBlock(x, y, z) == TCBlocks.bridgePillar && item.getTrackType().getLabel().contains("DYNAMIC")) {
             return false;
         }
         int facing0 = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
@@ -1983,7 +1984,7 @@ public class ItemTCRail extends ItemPart {
                 if (!canPlaceTrack(player, world, x, y + 1, z)) {
                     return false;
                 }
-                if (type.getLabel().contains("DYNAMIC") && world.getBlock(x, y, z) == BlockIDs.bridgePillar.block) {
+                if (type.getLabel().contains("DYNAMIC") && world.getBlock(x, y, z) == TCBlocks.bridgePillar) {
                     return false;
                 }
 

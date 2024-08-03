@@ -7,6 +7,7 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry;
+import ebf.tim.entities.EntitySeat;
 import javazoom.jl.decoder.JavaLayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
@@ -36,6 +37,7 @@ import train.common.Traincraft;
 import train.common.adminbook.GUIAdminBook;
 import train.common.api.EntityBogie;
 import train.common.api.EntityRollingStock;
+import train.common.blocks.TCBlocks;
 import train.common.core.CommonProxy;
 import train.common.core.Traincraft_EventSounds;
 import train.common.core.handlers.ConfigHandler;
@@ -57,6 +59,42 @@ import java.lang.reflect.Method;
 import java.util.Calendar;
 
 public class ClientProxy extends CommonProxy {
+
+    public static final net.minecraft.client.renderer.entity.RenderPlayer playerRender = new net.minecraft.client.renderer.entity.RenderPlayer(){
+        EntityRollingStock stock;
+        @Override
+        public void doRender(net.minecraft.client.entity.AbstractClientPlayer player, double x, double y, double z, float f0, float f1){
+            if(player.ridingEntity instanceof EntityRollingStock) {
+                stock = (EntityRollingStock) player.ridingEntity;
+            } else if (player.ridingEntity instanceof EntitySeat) {
+                stock =  ((EntitySeat) player.ridingEntity).parent;
+            } else {
+                stock = null;
+            }
+            if (stock != null) {
+                GL11.glPushMatrix();
+                float scale = stock.getPlayerScale();
+                scale = player.height * scale / player.height;
+                GL11.glTranslated(x, (y + .35), z);
+                GL11.glScalef(scale, scale, scale);
+                GL11.glTranslated(-x, -(y + .35), -z);
+                if (player != Minecraft.getMinecraft().thePlayer && stock.getPlayerScale() != 1) {
+                    GL11.glTranslated(0, 1 - (stock.getPlayerScale() - 0.2), 0); //rough approx. but gets the job done for everything in range 0.5-1
+                } else {
+                    GL11.glTranslated(0, (1 - stock.getPlayerScale()) * -1, 0); //rough approx. but gets the job done for everything in range 0.5-1
+                }
+                super.doRender(player, x, y, z, f0, f1);
+                GL11.glPopMatrix();
+                return;
+            }
+            super.doRender(player, x, y, z, f0, f1);
+        }
+    };
+
+    @Override
+    public void registerPlayerScaler(){
+        RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, playerRender);
+    }
 
     public static boolean hdTransportItems=false;
     public static boolean preRenderModels=false;
@@ -146,13 +184,13 @@ public class ClientProxy extends CommonProxy {
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.signal.block), new ItemRenderSignal());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileLantern.class, new RenderLantern());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.lantern.block), new ItemRenderLantern());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.lantern), new ItemRenderLantern());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileSwitchStand.class, new RenderSwitchStand());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.switchStand.block), new ItemRenderSwitchStand());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.switchStand), new ItemRenderSwitchStand());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileMFPBWigWag.class, new RenderMFPBWigWag());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.MFPBWigWag.block), new ItemRenderMFPBWigWag());
+        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.MFPBWigWag), new ItemRenderMFPBWigWag());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileWaterWheel.class, new RenderWaterWheel());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.waterWheel.block), new ItemRenderWaterWheel());
@@ -164,9 +202,6 @@ public class ClientProxy extends CommonProxy {
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.generatorDiesel.block), new ItemRenderGeneratorDiesel());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileTCRail.class, new RenderTCRail());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileBridgePillar.class, new RenderBridgePillar());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.bridgePillar.block), new ItemRenderBridgePillar());
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileMetroMadridPole.class, new RenderMetroMadridPole());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.metroMadridPole.block), new ItemRenderModelMetroMadridPole());
@@ -204,6 +239,10 @@ public class ClientProxy extends CommonProxy {
 
         ClientRegistry.bindTileEntitySpecialRenderer(TileSpeedSign.class, new RenderSpeedSign());
         MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.speedSign.block), new ItemRenderSpeedSign());
+
+
+        //seats
+        RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, nullRender);
 
 		/*
 		ClientRegistry.bindTileEntitySpecialRenderer(TileFortyFootContainer.class, new FortyFootContainerRender());
@@ -286,13 +325,31 @@ public class ClientProxy extends CommonProxy {
             case GuiIDs.TRAIN_WORKBENCH:
                 return te instanceof TileTrainWbench ? new GuiTrainCraftingBlock(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
             case (GuiIDs.LOCO):
-                return riddenByEntity != null ? new GuiLoco2(riddenByEntity.inventory, entity) : null;
+                if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntityRollingStock) {
+                    return new GuiLoco2(riddenByEntity.inventory, entity);
+                } else if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntitySeat) {
+                    return new GuiLoco2(riddenByEntity.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
+                } else {
+                    return null;
+                }
             case (GuiIDs.FORNEY):
-                return riddenByEntity != null ? new GuiForney(riddenByEntity.inventory, entity) : null;
+                if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntityRollingStock) {
+                    return new GuiForney(riddenByEntity.inventory, entity);
+                } else if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntitySeat) {
+                    return new GuiForney(riddenByEntity.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
+                } else {
+                    return null;
+                }
             case (GuiIDs.CRAFTING_CART):
                 return riddenByEntity != null ? new GuiCraftingCart(riddenByEntity.inventory, world) : null;
             case (GuiIDs.FURNACE_CART):
-                return riddenByEntity != null ? new GuiFurnaceCart(riddenByEntity.inventory, entity) : null;
+                if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntityRollingStock) {
+                    return new GuiFurnaceCart(riddenByEntity.inventory, entity);
+                } else if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntitySeat) {
+                    return new GuiFurnaceCart(riddenByEntity.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
+                } else {
+                    return null;
+                }
             case (GuiIDs.ZEPPELIN):
                 return riddenByEntity != null ? new GuiZepp(riddenByEntity.inventory, entity) : null;
             case (GuiIDs.DIGGER):
