@@ -6,6 +6,7 @@ import ebf.tim.utility.ClientUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,10 +40,13 @@ public class GUISeatManager extends GuiScreen {
     public GUISeatManager(EntityRollingStock transport) {
         entity=transport;
     }
+    public GUISeatManager(EntityPlayer player, EntityRollingStock transport) {
+        entity=transport;
+    }
 
     @Override
     public void initGui() {
-        if(entity !=null && entity.getRiderOffsets().length > 0) {
+        if (entity != null && entity.getRiderOffsets().length > 0) {
 
         }
     }
@@ -65,7 +69,7 @@ public class GUISeatManager extends GuiScreen {
         }
         for(EntitySeat seat : entity.seats) {
             if (seat.getPassenger() != null) {
-                if (seat.getPassenger() == Minecraft.getMinecraft().thePlayer) {
+                if (seat.getPassenger() instanceof EntityPlayer && ((EntityPlayer)seat.getPassenger()).getDisplayName() == mc.thePlayer.getDisplayName()) {
                     currentSeat = seat;
                 }
                 filledSeatIDs.add(seat.getEntityId());
@@ -76,6 +80,11 @@ public class GUISeatManager extends GuiScreen {
         }
         switch(guiScreen) {
             case 0:{defineButtons();guiSeatManager();break;}
+        }
+        for(Object guiButton: buttonList) {
+            if (guiButton instanceof GUIButton) {
+                ((GUIButton)guiButton).drawText(parWidth-(int)guiLeft,parHeight-(int)guiTop);
+            }
         }
     }
     @Override
@@ -134,8 +143,6 @@ public class GUISeatManager extends GuiScreen {
                                         if (lastClickTick+5 < entity.ticksExisted) {
                                             Traincraft.updateChannel.sendToServer(new PacketSeatUpdate(entity.getEntityId(),currentSeat.getPassenger().getEntityId(),entity.seats.indexOf(currentSeat),buttonList.indexOf(this),entity.dimension));
                                             lastClickTick = entity.ticksExisted;
-                                        } else {
-                                            System.out.println("Too fast");
                                         }
                                     }
                                     @Override
@@ -165,7 +172,12 @@ public class GUISeatManager extends GuiScreen {
         }
     }
 
-
+    @Override
+    protected void actionPerformed(GuiButton guibutton) {
+        if (guibutton instanceof GUIButton) {
+            ((GUIButton) guibutton).onClick();
+        }
+    }
 
 
     public void guiSeatManager(){
@@ -179,6 +191,9 @@ public class GUISeatManager extends GuiScreen {
         for(EntitySeat seat: entity.seats) {
             if (seat.getPassenger() instanceof AbstractClientPlayer) {
                 mc.getTextureManager().bindTexture(((AbstractClientPlayer) seat.getPassenger()).getLocationSkin());
+                ClientUtil.drawTexturedRect(locations.get(entity.seats.indexOf(seat)).x, locations.get(entity.seats.indexOf(seat)).y, 32, 64, 24, 24, 32, 64);
+            } else if (seat.getPassenger() instanceof EntityPlayer) {
+                mc.getTextureManager().bindTexture(Minecraft.getMinecraft().thePlayer.getLocationSkin());
                 ClientUtil.drawTexturedRect(locations.get(entity.seats.indexOf(seat)).x, locations.get(entity.seats.indexOf(seat)).y, 32, 64, 24, 24, 32, 64);
             }
         }

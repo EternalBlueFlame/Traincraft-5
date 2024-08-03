@@ -16,16 +16,20 @@ public class ModelLeftParallelCurveTCTrack extends ModelBase {
     private IModelCustom modelSmallLeftParallelCurve;
     private IModelCustom modelMediumLeftParallelCurve;
     private IModelCustom modelLargeLeftParallelCurve;
+    private IModelCustom model20x2SCurveLeft;
 
     public ModelLeftParallelCurveTCTrack() {
         modelSmallLeftParallelCurve = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_s_left.obj"));
         modelMediumLeftParallelCurve = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_m_left.obj"));
         modelLargeLeftParallelCurve = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_l_left.obj"));
+        model20x2SCurveLeft = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "20x2_s_curve_left.obj"));
     }
 
     public void renderSmall() {modelSmallLeftParallelCurve.renderAll();}
     public void renderMedium() {modelMediumLeftParallelCurve.renderAll();}
     public void renderLarge() {modelLargeLeftParallelCurve.renderAll();}
+
+    public void render20x2() {model20x2SCurveLeft.renderAll();}
 
     public void render(String type, String variant, TileTCRail tcRail, double x, double y, double z) {
         int facing = tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord);
@@ -76,6 +80,7 @@ public class ModelLeftParallelCurveTCTrack extends ModelBase {
         if(type.equals("small"))this.renderSmall();
         if(type.equals("medium"))this.renderMedium();
         if(type.equals("large"))this.renderLarge();
+        if(type.equals("20x2"))this.render20x2();
 
         GL11.glPopMatrix();
     }

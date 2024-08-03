@@ -1,5 +1,7 @@
 package train.client.gui;
 
+import ebf.tim.gui.GUIButton;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
@@ -30,10 +32,13 @@ public class GuiForney extends GuiContainer {
     private int buttonPosX = 0;
     private int buttonPosY = 0;
 
+    private InventoryPlayer player;
+    private GUIButton buttonSeatManager;
 
     public GuiForney(InventoryPlayer inventoryplayer, Entity entityminecart) {
         super(new InventoryForney(inventoryplayer, (Locomotive) entityminecart));
         loco = (Locomotive) entityminecart;
+        player = inventoryplayer;
     }
 
     @Override
@@ -81,6 +86,36 @@ public class GuiForney extends GuiContainer {
         } else {
             this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 130, buttonPosY - 10, 43, 10, "Locked"));
         }
+        if (loco.seats.size() > 1) {
+            this.buttonList.add(this.buttonSeatManager = new GUIButton(buttonPosX + 124,buttonPosY - 20, 51,10, "Seats") {
+                @Override
+                public String getHoverText() {
+                    return "gui.seats";
+                }
+
+                @Override
+                public int[] getColor(){
+                    return null;
+                }
+
+                @Override
+                public void onClick() {
+                    Traincraft.proxy.seatGUI(player.player,loco);
+                }
+
+                @Override
+                public FontRenderer getFont(){return fontRendererObj;}
+            });
+        }
+    }
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float par3) {
+        for(Object guiButton: buttonList) {
+            if (guiButton instanceof GUIButton) {
+                ((GUIButton)guiButton).drawText(mouseX-(int)guiLeft,mouseY-(int)guiTop);
+            }
+        }
     }
 
     @Override
@@ -119,6 +154,8 @@ public class GuiForney extends GuiContainer {
             } else if (loco.riddenByEntity != null && loco.riddenByEntity instanceof EntityPlayer) {
                 ((EntityPlayer) loco.riddenByEntity).addChatMessage(new ChatComponentText("You are not the owner"));
             }
+        } else if (guibutton instanceof GUIButton) {
+            ((GUIButton)guibutton).onClick();
         }
     }
 

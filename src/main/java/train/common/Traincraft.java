@@ -14,7 +14,9 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
+import cpw.mods.fml.relauncher.Side;
 import ebf.tim.entities.EntitySeat;
+import ebf.tim.networking.PacketSeatUpdate;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
@@ -207,6 +209,8 @@ public class Traincraft {
         VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
         proxy.registerVillagerSkin(ConfigHandler.TRAINCRAFT_VILLAGER_ID, "station_chief.png");
         VillagerRegistry.instance().registerVillageTradeHandler(ConfigHandler.TRAINCRAFT_VILLAGER_ID, villageHandler);
+        Traincraft.updateChannel.registerMessage(PacketSeatUpdate.Handler.class, PacketSeatUpdate.class, 8, Side.CLIENT);
+        Traincraft.updateChannel.registerMessage(PacketSeatUpdate.Handler.class, PacketSeatUpdate.class, 9, Side.SERVER);
 
 
         proxy.registerBookHandler();

@@ -28,4 +28,5 @@ public class GuiIDs {
 	public static final int PAINTBRUSH = 106;
 	public static final int FIXED_OVERLAY = 107;
 	public static final int DYNAMIC_OVERLAY = 108;
+	public static final int SEAT_GUI = 109;
 }

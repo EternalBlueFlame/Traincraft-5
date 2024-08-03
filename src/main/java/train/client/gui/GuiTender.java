@@ -1,5 +1,7 @@
 package train.client.gui;
 
+import ebf.tim.gui.GUIButton;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
@@ -25,6 +27,8 @@ public class GuiTender extends GuiContainer {
     private final EntityPlayer player;
     private GuiButton buttonLock;
 
+    private GUIButton buttonSeatManager;
+
     public GuiTender(EntityPlayer player, InventoryPlayer inventoryplayer, Entity entityminecart) {
         super(new InventoryTender(inventoryplayer, (Tender) entityminecart));
 
@@ -44,6 +48,27 @@ public class GuiTender extends GuiContainer {
             this.buttonList.add(this.buttonLock = new GuiButton(3, var1 + 124, var2 - 10, 51, 10, "Unlocked"));
         } else {
             this.buttonList.add(this.buttonLock = new GuiButton(3, var1 + 130, var2 - 10, 43, 10, "Locked"));
+        }
+        if (tender.seats.size() > 1) {
+            this.buttonList.add(this.buttonSeatManager = new GUIButton((int)guiLeft+166,(int)guiTop+166, 18,18) {
+                @Override
+                public String getHoverText() {
+                    return "gui.seats";
+                }
+
+                @Override
+                public int[] getColor(){
+                    return null;
+                }
+
+                @Override
+                public void onClick() {
+                    Traincraft.proxy.seatGUI(player,tender);
+                }
+
+                @Override
+                public FontRenderer getFont(){return fontRendererObj;}
+            });
         }
     }
 
@@ -85,6 +110,8 @@ public class GuiTender extends GuiContainer {
             } else if (player != null) {
                 player.addChatMessage(new ChatComponentText("You are not the owner"));
             }
+        } else if (guibutton instanceof GUIButton) {
+            ((GUIButton)guibutton).onClick();
         }
     }
 

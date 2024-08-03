@@ -8,6 +8,7 @@ import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import ebf.tim.entities.EntitySeat;
+import ebf.tim.gui.GUISeatManager;
 import javazoom.jl.decoder.JavaLayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;
@@ -382,7 +383,8 @@ public class ClientProxy extends CommonProxy {
                 return entity1 != null ? new GuiFixedOverlay(player, (EntityRollingStock) entity1) : null;
             case (GuiIDs.DYNAMIC_OVERLAY):
                 return entity1 != null ? new GuiDynamicOverlay(player, (EntityRollingStock) entity1) : null;
-
+            case (GuiIDs.SEAT_GUI):
+                return entity1 != null ? new GUISeatManager(player, (EntityRollingStock) entity1) : null;
             default:
                 return null;
         }
@@ -465,5 +467,10 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void setHook() {
         JavaLayerUtils.setHook(new JLayerHook(Minecraft.getMinecraft()));
+    }
+
+    @Override
+    public void seatGUI(EntityPlayer player, EntityRollingStock transport) {
+        Minecraft.getMinecraft().displayGuiScreen(new GUISeatManager(transport));
     }
 }
