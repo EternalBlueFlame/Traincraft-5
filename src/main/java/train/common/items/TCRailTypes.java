@@ -1,6 +1,5 @@
 package train.common.items;
 
-import train.common.Traincraft;
 import train.common.tile.TileTCRail;
 
 public class TCRailTypes {
@@ -10,7 +9,7 @@ public class TCRailTypes {
         STRAIGHT(),
         DIAGONAL(),
         TURN(),
-        PARALEL(),
+        PARALLEL(),
         DIAGONALTURN(),
         CROSSING(),
         DIAGONAL_CROSSING(),
@@ -33,7 +32,7 @@ public class TCRailTypes {
     public static boolean isTurnTrack(TileTCRail tile){
         if (tile == null || tile.getRailType() == null)
             return false;
-        return (tile.getRailType() == RailTypes.TURN || tile.getRailType() == RailTypes.DIAGONALTURN || tile.getRailType() == RailTypes.PARALEL);
+        return (tile.getRailType() == RailTypes.TURN || tile.getRailType() == RailTypes.DIAGONALTURN || tile.getRailType() == RailTypes.PARALLEL);
     }
     public static boolean isCrossingTrack(TileTCRail tile){
         if (tile == null || tile.getRailType() == null)
