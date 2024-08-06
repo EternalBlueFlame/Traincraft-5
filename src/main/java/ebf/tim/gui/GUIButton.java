@@ -72,7 +72,6 @@ public abstract class GUIButton extends GuiButton {
     /** draws the button*/
     public void drawButton(int mouseX, int mouseY) {
         GL11.glPushMatrix();
-        RenderHelper.enableStandardItemLighting();
         TextureManager.bindTexture(buttonTextures);
         if(getColor()!=null){
             GL11.glColor4f(getColor()[0]*0.00392156862f, getColor()[1]*0.00392156862f, getColor()[2]*0.00392156862f, 1.0F);

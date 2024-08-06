@@ -863,6 +863,17 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 			double norm = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 			double newPosY = Math.abs(j + (Math.tan(slopeAngle * Math.abs(cz - this.posZ))) + this.yOffset + 0.3);
+			if (this.isDerail) {
+				for (int i = -2; i< 3;i++) {
+					if (worldObj.getBlock((int) Math.round(cx), (int) Math.round(newPosY) + i, (int) Math.round(this.posZ)) instanceof BlockTCRail ||
+							worldObj.getBlock((int) Math.round(cx), (int) Math.round(newPosY) + i, (int) Math.round(this.posZ)) instanceof BlockTCRailGag) {
+						if (Math.round(this.entityMainTrain.posY) == Math.round(this.posY)) {
+							newPosY += i + 1;
+							break;
+						}
+					}
+				}
+			}
 			this.setPosition(cx + 0.5D, newPosY, this.posZ);
 
 			this.boundingBox.offset(0, 0 , Math.copySign(norm, this.motionZ));
@@ -880,6 +891,17 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 			double norm = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 			double newPosY = (j + (Math.tan(slopeAngle * Math.abs(cx - this.posX))) + this.yOffset + 0.3);
+			if (this.isDerail) {
+				for (int i = -2; i< 3;i++) {
+					if (worldObj.getBlock((int) Math.round(this.posX), (int) Math.round(newPosY) + i, (int) Math.round(cz)) instanceof BlockTCRail ||
+							worldObj.getBlock((int) Math.round(this.posX), (int) Math.round(newPosY) + i, (int) Math.round(cz)) instanceof BlockTCRailGag) {
+						if (Math.round(this.entityMainTrain.posY) == Math.round(this.posY)) {
+							newPosY += i + 1;
+							break;
+						}
+					}
+				}
+			}
 			this.setPosition(this.posX, newPosY, cz + 0.5D);
 
 			this.boundingBox.offset(Math.copySign(norm, this.motionX), 0 ,0);

@@ -1,5 +1,7 @@
 package train.client.gui;
 
+import ebf.tim.gui.GUIButton;
+import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
@@ -26,6 +28,7 @@ public class GuiFreight extends GuiContainer {
     private float yaw;
     private float roll;
     private boolean rollDown;
+    private GUIButton buttonSeatManager;
     private GuiButton buttonLock;
 
     public GuiFreight(EntityPlayer player, InventoryPlayer inventoryplayer, Entity entityminecart) {
@@ -53,6 +56,27 @@ public class GuiFreight extends GuiContainer {
             this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 124, buttonPosY - 10, 51, 10, "Unlocked"));
         } else {
             this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 130, buttonPosY - 10, 43, 10, "Locked"));
+        }
+        if (freight.seats.size() > 1) {
+            this.buttonList.add(this.buttonSeatManager = new GUIButton(buttonPosX + 124,buttonPosY - 20, 51,10, "Seats") {
+                @Override
+                public String getHoverText() {
+                    return "gui.seats";
+                }
+
+                @Override
+                public int[] getColor(){
+                    return null;
+                }
+
+                @Override
+                public void onClick() {
+                    Traincraft.proxy.seatGUI(player,freight);
+                }
+
+                @Override
+                public FontRenderer getFont(){return fontRendererObj;}
+            });
         }
     }
 
@@ -91,6 +115,8 @@ public class GuiFreight extends GuiContainer {
             } else if (player != null) {
                 player.addChatMessage(new ChatComponentText("You are not the owner"));
             }
+        } else if (guibutton instanceof GUIButton) {
+            ((GUIButton)guibutton).onClick();
         }
     }
 
@@ -130,6 +156,17 @@ public class GuiFreight extends GuiContainer {
         return (mouseX >= j + 124 && mouseX <= j + 174 && mouseY >= k - 10 && mouseY <= k);
     }
 
+
+
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float par3) {
+        for(Object guiButton: buttonList) {
+            if (guiButton instanceof GUIButton) {
+                ((GUIButton)guiButton).drawText(mouseX-(int)guiLeft,mouseY-(int)guiTop);
+            }
+        }
+        super.drawScreen(mouseX,mouseY,par3);
+    }
     @Override
     protected void drawGuiContainerForegroundLayer(int i, int j) {
         GL11.glDisable(GL11.GL_LIGHTING);

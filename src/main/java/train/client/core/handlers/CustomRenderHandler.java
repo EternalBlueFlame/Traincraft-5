@@ -249,6 +249,8 @@ public class CustomRenderHandler {
                 turnSize = "medium";
             } else if (item.getTrackType() == EnumTracks.LARGE_PARALLEL_CURVE || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_PARALLEL_CURVE) {
                 turnSize = "large";
+            } else if (item.getTrackType() == EnumTracks.S_CURVE_20x2) {
+                turnSize = "20x2";
             }
 
             if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {

@@ -6,6 +6,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import ebf.tim.entities.EntitySeat;
+import ebf.tim.gui.GUISeatManager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
@@ -211,6 +212,10 @@ public class CommonProxy implements IGuiHandler {
                 return entity1 instanceof EntityTracksBuilder ? new InventoryBuilder(player.inventory, (EntityTracksBuilder) entity1) : null;
             case (GuiIDs.LIQUID):
                 return entity1 instanceof LiquidTank ? new InventoryLiquid(player.inventory, (LiquidTank) entity1) : null;
+            case (GuiIDs.SEAT_GUI):
+                if (entity instanceof EntityRollingStock) {
+                    return riddenByEntity != null ? new GUISeatManager(player, (EntityRollingStock)entity) : null; //#!#doesn't work for whatever reason
+                }
 		/*case (GuiIDs.FORTY_FOOT_CONTAINER):
 			return new ContainerStorage((TileFortyFootContainer)te, player);*/
 
@@ -289,6 +294,9 @@ public class CommonProxy implements IGuiHandler {
 
     public void setHook() {
     }
+
+
+    public void seatGUI(EntityPlayer player, EntityRollingStock transport) {    }
 
 
     public Object getTESR(){return null;}

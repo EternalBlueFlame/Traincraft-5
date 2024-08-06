@@ -9,6 +9,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.entities.EntitySeat;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -57,7 +58,6 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
     public boolean forwardPressed = false;
     private boolean backwardPressed = false;
     public boolean brakePressed = false;
-
 
     public int speedLimit = 0;
     public String trainLevel = "1";
@@ -477,8 +477,16 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         }
 
         if (i == 7) {
-            if (seats.size() != 0)
-                ((EntityPlayer) seats.get(0).getPassenger()).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+            if (seats != null && seats.size() != 0) {
+                for(EntitySeat seat: seats) {
+                    if(seat.isControlSeat() && seat.getPassenger() != null && playerEntity == seat.getPassenger()) {
+                        ((EntityPlayer) seat.getPassenger()).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+                        break;
+                    } else if (seat.getPassenger() != null && seat.getPassenger() instanceof EntityPlayer) {
+                        Traincraft.proxy.seatGUI((EntityPlayer) seat.getPassenger(),this);
+                    }
+                }
+            }
         }
 
         if (i == 12) {
