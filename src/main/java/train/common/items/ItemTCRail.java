@@ -3787,7 +3787,7 @@ public class ItemTCRail extends ItemPart {
                 return false;
         }
         if (l == 1) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, false), l, false, 2, x - 29, z + 28, 31.5, x + 1 ,
+            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, false), l, false, 2, x - 29, z + 28, 28.5, x + 1 ,
                     y + 1, z + 29, tempType.getLabel(), tempType.getItem().item))
                 return false;
         }
