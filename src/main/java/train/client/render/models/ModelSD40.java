@@ -178,7 +178,7 @@ public class ModelSD40 extends ModelBase {
 		box107 = new ModelRendererTurbo(this, 201, 24);
 		box107.addBox(0F, 0F, 0F, 5, 3, 1);
 		box107.setRotationPoint(5F, 32F, -22F);
-		box107.rotateAngleY = 0.6457718232379019F;
+		box107.rotateAngleY = -0.6457718232379019F;
 		box107.rotateAngleZ = 3.141592653589793F;
 
 		box108 = new ModelRendererTurbo(this, 184, 63);
@@ -431,7 +431,7 @@ public class ModelSD40 extends ModelBase {
 		box46.addBox(0F, 0F, 0F, 6, 1, 1);
 		box46.setRotationPoint(-1F, 9F, 37F);
 		box46.rotateAngleX = 3.141592653589793F;
-		box46.rotateAngleY = 0.15707963267948966F;
+		box46.rotateAngleY = -0.15707963267948966F;
 		box46.rotateAngleZ = 3.141592653589793F;
 
 		box47 = new ModelRendererTurbo(this, 2, 147);
@@ -560,7 +560,7 @@ public class ModelSD40 extends ModelBase {
 		box73 = new ModelRendererTurbo(this, 103, 8);
 		box73.addBox(0F, 0F, 0F, 5, 15, 1);
 		box73.setRotationPoint(5F, 25F, -30F);
-		box73.rotateAngleY = 0.6457718232379019F;
+		box73.rotateAngleY = -0.6457718232379019F;
 		box73.rotateAngleZ = 3.141592653589793F;
 
 		box74 = new ModelRendererTurbo(this, 235, 27);

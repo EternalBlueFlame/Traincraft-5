@@ -113,6 +113,7 @@ public enum ItemIDs {
 	tcRailSmallParallelCurve("ItemTCRail", "item_rail_tc_parallel_curve_small", 3),
 	tcRailMediumParallelCurve("ItemTCRail", "item_rail_tc_parallel_curve_medium", 3),
 	tcRailLargeParallelCurve("ItemTCRail", "item_rail_tc_parallel_curve_large", 3),
+	tcRail20x2SCurve("ItemTCRail", "item_rail_tc_parallel_curve_2x20", 3),
 
 	tcRailTwoWaysCrossing("ItemTCRail","item_rail_two_ways_crossing",5),
 	tcRailDiamondCrossing("ItemTCRail", "item_rail_diamond_crossing", 5),

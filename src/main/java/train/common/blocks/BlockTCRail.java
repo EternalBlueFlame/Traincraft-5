@@ -12,15 +12,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import train.common.Traincraft;
-import train.common.items.ItemTCRail;
 import train.common.items.ItemWrench;
-import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
+import train.common.tile.TileTCRailGag;
 
 import java.util.Random;
 
@@ -67,6 +65,20 @@ public class BlockTCRail extends Block {
 		return true;
 	}
 	private static final int[] matrixXZ = {0,-1,-2,1,2}, matrixY = {0,-1,-2,1,2};
+
+	@Override
+	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
+		TileTCRail tileEntity = (TileTCRail) world.getTileEntity(x,y,z);
+		if (tileEntity == null) {
+			TileTCRailGag gagRail = (TileTCRailGag) world.getTileEntity(x,y,z);
+			tileEntity = (TileTCRail) world.getTileEntity(gagRail.originX, gagRail.originY, gagRail.originZ);
+		}
+		if (tileEntity == null) {
+			return;
+		}
+		tileEntity.lastPlayerToInteract = player;
+	}
+
 	@Override
 	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
 		TileTCRail tileEntity = (TileTCRail) world.getTileEntity(i, j, k);
@@ -76,8 +88,8 @@ public class BlockTCRail extends Block {
 			world.removeTileEntity(tileEntity.linkedX, tileEntity.linkedY, tileEntity.linkedZ);
 		}
 		if (tileEntity != null && (tileEntity.idDrop != null) && !world.isRemote) {
-			EntityPlayer player = Traincraft.proxy.getPlayer();
-			if (!(player != null && player.capabilities.isCreativeMode)) {
+			EntityPlayer player = tileEntity.lastPlayerToInteract;
+			if (player != null && !player.capabilities.isCreativeMode) {
 				this.dropBlockAsItem(world, i, j, k, new ItemStack(tileEntity.idDrop, 1, 0));
 			}
 		}

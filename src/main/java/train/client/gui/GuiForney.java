@@ -111,6 +111,7 @@ public class GuiForney extends GuiContainer {
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float par3) {
+        super.drawScreen(mouseX,mouseY,par3);
         for(Object guiButton: buttonList) {
             if (guiButton instanceof GUIButton) {
                 ((GUIButton)guiButton).drawText(mouseX-(int)guiLeft,mouseY-(int)guiTop);
