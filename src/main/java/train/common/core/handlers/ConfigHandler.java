@@ -48,6 +48,8 @@ public class ConfigHandler {
 
 	public static int TRACK_RENDER_DISTANCE;
 
+	public static boolean ENABLE_SLOPE_ACCELERATION;
+
 
 	public static void init(File configFile) {
 		Configuration cf = new Configuration(configFile);
@@ -98,6 +100,7 @@ public class ConfigHandler {
 
 			ALLOW_ATO_ON_STEAMERS = cf.get(CATEGORY_GENERAL, "ALLOW_ATO_ON_STEAMERS", false, "Allows Minecraft Train Control's ATO system to be used on steam trains").getBoolean(true);
 			PAINTBRUSH_DEFAULT_LOW_PERFORMANCE_MODE = cf.get(CATEGORY_GENERAL, "PAINTBRUSH_DEFAULT_LOW_PERFORMANCE_MODE", false, "Defaults to low performance mode in paintbrush menu.").getBoolean(false);
+			ENABLE_SLOPE_ACCELERATION = cf.get(CATEGORY_GENERAL,"ENABLE_SLOPE_ACCELERATION",true,"Defaults to true").getBoolean(true);
 		} catch (Exception e) {
 			Traincraft.tcLog.fatal("Traincraft had a problem loading its configuration\n" + e);
 		} finally {

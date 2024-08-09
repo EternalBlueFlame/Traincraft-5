@@ -84,6 +84,9 @@ public enum EnumTracks implements TrackRecord {
     LARGE_PARALLEL_CURVE("LARGE_PARALLEL_CURVE", PARALEL, "NORMAL", ItemIDs.tcRailLargeParallelCurve,0, "4x16"),
     LARGE_RIGHT_PARALLEL_CURVE("LARGE_RIGHT_PARALLEL_CURVE", PARALEL, "NORMAL", ItemIDs.tcRailLargeParallelCurve, 0,""),
     LARGE_LEFT_PARALLEL_CURVE("LARGE_LEFT_PARALLEL_CURVE", PARALEL, "NORMAL", ItemIDs.tcRailLargeParallelCurve, 0,""),
+    S_CURVE_20x2("20x2_S_CURVE", PARALEL, "NORMAL", ItemIDs.tcRail20x2SCurve, 0, "2x20"),
+    S_CURVE_20x2_RIGHT("20x2_S_CURVE_RIGHT", PARALEL, "NORMAL", ItemIDs.tcRail20x2SCurve, 0, ""),
+    S_CURVE_20x2_LEFT("20x2_S_CURVE_LEFT", PARALEL, "NORMAL", ItemIDs.tcRail20x2SCurve, 0, ""),
 
     TWO_WAYS_CROSSING("TWO_WAYS_CROSSING", CROSSING, "NORMAL", ItemIDs.tcRailTwoWaysCrossing, 0,"3x3"),
 

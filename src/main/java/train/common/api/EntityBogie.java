@@ -18,19 +18,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
-import train.common.Traincraft;
 import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
-import train.common.items.ItemTCRail;
 import train.common.items.TCRailTypes;
-import train.common.library.EnumTracks;
 import train.common.library.BlockIDs;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static train.common.core.util.TraincraftUtil.isRailBlockAt;
@@ -59,7 +53,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
     private double minecartYaw;
     private double minecartPitch;
 
-    public double fakeY=0;
 
 
 
@@ -184,10 +177,32 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		} else if (isRailBlockAt(worldObj, i, j + 1, k) || worldObj.getBlock(i, j + 1, k) == BlockIDs.tcRail.block || worldObj.getBlock(i, j + 1, k) == BlockIDs.tcRailGag.block) {
 			j++;
 		}
-
 		Block block = this.worldObj.getBlock(i, j, k);
-
-		return (BlockRailBase.func_150051_a(block) || block == BlockIDs.tcRail.block || block == BlockIDs.tcRailGag.block);
+		if (BlockRailBase.func_150051_a(block) || block == BlockIDs.tcRail.block || block == BlockIDs.tcRailGag.block) {
+			return true;
+		}/* this is test/in-dev anti-derailment code.
+		Vec3f closest = null;
+		double dist = Double.MAX_VALUE;
+		for(int a = -1; a<2;a++) {
+			for(int c = -1;c<2;c++) {
+				if (isRailBlockAt(worldObj, i+a, j, k+c) || worldObj.getBlock(i+a, j, k+c) == BlockIDs.tcRail.block || worldObj.getBlock(i+a, j, k+c) == BlockIDs.tcRailGag.block) {
+					if (closest == null) {
+						closest = new Vec3f(i+a,j,k+c);
+						dist = Math.sqrt(Math.pow(closest.xCoord-posX,2)+Math.pow(closest.zCoord-posZ,2));
+					} else {
+						double tdist = Math.sqrt(Math.pow((i+a)-posX,2)+Math.pow((k+c)-posZ,2));
+						if (tdist < dist) {
+							dist = tdist;
+						}
+					}
+				}
+			}
+		}
+		if (closest != null) {
+			this.setPosition( closest.xCoord, closest.yCoord, closest.zCoord);
+			return true;
+		}*/
+		return false;
 	}
 
 	@Override
@@ -444,7 +459,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			if (TCRailTypes.isStraightTrack(tileRail) || (TCRailTypes.isSwitchTrack(tileRail) && !tileRail.getSwitchState())) {
 				moveOnTCStraight(j, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata());
 			}
-			else if (TCRailTypes.isTurnTrack(tileRail) || (TCRailTypes.isSwitchTrack(tileRail) && !tileRail.getSwitchState())) {
+			else if (TCRailTypes.isTurnTrack(tileRail) || (TCRailTypes.isSwitchTrack(tileRail) && tileRail.getSwitchState())) {
 				if (shouldIgnoreSwitch(tileRail, i, j, k, meta)) {
 					moveOnTCStraight(j, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata());
 				}
@@ -463,6 +478,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 				moveOnTCDiagonal(i, j, k, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata(), tileRail.getRailLength());
 			} else if (TCRailTypes.isCurvedSlopeTrack(tileRail)) {
 				moveOnTCCurvedSlope(i, j, k, tileRail.r, tileRail.cx, tileRail.cz, tileRail.xCoord, tileRail.zCoord, meta, 1, tileRail.slopeAngle);
+			} else if (TCRailTypes.isDiagonalTrack(tileRail)) {
+				moveOnTCDiagonal(i, j, k, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata(), tileRail.getRailLength());
 			}
 
 		}
@@ -663,8 +680,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		}*/
 	}
 
-
-
 	private void moveOnTCDiagonal(int i, int j, int k, double cx, double cz, int meta, double length) {
 
 		double Y_OFFSET = 0.2;
@@ -758,6 +773,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 		}
 	}
+
 	private void moveOnTCCurvedSlope(int i, int j, int k,double r, double cx, double cz, int tilex, int tilez, int meta, double slopeHeight, double slopeAngle) {
 		double newTilex = tilex;
 		double newTilez = tilez;
@@ -981,7 +997,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 				}
 			}
 			if (meta == 1) {
-				if (Math.abs(motionZ) < 0.01 && motionX > 0) {
+				if (Math.abs(motionZ) < 0.002 && motionX > 0) { //allow a little more off-axis motion
 					TileEntity tile2 = worldObj.getTileEntity(i + 1, j, k);
 					if (tile2 != null && tile2 instanceof TileTCRail) {
 						((TileTCRail) tile2).setSwitchState(false, true);

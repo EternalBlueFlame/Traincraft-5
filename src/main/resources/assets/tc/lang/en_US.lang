@@ -265,6 +265,8 @@ item.tc:tcRailEmbeddedLargeParallelSwitch.name=Embedded Parallel Switch (4x17)
 item.tc:tcRailEmbeddedMedium45DegreeSwitch.name=Embedded 45 Degree Switch (3x5)
 item.tc:tcRailEmbeddedLarge45DegreeSwitch.name=Embedded 45 Degree Switch (4x8)
 
+item.tc:tcRail20x2SCurve.name=Parallel Curve (2x20)
+
 item.tc:minecartWork.name=Work Train
 item.tc:minecartTender.name=Small Tender
 item.tc:minecartChest.name=Freight Car

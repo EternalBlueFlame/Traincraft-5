@@ -418,6 +418,8 @@ public class CustomRenderHandler {
 
         blockColour = block.colorMultiplier(world, x, y, z);
         IIcon icon = block.getIcon(1, metadata);
-        ballastMaterial = icon.getIconName();
+        if (icon != null && icon.getIconName() != null) {
+            ballastMaterial = icon.getIconName();
+        }
     }
 }
