@@ -6337,6 +6337,14 @@ public class ItemTCRail extends ItemPart {
             return false;
         }
 
+        for (int check = 0; check < usedXArray.length; check++){
+            if (!canPlaceTrack(player, world, usedXArray[check], y + 1, usedZArray[check])
+            || !canPlaceTrack(player, world, usedXArray2[check], y + 1, usedZArray2[check])){
+                return false;
+            }
+        }
+
+
         if (!putDownTurn(player, world, false, x, y, z, usedXArray, usedZArray, dir, false, dir, x + xoffset, z + zoffset, 100, x - cx,
                 y + 1, z - cz, tempType.getLabel(), tempType.getItem().item))
             return false;
