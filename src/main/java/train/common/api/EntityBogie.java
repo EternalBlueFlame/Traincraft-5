@@ -41,6 +41,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	protected int bogieIndex;
 	public double bogieShift;
 	protected Side side;
+	public TileTCRail lastTrack=null;
 
 
 
@@ -453,60 +454,70 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		}
 		else if (l == BlockIDs.tcRail.block) {
 			limitSpeedOnTCRail();
-			TileTCRail tileRail = (TileTCRail) worldObj.getTileEntity(i, j, k);
-			int meta = tileRail.getBlockMetadata();
-
-			if (TCRailTypes.isStraightTrack(tileRail) || (TCRailTypes.isSwitchTrack(tileRail) && !tileRail.getSwitchState())) {
-				moveOnTCStraight(j, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata());
+			if(lastTrack==null || lastTrack.xCoord!=i ||lastTrack.zCoord!=k){
+				if( worldObj.getTileEntity(i, j, k) instanceof TileTCRail) {
+					lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
+				} else {
+					return;
+				}
 			}
-			else if (TCRailTypes.isTurnTrack(tileRail) || (TCRailTypes.isSwitchTrack(tileRail) && tileRail.getSwitchState())) {
-				if (shouldIgnoreSwitch(tileRail, i, j, k, meta)) {
-					moveOnTCStraight(j, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata());
+			int meta = lastTrack.getBlockMetadata();
+
+			if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
+				moveOnTCStraight(j, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
+			}
+			else if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState())) {
+				if (shouldIgnoreSwitch(lastTrack, i, j, k, meta)) {
+					moveOnTCStraight(j, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
 				}
 				else {
-					if (TCRailTypes.isTurnTrack(tileRail) || (TCRailTypes.isSwitchTrack(tileRail) && tileRail.getSwitchState())) {
-						moveOnTC90TurnRail(j, tileRail.r, tileRail.cx, tileRail.cz);
+					if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState())) {
+						moveOnTC90TurnRail(j, lastTrack.r, lastTrack.cx, lastTrack.cz);
 					}
 				}
-			} else if (TCRailTypes.isCrossingTrack(tileRail)) {
+			} else if (TCRailTypes.isCrossingTrack(lastTrack)) {
 				moveOnTCTwoWaysCrossing();
-			} else if (TCRailTypes.isSlopeTrack(tileRail)) {
-				moveOnTCSlope(j, tileRail.xCoord, tileRail.zCoord, tileRail.slopeAngle, tileRail.slopeHeight, tileRail.getBlockMetadata());
-			} else if (TCRailTypes.isDiagonalCrossingTrack(tileRail)) {
-				moveOnTCDiamondCrossing(i, j, k, tileRail.xCoord,  tileRail.zCoord );
-			} else if (TCRailTypes.isDiagonalCrossingTrack(tileRail)) {
-				moveOnTCDiagonal(i, j, k, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata(), tileRail.getRailLength());
-			} else if (TCRailTypes.isCurvedSlopeTrack(tileRail)) {
-				moveOnTCCurvedSlope(i, j, k, tileRail.r, tileRail.cx, tileRail.cz, tileRail.xCoord, tileRail.zCoord, meta, 1, tileRail.slopeAngle);
-			} else if (TCRailTypes.isDiagonalTrack(tileRail)) {
-				moveOnTCDiagonal(i, j, k, tileRail.xCoord, tileRail.zCoord, tileRail.getBlockMetadata(), tileRail.getRailLength());
+			} else if (TCRailTypes.isSlopeTrack(lastTrack)) {
+				moveOnTCSlope(j, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, lastTrack.getBlockMetadata());
+			} else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
+				moveOnTCDiamondCrossing(i, j, k, lastTrack.xCoord,  lastTrack.zCoord );
+			} else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
+				moveOnTCDiagonal(i, j, k, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
+			} else if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
+				moveOnTCCurvedSlope(i, j, k, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, meta, 1, lastTrack.slopeAngle);
+			} else if (TCRailTypes.isDiagonalTrack(lastTrack)) {
+				moveOnTCDiagonal(i, j, k, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
 			}
 
 		}
 		else if (l == BlockIDs.tcRailGag.block) {
 			limitSpeedOnTCRail();
 			TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(i, j, k);
-			if (worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ) instanceof TileTCRail) {
-				TileTCRail tile = (TileTCRail) worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
 
-				if (TCRailTypes.isTurnTrack(tile)) {
-					moveOnTC90TurnRail(j, tile.r, tile.cx, tile.cz);
+			if(lastTrack==null || lastTrack.xCoord!=tileGag.originX ||lastTrack.zCoord!=tileGag.originZ){
+				if(worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ) instanceof TileTCRail) {
+					lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
+				} else {
+					return;
 				}
-				if (TCRailTypes.isStraightTrack(tile)) {
-					moveOnTCStraight(j, tile.xCoord, tile.zCoord, tile.getBlockMetadata());
-				}
-				if (TCRailTypes.isSlopeTrack(tile)) {
-					moveOnTCSlope(j, tile.xCoord, tile.zCoord, tile.slopeAngle, tile.slopeHeight, tile.getBlockMetadata());
-				}
-				else if (TCRailTypes.isDiagonalCrossingTrack(tile)) {
-					moveOnTCDiamondCrossing(i, j, k, tile.xCoord,  tile.zCoord );
-				}
-				if (TCRailTypes.isDiagonalTrack(tile)) {
-					moveOnTCDiagonal(i, j, k, tile.xCoord, tile.zCoord, tile.getBlockMetadata(), tile.getRailLength());
-				}
-				if (TCRailTypes.isCurvedSlopeTrack(tile)) {
-					moveOnTCCurvedSlope(i, j, k, tile.r, tile.cx, tile.cz, tile.xCoord, tile.zCoord, tile.getBlockMetadata(), 1, tile.slopeAngle);
-				}
+			}
+			if (TCRailTypes.isTurnTrack(lastTrack)) {
+				moveOnTC90TurnRail(j, lastTrack.r, lastTrack.cx, lastTrack.cz);
+			}
+			if (TCRailTypes.isStraightTrack(lastTrack)) {
+				moveOnTCStraight(j, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
+			}
+			if (TCRailTypes.isSlopeTrack(lastTrack)) {
+				moveOnTCSlope(j, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, lastTrack.getBlockMetadata());
+			}
+			else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
+				moveOnTCDiamondCrossing(i, j, k, lastTrack.xCoord,  lastTrack.zCoord );
+			}
+			if (TCRailTypes.isDiagonalTrack(lastTrack)) {
+				moveOnTCDiagonal(i, j, k, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
+			}
+			if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
+				moveOnTCCurvedSlope(i, j, k, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), 1, lastTrack.slopeAngle);
 			}
 		}
 		else {
