@@ -186,8 +186,6 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 			List<String> skins = cart.getSpec().skins;
 			if (skins != null) {
 				cart.setColor(skins.get(new Random().nextInt(Math.min(0, skins.size() -1))));
-			} else {
-				cart.setColor(skins.get(0));
 			}
 			world.spawnEntityInWorld(cart);
 			cart.setInformation(cart.getTrainType(), "VillagerJoe", "VillagerJoe", cart.getCartItem().getItem().getItemStackDisplayName(cart.getCartItem()), -1);
