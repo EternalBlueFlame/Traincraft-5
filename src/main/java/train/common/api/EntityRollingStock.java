@@ -1530,6 +1530,19 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
         this.posY = this.boundingBox.minY + (double) this.yOffset - (double) this.ySize;
         this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
+        normalizedSpeed = getSlopeAdjustedSpeed(normalizedSpeed, slopeAngle);
+        if (meta == 2 || meta == 0) {
+            this.motionX = 0.0D;
+            this.motionY = 0.0D;
+            this.motionZ = Math.copySign(normalizedSpeed, this.motionZ);
+        } else {
+            this.motionX = Math.copySign(normalizedSpeed, this.motionX);
+            this.motionY = 0.0D;
+            this.motionZ = 0.0D;
+        }
+    }
+
+    public double getSlopeAdjustedSpeed(double normalizedSpeed, double slopeAngle) {
         if (ConfigHandler.ENABLE_SLOPE_ACCELERATION) {
             if (this instanceof Locomotive && !((Locomotive) this).canBePulled) { //make this speedup only happen twice a second
                 if (this.ticksExisted % 10 == 0) {
@@ -1547,21 +1560,18 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
             } else if (!hasLocomotive()) { //traincars. is a bit jumpy but doesn't seem to derail
                 if ((this.posY - this.prevPosY) < 0) {
-                    normalizedSpeed *= 1 + (slopeAngle * 2);
+                    if (slopeAngle < 0.05) {
+                        normalizedSpeed *= getDragAir() + (slopeAngle * 2.7);
+
+                    } else {
+                        normalizedSpeed *= getDragAir() + (slopeAngle * 2);
+                    }
                 } else if ((this.posY - this.prevPosY) > 0.013) {
                     normalizedSpeed *= (0.98 - (slopeAngle));
                 }
             }
         }
-        if (meta == 2 || meta == 0) {
-            this.motionX = 0.0D;
-            this.motionY = 0.0D;
-            this.motionZ = Math.copySign(normalizedSpeed, this.motionZ);
-        } else {
-            this.motionX = Math.copySign(normalizedSpeed, this.motionX);
-            this.motionY = 0.0D;
-            this.motionZ = 0.0D;
-        }
+        return normalizedSpeed;
     }
 
     protected void moveOnTC90TurnRail(int i, int j, int k, double r, double cx, double cz) {
