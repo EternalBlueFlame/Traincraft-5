@@ -398,25 +398,18 @@ public class ItemTCRail extends ItemPart {
             return new int[][]{{0,0},{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0},{8,0},{9,0},{10,0},{11,0},{12,0},{13,0},{14,0},{15,0},{16,0},{3,1},{4,1},{5,1},{6,1},{7,1},{8,1},{9,1},{10,1},{11,1},{12,1},{13,1},{14,1},{15,1},{16,1},{17,1},{18,1},{19,1}};
         }
         /**45 degree curves*/
-        else if ((type == EnumTracks.MEDIUM_45DEGREE_TURN || type == EnumTracks.EMBEDDED_MEDIUM_45DEGREE_TURN) && !player.isSneaking())
-            return new int[][]{{0, 0}, {1, 0}, {2, 0}, {1, 1}, {2, 1}, {3, 1}, {2, 2}};
-        else if ((type == EnumTracks.LARGE_45DEGREE_TURN || type == EnumTracks.EMBEDDED_LARGE_45DEGREE_TURN) && !player.isSneaking())
-            return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}, {4, 2}, {5, 2}, {6, 2}, {5, 3}};
-        else if ((type == EnumTracks.VERY_LARGE_45DEGREE_TURN || type == EnumTracks.EMBEDDED_VERY_LARGE_45DEGREE_TURN) && !player.isSneaking())
-            return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}, {6, 1}, {4, 2}, {5, 2}, {6, 2}, {7, 2}, {6, 3}, {7, 3}, {8, 3}, {7, 4}};
-        else if ((type == EnumTracks.SUPER_LARGE_45DEGREE_TURN || type == EnumTracks.EMBEDDED_SUPER_LARGE_45DEGREE_TURN) && !player.isSneaking())
-            return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}, {6, 1}, {7, 1}, {5, 2}, {6, 2}, {7, 2}, {8, 2}, {9, 2}, {7, 3}, {8, 3}, {9, 3}, {10, 3}, {9, 4}, {10, 4}, {11, 4}, {10, 5}};
+
         else if ((type == EnumTracks.MEDIUM_45DEGREE_SWITCH || type == EnumTracks.EMBEDDED_MEDIUM_45DEGREE_SWITCH) && !player.isSneaking())
             return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {2, 1}, {3, 1}, {4, 1}, {3, 2}};
         else if ((type == EnumTracks.LARGE_45DEGREE_SWITCH || type == EnumTracks.EMBEDDED_LARGE_45DEGREE_SWITCH) && !player.isSneaking())
             return new int[][]{{0,0},{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{3, 1}, {4, 1}, {5, 1}, {6, 1}, {5, 2}, {6, 2}, {7, 2}, {6, 3},};
-        else if ((type == EnumTracks.MEDIUM_45DEGREE_TURN || type == EnumTracks.EMBEDDED_MEDIUM_45DEGREE_TURN) && player.isSneaking())
+        else if ((type == EnumTracks.MEDIUM_45DEGREE_TURN || type == EnumTracks.EMBEDDED_MEDIUM_45DEGREE_TURN))
             return new int[][]{{0, 0}, {1, 0}, {2, 0}, {1, 1}, {2, 1}};
-        else if ((type == EnumTracks.LARGE_45DEGREE_TURN || type == EnumTracks.EMBEDDED_LARGE_45DEGREE_TURN) && player.isSneaking())
+        else if ((type == EnumTracks.LARGE_45DEGREE_TURN || type == EnumTracks.EMBEDDED_LARGE_45DEGREE_TURN) )
             return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}, {4, 2}, {5, 2}};
-        else if ((type == EnumTracks.VERY_LARGE_45DEGREE_TURN || type == EnumTracks.EMBEDDED_VERY_LARGE_45DEGREE_TURN) && player.isSneaking())
+        else if ((type == EnumTracks.VERY_LARGE_45DEGREE_TURN || type == EnumTracks.EMBEDDED_VERY_LARGE_45DEGREE_TURN) )
             return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}, {6, 1}, {4, 2}, {5, 2}, {6, 2}, {7, 2}, {6, 3}, {7, 3}};
-        else if ((type == EnumTracks.SUPER_LARGE_45DEGREE_TURN || type == EnumTracks.EMBEDDED_SUPER_LARGE_45DEGREE_TURN) && player.isSneaking())
+        else if ((type == EnumTracks.SUPER_LARGE_45DEGREE_TURN || type == EnumTracks.EMBEDDED_SUPER_LARGE_45DEGREE_TURN) )
             return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}, {1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}, {6, 1}, {7, 1}, {5, 2}, {6, 2}, {7, 2}, {8, 2}, {9, 2}, {7, 3}, {8, 3}, {9, 3}, {10, 3}, {9, 4}, {10, 4}};
         else if ((type == EnumTracks.MEDIUM_45DEGREE_SWITCH || type == EnumTracks.EMBEDDED_MEDIUM_45DEGREE_SWITCH) && player.isSneaking())
             return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {2, 1}, {3, 1}};
@@ -510,9 +503,9 @@ public class ItemTCRail extends ItemPart {
             y = getPlacementHeight(world, x, y, z);
             int l;
             int[] curveXArray;
-            int[] CurveZArray;
+            int[] curveZArray;
             int[] curveXArray2;
-            int[] CurveZArray2;
+            int[] curveZArray2;
 
             if (type.getRailType() == RailTypes.DIAGONAL) {
                 l = MathHelper.floor_double((player != null ? player.rotationYaw : par10) * 4.0F / 360.0F) & 3;
@@ -585,8 +578,8 @@ public class ItemTCRail extends ItemPart {
                 case EMBEDDED_LEFT_TURN_1X1:
                 case EMBEDDED_RIGHT_TURN_1X1:
                     curveXArray = new int[] {0};
-                    CurveZArray = new int[] {0};
-                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, CurveZArray, 0.5f)) {return false;}
+                    curveZArray = new int[] {0};
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 0.5f)) {return false;}
                     break;
 
                 case MEDIUM_LEFT_TURN:
@@ -594,92 +587,95 @@ public class ItemTCRail extends ItemPart {
                 case EMBEDDED_MEDIUM_LEFT_TURN:
                 case EMBEDDED_MEDIUM_RIGHT_TURN:
                     curveXArray = new int[] {0, 0, 1, 1, 2};
-                    CurveZArray = new int[] {0, 1, 1, 2, 2};
-                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, CurveZArray, 2.5f)) {return false;}
+                    curveZArray = new int[] {0, 1, 1, 2, 2};
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 2.5f)) {return false;}
                     break;
+
                 case LARGE_LEFT_TURN:
                 case LARGE_RIGHT_TURN:
                 case EMBEDDED_LARGE_LEFT_TURN:
                 case EMBEDDED_LARGE_RIGHT_TURN:
                     curveXArray = new int[] {0, 0, 1, 1, 2, 0, 1, 2, 3, 4, 3, 2};
-                    CurveZArray = new int[] {0, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4};
-                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, CurveZArray, 4.5f)) {return false;}
+                    curveZArray = new int[] {0, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4};
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 4.5f)) {return false;}
                     break;
+
                 case VERY_LARGE_LEFT_TURN:
                 case VERY_LARGE_RIGHT_TURN:
                 case EMBEDDED_VERY_LARGE_LEFT_TURN:
                 case EMBEDDED_VERY_LARGE_RIGHT_TURN:
                     curveXArray = new int[] {0, 0, 0, 1, 0, 1, 0, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 5, 6, 6, 7, 7, 8, 9};
-                    CurveZArray = new int[] {0, 1, 2, 2, 3, 3, 4, 4, 5, 4, 5, 6, 6, 7, 7, 8, 7, 8, 9, 8, 9, 8, 9, 9, 9};
-                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, CurveZArray, 9.5f)) {return false;}
+                    curveZArray = new int[] {0, 1, 2, 2, 3, 3, 4, 4, 5, 4, 5, 6, 6, 7, 7, 8, 7, 8, 9, 8, 9, 8, 9, 9, 9};
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 9.5f)) {return false;}
                     break;
+
                 case SUPER_LARGE_LEFT_TURN:
                 case SUPER_LARGE_RIGHT_TURN:
                 case EMBEDDED_SUPER_LARGE_LEFT_TURN:
                 case EMBEDDED_SUPER_LARGE_RIGHT_TURN:
                     curveXArray = new int[] {0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 9, 9, 10, 11, 11, 12, 12, 13, 14, 15};
-                    CurveZArray = new int[] {0, 1, 2, 3, 4, 3, 4, 5, 6, 6, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 13, 14, 14, 14, 15, 14, 15, 15, 15, 15};
-                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, CurveZArray, 15.5f)) {return false;}
+                    curveZArray = new int[] {0, 1, 2, 3, 4, 3, 4, 5, 6, 6, 7, 8, 8, 9, 9, 10, 10, 11, 11, 12, 12, 13, 13, 13, 14, 14, 14, 15, 14, 15, 15, 15, 15};
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 15.5f)) {return false;}
                     break;
+
                 case LEFT_TURN_29X29:
                 case RIGHT_TURN_29X29:
                 case EMBEDDED_LEFT_TURN_29X29:
                 case EMBEDDED_RIGHT_TURN_29X29:
                     curveXArray = new int[] {0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1 ,2,2,2 ,2 ,2 ,3 ,3 ,3 ,3 ,4 ,4 ,4 , 5,5 ,5 ,5 ,6 ,6 ,6 ,7 , 7,7 ,8 ,8 ,8 ,9 ,9 ,9 ,10,10,10,11,11,11,12,12,13,13,14,14,14,15,15,16,16,16,17,17,18,18,18,19,19,20,20,21,21,21,22,22,23,23,24,24,25,25,26,27,28};
-                    CurveZArray = new int[] {0,1,2,3,4,5,6,7,3,4,5,6,7,8,9,10,8,9,10,11,12,11,12,13,14,13,14,15,14,15,16,17,16,17,18,17,18,19,18,19,20,19,20,21,20,21,22,21,22,23,22,23,23,24,23,24,25,24,25,24,25,26,25,26,25,26,27,26,27,26,27,26,27,28,27,28,27,28,27,28,27,28,28,28,28};
+                    curveZArray = new int[] {0,1,2,3,4,5,6,7,3,4,5,6,7,8,9,10,8,9,10,11,12,11,12,13,14,13,14,15,14,15,16,17,16,17,18,17,18,19,18,19,20,19,20,21,20,21,22,21,22,23,22,23,23,24,23,24,25,24,25,24,25,26,25,26,25,26,27,26,27,26,27,26,27,28,27,28,27,28,27,28,27,28,28,28,28};
 
-                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, CurveZArray, 28.5f)) {return false;}
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 28.5f)) {return false;}
                     break;
+
                 case LEFT_TURN_32X32:
                 case RIGHT_TURN_32X32:
                 case EMBEDDED_LEFT_TURN_32X32:
                 case EMBEDDED_RIGHT_TURN_32X32:
 
                     curveXArray = new int[] {0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,1 ,1 ,2,2,2 ,2 ,2 ,2 ,3 ,3 ,3 ,3 ,3 ,4 ,4 , 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9,9 , 9,10,10,10,11,11,11,12,12,12,13,13,13,14,14,15,15,15,16,16,16,17,17,18,18,18,19,19,20,20,20,21,21,22,22,23,23,24,24,25,25,26,26,27,27,28,28,29,29,30,31};
-                    CurveZArray = new int[] {0,1,2,3,4,5,6,7,2,3,4,5,6,7,8,9,10,11,8,9,10,11,12,13,11,12,13,14,15,12,13,14,15,16,15,16,17,18,16,17,18,19,20,18,19,20,19,20,21,20,21,22,21,22,23,22,23,24,23,24,25,24,25,26,25,26,25,26,27,26,27,28,27,28,27,28,29,28,29,28,29,30,29,30,29,30,29,30,30,31,30,31,30,31,30,31,30,31,30,31,31,31};
+                    curveZArray = new int[] {0,1,2,3,4,5,6,7,2,3,4,5,6,7,8,9,10,11,8,9,10,11,12,13,11,12,13,14,15,12,13,14,15,16,15,16,17,18,16,17,18,19,20,18,19,20,19,20,21,20,21,22,21,22,23,22,23,24,23,24,25,24,25,26,25,26,25,26,27,26,27,28,27,28,27,28,29,28,29,28,29,30,29,30,29,30,29,30,30,31,30,31,30,31,30,31,30,31,30,31,31,31};
 
-                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, CurveZArray, 31.5f)) {return false;}
-                    break;
-
-
-                case MEDIUM_RIGHT_45DEGREE_TURN:
-                case EMBEDDED_MEDIUM_RIGHT_45DEGREE_TURN:
-                    if (!mediumRight45DegreeTurn(player, world, x, y, z, l, tempType)) {return false;}
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 31.5f)) {return false;}
                     break;
 
                 case MEDIUM_LEFT_45DEGREE_TURN:
-                case EMBEDDED_MEDIUM_LEFT_45DEGREE_TURN: //TODO consolidate left/right
-                    if (!mediumLeft45DegreeTurn(player, world, x, y, z, l, tempType)) {return false;}
-                    break;
-
-                case LARGE_RIGHT_45DEGREE_TURN:
-                case EMBEDDED_LARGE_RIGHT_45DEGREE_TURN:
-                    if (!largeRight45DegreeTurn(player, world, x, y, z, l, tempType)) {return false;}
+                case MEDIUM_RIGHT_45DEGREE_TURN:
+                case EMBEDDED_MEDIUM_LEFT_45DEGREE_TURN:
+                case EMBEDDED_MEDIUM_RIGHT_45DEGREE_TURN:
+                    curveXArray = new int[] {0, 0, 0, 1, 1};
+                    curveZArray = new int[] {0, 1, 2, 1, 2};
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 3.75f)) {return false;}
                     break;
 
                 case LARGE_LEFT_45DEGREE_TURN:
+                case LARGE_RIGHT_45DEGREE_TURN:
                 case EMBEDDED_LARGE_LEFT_45DEGREE_TURN:
-                    if (!largeLeft45DegreeTurn(player, world, x, y, z, l, tempType)) {return false;}
-                    break;
+                case EMBEDDED_LARGE_RIGHT_45DEGREE_TURN:
+                    curveXArray = new int[]{0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2};
+                    curveZArray = new int[]{0, 1, 2, 3, 1, 2, 3, 4, 5, 4, 5};
 
-                case VERY_LARGE_RIGHT_45DEGREE_TURN:
-                case EMBEDDED_VERY_LARGE_RIGHT_45DEGREE_TURN:
-                    if (!veryLargeRight45DegreeTurn(player, world, x, y, z, l, tempType)) {return false;}
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 8.45f)) {return false;}
                     break;
 
                 case VERY_LARGE_LEFT_45DEGREE_TURN:
+                case VERY_LARGE_RIGHT_45DEGREE_TURN:
                 case EMBEDDED_VERY_LARGE_LEFT_45DEGREE_TURN:
-                    if (!veryLargeLeft45DegreeTurn(player, world, x, y, z, l, tempType)) {return false;}
-                    break;
+                case EMBEDDED_VERY_LARGE_RIGHT_45DEGREE_TURN:
+                    curveXArray = new int[]{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3};
+                    curveZArray = new int[]{0, 1, 2, 3, 4, 1, 2, 3, 4, 5, 6, 4, 5, 6, 7, 6, 7};
 
-                case SUPER_LARGE_RIGHT_45DEGREE_TURN:
-                case EMBEDDED_SUPER_LARGE_RIGHT_45DEGREE_TURN:
-                    if (!superLargeRight45DegreeTurn(player, world, x, y, z, l, tempType)) {return false;}
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 10.89f)) {return false;}
                     break;
 
                 case SUPER_LARGE_LEFT_45DEGREE_TURN:
+                case SUPER_LARGE_RIGHT_45DEGREE_TURN:
                 case EMBEDDED_SUPER_LARGE_LEFT_45DEGREE_TURN:
-                    if (!superLargeLeft45DegreeTurn(player, world, x, y, z, l, tempType)) {return false;}
+                case EMBEDDED_SUPER_LARGE_RIGHT_45DEGREE_TURN:
+                    curveXArray = new int[]{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4};
+                    curveZArray = new int[]{0, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 6, 7, 5, 6, 7, 8, 9, 7, 8, 9, 10, 9, 10};
+
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 15.69f)) {return false;}
                     break;
 
                 case LARGE_RIGHT_CURVED_SLOPE_DYNAMIC:
@@ -743,10 +739,10 @@ public class ItemTCRail extends ItemPart {
                 case EMBEDDED_SMALL_LEFT_PARALLEL_CURVE:
 
                     curveXArray = new int[]{0, 0, 0, 0, 0, 0};
-                    CurveZArray = new int[]{0, 1, 2, 3, 4, 5};
+                    curveZArray = new int[]{0, 1, 2, 3, 4, 5};
                     curveXArray2 = new int[]{1, 1, 1, 1, 1, 1};
-                    CurveZArray2 = new int[]{2, 3, 4, 5, 6, 7};
-                    if (!SCurve(player, world, x, y, z, l, tempType, par10, curveXArray, CurveZArray, curveXArray2, CurveZArray2, 16.25f, 8, 2)) {return false;}
+                    curveZArray2 = new int[]{2, 3, 4, 5, 6, 7};
+                    if (!SCurve(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, curveXArray2, curveZArray2, 16.25f, 8, 2)) {return false;}
                     break;
 
                 case MEDIUM_RIGHT_PARALLEL_CURVE:
@@ -755,10 +751,10 @@ public class ItemTCRail extends ItemPart {
                 case EMBEDDED_MEDIUM_LEFT_PARALLEL_CURVE:
 
                     curveXArray = new int[]{0, 0, 0, 0, 0, 1, 1, 1};
-                    CurveZArray = new int[]{0, 1, 2, 3, 4, 3, 4, 5};
+                    curveZArray = new int[]{0, 1, 2, 3, 4, 3, 4, 5};
                     curveXArray2 = new int[]{1, 1, 1, 2, 2, 2, 2, 2};
-                    CurveZArray2 = new int[]{6, 7, 8, 7, 8, 9, 10, 11};
-                    if (!SCurve(player, world, x, y, z, l, tempType, par10, curveXArray, CurveZArray, curveXArray2, CurveZArray2, 18.50f, 12, 3)) {return false;}
+                    curveZArray2 = new int[]{6, 7, 8, 7, 8, 9, 10, 11};
+                    if (!SCurve(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, curveXArray2, curveZArray2, 18.50f, 12, 3)) {return false;}
                     break;
 
                 case LARGE_RIGHT_PARALLEL_CURVE:
@@ -767,10 +763,10 @@ public class ItemTCRail extends ItemPart {
                 case EMBEDDED_LARGE_LEFT_PARALLEL_CURVE:
 
                     curveXArray = new int[]{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1};
-                    CurveZArray = new int[]{0, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8};
+                    curveZArray = new int[]{0, 1, 2, 3, 4, 5, 4, 5, 6, 7, 8};
                     curveXArray2 = new int[]{2, 2, 2, 2, 2, 3, 3, 3, 3, 3,3};
-                    CurveZArray2 = new int[]{7, 8, 9, 10, 11, 10, 11, 12, 13, 14,15};
-                    if (!SCurve(player, world, x, y, z, l, tempType, par10, curveXArray, CurveZArray, curveXArray2, CurveZArray2, 22f, 16, 4)) {return false;}
+                    curveZArray2 = new int[]{7, 8, 9, 10, 11, 10, 11, 12, 13, 14,15};
+                    if (!SCurve(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, curveXArray2, curveZArray2, 22f, 16, 4)) {return false;}
                     break;
 
                 case S_CURVE_20x2_LEFT:
@@ -778,11 +774,11 @@ public class ItemTCRail extends ItemPart {
                 case EMBEDDED_S_CURVE_20x2_LEFT:
                 case EMBEDDED_S_CURVE_20x2_RIGHT:
                     curveXArray = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1};
-                    CurveZArray = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 3, 4, 5, 6, 7, 8, 9};
+                    curveZArray = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 3, 4, 5, 6, 7, 8, 9};
                     curveXArray2 = new int[] {0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};
-                    CurveZArray2 = new int[] {10, 11, 12, 13, 14, 15, 16, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
+                    curveZArray2 = new int[] {10, 11, 12, 13, 14, 15, 16, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19};
 
-                    if (!SCurve(player, world, x, y, z, l, tempType, par10, curveXArray, CurveZArray, curveXArray2, CurveZArray2, 100.25f, 20, 2)) {return false;}
+                    if (!SCurve(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, curveXArray2, curveZArray2, 100.25f, 20, 2)) {return false;}
                     break;
 
                 case MEDIUM_RIGHT_45DEGREE_SWITCH:
@@ -3359,273 +3355,6 @@ public class ItemTCRail extends ItemPart {
         }
         return true;
 
-    }
-
-
-
-
-
-
-    private boolean mediumRight45DegreeTurn(EntityPlayer player, World world, int x, int y, int z, int l, EnumTracks tempType) {
-
-        int[] xArray;
-        int[] zArray;
-        if (player.isSneaking()) {
-            xArray = new int[]{0, 0, 0, 1, 1};
-            zArray = new int[]{0, 1, 2, 1, 2};
-        } else {
-            xArray = new int[]{0, 0, 0, 1, 1, 1, 2};
-            zArray = new int[]{0, 1, 2, 1, 2, 3, 2};
-        }
-        if (l == 2) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, true), l, false, 3, x + 1, z - 2, 3.75, x + 4.25,
-                    y + 1, z + 1, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 0) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, false), l, false, 1, x - 1, z + 2, 3.75, x - 3.25,
-                    y + 1, z, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 1) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, true), l, false, 2, x - 2, z - 1, 3.75, x + 1,
-                    y + 1, z - 3.25, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 3) {
-            return putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, false), l, false, 0, x + 2, z + 1, 3.75, x, y + 1,
-                    z + 4.25, tempType.getLabel(), tempType.getItem().item);
-        }
-        return true;
-    }
-    private boolean mediumLeft45DegreeTurn(EntityPlayer player, World world, int x, int y, int z, int l, EnumTracks tempType) {
-
-        int[] xArray;
-        int[] zArray;
-        if (player.isSneaking()) {
-            xArray = new int[]{0, 0, 0, 1, 1};
-            zArray = new int[]{0, 1, 2, 1, 2};
-        } else {
-            xArray = new int[]{0, 0, 0, 1, 1, 1, 2};
-            zArray = new int[]{0, 1, 2, 1, 2, 3, 2};
-        }
-
-        if (l == 2) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, true), l, false, 1, x - 1, z - 2, 3.75, x - 3.25,
-                    y + 1, z + 1, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 0) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, false), l, false, 3, x + 1, z + 2, 3.75, x + 4.25,
-                    y + 1, z, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 1) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, false), l, false, 0, x - 2, z + 1, 3.75, x + 1,
-                    y + 1, z + 4.25, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 3) {
-            return putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, true), l, false, 2, x + 2, z - 1, 3.75, x, y + 1,
-                    z - 3.25, tempType.getLabel(), tempType.getItem().item);
-        }
-        return true;
-    }
-    private boolean largeRight45DegreeTurn(EntityPlayer player, World world, int x, int y, int z, int l, EnumTracks tempType) {
-        int[] xArray;
-        int[] zArray;
-        if (player.isSneaking()) {
-            xArray = new int[]{0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2};
-            zArray = new int[]{0, 1, 2, 3, 1, 2, 3, 4, 5, 4, 5};
-        } else {
-            xArray = new int[]{0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 3};
-            zArray = new int[]{0, 1, 2, 3, 1, 2, 3, 4, 5, 4, 5, 6, 5};
-        }
-        if (l == 2) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, true), l, false, 3, x + 2, z - 5, 8.49, x + 8.99,
-                    y + 1, z + 1, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 0) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, false), l, false, 1, x - 2, z + 5, 8.49, x - 7.99,
-                    y + 1, z, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 1) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, true), l, false, 2, x - 5, z - 2, 8.49, x + 1,
-                    y + 1, z - 7.99, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 3) {
-            return putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, false), l, false, 0, x + 5, z + 2, 8.49, x,
-                    y + 1, z + 8.99, tempType.getLabel(), tempType.getItem().item);
-        }
-        return true;
-    }
-    private boolean largeLeft45DegreeTurn(EntityPlayer player, World world, int x, int y, int z, int l, EnumTracks tempType) {
-        int[] xArray;
-        int[] zArray;
-        if (player.isSneaking()) {
-            xArray = new int[]{0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2};
-            zArray = new int[]{0, 1, 2, 3, 1, 2, 3, 4, 5, 4, 5};
-        } else {
-            xArray = new int[]{0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 3};
-            zArray = new int[]{0, 1, 2, 3, 1, 2, 3, 4, 5, 4, 5, 6, 5};
-        }
-        if (l == 2) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, true), l, false, 1, x - 2, z - 5, 8.49, x - 7.99,
-                    y + 1, z + 1, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 0) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, false), l, false, 3, x + 2, z + 5, 8.49, x + 8.99,
-                    y + 1, z, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 1) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, false), l, false, 0, x - 5, z + 2, 8.49, x + 1,
-                    y + 1, z + 8.99, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 3) {
-            return putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, true), l, false, 2, x + 5, z - 2, 8.49, x,
-                    y + 1, z - 7.99, tempType.getLabel(), tempType.getItem().item);
-        }
-        return true;
-    }
-    public boolean veryLargeRight45DegreeTurn(EntityPlayer player, World world, int x, int y, int z, int l, EnumTracks tempType) {
-        int[] xArray;
-        int[] zArray;
-        if (player.isSneaking()) {
-            xArray = new int[]{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3};
-            zArray = new int[]{0, 1, 2, 3, 4, 1, 2, 3, 4, 5, 6, 4, 5, 6, 7, 6, 7};
-        } else {
-            xArray = new int[]{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4};
-            zArray = new int[]{0, 1, 2, 3, 4, 1, 2, 3, 4, 5, 6, 4, 5, 6, 7, 6, 7, 8, 7};
-
-        }
-        if (l == 2) {
-
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, true), l, false, 3, x + 3, z - 7, 10.89, x + 11.39,
-                    y + 1, z + 1, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-
-        if (l == 0) {
-
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, false), l, false, 1, x - 3, z + 7, 10.89, x - 10.39,
-                    y + 1, z, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 1) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, true), l, false, 2, x - 7, z - 3, 10.89, x + 1,
-                    y + 1, z - 10.39, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-
-        if (l == 3) {
-            return putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, false), l, false, 0, x + 7, z + 3, 10.89, x,
-                    y + 1, z + 11.39, tempType.getLabel(), tempType.getItem().item);
-        }
-        return true;
-    }
-    public boolean veryLargeLeft45DegreeTurn(EntityPlayer player, World world, int x, int y, int z, int l, EnumTracks tempType) {
-        int[] xArray;
-        int[] zArray;
-        if (player.isSneaking()) {
-            xArray = new int[]{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3};
-            zArray = new int[]{0, 1, 2, 3, 4, 1, 2, 3, 4, 5, 6, 4, 5, 6, 7, 6, 7};
-        } else {
-            xArray = new int[]{0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 4};
-            zArray = new int[]{0, 1, 2, 3, 4, 1, 2, 3, 4, 5, 6, 4, 5, 6, 7, 6, 7, 8, 7};
-        }
-        if (l == 2) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, true), l, false, 3, x + 3, z - 7, 10.89, x - 10.39,
-                    y + 1, z + 1, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 0) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, false), l, false, 1, x - 3, z + 7, 10.89, x + 11.39,
-                    y + 1, z, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 1) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, false), l, false, 2, x - 7, z - 3, 10.89, x + 1,
-                    y + 1, z + 11.39, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 3) {
-            return putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, true), l, false, 0, x + 7, z + 3, 10.89, x,
-                    y + 1, z - 10.39, tempType.getLabel(), tempType.getItem().item);
-        }
-        return true;
-    }
-    public boolean superLargeRight45DegreeTurn(EntityPlayer player, World world, int x, int y, int z, int l, EnumTracks tempType) {
-
-        int[] xArray;
-        int[] zArray;
-        if (player.isSneaking()) {
-            xArray = new int[]{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4};
-            zArray = new int[]{0, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 6, 7, 5, 6, 7, 8, 9, 7, 8, 9, 10, 9, 10};
-        } else {
-            xArray = new int[]{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5};
-            zArray = new int[]{0, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 6, 7, 5, 6, 7, 8, 9, 7, 8, 9, 10, 9, 10, 11, 10};
-        }
-
-        if (l == 2) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, true), l, false, 3, x + 4, z - 11, 15.69, x + 16.19,
-                    y + 1, z + 1, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 0) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, false), l, false, 1, x - 4, z + 11, 15.69, x - 15.19,
-                    y + 1, z, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 1) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, true), l, false, 2, x - 11, z - 4, 15.69, x + 1,
-                    y + 1, z - 15.19, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 3) {
-            return putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, false), l, false, 0, x + 11, z + 4, 15.69, x,
-                    y + 1, z + 16.19, tempType.getLabel(), tempType.getItem().item);
-        }
-        return true;
-    }
-    public boolean superLargeLeft45DegreeTurn(EntityPlayer player, World world, int x, int y, int z, int l, EnumTracks tempType) {
-
-        int[] xArray;
-        int[] zArray;
-        if (player.isSneaking()) {
-            xArray = new int[]{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4};
-            zArray = new int[]{0, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 6, 7, 5, 6, 7, 8, 9, 7, 8, 9, 10, 9, 10};
-        } else {
-            xArray = new int[]{0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 3, 3, 3, 3, 4, 4, 4, 5};
-            zArray = new int[]{0, 1, 2, 3, 4, 5, 1, 2, 3, 4, 5, 6, 7, 5, 6, 7, 8, 9, 7, 8, 9, 10, 9, 10, 11, 10};
-        }
-        if (l == 2) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, true), flipArraySign(zArray, z, true), l, false, 1, x - 4, z - 11, 15.69, x - 15.19,
-                    y + 1, z + 1, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-
-        if (l == 0) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(xArray, x, false), flipArraySign(zArray, z, false), l, false, 3, x + 4, z + 11, 15.69, x + 16.19,
-                    y + 1, z, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-        if (l == 1) {
-            if (!putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, true), flipArraySign(xArray, z, false), l, false, 0, x - 11, z + 4, 15.69, x + 1,
-                    y + 1, z + 16.19, tempType.getLabel(), tempType.getItem().item))
-                return false;
-        }
-
-        if (l == 3) {
-            return putDownTurn(player, world, false, x, y, z, flipArraySign(zArray, x, false), flipArraySign(xArray, z, true), l, false, 2, x + 11, z - 4, 15.69, x,
-                    y + 1, z - 15.19, tempType.getLabel(), tempType.getItem().item);
-        }
-        return true;
     }
     public boolean largeRightCurvedSlope(EntityPlayer player, World world, int x, int y, int z, int l, EnumTracks tempType) {
 
