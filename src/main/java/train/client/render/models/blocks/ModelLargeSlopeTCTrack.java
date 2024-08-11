@@ -18,6 +18,7 @@ public class ModelLargeSlopeTCTrack extends ModelBase {
 
 	private IModelCustom modelLargeSlopeWood;
 	private IModelCustom modelLargeSlopeBallast;
+	private String[] ballastTexture = new String[2];
 
 
 	public ModelLargeSlopeTCTrack() {
@@ -34,7 +35,7 @@ public class ModelLargeSlopeTCTrack extends ModelBase {
 
 	public void render(String type, String ballast, int ballastColour) {
 
-		String[] ballastTexture = new String[2];
+
 		if (ballast.contains(":")) {
 			ballastTexture = ballast.split(":", 5);
 		}
@@ -89,7 +90,6 @@ public class ModelLargeSlopeTCTrack extends ModelBase {
 	}
 
 	public void render(String type, TileTCRail tcRail, double x, double y, double z) {
-		int facing = tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord);
 		String iconName;
 		Block block = Block.getBlockById(tcRail.getBallastMaterial());
 		IIcon icon = block.getIcon(1, tcRail.ballastMetadata);
@@ -102,7 +102,7 @@ public class ModelLargeSlopeTCTrack extends ModelBase {
 			colour = 16777215;
 		}
 
-		render( type, facing, x, y, z, 1, 1, 1, 1, iconName, colour);
+		render( type, tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1, iconName, colour);
 	}
 
 	public void render(String type, int facing, double x, double y, double z, float r, float g, float b, float a, String ballastTexture, int colour)

@@ -31,6 +31,7 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
     public static final ModelRightDiamondCrossing modelRightDiamondCrossing = new ModelRightDiamondCrossing();
     public static final ModelLeftDiamondCrossing modelLeftDiamondCrossing = new ModelLeftDiamondCrossing();
 
+    public static TileTCRail railTile;
     /**
      * Embedded Tracks
      */
@@ -40,7 +41,7 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity var1, double x, double y, double z, float var8) {
         if (var1 instanceof TileTCRail) {
-            TileTCRail railTile = (TileTCRail) var1;
+            railTile = (TileTCRail) var1;
             if (railTile.hasModel && railTile.getTrackType() != null) {
                 switch (railTile.getTrackType()) {
                     // Normal Tracks

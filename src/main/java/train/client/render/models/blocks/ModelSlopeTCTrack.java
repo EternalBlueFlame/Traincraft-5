@@ -104,7 +104,6 @@ public class ModelSlopeTCTrack extends ModelBase {
 
 
 	public void render(String type, TileTCRail tcRail, double x, double y, double z) {
-		int facing = tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord);
 
 		String iconName;
 		Block block = Block.getBlockById(tcRail.getBallastMaterial());
@@ -117,7 +116,7 @@ public class ModelSlopeTCTrack extends ModelBase {
 			iconName = "tc:ballast_test";
 			colour = 16777215;
 		}
-		render( type, facing, x, y, z, 1, 1, 1, 1, iconName, colour);
+		render( type, tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1, iconName, colour);
 
 	}
 

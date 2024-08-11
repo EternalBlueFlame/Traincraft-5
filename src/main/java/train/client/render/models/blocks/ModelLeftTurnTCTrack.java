@@ -47,8 +47,7 @@ public class ModelLeftTurnTCTrack extends ModelBase {
 	public void render32X() {model32XLeftTurn.renderAll();}
 
 	public void render(String type, TileTCRail tcRail, double x, double y, double z) {
-		int facing = tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord);
-		render( type, facing, x, y, z, 1, 1, 1, 1);
+		render( type, tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1);
 	}
 
 	public void render(String type, int facing, double x, double y, double z, float r, float g, float b, float a) {

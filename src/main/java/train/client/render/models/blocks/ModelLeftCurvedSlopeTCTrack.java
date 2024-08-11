@@ -19,7 +19,7 @@ public class ModelLeftCurvedSlopeTCTrack extends ModelBase {
     private IModelCustom modelLargeLeftCurvedBallast;
     private IModelCustom modelVeryLargeLeftCurvedBallast;
     private IModelCustom modelSuperLargeLeftCurvedBallast;
-
+    private String[] ballastTexture = new String[2];
     public ModelLeftCurvedSlopeTCTrack() {
         modelLargeLeftCurvedTrack = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_slope_curve_large_l.obj"));
         modelVeryLargeLeftCurvedTrack = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_slope_curve_very_large_l.obj"));
@@ -32,7 +32,6 @@ public class ModelLeftCurvedSlopeTCTrack extends ModelBase {
     public void render(String type, String ballast, int ballastColour) {
 
 
-        String[] ballastTexture = new String[2];
         if (ballast.contains(":")) {
             ballastTexture = ballast.split(":", 5);
         }
@@ -120,7 +119,6 @@ public class ModelLeftCurvedSlopeTCTrack extends ModelBase {
     }
 
     public void render(String type, TileTCRail tcRail, double x, double y, double z) {
-        int facing = tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord);
 
         String iconName;
         Block block = Block.getBlockById(tcRail.getBallastMaterial());
@@ -133,7 +131,7 @@ public class ModelLeftCurvedSlopeTCTrack extends ModelBase {
             iconName = "tc:ballast_test";
             colour = 16777215;
         }
-        render( type, facing, x, y, z, 1, 1, 1, 1, iconName, colour);
+        render( type, tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1, iconName, colour);
 
     }
 
