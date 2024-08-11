@@ -557,6 +557,16 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                         modelLeftParallelCurve.render("large", "embedded", railTile, x, y, z);
                         break;
                     }
+                    case EMBEDDED_S_CURVE_20x2:
+                    case EMBEDDED_S_CURVE_20x2_RIGHT: {
+                        modelRightParallelCurve.render("20x2", "embedded", railTile, x, y, z);
+                        break;
+                    }
+
+                    case EMBEDDED_S_CURVE_20x2_LEFT: {
+                        modelLeftParallelCurve.render("20x2", "embedded", railTile, x, y, z);
+                        break;
+                    }
                     case EMBEDDED_TWO_WAYS_CROSSING: {
                         modelTwoWaysCrossing.render("embedded_crossing", railTile, x, y, z);
                         break;
