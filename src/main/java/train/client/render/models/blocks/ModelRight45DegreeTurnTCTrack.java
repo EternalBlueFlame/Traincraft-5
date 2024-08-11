@@ -31,8 +31,7 @@ public class ModelRight45DegreeTurnTCTrack {
     public void renderSuperLarge() {modelSuperLargeRight45DegreeTurn.renderAll();}
 
     public void render(String type, String variant, TileTCRail tcRail, double x, double y, double z) {
-        int facing = tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord);
-        render( type, variant, facing, x, y, z, 1, 1, 1, 1);
+        render( type, variant, tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1);
     }
 
     public void render(String type, String variant, int facing, double x, double y, double z, float r, float g, float b, float a) {

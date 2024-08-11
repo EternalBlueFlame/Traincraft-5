@@ -22,6 +22,8 @@ public class ModelSmallStraightTCTrack extends ModelBase {
 	private IModelCustom modelRoadCrossingBase;
 	private IModelCustom modelRoadCrossingDynamic;
 
+	String[] ballastTexture = new String[2];
+
 	public ModelSmallStraightTCTrack() {
 		modelSmallStraight = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_normal.obj"));
 		modelRoadCrossing = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_roadcrossing.obj"));
@@ -30,7 +32,6 @@ public class ModelSmallStraightTCTrack extends ModelBase {
 	}
 
 	public void render(String type, TileTCRail tcRail, double x, double y, double z) {
-		int facing = tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord);
 
 		String iconName;
 		Block block = Block.getBlockById(tcRail.getBallastMaterial());
@@ -45,7 +46,7 @@ public class ModelSmallStraightTCTrack extends ModelBase {
 		}
 
 
-		render( type, facing, x, y, z, 1, 1, 1, 1 , iconName, colour);
+		render( type, tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1 , iconName, colour);
 	}
 
 
@@ -84,8 +85,6 @@ public class ModelSmallStraightTCTrack extends ModelBase {
 
 	public void render( String type, @Nullable String  ballast, int colour)
 	{
-
-		String[] ballastTexture = new String[2];
 		if (ballast !=null) {
 			if (ballast.contains(":")) {
 				ballastTexture = ballast.split(":", 5);

@@ -1778,7 +1778,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             entityplayer.addChatMessage(new ChatComponentText("Destination reset"));
             return true;
         }
-
         if(itemstack != null) {
             ItemStack crowbar = GameRegistry.findItemStack("railcraft","tool.crowbar",1);
             ItemStack crowbar1 = GameRegistry.findItemStack("railcraft","tool.crowbar.reinforced",1);
@@ -1857,7 +1856,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 
         //be sure the player has permission to enter the transport, and that the transport has the main seat open.
-        if (getRiderOffsets() != null && getPermissions(playerEntity, false, true)) {
+        if (getRiderOffsets() != null && getPermissions(playerEntity, false, true) && !entityplayer.isSneaking()) {
             for (EntitySeat seat : seats) {
                 //1.12 is stupid, sometimes when the passenger is null, it returns the player
                 if (!getWorld().isRemote && (seat.getPassenger() == null
@@ -2676,11 +2675,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
     public boolean shouldRiderSit(int seat){
-        if (seats.size() != 0 && seats.size() >= seat) {
-            return seats.get(seat).shouldRiderSit();
-        } else {
-            return this.shouldRiderSit();
-        }
+        return this.shouldRiderSit();
     }
     @Override
     public boolean shouldRiderSit(){
