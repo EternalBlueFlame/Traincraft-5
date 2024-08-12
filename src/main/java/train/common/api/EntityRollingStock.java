@@ -1353,69 +1353,73 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
 
-    private void moveOnTCCurvedSlope(int i, int j, int k, double r, double cx, double cz, int tilex, int tilez, int meta, double slopeHeight, double slopeAngle) {
-        double newTilex = tilex;
-        double newTilez = tilez;
+    private void moveOnTCCurvedSlope(int floor_X, int floor_Y, int floor_Z, double tileRadius, double circleX, double circleZ, int tileX, int tileZ, int meta, double slopeHeight, double slopeAngle) {
+        double newTileX = tileX;
+        double newTileZ = tileZ;
         if (meta == 2) {
-            newTilez += 1;
-            newTilex += 0.5;
+            newTileZ += 1;
+            newTileX += 0.5;
         }
         if (meta == 0) {
-            newTilex += 0.5;
+            newTileX += 0.5;
         }
         if (meta == 1) {
-            newTilex += 1;
-            newTilez += 0.5;
+            newTileX += 1;
+            newTileZ += 0.5;
         }
         if (meta == 3) {
-            newTilez += 0.5;
+            newTileZ += 0.5;
         }
-        double cpx = posX - cx;
-        double cpz = posZ - cz;
-        double tpx = newTilex - posX;
-        double tpz = newTilez - posZ;
+        double circlePosX = posX - circleX;
+        double circlePosZ = posZ - circleZ;
 
-        double tpnorm = Math.sqrt(tpx * tpx + tpz * tpz);
+        double tilePositionNormalized = Math.sqrt(Math.pow((newTileX - posX),2) + Math.pow((newTileZ - posZ),2));
 
-        double cp_norm = Math.sqrt(cpx * cpx + cpz * cpz);
-        double vnorm = Math.sqrt(motionX * motionX + motionZ * motionZ);
+        double circlePositionNormalized = Math.sqrt(circlePosX * circlePosX + circlePosZ * circlePosZ);
+        double velocityNormalized = Math.sqrt(motionX * motionX + motionZ * motionZ);
 
-        double norm_cpx = cpx / cp_norm; //u
-        double norm_cpz = cpz / cp_norm; //v
+        double normCirclePosX = circlePosX / circlePositionNormalized; //u
+        double normCirclePosZ = circlePosZ / circlePositionNormalized; //v
 
-        double vx2 = -norm_cpz * vnorm;//-v
-        double vz2 = norm_cpx * vnorm;//u
+        double negVelNormX = -normCirclePosZ * velocityNormalized;//-v
+        double velNormZ = normCirclePosX * velocityNormalized;//u
 
-        double px2 = posX + motionX;
-        double pz2 = posZ + motionZ;
+        double positionX = posX + motionX;
+        double positionZ = posZ + motionZ;
 
-        double px2_cx = px2 - cx;
-        double pz2_cz = pz2 - cz;
+        double positionXOffsetByCircle = positionX - circleX;
+        double positionZOffsetByCircle = positionZ - circleZ;
 
-        double p2_c_norm = Math.sqrt((px2_cx * px2_cx) + (pz2_cz * pz2_cz));
+        double offsetPositionNormalized = Math.sqrt((positionXOffsetByCircle * positionXOffsetByCircle) + (positionZOffsetByCircle * positionZOffsetByCircle));
 
-        double px2_cx_norm = px2_cx / p2_c_norm;
-        double pz2_cz_norm = pz2_cz / p2_c_norm;
+        double offsetPositionNormX = positionXOffsetByCircle / offsetPositionNormalized;
+        double offsetPositionNormZ = positionZOffsetByCircle / offsetPositionNormalized;
 
-        double px3 = cx + (px2_cx_norm * r);
-        double pz3 = cz + (pz2_cz_norm * r);
+        double posX3 = circleX + (offsetPositionNormX * tileRadius);
+        double posZ3 = circleZ + (offsetPositionNormZ * tileRadius);
 
-        double signX = px3 - posX;
-        double signZ = pz3 - posZ;
+        double signX = posX3 - posX;
+        double signZ = posZ3 - posZ;
 
-        vx2 = Math.copySign(vx2, signX);
-        vz2 = Math.copySign(vz2, signZ);
+        negVelNormX = Math.copySign(negVelNormX, signX);
+        velNormZ = Math.copySign(velNormZ, signZ);
 
-        double p_corr_x = cx + ((cpx / cp_norm) * r);
-        double p_corr_z = cz + ((cpz / cp_norm) * r);
-        motionX = vx2;
-        motionZ = vz2;
+        double correctedPosX = circleX + ((circlePosX / circlePositionNormalized) * tileRadius);
+        double correctedPosZ = circleZ + ((circlePosZ / circlePositionNormalized) * tileRadius);
+        double newYPos = Math.abs(floor_Y + Math.min(1, (slopeAngle * Math.abs(tilePositionNormalized))) + yOffset + 0.34f);
+        setPosition(correctedPosX, newYPos, correctedPosZ);
 
-        double newYPos = Math.abs(j + Math.min(1, (slopeAngle * Math.abs(tpnorm))) + yOffset + 0.34f);
-        setPosition(p_corr_x, newYPos, p_corr_z);
-        moveEntity(vx2, 0, vz2);
+        /* slope speed-up. it works* but not in a desired fashion. will come back to it.
+        double normalizedSlopeVelocity = Math.sqrt((negVelNormX*negVelNormX)+(velNormZ*velNormZ));
+        normalizedSlopeVelocity = getSlopeAdjustedSpeed(normalizedSlopeVelocity, slopeAngle);
+        double slopeVelopcityX = negVelNormX / normalizedSlopeVelocity;
+        double slopeVelopcityZ = velNormZ / normalizedSlopeVelocity;
+        motionX = Math.copySign(slopeVelopcityX, motionX);
+        motionZ = Math.copySign(slopeVelopcityZ, motionZ);
+        System.out.println(slopeAngle);
+        */
 
-
+        moveEntity(negVelNormX, 0, velNormZ);
     }
 
     private void moveOnTCStraight(int i, int j, int k, double cx, double cz, int meta) {
