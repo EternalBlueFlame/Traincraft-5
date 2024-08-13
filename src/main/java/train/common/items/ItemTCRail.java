@@ -3100,17 +3100,19 @@ public class ItemTCRail extends ItemPart {
         }
 
         for (int i = 0; i <= trackLength; i += 3){
-            if (!canPlaceTrack(player, world, x + (i * dx), y + 1, z + (i * dz))
-                    || !canPlaceTrack(player, world, x + (i * dx) + dx, y + 1, z + (i * dz) + dz)
-                    || !canPlaceTrack(player, world, x + (i * dx) + (2*dx), y + 1, z + (i * dz) + (2*dz)))
-
+           if (!canPlaceTrack(player, world, x + (i * dx), y + 1, z + (i * dz))
+                   || !canPlaceTrack(player, world, x + (i * dx) + dx, y + 1, z + (i * dz) + dz)
+                   || !canPlaceTrack(player, world, x + (i * dx) + (2*dx), y + 1, z + (i * dz) + (2*dz)))
                 return false;
 
             for(int j = 0; j < 3 ; j++){
-                if(!canPlaceTrack(player, world, x + (i * dx) + dx, y + 1, z + (i * dz))
-                || !canPlaceTrack(player, world, x + (i * dx) , y + 1, z + (i * dz) + dz))
-                    return false;
+
+                if(!canPlaceTrack(player, world, x + (i * dx) + (j * dx ) + dx , y + 1, z + (i * dz) + (j * dz))
+                    || !canPlaceTrack(player, world, x + (i * dx) + (j * dx), y + 1 , z + (i * dz) + (j * dz) + dz))
+                   return false;
             }
+
+
         }
 
         for (int i = 0; i <= trackLength; i += 3){
