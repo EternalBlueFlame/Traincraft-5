@@ -125,8 +125,8 @@ public enum ItemIDs {
 	tcRailLargeSwitch("ItemTCRail", "item_rail_switch_large", 5),
 	tcRailVeryLargeSwitch("ItemTCRail", "item_rail_switch_very_large", 5),
 
-	tcRailMediumParallelSwitch("ItemTCRail", "item_rail_switch_parallel", 5),
-	tcRailLargeParallelSwitch("ItemTCRail", "item_rail_switch_parallel", 5),
+	tcRailMediumParallelSwitch("ItemTCRail", "item_rail_switch_parallel_4x11", 5),
+	tcRailLargeParallelSwitch("ItemTCRail", "item_rail_switch_parallel_4x17", 5),
 	tcRailMedium45DegreeSwitch("ItemTCRail","item_rail_switch_45degree_medium", 5 ),
 	tcRailLarge45DegreeSwitch("ItemTCRail", "item_rail_switch_45degree_large", 5),
 
