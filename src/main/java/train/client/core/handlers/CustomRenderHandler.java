@@ -243,15 +243,15 @@ public class CustomRenderHandler {
             }
 
             // Normal Parallel Curves
-        } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.PARALEL) {
+        } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.PARALLEL) {
             String turnSize = "small";
             if (item.getTrackType() == EnumTracks.MEDIUM_PARALLEL_CURVE || item.getTrackType() == EnumTracks.EMBEDDED_MEDIUM_PARALLEL_CURVE) {
                 turnSize = "medium";
             } else if (item.getTrackType() == EnumTracks.LARGE_PARALLEL_CURVE || item.getTrackType() == EnumTracks.EMBEDDED_LARGE_PARALLEL_CURVE) {
                 turnSize = "large";
-            } else if (item.getTrackType() == EnumTracks.S_CURVE_20x2) {
+            } else if (item.getTrackType() == EnumTracks.S_CURVE_20x2 || item.getTrackType() == EnumTracks.EMBEDDED_S_CURVE_20x2) {
                 turnSize = "20x2";
-            }
+               }
 
             if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
                 RenderTCRail.modelLeftParallelCurve.render(turnSize, variant, facing, 0, 0, 0, r, g, b, a);

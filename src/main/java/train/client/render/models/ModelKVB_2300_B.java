@@ -49,14 +49,14 @@ public class ModelKVB_2300_B extends ModelConverter //Same as Filename
 		bodyModel[13] = new ModelRendererTurbo(this, 73, 1, textureX, textureY); // Box 32
 		bodyModel[14] = new ModelRendererTurbo(this, 225, 1, textureX, textureY); // Box 33
 		bodyModel[15] = new ModelRendererTurbo(this, 321, 1, textureX, textureY); // Box 31
-		bodyModel[16] = new ModelRendererTurbo(this, 97, 1, textureX, textureY); // Box 340
+		bodyModel[16] = new ModelRendererTurbo(this, 97, 1, textureX, textureY,"lamp"); // Box 340
 		bodyModel[17] = new ModelRendererTurbo(this, 105, 1, textureX, textureY); // Box 341
 		bodyModel[18] = new ModelRendererTurbo(this, 113, 1, textureX, textureY); // Box 228
-		bodyModel[19] = new ModelRendererTurbo(this, 121, 1, textureX, textureY); // Box 229
-		bodyModel[20] = new ModelRendererTurbo(this, 129, 1, textureX, textureY,"lamp"); // Box 230 l
-		bodyModel[21] = new ModelRendererTurbo(this, 153, 1, textureX, textureY,"lamp"); // Box 231 l
-		bodyModel[22] = new ModelRendererTurbo(this, 161, 1, textureX, textureY,"lamp"); // Box 232 l
-		bodyModel[23] = new ModelRendererTurbo(this, 169, 1, textureX, textureY,"lamp"); // Box 233 l
+		bodyModel[19] = new ModelRendererTurbo(this, 121, 1, textureX, textureY,"lamp"); // Box 229
+		bodyModel[20] = new ModelRendererTurbo(this, 129, 1, textureX, textureY); // Box 230 l
+		bodyModel[21] = new ModelRendererTurbo(this, 153, 1, textureX, textureY); // Box 231 l
+		bodyModel[22] = new ModelRendererTurbo(this, 161, 1, textureX, textureY); // Box 232 l
+		bodyModel[23] = new ModelRendererTurbo(this, 169, 1, textureX, textureY); // Box 233 l
 		bodyModel[24] = new ModelRendererTurbo(this, 361, 1, textureX, textureY); // Box 66
 		bodyModel[25] = new ModelRendererTurbo(this, 321, 1, textureX, textureY); // Box 67
 		bodyModel[26] = new ModelRendererTurbo(this, 1, 25, textureX, textureY); // Box 68
@@ -357,14 +357,14 @@ public class ModelKVB_2300_B extends ModelConverter //Same as Filename
 		bodyModel[321] = new ModelRendererTurbo(this, 17, 89, textureX, textureY); // Box 329
 		bodyModel[322] = new ModelRendererTurbo(this, 0, 177, textureX, textureY); // Box 397
 		bodyModel[323] = new ModelRendererTurbo(this, 0, 185, textureX, textureY); // Box 398
-		bodyModel[324] = new ModelRendererTurbo(this, 161, 1, textureX, textureY,"lamp"); // Box 399 l
-		bodyModel[325] = new ModelRendererTurbo(this, 169, 1, textureX, textureY,"lamp"); // Box 400 l
-		bodyModel[326] = new ModelRendererTurbo(this, 129, 1, textureX, textureY,"lamp"); // Box 401 l
-		bodyModel[327] = new ModelRendererTurbo(this, 153, 1, textureX, textureY,"lamp"); // Box 402 l
-		bodyModel[328] = new ModelRendererTurbo(this, 161, 1, textureX, textureY,"lamp"); // Box 401 l
-		bodyModel[329] = new ModelRendererTurbo(this, 161, 1, textureX, textureY,"lamp"); // Box 403 l
-		bodyModel[330] = new ModelRendererTurbo(this, 161, 1, textureX, textureY,"lamp"); // Box 404 l
-		bodyModel[331] = new ModelRendererTurbo(this, 161, 1, textureX, textureY,"lamp"); // Box 405 l
+		bodyModel[324] = new ModelRendererTurbo(this, 161, 1, textureX, textureY); // Box 399 l
+		bodyModel[325] = new ModelRendererTurbo(this, 169, 1, textureX, textureY); // Box 400 l
+		bodyModel[326] = new ModelRendererTurbo(this, 129, 1, textureX, textureY); // Box 401 l
+		bodyModel[327] = new ModelRendererTurbo(this, 153, 1, textureX, textureY); // Box 402 l
+		bodyModel[328] = new ModelRendererTurbo(this, 161, 1, textureX, textureY); // Box 401 l
+		bodyModel[329] = new ModelRendererTurbo(this, 161, 1, textureX, textureY); // Box 403 l
+		bodyModel[330] = new ModelRendererTurbo(this, 161, 1, textureX, textureY); // Box 404 l
+		bodyModel[331] = new ModelRendererTurbo(this, 161, 1, textureX, textureY); // Box 405 l
 		bodyModel[332] = new ModelRendererTurbo(this, 28, 29, textureX, textureY); // Box 406
 		bodyModel[333] = new ModelRendererTurbo(this, 28, 29, textureX, textureY); // Box 408
 		bodyModel[334] = new ModelRendererTurbo(this, 425, 137, textureX, textureY); // Box 468
@@ -407,7 +407,7 @@ public class ModelKVB_2300_B extends ModelConverter //Same as Filename
 		bodyModel[3].addShapeBox(0F, 0F, 0F, 6, 15, 2, 0F,0F, -0.25F, -0.75F, 0F, -0.25F, -0.25F, 0F, -0.25F, -0.75F, 0F, -0.25F, -0.25F, 0F, 0.25F, -0.6F, 0F, -0.05F, -0.072F, 0F, -0.05F, -0.9F, 0F, 0.25F, -0.4F); // Box 6
 		bodyModel[3].setRotationPoint(-27.5F, -18.75F, -11F);
 
-		bodyModel[4].addShapeBox(0F, 0F, 0F, 7, 15, 2, 0F,-1.5F, -0.65F, 0.25F, 0F, -0.5F, -2F, 0F, -0.5F, 1F, -1.5F, -0.65F, -1.5F, -0.015F, 0.75F, 0.25F, 0F, 0.25F, -2.2F, 0F, 0.25F, 1.25F, -0.15F, 0.75F, -1.5F); // Box 8
+		bodyModel[4].addShapeBox(0F, 0F, 0F, 7, 15, 2, 0F,-1.5F, -0.65F, 0.25F, 0F, -0.5F, -2F, 0F, -0.5F, 1F, -1.5F, -0.65F, -1.5F, -0.015F, 0.75F, 0.25F, 0F, 0.25F, -2.2F, 0F, 0.25F, 1.25F, -0.05F, 0.75F, -1.5F); // Box 8
 		bodyModel[4].setRotationPoint(-34.5F, -19F, 7.25F);
 
 		bodyModel[5].addShapeBox(0F, 0F, 0F, 7, 1, 21, 0F,-1.75F, -0.3F, -3.5F, 0F, 0F, -1F, 0F, 0F, 0F, -1.75F, -0.3F, -2.5F, -1.5F, 0.15F, -3.25F, 0F, 0F, -0.75F, 0F, 0F, 0.25F, -1.5F, 0.15F, -2.25F); // Box 10
@@ -1473,16 +1473,16 @@ public class ModelKVB_2300_B extends ModelConverter //Same as Filename
 		bodyModel[356].addShapeBox(0F, 0F, 0F, 1, 1, 1, 0F,-0.3F, -0.3F, -0.35F, 0F, -0.3F, -0.35F, 0F, -0.05F, 0F, -0.25F, -0.05F, 0F, -0.25F, 0F, -0.1F, 0F, 0F, -0.1F, 0F, 0F, 0F, -0.15F, 0F, 0F); // Box 428
 		bodyModel[356].setRotationPoint(-35.2F, -0.1F, -7.55F);
 
-		bodyModel[357].addShapeBox(0F, 0F, 0F, 7, 6, 2, 0F,-0.015F, -0.75F, 0.25F, 0F, -0.25F, -2F, 0F, -0.25F, 1.2F, -0.15F, -0.75F, -1.5F, 0.5F, 0F, 0.25F, 0F, 0F, -2.25F, 0F, 0F, 1.25F, 0.5F, 0F, -1.5F); // Box 427
+		bodyModel[357].addShapeBox(0F, 0F, 0F, 7, 6, 2, 0F,-0.015F, -0.75F, 0.25F, 0F, -0.25F, -2F, 0F, -0.25F, 1.2F, -0.05F, -0.75F, -1.5F, 0.5F, 0F, 0.25F, 0F, 0F, -2.25F, 0F, 0F, 1.25F, 0.5F, 0F, -1.5F); // Box 427
 		bodyModel[357].setRotationPoint(-34.5F, -4F, 7.25F);
 
 		bodyModel[358].addShapeBox(0F, 0F, 0F, 6, 6, 2, 0F,0F, -0.5F, -0.6F, 0F, -0.2F, -0.072F, 0F, -0.2F, -0.75F, 0F, -0.5F, -0.25F, 0F, 0F, -0.5F, 0F, 0F, 0F, 0F, 0F, -1F, 0F, 0F, -0.5F); // Box 428
 		bodyModel[358].setRotationPoint(-27.5F, -4F, -11F);
 
-		bodyModel[359].addShapeBox(0F, 0F, 0F, 7, 15, 2, 0F,-1.5F, -0.65F, -1.5F, 0F, -0.5F, 1F, 0F, -0.5F, -2F, -1.5F, -0.65F, 0.25F, -0.15F, 0.75F, -1.5F, 0F, 0.5F, 1.15F, 0F, 0.5F, -2.25F, -0.015F, 0.75F, 0.25F); // Box 429
+		bodyModel[359].addShapeBox(0F, 0F, 0F, 7, 15, 2, 0F,-1.5F, -0.65F, -1.5F, 0F, -0.5F, 1F, 0F, -0.5F, -2F, -1.5F, -0.65F, 0.25F, -0.05F, 0.75F, -1.5F, 0F, 0.5F, 1.15F, 0F, 0.5F, -2.25F, -0.015F, 0.75F, 0.25F); // Box 429
 		bodyModel[359].setRotationPoint(-34.5F, -19F, -9.25F);
 
-		bodyModel[360].addShapeBox(0F, 0F, 0F, 7, 6, 2, 0F,-0.15F, -0.75F, -1.5F, 0F, -0.5F, 1.15F, 0F, -0.5F, -2F, -0.015F, -0.75F, 0.25F, 0.5F, 0F, -1.5F, 0F, 0F, 1.25F, 0F, 0F, -2.25F, 0.5F, 0F, 0.25F); // Box 430
+		bodyModel[360].addShapeBox(0F, 0F, 0F, 7, 6, 2, 0F,-0.05F, -0.75F, -1.5F, 0F, -0.5F, 1.15F, 0F, -0.5F, -2F, -0.015F, -0.75F, 0.25F, 0.5F, 0F, -1.5F, 0F, 0F, 1.25F, 0F, 0F, -2.25F, 0.5F, 0F, 0.25F); // Box 430
 		bodyModel[360].setRotationPoint(-34.5F, -4F, -9.25F);
 	}
 
