@@ -63,7 +63,10 @@ public class BlockMFPBWigWag extends BlockDynamic {
 	@Override
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
 		super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
-		TileMFPBWigWag te = (TileMFPBWigWag) world.getTileEntity(i, j, k);
+		TileMFPBWigWag te = null;
+		if (world.getTileEntity(i,j,k) instanceof TileMFPBWigWag) {
+			te = (TileMFPBWigWag) world.getTileEntity(i, j, k);
+		}
 		if (te != null) {
 			int dir = MathHelper.floor_double((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 			te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
