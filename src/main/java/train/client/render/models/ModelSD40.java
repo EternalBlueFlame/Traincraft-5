@@ -5,6 +5,7 @@ import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import fexcraft.tmt.slim.ModelBase;
+import org.lwjgl.opengl.GL11;
 
 public class ModelSD40 extends ModelBase {
 
@@ -226,7 +227,7 @@ public class ModelSD40 extends ModelBase {
 
 		box119 = new ModelRendererTurbo(this, 89, 86);
 		box119.addBox(0F, 0F, 0F, 12, 1, 14);
-		box119.setRotationPoint(-6F, 31F, 4F);
+		box119.setRotationPoint(-6F, 31F, 3F);
 
 		box12 = new ModelRendererTurbo(this, 1, 29);
 		box12.addBox(0F, 0F, 0F, 12, 2, 1);
@@ -234,12 +235,12 @@ public class ModelSD40 extends ModelBase {
 
 		box120 = new ModelRendererTurbo(this, 172, 151);
 		box120.addBox(0F, 0F, 0F, 2, 3, 14);
-		box120.setRotationPoint(6F, 31F, 4F);
+		box120.setRotationPoint(6F, 31F, 3F);
 		box120.rotateAngleZ = -3.473205211468716F;
 
 		box121 = new ModelRendererTurbo(this, 207, 151);
 		box121.addBox(0F, 0F, 0F, 2, 3, 14);
-		box121.setRotationPoint(-6F, 31F, 18F);
+		box121.setRotationPoint(-6F, 31F, 17F);
 		box121.rotateAngleX = -3.141592653589793F;
 		box121.rotateAngleZ = -5.969026041820607F;
 

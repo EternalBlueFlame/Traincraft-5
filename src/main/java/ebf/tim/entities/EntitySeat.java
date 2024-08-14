@@ -93,8 +93,10 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
                     this.setDead();
                 }
             }
-            if (worldObj.isRemote && (this.getPassenger() != this.parent.seats.get(seatNumber).getPassenger() || this.pos != this.parent.seats.get(seatNumber).pos)) {
-                this.setDead();
+            if (worldObj.isRemote) {
+                if (this.parent.seats.size() >= seatNumber+1 && (this.pos != this.parent.seats.get(seatNumber).pos || this.getPassenger() != this.parent.seats.get(seatNumber).getPassenger())) {
+                    this.setDead();
+                }
             }
 
         }
