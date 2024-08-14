@@ -32,11 +32,7 @@ public class ModelRenderHelper
     {
         for (ModelRendererTurbo bm : bodyModel)
         {
-            if (bm.boxName == null)
-            {
-                bm.render(f5);
-            }
-            else if (bm.boxName.contains(BoxName.lamp.AsString()) && rollingStock.isLightsEnabled())
+            if (bm.boxName.contains(BoxName.lamp.AsString()) && rollingStock.isLightsEnabled())
             {
                 Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
                 bm.render(f5);
@@ -77,6 +73,10 @@ public class ModelRenderHelper
                 GL11.glDisable(GL11.GL_CULL_FACE);
                 bm.render(f5);
                 GL11.glEnable(GL11.GL_CULL_FACE);
+            }
+            else
+            {
+                bm.render(f5);
             }
         }
     }
