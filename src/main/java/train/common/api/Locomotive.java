@@ -22,7 +22,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import org.lwjgl.input.Keyboard;
-import train.client.core.handlers.TCKeyHandler;
 import train.common.Traincraft;
 import train.common.adminbook.ServerLogger;
 import train.common.core.HandleMaxAttachedCarts;
@@ -30,6 +29,7 @@ import train.common.core.handlers.ConfigHandler;
 import train.common.core.network.PacketKeyPress;
 import train.common.core.network.PacketParkingBrake;
 import train.common.core.network.PacketSlotsFilled;
+import train.common.enums.DataMemberName;
 import train.common.library.GuiIDs;
 import train.common.library.Info;
 import train.common.mtc.PDMMessage;
@@ -39,7 +39,9 @@ import train.common.mtc.packets.*;
 import java.util.List;
 import java.util.Random;
 
-public abstract class Locomotive extends EntityRollingStock implements IInventory, WirelessTransmitter {
+public abstract class Locomotive extends EntityRollingStock implements IInventory, WirelessTransmitter, IRollingStockLightControls
+{
+
     public int inventorySize;
     protected ItemStack[] locoInvent;
     private int soundPosition = 0;
@@ -90,6 +92,14 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
     public TileEntity[] blocksToCheck;
     public boolean stationStop = false;
 
+    /**
+     * variables for lighting on locomotive
+     */
+    private boolean isLightsEnabled = false;
+    private boolean isBeaconEnabled = false;
+    private byte ditchLightMode = 0;
+    private byte beaconCycleIndex = 0;
+
     public TrainSoundRecord sound = Traincraft.instance.traincraftRegistry.getTrainSoundRecord(this.getClass());
     /**
      * state of the loco
@@ -133,16 +143,13 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         this.setDefaultMass(0);
         this.setCustomSpeed(transportTopSpeed());
         dataWatcher.addObject(3, destination);
+        dataWatcher.addObject(15, (float) Math.round((getCustomSpeed() * 3.6f)));
         dataWatcher.addObject(22, locoState);
         dataWatcher.addObject(24, fuelTrain);
         dataWatcher.addObject(25, (int) convertSpeed(Math.sqrt(Math.abs(motionX * motionX) + Math.abs(motionZ * motionZ))));//convertSpeed((Math.abs(this.motionX) + Math.abs(this.motionZ))
-        dataWatcher.addObject(26, castToString(currentNumCartsPulled));
-        dataWatcher.addObject(27, castToString(currentMassPulled));
-        dataWatcher.addObject(28, castToString(Math.round(currentSpeedSlowDown)));
-        dataWatcher.addObject(29, castToString(currentAccelSlowDown));
-        dataWatcher.addObject(30, castToString(currentBrakeSlowDown));
-        dataWatcher.addObject(31, castToString(currentFuelConsumptionChange));
-        dataWatcher.addObject(15, (float) Math.round((getCustomSpeed() * 3.6f)));
+        dataWatcher.addObject(26, guiDetailsJSON());
+        dataWatcher.addObject(28, lightingDetailsJSONString());
+
         //dataWatcher.addObject(32, lineWaypoints);
         setAccel(0);
         setBrake(0);
@@ -393,6 +400,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         nbttagcompound.setString("currentSignalBlock", currentSignalBlock);
         nbttagcompound.setBoolean("isConnected", isConnected);
         nbttagcompound.setBoolean("stationStop", stationStop);
+        nbttagcompound.setString(DataMemberName.lightingDetailsJSONString.AsString(), lightingDetailsJSONString());
     }
 
     @Override
@@ -408,6 +416,20 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         if (!(this instanceof SteamTrain)) {
             isLocoTurnedOn = ntc.getBoolean("isLocoTurnedOn");
         }
+
+        JsonObject lightingDetailsJSONStringObject;
+        try {
+            lightingDetailsJSONStringObject = new JsonParser().parse(ntc.getString(DataMemberName.lightingDetailsJSONString.AsString())).getAsJsonObject();
+        }
+        catch (Exception e)
+        {
+            lightingDetailsJSONStringObject = lightingDetailsAsJSON();
+        }
+
+        isLightsEnabled = lightingDetailsJSONStringObject.get(DataMemberName.isLightsEnabled.AsString()).getAsBoolean();
+        isBeaconEnabled = lightingDetailsJSONStringObject.get(DataMemberName.isBeaconEnabled.AsString()).getAsBoolean();
+        ditchLightMode = lightingDetailsJSONStringObject.get(DataMemberName.ditchLightMode.AsString()).getAsByte();
+        beaconCycleIndex = lightingDetailsJSONStringObject.get(DataMemberName.beaconCycleIndex.AsString()).getAsByte();
 
         trainID = ntc.getString("trainID");
         speedLimit = ntc.getInteger("speedLimit");
@@ -431,6 +453,8 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         currentSignalBlock = ntc.getString("currentSignalBlock");
         isConnected = ntc.getBoolean("isConnected");
         stationStop = ntc.getBoolean("stationStop");
+
+        dataWatcher.updateObject(28, lightingDetailsJSONString());
     }
 
     /**
@@ -543,35 +567,6 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         }
     }
 
-    /**
-     * All this is used in GUI only
-     *
-     * @return
-     */
-    public String getCurrentNumCartsPulled() {
-        return (this.dataWatcher.getWatchableObjectString(26));
-    }
-
-    public String getCurrentMassPulled() {
-        return (this.dataWatcher.getWatchableObjectString(27));
-    }
-
-    public String getCurrentSpeedSlowDown() {
-        return (this.dataWatcher.getWatchableObjectString(28));
-    }
-
-    public String getCurrentAccelSlowDown() {
-        return (this.dataWatcher.getWatchableObjectString(29));
-    }
-
-    public String getCurrentBrakeSlowDown() {
-        return (this.dataWatcher.getWatchableObjectString(30));
-    }
-
-    public String getCurrentFuelConsumptionChange() {
-        return (this.dataWatcher.getWatchableObjectString(31));
-    }
-
     public Float getCustomSpeedGUI() {
         return (this.dataWatcher.getWatchableObjectFloat(15));
     }
@@ -655,9 +650,25 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         }
     }
 
+    private void cycleBeaconIndex()
+    {
+        if (isBeaconEnabled && ticksExisted % 5 == 0)
+        {
+            beaconCycleIndex++;
+            if (beaconCycleIndex == 4)
+            {
+                beaconCycleIndex = 0;
+            }
+        }
+    }
+
     @Override
-    public void onUpdate() {
-        if (worldObj.isRemote && ticksExisted %2 ==0){
+    public void onUpdate()
+    {
+        cycleBeaconIndex();
+
+        if (worldObj.isRemote && ticksExisted %2 ==0)
+        {
             keyHandling();
         }
         if (!worldObj.isRemote) {
@@ -952,13 +963,11 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
             dataWatcher.updateObject(20, overheatLevel);
             dataWatcher.updateObject(22, locoState);
             dataWatcher.updateObject(3, destination);
-            dataWatcher.updateObject(26, (castToString(currentNumCartsPulled)));
-            dataWatcher.updateObject(27, (castToString((currentMassPulled)) + " tons"));
-            dataWatcher.updateObject(28, ((int) currentSpeedSlowDown) + " km/h");
-            dataWatcher.updateObject(29, (castToString((double) (Math.round(currentAccelSlowDown * 1000)) / 1000)));
-            dataWatcher.updateObject(30, (castToString((double) (Math.round(currentBrakeSlowDown * 1000)) / 1000)));
-            dataWatcher.updateObject(31, ("1c/" + castToString((int) (currentFuelConsumptionChange)) + " per tick"));
+
+            //dataWatcher.updateObject(31, ("1c/" + castToString((int) (currentFuelConsumptionChange)) + " per tick"));
             dataWatcher.updateObject(15, getMaxSpeed());
+            dataWatcher.updateObject(26, guiDetailsJSON());
+            dataWatcher.updateObject(28, lightingDetailsJSONString());
             if (this.worldObj.handleMaterialAcceleration(this.boundingBox.expand(0.0D, -0.2000000059604645D, 0.0D).contract(0.001D, 0.001D, 0.001D), Material.water, this) && this.updateTicks % 4 == 0) {
                 if (!hasDrowned && !worldObj.isRemote && FMLCommonHandler.instance().getMinecraftServerInstance() != null && this.lastEntityRider instanceof EntityPlayer) {
                     FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(((EntityPlayer) this.lastEntityRider).getDisplayName() + " drowned " + this.getTrainOwner() + "'s locomotive"));
@@ -1120,6 +1129,103 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
 
     public boolean isLocoTurnedOn() {
         return isLocoTurnedOn;
+    }
+
+    public String guiDetailsJSON() {
+        JsonObject gui = new JsonObject();
+        gui.addProperty("cartsPulled", currentNumCartsPulled);
+        gui.addProperty("massPulled", currentMassPulled);
+        gui.addProperty("slowDown", Math.round(currentSpeedSlowDown));
+        gui.addProperty("accelSlowDown", currentAccelSlowDown);
+        gui.addProperty("brakeSlowDown", currentBrakeSlowDown);
+        gui.addProperty("fuelUseChange", currentFuelConsumptionChange);
+        return gui.toString();
+    }
+
+    public String getLightingDetails()
+    {
+        return dataWatcher.getWatchableObjectString(28);
+    }
+
+    public String lightingDetailsJSONString()
+    {
+        JsonObject lightingDetailsJSONString = new JsonObject();
+        lightingDetailsJSONString.addProperty(DataMemberName.isLightsEnabled.AsString(), isLightsEnabled);
+        lightingDetailsJSONString.addProperty(DataMemberName.isBeaconEnabled.AsString(), isBeaconEnabled);
+        lightingDetailsJSONString.addProperty(DataMemberName.beaconCycleIndex.AsString(), beaconCycleIndex);
+        lightingDetailsJSONString.addProperty(DataMemberName.ditchLightMode.AsString(), ditchLightMode);
+        return lightingDetailsJSONString.toString();
+    }
+
+    public JsonObject lightingDetailsAsJSON()
+    {
+        JsonObject lightingDetailsJSONString = new JsonObject();
+        lightingDetailsJSONString.addProperty(DataMemberName.isLightsEnabled.AsString(), isLightsEnabled);
+        lightingDetailsJSONString.addProperty(DataMemberName.isBeaconEnabled.AsString(), isBeaconEnabled);
+        lightingDetailsJSONString.addProperty(DataMemberName.beaconCycleIndex.AsString(), beaconCycleIndex);
+        lightingDetailsJSONString.addProperty(DataMemberName.ditchLightMode.AsString(), ditchLightMode);
+        return lightingDetailsJSONString;
+    }
+
+    public String guiDetailsDW() {
+        return dataWatcher.getWatchableObjectString(26);
+    }
+
+    public boolean isLightsEnabled()
+    {
+        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.isLightsEnabled.AsString()).getAsBoolean();
+    }
+
+    public boolean isBeaconEnabled()
+    {
+        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.isBeaconEnabled.AsString()).getAsBoolean();
+    }
+
+    public byte getBeaconCycleIndex()
+    {
+        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.beaconCycleIndex.AsString()).getAsByte();
+    }
+
+    public boolean isDitchLightsEnabled()
+    {
+        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.ditchLightMode.AsString()).getAsByte() > 0;
+    }
+
+    private JsonObject AsJsonObject(String string)
+    {
+        return new JsonParser().parse(string).getAsJsonObject();
+    }
+
+    /**
+     *
+     * @param isLocoLightsOn set 0 if loco lights is false, 1 if true
+     */
+    public void setPacketLights(boolean isLocoLightsOn)
+    {
+        isLightsEnabled = isLocoLightsOn;
+    }
+
+    /**
+     *
+     * @param isLocoBeaconEnabled set 0 if loco beacon is false, 1 if true
+     */
+    public void setPacketBeacon(boolean isLocoBeaconEnabled)
+    {
+        isBeaconEnabled = isLocoBeaconEnabled;
+    }
+
+    /**Sets the Ditch light mode
+     *
+     * @param ditchLightMode set 0 for off,
+     */
+    public void setPacketDitchLightsMode(byte ditchLightMode)
+    {
+        this.ditchLightMode = ditchLightMode;
+    }
+
+    public void setLocomotiveBeaconTick(byte beaconCycleIndex)
+    {
+        beaconCycleIndex = beaconCycleIndex;
     }
 
     // private int placeInSpecialInvent(ItemStack itemstack1, int i, boolean doAdd) {

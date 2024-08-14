@@ -5,6 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.util.MathHelper;
 import org.lwjgl.opengl.GL11;
+import train.common.enums.BoxName;
 
 import java.io.IOException;
 import java.util.*;
@@ -58,22 +59,38 @@ public class ModelRendererTurbo {
      * Creates a new ModelRenderTurbo object. It requires the coordinates of the
      * position of the texture, but also allows you to specify the width and height
      * of the texture.
-     * @param s
+     * @param nameOfBox
      * @param textureX
      * @param textureY
      * @param textureU
      * @param textureV
      */
-    public ModelRendererTurbo(String s, int textureX, int textureY, float textureU, float textureV){
+    public ModelRendererTurbo(String nameOfBox, int textureX, int textureY, float textureU, float textureV){
         mirror = false;
         showModel = true;
         faces = new ArrayList<>();
-        boxName = s;
+        boxName = nameOfBox;
         textureOffsetX = textureX;
         textureOffsetY = textureY;
         textureWidth = textureU;
         textureHeight = textureV;
     }
+
+    /**This is a overload of the original that uses a enum
+     * Creates a new ModelRenderTurbo object. It requires the coordinates of the
+     * position of the texture, but also allows you to specify the width and height
+     * of the texture.
+     * @param nameOfBox box name enum
+     * @param textureX
+     * @param textureY
+     * @param textureU
+     * @param textureV
+     */
+    public ModelRendererTurbo(BoxName nameOfBox, int textureX, int textureY, float textureU, float textureV)
+    {
+        this(nameOfBox.BoxName, textureX, textureY, textureU, textureV);
+    }
+
     public ModelRendererTurbo(ModelBase modelbase, int textureX, int textureY){
         mirror = false;
         showModel = true;
@@ -100,8 +117,14 @@ public class ModelRendererTurbo {
     public ModelRendererTurbo(TurboList modelbase, int textureX, int textureY, int textureU, int textureV){
         this("",textureX,textureY,textureU,textureV);
     }
-    public ModelRendererTurbo(ModelBase modelbase, int textureX, int textureY, int textureU, int textureV, String boxName) {
+    public ModelRendererTurbo(ModelBase modelbase, int textureX, int textureY, int textureU, int textureV, String boxName)
+    {
         this(boxName,textureX,textureY,textureU,textureV);
+    }
+
+    public ModelRendererTurbo(ModelBase modelbase, int textureX, int textureY, int textureU, int textureV, BoxName boxName)
+    {
+        this(boxName.AsString(),textureX,textureY,textureU,textureV);
     }
 
 
