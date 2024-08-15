@@ -167,6 +167,25 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                         model45DegreeLeftTurn.render("superlarge", "", railTile, x, y, z);
                         break;
                     }
+                    case DIAGONAL_TURN_9X20:
+                    case DIAGONAL_RIGHT_TURN_9X20: {
+                        model45DegreeRightTurn.render("9x20", "", railTile, x,y,z);
+                        break;
+                    }
+                    case DIAGONAL_LEFT_TURN_9X20: {
+                        model45DegreeLeftTurn.render("9x20","",railTile,x,y,z);
+                        break;
+                    }
+                    case DIAGONAL_TURN_10X22:
+                    case DIAGONAL_RIGHT_TURN_10X22: {
+                        model45DegreeRightTurn.render("10x22", "", railTile, x,y,z);
+                        break;
+                    }
+                    case DIAGONAL_LEFT_TURN_10X22: {
+                        model45DegreeLeftTurn.render("10x22","",railTile,x,y,z);
+                        break;
+                    }
+
                     case SMALL_PARALLEL_CURVE:
                     case SMALL_RIGHT_PARALLEL_CURVE: {
                         modelRightParallelCurve.render("small", "", railTile, x, y, z);
@@ -528,6 +547,24 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                     }
                     case EMBEDDED_SUPER_LARGE_LEFT_45DEGREE_TURN: {
                         model45DegreeLeftTurn.render("superlarge", "embedded", railTile, x, y, z);
+                        break;
+                    }
+                    case EMBEDDED_DIAGONAL_TURN_9X20:
+                    case EMBEDDED_DIAGONAL_RIGHT_TURN_9X20: {
+                        model45DegreeRightTurn.render("9x20","embedded",railTile,x,y,z);
+                        break;
+                    }
+                    case EMBEDDED_DIAGONAL_LEFT_TURN_9X20: {
+                        model45DegreeLeftTurn.render("9x20","embedded",railTile,x,y,z);
+                        break;
+                    }
+                    case EMBEDDED_DIAGONAL_TURN_10X22:
+                    case EMBEDDED_DIAGONAL_RIGHT_TURN_10X22: {
+                        model45DegreeRightTurn.render("10x22","embedded",railTile,x,y,z);
+                        break;
+                    }
+                    case EMBEDDED_DIAGONAL_LEFT_TURN_10X22: {
+                        model45DegreeLeftTurn.render("10x22","embedded",railTile,x,y,z);
                         break;
                     }
                     case EMBEDDED_SMALL_PARALLEL_CURVE:

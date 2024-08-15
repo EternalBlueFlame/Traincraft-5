@@ -415,6 +415,22 @@ public class ItemTCRail extends ItemPart {
             return new int[][]{{0, 0}, {1, 0}, {2, 0}, {3, 0}, {2, 1}, {3, 1}};
         else if ((type == EnumTracks.LARGE_45DEGREE_SWITCH || type == EnumTracks.EMBEDDED_LARGE_45DEGREE_SWITCH) && player.isSneaking())
             return new int[][]{{0,0},{1,0},{2,0},{3,0},{4,0},{5,0},{6,0}, {3, 1}, {4, 1}, {5, 1}, {6, 1}, {5, 2}, {6, 2}};
+        else if ((type == EnumTracks.DIAGONAL_TURN_9X20 || type == EnumTracks.EMBEDDED_DIAGONAL_TURN_9X20)) {
+            if (player.isSneaking()) {
+                return new int[][]{{0,0},{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0},{1,1},{2,1},{3,1},{4,1},{5,1},{6,1},{7,1},{8,1},{9,1},{10,1},{7,2},{8,2},{9,2},{10,2},{11,2},{12,2},{10,3},{11,3},{12,3},{13,3},{14,3},{12,4},{13,4},{14,4},{15,4},{14,5},{15,5},{16,5},{17,5},{15,6},{16,6},{17,6},{18,6},{16,7},{17,7},{18,7},{19,7},{18,8},{19,8}};
+            } else {
+                return new int[][]{{0,0},{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0},{1,1},{2,1},{3,1},{4,1},{5,1},{6,1},{7,1},{8,1},{9,1},{10,1},{7,2},{8,2},{9,2},{10,2},{11,2},{12,2},{10,3},{11,3},{12,3},{13,3},{14,3},{12,4},{13,4},{14,4},{15,4},{14,5},{15,5},{16,5},{17,5},{15,6},{16,6},{17,6},{18,6},{16,7},{17,7},{18,7},{19,7},{18,8},{19,8},{20,8},{19,9}};
+            }
+        }
+        else if ((type == EnumTracks.DIAGONAL_TURN_10X22 || type == EnumTracks.EMBEDDED_DIAGONAL_TURN_10X22)) {
+            if (player.isSneaking()) {
+                return new int[][]{{0,0},{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0},{2,1},{3,1},{4,1},{5,1},{6,1},{7,1},{8,1},{9,1},{10,1},{7,2},{8,2},{9,2},{10,2},{11,2},{12,2},{13,2},{10,3},{11,3},{12,3},{13,3},{14,3},{13,4},{14,4},{15,4},{16,4},{15,5},{16,5},{17,5},{18,5},{16,6},{17,6},{18,6},{19,6},{17,7},{18,7},{19,7},{20,7},{19,8},{20,8},{21,8},{20,9},{21,9}};
+            } else {
+                return new int[][]{{0,0},{1,0},{2,0},{3,0},{4,0},{5,0},{6,0},{7,0},{2,1},{3,1},{4,1},{5,1},{6,1},{7,1},{8,1},{9,1},{10,1},{7,2},{8,2},{9,2},{10,2},{11,2},{12,2},{13,2},{10,3},{11,3},{12,3},{13,3},{14,3},{13,4},{14,4},{15,4},{16,4},{15,5},{16,5},{17,5},{18,5},{16,6},{17,6},{18,6},{19,6},{17,7},{18,7},{19,7},{20,7},{19,8},{20,8},{21,8},{20,9},{21,9},{22,9},{21,10}};
+            }
+        }
+
+        /**curved slopes*/
         else if (type == EnumTracks.LARGE_CURVED_SLOPE_DYNAMIC || type == EnumTracks.EMBEDDED_LARGE_CURVED_SLOPE_DYNAMIC)
             return new int[][]{{0, 0}, {1, 0}, {1, 1}, {2, 0}, {2, 1}, {3, 1}, {2, 2}, {3, 2}, {3, 3}, {4, 3}, {4, 4}};
         else if (type == EnumTracks.VERY_LARGE_CURVED_SLOPE_DYNAMIC || type == EnumTracks.EMBEDDED_VERY_LARGE_CURVED_SLOPE_DYNAMIC)
@@ -621,7 +637,7 @@ public class ItemTCRail extends ItemPart {
                 case LEFT_TURN_29X29:
                 case RIGHT_TURN_29X29:
                 case EMBEDDED_LEFT_TURN_29X29:
-                case EMBEDDED_RIGHT_TURN_29X29: //#!#
+                case EMBEDDED_RIGHT_TURN_29X29:
 
                     curveXArray = new int[] {0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10, 10, 10, 11, 11, 11, 12, 12, 13, 13, 14, 14, 14, 15, 15, 16, 16, 16, 17, 17, 18, 18, 18, 19, 19, 20, 20, 21, 21, 21, 22, 22, 23, 23, 24, 24, 25, 25, 26, 27, 28};
                     curveZArray = new int[] {0, 1, 2, 3, 4, 5, 6, 7, 3, 4, 5, 6, 7, 8, 9, 10, 7, 8, 9, 10, 11, 12, 10, 11, 12, 13, 14, 12, 13, 14, 15, 14, 15, 16, 17, 16, 17, 18, 17, 18, 19, 18, 19, 20, 19, 20, 21, 20, 21, 22, 21, 22, 23, 22, 23, 23, 24, 23, 24, 25, 24, 25, 24, 25, 26, 25, 26, 25, 26, 27, 26, 27, 26, 27, 26, 27, 28, 27, 28, 27, 28, 27, 28, 27, 28, 28, 28, 28};
@@ -677,7 +693,33 @@ public class ItemTCRail extends ItemPart {
 
                     if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 15.69f)) {return false;}
                     break;
+                case DIAGONAL_LEFT_TURN_9X20:
+                case DIAGONAL_RIGHT_TURN_9X20:
+                case EMBEDDED_DIAGONAL_LEFT_TURN_9X20:
+                case EMBEDDED_DIAGONAL_RIGHT_TURN_9X20:
+                    if (player.isSneaking()) {
+                        curveXArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8};
+                        curveZArray = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 7, 8, 9, 10, 11, 12, 10, 11, 12, 13, 14, 12, 13, 14, 15, 14, 15, 16, 17, 15, 16, 17, 18, 16, 17, 18, 19, 18, 19};
+                    } else {
+                        curveXArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 9};
+                        curveZArray = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 7, 8, 9, 10, 11, 12, 10, 11, 12, 13, 14, 12, 13, 14, 15, 14, 15, 16, 17, 15, 16, 17, 18, 16, 17, 18, 19, 18, 19, 20, 19};
 
+                    }
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 27.85f)) {return false;}
+                    break;
+                case DIAGONAL_LEFT_TURN_10X22:
+                case DIAGONAL_RIGHT_TURN_10X22:
+                case EMBEDDED_DIAGONAL_LEFT_TURN_10X22:
+                case EMBEDDED_DIAGONAL_RIGHT_TURN_10X22:
+                    if (player.isSneaking()) {
+                        curveXArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 9, 9};
+                        curveZArray = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 2, 3, 4, 5, 6, 7, 8, 9, 10, 7, 8, 9, 10, 11, 12, 13, 10, 11, 12, 13, 14, 13, 14, 15, 16, 15, 16, 17, 18, 16, 17, 18, 19, 17, 18, 19, 20, 19, 20, 21, 20, 21};
+                    } else {
+                        curveXArray = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 4, 4, 4, 4, 5, 5, 5, 5, 6, 6, 6, 6, 7, 7, 7, 7, 8, 8, 8, 9, 9, 9, 10};
+                        curveZArray = new int[]{0, 1, 2, 3, 4, 5, 6, 7, 2, 3, 4, 5, 6, 7, 8, 9, 10, 7, 8, 9, 10, 11, 12, 13, 10, 11, 12, 13, 14, 13, 14, 15, 16, 15, 16, 17, 18, 16, 17, 18, 19, 17, 18, 19, 20, 19, 20, 21, 20, 21, 22, 21};
+                    }
+                    if (!turnTrack(player, world, x, y, z, l, tempType, par10, curveXArray, curveZArray, 30.22f)) {return false;}
+                    break;
                 case LARGE_RIGHT_CURVED_SLOPE_DYNAMIC:
                 case EMBEDDED_LARGE_RIGHT_CURVED_SLOPE_DYNAMIC:
                     if (!largeRightCurvedSlope(player, world, x, y, z, l, tempType)) {return false;}
@@ -2136,7 +2178,22 @@ public class ItemTCRail extends ItemPart {
                     tempType = EnumTracks.LARGE_LEFT_45DEGREE_SWITCH;
                 }
             }
-
+            if (type == EnumTracks.DIAGONAL_TURN_9X20) {
+                if (getTrackOrientation(l,yaw).equals("right")) {
+                    tempType = EnumTracks.DIAGONAL_RIGHT_TURN_9X20;
+                }
+                if (getTrackOrientation(l,yaw).equals("left")) {
+                    tempType = EnumTracks.DIAGONAL_LEFT_TURN_9X20;
+                }
+            }
+            if (type == EnumTracks.DIAGONAL_TURN_10X22) {
+                if (getTrackOrientation(l,yaw).equals("right")) {
+                    tempType = EnumTracks.DIAGONAL_RIGHT_TURN_10X22;
+                }
+                if (getTrackOrientation(l,yaw).equals("left")) {
+                    tempType = EnumTracks.DIAGONAL_LEFT_TURN_10X22;
+                }
+            }
             if (type == EnumTracks.EMBEDDED_TURN_1X1) {
                 if (getTrackOrientation(l, yaw).equals("right")) {
                     tempType = EnumTracks.EMBEDDED_RIGHT_TURN_1X1;
@@ -2230,6 +2287,22 @@ public class ItemTCRail extends ItemPart {
                 if (getTrackOrientation(l, yaw).equals("left")) {
                     tempType = EnumTracks.EMBEDDED_SUPER_LARGE_LEFT_45DEGREE_TURN;
 
+                }
+            }
+            if (type == EnumTracks.EMBEDDED_DIAGONAL_TURN_9X20) {
+                if (getTrackOrientation(l,yaw).equals("right")) {
+                    tempType = EnumTracks.EMBEDDED_DIAGONAL_RIGHT_TURN_9X20;
+                }
+                if (getTrackOrientation(l,yaw).equals("left")) {
+                    tempType = EnumTracks.EMBEDDED_DIAGONAL_LEFT_TURN_9X20;
+                }
+            }
+            if (type == EnumTracks.EMBEDDED_DIAGONAL_TURN_10X22) {
+                if (getTrackOrientation(l,yaw).equals("right")) {
+                    tempType = EnumTracks.EMBEDDED_DIAGONAL_RIGHT_TURN_10X22;
+                }
+                if (getTrackOrientation(l,yaw).equals("left")) {
+                    tempType = EnumTracks.EMBEDDED_DIAGONAL_LEFT_TURN_10X22;
                 }
             }
             if (type == EnumTracks.EMBEDDED_SMALL_PARALLEL_CURVE) {

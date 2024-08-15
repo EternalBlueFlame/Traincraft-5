@@ -17,16 +17,16 @@ public class ModelLeft45DegreeTurnTCTrack {
     private IModelCustom modelLargeLeft45DegreeTurn;
     private IModelCustom modelVeryLarge45DegreeTurn;
     private IModelCustom modelSuperLarge45DegreeTurn;
-    private IModelCustom modelEmbeddedMediumLeft45DegreeTurn;
-    private IModelCustom modelEmbeddedLargeLeft45DegreeTurn;
-    private IModelCustom modelEmbeddedVeryLargeLeft45DegreeTurn;
-    private IModelCustom modelEmbeddedSuperLargeLeft45DegreeTurn;
+    private IModelCustom model9x2045DegreeTurn;
+    private IModelCustom model10x2245DegreeTurn;
 
     public ModelLeft45DegreeTurnTCTrack(){
         modelMediumLeft45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_medium_left.obj"));
         modelLargeLeft45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_large_left.obj"));
         modelVeryLarge45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_very_large_left.obj"));
         modelSuperLarge45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_super_large_left.obj"));
+        model9x2045DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_9x20_left.obj"));
+        model10x2245DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_10x22_left.obj"));
 
     }
 
@@ -34,6 +34,10 @@ public class ModelLeft45DegreeTurnTCTrack {
     public void renderLarge() {modelLargeLeft45DegreeTurn.renderAll();}
     public void renderVeryLarge() {modelVeryLarge45DegreeTurn.renderAll();}
     public void renderSuperLarge() {modelSuperLarge45DegreeTurn.renderAll();}
+
+    public void render9x20() {model9x2045DegreeTurn.renderAll();}
+
+    public void render10x22() {model10x2245DegreeTurn.renderAll();}
 
 
     public void render(String type,String variant, TileTCRail tcRail, double x, double y, double z) {
@@ -80,6 +84,11 @@ public class ModelLeft45DegreeTurnTCTrack {
             this.renderVeryLarge();
         if (type.equals("superlarge") )
             this.renderSuperLarge();
+        if (type.equals("9x20"))
+            this.render9x20();
+        if (type.equals("10x22"))
+            this.render10x22();
+
 
         // Pop this matrix from the stack.
         GL11.glPopMatrix();

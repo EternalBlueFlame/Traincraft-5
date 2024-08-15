@@ -274,6 +274,14 @@ public class CustomRenderHandler {
                 turnSize = "superlarge";
             }
 
+            if (item.getTrackType() == EnumTracks.DIAGONAL_TURN_9X20 || item.getTrackType() == EnumTracks.EMBEDDED_DIAGONAL_TURN_9X20) {
+                turnSize = "9x20";
+            }
+
+            if (item.getTrackType() == EnumTracks.DIAGONAL_TURN_10X22 || item.getTrackType() == EnumTracks.EMBEDDED_DIAGONAL_TURN_10X22) {
+                turnSize = "10x22";
+            }
+
             if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
                 RenderTCRail.model45DegreeLeftTurn.render(turnSize, variant, facing, 0, 0, 0, r, g, b, a);
             } else {
