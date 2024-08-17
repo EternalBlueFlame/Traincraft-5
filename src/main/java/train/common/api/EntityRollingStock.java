@@ -169,6 +169,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     private double derailSpeed = 0.46;
 
     private int scrollPosition;
+    public TileTCRail lastTrack=null;
     public Vec3f[] cachedVectors = new Vec3f[]{
             new Vec3f(0,0,0),new Vec3f(0,0,0),new Vec3f(0,0,0),new Vec3f(0,0,0)};
 
@@ -536,14 +537,22 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         this.pressKey(i);
         if (i == 7) {
             if (this instanceof AbstractWorkCart) {
-                ((EntityPlayer) this.seats.get(0).getPassenger()).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
-            } else if (this.seats.size() > 1 && this.getInventoryRows() == 0 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
+                if (this.seats != null && this.seats.size() != 0 && this.seats.get(0).getPassenger() != null) {
+                    ((EntityPlayer) this.seats.get(0).getPassenger()).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+                } else {
+                    playerEntity.openGui(Traincraft.instance,GuiIDs.CRAFTING_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+                }
+            } else if (this.seats != null && this.seats.size() > 1 && this.getInventoryRows() == 0 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
                 ((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.SEAT_GUI, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
             }
         }
         if (i == 9) {
             if (this instanceof AbstractWorkCart) {
-                ((EntityPlayer) this.seats.get(0).getPassenger()).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+                if (this.seats != null && this.seats.size() != 0 && this.seats.get(0).getPassenger() != null) {
+                    ((EntityPlayer) this.seats.get(0).getPassenger()).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+                } else {
+                    playerEntity.openGui(Traincraft.instance,GuiIDs.FURNACE_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+                }
             }
         }
 
@@ -699,9 +708,15 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         }
         if(ticksExisted % 18 == 0) { //just so we aren't doing it *every* tick, but still frequent enough to not let the player actually take damage
-            for (EntitySeat seat : seats) {
-                if (seat.getPassenger() != null) {
-                    seat.getPassenger().addPotionEffect(new PotionEffect(Potion.resistance.id, 20, 5, true));
+            if (seats.size() != 0) {
+                for (EntitySeat seat : seats) {
+                    if (seat.getPassenger() != null) {
+                        seat.getPassenger().addPotionEffect(new PotionEffect(Potion.resistance.id, 20, 5, true));
+                    }
+                }
+            } else {
+                if (riddenByEntity instanceof EntityPlayer) {
+                    ((EntityPlayer) riddenByEntity).addPotionEffect(new PotionEffect(Potion.resistance.id,20,5,true));
                 }
             }
         }
@@ -793,9 +808,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 setRotation(rotationYaw, rotationPitch);
 
             }
-            for(int i=0;i<seats.size();i++){
-                if(seats.get(i)!=null) {
-                    TraincraftUtil.updateRider(this,getRiderOffsets()[i][0], getRiderOffsets()[i][1]+1, getRiderOffsets()[i][2], seats.get(i));
+            if (seats.size() != 0) {
+                for (int i = 0; i < seats.size(); i++) {
+                    if (seats.get(i) != null) {
+                        TraincraftUtil.updateRider(this, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 1, getRiderOffsets()[i][2], seats.get(i));
+                    }
                 }
             }
             return;
@@ -977,7 +994,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 
         for (EntitySeat seat: seats) { //handle died in train
-            if (seat.getPassenger() != null && seat.getPassenger().isDead) {
+            if (seat.getPassenger() != null && (seat.getPassenger().isDead || seat != seat.getPassenger().ridingEntity)) {
                 this.seats.get(0).getPassenger().ridingEntity = null;
                 this.seats.get(0).removePassenger(this.seats.get(0).getPassenger());
             }
@@ -1172,13 +1189,18 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         } else if (block == BlockIDs.tcRail.block) {
             limitSpeedOnTCRail();
-            //if(worldObj.getTileEntity(i,j,k)==null || !(worldObj.getTileEntity(i,j,k) instanceof TileTCRail))return;
-            TileTCRail tile = (TileTCRail) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
-            int meta = tile.getBlockMetadata();
+            if(lastTrack==null || lastTrack.xCoord!=floor_posX ||lastTrack.zCoord!=floor_posZ){
+                if( worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ) instanceof TileTCRail) {
+                    lastTrack = (TileTCRail) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
+                } else {
+                    return;
+                }
+            }
+            int meta = lastTrack.getBlockMetadata();
 
-            if (TCRailTypes.isStraightTrack(tile) || (TCRailTypes.isSwitchTrack(tile) && !tile.getSwitchState())) {
-                moveOnTCStraight(floor_posX, floor_posY, floor_posZ, tile.xCoord, tile.zCoord, meta);
-            } else if (TCRailTypes.isTurnTrack(tile) || (TCRailTypes.isSwitchTrack(tile) && tile.getSwitchState())) {
+            if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
+                moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
+            } else if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState())) {
                 if (bogieLoco != null) {
                     if (!bogieLoco.isOnRail()) {
                         derailSpeed = 0;
@@ -1186,54 +1208,59 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
                 if (derailSpeed == 0) {
                     this.unLink();
-                    moveOnTCStraight(floor_posX, floor_posY, floor_posZ, tile.xCoord, tile.zCoord, meta);
+                    moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
                 } else {
 
-                    if (shouldIgnoreSwitch(tile, floor_posX, floor_posY, floor_posZ, meta)) {
+                    if (shouldIgnoreSwitch(lastTrack, floor_posX, floor_posY, floor_posZ, meta)) {
 
-                        moveOnTCStraight(floor_posX, floor_posY, floor_posZ, tile.xCoord, tile.zCoord, meta);
+                        moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
                     } else {
-                        if (TCRailTypes.isTurnTrack(tile) || (TCRailTypes.isSwitchTrack(tile) && tile.getSwitchState()))
-                            moveOnTC90TurnRail(floor_posX, floor_posY, floor_posZ, tile.r, tile.cx, tile.cz);
+                        if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState()))
+                            moveOnTC90TurnRail(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz);
                     }
                     // shouldIgnoreSwitch(tile, i, j, k, meta);
                     // if (ItemTCRail.isTCTurnTrack(tile)) moveOnTC90TurnRail(i, j, k, r, cx, cy,
                     // cz, tile.getType(), meta);
                 }
-            } else if (TCRailTypes.isSlopeTrack(tile)) {
-                moveOnTCSlope(floor_posY, tile.xCoord, tile.zCoord, tile.slopeAngle, tile.slopeHeight, meta);
-            } else if (TCRailTypes.isCrossingTrack(tile)) {
-                moveOnTCTwoWaysCrossing(floor_posX, floor_posY, floor_posZ, tile.xCoord, tile.yCoord, tile.zCoord, meta);
-            } else if (TCRailTypes.isDiagonalCrossingTrack(tile)) {
-                moveOnTCDiamondCrossing(floor_posX, floor_posY, floor_posZ, tile.xCoord, tile.yCoord, tile.zCoord, meta);
-            } else if (TCRailTypes.isDiagonalTrack(tile)) {
-                moveOnTCDiagonal(floor_posX, floor_posY, floor_posZ, tile.xCoord, tile.zCoord, tile.getBlockMetadata(), tile.getRailLength());
-            } else if (TCRailTypes.isCurvedSlopeTrack(tile)) {
-                moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, tile.r, tile.cx, tile.cz, tile.xCoord, tile.zCoord, meta, 1, tile.slopeAngle);
+            } else if (TCRailTypes.isSlopeTrack(lastTrack)) {
+                moveOnTCSlope(floor_posY, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, meta);
+            } else if (TCRailTypes.isCrossingTrack(lastTrack)) {
+                moveOnTCTwoWaysCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, meta);
+            } else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
+                moveOnTCDiamondCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, meta);
+            } else if (TCRailTypes.isDiagonalTrack(lastTrack)) {
+                moveOnTCDiagonal(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
+            } else if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
+                moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, meta, 1, lastTrack.slopeAngle);
             }
 
         } else if (block == BlockIDs.tcRailGag.block) {
             limitSpeedOnTCRail();
             TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
-            if (worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ) instanceof TileTCRail) {
-                TileTCRail tile = (TileTCRail) worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
-                if (TCRailTypes.isTurnTrack(tile)) {
-                    moveOnTC90TurnRail(floor_posX, floor_posY, floor_posZ, tile.r, tile.cx, tile.cz);
+
+            if(lastTrack==null || lastTrack.xCoord!=tileGag.originX ||lastTrack.zCoord!=tileGag.originZ){
+                if(worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ) instanceof TileTCRail) {
+                    lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
+                } else {
+                    return;
                 }
-                if (TCRailTypes.isStraightTrack(tile)) {
-                    moveOnTCStraight(floor_posX, floor_posY, floor_posZ, tile.xCoord, tile.zCoord, tile.getBlockMetadata());
-                }
-                if (TCRailTypes.isSlopeTrack(tile)) {
-                    moveOnTCSlope(floor_posY, tile.xCoord, tile.zCoord, tile.slopeAngle, tile.slopeHeight, tile.getBlockMetadata());
-                }
-                if (TCRailTypes.isDiagonalTrack(tile)) {
-                    moveOnTCDiagonal(floor_posX, floor_posY, floor_posZ, tile.xCoord, tile.zCoord, tile.getBlockMetadata(), tile.getRailLength());
-                } else if (TCRailTypes.isDiagonalCrossingTrack(tile)) {
-                    moveOnTCDiamondCrossing(floor_posX, floor_posY, floor_posZ, tile.xCoord, tile.yCoord, tile.zCoord, meta);
-                }
-                if (TCRailTypes.isCurvedSlopeTrack(tile)) {
-                    moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, tile.r, tile.cx, tile.cz, tile.xCoord, tile.zCoord, tile.getBlockMetadata(), 1, tile.slopeAngle);
-                }
+            }
+            if (TCRailTypes.isTurnTrack(lastTrack)) {
+                moveOnTC90TurnRail(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz);
+            }
+            if (TCRailTypes.isStraightTrack(lastTrack)) {
+                moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
+            }
+            if (TCRailTypes.isSlopeTrack(lastTrack)) {
+                moveOnTCSlope(floor_posY, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, lastTrack.getBlockMetadata());
+            }
+            if (TCRailTypes.isDiagonalTrack(lastTrack)) {
+                moveOnTCDiagonal(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
+            } else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
+                moveOnTCDiamondCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, meta);
+            }
+            if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
+                moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.slopeHeight, lastTrack.slopeAngle);
             }
         } else {
 /*            Vec3f closest = null;  this is test/in-dev anti-derailment code.
