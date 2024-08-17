@@ -29,6 +29,9 @@ public class PacketHandler {
 		Traincraft.slotschannel = NetworkRegistry.INSTANCE.newSimpleChannel("slots");
 		Traincraft.ignitionChannel = NetworkRegistry.INSTANCE.newSimpleChannel("ignition");
 		Traincraft.brakeChannel = NetworkRegistry.INSTANCE.newSimpleChannel("brake");
+		Traincraft.rollingStockLightsChannel = NetworkRegistry.INSTANCE.newSimpleChannel("rollingStockLights");
+		Traincraft.rollingStockBeaconChannel = NetworkRegistry.INSTANCE.newSimpleChannel("rollingStockBeacon");
+		Traincraft.rollingStockDitchLightsChannel = NetworkRegistry.INSTANCE.newSimpleChannel("ditchLights");
 		Traincraft.lockChannel = NetworkRegistry.INSTANCE.newSimpleChannel("lock");
 		Traincraft.builderChannel = NetworkRegistry.INSTANCE.newSimpleChannel("builder");
 		Traincraft.paintbrushColorChannel = NetworkRegistry.INSTANCE.newSimpleChannel("paintbrushColor");
@@ -65,6 +68,13 @@ public class PacketHandler {
 				PacketTextureOverlayConfig.class, 11, Side.SERVER);
 		Traincraft.overlayTextureChannel.registerMessage(PacketTextureOverlayConfig.Handler.class,
 				PacketTextureOverlayConfig.class, 12, Side.CLIENT);
+
+		Traincraft.rollingStockLightsChannel.registerMessage(PacketRollingStockLights.Handler.class, PacketRollingStockLights.class,
+				19, Side.SERVER);
+		Traincraft.rollingStockBeaconChannel.registerMessage(PacketRollingStockBeacon.Handler.class, PacketRollingStockBeacon.class,
+				20, Side.SERVER);
+		Traincraft.rollingStockDitchLightsChannel.registerMessage(PacketRollingStockDitchLights.Handler.class, PacketRollingStockDitchLights.class,
+				21, Side.SERVER);
 
 		if (Loader.isModLoaded("ComputerCraft")) {
 			Traincraft.itsChannel.registerMessage(PacketSetSpeedHandler.class, PacketSetSpeed.class, 200, Side.CLIENT);
