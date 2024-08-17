@@ -183,7 +183,7 @@ public class GuiLoco2 extends GuiContainer {
                     this.initGui();
                 }
             } else {
-                GetEntityPlayer().addChatMessage(new ChatComponentText("You are not the owner"));
+                getEntityPlayer().addChatMessage(new ChatComponentText("You are not the owner"));
             }
         }
 
@@ -200,7 +200,7 @@ public class GuiLoco2 extends GuiContainer {
                     loco.isBraking = true;
                     this.initGui();
                 } else {
-                    GetEntityPlayer().addChatMessage(new ChatComponentText("Stop before turning it Off!"));
+                    getEntityPlayer().addChatMessage(new ChatComponentText("Stop before turning it Off!"));
                 }
             } else {
                 Traincraft.ignitionChannel.sendToServer(new PacketSetLocoTurnedOn(true));
@@ -260,7 +260,7 @@ public class GuiLoco2 extends GuiContainer {
         }
     }
 
-    private EntityPlayer GetEntityPlayer()
+    private EntityPlayer getEntityPlayer()
     {
         EntityPlayer p = (EntityPlayer) loco.riddenByEntity;
         if (loco.seats.size() != 0 && loco.seats.get(0).getPassenger() instanceof EntityPlayer) {
