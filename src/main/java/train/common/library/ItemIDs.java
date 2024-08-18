@@ -108,7 +108,8 @@ public enum ItemIDs {
 	tcRailLarge45DegreeTurn("ItemTCRail", "item_rail_45degree_turn_large", 5),
 	tcRailVeryLarge45DegreeTurn("ItemTCRail", "item_rail_45degree_turn_very_large", 5),
 	tcRailSuperLarge45DegreeTurn("ItemTCRail", "item_rail_45degree_turn_super_large", 5),
-
+	tcRail45DegreeTurn9x20("ItemTCRail", "item_rail_45degree_turn_9x20",5),
+	tcRail45DegreeTurn10x22("ItemTCRail", "item_rail_45degree_turn_10x22",5),
 
 	tcRailSmallParallelCurve("ItemTCRail", "item_rail_tc_parallel_curve_small", 3),
 	tcRailMediumParallelCurve("ItemTCRail", "item_rail_tc_parallel_curve_medium", 3),
@@ -176,6 +177,8 @@ public enum ItemIDs {
 	tcRailEmbeddedLarge45DegreeTurn("ItemTCRail", "item_rail_embedded_45degree_turn_large", 5),
 	tcRailEmbeddedVeryLarge45DegreeTurn("ItemTCRail", "item_rail_embedded_45degree_turn_very_large", 5),
 	tcRailEmbeddedSuperLarge45DegreeTurn("ItemTCRail", "item_rail_embedded_45degree_turn_super_large", 5),
+	tcRailEmbedded45DegreeTurn9x20("ItemTCRail", "item_rail_embedded_45degree_turn_9x20",5),
+	tcRailEmbedded45DegreeTurn10x22("ItemTCRail", "item_rail_embedded_45degree_turn_10x22",5),
 
 	tcRailEmbeddedSmallParallelCurve("ItemTCRail", "item_rail_tc_embedded_parallel_curve_small", 3),
 	tcRailEmbeddedMediumParallelCurve("ItemTCRail", "item_rail_tc_embedded_parallel_curve_medium", 3),

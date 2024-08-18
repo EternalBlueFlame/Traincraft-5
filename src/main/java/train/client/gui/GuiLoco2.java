@@ -1,5 +1,7 @@
 package train.client.gui;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import ebf.tim.gui.GUIButton;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -13,9 +15,7 @@ import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import train.common.Traincraft;
 import train.common.api.*;
-import train.common.core.network.PacketParkingBrake;
-import train.common.core.network.PacketSetLocoTurnedOn;
-import train.common.core.network.PacketSetTrainLockedToClient;
+import train.common.core.network.*;
 import train.common.inventory.InventoryLoco;
 import train.common.library.Info;
 
@@ -116,6 +116,39 @@ public class GuiLoco2 extends GuiContainer {
                 public FontRenderer getFont(){return fontRendererObj;}
             });
         }
+
+        //region Lights On/Off
+        if (loco.isLightsEnabled())
+        {
+            buttonList.add(this.buttonLock = new GuiButton(6, buttonPosX + 108, buttonPosY + 166, 67, 12, "Lights: On"));
+        }
+        else
+        {
+            buttonList.add(this.buttonLock = new GuiButton(6, buttonPosX + 108, buttonPosY + 166, 67, 12, "Lights: Off"));
+        }
+        //endregion Lights On/Off
+
+        //region Beacon On/Off
+        if (loco.isBeaconEnabled())
+        {
+            buttonList.add(this.buttonLock = new GuiButton(7, buttonPosX + 41, buttonPosY + 166, 67, 12, "Beacon: On"));
+        }
+        else
+        {
+            buttonList.add(this.buttonLock = new GuiButton(7, buttonPosX + 41, buttonPosY + 166, 67, 12, "Beacon: Off"));
+        }
+        //endregion Beacon On/Off
+
+        //region DitchLights On/Off
+        if (loco.isDitchLightsEnabled())
+        {
+            buttonList.add(this.buttonLock = new GuiButton(8, buttonPosX + 90, buttonPosY + 178, 85, 12, "Ditch Lights: On"));
+        }
+        else
+        {
+            buttonList.add(this.buttonLock = new GuiButton(8, buttonPosX + 90, buttonPosY + 178, 85, 12, "Ditch Lights: Off"));
+        }
+        //endregion DitchLights On/Off
     }
 
     @Override
@@ -135,10 +168,7 @@ public class GuiLoco2 extends GuiContainer {
                 this.initGui();
             }
         }
-        EntityPlayer p = (EntityPlayer) loco.riddenByEntity;
-        if (loco.seats.size() != 0 && loco.seats.get(0).getPassenger() instanceof EntityPlayer) {
-            p = (EntityPlayer) loco.seats.get(0).getPassenger();
-        }
+
         if (guibutton.id == 3) {
             if (!loco.isNotOwner()) {
                 if ((!loco.getTrainLockedFromPacket())) {
@@ -153,7 +183,7 @@ public class GuiLoco2 extends GuiContainer {
                     this.initGui();
                 }
             } else {
-                p.addChatMessage(new ChatComponentText("You are not the owner"));
+                getEntityPlayer().addChatMessage(new ChatComponentText("You are not the owner"));
             }
         }
 
@@ -170,7 +200,7 @@ public class GuiLoco2 extends GuiContainer {
                     loco.isBraking = true;
                     this.initGui();
                 } else {
-                    p.addChatMessage(new ChatComponentText("Stop before turning it Off!"));
+                    getEntityPlayer().addChatMessage(new ChatComponentText("Stop before turning it Off!"));
                 }
             } else {
                 Traincraft.ignitionChannel.sendToServer(new PacketSetLocoTurnedOn(true));
@@ -180,6 +210,64 @@ public class GuiLoco2 extends GuiContainer {
         } else if (guibutton instanceof GUIButton) {
             ((GUIButton)guibutton).onClick();
         }
+
+        if (guibutton.id == 6) // Lights
+        {
+            if (loco.isLightsEnabled())
+            {
+                Traincraft.rollingStockLightsChannel.sendToServer(new PacketRollingStockLights(false, loco.getEntityId()));
+                loco.setPacketLights(false);
+                guibutton.displayString = "Lights: Off";
+            }
+            else
+            {
+                Traincraft.rollingStockLightsChannel.sendToServer(new PacketRollingStockLights(true, loco.getEntityId()));
+                loco.setPacketLights(true);
+                guibutton.displayString = "Lights: On";
+            }
+        }
+
+        if (guibutton.id == 7) // Beacon
+        {
+            if (loco.isBeaconEnabled())
+            {
+                Traincraft.rollingStockBeaconChannel.sendToServer(new PacketRollingStockBeacon(false, loco.getEntityId()));
+                loco.setPacketBeacon(false);
+                guibutton.displayString = "Beacon: Off";
+            }
+            else
+            {
+                Traincraft.rollingStockBeaconChannel.sendToServer(new PacketRollingStockBeacon(true, loco.getEntityId()));
+                loco.setPacketBeacon(true);
+                guibutton.displayString = "Beacon: On";
+            }
+        }
+
+        if (guibutton.id == 8) // DitchLights
+        {
+            if (loco.isDitchLightsEnabled())
+            {
+                Traincraft.rollingStockDitchLightsChannel.sendToServer(new PacketRollingStockDitchLights((byte)0, loco.getEntityId()));
+                loco.setPacketDitchLightsMode((byte) 0);
+                guibutton.displayString = "Ditch Lights: Off";
+            }
+            else
+            {
+                Traincraft.rollingStockDitchLightsChannel.sendToServer(new PacketRollingStockDitchLights((byte)1, loco.getEntityId()));
+                loco.setPacketDitchLightsMode((byte) 1);
+                guibutton.displayString = "Ditch Lights: On";
+            }
+        }
+    }
+
+    private EntityPlayer getEntityPlayer()
+    {
+        EntityPlayer p = (EntityPlayer) loco.riddenByEntity;
+        if (loco.seats.size() != 0 && loco.seats.get(0).getPassenger() instanceof EntityPlayer) {
+            p = (EntityPlayer) loco.seats.get(0).getPassenger();
+        }
+
+        return p;
     }
 
     @Override
@@ -332,18 +420,20 @@ public class GuiLoco2 extends GuiContainer {
             }
         }
 
-        fontRendererObj.drawStringWithShadow("Carts pulled: " + loco.getCurrentNumCartsPulled(), 1, 10, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Mass pulled: " + loco.getCurrentMassPulled(), 1, 20, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Speed reduction: " + loco.getCurrentSpeedSlowDown() + " km/h", 1, 30, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Accel reduction: " + loco.getCurrentAccelSlowDown(), 1, 40, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Brake reduction: " + loco.getCurrentBrakeSlowDown(), 1, 50, 0xFFFFFF);
+        JsonObject guiDetails = new JsonParser().parse(loco.guiDetailsDW()).getAsJsonObject();
+
+        fontRendererObj.drawStringWithShadow("Carts pulled: " + guiDetails. get("cartsPulled"), 1, 10, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Mass pulled: " + guiDetails.get("massPulled") +  " tons", 1, 20, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Speed reduction: " + guiDetails.get("slowDown") + " km/h", 1, 30, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Accel reduction: " + (Math.round(guiDetails.get("accelSlowDown").getAsDouble() * 1000) / 1000), 1, 40, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Brake reduction: " + (Math.round(guiDetails.get("brakeSlowDown").getAsDouble() * 1000) / 1000), 1, 50, 0xFFFFFF);
         fontRendererObj.drawStringWithShadow("Fuel consumption: " + ((loco.getFuelConsumption() * 0.2) + "").substring(0, Math.min(((loco.getFuelConsumption() * 0.2) + "").length(), 4)) + " mB/s", 1,
                 60, 0xFFFFFF);
         fontRendererObj.drawStringWithShadow("Fuel: " + loco.getFuel(), 1, 70, 0xFFFFFF);
         fontRendererObj.drawStringWithShadow("Power: " + loco.transportMetricHorsePower() + " Mhp", 1, 80, 0xFFFFFF);
         fontRendererObj.drawStringWithShadow("State: " + loco.getState(), 1, 90, 0xFFFFFF);
         fontRendererObj.drawStringWithShadow("Heat level: " + loco.getOverheatLevel(), 1, 100, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Maximum Speed: " + (loco.getCustomSpeedGUI()) + " km/h" + " (" + (loco.getCustomSpeedGUI() + loco.getCurrentSpeedSlowDown()) + ")", 1, 110, 0xFFFFFF);
+        fontRendererObj.drawStringWithShadow("Maximum Speed: " + (loco.getCustomSpeedGUI()) + " km/h" + " (" + (loco.getCustomSpeedGUI() + guiDetails.get("slowDown").getAsFloat()) + "km/h)", 1, 110, 0xFFFFFF);
         fontRendererObj.drawStringWithShadow("Destination: " + (loco.getDestinationGUI()), 1, 120, 0xFFFFFF);
     }
 }
