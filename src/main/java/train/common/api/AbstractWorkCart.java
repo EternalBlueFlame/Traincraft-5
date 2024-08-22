@@ -1,8 +1,8 @@
 package train.common.api;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -111,7 +111,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 		if (this.furnaceBurnTime > 0) {
 			--this.furnaceBurnTime;
 		}
-		if (!this.worldObj.isRemote) {
+		if (!this.getWorld().isRemote) {
 			if (this.furnaceBurnTime == 0 && this.canSmelt()) {
 				this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.furnaceItemStacks[1]);
 
@@ -253,7 +253,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 	 * When some containers are closed they call this on each slot, then drop whatever it returns as an EntityItem - like when you close a workbench GUI.
 	 */
 	@Override
-	public ItemStack getStackInSlotOnClosing(int par1) {
+	public ItemStack removeStackFromSlot(int par1) {
 		if (this.furnaceItemStacks[par1] != null) {
 			ItemStack var2 = this.furnaceItemStacks[par1];
 			this.furnaceItemStacks[par1] = null;
@@ -295,15 +295,15 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
 		this.furnaceItemStacks[par1] = par2ItemStack;
-		if (par2ItemStack != null && par2ItemStack.stackSize > this.getInventoryStackLimit()) {
-			par2ItemStack.stackSize = this.getInventoryStackLimit();
+		if (par2ItemStack != null && par2itemstack.getCount() > this.getInventoryStackLimit()) {
+			par2itemstack.getCount() = this.getInventoryStackLimit();
 		}
 	}
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer p) {}
 
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer p) {}
 
 	@Override
 	public int getSizeInventory() {
@@ -312,7 +312,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i) {
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return true;
 		}
 		if(this.canBeDestroyedByPlayer(damagesource) || damagesource.getEntity() == null){

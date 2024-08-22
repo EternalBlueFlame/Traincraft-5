@@ -6,14 +6,14 @@ import cofh.api.energy.IEnergyReceiver;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.api.blocks.TileTraincraft;
 
 import java.util.Arrays;
 
 public class Energy extends TileTraincraft implements IEnergyProvider {
     public EnergyStorage energy = new EnergyStorage(3000, 80); //core energy value the first value is max storage and the second is transfer max.
-    private ForgeDirection[] sides = new ForgeDirection[]{}; //defines supported sides
+    private EnumFacing[] sides = new EnumFacing[]{}; //defines supported sides
 
     public Energy(int inventorySlots, int maxEnergy, int maxTransfer) {
         super(inventorySlots);
@@ -25,7 +25,7 @@ public class Energy extends TileTraincraft implements IEnergyProvider {
     }
 
     public void pushEnergy(World world, int x, int y, int z, EnergyStorage storage) {
-        for (ForgeDirection side : getSides()) {
+        for (EnumFacing side : getSides()) {
             TileEntity tile = world.getTileEntity(x + side.offsetX, y + side.offsetY, z + side.offsetZ);
             if (tile instanceof IEnergyReceiver && storage.getEnergyStored() > 0) {
                 if (((IEnergyReceiver) tile).canConnectEnergy(side.getOpposite())) {
@@ -51,32 +51,32 @@ public class Energy extends TileTraincraft implements IEnergyProvider {
         return nbtTag;
     }
 
-    public void setSides(ForgeDirection[] listOfSides) {
+    public void setSides(EnumFacing[] listOfSides) {
         this.sides = listOfSides;
     }
 
-    public ForgeDirection[] getSides() {
+    public EnumFacing[] getSides() {
         return this.sides;
     }
 
     //RF Overrides
     @Override
-    public boolean canConnectEnergy(ForgeDirection dir) {
+    public boolean canConnectEnergy(EnumFacing dir) {
         return Arrays.asList(sides).contains(dir);
     }
 
     @Override
-    public int extractEnergy(ForgeDirection dir, int amount, boolean simulate) {
+    public int extractEnergy(EnumFacing dir, int amount, boolean simulate) {
         return energy.extractEnergy(amount, simulate);
     }
 
     @Override
-    public int getEnergyStored(ForgeDirection dir) {
+    public int getEnergyStored(EnumFacing dir) {
         return energy.getEnergyStored();
     }
 
     @Override
-    public int getMaxEnergyStored(ForgeDirection dir) {
+    public int getMaxEnergyStored(EnumFacing dir) {
         return this.energy.getMaxEnergyStored();
     }
 }

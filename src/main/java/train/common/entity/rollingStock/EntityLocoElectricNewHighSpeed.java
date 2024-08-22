@@ -30,9 +30,9 @@ public class EntityLocoElectricNewHighSpeed extends ElectricTrain {
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.35F, posZ);
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
+		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.35F, posZ);
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class EntityLocoElectricNewHighSpeed extends ElectricTrain {
 	@Override
 	public void pressKey(int i) {
 		if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
@@ -87,7 +87,7 @@ public class EntityLocoElectricNewHighSpeed extends ElectricTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "High Speed";
 	}
 
@@ -97,7 +97,7 @@ public class EntityLocoElectricNewHighSpeed extends ElectricTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

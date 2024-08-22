@@ -938,7 +938,7 @@ public class ModelBNLRV_B extends ModelBase
 
 		for (int i = 0; i < 226; i++) {
 			if (bnlrv_bModel[i].boxName != null && bnlrv_bModel[i].boxName.contains("lamp") ) {
-				Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+				Minecraft.getMinecraft().entityRenderer.disableLightmap();
 				bnlrv_bModel[i].render(f5);
 				Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
 			}else if (bnlrv_bModel[i].boxName != null && bnlrv_bModel[i].boxName.contains("cull")) {

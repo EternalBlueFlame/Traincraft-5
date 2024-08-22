@@ -9,7 +9,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.handlers.WorldEvents;
 import train.common.core.util.Energy;
@@ -26,11 +26,11 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 
 	public TileWindMill() {
 		super(0, 240, 80);
-		super.setSides(new ForgeDirection[]{ForgeDirection.EAST, ForgeDirection.WEST, ForgeDirection.SOUTH, ForgeDirection.NORTH, ForgeDirection.DOWN});
+		super.setSides(new EnumFacing[]{EnumFacing.EAST, EnumFacing.WEST, EnumFacing.SOUTH, EnumFacing.NORTH, EnumFacing.DOWN});
 	}
 
 	@Override
-	public String getInventoryName(){return "Wind Mill";}
+	public String getName(){return "Wind Mill";}
 
 
 	@Override
@@ -55,19 +55,19 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 		/**
 		 * Remove any block on top of the wind mill
 		 */
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (updateTicks % 20 == 0) {
-				if (!this.worldObj.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
-					Block block = this.worldObj.getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
+				if (!this.getWorld().isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
+					Block block = this.getWorld().getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
 					if (block != null) {
-						EntityItem entityitem = new EntityItem(worldObj, this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(BlockIDs.windMill.block),1));
+						EntityItem entityitem = new EntityItem(getWorld(), this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(BlockIDs.windMill.block),1));
 						float f3 = 0.05F;
 						entityitem.motionX = (float) rand.nextGaussian() * f3;
 						entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
 						entityitem.motionZ = (float) rand.nextGaussian() * f3;
-						worldObj.spawnEntityInWorld(entityitem);
+						getWorld().spawnEntityInWorld(entityitem);
 					}
-					this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
+					this.getWorld().setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
 				}
 			}
 
@@ -82,7 +82,7 @@ public class TileWindMill extends Energy implements IEnergyProvider {
                    louter:
                    for(int x=-st;x<en;x++)
                      for(int z=-st;z<en;z++)
-                       if(!this.worldObj.canBlockSeeTheSky(this.xCoord + x, this.yCoord + 1, this.zCoord + z))
+                       if(!this.getWorld().canBlockSeeTheSky(this.xCoord + x, this.yCoord + 1, this.zCoord + z))
                        {
                            this.standsOpen++;
                            break louter;
@@ -95,14 +95,14 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 			 */
 			if (this.standsOpen == 0 && updateTicks % 4 == 0) {
 				this.energy.receiveEnergy((WorldEvents.windStrength + (Math.round(this.yCoord *0.25f)) * 10), false);
-				if (this.worldObj.isThundering()) {
+				if (this.getWorld().isThundering()) {
 					this.energy.receiveEnergy(Math.round(this.energy.getEnergyStored() * 3.5f), false);
-				} else if (this.worldObj.isRaining()) {
+				} else if (this.getWorld().isRaining()) {
 					this.energy.receiveEnergy(Math.round(this.energy.getEnergyStored() * 2.2f), false);
 				}
 			}
 			if (this.energy.getEnergyStored() > 0) {
-				pushEnergy(worldObj, this.xCoord, this.yCoord, this.zCoord, this.energy);
+				pushEnergy(getWorld(), this.xCoord, this.yCoord, this.zCoord, this.energy);
 			}
 
 			this.markDirty();

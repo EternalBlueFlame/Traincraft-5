@@ -21,7 +21,7 @@ public class PacketATODoAccelHandler implements IMessageHandler<PacketDoAccel, I
    }
 
    public void accel(Entity entity) {
-      if(entity.worldObj != null) {
+      if(entity.getWorld() != null) {
 
          Locomotive theTrain = (Locomotive)entity;
          if((int)theTrain.getSpeed() - 2 <= theTrain.speedLimit) {

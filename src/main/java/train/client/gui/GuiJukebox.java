@@ -1,7 +1,7 @@
 package train.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -63,7 +63,7 @@ public class GuiJukebox extends GuiScreen {
         buttonList.add(new GuiButton(4, this.width / 2 - 70, this.height / 2 + 30, 20, 20, "+"));
         buttonList.add(new GuiButton(5, this.width / 2 + 50, this.height / 2 + 30, 20, 20, "-"));
 
-        streamTextBox = new GuiTCTextField(this.fontRendererObj, this.width / 2 - (gui_width) / 2 + 10, this.height / 2 - gui_height / 2 + 50, gui_width - 16, 16);
+        streamTextBox = new GuiTCTextField(this.fontRenderer, this.width / 2 - (gui_width) / 2 + 10, this.height / 2 - gui_height / 2 + 50, gui_width - 16, 16);
         streamTextBox.setMaxStringLength(1000);
         streamTextBox.setText(this.jukebox.streamURL);
 
@@ -114,9 +114,9 @@ public class GuiJukebox extends GuiScreen {
         //fontRenderer.drawString("Date: " + Calendar.getInstance().get(Calendar.MONTH) + " " + Calendar.getInstance().get(Calendar.DATE), var5 - gui_width / 2, var6 - 30, 0xffffffff);
 
         if (Minecraft.getMinecraft().thePlayer != null && (jukebox.player != null && !jukebox.isInvalid)) {
-            fontRendererObj.drawString("Volume: " + (int) Math.ceil(jukebox.volume * 100), width / 2 - 26, height / 2 + 18, 0xff0e0e0e);
+            fontRenderer.drawString("Volume: " + (int) Math.ceil(jukebox.volume * 100), width / 2 - 26, height / 2 + 18, 0xff0e0e0e);
         } else {
-            fontRendererObj.drawString("Volume: 0", width / 2 - 26, height / 2 + 18, 0xff0e0e0e);
+            fontRenderer.drawString("Volume: 0", width / 2 - 26, height / 2 + 18, 0xff0e0e0e);
         }
 
         setText(0xff0e0e0e);
@@ -129,7 +129,7 @@ public class GuiJukebox extends GuiScreen {
     }
 
     private void setText(int color) {
-        fontRendererObj.drawString(infoText, this.width / 2 - gui_width / 2 + 10, this.height / 2 - 30, color);
+        fontRenderer.drawString(infoText, this.width / 2 - gui_width / 2 + 10, this.height / 2 - 30, color);
     }
 
     public void drawSquareCorners(int x, int y, int x0y0, int x1y0, int x0y1, int x1y1, int u, int v) {
@@ -262,7 +262,7 @@ public class GuiJukebox extends GuiScreen {
             if (player != null && player.getDisplayName().equals(((AbstractTrains) jukebox).getTrainOwner())) {
                 if ((!jukebox.locked)) {
                     AxisAlignedBB box = jukebox.boundingBox.expand(5, 5, 5);
-                    List lis3 = jukebox.worldObj.getEntitiesWithinAABBExcludingEntity(jukebox, box);
+                    List lis3 = jukebox.getWorld().getEntitiesWithinAABBExcludingEntity(jukebox, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object o : lis3) {
                             Entity entity = (Entity) o;
@@ -277,7 +277,7 @@ public class GuiJukebox extends GuiScreen {
                     this.initGui();
                 } else {
                     AxisAlignedBB box = jukebox.boundingBox.expand(5, 5, 5);
-                    List lis3 = jukebox.worldObj.getEntitiesWithinAABBExcludingEntity(jukebox, box);
+                    List lis3 = jukebox.getWorld().getEntitiesWithinAABBExcludingEntity(jukebox, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object o : lis3) {
                             Entity entity = (Entity) o;
@@ -309,7 +309,7 @@ public class GuiJukebox extends GuiScreen {
 
     @Override
     protected void drawCreativeTabHoveringText(String str, int t, int g) {
-        int textWidth = fontRendererObj.getStringWidth("When a jukebox is unlocked,") + 2;
+        int textWidth = fontRenderer.getStringWidth("When a jukebox is unlocked,") + 2;
 
         int i4 = 0xf0100010;
         drawGradientRect(t + 15 - 3, g - 40 - 4, t + textWidth + 3, g + 8 + 4, i4, i4);
@@ -318,11 +318,11 @@ public class GuiJukebox extends GuiScreen {
         int colour2 = (colour1 & 0xfefefe) >> 1 | colour1 & 0xff000000;
         drawGradientRect(t + 15 - 3, g - 40 - 3, t + textWidth + 3, g + 8 + 3, colour1, colour2);
         drawGradientRect(t + 15 - 2, g - 40 - 2, t + textWidth + 2, g + 8 + 2, i4, i4);
-        fontRendererObj.drawStringWithShadow(str, t + 15, g - 40, -1);
-        fontRendererObj.drawStringWithShadow("only its owner can open", t + 15, g + 10 - 40, -1);
-        fontRendererObj.drawStringWithShadow("the GUI and destroy it.", t + 15, g + 20 - 40, -1);
-        fontRendererObj.drawStringWithShadow("Current state: " + (jukebox.locked ? "Locked" : "Unlocked"), t + 15, g + 30 - 40, -1);
-        fontRendererObj.drawStringWithShadow("Owner: " + jukebox.getTrainOwner(), t + 15, g + 40 - 40, -1);
+        fontRenderer.drawStringWithShadow(str, t + 15, g - 40, -1);
+        fontRenderer.drawStringWithShadow("only its owner can open", t + 15, g + 10 - 40, -1);
+        fontRenderer.drawStringWithShadow("the GUI and destroy it.", t + 15, g + 20 - 40, -1);
+        fontRenderer.drawStringWithShadow("Current state: " + (jukebox.locked ? "Locked" : "Unlocked"), t + 15, g + 30 - 40, -1);
+        fontRenderer.drawStringWithShadow("Owner: " + jukebox.getTrainOwner(), t + 15, g + 40 - 40, -1);
     }
 
     public boolean intersectsWith(int mouseX, int mouseY) {

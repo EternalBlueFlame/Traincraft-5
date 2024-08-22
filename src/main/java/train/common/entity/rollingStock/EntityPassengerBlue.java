@@ -25,14 +25,14 @@ public class EntityPassengerBlue extends EntityRollingStock implements IPassenge
 	}
 
 	@Override
-	public void updateRiderPosition() {
+	public void updatePassenger(Entity passenger) {
 		/*double pitchRads = this.anglePitchClient * 3.141592653589793D / 180.0D;
 		
 		double distance = 2;
 		double yOffset = 0.01;
 		float rotationCos1 = (float) Math.cos(Math.toRadians(this.rotationYawClientReal + 90));
 		float rotationSin1 = (float) Math.sin(Math.toRadians((this.rotationYawClientReal + 90)));
-		float pitch = (float) (posY + ((Math.tan(pitchRads)*distance)+getMountedYOffset()) + riddenByEntity.getYOffset() + yOffset);
+		float pitch = (float) (posY + ((Math.tan(pitchRads)*distance)+getMountedYOffset()) + passenger.getYOffset() + yOffset);
 		double bogieX1 = (this.posX + (rotationCos1 * distance));
 		double bogieZ1 = (this.posZ + (rotationSin1* distance));
 		//System.out.println(rotationCos1+" "+ rotationSin1);
@@ -45,8 +45,8 @@ public class EntityPassengerBlue extends EntityRollingStock implements IPassenge
 			pitch-=pitchRads*1.2;
 		}
 		riddenByEntity.setPosition(bogieX1, pitch, bogieZ1);*/
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ);
+		if(passenger==null){return;}
+		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset(), posZ);
 	}
 
 	@Override
@@ -61,13 +61,13 @@ public class EntityPassengerBlue extends EntityRollingStock implements IPassenge
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 			if(lockThisCart(itemstack, entityplayer))return true;
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}
-			if (!worldObj.isRemote) {
+			if (!getWorld().isRemote) {
 				entityplayer.mountEntity(this);
 			}
 		}

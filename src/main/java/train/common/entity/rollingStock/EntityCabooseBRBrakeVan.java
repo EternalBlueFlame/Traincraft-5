@@ -25,12 +25,12 @@ public class EntityCabooseBRBrakeVan extends EntityRollingStock implements IPass
     }
 
     @Override
-    public void updateRiderPosition() {
+    public void updatePassenger(Entity passenger) {
         if (riddenByEntity == null) {
             return;
         }
 
-        riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ);
+        riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset(), posZ);
     }
 
     @Override
@@ -46,7 +46,7 @@ public class EntityCabooseBRBrakeVan extends EntityRollingStock implements IPass
             return false;
         }
 
-        if (!worldObj.isRemote) {
+        if (!getWorld().isRemote) {
             ItemStack itemstack = entityplayer.inventory.getCurrentItem();
             if (lockThisCart(itemstack, entityplayer)) {
 				return true;

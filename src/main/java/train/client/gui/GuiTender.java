@@ -67,7 +67,7 @@ public class GuiTender extends GuiContainer {
                 }
 
                 @Override
-                public FontRenderer getFont(){return fontRendererObj;}
+                public FontRenderer getFont(){return fontRenderer;}
             });
         }
     }
@@ -78,7 +78,7 @@ public class GuiTender extends GuiContainer {
             if (player != null && player.getCommandSenderName().equalsIgnoreCase(tender.getTrainOwner())) {
                 if (!tender.getTrainLockedFromPacket()) {
                     AxisAlignedBB box = tender.boundingBox.expand(5, 5, 5);
-                    List lis3 = tender.worldObj.getEntitiesWithinAABBExcludingEntity(tender, box);
+                    List lis3 = tender.getWorld().getEntitiesWithinAABBExcludingEntity(tender, box);
 
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
@@ -93,7 +93,7 @@ public class GuiTender extends GuiContainer {
                     this.initGui();
                 } else {
                     AxisAlignedBB box = tender.boundingBox.expand(5, 5, 5);
-                    List lis3 = tender.worldObj.getEntitiesWithinAABBExcludingEntity(tender, box);
+                    List lis3 = tender.getWorld().getEntitiesWithinAABBExcludingEntity(tender, box);
 
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
@@ -120,16 +120,16 @@ public class GuiTender extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRendererObj.drawString(tender.getCommandSenderName(), 34, 1, 0x000000);
-        fontRendererObj.drawString(tender.getCommandSenderName(), 36, 3, 0x000000);
-        fontRendererObj.drawString(tender.getCommandSenderName(), 34, 3, 0x000000);
-        fontRendererObj.drawString(tender.getCommandSenderName(), 36, 1, 0x000000);
+        fontRenderer.drawString(tender.getCommandSenderName(), 34, 1, 0x000000);
+        fontRenderer.drawString(tender.getCommandSenderName(), 36, 3, 0x000000);
+        fontRenderer.drawString(tender.getCommandSenderName(), 34, 3, 0x000000);
+        fontRenderer.drawString(tender.getCommandSenderName(), 36, 1, 0x000000);
 
-        fontRendererObj.drawString(tender.getCommandSenderName(), 34, 2, 0x000000);
-        fontRendererObj.drawString(tender.getCommandSenderName(), 36, 2, 0x000000);
-        fontRendererObj.drawString(tender.getCommandSenderName(), 35, 3, 0x000000);
-        fontRendererObj.drawString(tender.getCommandSenderName(), 35, 1, 0x000000);
-        fontRendererObj.drawString(tender.getCommandSenderName(), 35, 2, 0xd3a900);
+        fontRenderer.drawString(tender.getCommandSenderName(), 34, 2, 0x000000);
+        fontRenderer.drawString(tender.getCommandSenderName(), 36, 2, 0x000000);
+        fontRenderer.drawString(tender.getCommandSenderName(), 35, 3, 0x000000);
+        fontRenderer.drawString(tender.getCommandSenderName(), 35, 1, 0x000000);
+        fontRenderer.drawString(tender.getCommandSenderName(), 35, 2, 0xd3a900);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -143,7 +143,7 @@ public class GuiTender extends GuiContainer {
     protected void drawCreativeTabHoveringText(String str, int t, int g) {
         //int liqui = (dieselInventory.getLiquidAmount() * 50) / dieselInventory.getTankCapacity();
 
-        int textWidth = fontRendererObj.getStringWidth("the GUI, change speed, destroy it.");
+        int textWidth = fontRenderer.getStringWidth("the GUI, change speed, destroy it.");
         int startX = 90;
         int startY = 5;
         int i4 = 0xf0100010;
@@ -155,11 +155,11 @@ public class GuiTender extends GuiContainer {
         drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 8 + 3 + 40, colour1, colour2);
         drawGradientRect(startX - 2, startY - 2, startX + textWidth + 2, startY + 8 + 2 + 40, i4, i4);
 
-        fontRendererObj.drawStringWithShadow(str, startX, startY, -1);
-        fontRendererObj.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
-        fontRendererObj.drawStringWithShadow("the GUI and destroy it.", startX, startY + 20, -1);
-        fontRendererObj.drawStringWithShadow("Current state: " + (tender.getTrainLockedFromPacket() ? "Locked" : "Unlocked"), startX, startY + 30, -1);
-        fontRendererObj.drawStringWithShadow("Owner: " + tender.getTrainOwner().trim(), startX, startY + 40, -1);
+        fontRenderer.drawStringWithShadow(str, startX, startY, -1);
+        fontRenderer.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
+        fontRenderer.drawStringWithShadow("the GUI and destroy it.", startX, startY + 20, -1);
+        fontRenderer.drawStringWithShadow("Current state: " + (tender.getTrainLockedFromPacket() ? "Locked" : "Unlocked"), startX, startY + 30, -1);
+        fontRenderer.drawStringWithShadow("Owner: " + tender.getTrainOwner().trim(), startX, startY + 40, -1);
     }
 
     public boolean intersectsWith(int mouseX, int mouseY) {
@@ -177,7 +177,7 @@ public class GuiTender extends GuiContainer {
 
         if (mouseX > j + 143 && mouseX < j + 161 && mouseY > k + 18 && mouseY < k + 68) {
             drawHoveringText(Collections.singletonList("Water: " + (tender.getWater()) + "mb / " + (tender.getCartTankCapacity()) + "mb"),
-                    mouseX, mouseY, fontRendererObj);
+                    mouseX, mouseY, fontRenderer);
         }
     }
 

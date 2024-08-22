@@ -5,7 +5,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -56,7 +56,7 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (theTank.getFluidAmount() != this.dataWatcher.getWatchableObjectInt(23)){
 				this.dataWatcher.updateObject(23, theTank.getFluidAmount());
 				fuelTrain = theTank.getFluidAmount();
@@ -128,7 +128,7 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	}
 
 	public void liquidInSlot(ItemStack itemstack) {
-		if (worldObj.isRemote)
+		if (getWorld().isRemote)
 			return;
 		this.update += 1;
 		if (this.update % 8 == 0 && itemstack != null) {
@@ -163,15 +163,15 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 			motionZ *= 0.8;
 		} else if (ticksExisted%5==0 &&getTank().getFluidAmount()+100 < maxTank) {
 			FluidStack drain = null;
-			blocksToCheck = new TileEntity[]{worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY - 1), MathHelper.floor_double(posZ)),
-					worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 2), MathHelper.floor_double(posZ)),
-					worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 3), MathHelper.floor_double(posZ)),
-					worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 4), MathHelper.floor_double(posZ))
+			blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY - 1), MathHelper.floor_double(posZ)),
+					getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 2), MathHelper.floor_double(posZ)),
+					getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 3), MathHelper.floor_double(posZ)),
+					getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 4), MathHelper.floor_double(posZ))
 			};
 
 			for (TileEntity block : blocksToCheck) {
 				if (drain == null && block instanceof IFluidHandler) {
-					for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+					for (EnumFacing direction : EnumFacing.VALID_DIRECTIONS) {
 						if (((IFluidHandler) block).drain(direction, 100, false) != null &&
 								(getFluid()==null || ((IFluidHandler) block).drain(direction, 100, false).fluid==getTank().getFluid().fluid) &&
 								((IFluidHandler) block).drain(direction, 100, false).amount == 100
@@ -184,29 +184,29 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 			}
 			if(drain==null && cartLinked1 instanceof LiquidTank && !(cartLinked1 instanceof EntityBUnitEMDF7) && !(cartLinked1 instanceof EntityBUnitEMDF3) && !(cartLinked1 instanceof EntityBUnitDD35)){
 				if (getFluid() == null) {
-					drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+					drain = ((LiquidTank) cartLinked1).drain(EnumFacing.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
 					if (drain == null){
-						drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
+						drain = ((LiquidTank) cartLinked1).drain(EnumFacing.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
 					}
 				} else if (getFluid().getFluid() == LiquidManager.DIESEL) {
-					drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+					drain = ((LiquidTank) cartLinked1).drain(EnumFacing.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
 				} else {
-					drain = ((LiquidTank) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
+					drain = ((LiquidTank) cartLinked1).drain(EnumFacing.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
 				}
 			} else if (drain==null && cartLinked2 instanceof LiquidTank && !(cartLinked2 instanceof EntityBUnitEMDF7) && !(cartLinked2 instanceof EntityBUnitEMDF3) && !(cartLinked1 instanceof EntityBUnitDD35)){
 				if (getFluid() == null) {
-					drain = ((LiquidTank) cartLinked2).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+					drain = ((LiquidTank) cartLinked2).drain(EnumFacing.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
 					if (drain == null){
-						drain = ((LiquidTank) cartLinked2).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
+						drain = ((LiquidTank) cartLinked2).drain(EnumFacing.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
 					}
 				} else if (getFluid().getFluid() == LiquidManager.DIESEL) {
-					drain = ((LiquidTank) cartLinked2).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+					drain = ((LiquidTank) cartLinked2).drain(EnumFacing.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
 				} else {
-					drain = ((LiquidTank) cartLinked2).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 100), true);
+					drain = ((LiquidTank) cartLinked2).drain(EnumFacing.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 100), true);
 				}
 			}
 			if (drain != null){
-				fill(ForgeDirection.UNKNOWN, drain, true);
+				fill(EnumFacing.UNKNOWN, drain, true);
 			}
 		}
 
@@ -214,10 +214,10 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 			fuelTrain -= amount;
 			if (fuelTrain < 0) {
 				fuelTrain = 0;
-				drain(ForgeDirection.UNKNOWN, amount, true);
+				drain(EnumFacing.UNKNOWN, amount, true);
 				setLocoTurnedOnFromPacket(false);
 			} else {
-				drain(ForgeDirection.UNKNOWN, amount, true);
+				drain(EnumFacing.UNKNOWN, amount, true);
 			}
 		}
 	}
@@ -232,12 +232,12 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	}
 
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
 		return theTank.fill(resource, doFill);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		if (resource == null || !resource.isFluidEqual(theTank.getFluid())) {
 			return null;
 		}
@@ -245,22 +245,22 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		return theTank ==null? null:theTank.drain(maxDrain, doDrain);
 	}
 
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return true;
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return true;
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+	public FluidTankInfo[] getTankInfo(EnumFacing from) {
 		return new FluidTankInfo[] { theTank.getInfo() };
 	}
 

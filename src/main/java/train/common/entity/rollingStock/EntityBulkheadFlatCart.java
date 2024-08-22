@@ -12,7 +12,7 @@ import train.common.Traincraft;
 import train.common.api.Freight;
 import train.common.library.GuiIDs;
 
-public class EntityBulkheadFlatCart extends Freight implements IInventory {
+public class EntityBulkheadFlatCart extends Freight {
 
     public int freightInventorySize;
     public int numFreightSlots;
@@ -83,7 +83,7 @@ public class EntityBulkheadFlatCart extends Freight implements IInventory {
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "Bulkhead Flat Cart";
     }
 
@@ -99,8 +99,8 @@ public class EntityBulkheadFlatCart extends Freight implements IInventory {
             return false;
         }
 
-        if (!this.worldObj.isRemote) {
-            entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, worldObj, this.getEntityId(), -1, (int) this.posZ);
+        if (!this.getWorld().isRemote) {
+            entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, getWorld(), this.getEntityId(), -1, (int) this.posZ);
         }
         return true;
     }

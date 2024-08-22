@@ -36,9 +36,9 @@ public class EntityLocoSteamVBShay extends SteamTrain {
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.65, posZ);// default
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
+		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.65, posZ);// default
 	}
 	@Override
 	public boolean shouldRiderSit(){return false;}
@@ -52,14 +52,14 @@ public class EntityLocoSteamVBShay extends SteamTrain {
 	@Override
 	public void pressKey(int i) {
 		if (i == 7 && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 		checkInvent(locoInvent[0], locoInvent[1], this);
@@ -103,7 +103,7 @@ public class EntityLocoSteamVBShay extends SteamTrain {
 		return inventorySize;
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Vertical Boiler Shay";
 	}
 
@@ -113,7 +113,7 @@ public class EntityLocoSteamVBShay extends SteamTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

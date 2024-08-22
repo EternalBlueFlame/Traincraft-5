@@ -67,7 +67,7 @@ public class TileFortyFootContainer extends TileEntity implements IInventory {
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int index) {
+    public ItemStack removeStackFromSlot(int index) {
         ItemStack stack = this.getStackInSlot(index);
         this.setInventorySlotContents(index, null);
         return stack;
@@ -91,7 +91,7 @@ public class TileFortyFootContainer extends TileEntity implements IInventory {
 
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "40 Foot Container";
     }
 
@@ -111,12 +111,12 @@ public class TileFortyFootContainer extends TileEntity implements IInventory {
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer p) {
 
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer p) {
 
     }
 

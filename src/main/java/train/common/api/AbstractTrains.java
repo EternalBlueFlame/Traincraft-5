@@ -1,9 +1,9 @@
 package train.common.api;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.XmlBuilder;
 import fexcraft.tmt.slim.ModelBase;
 import io.netty.buffer.ByteBuf;
@@ -273,7 +273,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     @Override
     public boolean interactFirst(EntityPlayer entityplayer) {
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
-        if (!worldObj.isRemote && ConfigHandler.CHUNK_LOADING && (this instanceof Locomotive)) {
+        if (!getWorld().isRemote && ConfigHandler.CHUNK_LOADING && (this instanceof Locomotive)) {
             if (itemstack != null && itemstack.getItem() instanceof ItemChunkLoaderActivator) {
                 this.playerEntity = entityplayer;
                 if (getFlag(7)) {
@@ -449,7 +449,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public void setInformation(String trainType, String trainOwner, String trainCreator, String trainName, int uniqueID) {
-        if (!worldObj.isRemote) {
+        if (!getWorld().isRemote) {
             dataWatcher.updateObject(6, trainType);
             dataWatcher.updateObject(7, trainOwner);
             dataWatcher.updateObject(9, trainName);
@@ -510,7 +510,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * Lock packet
      */
     public void setTrainLockedFromPacket(boolean set) {
-        // System.out.println(worldObj.isRemote + " " + set);
+        // System.out.println(getWorld().isRemote + " " + set);
         locked = set;
     }
 
@@ -524,16 +524,16 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                     || this.trainOwner.isEmpty() || entityplayer.canCommandSenderUseCommand(2, "")) {
                 if (locked) {
                     locked = false;
-                    if (worldObj.isRemote) {
+                    if (getWorld().isRemote) {
                         entityplayer.addChatMessage(new ChatComponentText("Unlocked."));
                     }
                 } else {
                     locked = true;
-                    if (worldObj.isRemote) {
+                    if (getWorld().isRemote) {
                         entityplayer.addChatMessage(new ChatComponentText("Locked."));
                     }
                 }
-            } else if (worldObj.isRemote) {
+            } else if (getWorld().isRemote) {
                 entityplayer.addChatMessage(new ChatComponentText("You are not the owner!"));
             }
             return true;
@@ -623,7 +623,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public void requestTicket() {
-        ForgeChunkManager.Ticket chunkTicket = ForgeChunkManager.requestTicket(Traincraft.instance, worldObj, ForgeChunkManager.Type.ENTITY);
+        ForgeChunkManager.Ticket chunkTicket = ForgeChunkManager.requestTicket(Traincraft.instance, getWorld(), ForgeChunkManager.Type.ENTITY);
         if (chunkTicket != null) {
             chunkTicket.setChunkListDepth(25);
             chunkTicket.bindEntity(this);
@@ -802,4 +802,9 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * may return null. */
     @SideOnly(Side.CLIENT)
     public ModelBase[] getModel(){return new ModelBase[]{getRender().getModel()};}
+
+    @Override
+    public Type getType() {
+        return Type.CHEST;
+    }
 }

@@ -24,9 +24,9 @@ public class EntityCabooseBapWVcaboose extends EntityRollingStock implements IPa
     }
 
     @Override
-    public void updateRiderPosition() {
+    public void updatePassenger(Entity passenger) {
         if (riddenByEntity != null) {
-            riddenByEntity.setPosition(posX + 0.0f, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.3125, posZ + 0.0);
+            riddenByEntity.setPosition(posX + 0.0f, posY + getMountedYOffset() + passenger.getYOffset() + 0.3125, posZ + 0.0);
         }
     }
 
@@ -43,7 +43,7 @@ public class EntityCabooseBapWVcaboose extends EntityRollingStock implements IPa
             return false;
         }
 
-        if (!worldObj.isRemote) {
+        if (!getWorld().isRemote) {
             ItemStack itemstack = entityplayer.inventory.getCurrentItem();
             if (lockThisCart(itemstack, entityplayer)) {
                 return true;

@@ -7,7 +7,7 @@ package train.common.blocks.tracks;
 
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import ebf.tim.utility.DebugUtil;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.electricity.IElectricGrid;
@@ -21,7 +21,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.IIcon;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.api.ElectricTrain;
 import train.common.api.EntityRollingStock;
 import train.common.core.handlers.ConfigHandler;
@@ -40,7 +40,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 	private Block thisBlock;
 	private int updateTicks = 0;
 	protected boolean powered = false;
-    private static ForgeDirection[] dirMap = new ForgeDirection[] {ForgeDirection.WEST, ForgeDirection.EAST, ForgeDirection.NORTH, ForgeDirection.SOUTH};
+    private static EnumFacing[] dirMap = new EnumFacing[] {EnumFacing.WEST, EnumFacing.EAST, EnumFacing.NORTH, EnumFacing.SOUTH};
     private ChargeHandler RFChandler;
 	
 	public BlockEnergyTrack() {
@@ -86,8 +86,8 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
         if(this.updateTicks % 10 == 0) {
 			if (this.maxEnergy > this.RFChandler.getCharge()) {
 				if (this.getWorld().getTileEntity(this.getX(), this.getY() - 1, this.getZ()) instanceof IEnergyProvider) {
-					DebugUtil.println("found input and it gives " + ((IEnergyProvider)this.getWorld().getTileEntity(this.getX(), this.getY() - 1, this.getZ())).extractEnergy(ForgeDirection.UP, 100, true));
-					this.receiveEnergy(ForgeDirection.DOWN, ((IEnergyProvider) this.getWorld().getTileEntity(this.getX(), this.getY() - 1, this.getZ())).extractEnergy(ForgeDirection.UP, 100, false), false);
+					DebugUtil.println("found input and it gives " + ((IEnergyProvider)this.getWorld().getTileEntity(this.getX(), this.getY() - 1, this.getZ())).extractEnergy(EnumFacing.UP, 100, true));
+					this.receiveEnergy(EnumFacing.DOWN, ((IEnergyProvider) this.getWorld().getTileEntity(this.getX(), this.getY() - 1, this.getZ())).extractEnergy(EnumFacing.UP, 100, false), false);
 				}
 				int x = this.getX();
 				int y = this.getY();
@@ -100,7 +100,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 							ener1 = ((IEnergyProvider) this.getWorld().getTileEntity(pos[0], y, pos[1])).extractEnergy(dirMap[pos[2]], 100, false);
 						if (this.getWorld().getTileEntity(pos[0], y - 1, pos[1]) instanceof IEnergyProvider)
 							ener2 = ((IEnergyProvider) this.getWorld().getTileEntity(pos[0], y - 1, pos[1])).extractEnergy(dirMap[pos[2]], 100, false);
-						this.receiveEnergy(ForgeDirection.UP, ener1 + ener2, false);
+						this.receiveEnergy(EnumFacing.UP, ener1 + ener2, false);
 					} else break;
 
 				for (int[] pos : new int[][]{{x - 1, z}, {x + 1, z}, {x, z - 1}, {x, z + 1}}) {
@@ -246,13 +246,13 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
      */
 
     @Override
-    public boolean canConnectEnergy(ForgeDirection from)
+    public boolean canConnectEnergy(EnumFacing from)
     {
         return true;
     }
 
     @Override
-    public int receiveEnergy(ForgeDirection dir, int ammount, boolean simulate)
+    public int receiveEnergy(EnumFacing dir, int ammount, boolean simulate)
     {
         if(this.maxEnergy > this.RFChandler.getCharge())
         {
@@ -272,7 +272,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
         return 0;
     }
 	@Override
-    public int extractEnergy(ForgeDirection dir, int ammount, boolean simulate)
+    public int extractEnergy(EnumFacing dir, int ammount, boolean simulate)
     {
         if(this.RFChandler.getCharge() >= ammount)
         {
@@ -287,12 +287,12 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
         }
     }
 	@Override
-    public int getEnergyStored(ForgeDirection dir)
+    public int getEnergyStored(EnumFacing dir)
     {
         return (int) this.RFChandler.getCharge();
     }
 	@Override
-    public int getMaxEnergyStored(ForgeDirection dir)
+    public int getMaxEnergyStored(EnumFacing dir)
     {
         return this.maxEnergy;
     }

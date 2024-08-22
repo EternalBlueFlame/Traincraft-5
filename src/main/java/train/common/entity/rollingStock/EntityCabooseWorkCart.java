@@ -35,9 +35,9 @@ public class EntityCabooseWorkCart extends AbstractWorkCart implements IInventor
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.15F, posZ);
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
+		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.15F, posZ);
 	}
 
 	@Override
@@ -52,10 +52,10 @@ public class EntityCabooseWorkCart extends AbstractWorkCart implements IInventor
 			return;
 		}
 		if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 		if (i == 9 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
@@ -66,7 +66,7 @@ public class EntityCabooseWorkCart extends AbstractWorkCart implements IInventor
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Caboose";
 	}
 
@@ -75,13 +75,13 @@ public class EntityCabooseWorkCart extends AbstractWorkCart implements IInventor
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 			if(lockThisCart(itemstack, entityplayer))return true;
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}
-			if (!worldObj.isRemote) {
+			if (!getWorld().isRemote) {
 				entityplayer.mountEntity(this);
 			}
 		}

@@ -56,6 +56,6 @@ public class GuiFortyFootContainer extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2)
     {
-        fontRendererObj.drawString(I18n.format(te.getInventoryName()), (xSize / 2) - (fontRendererObj.getStringWidth(I18n.format(te.getInventoryName())) / 2) - 35, +6, 4210752, false);
+        fontRenderer.drawString(I18n.format(te.getName()), (xSize / 2) - (fontRenderer.getStringWidth(I18n.format(te.getName())) / 2) - 35, +6, 4210752, false);
     }
 }

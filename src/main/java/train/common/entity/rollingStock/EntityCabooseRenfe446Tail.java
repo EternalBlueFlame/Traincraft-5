@@ -1,5 +1,6 @@
 package train.common.entity.rollingStock;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,9 +26,9 @@ public class EntityCabooseRenfe446Tail extends EntityRollingStock implements IPa
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ);
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
+		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset(), posZ);
 	}
 
 	@Override
@@ -42,13 +43,13 @@ public class EntityCabooseRenfe446Tail extends EntityRollingStock implements IPa
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 			if(lockThisCart(itemstack, entityplayer))return true;
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}
-			if (!worldObj.isRemote) {
+			if (!getWorld().isRemote) {
 				entityplayer.mountEntity(this);
 			}
 		}

@@ -1,7 +1,7 @@
 package train.common.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -19,7 +19,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
 import train.common.api.blocks.BlockDynamic;
 import train.common.library.BlockIDs;
@@ -66,7 +66,7 @@ public class BlockDistil extends BlockDynamic {
 	@SideOnly(Side.CLIENT)
 	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
 		if (this.isActive) {
-			ForgeDirection side = ((TileEntityDistil) world.getTileEntity(i, j, k)).getFacing();
+			EnumFacing side = ((TileEntityDistil) world.getTileEntity(i, j, k)).getFacing();
 			float var7 = (float) i + 0.5F;
 			float var8 = (float) j + 0.0F + random.nextFloat() * 6.0F / 16.0F;
 			float var9 = (float) k + 0.5F;
@@ -76,19 +76,19 @@ public class BlockDistil extends BlockDynamic {
 
 				world.spawnParticle("mobSpellAmbient", var7, (double) j + 1F, var9, 0, 0, 0);
 			}
-			if (side == ForgeDirection.WEST) {
+			if (side == EnumFacing.WEST) {
 				world.spawnParticle("smoke", (double) (var7 - var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
 				world.spawnParticle("flame", (double) (var7 - var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
 			}
-			else if (side == ForgeDirection.EAST) {
+			else if (side == EnumFacing.EAST) {
 				world.spawnParticle("smoke", (double) (var7 + var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
 				world.spawnParticle("flame", (double) (var7 + var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
 			}
-			else if (side == ForgeDirection.NORTH) {
+			else if (side == EnumFacing.NORTH) {
 				world.spawnParticle("smoke", (double) (var7 + var11), (double) var8, (double) (var9 - var10), 0.0D, 0.0D, 0.0D);
 				world.spawnParticle("flame", (double) (var7 + var11), (double) var8, (double) (var9 - var10), 0.0D, 0.0D, 0.0D);
 			}
-			else if (side == ForgeDirection.SOUTH) {
+			else if (side == EnumFacing.SOUTH) {
 				world.spawnParticle("smoke", (double) (var7 + var11), (double) var8, (double) (var9 + var10), 0.0D, 0.0D, 0.0D);
 				world.spawnParticle("flame", (double) (var7 + var11), (double) var8, (double) (var9 + var10), 0.0D, 0.0D, 0.0D);
 			}
@@ -127,14 +127,14 @@ public class BlockDistil extends BlockDynamic {
 					float f1 = distilRand.nextFloat() * 0.8F + 0.1F;
 					float f2 = distilRand.nextFloat() * 0.8F + 0.1F;
 					do {
-						if (itemstack.stackSize <= 0) {
+						if (itemstack.getCount() <= 0) {
 							continue label0;
 						}
 						int i1 = distilRand.nextInt(21) + 10;
-						if (i1 > itemstack.stackSize) {
-							i1 = itemstack.stackSize;
+						if (i1 > itemstack.getCount()) {
+							i1 = itemstack.getCount();
 						}
-						itemstack.stackSize -= i1;
+						itemstack.getCount() -= i1;
 						EntityItem entityitem = new EntityItem(world, (float) i + f, (float) j + f1, (float) k + f2, itemstack.splitStack(i1));
 						float f3 = 0.05F;
 						entityitem.motionX = (float) distilRand.nextGaussian() * f3;
@@ -159,7 +159,7 @@ public class BlockDistil extends BlockDynamic {
 		TileEntityDistil te = (TileEntityDistil) world.getTileEntity(i, j, k);
 		if (te != null) {
 			int dir = MathHelper.floor_double((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-			te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
+			te.setFacing(EnumFacing.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
 			world.markBlockForUpdate(i, j, k);
 		}
 	}

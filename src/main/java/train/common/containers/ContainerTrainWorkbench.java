@@ -16,10 +16,10 @@ public class ContainerTrainWorkbench extends Container {
 
 	public IInventory craftMatrix;
 	public IInventory craftResult = new InventoryCraftResult();
-	private World worldObj;
+	private World getWorld();
 
 	public ContainerTrainWorkbench(InventoryPlayer invPlayer, World world, IInventory te) {
-		this.worldObj = world;
+		this.getWorld() = world;
 		craftMatrix = te;
 
 		this.addSlotToContainer(new SlotTrainCrafting(invPlayer.player, craftMatrix, craftResult, 0, 124, 35));
@@ -48,16 +48,16 @@ public class ContainerTrainWorkbench extends Container {
 	@Override
 	public void onCraftMatrixChanged(IInventory inv) {
 		super.onCraftMatrixChanged(inv);
-		craftResult.setInventorySlotContents(0, TrainCraftingManager.getInstance().func_82787_a(craftMatrix, worldObj));
+		craftResult.setInventorySlotContents(0, TrainCraftingManager.getInstance().func_82787_a(craftMatrix, getWorld()));
 	}
 
 	/*
-	 * @Override public void updateCraftingResults() { super.updateCraftingResults(); craftResult.setInventorySlotContents(0, TrainCraftingManager.getInstance().func_82787_a(craftMatrix, worldObj)); } */
+	 * @Override public void updateCraftingResults() { super.updateCraftingResults(); craftResult.setInventorySlotContents(0, TrainCraftingManager.getInstance().func_82787_a(craftMatrix, getWorld())); } */
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		craftResult.setInventorySlotContents(0, TrainCraftingManager.getInstance().func_82787_a(craftMatrix, worldObj));
+		craftResult.setInventorySlotContents(0, TrainCraftingManager.getInstance().func_82787_a(craftMatrix, getWorld()));
 	}
 
 	@Override

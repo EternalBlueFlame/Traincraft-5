@@ -36,9 +36,9 @@ public class EntityLocoDieselChME3 extends DieselTrain {
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.35F, posZ);
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
+		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.35F, posZ);
 	}
 
 	@Override
@@ -50,14 +50,14 @@ public class EntityLocoDieselChME3 extends DieselTrain {
 	@Override
 	public void pressKey(int i) {
 		if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 		checkInvent(locoInvent[0]);
@@ -102,7 +102,7 @@ public class EntityLocoDieselChME3 extends DieselTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "ChME3";
 	}
 
@@ -112,7 +112,7 @@ public class EntityLocoDieselChME3 extends DieselTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

@@ -54,7 +54,7 @@ public class EntityLocoSteamC41 extends SteamTrain {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 		checkInvent(locoInvent[0], locoInvent[1], this);
@@ -99,7 +99,7 @@ public class EntityLocoSteamC41 extends SteamTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "C41";
 	}
 
@@ -109,7 +109,7 @@ public class EntityLocoSteamC41 extends SteamTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

@@ -20,10 +20,10 @@ public class GuiRotativeDigger extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int i, int j) {
-        fontRendererObj.drawString(digger.getInventoryName(), 60, 6, 0x404040);
-        fontRendererObj.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
+        fontRenderer.drawString(digger.getName(), 60, 6, 0x404040);
+        fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
         if (digger.numCargoSlots > 0) {
-            fontRendererObj.drawString("Cargo:", 36, 22, 0x404040);
+            fontRenderer.drawString("Cargo:", 36, 22, 0x404040);
         }
     }
 

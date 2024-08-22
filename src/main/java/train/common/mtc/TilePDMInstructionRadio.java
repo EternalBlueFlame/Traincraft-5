@@ -130,7 +130,7 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
 
     public ArrayList<WirelessTransmitter> getWirelessTransmittersInBoundingBox() {
        // System.out.println("Got some..");
-      /*  List list = this.worldObj.getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 100, yCoord +100, zCoord + 100));
+      /*  List list = this.getWorld().getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 100, yCoord +100, zCoord + 100));
         ArrayList<EntityLocoElectricPeachDriverlessMetro> returnList = new ArrayList();
         if (list != null) {
             System.out.println(list.size());
@@ -150,8 +150,8 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
         ArrayList<WirelessTransmitter> toAdd = new ArrayList();
         for (int i1 = i; i1 <= j; ++i1) {
             for (int j1 = k; j1 <= l; ++j1) {
-                if (worldObj.getChunkProvider().chunkExists(i1, j1)) {
-                    entities = worldObj.getChunkFromChunkCoords(i1, j1).entityLists;
+                if (getWorld().getChunkProvider().chunkExists(i1, j1)) {
+                    entities = getWorld().getChunkFromChunkCoords(i1, j1).entityLists;
                     for (List olist: entities) {
                         for(Object obj : olist) {
 
@@ -166,7 +166,7 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
             }
         }
         //Oh yeah, also get other instruction radios too
-        List<TileEntity> allTEs = worldObj.loadedTileEntityList;
+        List<TileEntity> allTEs = getWorld().loadedTileEntityList;
         Iterator<TileEntity> iterator = allTEs.iterator();
         while(iterator.hasNext()) {
            TileEntity te = iterator.next();

@@ -36,7 +36,7 @@ public class PacketDestination implements IMessage {
     public static class Handler implements IMessageHandler<PacketDestination, IMessage> {
         @Override
         public IMessage onMessage(PacketDestination message, MessageContext context) {
-            Entity TrainEntity = context.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityID);
+            Entity TrainEntity = context.getServerHandler().playerEntity.getWorld().getEntityByID(message.entityID);
             if (TrainEntity instanceof Locomotive) {
                 ((Locomotive) TrainEntity).destination = message.destination;
             }

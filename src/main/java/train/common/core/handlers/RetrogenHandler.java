@@ -47,8 +47,8 @@ public class RetrogenHandler {
             if (event.phase == TickEvent.Phase.END) {
                 WorldServer world;
                 for (Chunk chunk : chunksToRetroGen) {
-                    if (chunk.worldObj instanceof WorldServer) {
-                        world = (WorldServer) chunk.worldObj;
+                    if (chunk.getWorld() instanceof WorldServer) {
+                        world = (WorldServer) chunk.getWorld();
                         rand.setSeed((long) chunk.xPosition * 341873128712L + (long) chunk.zPosition * 132897987541L);
                         Traincraft.tcLog.info("Retrogen chunk at " + chunk.xPosition + ", " + chunk.zPosition + " for dimension " + world.provider.dimensionId + ", Version " + VERSION);
                         Traincraft.worldGen.generate(rand, chunk.xPosition, chunk.zPosition, world, world.theChunkProviderServer.currentChunkProvider, world.theChunkProviderServer.currentChunkProvider);
@@ -67,7 +67,7 @@ public class RetrogenHandler {
         private ChunkData(Chunk chunk) {
             this.chunkX = chunk.xPosition;
             this.chunkZ = chunk.zPosition;
-            this.dimension = chunk.worldObj.provider.dimensionId;
+            this.dimension = chunk.getWorld().provider.dimensionId;
         }
 
         public ChunkData(int chunkX, int chunkZ, int dimension) {

@@ -56,11 +56,11 @@ public class TileInfoGrabberMTC  extends TileEntity implements IPeripheral {
 
         @Override
         public void updateEntity() {
-            if (worldObj == null) {
+            if (getWorld() == null) {
                 return;
             }
             if (isActivated) {
-                List<Object> list = this.worldObj.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
+                List<Object> list = this.getWorld().getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
                 if (list != null && list.size() > 0) {
                     for (Object obj : list) {
 

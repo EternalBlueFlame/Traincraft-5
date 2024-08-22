@@ -25,9 +25,9 @@ public class EntityCaboose extends EntityRollingStock implements IPassenger {
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ);
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
+		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset(), posZ);
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class EntityCaboose extends EntityRollingStock implements IPassenger {
 			return false;
 		}
 
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 			if(lockThisCart(itemstack, entityplayer)) {
 				return true;

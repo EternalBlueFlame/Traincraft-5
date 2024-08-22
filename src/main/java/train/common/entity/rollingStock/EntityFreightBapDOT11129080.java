@@ -78,7 +78,7 @@ public class EntityFreightBapDOT11129080 extends LiquidTank {
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "29,080 Gallon Tank car";
     }
 
@@ -92,8 +92,8 @@ public class EntityFreightBapDOT11129080 extends LiquidTank {
         if ((super.interactFirst(entityplayer))) {
             return false;
         }
-        if (!this.worldObj.isRemote) {
-            entityplayer.openGui(Traincraft.instance, GuiIDs.LIQUID, worldObj, this.getEntityId(), -1, (int) this.posZ);
+        if (!this.getWorld().isRemote) {
+            entityplayer.openGui(Traincraft.instance, GuiIDs.LIQUID, getWorld(), this.getEntityId(), -1, (int) this.posZ);
         }
         return true;
     }

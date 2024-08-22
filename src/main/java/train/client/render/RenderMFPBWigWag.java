@@ -3,7 +3,7 @@ package train.client.render;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 import fexcraft.tmt.slim.Tessellator;
 import train.client.render.models.blocks.ModelMFPBWigWag;
@@ -18,7 +18,7 @@ public class RenderMFPBWigWag extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
         TileMFPBWigWag tile = ((TileMFPBWigWag) tileEntity);
-        if (tile.getFacing() != ForgeDirection.UNKNOWN) {
+        if (tile.getFacing() != EnumFacing.UNKNOWN) {
             Tessellator.bindTexture(tile.powered ? textureOn : textureOff);
         }
 

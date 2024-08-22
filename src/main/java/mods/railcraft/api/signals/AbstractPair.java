@@ -8,8 +8,8 @@
 package mods.railcraft.api.signals;
 
 import com.google.common.collect.MapMaker;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -126,7 +126,7 @@ public abstract class AbstractPair {
                 int y = coord.y;
                 int z = coord.z;
 
-                World world = tile.getWorldObj();
+                World world = tile.getgetWorld()();
                 if (!world.blockExists(x, y, z))
                     continue;
 
@@ -190,7 +190,7 @@ public abstract class AbstractPair {
             return null;
         }
 
-        World world = tile.getWorldObj();
+        World world = tile.getgetWorld()();
         if (!world.blockExists(x, y, z))
             return null;
 
@@ -220,7 +220,7 @@ public abstract class AbstractPair {
 
     public WorldCoordinate getCoords() {
         if (coords == null)
-            coords = new WorldCoordinate(tile.getWorldObj().provider.dimensionId, tile.xCoord, tile.yCoord, tile.zCoord);
+            coords = new WorldCoordinate(tile.getgetWorld()().provider.dimensionId, tile.xCoord, tile.yCoord, tile.zCoord);
         return coords;
     }
 
@@ -312,17 +312,17 @@ public abstract class AbstractPair {
 
     @SideOnly(Side.CLIENT)
     public void addPair(int x, int y, int z) {
-        pairings.add(new WorldCoordinate(tile.getWorldObj().provider.dimensionId, x, y, z));
+        pairings.add(new WorldCoordinate(tile.getgetWorld()().provider.dimensionId, x, y, z));
     }
 
     @SideOnly(Side.CLIENT)
     public void removePair(int x, int y, int z) {
-        pairings.remove(new WorldCoordinate(tile.getWorldObj().provider.dimensionId, x, y, z));
+        pairings.remove(new WorldCoordinate(tile.getgetWorld()().provider.dimensionId, x, y, z));
     }
 
     public void clearPairings() {
         pairings.clear();
-        if (!tile.getWorldObj().isRemote)
+        if (!tile.getgetWorld()().isRemote)
             SignalTools.packetBuilder.sendPairPacketUpdate(this);
     }
 }

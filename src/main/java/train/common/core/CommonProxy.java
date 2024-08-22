@@ -1,7 +1,7 @@
 package train.common.core;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -178,7 +178,7 @@ public class CommonProxy implements IGuiHandler {
             case (GuiIDs.OPEN_HEARTH_FURNACE):
                 return te instanceof TileEntityOpenHearthFurnace ? new ContainerOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
             case (GuiIDs.TRAIN_WORKBENCH):
-                return te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
+                return te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, player.getWorld(), (TileTrainWbench) te) : null;
             case (GuiIDs.LOCO):
                 if (entity instanceof EntityRollingStock) {
                     return riddenByEntity != null ? new InventoryLoco(riddenByEntity.inventory,(EntityRollingStock)entity) : null;
@@ -188,7 +188,7 @@ public class CommonProxy implements IGuiHandler {
                     return riddenByEntity != null ? new InventoryForney(player.inventory, (EntityRollingStock) entity) : null;
                 }
             case (GuiIDs.CRAFTING_CART):
-                return new ContainerWorkbenchCart(player.inventory, player.worldObj);
+                return new ContainerWorkbenchCart(player.inventory, player.getWorld());
             case (GuiIDs.FURNACE_CART):
                 return riddenByEntity != null ? new InventoryWorkCart(player.inventory, entity) : null;
             case (GuiIDs.ZEPPELIN):

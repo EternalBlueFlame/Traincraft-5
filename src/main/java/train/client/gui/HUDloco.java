@@ -33,7 +33,7 @@ public class HUDloco extends GuiScreen {
             }
         } else {
             this.game = this.mc = Minecraft.getMinecraft();
-            this.fontRendererObj = this.game.fontRenderer;
+            this.fontRenderer = this.game.fontRenderer;
         }
     }
 
@@ -87,13 +87,13 @@ public class HUDloco extends GuiScreen {
         GL11.glEnable(3042 /* GL_BLEND */);
         GL11.glEnable(32826);
 
-        fontRendererObj.drawStringWithShadow("Speed:", 106, windowHeight + 7 + (h), 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("  " + (int) Math.abs(((float) (speed))), 106,
+        fontRenderer.drawStringWithShadow("Speed:", 106, windowHeight + 7 + (h), 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("  " + (int) Math.abs(((float) (speed))), 106,
                 windowHeight + 18 + (h), 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow(" Km/h", 106, windowHeight + 29 + (h), 0xFFFFFF);
+        fontRenderer.drawStringWithShadow(" Km/h", 106, windowHeight + 29 + (h), 0xFFFFFF);
 
         if (loco.canOverheat()) {
-            fontRendererObj.drawStringWithShadow("State: " + loco.getState(), 50, windowHeight + 80, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("State: " + loco.getState(), 50, windowHeight + 80, 0xFFFFFF);
         }
 
         GL11.glDisable(32826);
@@ -139,7 +139,7 @@ public class HUDloco extends GuiScreen {
             drawTexturedModalRect(34, windowHeight + 17, 154, 170 + l, 9, 70 - l);// l max = 70
         }
 
-        // fontRendererObj.drawStringWithShadow("Fuel:", 4, (windowHeight/2)+1, 0xFFFFFF);
+        // fontRenderer.drawStringWithShadow("Fuel:", 4, (windowHeight/2)+1, 0xFFFFFF);
         GL11.glDisable(32826);
         GL11.glDisable(3042 /* GL_BLEND */);
     }
@@ -205,7 +205,7 @@ public class HUDloco extends GuiScreen {
             overheatLevel = loco.getOverheatTime() + 30;
         }
 
-        // fontRendererObj.drawStringWithShadow("Heat:", 33, (windowHeight/2)+1, 0xFFFFFF);
+        // fontRenderer.drawStringWithShadow("Heat:", 33, (windowHeight/2)+1, 0xFFFFFF);
         GL11.glEnable(3042 /* GL_BLEND */);
         GL11.glEnable(32826);
 

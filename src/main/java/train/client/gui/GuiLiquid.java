@@ -70,7 +70,7 @@ public class GuiLiquid extends GuiContainer {
             if (player != null && player.getCommandSenderName().equalsIgnoreCase(((AbstractTrains) liquid).getTrainOwner())) {
                 if (!liquid.getTrainLockedFromPacket()) {
                     AxisAlignedBB box = liquid.boundingBox.expand(5, 5, 5);
-                    List lis3 = liquid.worldObj.getEntitiesWithinAABBExcludingEntity(liquid, box);
+                    List lis3 = liquid.getWorld().getEntitiesWithinAABBExcludingEntity(liquid, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
                             if (entity instanceof EntityPlayer) {
@@ -85,7 +85,7 @@ public class GuiLiquid extends GuiContainer {
                     this.initGui();
                 } else {
                     AxisAlignedBB box = liquid.boundingBox.expand(5, 5, 5);
-                    List lis3 = liquid.worldObj.getEntitiesWithinAABBExcludingEntity(liquid, box);
+                    List lis3 = liquid.getWorld().getEntitiesWithinAABBExcludingEntity(liquid, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
                             if (entity instanceof EntityPlayer) {
@@ -110,16 +110,16 @@ public class GuiLiquid extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRendererObj.drawString(liquid.getCommandSenderName(), 65, 1, 0x000000);
-        fontRendererObj.drawString(liquid.getCommandSenderName(), 65, 3, 0x000000);
-        fontRendererObj.drawString(liquid.getCommandSenderName(), 63, 1, 0x000000);
-        fontRendererObj.drawString(liquid.getCommandSenderName(), 63, 3, 0x000000);
+        fontRenderer.drawString(liquid.getCommandSenderName(), 65, 1, 0x000000);
+        fontRenderer.drawString(liquid.getCommandSenderName(), 65, 3, 0x000000);
+        fontRenderer.drawString(liquid.getCommandSenderName(), 63, 1, 0x000000);
+        fontRenderer.drawString(liquid.getCommandSenderName(), 63, 3, 0x000000);
 
-        fontRendererObj.drawString(liquid.getCommandSenderName(), 65, 2, 0x000000);
-        fontRendererObj.drawString(liquid.getCommandSenderName(), 63, 2, 0x000000);
-        fontRendererObj.drawString(liquid.getCommandSenderName(), 64, 1, 0x000000);
-        fontRendererObj.drawString(liquid.getCommandSenderName(), 64, 3, 0x000000);
-        fontRendererObj.drawString(liquid.getCommandSenderName(), 64, 2, 0xd3a900);
+        fontRenderer.drawString(liquid.getCommandSenderName(), 65, 2, 0x000000);
+        fontRenderer.drawString(liquid.getCommandSenderName(), 63, 2, 0x000000);
+        fontRenderer.drawString(liquid.getCommandSenderName(), 64, 1, 0x000000);
+        fontRenderer.drawString(liquid.getCommandSenderName(), 64, 3, 0x000000);
+        fontRenderer.drawString(liquid.getCommandSenderName(), 64, 2, 0xd3a900);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -131,7 +131,7 @@ public class GuiLiquid extends GuiContainer {
     protected void drawCreativeTabHoveringTextLockButton(String str, int t, int g) {
         //int liqui = (dieselInventory.getLiquidAmount() * 50) / dieselInventory.getTankCapacity();
 
-        int textWidth = fontRendererObj.getStringWidth("the GUI, change speed, destroy it.");
+        int textWidth = fontRenderer.getStringWidth("the GUI, change speed, destroy it.");
         int startX = 90;
         int startY = 5;
         int i4 = 0xf0100010;
@@ -143,11 +143,11 @@ public class GuiLiquid extends GuiContainer {
         drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 51, colour1, colour2);
         drawGradientRect(startX - 2, startY - 2, startX + textWidth + 2, startY + 50, i4, i4);
 
-        fontRendererObj.drawStringWithShadow(str, startX, startY, -1);
-        fontRendererObj.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
-        fontRendererObj.drawStringWithShadow("the GUI and destroy it.", startX, startY + 20, -1);
-        fontRendererObj.drawStringWithShadow("Current state: " + (liquid.getTrainLockedFromPacket() ? "Locked" : "Unlocked"), startX, startY + 30, -1);
-        fontRendererObj.drawStringWithShadow("Owner: " + (liquid).getTrainOwner().trim(), startX, startY + 40, -1);
+        fontRenderer.drawStringWithShadow(str, startX, startY, -1);
+        fontRenderer.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
+        fontRenderer.drawStringWithShadow("the GUI and destroy it.", startX, startY + 20, -1);
+        fontRenderer.drawStringWithShadow("Current state: " + (liquid.getTrainLockedFromPacket() ? "Locked" : "Unlocked"), startX, startY + 30, -1);
+        fontRenderer.drawStringWithShadow("Owner: " + (liquid).getTrainOwner().trim(), startX, startY + 40, -1);
     }
 
     public boolean intersectsWithLockButton(int mouseX, int mouseY) {

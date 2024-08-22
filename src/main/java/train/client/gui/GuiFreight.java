@@ -75,7 +75,7 @@ public class GuiFreight extends GuiContainer {
                 }
 
                 @Override
-                public FontRenderer getFont(){return fontRendererObj;}
+                public FontRenderer getFont(){return fontRenderer;}
             });
         }
     }
@@ -85,7 +85,7 @@ public class GuiFreight extends GuiContainer {
         if (guibutton.id == 3) {
             if (player != null && player.getCommandSenderName().equalsIgnoreCase(freight.getTrainOwner())) {
                 AxisAlignedBB box = freight.boundingBox.expand(5, 5, 5);
-                List lis3 = freight.worldObj.getEntitiesWithinAABBExcludingEntity(freight, box);
+                List lis3 = freight.getWorld().getEntitiesWithinAABBExcludingEntity(freight, box);
 
                 if (!freight.getTrainLockedFromPacket()) {
                     if (lis3 != null && !lis3.isEmpty()) {
@@ -131,7 +131,7 @@ public class GuiFreight extends GuiContainer {
 			state = "Unlocked";
 		}
 
-        int textWidth = fontRendererObj.getStringWidth("the GUI, change speed, destroy it.");
+        int textWidth = fontRenderer.getStringWidth("the GUI, change speed, destroy it.");
         int startX = 90;
         int startY = 5;
         int i4 = 0xf0100010;
@@ -143,11 +143,11 @@ public class GuiFreight extends GuiContainer {
         drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 8 + 3 + 40, colour1, colour2);
         drawGradientRect(startX - 2, startY - 2, startX + textWidth + 2, startY + 8 + 2 + 40, i4, i4);
 
-        fontRendererObj.drawStringWithShadow(str, startX, startY, -1);
-        fontRendererObj.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
-        fontRendererObj.drawStringWithShadow("the GUI and destroy it.", startX, startY + 20, -1);
-        fontRendererObj.drawStringWithShadow("Current state: " + state, startX, startY + 30, -1);
-        fontRendererObj.drawStringWithShadow("Owner: " + freight.getTrainOwner().trim(), startX, startY + 40, -1);
+        fontRenderer.drawStringWithShadow(str, startX, startY, -1);
+        fontRenderer.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
+        fontRenderer.drawStringWithShadow("the GUI and destroy it.", startX, startY + 20, -1);
+        fontRenderer.drawStringWithShadow("Current state: " + state, startX, startY + 30, -1);
+        fontRenderer.drawStringWithShadow("Owner: " + freight.getTrainOwner().trim(), startX, startY + 40, -1);
     }
 
     public boolean intersectsWith(int mouseX, int mouseY) {
@@ -172,8 +172,8 @@ public class GuiFreight extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRendererObj.drawString(freight.getCommandSenderName(), 10, 6, 0x404040);
-        fontRendererObj.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
+        fontRenderer.drawString(freight.getCommandSenderName(), 10, 6, 0x404040);
+        fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);

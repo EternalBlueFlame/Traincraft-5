@@ -17,10 +17,10 @@ import java.util.List;
 
 public class LinkHandler {
 
-	private World worldObj;
+	private World getWorld();
 
 	public LinkHandler(World world) {
-		worldObj = world;
+		getWorld() = world;
 	}
 
 	/* coupling cart stuff */
@@ -28,9 +28,9 @@ public class LinkHandler {
 
 
 		if (entityOne.isAttaching) {
-			List lis = worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, customBoundingBox.expand(15, 5, 15));
+			List lis = getWorld().getEntitiesWithinAABBExcludingEntity(entityOne, customBoundingBox.expand(15, 5, 15));
 			if (entityOne.bogieLoco != null) {
-				lis.addAll(worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, entityOne.bogieLoco.boundingBox.expand(7, 5, 7)));
+				lis.addAll(getWorld().getEntitiesWithinAABBExcludingEntity(entityOne, entityOne.bogieLoco.boundingBox.expand(7, 5, 7)));
 			}
 
 
@@ -98,7 +98,7 @@ public class LinkHandler {
 	 * Attaching to colliding carts
 	 */
 	public void addStake(EntityRollingStock cart1, EntityRollingStock cart2, boolean byPlayer) {
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 			distanceBehindCart = cart1.getLinkageDistance((EntityMinecart) cart1);
@@ -232,7 +232,7 @@ public class LinkHandler {
 					}
 
 
-					EntityPlayer entityplayer = cart1.worldObj.getClosestPlayerToEntity(cart1, 20);//
+					EntityPlayer entityplayer = cart1.getWorld().getClosestPlayerToEntity(cart1, 20);//
 					if (entityplayer != null && byPlayer) {
 						entityplayer.addChatMessage(new ChatComponentText("attached!"));
 					}
@@ -293,7 +293,7 @@ public class LinkHandler {
 	 * Handles the cart coupling physics
 	 */
 	private void StakePhysic(EntityRollingStock cart1, EntityRollingStock cart2, int linkIndex) {
-		if (worldObj.isRemote || cart1.updateTicks<5 || cart2.updateTicks<5) {
+		if (getWorld().isRemote || cart1.updateTicks<5 || cart2.updateTicks<5) {
 			return;
 		}
 		if (cart2.isAttached && cart1.isAttached && areLinked(cart2, cart1)) {
@@ -382,8 +382,8 @@ public class LinkHandler {
 
 			double d2 = MathHelper.sqrt_double((d * d) + (d1 * d1));
 			if(d2>20){
-				if(cart1.worldObj!=null){
-					EntityPlayer player = cart1.worldObj.getClosestPlayer(cart1.posX, cart1.posY, cart1.posZ, 300);
+				if(cart1.getWorld()!=null){
+					EntityPlayer player = cart1.getWorld().getClosestPlayer(cart1.posX, cart1.posY, cart1.posZ, 300);
 					if(player!=null){
 						player.addChatMessage(new ChatComponentText(String.format("[TRAINCRAFT] The rolling stock at %d %d %d had a problem loading and has lost its link. Attached cart was too far away", (int)cart1.posX, (int)cart1.posY, (int)cart1.posZ)));
 					}

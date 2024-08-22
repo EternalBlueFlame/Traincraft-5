@@ -7,7 +7,7 @@
 
 package train.common.tile;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class TileHelper {
 
@@ -25,55 +25,55 @@ public class TileHelper {
 	 * @param side - The side you are trying to find. A number between 0 and 5.
 	 * @return The side relative to the facing direction.
 	 */
-	public static ForgeDirection getOrientationFromSide(ForgeDirection front, ForgeDirection side) {
-		if (front != ForgeDirection.UNKNOWN && side != ForgeDirection.UNKNOWN) {
+	public static EnumFacing getOrientationFromSide(EnumFacing front, EnumFacing side) {
+		if (front != EnumFacing.UNKNOWN && side != EnumFacing.UNKNOWN) {
 			switch (front.ordinal()) {
 			case 0:
 				switch (side.ordinal()) {
 				case 0:
-					return ForgeDirection.getOrientation(3);
+					return EnumFacing.getOrientation(3);
 				case 1:
-					return ForgeDirection.getOrientation(2);
+					return EnumFacing.getOrientation(2);
 				case 2:
-					return ForgeDirection.getOrientation(1);
+					return EnumFacing.getOrientation(1);
 				case 3:
-					return ForgeDirection.getOrientation(0);
+					return EnumFacing.getOrientation(0);
 				case 4:
-					return ForgeDirection.getOrientation(5);
+					return EnumFacing.getOrientation(5);
 				case 5:
-					return ForgeDirection.getOrientation(4);
+					return EnumFacing.getOrientation(4);
 				}
 
 			case 1:
 				switch (side.ordinal()) {
 				case 0:
-					return ForgeDirection.getOrientation(4);
+					return EnumFacing.getOrientation(4);
 				case 1:
-					return ForgeDirection.getOrientation(5);
+					return EnumFacing.getOrientation(5);
 				case 2:
-					return ForgeDirection.getOrientation(0);
+					return EnumFacing.getOrientation(0);
 				case 3:
-					return ForgeDirection.getOrientation(1);
+					return EnumFacing.getOrientation(1);
 				case 4:
-					return ForgeDirection.getOrientation(2);
+					return EnumFacing.getOrientation(2);
 				case 5:
-					return ForgeDirection.getOrientation(3);
+					return EnumFacing.getOrientation(3);
 				}
 
 			case 2:
 				switch (side.ordinal()) {
 				case 0:
-					return ForgeDirection.getOrientation(0);
+					return EnumFacing.getOrientation(0);
 				case 1:
-					return ForgeDirection.getOrientation(1);
+					return EnumFacing.getOrientation(1);
 				case 2:
-					return ForgeDirection.getOrientation(3);
+					return EnumFacing.getOrientation(3);
 				case 3:
-					return ForgeDirection.getOrientation(2);
+					return EnumFacing.getOrientation(2);
 				case 4:
-					return ForgeDirection.getOrientation(5);
+					return EnumFacing.getOrientation(5);
 				case 5:
-					return ForgeDirection.getOrientation(4);
+					return EnumFacing.getOrientation(4);
 				}
 
 			case 3:
@@ -82,36 +82,36 @@ public class TileHelper {
 			case 4:
 				switch (side.ordinal()) {
 				case 0:
-					return ForgeDirection.getOrientation(0);
+					return EnumFacing.getOrientation(0);
 				case 1:
-					return ForgeDirection.getOrientation(1);
+					return EnumFacing.getOrientation(1);
 				case 2:
-					return ForgeDirection.getOrientation(5);
+					return EnumFacing.getOrientation(5);
 				case 3:
-					return ForgeDirection.getOrientation(4);
+					return EnumFacing.getOrientation(4);
 				case 4:
-					return ForgeDirection.getOrientation(3);
+					return EnumFacing.getOrientation(3);
 				case 5:
-					return ForgeDirection.getOrientation(2);
+					return EnumFacing.getOrientation(2);
 				}
 
 			case 5:
 				switch (side.ordinal()) {
 				case 0:
-					return ForgeDirection.getOrientation(0);
+					return EnumFacing.getOrientation(0);
 				case 1:
-					return ForgeDirection.getOrientation(1);
+					return EnumFacing.getOrientation(1);
 				case 2:
-					return ForgeDirection.getOrientation(4);
+					return EnumFacing.getOrientation(4);
 				case 3:
-					return ForgeDirection.getOrientation(5);
+					return EnumFacing.getOrientation(5);
 				case 4:
-					return ForgeDirection.getOrientation(2);
+					return EnumFacing.getOrientation(2);
 				case 5:
-					return ForgeDirection.getOrientation(3);
+					return EnumFacing.getOrientation(3);
 				}
 			}
 		}
-		return ForgeDirection.UNKNOWN;
+		return EnumFacing.UNKNOWN;
 	}
 }

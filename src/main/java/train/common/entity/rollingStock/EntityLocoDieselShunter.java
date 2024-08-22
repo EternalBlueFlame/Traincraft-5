@@ -36,9 +36,9 @@ public class EntityLocoDieselShunter extends DieselTrain {
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.4F, posZ);
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
+		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.4F, posZ);
 	}
 	
 	@Override
@@ -50,7 +50,7 @@ public class EntityLocoDieselShunter extends DieselTrain {
 	@Override
 	public void pressKey(int i) {
 		if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
@@ -98,7 +98,7 @@ public class EntityLocoDieselShunter extends DieselTrain {
 		return inventorySize;
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Class 08 Shunter";
 	}
 	@Override
@@ -107,7 +107,7 @@ public class EntityLocoDieselShunter extends DieselTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

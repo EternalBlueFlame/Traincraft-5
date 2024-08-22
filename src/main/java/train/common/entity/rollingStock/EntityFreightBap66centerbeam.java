@@ -12,7 +12,7 @@ import train.common.Traincraft;
 import train.common.api.Freight;
 import train.common.library.GuiIDs;
 
-public class EntityFreightBap66centerbeam extends Freight implements IInventory {
+public class EntityFreightBap66centerbeam extends Freight {
     public int freightInventorySize;
     public int numFreightSlots;
     public EntityFreightBap66centerbeam(World world) {
@@ -75,7 +75,7 @@ public class EntityFreightBap66centerbeam extends Freight implements IInventory 
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "66' Center Beam";
     }
 
@@ -89,7 +89,7 @@ public class EntityFreightBap66centerbeam extends Freight implements IInventory 
         if ((super.interactFirst(entityplayer))) {
             return true;
         }
-        entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, worldObj, this.getEntityId(), -1, (int) this.posZ);
+        entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, getWorld(), this.getEntityId(), -1, (int) this.posZ);
         return true;
     }
 

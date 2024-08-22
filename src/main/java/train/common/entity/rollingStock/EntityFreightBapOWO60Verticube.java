@@ -12,7 +12,7 @@ import train.common.Traincraft;
 import train.common.api.Freight;
 import train.common.library.GuiIDs;
 
-public class EntityFreightBapOWO60Verticube extends Freight implements IInventory {
+public class EntityFreightBapOWO60Verticube extends Freight {
     public int freightInventorySize;
     public int numFreightSlots;
     public EntityFreightBapOWO60Verticube(World world) {
@@ -75,7 +75,7 @@ public class EntityFreightBapOWO60Verticube extends Freight implements IInventor
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "OWO 60' Verticube Boxcar";
     }
 
@@ -89,7 +89,7 @@ public class EntityFreightBapOWO60Verticube extends Freight implements IInventor
         if ((super.interactFirst(entityplayer))) {
             return true;
         }
-        entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, worldObj, this.getEntityId(), -1, (int) this.posZ);
+        entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, getWorld(), this.getEntityId(), -1, (int) this.posZ);
         return true;
     }
 

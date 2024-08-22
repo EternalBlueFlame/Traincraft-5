@@ -81,11 +81,11 @@ public class InventoryFreight extends Container {
 		Slot var7;
 		ItemStack var8;
 		if (par1ItemStack.isStackable()) {
-			while (par1ItemStack.stackSize > 0 && (!bool && var6 < j || bool && var6 >= i)) {
+			while (par1itemstack.getCount() > 0 && (!bool && var6 < j || bool && var6 >= i)) {
 				var7 = (Slot) this.inventorySlots.get(var6);
 				var8 = var7.getStack();
 				if (var8 != null && var8.getItem() == par1ItemStack.getItem() && (!par1ItemStack.getHasSubtypes() || par1ItemStack.getItemDamage() == var8.getItemDamage()) && ItemStack.areItemStackTagsEqual(par1ItemStack, var8)) {
-					int var9 = var8.stackSize + par1ItemStack.stackSize;
+					int var9 = var8.stackSize + par1itemstack.getCount();
 					int maxSize = par1ItemStack.getMaxStackSize();//default is item max stack size
 					if (!bool) {//if items are transfered to the freight inventory, otherwise use normal max size
 						if (par1ItemStack.getMaxStackSize() < inv.getInventoryStackLimit())
@@ -94,14 +94,14 @@ public class InventoryFreight extends Container {
 							maxSize = inv.getInventoryStackLimit();//otherwise use maxStackSize of the inventory
 					}
 					if (var9 <= par1ItemStack.getMaxStackSize() && var9 <= maxSize) {
-						par1ItemStack.stackSize = 0;
+						par1itemstack.getCount() = 0;
 						var8.stackSize = var9;
 						var7.onSlotChanged();
 						var5 = true;
 					}
 
 					else if (var8.stackSize < par1ItemStack.getMaxStackSize() && var8.stackSize < maxSize) {
-						par1ItemStack.stackSize -= maxSize - var8.stackSize;//stackSize will be reduced by the maxSize - what's already in the slot
+						par1itemstack.getCount() -= maxSize - var8.stackSize;//stackSize will be reduced by the maxSize - what's already in the slot
 						var8.stackSize = maxSize;
 						var7.onSlotChanged();
 						var5 = true;
@@ -115,7 +115,7 @@ public class InventoryFreight extends Container {
 				}
 			}
 		}
-		if (par1ItemStack.stackSize > 0) {
+		if (par1itemstack.getCount() > 0) {
 			if (bool) {
 				var6 = j - 1;
 			}
@@ -137,14 +137,14 @@ public class InventoryFreight extends Container {
 					if (var9.stackSize <= maxSize) {
 						var7.putStack(var9);
 						var7.onSlotChanged();
-						par1ItemStack.stackSize = 0;
+						par1itemstack.getCount() = 0;
 						var5 = true;
 						break;
 					}
 					else {
-						par1ItemStack.stackSize = maxSize;//stackSize will be reduced to the maxSize to fit in
+						par1itemstack.getCount() = maxSize;//stackSize will be reduced to the maxSize to fit in
 						var7.putStack(par1ItemStack.copy());//putting the stack
-						par1ItemStack.stackSize = var9.stackSize -= maxSize;//Residue stays in invent(?)
+						par1itemstack.getCount() = var9.stackSize -= maxSize;//Residue stays in invent(?)
 						var7.onSlotChanged();
 						var5 = true;
 						break;

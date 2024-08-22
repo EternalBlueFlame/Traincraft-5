@@ -12,7 +12,7 @@ import train.common.Traincraft;
 import train.common.api.Freight;
 import train.common.library.GuiIDs;
 
-public class EntityFreightGSC60FootFlat extends Freight implements IInventory {
+public class EntityFreightGSC60FootFlat extends Freight {
     public int freightInventorySize;
     public int numFreightSlots;
     public EntityFreightGSC60FootFlat(World world) {
@@ -75,7 +75,7 @@ public class EntityFreightGSC60FootFlat extends Freight implements IInventory {
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "GSI 60' Flatcar";
     }
 
@@ -89,7 +89,7 @@ public class EntityFreightGSC60FootFlat extends Freight implements IInventory {
         if ((super.interactFirst(entityplayer))) {
             return true;
         }
-        entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, worldObj, this.getEntityId(), -1, (int) this.posZ);
+        entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, getWorld(), this.getEntityId(), -1, (int) this.posZ);
         return true;
     }
 

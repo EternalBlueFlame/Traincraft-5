@@ -1,7 +1,7 @@
 package train.client.render.models.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -65,7 +65,7 @@ public class ModelLantern extends ModelBase {
 		// Pop this matrix from the stack.
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
-		EntityItem ghostEntityItem = new EntityItem(lantern.getWorldObj());
+		EntityItem ghostEntityItem = new EntityItem(lantern.getgetWorld()());
 		ghostEntityItem.setEntityItemStack(new ItemStack(Blocks.torch, 1));
 		ghostEntityItem.hoverStart = 0.0F;
 

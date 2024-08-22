@@ -76,7 +76,7 @@ public class EntityTankWagon2 extends LiquidTank {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Tank cart";
 	}
 
@@ -90,8 +90,8 @@ public class EntityTankWagon2 extends LiquidTank {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!this.worldObj.isRemote) {
-			entityplayer.openGui(Traincraft.instance, GuiIDs.LIQUID, worldObj, this.getEntityId(), -1, (int) this.posZ);
+		if (!this.getWorld().isRemote) {
+			entityplayer.openGui(Traincraft.instance, GuiIDs.LIQUID, getWorld(), this.getEntityId(), -1, (int) this.posZ);
 		}
 		return true;
 	}

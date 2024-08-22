@@ -23,7 +23,7 @@ public class InventoryOpenHearthFurnace implements IInventory{
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
+	public ItemStack removeStackFromSlot(int p_70304_1_) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -35,7 +35,7 @@ public class InventoryOpenHearthFurnace implements IInventory{
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -65,13 +65,13 @@ public class InventoryOpenHearthFurnace implements IInventory{
 	}
 
 	@Override
-	public void openInventory() {
+	public void openInventory(EntityPlayer p) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void closeInventory() {
+	public void closeInventory(EntityPlayer p) {
 		// TODO Auto-generated method stub
 		
 	}

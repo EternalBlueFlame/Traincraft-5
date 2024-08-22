@@ -31,9 +31,9 @@ public class EntityPassengerDBOriental extends EntityRollingStock implements IPa
 		prevPosZ = d2;
 	}
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.2, posZ);
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
+		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2, posZ);
 	}
 
 	@Override
@@ -48,13 +48,13 @@ public class EntityPassengerDBOriental extends EntityRollingStock implements IPa
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 			if(lockThisCart(itemstack, entityplayer))return true;
 			if (riddenByEntity instanceof EntityPlayer && riddenByEntity != entityplayer) {
 				return true;
 			}
-			if (!worldObj.isRemote) {
+			if (!getWorld().isRemote) {
 				entityplayer.mountEntity(this);
 			}
 		}

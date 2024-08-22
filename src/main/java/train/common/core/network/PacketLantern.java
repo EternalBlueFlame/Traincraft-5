@@ -46,7 +46,7 @@ public class PacketLantern implements IMessage {
     public static class Handler implements IMessageHandler<PacketLantern, IMessage> {
         @Override
         public IMessage onMessage(PacketLantern message, MessageContext context) {
-            TileEntity lantern = context.getServerHandler().playerEntity.worldObj.getTileEntity(message.xPos, message.yPos, message.zPos);
+            TileEntity lantern = context.getServerHandler().playerEntity.getWorld().getTileEntity(message.xPos, message.yPos, message.zPos);
 
             /* "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks for when the value is null anyways. */
             if (lantern != null) {

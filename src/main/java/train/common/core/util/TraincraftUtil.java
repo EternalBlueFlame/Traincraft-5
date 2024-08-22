@@ -58,7 +58,7 @@ public class TraincraftUtil {
             transport.anglePitchClient = transport.serverRealPitch * 60;
         }
         float pitch = (float) (transport.posY + ((Math.tan(pitchRads) * distance) + transport.getMountedYOffset())
-                + transport.riddenByEntity.getYOffset() + yOffset);
+                + transport.passenger.getYOffset() + yOffset);
 
         double bogieX1 = (transport.posX + (rotationCos1 * distance));
         double bogieZ1 = (transport.posZ + (rotationSin1 * distance));
@@ -72,7 +72,7 @@ public class TraincraftUtil {
             pitch -= (float) (pitchRads * 1.2);
         }
         if (pitchRads == 0.0) {
-            transport.riddenByEntity.setPosition(bogieX1, (transport.posY + transport.getMountedYOffset() + transport.riddenByEntity.getYOffset() + yOffset), bogieZ1);
+            transport.riddenByEntity.setPosition(bogieX1, (transport.posY + transport.getMountedYOffset() + transport.passenger.getYOffset() + yOffset), bogieZ1);
         }
         if (pitchRads > -1.01 && pitchRads < 1.01) {
             transport.riddenByEntity.setPosition(bogieX1, pitch, bogieZ1);

@@ -151,10 +151,10 @@ public class GUIAdminBook extends GuiScreen {
 
         if (isTrainPage) {
             for (int i = 2 + (6 * page); i < Math.min(list.length, 9); i++) {//only show 6 entries per page
-                drawTextOutlined(fontRendererObj, list[(page * i) + i], guiLeft - 70, guiTop - 16 + (i * 16), 16777215);
+                drawTextOutlined(fontRenderer, list[(page * i) + i], guiLeft - 70, guiTop - 16 + (i * 16), 16777215);
             }
 
-            drawTextOutlined(fontRendererObj, I18n.format("container.inventory", new Object()), guiLeft + 80, guiTop + 10, 16777215);
+            drawTextOutlined(fontRenderer, I18n.format("container.inventory", new Object()), guiLeft + 80, guiTop + 10, 16777215);
             int index = 0;
             for (int y = 0; y < 6; y++) {
                 for (int x = 0; x < 9; x++) {
@@ -226,8 +226,8 @@ public class GUIAdminBook extends GuiScreen {
     private void func_146977_a(ItemStack p_146977_1_, int xDisplayPosition, int yDisplayPosition) {
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
-        itemRender.renderItemAndEffectIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), p_146977_1_, xDisplayPosition, yDisplayPosition);
-        itemRender.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.getTextureManager(), p_146977_1_, xDisplayPosition, yDisplayPosition, null);
+        itemRender.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.getTextureManager(), p_146977_1_, xDisplayPosition, yDisplayPosition);
+        itemRender.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.getTextureManager(), p_146977_1_, xDisplayPosition, yDisplayPosition, null);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopMatrix();
     }

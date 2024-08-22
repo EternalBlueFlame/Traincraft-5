@@ -63,7 +63,7 @@ public abstract class GuiTraincraft extends GuiContainer {
     }
 
     protected int getCenteredOffset(String string, int xWidth) {
-        return (xWidth - fontRendererObj.getStringWidth(string)) / 2;
+        return (xWidth - fontRenderer.getStringWidth(string)) / 2;
     }
 
     @Override
@@ -190,7 +190,7 @@ public abstract class GuiTraincraft extends GuiContainer {
         }
 
         if (item != null) {
-            itemRender.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, new ItemStack(item), x, y);
+            itemRender.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, new ItemStack(item), x, y);
         } else {
             String var4 = Info.guiPrefix + "Icons.png";
             mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, var4));

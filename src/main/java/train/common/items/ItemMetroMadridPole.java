@@ -46,7 +46,7 @@ public class ItemMetroMadridPole extends Item {
 		/*if (!entityplayer.canCurrentToolHarvestBlock(i, j, k)) {
 			return false;
 		}*/
-        if (itemstack.stackSize == 0) {
+        if (itemstack.getCount() == 0) {
             return false;
         }
 
@@ -55,7 +55,7 @@ public class ItemMetroMadridPole extends Item {
             if (world.getBlock(i, j, k) == spawnID) {
                 spawnID.onBlockPlacedBy(world, i, j, k, entityplayer, new ItemStack(spawnID));
             }
-            itemstack.stackSize--;
+            itemstack.getCount()--;
         }
         return true;
     }

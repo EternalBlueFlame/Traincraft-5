@@ -38,7 +38,7 @@ public class EntityLocoSteamFowler extends SteamTrain {
 
 
 	@Override
-	public void updateRiderPosition() {
+	public void updatePassenger(Entity passenger) {
 		TraincraftUtil.updateRider(this, -0.25, 0.25);
 	}
 
@@ -51,14 +51,14 @@ public class EntityLocoSteamFowler extends SteamTrain {
 	@Override
 	public void pressKey(int i) {
 		if (i == 7 &&  riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 		checkInvent(locoInvent[0], locoInvent[1], this);
@@ -102,7 +102,7 @@ public class EntityLocoSteamFowler extends SteamTrain {
 		return inventorySize;
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Fowler 4F";
 	}
 
@@ -112,7 +112,7 @@ public class EntityLocoSteamFowler extends SteamTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

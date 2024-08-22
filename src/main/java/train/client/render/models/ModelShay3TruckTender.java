@@ -637,11 +637,11 @@ public class ModelShay3TruckTender extends ModelConverter //Same as Filename
 
 		for(ModelRendererTurbo m :bodyModel) {
 			if(m.boxName.equals("lamp")){
-				Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+				Minecraft.getMinecraft().entityRenderer.disableLightmap();
 			}
 			m.render(f5);
 			if(m.boxName.equals("lamp")){
-				Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+				Minecraft.getMinecraft().entityRenderer.enableLightmap();
 
 			}
 			if(m.boxName.equals("cull")){

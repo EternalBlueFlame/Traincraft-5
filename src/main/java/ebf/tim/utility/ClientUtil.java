@@ -282,7 +282,7 @@ public class ClientUtil {
 
     public static void fixItemLighting(World w){
         if(w==null){
-            Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+            Minecraft.getMinecraft().entityRenderer.disableLightmap();
         }
     }
 }

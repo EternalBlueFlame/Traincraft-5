@@ -1,6 +1,6 @@
 package train.common.tile;
 
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -47,7 +47,7 @@ public class TileEntityOverheadLines extends TileEntity {
 		this.facing = facing; 
 	}
 	public void updateEntity() { 
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 		updateTicks++;
@@ -75,7 +75,7 @@ public class TileEntityOverheadLines extends TileEntity {
 
 		TODO This has been qouted out. Perhaps check and re-activate?
 		
-		List lis3 = this.worldObj.getEntitiesWithinAABB(ElectricTrain.class, AxisAlignedBB.getBoundingBoxFromPool((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)(this.xCoord + 1), (double)(this.yCoord + 1), (double)(this.zCoord + 1)).expand(1.0D, 4.0D, 1.0D));
+		List lis3 = this.getWorld().getEntitiesWithinAABB(ElectricTrain.class, AxisAlignedBB.getBoundingBoxFromPool((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)(this.xCoord + 1), (double)(this.yCoord + 1), (double)(this.zCoord + 1)).expand(1.0D, 4.0D, 1.0D));
 
 		if (lis3 != null && lis3.size() > 0) {
 
@@ -83,7 +83,7 @@ public class TileEntityOverheadLines extends TileEntity {
 
 			if ((entity instanceof IElectricTrain)) { if ((this.energy > 0) && (((EntityRollingStock)entity).fuelTrain)<400 ) { double transfered = this.energy0.05; (((EntityRollingStock)entity).fuelTrain)+=transfered; this.energy-=transfered2; } } } }
 
-		List lis1 = this.worldObj.getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBoxFromPool((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)(this.xCoord + 0.1), (double)(this.yCoord+0.1), (double)(this.zCoord + 0.1)).expand(1.2D, 1.2D, 1.2D));
+		List lis1 = this.getWorld().getEntitiesWithinAABB(EntityPlayer.class, AxisAlignedBB.getBoundingBoxFromPool((double)this.xCoord, (double)this.yCoord, (double)this.zCoord, (double)(this.xCoord + 0.1), (double)(this.yCoord+0.1), (double)(this.zCoord + 0.1)).expand(1.2D, 1.2D, 1.2D));
 */
 	}
 	public double getDistanceSq(double par1, double par3, double par5) {
@@ -152,7 +152,7 @@ public class TileEntityOverheadLines extends TileEntity {
 	}
 
 	@Override
-	public double injectEnergy(ForgeDirection directionFrom, double amount, double voltage) {
+	public double injectEnergy(EnumFacing directionFrom, double amount, double voltage) {
 		this.energy+=amount;
 		isProvider = true;
 		if(this.energy>this.getMaxEnergy()){
@@ -182,7 +182,7 @@ public class TileEntityOverheadLines extends TileEntity {
 	/*/
 	@Override
 	public boolean acceptsEnergyFrom(TileEntity emitter,
-			ForgeDirection direction) {
+			EnumFacing direction) {
 		return true;
 	}
 	public boolean facingMatchesDirection(Direction direction) { 

@@ -12,7 +12,7 @@ import train.common.Traincraft;
 import train.common.api.Freight;
 import train.common.library.GuiIDs;
 
-public class EntityFreightLongCoveredHopper extends Freight implements IInventory {
+public class EntityFreightLongCoveredHopper extends Freight {
 	public int freightInventorySize;
 	public int numFreightSlots;
 	EntityPlayer playerEntity;
@@ -76,7 +76,7 @@ public class EntityFreightLongCoveredHopper extends Freight implements IInventor
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Long Covered Hopper";
 	}
 
@@ -91,8 +91,8 @@ public class EntityFreightLongCoveredHopper extends Freight implements IInventor
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!this.worldObj.isRemote) {
-			entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, worldObj, this.getEntityId(), -1, (int) this.posZ);
+		if (!this.getWorld().isRemote) {
+			entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, getWorld(), this.getEntityId(), -1, (int) this.posZ);
 		}
 		return true;
 	}

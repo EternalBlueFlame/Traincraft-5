@@ -1,7 +1,7 @@
 package train.client.render;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelConverter;
 import fexcraft.tmt.slim.Tessellator;
@@ -136,14 +136,14 @@ public class RenderRollingStock extends Render {
         int k = MathHelper.floor_double(cart.posZ);
 
         // NOTE: func_150049_b_ = isRailBlockAt
-        if (cart.worldObj != null && (BlockRailBase.func_150049_b_(cart.worldObj, i, j, k)
-                || BlockRailBase.func_150049_b_(cart.worldObj, i, j - 1, k))) {
+        if (cart.getWorld() != null && (BlockRailBase.func_150049_b_(cart.getWorld(), i, j, k)
+                || BlockRailBase.func_150049_b_(cart.getWorld(), i, j - 1, k))) {
             cart.setMountedYOffset(-0.55);
         } else if (cart.posYFromServer != 0) {
             cart.setMountedYOffset(-0.5);
             GL11.glTranslatef(0f, -0.30f, 0f);
         }
-        if (cart.worldObj != null && cart.worldObj.getBlock(i, j, k).getClass().getName().equals("ebf.tim.blocks.rails.BlockRailCore")) {
+        if (cart.getWorld() != null && cart.getWorld().getBlock(i, j, k).getClass().getName().equals("ebf.tim.blocks.rails.BlockRailCore")) {
             GL11.glTranslatef(0f, 0.15f, 0f);
         }
         if (cart.bogieLoco != null) {// || cart.bogieUtility[0]!=null){
@@ -172,7 +172,7 @@ public class RenderRollingStock extends Render {
             cart.setRenderPitch(pitch);
         } else {
             // NOTE: func_150049_b_ = isRailBlockAt
-            if (cart.worldObj != null && (BlockRailBase.func_150049_b_(cart.worldObj, i, j, k) || BlockRailBase.func_150049_b_(cart.worldObj, i, j - 1, k))) {
+            if (cart.getWorld() != null && (BlockRailBase.func_150049_b_(cart.getWorld(), i, j, k) || BlockRailBase.func_150049_b_(cart.getWorld(), i, j - 1, k))) {
                 if (cart.isClientInReverse) {
                     yaw += 180;
                     pitch = -pitch;
@@ -204,7 +204,7 @@ public class RenderRollingStock extends Render {
             }
         }
 
-        //if(cart.bogie!=null)cart.worldObj.spawnParticle("reddust", cart.bogie.posX, cart.bogie.posY, cart.bogie.posZ, 0.1, 0.4, 0.1);
+        //if(cart.bogie!=null)cart.getWorld().spawnParticle("reddust", cart.bogie.posX, cart.bogie.posY, cart.bogie.posZ, 0.1, 0.4, 0.1);
 
         //GL11.glRotatef(180.0F - yaw, 0.0F, 1.0F, 0.0F);
         if (cart.bogieLoco != null) {// || cart.bogieUtility[0]!=null){
@@ -241,7 +241,7 @@ public class RenderRollingStock extends Render {
         }
 
         GL11.glEnable(GL11.GL_LIGHTING);
-        int skyLight = cart.worldObj.getLightBrightnessForSkyBlocks(i, j, k, 0);
+        int skyLight = cart.getWorld().getLightBrightnessForSkyBlocks(i, j, k, 0);
         if (!renderModeGUI) {
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, skyLight % 65536,
                     skyLight / 65536f);
@@ -338,7 +338,7 @@ public class RenderRollingStock extends Render {
 
                     for (double[] explosion : smokeFX) {
                         rotatedvec = rotatePointF(explosion[0], explosion[1], explosion[2], pitch, yaw);
-                        cart.worldObj.spawnParticle(smokeType,
+                        cart.getWorld().spawnParticle(smokeType,
                                 cart.posX + rotatedvec[0], cart.posY + rotatedvec[1], cart.posZ + rotatedvec[2],
                                 0, 0, 0);
                     }
@@ -387,23 +387,23 @@ public class RenderRollingStock extends Render {
                 for (int j = 0; j < explosionFXIterations; j++) {
                     if (yawMod == 180) {
                         for (double[] explosion : explosionFX) {
-                            cart.worldObj.spawnParticle(explosionType, cart.posX - explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[2], 0.0D, 0.0D, 0.0D);
-                            cart.worldObj.spawnParticle(explosionType, cart.posX - explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[2], 0.0D, 0.0D, 0.0D);
+                            cart.getWorld().spawnParticle(explosionType, cart.posX - explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[2], 0.0D, 0.0D, 0.0D);
+                            cart.getWorld().spawnParticle(explosionType, cart.posX - explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[2], 0.0D, 0.0D, 0.0D);
                         }
                     } else if (yawMod == 90) {
                         for (double[] explosion : explosionFX) {
-                            cart.worldObj.spawnParticle(explosionType, cart.posX + explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[0], 0.0D, 0.0D, 0.0D);
-                            cart.worldObj.spawnParticle(explosionType, cart.posX - explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[0], 0.0D, 0.0D, 0.0D);
+                            cart.getWorld().spawnParticle(explosionType, cart.posX + explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[0], 0.0D, 0.0D, 0.0D);
+                            cart.getWorld().spawnParticle(explosionType, cart.posX - explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[0], 0.0D, 0.0D, 0.0D);
                         }
                     } else if (yawMod == 0) {
                         for (double[] explosion : explosionFX) {
-                            cart.worldObj.spawnParticle(explosionType, cart.posX + explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[2], 0.0D, 0.0D, 0.0D);
-                            cart.worldObj.spawnParticle(explosionType, cart.posX + explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[2], 0.0D, 0.0D, 0.0D);
+                            cart.getWorld().spawnParticle(explosionType, cart.posX + explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[2], 0.0D, 0.0D, 0.0D);
+                            cart.getWorld().spawnParticle(explosionType, cart.posX + explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[2], 0.0D, 0.0D, 0.0D);
                         }
                     } else if (yawMod == -90) {
                         for (double[] explosion : explosionFX) {
-                            cart.worldObj.spawnParticle(explosionType, cart.posX + explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[0], 0.0D, 0.0D, 0.0D);
-                            cart.worldObj.spawnParticle(explosionType, cart.posX - explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[0], 0.0D, 0.0D, 0.0D);
+                            cart.getWorld().spawnParticle(explosionType, cart.posX + explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[0], 0.0D, 0.0D, 0.0D);
+                            cart.getWorld().spawnParticle(explosionType, cart.posX - explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[0], 0.0D, 0.0D, 0.0D);
                         }
                     }
                 }

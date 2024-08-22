@@ -28,7 +28,7 @@ public class HUDMTC extends GuiScreen {
             renderSkillHUD(event, (Locomotive) game.thePlayer.ridingEntity);
         } else {
             this.game = this.mc = Minecraft.getMinecraft();
-            this.fontRendererObj = this.game.fontRenderer;
+            this.fontRenderer = this.game.fontRenderer;
         }
     }
 

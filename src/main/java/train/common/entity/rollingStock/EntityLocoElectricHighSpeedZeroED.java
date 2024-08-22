@@ -77,7 +77,7 @@ public class EntityLocoElectricHighSpeedZeroED extends ElectricTrain {
 		return inventorySize;
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "High Speed";
 	}
 
@@ -87,7 +87,7 @@ public class EntityLocoElectricHighSpeedZeroED extends ElectricTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

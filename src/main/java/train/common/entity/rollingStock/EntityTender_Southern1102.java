@@ -83,7 +83,7 @@ public class EntityTender_Southern1102 extends Tender implements IInventory {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Baldwin 4-6-0 Tender";
 	}
 
@@ -98,8 +98,8 @@ public class EntityTender_Southern1102 extends Tender implements IInventory {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!this.worldObj.isRemote) {
-			entityplayer.openGui(Traincraft.instance, GuiIDs.TENDER, worldObj, this.getEntityId(), -1, (int) this.posZ);
+		if (!this.getWorld().isRemote) {
+			entityplayer.openGui(Traincraft.instance, GuiIDs.TENDER, getWorld(), this.getEntityId(), -1, (int) this.posZ);
 		}
 		return true;
 	}

@@ -21,7 +21,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -126,15 +126,15 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     protected boolean isRailValid(World world, int x, int y, int z, int meta) {
         boolean valid = true;
-        if (!world.isSideSolid(x, y - 1, z, ForgeDirection.UP))
+        if (!world.isSideSolid(x, y - 1, z, EnumFacing.UP))
             valid = false;
-        if (meta == 2 && !world.isSideSolid(x + 1, y, z, ForgeDirection.UP))
+        if (meta == 2 && !world.isSideSolid(x + 1, y, z, EnumFacing.UP))
             valid = false;
-        else if (meta == 3 && !world.isSideSolid(x - 1, y, z, ForgeDirection.UP))
+        else if (meta == 3 && !world.isSideSolid(x - 1, y, z, EnumFacing.UP))
             valid = false;
-        else if (meta == 4 && !world.isSideSolid(x, y, z - 1, ForgeDirection.UP))
+        else if (meta == 4 && !world.isSideSolid(x, y, z - 1, EnumFacing.UP))
             valid = false;
-        else if (meta == 5 && !world.isSideSolid(x, y, z + 1, ForgeDirection.UP))
+        else if (meta == 5 && !world.isSideSolid(x, y, z + 1, EnumFacing.UP))
             valid = false;
         return valid;
     }
@@ -327,7 +327,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     @Override
     public World getWorld() {
-        return tileEntity.getWorldObj();
+        return tileEntity.getgetWorld()();
     }
 
     @Override

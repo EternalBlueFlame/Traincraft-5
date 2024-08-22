@@ -12,7 +12,7 @@ import train.common.Traincraft;
 import train.common.api.Freight;
 import train.common.library.GuiIDs;
 
-public class EntityFreightHopperUK extends Freight implements IInventory {
+public class EntityFreightHopperUK extends Freight {
     public int freightInventorySize;
     public int numFreightSlots;
     public EntityFreightHopperUK(World world) {
@@ -74,7 +74,7 @@ public class EntityFreightHopperUK extends Freight implements IInventory {
         }
     }
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "Hopper UK";
     }
 
@@ -89,7 +89,7 @@ public class EntityFreightHopperUK extends Freight implements IInventory {
         if ((super.interactFirst(entityplayer))) {
             return false;
         }
-        entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, worldObj, this.getEntityId(), -1, (int) this.posZ);
+        entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, getWorld(), this.getEntityId(), -1, (int) this.posZ);
         return true;
     }
     @Override

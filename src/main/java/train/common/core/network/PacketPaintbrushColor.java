@@ -34,7 +34,7 @@ public class PacketPaintbrushColor implements IMessage {
     public static class Handler implements IMessageHandler<PacketPaintbrushColor, IMessage> {
         @Override
         public IMessage onMessage(PacketPaintbrushColor message, MessageContext context) {
-            Entity rollingStockEntity = context.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityID);
+            Entity rollingStockEntity = context.getServerHandler().playerEntity.getWorld().getEntityByID(message.entityID);
             if (rollingStockEntity instanceof EntityRollingStock) {
                 ((EntityRollingStock) rollingStockEntity).setColor(message.paintbrushColor);
             }

@@ -2,8 +2,8 @@ package ebf.tim.entities;
 
 
 import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -62,7 +62,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         this.parent = parent;
     }
 
-    public World getWorld(){return worldObj;}
+    public World getWorld(){return getWorld();}
     /** returns if this can be pushed*/
     @Override
     public boolean canBePushed() {
@@ -93,14 +93,14 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
                     this.setDead();
                 }
             }
-            if (worldObj.isRemote) {
+            if (getWorld().isRemote) {
                 if (this.parent.seats.size() >= seatNumber+1 && (this.pos != this.parent.seats.get(seatNumber).pos || this.getPassenger() != this.parent.seats.get(seatNumber).getPassenger())) {
                     this.setDead();
                 }
             }
 
         }
-        if (riddenByEntity != null && riddenByEntity instanceof EntityPlayer && worldObj.isRemote && this.isControlSeat()) {
+        if (riddenByEntity != null && riddenByEntity instanceof EntityPlayer && getWorld().isRemote && this.isControlSeat()) {
             if (TCKeyHandler.inventory.isPressed()) {
                 if (this.parent instanceof Locomotive) {
                     Traincraft.keyChannel.sendToServer(new PacketKeyPress(7));
@@ -111,7 +111,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
                 Traincraft.keyChannel.sendToServer(new PacketKeyPress(9));
             }
         }
-        if (this.parent instanceof Locomotive && this.isControlSeat() && worldObj.isRemote) {
+        if (this.parent instanceof Locomotive && this.isControlSeat() && getWorld().isRemote) {
             ((Locomotive)this.parent).keyHandling();
         }
     }
@@ -120,8 +120,8 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     public boolean shouldRiderSit(){
         if (parent != null) {
             return parent.shouldRiderSit(seatNumber);
-        } else if (worldObj.getEntityByID(this.parentId) != null && worldObj.getEntityByID(this.parentId) instanceof EntityRollingStock) {
-            parent = (EntityRollingStock) worldObj.getEntityByID(this.parentId);
+        } else if (getWorld().getEntityByID(this.parentId) != null && getWorld().getEntityByID(this.parentId) instanceof EntityRollingStock) {
+            parent = (EntityRollingStock) getWorld().getEntityByID(this.parentId);
             return parent.shouldRiderSit(seatNumber);
         } else {
             this.setDead();
@@ -182,7 +182,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     }
 
     @Override
-    public void updateRiderPosition() {
+    public void updatePassenger(Entity passenger) {
         if (this.getPassenger() != null) {
             this.getPassenger().setPosition(this.posX, this.posY+(getWorld().isRemote?(this.getPassenger()==Minecraft.getMinecraft().thePlayer?0.4:-1.3):-1.5), this.posZ);
         }
@@ -195,7 +195,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     //@Override
     public void addPassenger(Entity passenger) {
 //        DebugUtil.println(passengerEntity==null, passengerEntity.ridingEntity==null, passenger instanceof EntityLivingBase);
-        if(riddenByEntity==null && passenger instanceof EntityLivingBase) {
+        if(passenger==null && passenger instanceof EntityLivingBase) {
             //super.addPassenger(passenger);
             this.riddenByEntity=passenger;
             passenger.ridingEntity=this;

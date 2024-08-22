@@ -2,7 +2,7 @@ package train.client.core;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.client.registry.RenderingRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
@@ -324,7 +324,7 @@ public class ClientProxy extends CommonProxy {
             case (GuiIDs.OPEN_HEARTH_FURNACE):
                 return te instanceof TileEntityOpenHearthFurnace ? new GuiOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
             case GuiIDs.TRAIN_WORKBENCH:
-                return te instanceof TileTrainWbench ? new GuiTrainCraftingBlock(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
+                return te instanceof TileTrainWbench ? new GuiTrainCraftingBlock(player.inventory, player.getWorld(), (TileTrainWbench) te) : null;
             case (GuiIDs.LOCO):
                 if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntityRollingStock) {
                     return new GuiLoco2(riddenByEntity.inventory, entity);

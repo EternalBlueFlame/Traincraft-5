@@ -1,8 +1,8 @@
 package train.common.items;
 
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.core.items.IMinecartItem;
@@ -698,7 +698,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					world.spawnEntityInWorld(rollingStock);
 				}
 			}
-				--itemstack.stackSize;
+				--itemstack.getCount();
 
 
 		return rollingStock;

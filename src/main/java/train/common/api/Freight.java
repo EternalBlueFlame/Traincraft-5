@@ -22,7 +22,7 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
 
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, float i) {
-        if (worldObj.isRemote) {
+        if (getWorld().isRemote) {
             return true;
         }
 
@@ -58,15 +58,15 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer p) {
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer p) {
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int par1) {
+    public ItemStack removeStackFromSlot(int par1) {
         if (this.cargoItems[par1] != null) {
             ItemStack var2 = this.cargoItems[par1];
             this.cargoItems[par1] = null;
@@ -97,14 +97,14 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
         cargoItems[i] = itemstack;
-        if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-            itemstack.stackSize = getInventoryStackLimit();
+        if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
+            itemstack.getCount() = getInventoryStackLimit();
         }
     }
 
     @Override
     public void markDirty() {
-        if (!worldObj.isRemote) {
+        if (!getWorld().isRemote) {
             this.slotsFilled = 0;
             for (int i = 0; i < getSizeInventory(); i++) {
                 ItemStack itemstack = getStackInSlot(i);
@@ -117,7 +117,7 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "Freight cart";
     }
 
@@ -151,14 +151,14 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
     protected void handleMass() {
         if (this.updateTicks % 10 != 0)
             return;
-        if (worldObj.isRemote)
+        if (getWorld().isRemote)
             return;
         this.mass = this.getDefaultMass();
         this.itemInsideCount = 0;
         for (int i = 0; i < getSizeInventory(); i++) {
             ItemStack itemstack = getStackInSlot(i);
-            if (itemstack != null && itemstack.stackSize > 0) {
-                this.itemInsideCount += itemstack.stackSize;
+            if (itemstack != null && itemstack.getCount() > 0) {
+                this.itemInsideCount += itemstack.getCount();
             }
         }
         mass += (this.itemInsideCount * 0.0001);
@@ -217,4 +217,30 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
     public ItemStack[] getInventory() {
         return cargoItems;
     }
+
+    @Override
+    public boolean isEmpty() {
+        for (ItemStack slot : cargoItems){
+            if(slot != ItemStack.EMPTY){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public boolean isUsableByPlayer(EntityPlayer p_70300_1_){return true;}
+
+    /*These seem unnecessary?*/
+    @Override
+    public int getField(int id) {return 0;}
+
+    @Override
+    public void setField(int id, int value) {}
+
+    @Override
+    public int getFieldCount() {return 0;}
+
+    @Override
+    public void clear() {}
 }

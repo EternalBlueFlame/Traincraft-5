@@ -1,7 +1,7 @@
 package train.client.render.models.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
@@ -45,7 +45,7 @@ public class ModelWindMillWheel extends ModelBase {
 		GL11.glColor4f(f1 * f2, f1 * f3, f1 * f4,1);
 		GL11.glScalef(0.45f, 0.45f, 0.45f);
 
-		int facing = windMill.getWorldObj().getBlockMetadata((int) windMill.xCoord, (int) windMill.yCoord, (int) windMill.zCoord);
+		int facing = windMill.getgetWorld()().getBlockMetadata((int) windMill.xCoord, (int) windMill.yCoord, (int) windMill.zCoord);
 		if (facing == 3) {
 		}
 		if (facing == 1) {
@@ -58,10 +58,10 @@ public class ModelWindMillWheel extends ModelBase {
 			GL11.glRotatef(90, 0, 1, 0);
 		}
 		int windStrength = (int) (windMill.windClient + (((double) windMill.yCoord / 256) * 10));//* (windMill.yCoord - 64);
-		if (windMill.getWorldObj().isThundering()) {
+		if (windMill.getgetWorld()().isThundering()) {
 			windStrength *= 7.5;
 		}
-		else if (windMill.getWorldObj().isRaining()) {
+		else if (windMill.getgetWorld()().isRaining()) {
 			windStrength *= 4.5;
 		}
 		//System.out.println(windStrength+" "+(((double)windMill.yCoord/256)*10));

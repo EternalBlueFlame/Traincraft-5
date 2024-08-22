@@ -7,8 +7,8 @@
 
 package train.common.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -26,7 +26,7 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
 import train.common.api.blocks.BlockDynamic;
 import train.common.library.BlockIDs;
@@ -109,14 +109,14 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 					float f1 = furnaceRand.nextFloat() * 0.8F + 0.1F;
 					float f2 = furnaceRand.nextFloat() * 0.8F + 0.1F;
 					do {
-						if (itemstack.stackSize <= 0) {
+						if (itemstack.getCount() <= 0) {
 							continue label0;
 						}
 						int i1 = furnaceRand.nextInt(21) + 10;
-						if (i1 > itemstack.stackSize) {
-							i1 = itemstack.stackSize;
+						if (i1 > itemstack.getCount()) {
+							i1 = itemstack.getCount();
 						}
-						itemstack.stackSize -= i1;
+						itemstack.getCount() -= i1;
 						EntityItem entityitem = new EntityItem(world, i + f, j + f1, k + f2, itemstack.splitStack(i1));
 						float f3 = 0.05F;
 						entityitem.motionX = (float) furnaceRand.nextGaussian() * f3;
@@ -135,7 +135,7 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 		TileEntityOpenHearthFurnace te = (TileEntityOpenHearthFurnace) world.getTileEntity(i, j, k);
 		if (te != null) {
 			int dir = MathHelper.floor_double((entityliving.rotationYaw * 4F) / 360F + 0.5D) & 3;
-			te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
+			te.setFacing(EnumFacing.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
 			world.markBlockForUpdate(i, j, k);
 		}
 	}

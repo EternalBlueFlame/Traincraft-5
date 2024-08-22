@@ -1,7 +1,7 @@
 package train.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -47,7 +47,7 @@ public class GuiLantern extends GuiScreen {
         this.buttonList.add(this.doneBtn = new GuiButton(0, this.width / 2 - 100, this.height / 4 + 96 + 12, "Done"));
         this.buttonList.add(this.cancelBtn = new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + 12, "Cancel"));
 
-        this.colorTextField = new GuiTextField(this.fontRendererObj, this.width / 2 - 150, 60, 300, 20);
+        this.colorTextField = new GuiTextField(this.fontRenderer, this.width / 2 - 150, 60, 300, 20);
         this.colorTextField.setMaxStringLength(32767);
         this.colorTextField.setFocused(true);
         this.colorTextField.setText(this.lanternBlock.getColor());

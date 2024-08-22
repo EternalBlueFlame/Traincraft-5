@@ -27,9 +27,9 @@ public class EntityPassengerM8DNF1MiddleShort extends EntityRollingStock impleme
     }
 
     @Override
-    public void updateRiderPosition() {
+    public void updatePassenger(Entity passenger) {
         if(riddenByEntity!=null) {
-            riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + -0.25, posZ);
+            riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + -0.25, posZ);
         }//ew yucky rider position code, good thing its a passenger car so it doesnt matter! Wheeze.png
     }
 
@@ -45,13 +45,13 @@ public class EntityPassengerM8DNF1MiddleShort extends EntityRollingStock impleme
         if ((super.interactFirst(entityplayer))) {
             return false;
         }
-        if (!worldObj.isRemote) {
+        if (!getWorld().isRemote) {
             ItemStack itemstack = entityplayer.inventory.getCurrentItem();
             if(lockThisCart(itemstack, entityplayer))return true;
             if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
                 return true;
             }
-            if (!worldObj.isRemote) {
+            if (!getWorld().isRemote) {
                 entityplayer.mountEntity(this);
             }
         }

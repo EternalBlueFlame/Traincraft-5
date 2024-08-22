@@ -5,7 +5,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.Side;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -36,7 +36,7 @@ public class PacketTextureOverlayConfig implements IMessage {
     /**
      * @param configType       Type of overlay to use
      * @param trainEntity      Entity ID of rolling stock; recommended to retrieve by invoking rollingStock.getEntityId().
-     * @param dimensionID      Dimension ID of player world; recommended to retrieve by accessing Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId.
+     * @param dimensionID      Dimension ID of player world; recommended to retrieve by accessing Minecraft.getMinecraft().thePlayer.getWorld().provider.dimensionId.
      * @param overlayConfigTag NBT configuration tag; recommended to retrieve by invoking rollingStock.getOverlayTextureContainer().getOverlayConfigTag().
      * @author 02skaplan
      * <p>Server <-> client communication packet for overlay textures.</p>
@@ -52,7 +52,7 @@ public class PacketTextureOverlayConfig implements IMessage {
 
     /**
      * @param trainEntity    Entity ID of rolling stock; recommended to retrieve by invoking rollingStock.getEntityId().
-     * @param dimensionID    Dimension ID of player world; recommended to retrieve by accessing Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId.
+     * @param dimensionID    Dimension ID of player world; recommended to retrieve by accessing Minecraft.getMinecraft().thePlayer.getWorld().provider.dimensionId.
      * @param playerEntityID Entity ID of player. Used to send the response back to only the requesting player; recommended to retrieve by accessing Minecraft.getMinecraft().thePlayer.getEntityId() on the client side.
      * @author 02skaplan
      * <p>Client -> server communication packet for overlay texture requests.</p>
@@ -97,14 +97,14 @@ public class PacketTextureOverlayConfig implements IMessage {
             Entity rollingStockEntity;
             // If on the server side, distribute the packet to clients before updating local changes.
             if (context.side == Side.SERVER) { // I think it is necessary to grab the world through the server handler if the context side is server. Don't quote me on that, but it doesn't work without it.
-                rollingStockEntity = context.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityID);
+                rollingStockEntity = context.getServerHandler().playerEntity.getWorld().getEntityByID(message.entityID);
                 if (!message.request) { // If the packet is a configuration message, not a request for a configuration...
                     message.overlayConfigTag.setInteger("type", message.configType.ordinal());
                     Traincraft.overlayTextureChannel.sendToAllAround(new PacketTextureOverlayConfig(message.configType, message.entityID, message.dimensionID, message.overlayConfigTag), new NetworkRegistry.TargetPoint(message.dimensionID, rollingStockEntity.posX, rollingStockEntity.posY, rollingStockEntity.posZ, 256D));
                 } else { // If the packet is a request message...
                     if (rollingStockEntity != null && ((EntityRollingStock) rollingStockEntity).getOverlayTextureContainer() != null) { // If the rolling stock has an overlay texture container (accepts overlay textures)...
-                        if (context.getServerHandler().playerEntity.worldObj.getEntityByID(message.playerEntityID) != null) //todo verify
-                            Traincraft.overlayTextureChannel.sendTo(new PacketTextureOverlayConfig(((EntityRollingStock) rollingStockEntity).getOverlayTextureContainer().getType(), message.entityID, message.dimensionID, ((EntityRollingStock) rollingStockEntity).getOverlayTextureContainer().getOverlayConfigTag()), ((EntityPlayerMP) context.getServerHandler().playerEntity.worldObj.getEntityByID(message.playerEntityID)));
+                        if (context.getServerHandler().playerEntity.getWorld().getEntityByID(message.playerEntityID) != null) //todo verify
+                            Traincraft.overlayTextureChannel.sendTo(new PacketTextureOverlayConfig(((EntityRollingStock) rollingStockEntity).getOverlayTextureContainer().getType(), message.entityID, message.dimensionID, ((EntityRollingStock) rollingStockEntity).getOverlayTextureContainer().getOverlayConfigTag()), ((EntityPlayerMP) context.getServerHandler().playerEntity.getWorld().getEntityByID(message.playerEntityID)));
                     }
                     return null;
                 }

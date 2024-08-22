@@ -34,15 +34,15 @@ public class ModelRenderHelper
         {
             if (bm.boxName.contains(BoxName.lamp.AsString()) && rollingStock.isLightsEnabled())
             {
-                Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+                Minecraft.getMinecraft().entityRenderer.disableLightmap();
                 bm.render(f5);
-                Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+                Minecraft.getMinecraft().entityRenderer.enableLightmap();
             }
             else if (rollingStock.isDitchLightsEnabled() && bm.boxName.contains(BoxName.ditch.AsString()))
             {
-                Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+                Minecraft.getMinecraft().entityRenderer.disableLightmap();
                 bm.render(f5);
-                Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+                Minecraft.getMinecraft().entityRenderer.enableLightmap();
             }
             else if (rollingStock.isBeaconEnabled() && (bm.boxName.contains(BoxName.commander.AsString()) || bm.boxName.contains("prime")))
             {
@@ -50,9 +50,9 @@ public class ModelRenderHelper
                 {
                     if (((EntityRollingStock)rollingStock).ticksExisted % 30 == 0)
                     {
-                        Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+                        Minecraft.getMinecraft().entityRenderer.disableLightmap();
                         bm.render(f5);
-                        Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+                        Minecraft.getMinecraft().entityRenderer.enableLightmap();
                     }
                     else
                     {
@@ -92,9 +92,9 @@ public class ModelRenderHelper
             case 0:
                 if (bodyModel.boxName.contains("prime1"))
                 {
-                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+                    Minecraft.getMinecraft().entityRenderer.disableLightmap();
                     bodyModel.render(f5);
-                    Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+                    Minecraft.getMinecraft().entityRenderer.enableLightmap();
                 }
                 else
                 {
@@ -104,9 +104,9 @@ public class ModelRenderHelper
             case 1:
                 if (bodyModel.boxName.contains("prime2"))
                 {
-                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+                    Minecraft.getMinecraft().entityRenderer.disableLightmap();
                     bodyModel.render(f5);
-                    Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+                    Minecraft.getMinecraft().entityRenderer.enableLightmap();
                 }
                 else
                 {
@@ -116,9 +116,9 @@ public class ModelRenderHelper
             case 2:
                 if (bodyModel.boxName.contains("prime3"))
                 {
-                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+                    Minecraft.getMinecraft().entityRenderer.disableLightmap();
                     bodyModel.render(f5);
-                    Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+                    Minecraft.getMinecraft().entityRenderer.enableLightmap();
                 }
                 else
                 {
@@ -128,9 +128,9 @@ public class ModelRenderHelper
             case 3:
                 if (bodyModel.boxName.contains("prime4"))
                 {
-                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+                    Minecraft.getMinecraft().entityRenderer.disableLightmap();
                     bodyModel.render(f5);
-                    Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+                    Minecraft.getMinecraft().entityRenderer.enableLightmap();
                 }
                 else
                 {

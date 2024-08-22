@@ -64,14 +64,14 @@ public class GuiBuilder extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int i, int j) {
-        fontRendererObj.drawString("Builder", 4, 8, 0x404040);
-        fontRendererObj.drawString("Inventory", 113, 100, 0x404040);
-        fontRendererObj.drawString("Doesn't work", 4, 160, 0x404040);
-        fontRendererObj.drawString("with new tracks", 4, 170, 0x404040);
-        fontRendererObj.drawString("yet", 4, 180, 0x404040);
+        fontRenderer.drawString("Builder", 4, 8, 0x404040);
+        fontRenderer.drawString("Inventory", 113, 100, 0x404040);
+        fontRenderer.drawString("Doesn't work", 4, 160, 0x404040);
+        fontRenderer.drawString("with new tracks", 4, 170, 0x404040);
+        fontRenderer.drawString("yet", 4, 180, 0x404040);
 
-        fontRendererObj.drawString(StatCollector.translateToLocal("builder.currElev.name") + ": " + (int) builder.currentHeight, 120, -25, 0xFFFFFF);
-        fontRendererObj.drawString(StatCollector.translateToLocal("builder.reqElev.name") + ": " + builder.getPlannedHeight(), 120, -10, 0xFFFFFF);
+        fontRenderer.drawString(StatCollector.translateToLocal("builder.currElev.name") + ": " + (int) builder.currentHeight, 120, -25, 0xFFFFFF);
+        fontRenderer.drawString(StatCollector.translateToLocal("builder.reqElev.name") + ": " + builder.getPlannedHeight(), 120, -10, 0xFFFFFF);
 
         if (intersectsWith(i, j)) {
             drawCreativeTabHoveringText("When a builder is locked,", i, j);
@@ -101,7 +101,7 @@ public class GuiBuilder extends GuiContainer {
         if (guibutton.id == 4) {
             if (player != null && player.getCommandSenderName().equalsIgnoreCase(builder.getTrainOwner())) {
                 AxisAlignedBB box = builder.boundingBox.expand(5, 5, 5);
-                List<?> lis3 = builder.worldObj.getEntitiesWithinAABBExcludingEntity(builder, box);
+                List<?> lis3 = builder.getWorld().getEntitiesWithinAABBExcludingEntity(builder, box);
 
                 if (!builder.getTrainLockedFromPacket()) {
 
@@ -143,7 +143,7 @@ public class GuiBuilder extends GuiContainer {
         if (!(builder).getTrainLockedFromPacket())
             state = "Unlocked";
 
-        int textWidth = fontRendererObj.getStringWidth("the GUI, change speed, destroy it.");
+        int textWidth = fontRenderer.getStringWidth("the GUI, change speed, destroy it.");
         int startX = 10;
         int startY = -10;
 
@@ -158,11 +158,11 @@ public class GuiBuilder extends GuiContainer {
         drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 8 + 3 + 40, colour1, colour2);
         drawGradientRect(startX - 2, startY - 2, startX + textWidth + 2, startY + 8 + 2 + 40, i4, i4);
 
-        fontRendererObj.drawStringWithShadow(str, startX, startY, -1);
-        fontRendererObj.drawStringWithShadow("only its owner can open", startX, 0, -1);
-        fontRendererObj.drawStringWithShadow("the GUI and destroy it.", startX, startY + 20, -1);
-        fontRendererObj.drawStringWithShadow("Current state: " + state, startX, startY + 30, -1);
-        fontRendererObj.drawStringWithShadow("Owner: " + (builder).getTrainOwner().trim(), startX, startY + 40, -1);
+        fontRenderer.drawStringWithShadow(str, startX, startY, -1);
+        fontRenderer.drawStringWithShadow("only its owner can open", startX, 0, -1);
+        fontRenderer.drawStringWithShadow("the GUI and destroy it.", startX, startY + 20, -1);
+        fontRenderer.drawStringWithShadow("Current state: " + state, startX, startY + 30, -1);
+        fontRenderer.drawStringWithShadow("Owner: " + (builder).getTrainOwner().trim(), startX, startY + 40, -1);
     }
 
     public boolean intersectsWith(int mouseX, int mouseY) {
@@ -173,7 +173,7 @@ public class GuiBuilder extends GuiContainer {
 
     private void sendPacket(int packet, int packetID) {
         AxisAlignedBB box = (builder).boundingBox.expand(5, 5, 5);
-        List<?> lis3 = (builder).worldObj.getEntitiesWithinAABBExcludingEntity(builder, box);
+        List<?> lis3 = (builder).getWorld().getEntitiesWithinAABBExcludingEntity(builder, box);
         if (lis3 != null && !lis3.isEmpty()) {
             for (Object entity : lis3) {
                 if (entity instanceof EntityPlayer) {
@@ -185,7 +185,7 @@ public class GuiBuilder extends GuiContainer {
 
     private void sendFollow(int packet, int packetID) {
         AxisAlignedBB box = (builder).boundingBox.expand(5, 5, 5);
-        List<?> lis3 = (builder).worldObj.getEntitiesWithinAABBExcludingEntity(builder, box);
+        List<?> lis3 = (builder).getWorld().getEntitiesWithinAABBExcludingEntity(builder, box);
         if (lis3 != null && !lis3.isEmpty()) {
             for (Object entity : lis3) {
                 if (entity instanceof EntityPlayer) {

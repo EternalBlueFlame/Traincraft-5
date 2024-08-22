@@ -1,7 +1,7 @@
 package train.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.entity.player.EntityPlayer;
@@ -77,7 +77,7 @@ public class GuiFixedOverlay extends GuiAbstractPaintbrush {
         // After the server recognizes that we changed it, it will send an update packet out to all clients.
         if (newOverlayNumber != 0) {
             rollingStock.getOverlayTextureContainer().getSpecificationFixed().setSelectedOverlay(newOverlayNumber);
-            Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.FIXED, rollingStock.getEntityId(), Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId, rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
+            Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.FIXED, rollingStock.getEntityId(), Minecraft.getMinecraft().thePlayer.getWorld().provider.dimensionId, rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
         }
     }
 

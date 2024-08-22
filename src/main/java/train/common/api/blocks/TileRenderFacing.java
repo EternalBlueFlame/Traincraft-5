@@ -1,7 +1,7 @@
 package train.common.api.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.*;
 import net.minecraft.block.Block;
@@ -15,7 +15,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
 
 public class TileRenderFacing extends TileEntity {
@@ -36,7 +36,7 @@ public class TileRenderFacing extends TileEntity {
         return this;
     }
 
-    public TileRenderFacing setFacing(ForgeDirection direction){
+    public TileRenderFacing setFacing(EnumFacing direction){
         //this follows our own orders, which don't make a lot of sense, but it works.
         switch (direction){
             case SOUTH:{facing=0;break;}
@@ -50,22 +50,22 @@ public class TileRenderFacing extends TileEntity {
         return this;
     }
 
-    //for whatever dumb stupid reason, sometimes getWorldObject() doesn't exist.
+    //for whatever dumb stupid reason, sometimes getgetWorld()ect() doesn't exist.
     public World getWorld(){
-        return worldObj;
+        return getWorld();
     }
 
-    public ForgeDirection getFacing(){
+    public EnumFacing getFacing(){
         //1.8.9+ it's getHorizontal
         switch (facing){
-            case 0:{return ForgeDirection.SOUTH;}
-            case 1:{return ForgeDirection.EAST;}
-            case 2:{return ForgeDirection.NORTH;}
-            case 3:{return ForgeDirection.WEST;}
-            case 4:{return ForgeDirection.DOWN;}
-            case 5:{return ForgeDirection.UP;}
+            case 0:{return EnumFacing.SOUTH;}
+            case 1:{return EnumFacing.EAST;}
+            case 2:{return EnumFacing.NORTH;}
+            case 3:{return EnumFacing.WEST;}
+            case 4:{return EnumFacing.DOWN;}
+            case 5:{return EnumFacing.UP;}
         }
-        return ForgeDirection.NORTH;
+        return EnumFacing.NORTH;
     }
 
     @Override
@@ -93,7 +93,7 @@ public class TileRenderFacing extends TileEntity {
             if(blockGLID ==null) {
                 blockGLID = net.minecraft.client.renderer.GLAllocation.generateDisplayLists(1);
                 org.lwjgl.opengl.GL11.glNewList(blockGLID, org.lwjgl.opengl.GL11.GL_COMPILE);
-                if (worldObj == null) {
+                if (getWorld() == null) {
                     Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
                 } else {
                     Minecraft.getMinecraft().entityRenderer.enableLightmap(1);
@@ -123,7 +123,7 @@ public class TileRenderFacing extends TileEntity {
                 org.lwjgl.opengl.GL11.glRotatef(180, 1, 0, 0);
 
                 renderModel();
-                if (worldObj == null) {
+                if (getWorld() == null) {
                     Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
                 }
                 org.lwjgl.opengl.GL11.glEndList();
@@ -174,11 +174,11 @@ public class TileRenderFacing extends TileEntity {
     @Override
     public void markDirty() {
         super.markDirty();
-        if(this.worldObj != null) {
-            CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
-            worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
-            this.worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, host);
-            if (worldObj.isRemote && blockGLID != null) {
+        if(this.getWorld() != null) {
+            CommonUtil.markBlockForUpdate(getWorld(), xCoord, yCoord, zCoord);
+            getWorld().markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
+            this.getWorld().func_147453_f(this.xCoord, this.yCoord, this.zCoord, host);
+            if (getWorld().isRemote && blockGLID != null) {
             //    org.lwjgl.opengl.GL11.glDeleteLists(blockGLID, 1);
             //    blockGLID = null;
             }
@@ -218,13 +218,13 @@ public class TileRenderFacing extends TileEntity {
     public void readFromNBT(NBTTagCompound tag){
         super.readFromNBT(tag);
         facing = tag.getInteger("f");
-        if(worldObj!=null && worldObj.isRemote) {
+        if(getWorld()!=null && getWorld().isRemote) {
             markDirty();
         }
     }
 
     public void syncTileEntity(){
-        for(Object o : this.worldObj.playerEntities){
+        for(Object o : this.getWorld().playerEntities){
             if(o instanceof EntityPlayerMP){
                 EntityPlayerMP player = (EntityPlayerMP) o;
                 if(player.getDistance(xCoord, yCoord, zCoord) <= 64) {

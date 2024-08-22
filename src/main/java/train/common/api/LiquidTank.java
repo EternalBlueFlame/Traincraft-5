@@ -8,7 +8,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
 import train.common.adminbook.ServerLogger;
 import train.common.entity.rollingStock.EntityTankLava;
@@ -76,21 +76,21 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (worldObj.isRemote) {
+        if (getWorld().isRemote) {
             return;
         }
 
-        if (ticksExisted % 5 == 0 && fill(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
+        if (ticksExisted % 5 == 0 && fill(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
             FluidStack drain = null;
-            blocksToCheck = new TileEntity[]{worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY - 1), MathHelper.floor_double(posZ)),
-                    worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 2), MathHelper.floor_double(posZ)),
-                    worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 3), MathHelper.floor_double(posZ)),
-                    worldObj.getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 4), MathHelper.floor_double(posZ))
+            blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY - 1), MathHelper.floor_double(posZ)),
+                    getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 2), MathHelper.floor_double(posZ)),
+                    getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 3), MathHelper.floor_double(posZ)),
+                    getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 4), MathHelper.floor_double(posZ))
             };
 
             for (TileEntity block : blocksToCheck) {
                 if (drain == null && block instanceof IFluidHandler) {
-                    for (ForgeDirection direction : ForgeDirection.VALID_DIRECTIONS) {
+                    for (EnumFacing direction : EnumFacing.VALID_DIRECTIONS) {
                         if (((IFluidHandler) block).drain(direction, 100, false) != null &&
                                 ((IFluidHandler) block).drain(direction, 100, false).fluid == FluidRegistry.WATER &&
                                 ((IFluidHandler) block).drain(direction, 100, false).amount == 100
@@ -103,7 +103,7 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
             }
 
             if (drain != null) {
-                fill(ForgeDirection.UNKNOWN, drain, true);
+                fill(EnumFacing.UNKNOWN, drain, true);
             }
         }
 
@@ -134,7 +134,7 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
 
     public ItemStack checkInvent(ItemStack itemstack) {
         ItemStack result = null;
-        if (worldObj.isRemote) {
+        if (getWorld().isRemote) {
             return itemstack;
         }
         this.update += 1;
@@ -236,7 +236,7 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
 	 */
 	/*
 	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
+	public int addItem(ItemStack stack, boolean doAdd, EnumFacing from) {
 		if (stack == null) {
 			return 0;
 		}
@@ -257,7 +257,7 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
 	 */
 	/*
 	@Override
-	public ItemStack[] canExtractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
+	public ItemStack[] canExtractItem(boolean doRemove, EnumFacing from, int maxItemCount) {
 		return null;
 	}
 	*/
@@ -283,7 +283,7 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int par1) {
+    public ItemStack removeStackFromSlot(int par1) {
         if (this.cargoItems[par1] != null) {
             ItemStack var2 = this.cargoItems[par1];
             this.cargoItems[par1] = null;
@@ -314,8 +314,8 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
         cargoItems[i] = itemstack;
-        if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-            itemstack.stackSize = getInventoryStackLimit();
+        if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
+            itemstack.getCount() = getInventoryStackLimit();
         }
     }
 
@@ -325,16 +325,16 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return null;
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer p) {
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer p) {
     }
 
     @Override
@@ -349,7 +349,7 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
 
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, float i) {
-        if (worldObj.isRemote) {
+        if (getWorld().isRemote) {
             return true;
         }
         if (canBeDestroyedByPlayer(damagesource))
@@ -386,12 +386,12 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         return theTank.fill(resource, doFill);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if (resource == null || !resource.isFluidEqual(theTank.getFluid())) {
             return null;
         }
@@ -399,22 +399,22 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return theTank.drain(maxDrain, doDrain);
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return true;
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return true;
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+    public FluidTankInfo[] getTankInfo(EnumFacing from) {
         return new FluidTankInfo[]{theTank.getInfo()};
     }
 }

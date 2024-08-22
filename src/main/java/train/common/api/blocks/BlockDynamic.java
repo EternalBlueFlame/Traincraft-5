@@ -1,7 +1,7 @@
 package train.common.api.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import train.common.Traincraft;
 import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.ModelBase;
@@ -19,7 +19,7 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.containers.ContainerTier;
 
 import java.util.List;
@@ -141,10 +141,10 @@ public class BlockDynamic extends BlockContainer {
         world.setTileEntity(x,y,z,createNewTileEntity(world,0));
         if(world.getTileEntity(x,y,z) instanceof TileRenderFacing){
             switch ((CommonUtil.floorDouble(((entity.rotationYaw-45)%360) / 90.0F)&3)){
-                case 0: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.SOUTH);break;
-                case 1: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.EAST);break;
-                case 2: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.NORTH);break;
-                case 3: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.WEST);break;
+                case 0: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(EnumFacing.SOUTH);break;
+                case 1: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(EnumFacing.EAST);break;
+                case 2: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(EnumFacing.NORTH);break;
+                case 3: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(EnumFacing.WEST);break;
 
             }
 
@@ -153,15 +153,15 @@ public class BlockDynamic extends BlockContainer {
 
 
     @Override
-    public boolean onBlockActivated(World worldOBJ, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
+    public boolean onBlockActivated(World getWorld(), int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
         if (player.isSneaking() || slots==0) {
             return false;
-        } else if (worldOBJ.isRemote) {
+        } else if (getWorld().isRemote) {
             return true;
         }
 
-        if (worldOBJ.getTileEntity(x, y, z) instanceof TileTraincraft) {
-            player.openGui(Traincraft.instance, 0, worldOBJ, x, y, z);
+        if (getWorld().getTileEntity(x, y, z) instanceof TileTraincraft) {
+            player.openGui(Traincraft.instance, 0, getWorld(), x, y, z);
             return true;
         } else {
             return false;

@@ -26,7 +26,7 @@ public class EntityPassengerM8CTail extends EntityRollingStock implements IPasse
     }
 
     @Override
-    public void updateRiderPosition() {
+    public void updatePassenger(Entity passenger) {
         if (riddenByEntity == null) {return;}
         double pitchRads = this.anglePitchClient * Math.PI / 180.0D;
         double distance = 1.5f;
@@ -39,8 +39,8 @@ public class EntityPassengerM8CTail extends EntityRollingStock implements IPasse
             anglePitchClient = serverRealPitch*60;
         }
         float pitch = (float) (posY + ((Math.tan(pitchRads) * distance) + getMountedYOffset())
-                + riddenByEntity.getYOffset() + yOffset);
-        float pitch1 = (float) (posY + getMountedYOffset() + riddenByEntity.getYOffset() + yOffset);
+                + passenger.getYOffset() + yOffset);
+        float pitch1 = (float) (posY + getMountedYOffset() + passenger.getYOffset() + yOffset);
         double bogieX1 = (this.posX + (rotationCos1 * distance));
         double bogieZ1 = (this.posZ + (rotationSin1* distance));
         //System.out.println(rotationCos1+" "+rotationSin1);
@@ -73,13 +73,13 @@ public class EntityPassengerM8CTail extends EntityRollingStock implements IPasse
         if ((super.interactFirst(entityplayer))) {
             return false;
         }
-        if (!worldObj.isRemote) {
+        if (!getWorld().isRemote) {
             ItemStack itemstack = entityplayer.inventory.getCurrentItem();
             if(lockThisCart(itemstack, entityplayer))return true;
             if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
                 return true;
             }
-            if (!worldObj.isRemote) {
+            if (!getWorld().isRemote) {
                 entityplayer.mountEntity(this);
             }
         }

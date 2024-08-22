@@ -32,7 +32,7 @@ public class ModelLights extends ModelBase {
 		GL11.glRotatef(90f, 0, 1, 0);
 		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "lights3.png"));
 		render("Branch_1");
-		Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+		Minecraft.getMinecraft().entityRenderer.disableLightmap();
 		GL11.glEnable(GL11.GL_BLEND);
 		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "lights.png"));
 		render("Bulb_1");
@@ -40,7 +40,7 @@ public class ModelLights extends ModelBase {
 		render("Plane_1");
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+		Minecraft.getMinecraft().entityRenderer.enableLightmap();
 		GL11.glPopMatrix();
 	}
 }

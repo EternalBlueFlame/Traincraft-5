@@ -66,7 +66,7 @@ public class RendersignalSpanish extends TileEntitySpecialRenderer {
 
 
         if (!skipRender) {
-            // tileEntity.getWorldObj().getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0
+            // tileEntity.getgetWorld()().getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getgetWorld()(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0
             if (state) {
                 modelspanishSignal.render(null, 0, 0, 0, 0, 0, 0.0625f);
             } else {

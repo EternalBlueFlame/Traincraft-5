@@ -554,11 +554,11 @@ public class ModelLocoBR01_DB extends ModelBase {
 		box98.render(f5);
 		box99.render(f5);
 		
-		Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+		Minecraft.getMinecraft().entityRenderer.disableLightmap();
 		box94.render(f5);
 		box95.render(f5);
 		box22.render(f5);
-		Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+		Minecraft.getMinecraft().entityRenderer.enableLightmap();
 		
 		if (ClientProxy.isHoliday()) {
 			GL11.glPushMatrix();

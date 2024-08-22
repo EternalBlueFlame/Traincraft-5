@@ -1,7 +1,7 @@
 package train.common.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -68,7 +68,7 @@ public class TileTCRail extends TileEntity {
 	private int isLeftFlag = -5;
 
 	public TileTCRail() {
-		if(this.worldObj != null)
+		if(this.getWorld() != null)
 			facingMeta = this.getBlockMetadata();
 	}
 
@@ -92,7 +92,7 @@ public class TileTCRail extends TileEntity {
 	}
 
 	public void setType(String type) {
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.type = type;
 	}
 
@@ -103,7 +103,7 @@ public class TileTCRail extends TileEntity {
 
 
 	public void setRailLength(Double railLength){
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.railLength = railLength;
 	}
 
@@ -116,7 +116,7 @@ public class TileTCRail extends TileEntity {
 
 
 	public void setBallastMaterial(int  ballast) {
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.ballastMaterial = ballast;
 	}
 
@@ -194,7 +194,7 @@ public class TileTCRail extends TileEntity {
 
 	@Override
 	public void updateEntity() {
-		if (worldObj.isRemote || !canTypeBeModifiedBySwitch) {
+		if (getWorld().isRemote || !canTypeBeModifiedBySwitch) {
 
 			return;
 		}
@@ -202,24 +202,24 @@ public class TileTCRail extends TileEntity {
 		updateTicks2++;
 
 		/*if (updateTicks2 % 20 == 0 && !isLinkedToRail && getType() != null && getType().equals(EnumTracks.SMALL_STRAIGHT.getLabel()) && !hasRotated) {
-			TileEntity tileNorth = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord - 1);
-			TileEntity tileSouth = worldObj.getBlockTileEntity(xCoord, yCoord, zCoord + 1);
-			TileEntity tileEast = worldObj.getBlockTileEntity(xCoord + 1, yCoord, zCoord);
-			TileEntity tileWest = worldObj.getBlockTileEntity(xCoord - 1, yCoord, zCoord);
+			TileEntity tileNorth = getWorld().getBlockTileEntity(xCoord, yCoord, zCoord - 1);
+			TileEntity tileSouth = getWorld().getBlockTileEntity(xCoord, yCoord, zCoord + 1);
+			TileEntity tileEast = getWorld().getBlockTileEntity(xCoord + 1, yCoord, zCoord);
+			TileEntity tileWest = getWorld().getBlockTileEntity(xCoord - 1, yCoord, zCoord);
 			if (tileNorth != null && (tileNorth instanceof TileTCRail)) {//&& (tileNorth.getBlockMetadata() == 2 || tileNorth.getBlockMetadata() == 0)) {
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 2, 2);
+				getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 2, 2);
 				hasRotated = true;
 			}
 			if (tileSouth != null && (tileSouth instanceof TileTCRail)) {//&& (tileSouth.getBlockMetadata() == 0 || tileSouth.getBlockMetadata() == 2)) {
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
+				getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
 				hasRotated = true;
 			}
 			if (tileEast != null && (tileEast instanceof TileTCRail)) {// && ( tileEast.getBlockMetadata() == 3 || tileEast.getBlockMetadata() == 1)) {
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 3, 2);
+				getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 3, 2);
 				hasRotated = true;
 			}
 			if (tileWest != null && (tileWest instanceof TileTCRail)) {//&& ( tileWest.getBlockMetadata() == 1 || tileWest.getBlockMetadata() == 3)) {
-				worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
+				getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
 				hasRotated = true;
 			}
 		}*/
@@ -228,33 +228,33 @@ public class TileTCRail extends TileEntity {
 			updateTicks2 =0;
 			TileEntity tile1 = null;
 
-			switch (worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) {
+			switch (getWorld().getBlockMetadata(xCoord, yCoord, zCoord)) {
 
 				case 0: {
-					tile1 = worldObj.getTileEntity(xCoord, yCoord, zCoord - 1);
+					tile1 = getWorld().getTileEntity(xCoord, yCoord, zCoord - 1);
 					break;
 				}
 				case 1: {
-					tile1 = worldObj.getTileEntity(xCoord + 1, yCoord, zCoord);
+					tile1 = getWorld().getTileEntity(xCoord + 1, yCoord, zCoord);
 					break;
 				}
 				case 2: {
-					tile1 = worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
+					tile1 = getWorld().getTileEntity(xCoord, yCoord, zCoord + 1);
 					break;
 				}
 				case 3: {
-					tile1 = worldObj.getTileEntity(xCoord - 1, yCoord, zCoord);
+					tile1 = getWorld().getTileEntity(xCoord - 1, yCoord, zCoord);
 					break;
 				}
 			}
 			if (tile1 instanceof TileTCRail && TCRailTypes.isSwitchTrack((TileTCRail) tile1)) {
 
 				TileTCRail tileSwitch = (TileTCRail) tile1;
-				boolean flag1 = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+				boolean flag1 = getWorld().isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 
-				if (tileSwitch.previousRedstoneState != flag1 && ! worldObj.isBlockIndirectlyGettingPowered(tileSwitch.xCoord, tileSwitch.yCoord, tileSwitch.zCoord)) {
+				if (tileSwitch.previousRedstoneState != flag1 && ! getWorld().isBlockIndirectlyGettingPowered(tileSwitch.xCoord, tileSwitch.yCoord, tileSwitch.zCoord)) {
 
-					tileSwitch.changeSwitchState(worldObj, tileSwitch, tile1.xCoord, tile1.yCoord, tile1.zCoord);
+					tileSwitch.changeSwitchState(getWorld(), tileSwitch, tile1.xCoord, tile1.yCoord, tile1.zCoord);
 					tileSwitch.previousRedstoneState = flag1;
 				}
 			}
@@ -262,14 +262,14 @@ public class TileTCRail extends TileEntity {
 			 * if (tile2 != null && tile2 instanceof TileTCRail &&
 			 * ItemTCRail.isTCSwitch((TileTCRail) tile2)) { TileTCRail
 			 * tileSwitch = (TileTCRail) tile2; boolean flag1 =
-			 * worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord,
+			 * getWorld().isBlockIndirectlyGettingPowered(xCoord, yCoord,
 			 * zCoord); boolean flag2 =
-			 * worldObj.isBlockIndirectlyGettingPowered(tileSwitch.xCoord,
+			 * getWorld().isBlockIndirectlyGettingPowered(tileSwitch.xCoord,
 			 * tileSwitch.yCoord, tileSwitch.zCoord);
 			 * //System.out.println(flag2+" flag2"); //boolean switchState2
 			 * = tileSwitch.getSwitchState(); if
 			 * (tileSwitch.previousRedstoneState != flag1 && !flag2) {
-			 * tileSwitch.changeSwitchState(worldObj, tile2, tile2.xCoord,
+			 * tileSwitch.changeSwitchState(getWorld(), tile2, tile2.xCoord,
 			 * tile2.yCoord, tile2.zCoord); tileSwitch.previousRedstoneState
 			 * = flag1; } }
 			 */
@@ -280,16 +280,16 @@ public class TileTCRail extends TileEntity {
 			updateTicks++;
 
 			if (updateTicks > 60) {
-				List list = worldObj.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(xCoord + f,
+				List list = getWorld().getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(xCoord + f,
 						yCoord, zCoord + f, xCoord + 1 - f, yCoord + 1 - f, zCoord + 1 - f));
 
 				if (list.isEmpty()) {
 
 					manualOverride = false;
 					//setSwitchState(false,false);
-					// worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, facingMeta, 2);
+					// getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, facingMeta, 2);
 					// System.out.println("X: " + xCoord + " Y: " + yCoord + " Z: " + zCoord);
-					changeSwitchState(worldObj, this, xCoord, yCoord, zCoord);
+					changeSwitchState(getWorld(), this, xCoord, yCoord, zCoord);
 					setSwitchState(previousRedstoneState, false);
 					updateTicks = 0;
 				} else {
@@ -319,33 +319,33 @@ public class TileTCRail extends TileEntity {
 					// Bounding box generated from -x -z to x z
 					case 0: {
 						if (isLeftFlag == 1) {
-							list = worldObj.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord - 1.0D, this.yCoord, this.zCoord + 1.0D, this.xCoord - f, this.yCoord + 1.0D - f, this.zCoord + Math.min(5.0D,this.getTrack().getSwitchSize()) - f));
+							list = getWorld().getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord - 1.0D, this.yCoord, this.zCoord + 1.0D, this.xCoord - f, this.yCoord + 1.0D - f, this.zCoord + Math.min(5.0D,this.getTrack().getSwitchSize()) - f));
 						} else {
-							list = worldObj.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord + 1.0D, this.yCoord, this.zCoord + 1.0D, this.xCoord + 2.0D - f, this.yCoord + 1.0D - f, this.zCoord + Math.min(5.0D,this.getTrack().getSwitchSize()) - f));
+							list = getWorld().getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord + 1.0D, this.yCoord, this.zCoord + 1.0D, this.xCoord + 2.0D - f, this.yCoord + 1.0D - f, this.zCoord + Math.min(5.0D,this.getTrack().getSwitchSize()) - f));
 						}
 						break;
 					}
 					case 1: {
 						if (isLeftFlag == 1) {
-							list = worldObj.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord - Math.min(4.0D,this.getTrack().getSwitchSize()), this.yCoord, this.zCoord - 1.0D, this.xCoord - f, this.yCoord + 1.0D - f, this.zCoord - f));
+							list = getWorld().getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord - Math.min(4.0D,this.getTrack().getSwitchSize()), this.yCoord, this.zCoord - 1.0D, this.xCoord - f, this.yCoord + 1.0D - f, this.zCoord - f));
 						} else {
-							list = worldObj.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord - Math.min(4.0D,this.getTrack().getSwitchSize()), this.yCoord, this.zCoord + 1.0D, this.xCoord - f, this.yCoord + 1.0D - f, this.zCoord + 2.0D - f));
+							list = getWorld().getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord - Math.min(4.0D,this.getTrack().getSwitchSize()), this.yCoord, this.zCoord + 1.0D, this.xCoord - f, this.yCoord + 1.0D - f, this.zCoord + 2.0D - f));
 						}
 						break;
 					}
 					case 2: {
 						if (isLeftFlag == 1) {
-							list = worldObj.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord + 1.0D, this.yCoord, this.zCoord - Math.min(4.0D,this.getTrack().getSwitchSize()), this.xCoord + 2.0D - f, this.yCoord + 1.0D - f, this.zCoord - f));
+							list = getWorld().getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord + 1.0D, this.yCoord, this.zCoord - Math.min(4.0D,this.getTrack().getSwitchSize()), this.xCoord + 2.0D - f, this.yCoord + 1.0D - f, this.zCoord - f));
 						} else {
-							list = worldObj.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord - 1.0D, this.yCoord, this.zCoord - Math.min(4.0D,this.getTrack().getSwitchSize()), this.xCoord - f, this.yCoord + 1.0D - f, this.zCoord - f));
+							list = getWorld().getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord - 1.0D, this.yCoord, this.zCoord - Math.min(4.0D,this.getTrack().getSwitchSize()), this.xCoord - f, this.yCoord + 1.0D - f, this.zCoord - f));
 						}
 						break;
 					}
 					case 3: {
 						if (isLeftFlag == 1) {
-							list = worldObj.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord + 1.0D, this.yCoord, this.zCoord + 1.0D, this.xCoord + Math.min(5.0D,this.getTrack().getSwitchSize()) - f, this.yCoord + 1.0D - f, this.zCoord + 2.0D - f));
+							list = getWorld().getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord + 1.0D, this.yCoord, this.zCoord + 1.0D, this.xCoord + Math.min(5.0D,this.getTrack().getSwitchSize()) - f, this.yCoord + 1.0D - f, this.zCoord + 2.0D - f));
 						} else {
-							list = worldObj.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord + 1.0D, this.yCoord, this.zCoord - 1.0D, this.xCoord + Math.min(5.0D,this.getTrack().getSwitchSize()) - f, this.yCoord + 1.0 - f, this.zCoord - f));
+							list = getWorld().getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(this.xCoord + 1.0D, this.yCoord, this.zCoord - 1.0D, this.xCoord + Math.min(5.0D,this.getTrack().getSwitchSize()) - f, this.yCoord + 1.0 - f, this.zCoord - f));
 						}
 						break;
 					}
@@ -356,7 +356,7 @@ public class TileTCRail extends TileEntity {
 				}
 				if (!list.isEmpty()) {
 
-					changeSwitchState(worldObj, this, xCoord, yCoord, zCoord);
+					changeSwitchState(getWorld(), this, xCoord, yCoord, zCoord);
 					setSwitchState(true, true);
 				}
 			}
@@ -366,7 +366,7 @@ public class TileTCRail extends TileEntity {
 
 
 	public void setSwitchState(boolean state, boolean manualOverride) {
-		previousRedstoneState = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+		previousRedstoneState = getWorld().isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 		this.switchActive = state;
 		this.manualOverride = manualOverride;
 
@@ -375,7 +375,7 @@ public class TileTCRail extends TileEntity {
 		}
 
 		this.markDirty();
-		this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+		this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 	}
 
 	@Override

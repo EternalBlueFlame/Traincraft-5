@@ -70,7 +70,7 @@ public class TileLantern extends TileEntity {
 	}
 	
 	public void syncTileEntity() {
-		for (Object o : this.worldObj.playerEntities) {
+		for (Object o : this.getWorld().playerEntities) {
 			if (o instanceof EntityPlayerMP) {
 				EntityPlayerMP player = (EntityPlayerMP) o;
 				if (player.getDistance(xCoord, yCoord, zCoord) <= 64) {

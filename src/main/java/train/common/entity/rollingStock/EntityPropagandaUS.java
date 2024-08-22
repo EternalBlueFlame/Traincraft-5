@@ -28,7 +28,7 @@ public class EntityPropagandaUS extends EntityRollingStock {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i) {
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return true;
 		}
 		if(canBeDestroyedByPlayer(damagesource))return true;
@@ -65,7 +65,7 @@ public class EntityPropagandaUS extends EntityRollingStock {
 			return false;
 		}
 		if (locked && !entityplayer.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
-			if (!worldObj.isRemote)
+			if (!getWorld().isRemote)
 				entityplayer.addChatMessage(new ChatComponentText("this train is locked"));
 			return true;
 		}

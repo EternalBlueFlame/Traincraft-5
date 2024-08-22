@@ -45,7 +45,7 @@ public class EntityLocoDieselBapGP49 extends DieselTrain {
     }
 
     @Override
-    public void updateRiderPosition() {
+    public void updatePassenger(Entity passenger) {
         if (riddenByEntity == null) {return;}
         double pitchRads = this.anglePitchClient * Math.PI / 180.0D;
         double distance = 2.95;
@@ -58,8 +58,8 @@ public class EntityLocoDieselBapGP49 extends DieselTrain {
             anglePitchClient = serverRealPitch*60;
         }
         float pitch = (float) (posY + ((Math.tan(pitchRads) * distance) + getMountedYOffset())
-                + riddenByEntity.getYOffset() + yOffset);
-        float pitch1 = (float) (posY + getMountedYOffset() + riddenByEntity.getYOffset() + yOffset);
+                + passenger.getYOffset() + yOffset);
+        float pitch1 = (float) (posY + getMountedYOffset() + passenger.getYOffset() + yOffset);
         double bogieX1 = (this.posX + (rotationCos1 * distance));
         double bogieZ1 = (this.posZ + (rotationSin1* distance));
         if(anglePitchClient>20 && rotationCos1 == 1){
@@ -86,7 +86,7 @@ public class EntityLocoDieselBapGP49 extends DieselTrain {
     @Override
     public void pressKey(int i) {
         if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-            ((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+            ((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
         }
     }
 
@@ -99,12 +99,12 @@ public class EntityLocoDieselBapGP49 extends DieselTrain {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (worldObj.isRemote || bogieLoco==null) {
+        if (getWorld().isRemote || bogieLoco==null) {
             return;
         }
         checkInvent(locoInvent[0]);//, locoInvent[1], this
         if (fakePlayer == null){
-            fakePlayer = new FakePlayer(worldObj);
+            fakePlayer = new FakePlayer(getWorld());
         }
         rotation = MathHelper.floor_float(TraincraftUtil.atan2degreesf(
                 bogieLoco.posZ - posZ,
@@ -112,37 +112,37 @@ public class EntityLocoDieselBapGP49 extends DieselTrain {
 
         point1 = rotateVec3(blockpos[0], getPitch(), rotation);
         point1[0] += posX;point1[1] += posY;point1[2] += posZ;
-        mineSnow(worldObj, point1, locoInvent, fakePlayer);
+        mineSnow(getWorld(), point1, locoInvent, fakePlayer);
         point1[1]++;
-        mineSnow(worldObj, point1, locoInvent, fakePlayer);
+        mineSnow(getWorld(), point1, locoInvent, fakePlayer);
         point1[1]++;
-        mineSnow(worldObj, point1, locoInvent, fakePlayer);
+        mineSnow(getWorld(), point1, locoInvent, fakePlayer);
 
 
         point1 = rotateVec3(blockpos[1], getPitch(), rotation);
         point1[0] += posX;point1[1] += posY;point1[2] += posZ;
-        mineSnow(worldObj, point1, locoInvent, fakePlayer);
+        mineSnow(getWorld(), point1, locoInvent, fakePlayer);
         point1[1]++;
-        mineSnow(worldObj, point1, locoInvent, fakePlayer);
+        mineSnow(getWorld(), point1, locoInvent, fakePlayer);
         point1[1]++;
-        mineSnow(worldObj, point1, locoInvent, fakePlayer);
+        mineSnow(getWorld(), point1, locoInvent, fakePlayer);
 
 
         point1 = rotateVec3(blockpos[2], getPitch(), rotation);
         point1[0] += posX;point1[1] += posY+1;point1[2] += posZ;
-        mineSnow(worldObj, point1, locoInvent, fakePlayer);
+        mineSnow(getWorld(), point1, locoInvent, fakePlayer);
         point1[1]++;
-        mineSnow(worldObj, point1, locoInvent, fakePlayer);
+        mineSnow(getWorld(), point1, locoInvent, fakePlayer);
 
     }
 
-    private static void mineSnow(World worldObj, double[] point, ItemStack[] locoInvent, FakePlayer fakePlayer){
-        Block b = worldObj.getBlock(MathHelper.floor_double(point[0]),MathHelper.floor_double(point[1]),MathHelper.floor_double(point[2]));
-        int blockMeta = worldObj.getBlockMetadata(MathHelper.floor_double(point[0]), MathHelper.floor_double(point[1]),
+    private static void mineSnow(World getWorld(), double[] point, ItemStack[] locoInvent, FakePlayer fakePlayer){
+        Block b = getWorld().getBlock(MathHelper.floor_double(point[0]),MathHelper.floor_double(point[1]),MathHelper.floor_double(point[2]));
+        int blockMeta = getWorld().getBlockMetadata(MathHelper.floor_double(point[0]), MathHelper.floor_double(point[1]),
                 MathHelper.floor_double(point[2]));
 
         if((b == Blocks.snow || b == Blocks.snow_layer) && b.canHarvestBlock(fakePlayer, blockMeta)){
-            worldObj.setBlockToAir(MathHelper.floor_double(point[0]),MathHelper.floor_double(point[1]),MathHelper.floor_double(point[2]));
+            getWorld().setBlockToAir(MathHelper.floor_double(point[0]),MathHelper.floor_double(point[1]),MathHelper.floor_double(point[2]));
             int snowballs = new Random().nextInt(9);
             for(int i=2; i<locoInvent.length && snowballs>0; i++){
                 if (locoInvent[i] == null){
@@ -159,9 +159,9 @@ public class EntityLocoDieselBapGP49 extends DieselTrain {
                 }
             }
             if (snowballs >0){
-                EntityItem entityitem = new EntityItem(worldObj, point[0], point[1] + 1, point[2], new ItemStack(Items.snowball, snowballs));
+                EntityItem entityitem = new EntityItem(getWorld(), point[0], point[1] + 1, point[2], new ItemStack(Items.snowball, snowballs));
                 entityitem.delayBeforeCanPickup = 10;
-                worldObj.spawnEntityInWorld(entityitem);
+                getWorld().spawnEntityInWorld(entityitem);
 
             }
         }
@@ -231,7 +231,7 @@ public class EntityLocoDieselBapGP49 extends DieselTrain {
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "EMD GP49";
     }
 
@@ -246,7 +246,7 @@ public class EntityLocoDieselBapGP49 extends DieselTrain {
         if ((super.interactFirst(entityplayer))) {
             return false;
         }
-        if (!worldObj.isRemote) {
+        if (!getWorld().isRemote) {
             if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
                 return true;
             }

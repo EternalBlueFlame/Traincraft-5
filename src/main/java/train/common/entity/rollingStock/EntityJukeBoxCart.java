@@ -1,8 +1,8 @@
 package train.common.entity.rollingStock;
 
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,7 +45,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i) {
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return true;
 		}
 		if(canBeDestroyedByPlayer(damagesource))return true;
@@ -77,7 +77,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!worldObj.isRemote && this.ticksExisted % 10 == 0) {
+		if (!getWorld().isRemote && this.ticksExisted % 10 == 0) {
 			this.dataWatcher.updateObject(22, streamURL);
 			if (isPlaying) {
 				this.dataWatcher.updateObject(23, 1);
@@ -117,7 +117,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 				}
 				if (this.isPlaying && rand.nextInt(5) == 0 && (this.player != null && this.player.isPlaying())) {
 					int random2 = rand.nextInt(24) + 1;
-					worldObj.spawnParticle("note", posX, posY + 1.2D, posZ, random2 / 24.0D, 0.0D, 0.0D);
+					getWorld().spawnParticle("note", posX, posY + 1.2D, posZ, random2 / 24.0D, 0.0D, 0.0D);
 				}
 			}
 			
@@ -147,7 +147,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 		if (!this.isPlaying) {
 			this.isPlaying = true;
 			if (side == Side.CLIENT) {
-				this.player = new MP3Player(this.streamURL, this.worldObj, this.getEntityId());
+				this.player = new MP3Player(this.streamURL, this.getWorld(), this.getEntityId());
 				player.setVolume(0);
 				Traincraft.proxy.playerList.add(this.player);
 			}
@@ -180,12 +180,12 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 			return false;
 		}
 		if (locked && !entityplayer.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
-			if (!worldObj.isRemote)
+			if (!getWorld().isRemote)
 				entityplayer.addChatMessage(new ChatComponentText("this train is locked"));
 			return true;
 		}
 		
-		entityplayer.openGui(Traincraft.instance, GuiIDs.JUKEBOX, worldObj, this.getEntityId(), -1, (int) this.posZ);
+		entityplayer.openGui(Traincraft.instance, GuiIDs.JUKEBOX, getWorld(), this.getEntityId(), -1, (int) this.posZ);
 		return true;
 	}
 

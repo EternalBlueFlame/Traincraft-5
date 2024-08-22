@@ -12,7 +12,7 @@ import train.common.Traincraft;
 import train.common.api.Freight;
 import train.common.library.GuiIDs;
 
-public class EntityFlatCartWoodUS extends Freight implements IInventory{
+public class EntityFlatCartWoodUS extends Freight{
 	public int freightInventorySize;
 	public int numFreightSlots;
 	private EntityPlayer playerEntity;
@@ -39,9 +39,9 @@ public class EntityFlatCartWoodUS extends Freight implements IInventory{
 	}
 
 	@Override
-	public void updateRiderPosition() {
+	public void updatePassenger(Entity passenger) {
 		if(riddenByEntity!=null) {
-			riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.4, posZ);
+			riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.4, posZ);
 		}
 	}
 	@Override
@@ -50,7 +50,7 @@ public class EntityFlatCartWoodUS extends Freight implements IInventory{
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, worldObj, this.getEntityId(), -1, (int) this.posZ);
+		entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, getWorld(), this.getEntityId(), -1, (int) this.posZ);
 		return true;
 	}
 
@@ -59,7 +59,7 @@ public class EntityFlatCartWoodUS extends Freight implements IInventory{
 		return false;
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Wood transport";
 	}
 

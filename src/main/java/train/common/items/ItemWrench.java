@@ -1,13 +1,13 @@
 package train.common.items;
 
 import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
@@ -25,7 +25,7 @@ public class ItemWrench extends ItemPart implements buildcraft.api.tools.IToolWr
 	@Override
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		Block blockId = world.getBlock(x, y, z);
-		if (blockId.rotateBlock(world, x, y, z, ForgeDirection.getOrientation(side))) {
+		if (blockId.rotateBlock(world, x, y, z, EnumFacing.getOrientation(side))) {
 			player.swingItem();
 			return !world.isRemote;
 		}

@@ -35,14 +35,14 @@ public class EntityLocoSteamBR80_DB extends SteamTrain {
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
 		double distance = -0.1;
 		double pitchRads = this.anglePitchClient * 3.141592653589793D / 180.0D;
 		float rotationCos1 = (float) Math.cos(Math.toRadians(this.renderYaw + 90));
 		float rotationSin1 = (float) Math.sin(Math.toRadians((this.renderYaw + 90)));
 		float pitch = (float) (posY + ((Math.tan(pitchRads) * distance) + getMountedYOffset())
-				+ riddenByEntity.getYOffset() + 0.35);
+				+ passenger.getYOffset() + 0.35);
 		double bogieX1 = (this.posX + (rotationCos1 * distance));
 		double bogieZ1 = (this.posZ + (rotationSin1* distance));
 		
@@ -56,7 +56,7 @@ public class EntityLocoSteamBR80_DB extends SteamTrain {
 		}
 		riddenByEntity.setPosition(bogieX1, pitch, bogieZ1);
 		
-		//riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.45, posZ);
+		//riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.45, posZ);
 	}
 
 	@Override
@@ -68,7 +68,7 @@ public class EntityLocoSteamBR80_DB extends SteamTrain {
 	@Override
 	public void pressKey(int i) {
 		if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
@@ -117,7 +117,7 @@ public class EntityLocoSteamBR80_DB extends SteamTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "BR80";
 	}
 
@@ -127,7 +127,7 @@ public class EntityLocoSteamBR80_DB extends SteamTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

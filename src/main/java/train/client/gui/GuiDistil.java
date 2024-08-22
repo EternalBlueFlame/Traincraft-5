@@ -33,8 +33,8 @@ public class GuiDistil extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
-        fontRendererObj.drawString("Distillation tower", 8, 6, 0x404040);
-        fontRendererObj.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
+        fontRenderer.drawString("Distillation tower", 8, 6, 0x404040);
+        fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
         if (distilInventory.slots[0] != null) {
 			// Stops showing 100% on copper
             if (Block.getBlockFromItem(distilInventory.slots[0].getItem()) == BlockIDs.oreTC.block
@@ -45,7 +45,7 @@ public class GuiDistil extends GuiContainer {
             double plasticChance = DistilRecipes.smelting().getPlasticChance(distilInventory.slots[0].getItem());
             if (plasticChance != 0) {//stops showing 100% for blocks that aren't part of a recipe
                 double chanceShown = ((1 / plasticChance) * 100);
-                fontRendererObj.drawString((int) chanceShown + "%", 79, 70, 0x404040);
+                fontRenderer.drawString((int) chanceShown + "%", 79, 70, 0x404040);
             }
         }
     }
@@ -69,7 +69,7 @@ public class GuiDistil extends GuiContainer {
 
     @Override
     protected void drawCreativeTabHoveringText(String str, int t, int g) {
-        int textWidth = fontRendererObj.getStringWidth(distilInventory.amount + "/" + distilInventory.getTankCapacity());
+        int textWidth = fontRenderer.getStringWidth(distilInventory.amount + "/" + distilInventory.getTankCapacity());
         int startX = t + 14;
         int startY = g - 12;
 
@@ -80,8 +80,8 @@ public class GuiDistil extends GuiContainer {
         int colour2 = (colour1 & 0xfefefe) >> 1 | colour1 & 0xff000000;
         drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 8 + 3 + 10, colour1, colour2);
         drawGradientRect(startX - 2, startY - 2, startX + textWidth + 2, startY + 8 + 2 + 10, i4, i4);
-        fontRendererObj.drawStringWithShadow(str, startX, startY, -1);
-        fontRendererObj.drawStringWithShadow(distilInventory.amount + "/" + distilInventory.getTankCapacity(), startX, startY + 10, -1);
+        fontRenderer.drawStringWithShadow(str, startX, startY, -1);
+        fontRenderer.drawStringWithShadow(distilInventory.amount + "/" + distilInventory.getTankCapacity(), startX, startY + 10, -1);
     }
 
     @Override

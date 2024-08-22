@@ -1,7 +1,7 @@
 package train.common.entity.zeppelin;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -192,17 +192,17 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			idle = true;
 		}
 
-		if (i == 7 && !worldObj.isRemote) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.ZEPPELIN, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+		if (i == 7 && !getWorld().isRemote) {
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.ZEPPELIN, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 		if (i == 9) {
 			if (this.riddenByEntity != null && (this.riddenByEntity instanceof EntityLivingBase)&&bombTimer<=0) {
 				if(this.zeppInvent!=null && this.zeppInvent.length>0){
 					for(int t=0;t<this.zeppInvent.length;t++){
 						if(this.zeppInvent[t]!=null && this.zeppInvent[t].getItem()!=null && this.zeppInvent[t].getItem() == Item.getItemFromBlock(Blocks.tnt)){
-							EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.worldObj, (double) ((float) posX), (double) ((float) posY -1F), (double) ((float) posZ), (EntityLivingBase) this.riddenByEntity);
-							this.worldObj.spawnEntityInWorld(entitytntprimed);
-							this.worldObj.playSoundAtEntity(entitytntprimed, "random.fuse", 1.0F, 1.0F);
+							EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.getWorld(), (double) ((float) posX), (double) ((float) posY -1F), (double) ((float) posZ), (EntityLivingBase) this.riddenByEntity);
+							this.getWorld().spawnEntityInWorld(entitytntprimed);
+							this.getWorld().playSoundAtEntity(entitytntprimed, "random.fuse", 1.0F, 1.0F);
 							bombTimer=100;
 							if(--this.zeppInvent[t].stackSize==0)this.zeppInvent[t]=null;
 							return;
@@ -340,7 +340,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			double d4 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j)) / i) - 0.125D;
 			double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j + 1)) / i) - 0.125D;
 			AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
-			if (worldObj.isAABBInMaterial(axisalignedbb, Material.water)) {
+			if (getWorld().isAABBInMaterial(axisalignedbb, Material.water)) {
 				d += 1.0D / i;
 			}
 		}
@@ -354,12 +354,12 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			if (rand.nextBoolean()) {
 				double d21 = (posX - d13 * d18 * 0.80000000000000004D) + d15 * d20;
 				double d23 = posZ - d15 * d18 * 0.80000000000000004D - d13 * d20;
-				worldObj.spawnParticle("largesmoke", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
+				getWorld().spawnParticle("largesmoke", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
 			}
 			else {
 				double d22 = posX + d13 + d15 * d18 * 0.69999999999999996D;
 				double d24 = (posZ + d15) - d13 * d18 * 0.69999999999999996D;
-				worldObj.spawnParticle("largesmoke", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
+				getWorld().spawnParticle("largesmoke", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
 			}
 		}
 		float burn = FuelHandler.steamFuelLast(zeppInvent[0])*0.05f;
@@ -377,7 +377,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		double var12;
 		double var26;
 
-		if (this.worldObj.isRemote && this.field_70279_a) {
+		if (this.getWorld().isRemote && this.field_70279_a) {
 			if (this.boatPosRotationIncrements > 0) {
 				var6 = this.posX + (this.boatX - this.posX) / this.boatPosRotationIncrements;
 				var8 = this.posY + (this.boatY - this.posY) / this.boatPosRotationIncrements;
@@ -466,7 +466,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			motionZ *= 0.99000000953674316D;
 		}
 
-		List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+		List list = getWorld().getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
 		if (list != null && list.size() > 0) {
 			for (int j1 = 0; j1 < list.size(); j1++) {
 				Entity entity = (Entity) list.get(j1);
@@ -499,17 +499,17 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		this.rotationYaw = (float) (this.rotationYaw + d12);
 		this.setRotation(this.rotationYaw, this.rotationPitch);
 		if (updateTicks % 10 == 0) {
-//			Traincraft.rotationChannel.sendToAllAround(new PacketZeppelinRotation(this, rotationYaw, roll), new NetworkRegistry.TargetPoint(worldObj.provider.dimensionId, posX, posY, posZ, 400D));
+//			Traincraft.rotationChannel.sendToAllAround(new PacketZeppelinRotation(this, rotationYaw, roll), new NetworkRegistry.TargetPoint(getWorld().provider.dimensionId, posX, posY, posZ, 400D));
 			updateTicks=0;
 		}
 	}
 
 	@Override
-	public void updateRiderPosition() {
+	public void updatePassenger(Entity passenger) {
 		if (riddenByEntity != null) {
 			double d = Math.cos((rotationYaw * 3.1415926535897931D) / 180D) * 0.60000000000000002D;
 			double d1 = Math.sin((rotationYaw * 3.1415926535897931D) / 180D) * 0.60000000000000002D;
-			riddenByEntity.setPosition(posX + d, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ + d1);
+			riddenByEntity.setPosition(posX + d, posY + getMountedYOffset() + passenger.getYOffset(), posZ + d1);
 			riddenByEntity.fallDistance = 0F;//no more damages on landing
 			if (riddenByEntity instanceof EntityLiving) {
 				pitch = ((EntityPlayer) riddenByEntity).rotationPitch * -1;
@@ -570,7 +570,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	 * works exactly like getStackInSlot, is only used upon closing GUIs
 	 */
 	@Override
-	public ItemStack getStackInSlotOnClosing(int par1) {
+	public ItemStack removeStackFromSlot(int par1) {
 		if (this.zeppInvent[par1] != null) {
 			ItemStack var2 = this.zeppInvent[par1];
 			this.zeppInvent[par1] = null;
@@ -603,13 +603,13 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		zeppInvent[i] = itemstack;
-		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-			itemstack.stackSize = getInventoryStackLimit();
+		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
+			itemstack.getCount() = getInventoryStackLimit();
 		}
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Zeppelin";
 	}
 
@@ -634,17 +634,17 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	public boolean interactFirst(EntityPlayer entityplayer) {
 
 		if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) { return true; }
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			entityplayer.mountEntity(this);
 		}
 		return true;
 	}
 
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer p) {}
 
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer p) {}
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {

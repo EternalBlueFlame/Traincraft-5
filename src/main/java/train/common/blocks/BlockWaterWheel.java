@@ -1,7 +1,7 @@
 package train.common.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -11,7 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
 import train.common.library.Info;
 import train.common.tile.TileWaterWheel;
@@ -57,7 +57,7 @@ public class BlockWaterWheel extends Block {
 	@Override
 	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
 		TileEntity tile = par1World.getTileEntity(par2, par3, par4);
-		if (tile instanceof TileWaterWheel && ((TileWaterWheel) tile).getFacing() != ForgeDirection.UNKNOWN) {
+		if (tile instanceof TileWaterWheel && ((TileWaterWheel) tile).getFacing() != EnumFacing.UNKNOWN) {
 			double d0 = (double) ((float) par2 + 0.5F);
 			double d2 = (double) ((float) par4 + 0.5F);
 

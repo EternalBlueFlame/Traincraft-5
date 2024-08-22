@@ -5,7 +5,7 @@ import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -77,7 +77,7 @@ public class ServerLogger {
                     }
                 }
                 if (wagon instanceof LiquidTank) {
-                    for (FluidTankInfo tank : ((LiquidTank) wagon).getTankInfo(ForgeDirection.UNKNOWN)) {
+                    for (FluidTankInfo tank : ((LiquidTank) wagon).getTankInfo(EnumFacing.UNKNOWN)) {
                         addFluidXML(sb, tank.fluid);
                     }
                 }

@@ -20,7 +20,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.core.items.IMinecartItem;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.world.WorldServer;
@@ -64,7 +64,7 @@ public abstract class CartTools {
      * @param owner
      */
     public static void setCartOwner(EntityMinecart cart, GameProfile owner) {
-        if (!cart.worldObj.isRemote) {
+        if (!cart.getWorld().isRemote) {
             NBTTagCompound data = cart.getEntityData();
             if (owner.getName() != null)
                 data.setString("owner", owner.getName());
@@ -179,7 +179,7 @@ public abstract class CartTools {
     public static boolean isMinecartOnAnySide(World world, int i, int j, int k, float sensitivity, Class<? extends EntityMinecart> type, boolean subclass) {
         List<EntityMinecart> list = new ArrayList<EntityMinecart>();
         for (int side = 0; side < 6; side++) {
-            list.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, ForgeDirection.getOrientation(side)));
+            list.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, EnumFacing.getOrientation(side)));
         }
 
         if (type == null)
@@ -212,7 +212,7 @@ public abstract class CartTools {
     public static List<EntityMinecart> getMinecartsOnAllSides(World world, int i, int j, int k, float sensitivity) {
         List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
         for (int side = 0; side < 6; side++) {
-            carts.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, ForgeDirection.getOrientation(side)));
+            carts.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, EnumFacing.getOrientation(side)));
         }
 
         return carts;
@@ -222,7 +222,7 @@ public abstract class CartTools {
         List<EntityMinecart> list = new ArrayList<EntityMinecart>();
         List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
         for (int side = 0; side < 6; side++) {
-            list.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, ForgeDirection.getOrientation(side)));
+            list.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, EnumFacing.getOrientation(side)));
         }
 
         for (EntityMinecart cart : list) {
@@ -232,7 +232,7 @@ public abstract class CartTools {
         return carts;
     }
 
-    private static int getYOnSide(int y, ForgeDirection side) {
+    private static int getYOnSide(int y, EnumFacing side) {
         switch (side) {
             case UP:
                 return y + 1;
@@ -243,7 +243,7 @@ public abstract class CartTools {
         }
     }
 
-    private static int getXOnSide(int x, ForgeDirection side) {
+    private static int getXOnSide(int x, EnumFacing side) {
         switch (side) {
             case EAST:
                 return x + 1;
@@ -254,7 +254,7 @@ public abstract class CartTools {
         }
     }
 
-    private static int getZOnSide(int z, ForgeDirection side) {
+    private static int getZOnSide(int z, EnumFacing side) {
         switch (side) {
             case NORTH:
                 return z - 1;
@@ -265,26 +265,26 @@ public abstract class CartTools {
         }
     }
 
-    public static List<EntityMinecart> getMinecartsOnSide(World world, int i, int j, int k, float sensitivity, ForgeDirection side) {
+    public static List<EntityMinecart> getMinecartsOnSide(World world, int i, int j, int k, float sensitivity, EnumFacing side) {
         return getMinecartsAt(world, getXOnSide(i, side), getYOnSide(j, side), getZOnSide(k, side), sensitivity);
     }
 
-    public static boolean isMinecartOnSide(World world, int i, int j, int k, float sensitivity, ForgeDirection side) {
+    public static boolean isMinecartOnSide(World world, int i, int j, int k, float sensitivity, EnumFacing side) {
         return getMinecartOnSide(world, i, j, k, sensitivity, side) != null;
     }
 
-    public static EntityMinecart getMinecartOnSide(World world, int i, int j, int k, float sensitivity, ForgeDirection side) {
+    public static EntityMinecart getMinecartOnSide(World world, int i, int j, int k, float sensitivity, EnumFacing side) {
         for (EntityMinecart cart : getMinecartsOnSide(world, i, j, k, sensitivity, side)) {
             return cart;
         }
         return null;
     }
 
-    public static boolean isMinecartOnSide(World world, int i, int j, int k, float sensitivity, ForgeDirection side, Class<? extends EntityMinecart> type, boolean subclass) {
+    public static boolean isMinecartOnSide(World world, int i, int j, int k, float sensitivity, EnumFacing side, Class<? extends EntityMinecart> type, boolean subclass) {
         return getMinecartOnSide(world, i, j, k, sensitivity, side, type, subclass) != null;
     }
 
-    public static <T extends EntityMinecart> T getMinecartOnSide(World world, int i, int j, int k, float sensitivity, ForgeDirection side, Class<T> type, boolean subclass) {
+    public static <T extends EntityMinecart> T getMinecartOnSide(World world, int i, int j, int k, float sensitivity, EnumFacing side, Class<T> type, boolean subclass) {
         for (EntityMinecart cart : getMinecartsOnSide(world, i, j, k, sensitivity, side)) {
             if (type == null || (subclass && type.isInstance(cart)) || cart.getClass() == type)
                 return (T) cart;

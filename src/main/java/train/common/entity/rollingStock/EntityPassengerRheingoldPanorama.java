@@ -36,7 +36,7 @@ public class EntityPassengerRheingoldPanorama extends EntityRollingStock impleme
 				{1.0f,0.4f,0f},{-1.0f,0.4f,0f},{-3.05f,-0.25f,0f},{3.05f,-0.25f,0f}};
 	}
 	@Override
-	public void updateRiderPosition() {
+	public void updatePassenger(Entity passenger) {
 		TraincraftUtil.updateRider(this,-0.5, 0.4);
 	}
 
@@ -52,13 +52,13 @@ public class EntityPassengerRheingoldPanorama extends EntityRollingStock impleme
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 			if(lockThisCart(itemstack, entityplayer))return true;
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}
-			if (!worldObj.isRemote) {
+			if (!getWorld().isRemote) {
 				entityplayer.mountEntity(this);
 			}
 		}

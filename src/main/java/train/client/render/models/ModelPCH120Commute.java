@@ -504,11 +504,11 @@ public class ModelPCH120Commute extends ModelConverter //Same as Filename
 	{
 		for(ModelRendererTurbo m :bodyModel) {
 			if(m.boxName.equals("light")){
-				Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+				Minecraft.getMinecraft().entityRenderer.disableLightmap();
 			}
 			m.render(f5);
 			if(m.boxName.equals("light")){
-				Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+				Minecraft.getMinecraft().entityRenderer.enableLightmap();
 			}
 		}
 		for(int i = 0; i < 112; i++)

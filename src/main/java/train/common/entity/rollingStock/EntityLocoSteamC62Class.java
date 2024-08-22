@@ -36,14 +36,14 @@ public class EntityLocoSteamC62Class extends SteamTrain {
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
 		
 		/*double rads = this.renderYaw * 3.141592653589793D / 180.0D;
 		double pitchRads = this.renderPitch * 3.141592653589793D / 180.0D;
-		riddenByEntity.setPosition(posX - Math.cos(rads)*3, posY + (Math.tan(pitchRads)*-3F)+( getMountedYOffset() + riddenByEntity.getYOffset() + 0.55F), posZ - Math.sin(rads)*3);
+		riddenByEntity.setPosition(posX - Math.cos(rads)*3, posY + (Math.tan(pitchRads)*-3F)+( getMountedYOffset() + passenger.getYOffset() + 0.55F), posZ - Math.sin(rads)*3);
 		*/
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.36F, posZ);
+		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.36F, posZ);
 	}
 
 	@Override
@@ -55,14 +55,14 @@ public class EntityLocoSteamC62Class extends SteamTrain {
 	@Override
 	public void pressKey(int i) {
 		if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 		checkInvent(locoInvent[0], locoInvent[1], this);
@@ -106,7 +106,7 @@ public class EntityLocoSteamC62Class extends SteamTrain {
 		return inventorySize;
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "C62 Class [JNR]";
 	}
 
@@ -116,7 +116,7 @@ public class EntityLocoSteamC62Class extends SteamTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

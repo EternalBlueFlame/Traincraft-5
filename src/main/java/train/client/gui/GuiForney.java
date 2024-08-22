@@ -106,7 +106,7 @@ public class GuiForney extends GuiContainer {
                 }
 
                 @Override
-                public FontRenderer getFont(){return fontRendererObj;}
+                public FontRenderer getFont(){return fontRenderer;}
             });
         }
     }
@@ -173,7 +173,7 @@ public class GuiForney extends GuiContainer {
             state = "Unlocked";
         }
 
-        int textWidth = fontRendererObj.getStringWidth("the GUI, change speed, destroy it.");
+        int textWidth = fontRenderer.getStringWidth("the GUI, change speed, destroy it.");
         int startX = 90;
         int startY = 5;
 
@@ -184,11 +184,11 @@ public class GuiForney extends GuiContainer {
         int colour2 = (colour1 & 0xfefefe) >> 1 | colour1 & 0xff000000;
         drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 8 + 3 + 40, colour1, colour2);
         drawGradientRect(startX - 2, startY - 2, startX + textWidth + 2, startY + 8 + 2 + 40, i4, i4);
-        fontRendererObj.drawStringWithShadow(str, startX, startY, -1);
-        fontRendererObj.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
-        fontRendererObj.drawStringWithShadow("the GUI, change speed, destroy it.", startX, startY + 20, -1);
-        fontRendererObj.drawStringWithShadow("Current state: " + state, startX, startY + 30, -1);
-        fontRendererObj.drawStringWithShadow("Owner: " + loco.getTrainOwner().trim(), startX, startY + 40, -1);
+        fontRenderer.drawStringWithShadow(str, startX, startY, -1);
+        fontRenderer.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
+        fontRenderer.drawStringWithShadow("the GUI, change speed, destroy it.", startX, startY + 20, -1);
+        fontRenderer.drawStringWithShadow("Current state: " + state, startX, startY + 30, -1);
+        fontRenderer.drawStringWithShadow("Owner: " + loco.getTrainOwner().trim(), startX, startY + 40, -1);
     }
 
     public boolean intersectsWith(int mouseX, int mouseY) {
@@ -203,16 +203,16 @@ public class GuiForney extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRendererObj.drawString(loco.getCommandSenderName(), 37, 3, 0x000000);
-        fontRendererObj.drawString(loco.getCommandSenderName(), 39, 1, 0x000000);
-        fontRendererObj.drawString(loco.getCommandSenderName(), 37, 1, 0x000000);
-        fontRendererObj.drawString(loco.getCommandSenderName(), 39, 3, 0x000000);
+        fontRenderer.drawString(loco.getCommandSenderName(), 37, 3, 0x000000);
+        fontRenderer.drawString(loco.getCommandSenderName(), 39, 1, 0x000000);
+        fontRenderer.drawString(loco.getCommandSenderName(), 37, 1, 0x000000);
+        fontRenderer.drawString(loco.getCommandSenderName(), 39, 3, 0x000000);
 
-        fontRendererObj.drawString(loco.getCommandSenderName(), 38, 3, 0x000000);
-        fontRendererObj.drawString(loco.getCommandSenderName(), 38, 1, 0x000000);
-        fontRendererObj.drawString(loco.getCommandSenderName(), 37, 2, 0x000000);
-        fontRendererObj.drawString(loco.getCommandSenderName(), 39, 2, 0x000000);
-        fontRendererObj.drawString(loco.getCommandSenderName(), 38, 2, 0xd3a900);
+        fontRenderer.drawString(loco.getCommandSenderName(), 38, 3, 0x000000);
+        fontRenderer.drawString(loco.getCommandSenderName(), 38, 1, 0x000000);
+        fontRenderer.drawString(loco.getCommandSenderName(), 37, 2, 0x000000);
+        fontRenderer.drawString(loco.getCommandSenderName(), 39, 2, 0x000000);
+        fontRenderer.drawString(loco.getCommandSenderName(), 38, 2, 0xd3a900);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -246,16 +246,16 @@ public class GuiForney extends GuiContainer {
 
         JsonObject guiDetails = new JsonParser().parse(loco.guiDetailsDW()).getAsJsonObject();
 
-        fontRendererObj.drawStringWithShadow("Carts pulled: " + guiDetails. get("cartsPulled"), 1, 10, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Mass pulled: " + guiDetails.get("massPulled"), 1, 20, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Speed reduction: " + guiDetails.get("slowDown") + " km/h", 1, 30, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Accel reduction: " + guiDetails.get("accelSlowDown"), 1, 40, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Brake reduction: " + guiDetails.get("brakeSlowDown"), 1, 50, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Fuel consumption: 1 every " + loco.getFuelConsumption() + " ticks", 1, 60, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Fuel: " + loco.getFuel(), 1, 70, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Power: " + loco.transportMetricHorsePower() + " Mhp", 1, 80, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("State: " + loco.getState(), 1, 90, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Heat level: " + loco.getOverheatLevel(), 1, 100, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Maximum Speed: " + (loco.getCustomSpeedGUI()), 1, 110, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Carts pulled: " + guiDetails. get("cartsPulled"), 1, 10, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Mass pulled: " + guiDetails.get("massPulled"), 1, 20, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Speed reduction: " + guiDetails.get("slowDown") + " km/h", 1, 30, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Accel reduction: " + guiDetails.get("accelSlowDown"), 1, 40, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Brake reduction: " + guiDetails.get("brakeSlowDown"), 1, 50, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Fuel consumption: 1 every " + loco.getFuelConsumption() + " ticks", 1, 60, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Fuel: " + loco.getFuel(), 1, 70, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Power: " + loco.transportMetricHorsePower() + " Mhp", 1, 80, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("State: " + loco.getState(), 1, 90, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Heat level: " + loco.getOverheatLevel(), 1, 100, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Maximum Speed: " + (loco.getCustomSpeedGUI()), 1, 110, 0xFFFFFF);
     }
 }

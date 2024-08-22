@@ -3,7 +3,7 @@ package train.client.render;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 import fexcraft.tmt.slim.Tessellator;
 import train.client.render.models.ModelSwitchStandOff;
@@ -19,9 +19,9 @@ public class RenderSwitchStand extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
-        boolean skipRender = false, powered = tileEntity.getWorldObj().getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0;
+        boolean skipRender = false, powered = tileEntity.getgetWorld()().getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getgetWorld()(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0;
         TileSwitchStand tile = ((TileSwitchStand) tileEntity);
-        if (tile.getFacing() != ForgeDirection.UNKNOWN) {
+        if (tile.getFacing() != EnumFacing.UNKNOWN) {
             Tessellator.bindTexture(powered ? texture2 : texture);
         }
 

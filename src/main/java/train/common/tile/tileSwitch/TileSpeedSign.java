@@ -1,29 +1,29 @@
 package train.common.tile.tileSwitch;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 public class TileSpeedSign extends TileEntity {
 
 	private int skinstate;
-	private ForgeDirection facing;
+	private EnumFacing facing;
 
-	public ForgeDirection getFacing() {
+	public EnumFacing getFacing() {
 		if(facing != null){
 			return this.facing;
 		}
-		return ForgeDirection.UNKNOWN;
+		return EnumFacing.UNKNOWN;
 	}
 
 	public void setSkinstate(int skinstate) {
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.skinstate = skinstate;
 	}
 
@@ -37,17 +37,17 @@ public class TileSpeedSign extends TileEntity {
 		} else {
 			skinstate++;
 		}
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
-	public void setFacing(ForgeDirection face) {
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+	public void setFacing(EnumFacing face) {
+		getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.facing = face;
 	}
 
 	public void readFromNBT(NBTTagCompound nbtTag) {
 		if(nbtTag.hasKey("Orientation")) {
-			facing = ForgeDirection.getOrientation(nbtTag.getByte("Orientation"));
+			facing = EnumFacing.getOrientation(nbtTag.getByte("Orientation"));
 		}
 		if(nbtTag.hasKey("skinstate")){
 			skinstate = nbtTag.getInteger("skinstate");

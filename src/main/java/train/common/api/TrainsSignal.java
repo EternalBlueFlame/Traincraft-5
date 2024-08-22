@@ -5,7 +5,7 @@ import train.common.library.BlockIDs;
 
 public class TrainsSignal {
     // ***Signal behavior***/
-    public static int isSignal(double motionX, double motionZ, int i, int j, int k, World worldObj) {
+    public static int isSignal(double motionX, double motionZ, int i, int j, int k, World getWorld()) {
         int action = 0;// stupid name
         // equals 1 if there is a signal near, carts slows down
         // equals 2 if the signal is two blocks away, the carts can't move
@@ -14,11 +14,11 @@ public class TrainsSignal {
 
         /* Basically checks if there is a signal somewhere in front of the cart, using the speed */
         /* t represents the distance to the signal */
-        //@SuppressWarnings("unused") TileSignal te = (TileSignal) worldObj.getTileEntity(i, j, k);
+        //@SuppressWarnings("unused") TileSignal te = (TileSignal) getWorld().getTileEntity(i, j, k);
 
         if ((motionX > 0) && motionZ == 0) {
             for (int t = 0; t < 12; t++) {
-                if ((worldObj.getBlock(i + t, j, k + l) == BlockIDs.signal.block) || (worldObj.getBlock(i + t, j, k - l) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
+                if ((getWorld().getBlock(i + t, j, k + l) == BlockIDs.signal.block) || (getWorld().getBlock(i + t, j, k - l) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
                     action = 1;
                     if (t == 2) {
                         action = 2;
@@ -31,7 +31,7 @@ public class TrainsSignal {
             /* North */
         } else if ((motionX < 0) && motionZ == 0) {
             for (int t = 0; t < 12; t++) {
-                if ((worldObj.getBlock(i - t, j, k + l) == BlockIDs.signal.block) || (worldObj.getBlock(i - t, j, k - l) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
+                if ((getWorld().getBlock(i - t, j, k + l) == BlockIDs.signal.block) || (getWorld().getBlock(i - t, j, k - l) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
                     action = 1;
                     if (t == 2) {
                         action = 2;
@@ -45,7 +45,7 @@ public class TrainsSignal {
         } else if ((motionZ > 0) && motionX == 0) {
             // k - = front
             for (int t = 0; t < 12; t++) {
-                if ((worldObj.getBlock(i + l, j, k + t) == BlockIDs.signal.block) || (worldObj.getBlock(i - l, j, k + t) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
+                if ((getWorld().getBlock(i + l, j, k + t) == BlockIDs.signal.block) || (getWorld().getBlock(i - l, j, k + t) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
                     action = 1;
                     if (t == 2) {
                         action = 2;
@@ -58,7 +58,7 @@ public class TrainsSignal {
             /* WEST */
         } else if ((motionZ < 0) && motionX == 0) {
             for (int t = 0; t < 12; t++) {
-                if ((worldObj.getBlock(i + l, j, k - t) == BlockIDs.signal.block) || (worldObj.getBlock(i - l, j, k - t) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
+                if ((getWorld().getBlock(i + l, j, k - t) == BlockIDs.signal.block) || (getWorld().getBlock(i - l, j, k - t) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
                     action = 1;
                     if (t == 2) {
                         action = 2;

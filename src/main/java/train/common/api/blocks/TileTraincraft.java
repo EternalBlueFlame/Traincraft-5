@@ -82,7 +82,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int slot){
+    public ItemStack removeStackFromSlot(int slot){
         if (this.slots[slot] != null) {
             ItemStack var2 = this.slots[slot];
             this.slots[slot] = null;
@@ -100,7 +100,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     @Override
-    public String getInventoryName(){
+    public String getName(){
         return "traincraft.tile.generic";
     }
 
@@ -120,12 +120,12 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     @Override
-    public void openInventory(){
+    public void openInventory(EntityPlayer p){
 
     }
 
     @Override
-    public void closeInventory(){
+    public void closeInventory(EntityPlayer p){
 
     }
 
@@ -179,7 +179,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     public void syncTileEntity(){
-        for(Object o : this.worldObj.playerEntities){
+        for(Object o : this.getWorld().playerEntities){
             if(o instanceof EntityPlayerMP){
                 EntityPlayerMP player = (EntityPlayerMP) o;
                 if(player.getDistance(xCoord, yCoord, zCoord) <= 64) {

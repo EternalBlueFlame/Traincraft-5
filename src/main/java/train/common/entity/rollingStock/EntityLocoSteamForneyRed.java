@@ -40,8 +40,8 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
 		TraincraftUtil.updateRider(this,0.5,0.4);
 	}
 
@@ -54,30 +54,30 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 	@Override
 	public void pressKey(int i) {
 		if (i == 7 && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.FORNEY, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.FORNEY, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 		checkInvent(locoInvent[0], locoInvent[1], this);
 		for (int h = 0; h < this.locoInvent.length; h++) {
 			if (this.locoInvent[h] != null && steamFuelLast(this.locoInvent[h]) != 0) {
-				if (fuelTrain <= 0 && !worldObj.isRemote) {
+				if (fuelTrain <= 0 && !getWorld().isRemote) {
 					fuelTrain = steamFuelLast(this.locoInvent[h]);
-					if (!worldObj.isRemote) {
+					if (!getWorld().isRemote) {
 						this.decrStackSize(h, 1);
 					}
 				}
 			}
 			else if (this.locoInvent[h] != null && steamFuelLast(this.locoInvent[h]) != 0) {
-				if (fuelTrain <= 0 && !worldObj.isRemote) {
+				if (fuelTrain <= 0 && !getWorld().isRemote) {
 					fuelTrain = steamFuelLast(this.locoInvent[h]);
-					if (!worldObj.isRemote) {
+					if (!getWorld().isRemote) {
 						this.decrStackSize(h, 1);
 					}
 				}
@@ -123,7 +123,7 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 		return inventorySize;
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Forney";
 	}
 	@Override
@@ -132,7 +132,7 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

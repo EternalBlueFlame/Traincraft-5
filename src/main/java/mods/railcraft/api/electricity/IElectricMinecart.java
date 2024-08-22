@@ -175,7 +175,7 @@ public interface IElectricMinecart {
             if (drewFromTrack > 0)
                 drewFromTrack--;
             else if (type == Type.USER && charge < (capacity / 2.0) && clock % DRAW_INTERVAL == 0) {
-                ILinkageManager lm = CartTools.getLinkageManager(minecart.worldObj);
+                ILinkageManager lm = CartTools.getLinkageManager(minecart.getWorld());
                 for (EntityMinecart cart : lm.getCartsInTrain(minecart)) {
                     if (cart instanceof IElectricMinecart) {
                         ChargeHandler ch = ((IElectricMinecart) cart).getChargeHandler();
@@ -207,7 +207,7 @@ public interface IElectricMinecart {
          */
         public void tickOnTrack(int trackX, int trackY, int trackZ) {
             if (type == Type.USER && charge < capacity && clock % DRAW_INTERVAL == 0) {
-                IElectricGrid track = RailTools.getTrackObjectAt(minecart.worldObj, trackX, trackY, trackZ, IElectricGrid.class);
+                IElectricGrid track = RailTools.getTrackObjectAt(minecart.getWorld(), trackX, trackY, trackZ, IElectricGrid.class);
                 if (track != null) {
                     double drawnFromTrack = track.getChargeHandler().removeCharge(capacity - charge);
                     if (drawnFromTrack > 0.0)

@@ -1,7 +1,7 @@
 package train.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -106,7 +106,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
         drawList = false;
         topVisSkin = 0;
         try {
-            renderEntity = rollingStock.getClass().getConstructor(new Class[]{ World.class }).newInstance(rollingStock.worldObj);
+            renderEntity = rollingStock.getClass().getConstructor(new Class[]{ World.class }).newInstance(rollingStock.getWorld());
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
@@ -343,20 +343,20 @@ public class GuiPaintbrushMenu extends GuiScreen {
 
 
         // Draw Currently Displayed Texture Name and Tooltip
-        fontRendererObj.drawString(currentDisplayTextureTitle, GUI_ANCHOR_MID_X - ((int) (fontRendererObj.getStringWidth(currentDisplayTextureTitle) * 0.5)), GUI_ANCHOR_Y + 14, 0);
+        fontRenderer.drawString(currentDisplayTextureTitle, GUI_ANCHOR_MID_X - ((int) (fontRenderer.getStringWidth(currentDisplayTextureTitle) * 0.5)), GUI_ANCHOR_Y + 14, 0);
         // Draw description.
         if(!drawList) {
             int stringWidth;
             for (int i = 0; i < Math.min(MAX_LINES_OF_DESCRIPTION, currentTextureDescription.size()); i++) {
-                stringWidth = fontRendererObj.getStringWidth(currentTextureDescription.get(i + descriptionScrollerIndex));
-                fontRendererObj.drawString(currentTextureDescription.get(i + descriptionScrollerIndex), GUI_ANCHOR_MID_X - ((int) (stringWidth * 0.5)) - 5, GUI_ANCHOR_Y + MENU_TEXTURE_HEIGHT - 60 + (i * fontRendererObj.FONT_HEIGHT), 0);
+                stringWidth = fontRenderer.getStringWidth(currentTextureDescription.get(i + descriptionScrollerIndex));
+                fontRenderer.drawString(currentTextureDescription.get(i + descriptionScrollerIndex), GUI_ANCHOR_MID_X - ((int) (stringWidth * 0.5)) - 5, GUI_ANCHOR_Y + MENU_TEXTURE_HEIGHT - 60 + (i * fontRenderer.FONT_HEIGHT), 0);
             }
         } else {
             int yOffset = 22;
             for (int i=0;i<MAX_LISTED_SKINS;i++) {
                 if(i+topVisSkin<rollingStock.getSpec().getLiveries().size()) {
                     String t = rollingStock.getSpec().getLiveries().get(i + topVisSkin);
-                    fontRendererObj.drawString(t, GUI_ANCHOR_MID_X - ((int) (fontRendererObj.getStringWidth(t) * 0.5)), GUI_ANCHOR_Y + 10 + yOffset, 0);
+                    fontRenderer.drawString(t, GUI_ANCHOR_MID_X - ((int) (fontRenderer.getStringWidth(t) * 0.5)), GUI_ANCHOR_Y + 10 + yOffset, 0);
                     yOffset += 16;
                 }
             }
@@ -368,16 +368,16 @@ public class GuiPaintbrushMenu extends GuiScreen {
                 case 0:
                 case 1: // Arrow left or right button.
                     if (GuiPaintbrushMenu.activeButtonID == 0) { // If arrow left...
-                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Previous Page.name")), mouseX, mouseY, fontRendererObj);
+                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Previous Page.name")), mouseX, mouseY, fontRenderer);
                     } else { // If arrow right...
-                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Next Page.name")), mouseX, mouseY, fontRendererObj);
+                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Next Page.name")), mouseX, mouseY, fontRenderer);
                     }
                     break;
                 case 2: // Render models button.
                     if (renderModels) {
-                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Hide Models.name")), mouseX, mouseY, fontRendererObj);
+                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Hide Models.name")), mouseX, mouseY, fontRenderer);
                     } else {
-                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Show Models.name")), mouseX, mouseY, fontRendererObj);
+                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Show Models.name")), mouseX, mouseY, fontRenderer);
                     }
                     break;
                 case 3: // Left texture button.
@@ -385,40 +385,40 @@ public class GuiPaintbrushMenu extends GuiScreen {
                 case 5: // Right texture button.
                     break;
                 case 6: // Random texture button.
-                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Random Texture.name")), mouseX, mouseY, fontRendererObj);
+                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Random Texture.name")), mouseX, mouseY, fontRenderer);
                     break;
                 case 7: // Apply & submit button.
-                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Apply Texture.name")), mouseX, mouseY, fontRendererObj);
+                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Apply Texture.name")), mouseX, mouseY, fontRenderer);
                     break;
                 case 8: // Description arrow up.
                 case 9: // Description arrow down.
                     break;
                 case 11: // Clear overlay button.
-                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.None.name")), mouseX, mouseY, fontRendererObj);
+                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.None.name")), mouseX, mouseY, fontRenderer);
                     break;
                 case 12: // Open dynamic overlay menu button.
-                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Dynamic Overlay.name")), mouseX, mouseY, fontRendererObj);
+                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Dynamic Overlay.name")), mouseX, mouseY, fontRenderer);
                     break;
                 case 13: // Open fixed overlay menu button.
-                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Fixed Overlay.name")), mouseX, mouseY, fontRendererObj);
+                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Fixed Overlay.name")), mouseX, mouseY, fontRenderer);
                     break;
                 case 14: // Close button.
-                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Close Menu.name")), mouseX, mouseY, fontRendererObj);
+                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Close Menu.name")), mouseX, mouseY, fontRenderer);
                     break;
                 case 15: // Pause/Play
                     if (doAnimation)
-                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Pause.name")), mouseX, mouseY, fontRendererObj);
+                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Pause.name")), mouseX, mouseY, fontRenderer);
                     else
-                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Play.name")), mouseX, mouseY, fontRendererObj);
+                        drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Play.name")), mouseX, mouseY, fontRenderer);
                     break;
                 case 17: //dropdown
-                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.List Skins.name")), mouseX, mouseY, fontRendererObj);
+                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.List Skins.name")), mouseX, mouseY, fontRenderer);
                     break;
                 case 18: //dropdown UP
-                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Scroll Up.name")), mouseX, mouseY, fontRendererObj);
+                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Scroll Up.name")), mouseX, mouseY, fontRenderer);
                     break;
                 case 19: //dropdown DOWN
-                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Scroll Down.name")), mouseX, mouseY, fontRendererObj);
+                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Scroll Down.name")), mouseX, mouseY, fontRenderer);
                     break;
             }
 
@@ -495,7 +495,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
                 case 11: // Clear overlay button.
                     if (rollingStock.acceptsOverlayTextures() && rollingStock.getOverlayTextureContainer().getType() != OverlayTextureManager.Type.NONE) {
                         rollingStock.getOverlayTextureContainer().getOverlayConfigTag().setInteger("type", OverlayTextureManager.Type.NONE.ordinal());
-                        Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.NONE, rollingStock.getEntityId(), Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId, rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
+                        Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.NONE, rollingStock.getEntityId(), Minecraft.getMinecraft().thePlayer.getWorld().provider.dimensionId, rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
                         this.mc.thePlayer.closeScreen();
                     }
                     break;

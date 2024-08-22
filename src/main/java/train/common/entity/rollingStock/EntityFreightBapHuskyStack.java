@@ -46,10 +46,10 @@ public class EntityFreightBapHuskyStack extends EntityRollingStock implements IP
                 container1.savedData.removeTag("z");
                 stackToPlace.setTagCompound(container1.savedData);
             }
-            if (!worldObj.isRemote) {
-                EntityItem dropItem = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, stackToPlace.copy());
+            if (!getWorld().isRemote) {
+                EntityItem dropItem = new EntityItem(this.getWorld(), this.posX, this.posY, this.posZ, stackToPlace.copy());
                 dropItem.delayBeforeCanPickup = 1;
-                worldObj.spawnEntityInWorld(dropItem);
+                getWorld().spawnEntityInWorld(dropItem);
             }
         }
 
@@ -60,10 +60,10 @@ public class EntityFreightBapHuskyStack extends EntityRollingStock implements IP
                 container2.savedData.removeTag("z");
                 stackToPlace.setTagCompound(container2.savedData);
             }
-            if (!worldObj.isRemote) {
-                EntityItem dropItem = new EntityItem(this.worldObj, this.posX, this.posY, this.posZ, stackToPlace.copy());
+            if (!getWorld().isRemote) {
+                EntityItem dropItem = new EntityItem(this.getWorld(), this.posX, this.posY, this.posZ, stackToPlace.copy());
                 dropItem.delayBeforeCanPickup = 1;
-                worldObj.spawnEntityInWorld(dropItem);
+                getWorld().spawnEntityInWorld(dropItem);
             }
 
         }
@@ -89,7 +89,7 @@ public class EntityFreightBapHuskyStack extends EntityRollingStock implements IP
                     this.container2 = new BasicallyContainer("FortyFootContainer", "Grey", null);
                 }
             }
-            if (!worldObj.isRemote) {
+            if (!getWorld().isRemote) {
                 entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, (ItemStack)null);
             }
             /*NBTTagList list = theItem.getTagCompound().getTagList("Items", Constants.NBT.TAG_COMPOUND);
@@ -108,10 +108,10 @@ public class EntityFreightBapHuskyStack extends EntityRollingStock implements IP
                     container2.savedData.removeTag("z");
                     theItemStack.setTagCompound(container2.savedData);
                 }
-                if (!worldObj.isRemote) {
+                if (!getWorld().isRemote) {
                     EntityItem dropItem = new EntityItem(entityplayer.getEntityWorld(), entityplayer.posX, entityplayer.posY, entityplayer.posZ, theItemStack.copy());
                     dropItem.delayBeforeCanPickup = 1;
-                    playerEntity.worldObj.spawnEntityInWorld(dropItem);
+                    playerEntity.getWorld().spawnEntityInWorld(dropItem);
                 }
                 container2 = null;
 
@@ -122,10 +122,10 @@ public class EntityFreightBapHuskyStack extends EntityRollingStock implements IP
                     container1.savedData.removeTag("z");
                     theItemStack.setTagCompound(container1.savedData);
                 }
-                if (!worldObj.isRemote) {
+                if (!getWorld().isRemote) {
                     EntityItem dropItem = new EntityItem(entityplayer.getEntityWorld(), entityplayer.posX, entityplayer.posY, entityplayer.posZ, theItemStack.copy());
                     dropItem.delayBeforeCanPickup = 1;
-                    playerEntity.worldObj.spawnEntityInWorld(dropItem);
+                    playerEntity.getWorld().spawnEntityInWorld(dropItem);
                 }
                 container1 = null;
             }

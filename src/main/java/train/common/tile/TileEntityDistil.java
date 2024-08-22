@@ -1,7 +1,7 @@
 package train.common.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.block.Block;
@@ -12,7 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
 import train.common.api.LiquidManager;
 import train.common.api.LiquidManager.StandardTank;
@@ -50,7 +50,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 		this.theTank = LiquidManager.getInstance().new FilteredTank(maxTank, LiquidManager.dieselFilter(), 1);
 	}
 	@Override
-	public String getInventoryName(){
+	public String getName(){
 		return "Distillation tower";
 	}
 
@@ -126,7 +126,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	}
 	@Override
 	public void updateEntity() {
-		if(!worldObj.isRemote){
+		if(!getWorld().isRemote){
 			updateTicks++;
 			boolean flag = distilBurnTime > 0;
 			boolean flag1 = false;
@@ -163,12 +163,12 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 
 			if (flag != (distilBurnTime > 0)) {
 				flag1 = true;
-				BlockDistil.updateDistilBlockState(distilBurnTime > 0, worldObj, xCoord, yCoord, zCoord);
+				BlockDistil.updateDistilBlockState(distilBurnTime > 0, getWorld(), xCoord, yCoord, zCoord);
 			}
 			else {
 				flag1 = false;
-				BlockDistil.updateDistilBlockState(distilBurnTime > 0, worldObj, xCoord, yCoord, zCoord);
-				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				BlockDistil.updateDistilBlockState(distilBurnTime > 0, getWorld(), xCoord, yCoord, zCoord);
+				this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
 
 			if (slots[2] != null) {
@@ -202,7 +202,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 						flag1 = true;
 
 						this.markDirty();
-						this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+						this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 					}
 				}
 			}
@@ -221,7 +221,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 			if (updateTicks % 8 == 0){
 				this.markDirty();
-				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 			}
 			if (distilBurnTime > 0) {
 				distilBurnTime--;
@@ -300,7 +300,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 
 			this.markDirty();
-			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+			this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
 		}
 
 		if (slots[0].getItem().hasContainerItem(slots[0])) {
@@ -326,23 +326,23 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	}
 
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer p) {}
 
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer p) {}
 
 	public FluidStack getFluid() {
 		return theTank.getFluid();
 	}
 
 	@Override
-	public int fill(ForgeDirection from, FluidStack resource, boolean doFill)
+	public int fill(EnumFacing from, FluidStack resource, boolean doFill)
 	{
 		return theTank.fill(resource, doFill);
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
 		if (resource == null || !resource.isFluidEqual(theTank.getFluid())) {
 			return null;
 		}
@@ -350,7 +350,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	}
 
 	@Override
-	public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
 		return theTank.drain(maxDrain, doDrain);
 	}
 
@@ -358,17 +358,17 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 		return this.maxTank;
 	}
 	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+	public boolean canFill(EnumFacing from, Fluid fluid) {
 		return true;
 	}
 
 	@Override
-	public boolean canDrain(ForgeDirection from, Fluid fluid) {
+	public boolean canDrain(EnumFacing from, Fluid fluid) {
 		return true;
 	}
 
 	@Override
-	public FluidTankInfo[] getTankInfo(ForgeDirection from)
+	public FluidTankInfo[] getTankInfo(EnumFacing from)
 	{
 		return new FluidTankInfo[] { theTank.getInfo() };
 	}
@@ -394,7 +394,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getTexture(int x, int y, int z){
-		return (worldObj==null|| CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)== TCBlocks.distilActive)?
+		return (getWorld()==null|| CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)== TCBlocks.distilActive)?
 						textureOn:textureOff;
 	}
 

@@ -7,8 +7,8 @@
 
 package train.common.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -22,7 +22,7 @@ import train.common.Traincraft;
 import train.common.library.Info;
 import train.common.tile.TileStopper;
 
-import static net.minecraftforge.common.util.ForgeDirection.UP;
+import static net.minecraftforge.common.util.EnumFacing.UP;
 
 public class BlockStopper extends BlockContainer {
 

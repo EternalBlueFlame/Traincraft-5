@@ -111,11 +111,11 @@ public class GUISeatManager extends GuiScreen {
                         column++;
                         activeRow=0;
                     }
-                    int width = fontRendererObj.getStringWidth("Empty Seat") + 6;
+                    int width = fontRenderer.getStringWidth("Empty Seat") + 6;
                     if (entity.seats.get(i).getPassenger() instanceof EntityPlayer) {
 
-                        if (fontRendererObj.getStringWidth(entity.seats.get(i).getPassenger().getCommandSenderName()) > width) {
-                            width = fontRendererObj.getStringWidth(entity.seats.get(i).getPassenger().getCommandSenderName()) + 7;
+                        if (fontRenderer.getStringWidth(entity.seats.get(i).getPassenger().getCommandSenderName()) > width) {
+                            width = fontRenderer.getStringWidth(entity.seats.get(i).getPassenger().getCommandSenderName()) + 7;
                             if(width%2 !=0)
                                 width++;
                         }
@@ -128,7 +128,7 @@ public class GUISeatManager extends GuiScreen {
                                     @Override
                                     public void onClick() {}
                                     @Override
-                                    public FontRenderer getFont(){return fontRendererObj;}
+                                    public FontRenderer getFont(){return fontRenderer;}
                                 }
                         );
                     } else { //TODO: add an else if for things that aren't players. this becomes important for stuff like stock cars or putting villagers in player seats
@@ -146,7 +146,7 @@ public class GUISeatManager extends GuiScreen {
                                         }
                                     }
                                     @Override
-                                    public FontRenderer getFont(){return fontRendererObj;}
+                                    public FontRenderer getFont(){return fontRenderer;}
                                 }
                         );
                     }
@@ -154,7 +154,7 @@ public class GUISeatManager extends GuiScreen {
                     activeRow++;
                 }
                 buttonList.add(
-                        new GUIButton( percentLeft(50)-((fontRendererObj.getStringWidth("Close")+7)/2), percentTop(75)-10, fontRendererObj.getStringWidth("Close")+7,20,"Close") {
+                        new GUIButton( percentLeft(50)-((fontRenderer.getStringWidth("Close")+7)/2), percentTop(75)-10, fontRenderer.getStringWidth("Close")+7,20,"Close") {
                             @Override
                             public String getHoverText() {
                                 return "Close Inventory";
@@ -164,7 +164,7 @@ public class GUISeatManager extends GuiScreen {
                                 mc.displayGuiScreen(null);
                             }
                             @Override
-                            public FontRenderer getFont(){return fontRendererObj;}
+                            public FontRenderer getFont(){return fontRenderer;}
                         }
                 );
                 break;

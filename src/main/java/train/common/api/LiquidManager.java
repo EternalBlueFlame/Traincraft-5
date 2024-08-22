@@ -5,8 +5,8 @@ import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.api.fuel.FuelManager;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
@@ -14,7 +14,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
 import train.common.blocks.BlockTraincraftFluid;
 import train.common.items.ItemBlockFluid;
@@ -134,9 +134,9 @@ public class LiquidManager {
 		FluidStack bucketLiquid = getFluidInContainer(itemstack);
 		ItemStack emptyItem = itemstack.getItem().getContainerItem(itemstack);
 		if ((bucketLiquid != null)) {
-			int used = tank.fill(ForgeDirection.UNKNOWN,bucketLiquid, false);
+			int used = tank.fill(EnumFacing.UNKNOWN,bucketLiquid, false);
 			if (used >= bucketLiquid.amount) {
-				tank.fill(ForgeDirection.UNKNOWN,bucketLiquid, true);
+				tank.fill(EnumFacing.UNKNOWN,bucketLiquid, true);
 				if (itemstack.getItem() == Items.potionitem){
 					return new ItemStack(Items.glass_bottle, 1);
 				}
@@ -145,12 +145,12 @@ public class LiquidManager {
 			}
 		}
 		else if ((getInstance().isEmptyContainer(itemstack))) {
-			ItemStack filled = getInstance().fillFluidContainer(tank.drain(ForgeDirection.UNKNOWN,1000,false), itemstack);
+			ItemStack filled = getInstance().fillFluidContainer(tank.drain(EnumFacing.UNKNOWN,1000,false), itemstack);
 			if ((filled != null)) {
 				FluidStack liquid = getFluidInContainer(filled);
-				FluidStack drain = tank.drain(ForgeDirection.UNKNOWN,liquid.amount, false);
+				FluidStack drain = tank.drain(EnumFacing.UNKNOWN,liquid.amount, false);
 				if ((drain != null) && (drain.amount > 0)) {
-					tank.drain(ForgeDirection.UNKNOWN,liquid.amount, true);
+					tank.drain(EnumFacing.UNKNOWN,liquid.amount, true);
 					inventory.decrStackSize(inventoryIndex, 1);
 					return filled;
 				}

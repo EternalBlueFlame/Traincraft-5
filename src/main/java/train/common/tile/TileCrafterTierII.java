@@ -1,7 +1,7 @@
 package train.common.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -11,7 +11,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.api.blocks.TileRenderFacing;
 import train.common.core.interfaces.ITier;
 import train.common.core.managers.TierRecipe;
@@ -25,7 +25,7 @@ import java.util.Random;
 public class TileCrafterTierII extends TileRenderFacing implements IInventory, ITier {
 	private ItemStack[] crafterInventory;
 
-	private ForgeDirection facing;
+	private EnumFacing facing;
 	private final int Tier = 2;
 	private List<Item> resultList;
 	private static List<Item> knownRecipes = new ArrayList<Item>();
@@ -72,7 +72,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int par1) {
+	public ItemStack removeStackFromSlot(int par1) {
 		if (crafterInventory[par1] != null) {
 			ItemStack var2 = crafterInventory[par1];
 			crafterInventory[par1] = null;
@@ -86,13 +86,13 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 	@Override
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		crafterInventory[i] = itemstack;
-		if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-			itemstack.stackSize = getInventoryStackLimit();
+		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
+			itemstack.getCount() = getInventoryStackLimit();
 		}
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "TierII";
 	}
 
@@ -101,7 +101,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 
 		super.readFromNBT(nbtTag);
 
-		facing = ForgeDirection.getOrientation(nbtTag.getByte("Orientation"));
+		facing = EnumFacing.getOrientation(nbtTag.getByte("Orientation"));
 		slotSelected = nbtTag.getIntArray("Selected");
 		NBTTagList nbttaglist = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 
@@ -147,7 +147,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 			nbtTag.setByte("Orientation", (byte) facing.ordinal());
 		} else {
 
-			nbtTag.setByte("Orientation", (byte) ForgeDirection.NORTH.ordinal());
+			nbtTag.setByte("Orientation", (byte) EnumFacing.NORTH.ordinal());
 		}
 
 		nbtTag.setIntArray("Selected", slotSelected);
@@ -213,10 +213,10 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		if (worldObj == null) {
+		if (getWorld() == null) {
 			return true;
 		}
-		if (worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (getWorld().getTileEntity(xCoord, yCoord, zCoord) != this) {
 			return false;
 		}
 		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
@@ -224,10 +224,10 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 
 
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer p) {}
 
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer p) {}
 
 	@Override
 	public S35PacketUpdateTileEntity getDescriptionPacket() {

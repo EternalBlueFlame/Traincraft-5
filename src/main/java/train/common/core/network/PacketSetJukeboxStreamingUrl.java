@@ -57,7 +57,7 @@ public class PacketSetJukeboxStreamingUrl implements IMessage {
     public static class Handler implements IMessageHandler<PacketSetJukeboxStreamingUrl, IMessage> {
         @Override
         public IMessage onMessage(PacketSetJukeboxStreamingUrl message, MessageContext context) {
-            Entity entity = context.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityID);
+            Entity entity = context.getServerHandler().playerEntity.getWorld().getEntityByID(message.entityID);
 
             if (entity instanceof EntityJukeBoxCart) {
                 ((EntityJukeBoxCart) entity).recievePacket(message.url, message.setPlaying);

@@ -1680,7 +1680,7 @@ public class  ModelClass416Tail extends ModelConverter //Same as Filename
 
 		for (int i = 0; i < 410; i++) {
 			if (bodyModel[i].boxName != null && bodyModel[i].boxName.contains("lamp")) {
-				Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+				Minecraft.getMinecraft().entityRenderer.disableLightmap();
 				bodyModel[i].render(f5);
 				Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
 			} else if (bodyModel[i].boxName != null && bodyModel[i].boxName.contains("cull")) {

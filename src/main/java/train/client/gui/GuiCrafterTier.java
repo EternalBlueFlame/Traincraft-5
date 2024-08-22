@@ -62,15 +62,15 @@ public class GuiCrafterTier extends GuiTraincraft {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRendererObj.drawString(tier1.getGUIName(), 9 + 1, 6, 0x000000);
-        fontRendererObj.drawString("Output:", 90 + 1, 118, 0x000000);
-        fontRendererObj.drawString("Storage:", 9 + 1, 118, 0xffffff);
-        fontRendererObj.drawString("Inventory:", 9 + 1, 164, 0xffffff);
+        fontRenderer.drawString(tier1.getGUIName(), 9 + 1, 6, 0x000000);
+        fontRenderer.drawString("Output:", 90 + 1, 118, 0x000000);
+        fontRenderer.drawString("Storage:", 9 + 1, 118, 0xffffff);
+        fontRenderer.drawString("Inventory:", 9 + 1, 164, 0xffffff);
 
-        fontRendererObj.drawString(tier1.getGUIName(), 9, 6, 0xd3a900);
-        fontRendererObj.drawString("Output:", 90, 118, 0xd3a900);
-        fontRendererObj.drawString("Storage:", 9, 118, 0x202020);
-        fontRendererObj.drawString("Inventory:", 9, 164, 0x202020);
+        fontRenderer.drawString(tier1.getGUIName(), 9, 6, 0xd3a900);
+        fontRenderer.drawString("Output:", 90, 118, 0xd3a900);
+        fontRenderer.drawString("Storage:", 9, 118, 0x202020);
+        fontRenderer.drawString("Inventory:", 9, 164, 0x202020);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);

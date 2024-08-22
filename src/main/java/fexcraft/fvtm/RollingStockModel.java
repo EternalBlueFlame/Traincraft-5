@@ -92,7 +92,7 @@ public class RollingStockModel extends ModelBase {
             }
             GL11.glPushMatrix();
             if (part.ignoresLighting) {
-                Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+                Minecraft.getMinecraft().entityRenderer.disableLightmap();
             }
             GL11.glTranslatef(part.rotationPointX * 0.0625F, part.rotationPointY * 0.0625F, part.rotationPointZ * 0.0625F);
             GL11.glRotatef(part.rotateAngleY, 0.0F, 1.0F, 0.0F);
@@ -111,7 +111,7 @@ public class RollingStockModel extends ModelBase {
 
             GL11.glTranslatef(-part.rotationPointX * 0.0625F, -part.rotationPointY * 0.0625F, -part.rotationPointZ * 0.0625F);
             if (part.ignoresLighting) {
-                Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+                Minecraft.getMinecraft().entityRenderer.enableLightmap();
             }
             GL11.glPopMatrix();
 

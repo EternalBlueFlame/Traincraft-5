@@ -1,12 +1,12 @@
 package train.client.render.models.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileWaterWheel;
@@ -43,7 +43,7 @@ public class ModelWaterWheel extends ModelBase {
 		float f4 = (float) (j & 255) / 255.0F;
 		GL11.glColor4f(f1 * f2, f1 * f3, f1 * f4, 1);
 		// Render the object, using modelTutBox.renderAll();
-		int facing = waterWheel.getWorldObj().getBlockMetadata((int) waterWheel.xCoord, (int) waterWheel.yCoord, (int) waterWheel.zCoord);
+		int facing = waterWheel.getgetWorld()().getBlockMetadata((int) waterWheel.xCoord, (int) waterWheel.yCoord, (int) waterWheel.zCoord);
 		if (facing == 3) {
 			GL11.glScalef(0.7f, 0.5f, 0.5f);
 			GL11.glScalef(1f, 0.36f, 0.36f);
@@ -63,7 +63,7 @@ public class ModelWaterWheel extends ModelBase {
 			GL11.glScalef(0.36f, 0.36f, 1f);
 			GL11.glRotatef(180, 0, 1, 0);
 		}
-		if (waterWheel.getFacing()!= ForgeDirection.UNKNOWN) {
+		if (waterWheel.getFacing()!= EnumFacing.UNKNOWN) {
 			long now = System.nanoTime();
 			int elapsed = (int) ((now - lastframe) / (1000 * 100));
 			wheel -= (float) elapsed / 300.0f;

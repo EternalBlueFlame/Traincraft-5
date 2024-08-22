@@ -1,6 +1,6 @@
 package train.client.render.models.blocks;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.IIcon;
@@ -123,7 +123,7 @@ public class ModelLeftCurvedSlopeTCTrack extends ModelBase {
         String iconName;
         Block block = Block.getBlockById(tcRail.getBallastMaterial());
         IIcon icon = block.getIcon(1, tcRail.ballastMetadata);
-        int colour = block.colorMultiplier(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord- 1, tcRail.zCoord);
+        int colour = block.colorMultiplier(tcRail.getgetWorld()(), tcRail.xCoord, tcRail.yCoord- 1, tcRail.zCoord);
         if (icon != null) {
             iconName = icon.getIconName();
         }
@@ -131,7 +131,7 @@ public class ModelLeftCurvedSlopeTCTrack extends ModelBase {
             iconName = "tc:ballast_test";
             colour = 16777215;
         }
-        render( type, tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1, iconName, colour);
+        render( type, tcRail.getgetWorld()().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1, iconName, colour);
 
     }
 

@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
 import train.common.Traincraft;
 import train.common.api.LiquidManager;
@@ -48,7 +48,7 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
     public void onUpdate() {
         super.onUpdate();
         checkInvent(cargoItems[0]);
-        if (worldObj.isRemote) {
+        if (getWorld().isRemote) {
             return;
         }
 
@@ -68,7 +68,7 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
             // setColor(getColorFromString("Full"));
             setDefaultMass(-weightKg());
             if ((motionX > 0.01 || motionZ > 0.01) && ticksExisted % 40 == 0) {
-                drain(ForgeDirection.UNKNOWN, 6, true);
+                drain(EnumFacing.UNKNOWN, 6, true);
             }
 
         } else if (getAmount() <= 0) {
@@ -119,7 +119,7 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
         }
 
         if (nbttagcompound.hasKey("FluidName")) {
-            fill(ForgeDirection.UNKNOWN, FluidStack.loadFluidStackFromNBT(nbttagcompound), true);
+            fill(EnumFacing.UNKNOWN, FluidStack.loadFluidStackFromNBT(nbttagcompound), true);
         }
     }
 
@@ -145,7 +145,7 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
     }
 
     public void liquidInSlot(ItemStack itemstack) {
-        if (worldObj.isRemote) {
+        if (getWorld().isRemote) {
             return;
         }
 
@@ -180,7 +180,7 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "EMD F7 B-Unit";
     }
 
@@ -195,8 +195,8 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
             return false;
         }
 
-        if (!this.worldObj.isRemote) {
-            entityplayer.openGui(Traincraft.instance, GuiIDs.LIQUID, worldObj, this.getEntityId(), -1, (int) this.posZ);
+        if (!this.getWorld().isRemote) {
+            entityplayer.openGui(Traincraft.instance, GuiIDs.LIQUID, getWorld(), this.getEntityId(), -1, (int) this.posZ);
         }
         return true;
     }
@@ -213,12 +213,12 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
 
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         return theTank.fill(resource, doFill);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         if (resource == null || !resource.isFluidEqual(theTank.getFluid())) {
             return null;
         }
@@ -226,12 +226,12 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return theTank.drain(maxDrain, doDrain);
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+    public FluidTankInfo[] getTankInfo(EnumFacing from) {
         return new FluidTankInfo[]{theTank.getInfo()};
     }
 

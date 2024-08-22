@@ -11,10 +11,10 @@ public class ContainerWorkbenchCart extends Container {
 	/** The crafting matrix inventory (3x3). */
 	public InventoryCrafting craftMatrix = new InventoryCrafting(this, 3, 3);
 	public IInventory craftResult = new InventoryCraftResult();
-	private World worldObj;
+	private World getWorld();
 
 	public ContainerWorkbenchCart(InventoryPlayer par1InventoryPlayer, World par2World) {
-		this.worldObj = par2World;
+		this.getWorld() = par2World;
 
 		this.addSlotToContainer(new SlotCrafting(par1InventoryPlayer.player, craftMatrix, craftResult, 0, 124, 35));
 		int var6;
@@ -44,7 +44,7 @@ public class ContainerWorkbenchCart extends Container {
 	 */
 	@Override
 	public void onCraftMatrixChanged(IInventory par1IInventory) {
-		this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, worldObj));
+		this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, getWorld()));
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class ContainerWorkbenchCart extends Container {
 	public void onContainerClosed(EntityPlayer par1EntityPlayer) {
 		super.onContainerClosed(par1EntityPlayer);
 
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			for (int var2 = 0; var2 < 9; ++var2) {
 				ItemStack var3 = craftMatrix.getStackInSlotOnClosing(var2);
 

@@ -15,7 +15,7 @@ public class PacketGetSomethingFromServerHandler implements IMessageHandler<Pack
 
     @Override
     public PacketThingFromServer onMessage(PacketGetSomethingFromServer message, MessageContext ctx) {
-        Locomotive trainEntity = (Locomotive)ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.entity);
+        Locomotive trainEntity = (Locomotive)ctx.getServerHandler().playerEntity.getWorld().getEntityByID(message.entity);
         if (message.function == 1 && trainEntity !=null) {
            //Get all of the speed/stoppoint/speedchange data.
 

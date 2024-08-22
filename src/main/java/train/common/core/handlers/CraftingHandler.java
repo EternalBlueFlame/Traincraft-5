@@ -7,7 +7,7 @@
 
 package train.common.core.handlers;
 
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import net.minecraft.item.Item;
@@ -26,7 +26,7 @@ public class CraftingHandler
 		  if (items != null) for (Item item: items) if (item == event.crafting.getItem()) event.player.addStat(ach.achievement, 1);
       }
 		if ((event.crafting.getItem() instanceof ItemRollingStock)) {
-			if (!event.player.worldObj.isRemote) {
+			if (!event.player.getWorld().isRemote) {
         if (FMLCommonHandler.instance().getMinecraftServerInstance() != null) {
 					ItemRollingStock stock = (ItemRollingStock) event.crafting.getItem();
           //TraincraftSaveHandler.createFile(FMLCommonHandler.instance().getMinecraftServerInstance());

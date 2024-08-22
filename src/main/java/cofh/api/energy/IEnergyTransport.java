@@ -1,6 +1,6 @@
 package cofh.api.energy;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * Implement this interface on Tile Entities which transport energy.
@@ -79,7 +79,7 @@ public interface IEnergyTransport extends IEnergyProvider, IEnergyReceiver {
 	 * This method <b>cannot</b> be a no-op for IEnergyTransport.
 	 */
 	@Override
-	int getEnergyStored(ForgeDirection from);
+	int getEnergyStored(EnumFacing from);
 
 	/**
 	 * Indicates to other IEnergyTransports the state of the given side. See {@link #InterfaceType} for details.
@@ -95,7 +95,7 @@ public interface IEnergyTransport extends IEnergyProvider, IEnergyReceiver {
 	 *
 	 * @return The type of connection to establish on this side. <b>null is NOT a valid value</b>
 	 */
-	InterfaceType getTransportState(ForgeDirection from);
+	InterfaceType getTransportState(EnumFacing from);
 
 	/**
 	 * This method is provided primarily for the purposes of automation tools, and should not need to be called by another IEnergyTransport.
@@ -104,6 +104,6 @@ public interface IEnergyTransport extends IEnergyProvider, IEnergyReceiver {
 	 *
 	 * @return Whether or not state was successfully altered.
 	 */
-	boolean setTransportState(InterfaceType state, ForgeDirection from);
+	boolean setTransportState(InterfaceType state, EnumFacing from);
 
 }

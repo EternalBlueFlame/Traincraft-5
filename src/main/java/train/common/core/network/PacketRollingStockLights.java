@@ -42,7 +42,7 @@ public class PacketRollingStockLights implements IMessage
         @Override
         public IMessage onMessage(PacketRollingStockLights message, MessageContext context)
         {
-			Entity TrainEntity = context.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityID);
+			Entity TrainEntity = context.getServerHandler().playerEntity.getWorld().getEntityByID(message.entityID);
 			
 			if (TrainEntity instanceof IRollingStockLightControls)
             {

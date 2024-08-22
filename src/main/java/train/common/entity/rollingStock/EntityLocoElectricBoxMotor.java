@@ -29,7 +29,7 @@ public class EntityLocoElectricBoxMotor extends ElectricTrain {
 	}
 
 	@Override
-	public void updateRiderPosition() {
+	public void updatePassenger(Entity passenger) {
 		TraincraftUtil.updateRider(this, 3.9, 0.2);
 	}
 
@@ -42,7 +42,7 @@ public class EntityLocoElectricBoxMotor extends ElectricTrain {
 	@Override
 	public void pressKey(int i) {
 		if (i == 7 && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
@@ -85,7 +85,7 @@ public class EntityLocoElectricBoxMotor extends ElectricTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Boxmotor";
 	}
 
@@ -95,7 +95,7 @@ public class EntityLocoElectricBoxMotor extends ElectricTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

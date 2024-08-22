@@ -12,7 +12,7 @@ import train.common.Traincraft;
 import train.common.api.Freight;
 import train.common.library.GuiIDs;
 
-public class EntityFreightBR_Mk1_TPO_Stowage extends Freight implements IInventory {
+public class EntityFreightBR_Mk1_TPO_Stowage extends Freight {
     public int freightInventorySize;
     public int numFreightSlots;
     public EntityFreightBR_Mk1_TPO_Stowage(World world) {
@@ -74,7 +74,7 @@ public class EntityFreightBR_Mk1_TPO_Stowage extends Freight implements IInvento
         }
     }
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "BR Mk1 TPO Stowage";
     }
 
@@ -89,7 +89,7 @@ public class EntityFreightBR_Mk1_TPO_Stowage extends Freight implements IInvento
         if ((super.interactFirst(entityplayer))) {
             return false;
         }
-        entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, worldObj, this.getEntityId(), -1, (int) this.posZ);
+        entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, getWorld(), this.getEntityId(), -1, (int) this.posZ);
         return true;
     }
     @Override

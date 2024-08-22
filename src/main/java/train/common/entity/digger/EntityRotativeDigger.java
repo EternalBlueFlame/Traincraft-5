@@ -1,7 +1,7 @@
 package train.common.entity.digger;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -94,10 +94,10 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         stepHeight = 0.6F;
 
-        if (worldObj.isRemote) {
+        if (getWorld().isRemote) {
             this.wheels = new EntityRotativeWheel[1];
-            this.wheels[0] = new EntityRotativeWheel(this.worldObj, this, 0, 5.4D, 0, 0, 0.0D);
-            worldObj.spawnEntityInWorld(this.wheels[0]);
+            this.wheels[0] = new EntityRotativeWheel(this.getWorld(), this, 0, 5.4D, 0, 0, 0.0D);
+            getWorld().spawnEntityInWorld(this.wheels[0]);
         }
 
         this.dataWatcher.addObject(20, fuel);
@@ -179,7 +179,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, float i) {
-        if (worldObj.isRemote || isDead) {
+        if (getWorld().isRemote || isDead) {
             return true;
         }
 
@@ -207,21 +207,21 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             float f1 = rand.nextFloat() * 0.8F + 0.1F;
             float f2 = rand.nextFloat() * 0.8F + 0.1F;
             do {
-                if (itemstack.stackSize <= 0) {
+                if (itemstack.getCount() <= 0) {
                     continue label0;
                 }
 
                 int k = rand.nextInt(21) + 10;
-                if (k > itemstack.stackSize) {
-                    k = itemstack.stackSize;
+                if (k > itemstack.getCount()) {
+                    k = itemstack.getCount();
                 }
 
-                EntityItem entityitem = new EntityItem(worldObj, posX + f, posY + f1, posZ + f2, itemstack.splitStack(k));
+                EntityItem entityitem = new EntityItem(getWorld(), posX + f, posY + f1, posZ + f2, itemstack.splitStack(k));
                 float f3 = 0.05F;
                 entityitem.motionX = (float) rand.nextGaussian() * f3;
                 entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
                 entityitem.motionZ = (float) rand.nextGaussian() * f3;
-                worldObj.spawnEntityInWorld(entityitem);
+                getWorld().spawnEntityInWorld(entityitem);
             } while (true);
         }
         if (wheels != null) {
@@ -240,7 +240,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
             //TODO there is no GUI for it currently
-            //((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.DIGGER, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+            //((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.DIGGER, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
         }
 
         if (i == 9) {
@@ -376,7 +376,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j + 1)) / i) - 0.125D;
             AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
 
-            if (worldObj.isAABBInMaterial(axisalignedbb, Material.water)) {
+            if (getWorld().isAABBInMaterial(axisalignedbb, Material.water)) {
                 d += 1.0D / i;
             }
         }
@@ -394,16 +394,16 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             if (rand.nextBoolean()) {
                 double d21 = (posX - d13 * d18 * 0.80000000000000004D) + d15 * d20;
                 double d23 = posZ - d15 * d18 * 0.80000000000000004D - d13 * d20;
-                // worldObj.spawnParticle("splash", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
-                worldObj.spawnParticle("largesmoke", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
+                // getWorld().spawnParticle("splash", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
+                getWorld().spawnParticle("largesmoke", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
             } else {
                 double d22 = posX + d13 + d15 * d18 * 0.69999999999999996D;
                 double d24 = (posZ + d15) - d13 * d18 * 0.69999999999999996D;
-                // worldObj.spawnParticle("splash", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
-                worldObj.spawnParticle("largesmoke", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
+                // getWorld().spawnParticle("splash", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
+                getWorld().spawnParticle("largesmoke", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
             }
         }
-        if (worldObj.isRemote) {
+        if (getWorld().isRemote) {
             if (field_9394_d > 0) {
                 double d1 = posX + (field_9393_e - posX) / field_9394_d;
                 double d5 = posY + (field_9392_f - posY) / field_9394_d;
@@ -503,7 +503,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         }
 
         setRotation(rotationYaw, rotationPitch);
-        List<?> list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+        List<?> list = getWorld().getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
         if (list != null && !list.isEmpty()) {
             for (Object o : list) {
                 Entity entity = (Entity) o;
@@ -519,7 +519,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         if (Math.sqrt((motionX * motionX) + (motionZ * motionZ)) > 0.01) {
             Vec3 pos = Vec3.createVectorHelper(posX, posY - 1, posZ);
-            Block id = worldObj.getBlock((int) posX, (int) posY - 1, (int) posZ);
+            Block id = getWorld().getBlock((int) posX, (int) posY - 1, (int) posZ);
 
             if (id != null) {
                 this.playMiningEffect(pos, Block.getIdFromBlock(id));
@@ -535,7 +535,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      */
 
     private void playMiningEffect(Vec3 pos, int block_index) {
-        Block id = worldObj.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = getWorld().getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
         if (id != null) {
             Minecraft.getMinecraft().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
         }
@@ -572,12 +572,12 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     }
 
     @Override
-    public void updateRiderPosition() {
+    public void updatePassenger(Entity passenger) {
         if (riddenByEntity == null) {
             return;
         }
 
-        riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 1.1F, posZ);
+        riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 1.1F, posZ);
         if (riddenByEntity instanceof EntityLiving) {
             pitch = riddenByEntity.rotationPitch;
             if (pitch > Math.toDegrees(pitchLimits))
@@ -635,7 +635,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      * works exactly like getStackInSlot, is only used upon closing GUIs
      */
     @Override
-    public ItemStack getStackInSlotOnClosing(int par1) {
+    public ItemStack removeStackFromSlot(int par1) {
         if (this.zeppInvent[par1] != null) {
             ItemStack var2 = this.zeppInvent[par1];
             this.zeppInvent[par1] = null;
@@ -668,8 +668,8 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     public void setInventorySlotContents(int i, ItemStack itemstack) {
 
         zeppInvent[i] = itemstack;
-        if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-            itemstack.stackSize = getInventoryStackLimit();
+        if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
+            itemstack.getCount() = getInventoryStackLimit();
         }
         if (itemstack != null && itemstack.getItem() == Items.coal && i == 0 && riddenByEntity != null && (riddenByEntity instanceof EntityPlayer)) {
             // ((EntityPlayer)riddenByEntity).func_25046_a(Train.field_27542_startTrain, 1);
@@ -678,7 +678,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "Rotative Digger";
     }
 
@@ -732,7 +732,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             return true;
         }
 
-        if (!worldObj.isRemote) {
+        if (!getWorld().isRemote) {
             entityplayer.mountEntity(this);
         }
 
@@ -740,11 +740,11 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     }
 
     @Override
-    public void openInventory() {
+    public void openInventory(EntityPlayer p) {
     }
 
     @Override
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer p) {
     }
 
     @Override

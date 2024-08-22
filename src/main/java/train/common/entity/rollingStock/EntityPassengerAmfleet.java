@@ -24,9 +24,9 @@ public class EntityPassengerAmfleet extends EntityRollingStock implements IPasse
     }
 
     @Override
-    public void updateRiderPosition() {
+    public void updatePassenger(Entity passenger) {
         if(riddenByEntity!=null) {
-            riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.2, posZ);
+            riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2, posZ);
         }
     }
 
@@ -42,13 +42,13 @@ public class EntityPassengerAmfleet extends EntityRollingStock implements IPasse
         if ((super.interactFirst(entityplayer))) {
             return false;
         }
-        if (!worldObj.isRemote) {
+        if (!getWorld().isRemote) {
             ItemStack itemstack = entityplayer.inventory.getCurrentItem();
             if(lockThisCart(itemstack, entityplayer))return true;
             if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
                 return true;
             }
-            if (!worldObj.isRemote) {
+            if (!getWorld().isRemote) {
                 entityplayer.mountEntity(this);
             }
         }

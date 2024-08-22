@@ -84,7 +84,7 @@ public class EntityTenderOnion extends Tender implements IInventory {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Onion's Tender";
 	}
 
@@ -99,8 +99,8 @@ public class EntityTenderOnion extends Tender implements IInventory {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!this.worldObj.isRemote) {
-			entityplayer.openGui(Traincraft.instance, GuiIDs.TENDER, worldObj, this.getEntityId(), -1, (int) this.posZ);
+		if (!this.getWorld().isRemote) {
+			entityplayer.openGui(Traincraft.instance, GuiIDs.TENDER, getWorld(), this.getEntityId(), -1, (int) this.posZ);
 		}
 		return true;
 	}

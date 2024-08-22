@@ -83,7 +83,7 @@ public class EntityAIFearHorn extends EntityAIBase {
         int xmax = x + r;
         int ymax = y + r;
         int zmax = z + r;
-        ChunkCache chunkcache = new ChunkCache(entity.worldObj, xmin, ymin, zmin, xmax, ymax, zmax, 0);
+        ChunkCache chunkcache = new ChunkCache(entity.getWorld(), xmin, ymin, zmin, xmax, ymax, zmax, 0);
         return (new TCPathFinder(chunkcache, canPassOpenDoor, canPassClosedDoor, false, canSwim)).createEntityPathTo(entity, targetX, targetY, targetZ, range);
     }
 }

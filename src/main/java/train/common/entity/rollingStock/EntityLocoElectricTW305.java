@@ -28,8 +28,8 @@ public class EntityLocoElectricTW305 extends ElectricTrain {
 	}
 
 	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
+	public void updatePassenger(Entity passenger) {
+		if(passenger==null){return;}
 		double pitchRads = this.anglePitchClient * Math.PI / 180.0D;
 		double distance = 2.15;
 		double yOffset = 0.0;
@@ -41,8 +41,8 @@ public class EntityLocoElectricTW305 extends ElectricTrain {
 			anglePitchClient = serverRealPitch*60;
 		}
 		float pitch = (float) (posY + ((Math.tan(pitchRads) * distance) + getMountedYOffset())
-				+ riddenByEntity.getYOffset() + yOffset);
-		float pitch1 = (float) (posY + getMountedYOffset() + riddenByEntity.getYOffset() + yOffset);
+				+ passenger.getYOffset() + yOffset);
+		float pitch1 = (float) (posY + getMountedYOffset() + passenger.getYOffset() + yOffset);
 		double bogieX1 = (this.posX + (rotationCos1 * distance));
 		double bogieZ1 = (this.posZ + (rotationSin1* distance));
 		//System.out.println(rotationCos1+" "+rotationSin1);
@@ -71,7 +71,7 @@ public class EntityLocoElectricTW305 extends ElectricTrain {
 	@Override
 	public void pressKey(int i) {
 		if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class EntityLocoElectricTW305 extends ElectricTrain {
 		return inventorySize;
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Tw 305";
 	}
 
@@ -123,7 +123,7 @@ public class EntityLocoElectricTW305 extends ElectricTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

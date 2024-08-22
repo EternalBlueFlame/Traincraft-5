@@ -50,7 +50,7 @@ public class ItemRotativeDigger extends Item {
 			if (!world.isRemote) {
 				world.spawnEntityInWorld(new EntityRotativeDigger(world, (float) i + 0.5F, (float) j + 1.5F, (float) k + 0.5F));
 			}
-			itemstack.stackSize--;
+			itemstack.getCount()--;
 		}
 		return itemstack;
 	}

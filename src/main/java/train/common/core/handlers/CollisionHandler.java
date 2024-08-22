@@ -26,11 +26,11 @@ import java.util.Random;
 
 public class CollisionHandler {
 
-	private World worldObj;
+	private World getWorld();
 	private Random rand;
 
 	public CollisionHandler(World world) {
-		worldObj = world;
+		getWorld() = world;
 		this.rand = new Random();
 
 	}
@@ -42,7 +42,7 @@ public class CollisionHandler {
 		/**
 		 * A smaller BB is needed otherwise the entity will get sucked back as soon as it unmounts this does not affect collisions with player or other carts. Only collisions with mobs
 		 */
-		listRide = worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, boundingBox.expand(-0.5, -0.5, -0.5));
+		listRide = getWorld().getEntitiesWithinAABBExcludingEntity(entityOne, boundingBox.expand(-0.5, -0.5, -0.5));
 		if (listRide != null && listRide.size() > 0) {
 			for (Object aListRide : listRide) {
 				entity = (Entity) aListRide;
@@ -62,7 +62,7 @@ public class CollisionHandler {
 		else {
 			box = boundingBox.expand(2, 0, 2);
 		}
-		listRide = worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, box);
+		listRide = getWorld().getEntitiesWithinAABBExcludingEntity(entityOne, box);
 		if (listRide != null && listRide.size() > 0) {
 
 			for (Object aListRide : listRide) {
@@ -89,7 +89,7 @@ public class CollisionHandler {
 		}
 		//box = boundingBox.expand(2, 2, 2);
 
-		listRide = worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, box);
+		listRide = getWorld().getEntitiesWithinAABBExcludingEntity(entityOne, box);
 		if (listRide != null && listRide.size() > 0) {
 
 			for (Object aListRide : listRide) {
@@ -135,7 +135,7 @@ public class CollisionHandler {
 			EntityMinecart.getCollisionHandler().onEntityCollision(entityOne, par1Entity);
 			return;
 		}
-		if (!this.worldObj.isRemote) {
+		if (!this.getWorld().isRemote) {
 			if (par1Entity != entityOne.riddenByEntity) {
 
 				double d0 = par1Entity.posX - entityOne.posX;
@@ -211,7 +211,7 @@ public class CollisionHandler {
 			return;
 		}
 
-		if (!this.worldObj.isRemote) {
+		if (!this.getWorld().isRemote) {
 			if (entity != entityOne.riddenByEntity) {
 
 				double var2 = entity.posX - entityOne.posX;
@@ -281,7 +281,7 @@ public class CollisionHandler {
 							entityOne.addVelocity(-var2, 0.0D, -var4);
 						if(entity instanceof EntityPlayer){
 
-							MovingObjectPosition movingobjectposition = worldObj.rayTraceBlocks(Vec3.createVectorHelper(entityOne.posX, entityOne.posY, entityOne.posZ), Vec3.createVectorHelper(entityOne.posX + entityOne.motionX, entityOne.posY + entityOne.motionY, entityOne.posZ + entityOne.motionZ), false);
+							MovingObjectPosition movingobjectposition = getWorld().rayTraceBlocks(Vec3.createVectorHelper(entityOne.posX, entityOne.posY, entityOne.posZ), Vec3.createVectorHelper(entityOne.posX + entityOne.motionX, entityOne.posY + entityOne.motionY, entityOne.posZ + entityOne.motionZ), false);
 							if (entity != null && entity instanceof EntityPlayer) {
 								movingobjectposition = new MovingObjectPosition(entity);
 							}
@@ -320,7 +320,7 @@ public class CollisionHandler {
 
 	public void applyRideEntity(Entity entity, Entity entityOne) {
 
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 		if (entity == entityOne.riddenByEntity) {
@@ -340,7 +340,7 @@ public class CollisionHandler {
 
 	/* Creatures are shot away when a cart/loco hits them */
 	public void applyCollisionLiving(Entity entity, Entity entityOne) {
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 		//System.out.println(entity+" "+ entityOne);
@@ -373,7 +373,7 @@ public class CollisionHandler {
 
 				Vec3 vec3d4 = Vec3.createVectorHelper(entityOne.posX, entityOne.posY, entityOne.posZ);
 				Vec3 vec3d5 = Vec3.createVectorHelper(entityOne.posX + entityOne.motionX, entityOne.posY + entityOne.motionY, entityOne.posZ + entityOne.motionZ);
-				MovingObjectPosition movingobjectposition = worldObj.rayTraceBlocks(vec3d4, vec3d5, false);
+				MovingObjectPosition movingobjectposition = getWorld().rayTraceBlocks(vec3d4, vec3d5, false);
 
 				if (entity != null) {
 					movingobjectposition = new MovingObjectPosition(entity);
@@ -421,10 +421,10 @@ public class CollisionHandler {
 								entity.velocityChanged = true;
 							}
 
-							//worldObj.playSoundAtEntity(entityOne, "damage.fallsmall", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
+							//getWorld().playSoundAtEntity(entityOne, "damage.fallsmall", 1.0F, 1.2F / (rand.nextFloat() * 0.2F + 0.9F));
 							entityOne.playSound("damage.fallsmall", 1.0F, 1.2F / (this.rand.nextFloat() * 0.2F + 0.9F));
 							for (int var9 = 0; var9 < 4; ++var9) {
-								entity.worldObj.spawnParticle("crit", entity.posX + entity.motionX * var9 / 4.0D, entity.posY + entity.motionY * var9 / 4.0D, entity.posZ + entity.motionZ * var9 / 4.0D, -entity.motionX, -entity.motionY + 0.2D, -entity.motionZ);
+								entity.getWorld().spawnParticle("crit", entity.posX + entity.motionX * var9 / 4.0D, entity.posY + entity.motionY * var9 / 4.0D, entity.posZ + entity.motionZ * var9 / 4.0D, -entity.motionX, -entity.motionY + 0.2D, -entity.motionZ);
 							}
 
 						}
@@ -439,7 +439,7 @@ public class CollisionHandler {
 
 	public void applyCollision3(Entity entity, Entity entityOne) {
 
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 
@@ -517,7 +517,7 @@ public class CollisionHandler {
 
 	public void applyCollision2(Entity entity, Entity entityOne) {
 
-		if (worldObj.isRemote) {
+		if (getWorld().isRemote) {
 			return;
 		}
 

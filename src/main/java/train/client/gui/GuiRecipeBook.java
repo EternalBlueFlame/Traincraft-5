@@ -1,7 +1,7 @@
 package train.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -439,7 +439,7 @@ public class GuiRecipeBook extends GuiScreen {
         int halfWidth = (this.width) / 2;
         int halfHeight = (this.height) / 2;
 
-        this.searchBar = new GuiTextField(fontRendererObj, halfWidth + 23, ((halfHeight - bookImageHeight / 2) - 9), 100, 10);
+        this.searchBar = new GuiTextField(fontRenderer, halfWidth + 23, ((halfHeight - bookImageHeight / 2) - 9), 100, 10);
 		this.searchBar.setEnableBackgroundDrawing(false);
 		this.searchBar.setFocused(true);
 		this.searchBar.setCanLoseFocus(false);
@@ -564,24 +564,24 @@ public class GuiRecipeBook extends GuiScreen {
 
         pageIndic = String.format(StatCollector.translateToLocal("book.pageIndicator"), new Object[]{this.currPage + 1, this.bookTotalPages});
 
-		var9 = this.fontRendererObj.getStringWidth(pageIndic);
+		var9 = this.fontRenderer.getStringWidth(pageIndic);
 		if (this.currPage > 0) {
-			this.fontRendererObj.drawString(pageIndic, var5 - var9 + this.bookImageWidth - 44, var6 + 7, 0);
-			this.fontRendererObj.drawString(fontRendererObj.trimStringToWidth(searchBar.getText(), SEARCH_BOX_TEXT_MAX_WIDTH), SEARCH_BOX_X + 21, SEARCH_BOX_Y + 3, 0);
+			this.fontRenderer.drawString(pageIndic, var5 - var9 + this.bookImageWidth - 44, var6 + 7, 0);
+			this.fontRenderer.drawString(fontRenderer.trimStringToWidth(searchBar.getText(), SEARCH_BOX_TEXT_MAX_WIDTH), SEARCH_BOX_X + 21, SEARCH_BOX_Y + 3, 0);
 		}
 		super.drawScreen(par1, par2, par3);
 
         if (this.currPage < rightPage.size()) {
-            this.fontRendererObj.drawSplitString(leftPage.get(this.currPage), var5 + 36, var6 + 16 + 16, 140, 0);
+            this.fontRenderer.drawSplitString(leftPage.get(this.currPage), var5 + 36, var6 + 16 + 16, 140, 0);
 
-            this.fontRendererObj.drawSplitString(rightPage.get(this.currPage), var5 + 250, var6 + 16 + 16, 140, 0);
+            this.fontRenderer.drawSplitString(rightPage.get(this.currPage), var5 + 250, var6 + 16 + 16, 140, 0);
 
             GL11.glEnable(32826);
             RenderHelper.enableGUIStandardItemLighting();
             if (this.leftPageItemStacks != null && this.leftPageItemStacks.get(this.currPage) != null && this.leftPageItemStacks.get(this.currPage).get(0) != null) {
                 for (int t = 0; t < this.leftPageItemStacks.get(this.currPage).size(); t++) {
                     if (this.leftPageItemStacks.get(this.currPage).get(t) != null) {
-                        renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, ((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getItemStack(), var5 + ((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getX(), var6 + ((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getY());
+                        renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, ((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getItemStack(), var5 + ((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getX(), var6 + ((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getY());
                     }
                 }
             }
@@ -589,7 +589,7 @@ public class GuiRecipeBook extends GuiScreen {
             if (this.rightPageItemStacks != null && this.rightPageItemStacks.get(this.currPage) != null && this.rightPageItemStacks.get(this.currPage).get(0) != null) {
                 for (int t = 0; t < this.rightPageItemStacks.get(this.currPage).size(); t++) {
                     if (this.rightPageItemStacks.get(this.currPage).get(t) != null) {
-                        renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, ((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getItemStack(), var5 + ((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getX() + 210, var6 + ((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getY());
+                        renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, ((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getItemStack(), var5 + ((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getX() + 210, var6 + ((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getY());
                     }
                 }
             }
@@ -660,52 +660,52 @@ public class GuiRecipeBook extends GuiScreen {
         if (side.equals("right")) offset = 194;
         GL11.glEnable(32826);
         if (itemList[0] != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList[0], var5 + 50 + offset, var6 + 67);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[0], var5 + 50 + offset, var6 + 67);
         }
 
         if (itemList[1] != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList[1], var5 + 68 + offset, var6 + 67);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[1], var5 + 68 + offset, var6 + 67);
         }
 
         if (itemList[2] != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList[2], var5 + 86 + offset, var6 + 67);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[2], var5 + 86 + offset, var6 + 67);
         }
 
         if (itemList[3] != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList[3], var5 + 50 + offset, var6 + 85);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[3], var5 + 50 + offset, var6 + 85);
         }
 
         if (itemList[4] != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList[4], var5 + 68 + offset, var6 + 85);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[4], var5 + 68 + offset, var6 + 85);
         }
 
         if (itemList[5] != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList[5], var5 + 86 + offset, var6 + 85);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[5], var5 + 86 + offset, var6 + 85);
         }
 
         if (itemList[6] != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList[6], var5 + 50 + offset, var6 + 103);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[6], var5 + 50 + offset, var6 + 103);
         }
         if (itemList[7] != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList[7], var5 + 68 + offset, var6 + 103);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[7], var5 + 68 + offset, var6 + 103);
         }
 
         if (itemList[8] != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList[8], var5 + 86 + offset, var6 + 103);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[8], var5 + 86 + offset, var6 + 103);
         }
 
         if (itemOutput != null && itemOutput.getItem() != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemOutput, var5 + 145 + offset, var6 + 85);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemOutput, var5 + 145 + offset, var6 + 85);
             // Draw name of recipe. Highlight in green if it contains the search query.
-            this.fontRendererObj.drawString(itemOutput.getItem().getItemStackDisplayName(itemOutput), var5 + 20 + offset, var6 + 40, (!searchBar.getText().isEmpty() && itemOutput.getItem().getItemStackDisplayName(itemOutput).toLowerCase().contains(searchBar.getText().toLowerCase())) ? 0x21d12d : 0);
+            this.fontRenderer.drawString(itemOutput.getItem().getItemStackDisplayName(itemOutput), var5 + 20 + offset, var6 + 40, (!searchBar.getText().isEmpty() && itemOutput.getItem().getItemStackDisplayName(itemOutput).toLowerCase().contains(searchBar.getText().toLowerCase())) ? 0x21d12d : 0);
         }
 
         if (itemOutput != null) {
-            this.fontRendererObj.drawString("Crafted in: Train Workbench", var5 + 20 + offset, var6 + 130, 0);
+            this.fontRenderer.drawString("Crafted in: Train Workbench", var5 + 20 + offset, var6 + 130, 0);
 
             for (int z = 0; z < RecipeBookHandler.vanillaWorkTableRecipes.length; z++) {
                 if (itemOutput.getItem() != null && RecipeBookHandler.vanillaWorkTableRecipes[z] != null && RecipeBookHandler.vanillaWorkTableRecipes[z].equals(itemOutput.getItem().getItemStackDisplayName(itemOutput))) {
-                    this.fontRendererObj.drawString("Also crafted in: Crafting Table", var5 + 20 + offset, var6 + 140, 0);
+                    this.fontRenderer.drawString("Also crafted in: Crafting Table", var5 + 20 + offset, var6 + 140, 0);
                     break;
                 }
             }
@@ -726,92 +726,92 @@ public class GuiRecipeBook extends GuiScreen {
         GL11.glEnable(32826);
 
         if (itemList.get(0) != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(0), var5 + 94 + offset, var6 + 76);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(0), var5 + 94 + offset, var6 + 76);
         }
 
         if (itemList.get(0) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(0), var5 + 94 + offset, var6 + 76);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(0), var5 + 94 + offset, var6 + 76);
         }
 
         if (itemList.get(1) != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(1), var5 + 113 + offset, var6 + 143);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(1), var5 + 113 + offset, var6 + 143);
         }
 
         if (itemList.get(1) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(1), var5 + 113 + offset, var6 + 143);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(1), var5 + 113 + offset, var6 + 143);
         }
         if (itemList.get(2) != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(2), var5 + 148 + offset, var6 + 143);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(2), var5 + 148 + offset, var6 + 143);
         }
 
         if (itemList.get(2) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(2), var5 + 148 + offset, var6 + 143);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(2), var5 + 148 + offset, var6 + 143);
         }
 
         if (itemList.get(3) != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(3), var5 + 214 + offset, var6 + 143);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(3), var5 + 214 + offset, var6 + 143);
         }
 
         if (itemList.get(3) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(3), var5 + 214 + offset, var6 + 143);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(3), var5 + 214 + offset, var6 + 143);
         }
 
         if (itemList.get(4) != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(4), var5 + 148 + offset, var6 + 77);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(4), var5 + 148 + offset, var6 + 77);
         }
 
         if (itemList.get(4) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(4), var5 + 148 + offset, var6 + 77);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(4), var5 + 148 + offset, var6 + 77);
         }
 
         if (itemList.get(5) != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(5), var5 + 184 + offset, var6 + 77);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(5), var5 + 184 + offset, var6 + 77);
         }
 
         if (itemList.get(5) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(5), var5 + 184 + offset, var6 + 77);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(5), var5 + 184 + offset, var6 + 77);
         }
 
         if (itemList.get(6) != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(6), var5 + 149 + offset, var6 + 110);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(6), var5 + 149 + offset, var6 + 110);
         }
 
         if (itemList.get(6) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(6), var5 + 149 + offset, var6 + 110);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(6), var5 + 149 + offset, var6 + 110);
         }
 
         if (itemList.get(7) != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(7), var5 + 185 + offset, var6 + 110);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(7), var5 + 185 + offset, var6 + 110);
         }
 
         if (itemList.get(7) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(7), var5 + 185 + offset, var6 + 110);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(7), var5 + 185 + offset, var6 + 110);
         }
 
         if (itemList.get(8) != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(8), var5 + 94 + offset, var6 + 110);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(8), var5 + 94 + offset, var6 + 110);
         }
 
         if (itemList.get(8) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(8), var5 + 94 + offset, var6 + 110);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(8), var5 + 94 + offset, var6 + 110);
         }
 
         if (itemList.get(9) != null) {
-            renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(9), var5 + 214 + offset, var6 + 77);
+            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(9), var5 + 214 + offset, var6 + 77);
         }
 
         if (itemList.get(9) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRendererObj, this.mc.renderEngine, itemList.get(9), var5 + 214 + offset, var6 + 77);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(9), var5 + 214 + offset, var6 + 77);
         }
 
         ItemStack output = recipeList.get(page).getOutput();
         if (output != null) {
             if (side.equals("left")) {
-                renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, output, var5 + 162, var6 + 177);
+                renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, output, var5 + 162, var6 + 177);
             }
 
             if (side.equals("right")) {
-                renderItem.renderItemIntoGUI(this.fontRendererObj, this.mc.renderEngine, output, var5 + 432, var6 + 177);
+                renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, output, var5 + 432, var6 + 177);
             }
         }
 
@@ -825,13 +825,13 @@ public class GuiRecipeBook extends GuiScreen {
 
         // Draw item names and tiers.
         if (side.equals("left")) {
-            this.fontRendererObj.drawString("Tier: " + tier, var5 - var9 + this.bookImageWidth - 56, var6 + 40, 0);
-            this.fontRendererObj.drawString(fontRendererObj.trimStringToWidth(name, 150), var5 - var9 + this.bookImageWidth - 45, var6 + 56, (!searchBar.getText().isEmpty() && drawColorHighlightFlag) ? 0x21d12d : 0xffffff);
+            this.fontRenderer.drawString("Tier: " + tier, var5 - var9 + this.bookImageWidth - 56, var6 + 40, 0);
+            this.fontRenderer.drawString(fontRenderer.trimStringToWidth(name, 150), var5 - var9 + this.bookImageWidth - 45, var6 + 56, (!searchBar.getText().isEmpty() && drawColorHighlightFlag) ? 0x21d12d : 0xffffff);
         }
 
         if (side.equals("right")) {
-            this.fontRendererObj.drawString(fontRendererObj.trimStringToWidth(name, 150), var5 - var9 + this.bookImageWidth + 225, var6 + 56, (!searchBar.getText().isEmpty() && drawColorHighlightFlag) ? 0x21d12d : 0xffffff);
-            this.fontRendererObj.drawString("Tier: " + tier, var5 - var9 + this.bookImageWidth + 338, var6 + 40, 0);
+            this.fontRenderer.drawString(fontRenderer.trimStringToWidth(name, 150), var5 - var9 + this.bookImageWidth + 225, var6 + 56, (!searchBar.getText().isEmpty() && drawColorHighlightFlag) ? 0x21d12d : 0xffffff);
+            this.fontRenderer.drawString("Tier: " + tier, var5 - var9 + this.bookImageWidth + 338, var6 + 40, 0);
         }
         GL11.glDisable(32826);
     }

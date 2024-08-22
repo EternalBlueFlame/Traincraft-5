@@ -1,7 +1,7 @@
 package train.common.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockMushroom;
@@ -1978,7 +1978,7 @@ public class ItemTCRail extends ItemPart {
                 }
             }
             if (player == null || !player.capabilities.isCreativeMode) {
-                --itemstack.stackSize;
+                --itemstack.getCount();
             }
             return true;
         }

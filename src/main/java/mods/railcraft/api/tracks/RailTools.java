@@ -81,10 +81,10 @@ public abstract class RailTools {
         int y = MathHelper.floor_double(cart.posY);
         int z = MathHelper.floor_double(cart.posZ);
 
-        if (BlockRailBase.func_150049_b_(cart.worldObj, x, y - 1, z))
+        if (BlockRailBase.func_150049_b_(cart.getWorld(), x, y - 1, z))
             y--;
 
-        TileEntity tile = cart.worldObj.getTileEntity(x, y, z);
+        TileEntity tile = cart.getWorld().getTileEntity(x, y, z);
         if (tile instanceof ITrackTile) {
             ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
             return track instanceof ITrackLockdown && ((ITrackLockdown) track).isCartLockedDown(cart);

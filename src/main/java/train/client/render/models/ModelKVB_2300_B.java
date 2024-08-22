@@ -1491,11 +1491,11 @@ public class ModelKVB_2300_B extends ModelConverter //Same as Filename
 
 		for (ModelRendererTurbo m : bodyModel) {
 			if (m.boxName.equals("lamp")) {
-				Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+				Minecraft.getMinecraft().entityRenderer.disableLightmap();
 			}
 			m.render(f5);
 			if (m.boxName.equals("lamp")) {
-				Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+				Minecraft.getMinecraft().entityRenderer.enableLightmap();
 				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 				GL11.glEnable(GL11.GL_BLEND);
 			}

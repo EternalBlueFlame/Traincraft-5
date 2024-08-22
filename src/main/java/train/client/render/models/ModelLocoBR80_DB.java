@@ -507,10 +507,10 @@ public class ModelLocoBR80_DB extends ModelBase {
 		box57.render(f5);
 		box58.render(f5);
 		
-		Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+		Minecraft.getMinecraft().entityRenderer.disableLightmap();
 		lightBack.render(f5);
 		lightFront.render(f5);
-		Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+		Minecraft.getMinecraft().entityRenderer.enableLightmap();
 		
 		box6.render(f5);
 		box60.render(f5);

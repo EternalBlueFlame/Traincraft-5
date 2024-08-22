@@ -35,7 +35,7 @@ public class PacketSetTrainLockedToClient implements IMessage {
     public static class Handler implements IMessageHandler<PacketSetTrainLockedToClient, IMessage> {
         @Override
         public IMessage onMessage(PacketSetTrainLockedToClient message, MessageContext context) {
-            Entity TrainEntity = context.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityID);
+            Entity TrainEntity = context.getServerHandler().playerEntity.getWorld().getEntityByID(message.entityID);
 
             if (TrainEntity instanceof AbstractTrains) {
                 ((AbstractTrains) TrainEntity).setTrainLockedFromPacket(message.bool);

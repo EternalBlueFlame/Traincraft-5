@@ -555,11 +555,11 @@ public class ModelLocoEr_Ussr extends ModelBase {
 		box8.render(f5);
 		box83.render(f5);
 		
-		Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+		Minecraft.getMinecraft().entityRenderer.disableLightmap();
 		box35.render(f5);
 		box16.render(f5);
 		box9.render(f5);
-		Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+		Minecraft.getMinecraft().entityRenderer.enableLightmap();
 		
 		if (ClientProxy.isHoliday()) {
 			GL11.glPushMatrix();

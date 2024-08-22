@@ -35,7 +35,7 @@ public class PacketUpdateTrainID implements IMessage {
     public static class Handler implements IMessageHandler<PacketUpdateTrainID, IMessage> {
         @Override
         public IMessage onMessage(PacketUpdateTrainID message, MessageContext context) {
-            Entity TrainEntity = context.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityID);
+            Entity TrainEntity = context.getServerHandler().playerEntity.getWorld().getEntityByID(message.entityID);
             if (TrainEntity instanceof Locomotive) {
                 ((Locomotive) TrainEntity).trainID = message.trainID;
             }

@@ -4,7 +4,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
-import cpw.mods.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.Side;
 import ebf.tim.entities.EntitySeat;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -56,8 +56,8 @@ public class PacketSeatUpdate implements IMessage {
             EntitySeat oldSeat;
             EntitySeat newSeat;
             if (ctx.side == Side.SERVER) {
-                rollingStockEntity = (EntityRollingStock) ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.rollingStockId);
-                playerEntity = ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.playerId);
+                rollingStockEntity = (EntityRollingStock) ctx.getServerHandler().playerEntity.getWorld().getEntityByID(message.rollingStockId);
+                playerEntity = ctx.getServerHandler().playerEntity.getWorld().getEntityByID(message.playerId);
 
             } else {
                 rollingStockEntity = (EntityRollingStock) Minecraft.getMinecraft().theWorld.getEntityByID(message.rollingStockId);

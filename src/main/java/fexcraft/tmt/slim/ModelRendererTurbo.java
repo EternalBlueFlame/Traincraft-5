@@ -1390,7 +1390,7 @@ public class ModelRendererTurbo {
         }
         GL11.glPushMatrix();
         if (ignoresLighting){
-            Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);
+            Minecraft.getMinecraft().entityRenderer.disableLightmap();
         }
         if(noCull){
             GL11.glDisable(GL11.GL_CULL_FACE);
@@ -1419,7 +1419,7 @@ public class ModelRendererTurbo {
             GL11.glEnable(GL11.GL_CULL_FACE);
         }
         if (ignoresLighting){
-            Minecraft.getMinecraft().entityRenderer.enableLightmap(1D);
+            Minecraft.getMinecraft().entityRenderer.enableLightmap();
         }
         GL11.glPopMatrix();
     }

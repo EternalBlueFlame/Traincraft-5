@@ -49,7 +49,7 @@ public class ItemSignal extends Item { // implements IBoxable TODO when IC2
 		/*if (!entityplayer.canCurrentToolHarvestBlock(i, j, k)) {
 			return false;
 		}*/
-		if (itemstack.stackSize == 0) {
+		if (itemstack.getCount() == 0) {
 			return false;
 		}
 
@@ -59,7 +59,7 @@ public class ItemSignal extends Item { // implements IBoxable TODO when IC2
 				spawnID.onBlockPlacedBy(world, i, j, k, entityplayer, new ItemStack(spawnID));
 			}
 			world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, block.stepSound.getStepResourcePath(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
-			itemstack.stackSize--;
+			itemstack.getCount()--;
 		}
 		return true;
 	}

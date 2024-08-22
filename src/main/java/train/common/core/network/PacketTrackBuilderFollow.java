@@ -38,7 +38,7 @@ public class PacketTrackBuilderFollow implements IMessage {
     public static class Handler implements IMessageHandler<PacketTrackBuilderFollow, IMessage> {
         @Override
         public IMessage onMessage(PacketTrackBuilderFollow message, MessageContext context) {
-            Entity builderEntity = context.getServerHandler().playerEntity.worldObj.getEntityByID(message.id);
+            Entity builderEntity = context.getServerHandler().playerEntity.getWorld().getEntityByID(message.id);
             /*
              * "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks
              * for when the value is null anyways.

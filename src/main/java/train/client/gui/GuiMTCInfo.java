@@ -1,8 +1,8 @@
 package train.client.gui;
 
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
@@ -28,9 +28,9 @@ public class GuiMTCInfo extends GuiScreen {
 
     @Override
     public void initGui() {
-        trainLevel = new GuiTCTextField(fontRendererObj, this.width / 2 - 5, this.height / 2 - 1, 15, 15);
-        destination = new GuiTCTextField(fontRendererObj, this.width / 2 - 5, this.height / 2 + 20, 80, 15);
-        trainID = new GuiTCTextField(fontRendererObj, this.width / 2 - 5, this.height / 2 - 20, 80, 15);
+        trainLevel = new GuiTCTextField(fontRenderer, this.width / 2 - 5, this.height / 2 - 1, 15, 15);
+        destination = new GuiTCTextField(fontRenderer, this.width / 2 - 5, this.height / 2 + 20, 80, 15);
+        trainID = new GuiTCTextField(fontRenderer, this.width / 2 - 5, this.height / 2 - 20, 80, 15);
         okayButton = new GuiButton(0, this.width / 2 - 5, this.height / 2 + 40, 60, 25, "Okay");
         trainLevel.setMaxStringLength(1);
         trainLevel.setText(theLocomotive.trainLevel);
@@ -42,10 +42,10 @@ public class GuiMTCInfo extends GuiScreen {
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
-        this.drawCenteredString(this.fontRendererObj, "Minecraft Train Control Setup", this.width / 2, 40, 0xFFFFFFFF);
-        this.drawString(this.fontRendererObj, "Train Level: ", this.width / 2 - 70, this.height / 2 + 3, 0xFFFFFFFF);
-        this.drawString(this.fontRendererObj, "Train ID: ", this.width / 2 - 70, this.height / 2 - 17, 0xFFFFFFFF);
-        this.drawString(this.fontRendererObj, "Destination: ", this.width / 2 - 70, this.height / 2 + 23, 0xFFFFFFFF);
+        this.drawCenteredString(this.fontRenderer, "Minecraft Train Control Setup", this.width / 2, 40, 0xFFFFFFFF);
+        this.drawString(this.fontRenderer, "Train Level: ", this.width / 2 - 70, this.height / 2 + 3, 0xFFFFFFFF);
+        this.drawString(this.fontRenderer, "Train ID: ", this.width / 2 - 70, this.height / 2 - 17, 0xFFFFFFFF);
+        this.drawString(this.fontRenderer, "Destination: ", this.width / 2 - 70, this.height / 2 + 23, 0xFFFFFFFF);
         trainLevel.drawTextBox();
         trainID.drawTextBox();
         destination.drawTextBox();

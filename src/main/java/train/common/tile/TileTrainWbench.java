@@ -7,8 +7,8 @@
 
 package train.common.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -17,14 +17,14 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.api.blocks.TileRenderFacing;
 import train.common.library.Info;
 
 public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 	private ItemStack[] workbenchItemStacks;
-	private ForgeDirection facing;
+	private EnumFacing facing;
 
 	public TileTrainWbench() {
 
@@ -32,10 +32,10 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 	}
 
 	@Override
-	public void closeInventory() {}
+	public void closeInventory(EntityPlayer p) {}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 
 		return "TrainWorkbench";
 	}
@@ -47,7 +47,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 	}
 
 	@Override
-	public void openInventory() {}
+	public void openInventory(EntityPlayer p) {}
 
 	@Override
 	public int getSizeInventory() {
@@ -90,7 +90,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 	}
 
 	@Override
-	public ItemStack getStackInSlotOnClosing(int i) {
+	public ItemStack removeStackFromSlot(int i) {
 
 		if (this.workbenchItemStacks[i] != null) {
 
@@ -121,7 +121,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 		super.readFromNBT(nbtTag);
 
-		facing = ForgeDirection.getOrientation(nbtTag.getByte("Orientation"));
+		facing = EnumFacing.getOrientation(nbtTag.getByte("Orientation"));
 		NBTTagList tagList = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		workbenchItemStacks = new ItemStack[getSizeInventory()];
 
@@ -148,7 +148,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 		}
 		else {
 
-			nbtTag.setByte("Orientation", (byte) ForgeDirection.NORTH.ordinal());
+			nbtTag.setByte("Orientation", (byte) EnumFacing.NORTH.ordinal());
 		}
 
 		NBTTagList tagList = new NBTTagList();
@@ -177,7 +177,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
 
-		if (worldObj == null || worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (getWorld() == null || getWorld().getTileEntity(xCoord, yCoord, zCoord) != this) {
 
 			return false;
 		}

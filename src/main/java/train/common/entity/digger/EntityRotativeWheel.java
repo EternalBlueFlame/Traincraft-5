@@ -1,7 +1,7 @@
 package train.common.entity.digger;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockTorch;
@@ -85,12 +85,12 @@ public class EntityRotativeWheel extends Entity {
             this.dataWatcher.updateObject(21, startWheel);
         }
 
-        if (fakePlayer == null && worldObj != null) {
-            fakePlayer = new FakePlayer(worldObj);
+        if (fakePlayer == null && getWorld() != null) {
+            fakePlayer = new FakePlayer(getWorld());
         }
 
-        assert worldObj != null;
-        List<?> listLiving = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.4, 0.4, 0.4));
+        assert getWorld() != null;
+        List<?> listLiving = getWorld().getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.4, 0.4, 0.4));
         if (listLiving != null && !listLiving.isEmpty() && entity != null && entity instanceof EntityRotativeDigger && ((EntityRotativeDigger) entity).getFuel() > 0) {//&& ((EntityRotativeDigger) entity).start){
 
             for (Object o : listLiving) {
@@ -121,7 +121,7 @@ public class EntityRotativeWheel extends Entity {
              * } */
         }
 
-        if (worldObj.isRemote) {
+        if (getWorld().isRemote) {
             if (field_9394_d > 0) {
                 double d1 = posX + (field_9393_e - posX) / (double) field_9394_d;
                 double d5 = posY + (field_9392_f - posY) / (double) field_9394_d;
@@ -163,17 +163,17 @@ public class EntityRotativeWheel extends Entity {
             return;
         }
 
-        Block id = worldObj.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
-        int meta = worldObj.getBlockMetadata((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = getWorld().getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        int meta = getWorld().getBlockMetadata((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
         if (id != null) {
             this.playMiningEffect(pos, id);
         }
 
         if (!shouldIgnoreBlockForHarvesting(pos, id)) {
-            id.harvestBlock(worldObj, fakePlayer, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, meta);
-            worldObj.setBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, null);
+            id.harvestBlock(getWorld(), fakePlayer, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, meta);
+            getWorld().setBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, null);
 
-            worldObj.playAuxSFX(2001, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, Block.getIdFromBlock(id) + (meta << 12));
+            getWorld().playAuxSFX(2001, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, Block.getIdFromBlock(id) + (meta << 12));
             this.playMiningEffect(pos, id);
         }
 
@@ -191,7 +191,7 @@ public class EntityRotativeWheel extends Entity {
             return true;
         }
 
-        return id.getCollisionBoundingBoxFromPool(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord) == null;
+        return id.getCollisionBoundingBoxFromPool(getWorld(), (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord) == null;
     }
 
     public int getStartWheel() {
@@ -209,7 +209,7 @@ public class EntityRotativeWheel extends Entity {
     @SideOnly(Side.CLIENT)
     private void playMiningEffect(Vec3 pos, Block block_index) {
         miningTickCounter++;
-        Block id = worldObj.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = getWorld().getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
     }
 
     /**

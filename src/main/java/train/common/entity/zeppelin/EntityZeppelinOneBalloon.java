@@ -23,7 +23,7 @@ public class EntityZeppelinOneBalloon extends AbstractZeppelin{
 	}
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i) {
-		if (worldObj.isRemote || isDead) {
+		if (getWorld().isRemote || isDead) {
 			return true;
 		}
 		boatRockDirection = -boatRockDirection;
@@ -44,7 +44,7 @@ public class EntityZeppelinOneBalloon extends AbstractZeppelin{
 		return true;
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Zeppelin One Balloon";
 	}
 }

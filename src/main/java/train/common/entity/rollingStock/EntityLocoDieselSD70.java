@@ -93,7 +93,7 @@ public class EntityLocoDieselSD70 extends DieselTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "SD70M";
 	}
 
@@ -103,7 +103,7 @@ public class EntityLocoDieselSD70 extends DieselTrain {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
 				return true;
 			}

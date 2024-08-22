@@ -1,8 +1,8 @@
 package train.client.gui;
 
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -30,29 +30,29 @@ public class GuiSpeedTransmitter extends GuiScreen {
 
         if (entity instanceof TileInfoTransmitterSpeed) {
             transmitterBlock = (TileInfoTransmitterSpeed) entity;
-            Block transmitterBlocc = entity.getWorldObj().getBlock(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
-            System.out.println(entity.getWorldObj().isBlockIndirectlyGettingPowered(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord));
+            Block transmitterBlocc = entity.getgetWorld()().getBlock(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
+            System.out.println(entity.getgetWorld()().isBlockIndirectlyGettingPowered(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord));
         }
     }
 
     @Override
     public void initGui() {
-        //trainLevel = new GuiTCTextField(fontRendererObj, this.width/2 -5, this.height/2 - 1, 15,10);
+        //trainLevel = new GuiTCTextField(fontRenderer, this.width/2 -5, this.height/2 - 1, 15,10);
         //okayButton = new GuiButton(0,this.width/2 -5, this.height/2 + 10, 25,25, "Okay" );
         //trainLevel.setMaxStringLength(1);
         // trainLevel.setText(theLocomotive.trainLevel);
         //this.buttonList.add(okayButton);
-        speedLimitTextField = new GuiTCTextField(fontRendererObj, this.width / 2 - 30, 69, 27, 10);
+        speedLimitTextField = new GuiTCTextField(fontRenderer, this.width / 2 - 30, 69, 27, 10);
         speedLimitTextField.setMaxStringLength(3);
 
-        nextSpeedLimitTextField = new GuiTCTextField(fontRendererObj, this.width / 2 - 7, 89, 27, 10);
+        nextSpeedLimitTextField = new GuiTCTextField(fontRenderer, this.width / 2 - 7, 89, 27, 10);
         nextSpeedLimitTextField.setMaxStringLength(3);
 
-        nextSpeedXTextField = new GuiTCTextField(fontRendererObj, this.width / 2 + 10, 109, 35, 10);
+        nextSpeedXTextField = new GuiTCTextField(fontRenderer, this.width / 2 + 10, 109, 35, 10);
 
-        nextSpeedYTextField = new GuiTCTextField(fontRendererObj, this.width / 2 + 10, 129, 35, 10);
+        nextSpeedYTextField = new GuiTCTextField(fontRenderer, this.width / 2 + 10, 129, 35, 10);
 
-        nextSpeedZTextField = new GuiTCTextField(fontRendererObj, this.width / 2 + 10, 149, 35, 10);
+        nextSpeedZTextField = new GuiTCTextField(fontRenderer, this.width / 2 + 10, 149, 35, 10);
 
         okayButton = new GuiButton(0, this.width / 2 - 5, this.height / 2 + 45, 30, 30, "Okay");
         speedLimitTextField.setText(Integer.toString(transmitterBlock.setSpeed));
@@ -67,17 +67,17 @@ public class GuiSpeedTransmitter extends GuiScreen {
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         drawDefaultBackground();
 
-        this.drawCenteredString(this.fontRendererObj, "Speed Transmitter Setup", this.width / 2, 40, 0xFFFFFFFF);
+        this.drawCenteredString(this.fontRenderer, "Speed Transmitter Setup", this.width / 2, 40, 0xFFFFFFFF);
         glColor3f(1, 1, 1);
-        this.drawString(this.fontRendererObj, "Speed Limit: ", this.width / 2 - 90, 70, 0xFFFFFFFF);
+        this.drawString(this.fontRenderer, "Speed Limit: ", this.width / 2 - 90, 70, 0xFFFFFFFF);
         speedLimitTextField.drawTextBox();
-        this.drawString(this.fontRendererObj, "Speed Next Limit: ", this.width / 2 - 90, 90, 0xFFFFFFFF);
+        this.drawString(this.fontRenderer, "Speed Next Limit: ", this.width / 2 - 90, 90, 0xFFFFFFFF);
         nextSpeedLimitTextField.drawTextBox();
-        this.drawString(this.fontRendererObj, "Speed Next Limit X: ", this.width / 2 - 90, 110, 0xFFFFFFFF);
+        this.drawString(this.fontRenderer, "Speed Next Limit X: ", this.width / 2 - 90, 110, 0xFFFFFFFF);
         nextSpeedXTextField.drawTextBox();
-        this.drawString(this.fontRendererObj, "Speed Next Limit Y: ", this.width / 2 - 90, 130, 0xFFFFFFFF);
+        this.drawString(this.fontRenderer, "Speed Next Limit Y: ", this.width / 2 - 90, 130, 0xFFFFFFFF);
         nextSpeedYTextField.drawTextBox();
-        this.drawString(this.fontRendererObj, "Speed Next Limit Z: ", this.width / 2 - 90, 150, 0xFFFFFFFF);
+        this.drawString(this.fontRenderer, "Speed Next Limit Z: ", this.width / 2 - 90, 150, 0xFFFFFFFF);
         nextSpeedZTextField.drawTextBox();
 
         super.drawScreen(mouseX, mouseY, partialTicks);
@@ -87,7 +87,7 @@ public class GuiSpeedTransmitter extends GuiScreen {
     @SideOnly(Side.CLIENT)
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0) {
-            TileInfoTransmitterSpeed its = (TileInfoTransmitterSpeed) transmitterBlock.getWorldObj().getTileEntity(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
+            TileInfoTransmitterSpeed its = (TileInfoTransmitterSpeed) transmitterBlock.getgetWorld()().getTileEntity(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
             its.setSpeed = Integer.parseInt(speedLimitTextField.getText());
             Traincraft.itsChannel.sendToServer(new PacketSetSpeed(Integer.parseInt(speedLimitTextField.getText()), its.xCoord, its.yCoord, its.zCoord, 0));
             its.nextUpdateSpeed(Integer.parseInt(nextSpeedLimitTextField.getText()), Double.parseDouble(nextSpeedXTextField.getText()), Double.parseDouble(nextSpeedYTextField.getText()), Double.parseDouble(nextSpeedZTextField.getText()));

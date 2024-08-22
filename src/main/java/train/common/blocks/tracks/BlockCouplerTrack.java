@@ -37,7 +37,7 @@ public class BlockCouplerTrack extends TrackBaseTraincraft implements ITrackPowe
 	@Override
 	public void onMinecartPass(EntityMinecart cart) {
 		if (isPowered() && !(cart instanceof AbstractTrains)) {//So that it attaches minecarts when railcraft is installed
-			ILinkageManager lm = CartTools.getLinkageManager(cart.worldObj);
+			ILinkageManager lm = CartTools.getLinkageManager(cart.getWorld());
 			if (taggedCart != null)
 				lm.createLink(this.taggedCart, cart);
 			this.taggedCart = cart;
@@ -47,13 +47,13 @@ public class BlockCouplerTrack extends TrackBaseTraincraft implements ITrackPowe
 			((EntityRollingStock) cart).isAttaching = true;
 			if (taggedCart instanceof EntityRollingStock) {
 				((EntityRollingStock) taggedCart).isAttaching = true;
-				LinkHandler lh = new LinkHandler(cart.worldObj);
+				LinkHandler lh = new LinkHandler(cart.getWorld());
 				lh.addStake((EntityRollingStock) this.taggedCart, (EntityRollingStock) cart, false);
 			}
 			this.taggedCart = cart;
 		}
 		if (!isPowered() && !(cart instanceof AbstractTrains)) {
-			ILinkageManager lm = CartTools.getLinkageManager(cart.worldObj);
+			ILinkageManager lm = CartTools.getLinkageManager(cart.getWorld());
 			if (taggedCart != null)
 				lm.breakLink(this.taggedCart, cart);
 			this.taggedCart = cart;

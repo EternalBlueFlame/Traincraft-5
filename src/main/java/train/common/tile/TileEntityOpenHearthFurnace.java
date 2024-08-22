@@ -1,8 +1,8 @@
 package train.common.tile;
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.api.blocks.TileTraincraft;
 import train.common.blocks.BlockOpenHearthFurnace;
 import train.common.blocks.TCBlocks;
@@ -43,7 +43,7 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 		random = new Random();
 	}
 	@Override
-	public String getInventoryName(){
+	public String getName(){
 		return "Open Hearth Furnace";
 	}
 
@@ -82,7 +82,7 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 		if (furnaceBurnTime > 0) {
 			furnaceBurnTime--;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (furnaceBurnTime == 0 && canSmelt()) {
 				if (this.slots[2] != null) {
 					currentItemBurnTime = furnaceBurnTime = getItemBurnTime(this.slots[2]);
@@ -113,13 +113,13 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 			}
 			if (flag != (furnaceBurnTime > 0)) {
 				flag1 = true;
-				BlockOpenHearthFurnace.updateHearthFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, random);
+				BlockOpenHearthFurnace.updateHearthFurnaceBlockState(furnaceBurnTime > 0, getWorld(), xCoord, yCoord, zCoord, random);
 			}
 			this.syncTileEntity();
 		}
-		if (this.worldObj.isRemote) {
+		if (this.getWorld().isRemote) {
 			if (furnaceBurnTime > 0) {
-				smoke(worldObj, xCoord, yCoord, zCoord, random);
+				smoke(getWorld(), xCoord, yCoord, zCoord, random);
 			}
 		}
 		if (flag1) {
@@ -165,7 +165,7 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 
 		}
 		else if (this.slots[3].getItem() == itemstack.getItem()) {
-			this.slots[3].stackSize += itemstack.stackSize;
+			this.slots[3].stackSize += itemstack.getCount();
 
 		}
 		if (this.slots[0].getItem().hasContainerItem(this.slots[0])) {

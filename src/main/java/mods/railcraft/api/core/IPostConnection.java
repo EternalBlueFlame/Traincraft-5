@@ -9,7 +9,7 @@
 package mods.railcraft.api.core;
 
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 
 /**
  * If you want your block to connect (or not connect) to posts, implement this
@@ -39,6 +39,6 @@ public interface IPostConnection {
      * @param side Side to connect to
      * @return true if connect
      */
-    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, ForgeDirection side);
+    public ConnectStyle connectsToPost(IBlockAccess world, int x, int y, int z, EnumFacing side);
 
 }
