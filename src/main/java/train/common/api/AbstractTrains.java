@@ -685,6 +685,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         return "";
     }
 
+    public String transportFreightType(){return "";}
+
     public boolean isFictional(){return false;}
 
     public String[] additionalItemText(){return getSpec()==null?null:getSpec().getAdditionnalTooltip().split("\n");}
