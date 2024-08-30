@@ -18,7 +18,7 @@ import cpw.mods.fml.relauncher.Side;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.networking.PacketSeatUpdate;
 import ebf.tim.utility.DebugUtil;
-import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -32,7 +32,6 @@ import train.common.api.LiquidManager;
 import train.common.blocks.TCBlocks;
 import train.common.core.CommonProxy;
 import train.common.core.CreativeTabTraincraft;
-import train.common.core.CreativeTabTraincraftTrains;
 import train.common.core.TrainModCore;
 import train.common.core.handlers.*;
 import train.common.core.util.TraincraftUtil;
@@ -104,7 +103,7 @@ public class Traincraft {
     public static File configDirectory;
 
     /* Creative tab for Traincraft */
-    public static CreativeTabTraincraft tcTab, tcTrainTab;
+    public static CreativeTabTraincraft tcTab, tcTrainTab, tcCommunityTab ;
 
     public ArmorMaterial armor = EnumHelper.addArmorMaterial("Armor", 5, new int[]{1, 2, 2, 1}, 25);
     public ArmorMaterial armorCloth = EnumHelper.addArmorMaterial("TCcloth", 5, new int[]{1, 2, 2, 1}, 25);
@@ -145,6 +144,9 @@ public class Traincraft {
                 e.printStackTrace();
             }
         }
+        if (hasTCCEAddon()){
+            tcCommunityTab = new CreativeTabTraincraft("Traincraft: Community Edition", Info.modID, "trains/train_mogul");
+        }
 
         /* Other Proxy init */
         tcLog.info("Initialize Renderer and Events");
@@ -159,6 +161,11 @@ public class Traincraft {
         tcLog.info("Start Initialization");
         TCBlocks.init();
         TCItems.init();
+        if (Traincraft.hasTCCEAddon()) {
+            TCItems.registerTCCERollingStock();
+            Traincraft.tcLog.info("Enabled Traincraft: Community Edition rollingstock");
+        }
+
         proxy.registerTileEntities();
 
         tcLog.info("Initialize Fluids");
@@ -257,4 +264,6 @@ public class Traincraft {
     public static boolean hasRailcraft() {
         return Loader.isModLoaded("Railcraft");
     }
+
+    public static boolean hasTCCEAddon() {return Loader.isModLoaded("tcce");}
 }
