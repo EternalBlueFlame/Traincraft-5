@@ -1040,6 +1040,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
      *
      * @return
      */
+    @Override
     public double getSpeed() {
         return dataWatcher.getWatchableObjectInt(25);
     }

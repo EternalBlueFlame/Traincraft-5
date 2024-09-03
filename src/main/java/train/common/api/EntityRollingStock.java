@@ -2647,8 +2647,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         return this.func_70489_a(par1, par3, par5);
     }
 
-    //private int renderTicks;
+    //this does weird math for putch on stuff without bogies, that shouldn't even be needed. but kinda is.
+    // replace this with a proper atan2 over time later
+    @Deprecated
     public Vec3 yVector(double par1, double par3, double par5) {
+        if(getSpec().getBogieLocoPosition()!=0){
+            return null;
+        }
         int i = MathHelper.floor_double(par1);
         int j = MathHelper.floor_double(par3);
         int k = MathHelper.floor_double(par5);
@@ -2680,12 +2685,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
          */
         if (l == BlockIDs.tcRail.block || l == BlockIDs.tcRailGag.block) {
             //par3 = (double) j;
-            int[][] aint = matrix[i1];
             double d3 = 0.0D;
-            double d4 = i + 0.5D + aint[0][0] * 0.5D;
-            double d6 = k + 0.5D + aint[0][2] * 0.5D;
-            double d10 = (i + 0.5D + aint[1][0] * 0.5D) - d4;
-            double d12 = (k + 0.5D + aint[1][2] * 0.5D) - d6;
+            double d4 = i + 0.5D + matrix[i1][0][0] * 0.5D;
+            double d6 = k + 0.5D + matrix[i1][0][2] * 0.5D;
+            double d10 = (i + 0.5D + matrix[i1][1][0] * 0.5D) - d4;
+            double d12 = (k + 0.5D + matrix[i1][1][2] * 0.5D) - d6;
 
             if (d10 == 0.0D) {
                 d3 = par5 - k;

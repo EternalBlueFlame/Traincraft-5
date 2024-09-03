@@ -27,6 +27,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import train.client.render.Bogie;
+import train.client.render.TransportRenderCache;
 import train.common.Traincraft;
 import train.common.adminbook.ItemAdminBook;
 import train.common.core.handlers.ConfigHandler;
@@ -61,6 +62,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     protected boolean itemdropped = false;
 
     public XmlBuilder entity_data = new XmlBuilder();
+    public TransportRenderCache render_cache=new TransportRenderCache();
     /**
      * A reference to EnumTrains containing all spec for this specific train
      */
@@ -499,6 +501,10 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         return defaultMass;
     }
 
+    //this is only for locomotive GUI stuff
+    public double getSpeed() {
+        return 0;
+    }
     /**
      * Lock packet
      */
@@ -802,4 +808,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * may return null. */
     @SideOnly(Side.CLIENT)
     public ModelBase[] getModel(){return new ModelBase[]{getRender().getModel()};}
+
+
+    public ArrayList<double[]> getSmokePosition() {return null;}
 }
