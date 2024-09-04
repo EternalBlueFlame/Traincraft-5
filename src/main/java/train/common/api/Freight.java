@@ -9,6 +9,7 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import train.common.adminbook.ServerLogger;
+import train.common.api.blocks.EnumCargoTypes;
 
 public abstract class Freight extends EntityRollingStock implements IInventory {
     public ItemStack[] cargoItems;
@@ -51,6 +52,7 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
         return true;
     }
 
+
     /* IInventory implements */
     @Override
     public ItemStack getStackInSlot(int i) {
@@ -60,6 +62,7 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
     @Override
     public void openInventory() {
     }
+
 
     @Override
     public void closeInventory() {
@@ -143,6 +146,10 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
     public void onUpdate() {
         super.onUpdate();
         handleMass();
+    }
+
+    public EnumCargoTypes.CargoTypes getCargoType(){
+        return EnumCargoTypes.CargoTypes.DEFAULT;
     }
 
     /**

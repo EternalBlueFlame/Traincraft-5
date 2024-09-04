@@ -121,6 +121,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						t("menu.item." + getEntity().transportcountry().toLowerCase()));
 			}
 
+
 			StringBuilder s = new StringBuilder();
 			s.append(t("menu.item.types"));
 			s.append(": ");
@@ -293,6 +294,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 			}
 		}
+
 		if (rollingStock != null) {
 			if (!world.isRemote) {
 

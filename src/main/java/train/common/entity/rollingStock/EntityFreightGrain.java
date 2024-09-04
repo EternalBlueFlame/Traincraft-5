@@ -10,6 +10,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import train.common.Traincraft;
 import train.common.api.Freight;
+import train.common.api.blocks.EnumCargoTypes;
 import train.common.library.GuiIDs;
 
 public class EntityFreightGrain extends Freight implements IInventory {
@@ -83,6 +84,11 @@ public class EntityFreightGrain extends Freight implements IInventory {
 	@Override
 	public int getSizeInventory() {
 		return freightInventorySize;
+	}
+
+	@Override
+	public EnumCargoTypes.CargoTypes getCargoType(){
+		return EnumCargoTypes.CargoTypes.GRAIN;
 	}
 
 	@Override
