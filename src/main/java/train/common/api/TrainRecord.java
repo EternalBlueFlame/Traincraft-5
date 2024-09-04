@@ -1,9 +1,12 @@
 package train.common.api;
 
+import cpw.mods.fml.common.registry.EntityRegistry;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
+import train.common.Traincraft;
+import train.common.core.managers.TierRecipeManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -56,7 +59,7 @@ public abstract class TrainRecord {
 
     public abstract double getBogieLocoPosition();
 
-    public abstract Class<Entity> getEntityClass();
+    public abstract Class<AbstractTrains> getEntityClass();
 
     @Deprecated
     public abstract String getAdditionnalTooltip();
@@ -179,7 +182,7 @@ public abstract class TrainRecord {
             }
 
             @Override
-            public Class<Entity> getEntityClass() {
+            public Class<AbstractTrains> getEntityClass() {
                 return entityClass;
             }
 
