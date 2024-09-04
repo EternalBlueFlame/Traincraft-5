@@ -101,11 +101,11 @@ public class TCBlocks {
 		BlockIDs.tcRail.block = new BlockTCRail().setHardness(1.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
 		BlockIDs.tcRailGag.block = new BlockTCRailGag().setHardness(1.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
 
-		BlockIDs.MILWSwitchStand.block = new BlockMILWSwitchStand().setHardness(1F).setStepSound(Block.soundTypeStone);
-		BlockIDs.autoSwtichStand.block = new BlockautoSwitchStand().setHardness(1F).setStepSound(Block.soundTypeAnvil);
+		BlockIDs.MILWSwitchStand.block = new BlockMILWSwitchStand().setHardness(1F).setStepSound(Block.soundTypeMetal);
+		BlockIDs.autoSwtichStand.block = new BlockautoSwitchStand().setHardness(1F).setStepSound(Block.soundTypeMetal);
 		BlockIDs.owoSwitchStand.block = new BlockowoSwitchStand().setHardness(2F).setStepSound(Block.soundTypeMetal);
-		BlockIDs.circleSwitchStand.block = new BlockcircleSwitchStand().setHardness(2F).setStepSound(Block.soundTypeAnvil);
-		BlockIDs.owoYardSwitchStand.block = new BlockowoYardSwitchStand().setHardness(4F).setStepSound(Block.soundTypeLadder);
+		BlockIDs.circleSwitchStand.block = new BlockcircleSwitchStand().setHardness(2F).setStepSound(Block.soundTypeMetal);
+		BlockIDs.owoYardSwitchStand.block = new BlockowoYardSwitchStand().setHardness(4F).setStepSound(Block.soundTypeMetal);
 		BlockIDs.overheadWire.block = new BlockoverheadWire().setHardness(2F);
 		BlockIDs.overheadWireDouble.block = new BlockoverheadWireDouble().setHardness(2F);
 		BlockIDs.signalSpanish.block = new BlocksignalSpanish().setHardness(1F).setResistance(10F).setLightLevel(0.2F).setCreativeTab(Traincraft.tcTab).setStepSound(Block.soundTypeMetal);
