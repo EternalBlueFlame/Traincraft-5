@@ -20,27 +20,12 @@ import train.common.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.common.library.EnumTrains;
 
 public class EntityHandler {
-	public static int trainID= 32;
 	public static void init() {	
 		EntityRegistry.registerModEntity(EntityZeppelinTwoBalloons.class, "zeppelin", EntityIds.ZEPPELIN, Traincraft.instance, 512, 1, true);//zepplin
 		EntityRegistry.registerModEntity(EntityBogie.class, "Entity Front Bogie", EntityIds.LOCOMOTIVE_BOGIE, Traincraft.instance, 512, 1, true);//front bogie
 		EntityRegistry.registerModEntity(EntityZeppelinOneBalloon.class, "zeppelin big", EntityIds.ZEPPELIN_BIG, Traincraft.instance, 512, 1, true);//zepplin big
 		for(TrainRecord trains : EnumTrains.trains()){
-			EntityRegistry.registerModEntity(trains.getEntityClass(), trains.getInternalName(), trainID, Traincraft.instance, 512, 1, true);
-			if(trains.getEntity(null)!=null) {
-				trains.getEntity(null).registerSkins();
-			}
-			trainID++;
-			if(trainID== 112 || trainID==51){
-				trainID++;
-			}
+			TrainRecord.registerTransport(trains);
 		}
-	}
-
-	public static Entity getEntityServer(World world, int entityId) {
-		if ((world instanceof WorldServer)) {
-			return world.getEntityByID(entityId);
-		}
-		return null;
 	}
 }

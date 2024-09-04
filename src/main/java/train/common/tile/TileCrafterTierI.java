@@ -196,7 +196,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 			crafterInventory[i] = null;
 		}
 
-		List<TierRecipe> recipes = TierRecipeManager.getInstance().getTierRecipeList(1);
+		List<TierRecipe> recipes = TierRecipeManager.getInstance().getTierRecipeList(this.Tier());
 		int count = 0;
 		for (TierRecipe recipe : recipes) {
 			ItemStack stack = recipe.hasComponents(crafterInventory);

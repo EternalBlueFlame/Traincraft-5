@@ -289,7 +289,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 		if(i>9)
 			return false;
 
-		List<TierRecipe> recipeList = TierRecipeManager.getInstance().getTierRecipeList(this.Tier);
+		List<TierRecipe> recipeList = TierRecipeManager.getInstance().getTierRecipeList(this.Tier());
 		for(TierRecipe recipe : recipeList){
 			ItemStack stack2 = recipe.getInput().get(i);
 			if (stack2 != null && TierRecipe.areItemsIdentical(stack, stack2)) {

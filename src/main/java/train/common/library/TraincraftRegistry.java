@@ -46,6 +46,7 @@ import train.common.api.blocks.BlockDynamic;
 import train.common.api.blocks.TileRenderFacing;
 import train.common.blocks.BlockTraincraftFluid;
 import train.common.core.handlers.EntityHandler;
+import train.common.core.managers.TierRecipeManager;
 import train.common.items.ItemRollingStock;
 
 import javax.annotation.Nullable;
@@ -155,16 +156,38 @@ public class TraincraftRegistry {
     }
 
 
-    public static void registerTransports(String MODID, List<AbstractTrains> entities) {
-        registerTransports(MODID,entities.toArray(new AbstractTrains[]{}));
+
+    public static int trainID= 32;
+    public static void registerTransport(TrainRecord record){
+        EntityRegistry.registerModEntity(record.getEntityClass(), record.getInternalName(), trainID, Traincraft.instance, 512, 1, true);
+        AbstractTrains entity = record.getEntity(null);
+        if(entity!=null) {
+            entity.registerSkins();
+            if(entity.getRecipe()!=null){
+                TierRecipeManager.getInstance().addRecipe(entity.getTier(),
+                        entity.getRecipe()[0],entity.getRecipe()[1],entity.getRecipe()[2],entity.getRecipe()[3],
+                        entity.getRecipe()[4],entity.getRecipe()[5],entity.getRecipe()[6],entity.getRecipe()[7],
+                        entity.getRecipe()[8],entity.getRecipe()[9], entity.getCartItem(),1);
+            }
+        }
+        trainID++;
+        if(trainID== 112 || trainID==51){
+            trainID++;
+        }
     }
 
     public static void registerTransports(String MODID, AbstractTrains[] entities) {
         for(final AbstractTrains trains : entities){
-            EntityRegistry.registerModEntity(trains.getClass(), MODID+":"+trains.transportName(), EntityHandler.trainID, Traincraft.instance, 512, 1, true);
+            EntityRegistry.registerModEntity(trains.getClass(), MODID+":"+trains.transportName(), trainID, Traincraft.instance, 512, 1, true);
             trains.registerSkins();
             GameRegistry.registerItem(trains.getItem(), MODID+":entity/"+trains.transportName());
-            EntityHandler.trainID+=1;
+            trainID+=1;
+            if(trains.getRecipe()!=null){
+                TierRecipeManager.getInstance().addRecipe(trains.getTier(),
+                        trains.getRecipe()[0],trains.getRecipe()[1],trains.getRecipe()[2],trains.getRecipe()[3],
+                        trains.getRecipe()[4],trains.getRecipe()[5],trains.getRecipe()[6],trains.getRecipe()[7],
+                        trains.getRecipe()[8],trains.getRecipe()[9], trains.getCartItem(),1);
+            }
             //todo:this part should be unnecessary? double-check.
             if(Traincraft.proxy.isClient()){
                 Traincraft.instance.traincraftRegistry.registerTrainRenderRecord(new TrainRenderRecord() {
