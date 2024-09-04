@@ -58,7 +58,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
     private int slotsFilled = 0;
     public boolean isLocoTurnedOn = false;
     public boolean forwardPressed = false;
-    private boolean backwardPressed = false;
+    public boolean backwardPressed = false;
     public boolean brakePressed = false;
 
     public int speedLimit = 0;
@@ -100,7 +100,10 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
     private byte ditchLightMode = 0;
     private byte beaconCycleIndex = 0;
 
-    public TrainSoundRecord sound = Traincraft.instance.traincraftRegistry.getTrainSoundRecord(this.getClass());
+    public TrainSound soundRunning;
+    public TrainSound soundIdle;
+    public TrainSound soundHorn;
+    public TrainSound soundBell;
     /**
      * state of the loco
      */
@@ -593,9 +596,11 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
     }
 
     public void soundHorn() {
-        TrainSoundRecord sound = Traincraft.instance.traincraftRegistry.getTrainSoundRecord(this.getClass());
-        if (sound != null && !sound.getHornString().isEmpty() && whistleDelay == 0) {
-            worldObj.playSoundAtEntity(this, sound.getHornString(), sound.getHornVolume(), 1.0F);
+        if(soundHorn==null){
+            soundHorn=getHorn();
+        }
+        if (soundHorn != null && !soundHorn.addr.isEmpty() && whistleDelay == 0) {
+            worldObj.playSoundAtEntity(this, soundHorn.addr, soundHorn.vol, soundHorn.pit);
             whistleDelay = 65;
         }
 
@@ -612,8 +617,13 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
     }
 
     public void soundWhistle() {
-        worldObj.playSoundAtEntity(this, Info.resourceLocation + ":" + "bell", 0.5F, 1.0F);
-
+        if(soundBell==null){
+            soundBell=getBell();
+        }
+        if (soundBell != null && !soundBell.addr.isEmpty() && whistleDelay == 0) {
+            worldObj.playSoundAtEntity(this, soundBell.addr, soundBell.vol, soundBell.pit);
+            whistleDelay = 65;
+        }
     }
     
     @SideOnly(Side.CLIENT)
@@ -755,29 +765,35 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
             motionZ *= 0.0;
         }
         if (ConfigHandler.SOUNDS && whistleDelay == 0) {
-            if (sound != null && !sound.getHornString().isEmpty()) {
+            if(soundIdle==null){
+                soundIdle=getIdleSound();
+            }
+            if (soundIdle != null && !soundIdle.addr.isEmpty()) {
                 if (getFuel() > 0 && this.isLocoTurnedOn()) {
                     double speed = Math.sqrt(motionX * motionX + motionZ * motionZ);
                     if (speed > -0.001D && speed < 0.01D && soundPosition == 0) {
-                        worldObj.playSoundAtEntity(this, sound.getIdleString(), sound.getIdleVolume(), 0.001F);
-                        soundPosition = sound.getIdleSoundLength();
+                        worldObj.playSoundAtEntity(this, soundIdle.addr, soundIdle.vol, soundIdle.pit);
+                        soundPosition = soundIdle.len;
                     }
 
-                    if (sound.getSoundChangeWithSpeed() && !sound.getHornString().isEmpty() && whistleDelay == 0) {
+                    if(soundRunning==null){
+                        soundRunning=getRunningSound();
+                    }
+                    if (soundRunning!=null && soundRunning.runningPitch && !soundRunning.addr.isEmpty() && whistleDelay == 0) {
                         if (speed > 0.01D && speed < 0.06D && soundPosition == 0) {
-                            worldObj.playSoundAtEntity(this, sound.getRunString(), sound.getRunVolume(), 0.1F);
-                            soundPosition = sound.getRunSoundLength();
+                            worldObj.playSoundAtEntity(this, soundRunning.addr, soundRunning.vol, soundRunning.pit-0.3f);
+                            soundPosition = soundRunning.len;
                         } else if (speed > 0.06D && speed < 0.2D && soundPosition == 0) {
-                            worldObj.playSoundAtEntity(this, sound.getRunString(), sound.getRunVolume(), 0.4F);
-                            soundPosition = sound.getRunSoundLength() / 2;
+                            worldObj.playSoundAtEntity(this, soundRunning.addr, soundRunning.vol, soundRunning.pit-0.1f);
+                            soundPosition = soundRunning.len / 2;
                         } else if (speed > 0.2D && soundPosition == 0) {
-                            worldObj.playSoundAtEntity(this, sound.getRunString(), sound.getRunVolume(), 0.5F);
-                            soundPosition = sound.getRunSoundLength() / 3;
+                            worldObj.playSoundAtEntity(this, soundRunning.addr, soundRunning.vol, soundRunning.pit);
+                            soundPosition = soundRunning.len / 3;
                         }
                     } else {
                         if (speed > 0.01D && soundPosition == 0) {
-                            worldObj.playSoundAtEntity(this, sound.getRunString(), sound.getRunVolume(), 0.4F);
-                            soundPosition = sound.getRunSoundLength();
+                            worldObj.playSoundAtEntity(this, soundRunning.addr, soundRunning.vol, soundRunning.pit);
+                            soundPosition = soundRunning.len;
                         }
                     }
 
@@ -988,6 +1004,10 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         }
     }
 
+    @Override
+    public int getMinecartType() {
+        return 2;
+    }
 
     public boolean isNotOwner() {
         if (this.riddenByEntity instanceof EntityPlayer && !((EntityPlayer) this.riddenByEntity).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {

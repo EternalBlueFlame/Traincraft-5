@@ -18,10 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -748,7 +745,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * example:
      * return new Bogie[]{new Bogie(new MyModel1(), offset), new Bogie(new MyModel2(), offset2), etc...};
      * may return null. */
-    @SideOnly(Side.CLIENT)
     public Bogie[] bogies(){
         return new Bogie[]{null};
     }
@@ -811,4 +807,47 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
 
     public ArrayList<double[]> getSmokePosition() {return null;}
+
+    public int[] getParticleData(int id) {
+        switch (id){
+            case 1: {return new int[]{1,200,0xFF0000};}
+            default: {return new int[]{1,10,0xCCCC11};}
+        }
+    }
+
+    public ItemStack[] getRecipe(){return null;}
+    public int getTier(){return 1;}
+
+    public TrainSound getHorn(){
+        TrainSoundRecord sound = Traincraft.instance.traincraftRegistry.getTrainSoundRecord(this.getClass());
+        if(sound != null && !sound.getHornString().isEmpty()){
+            return new TrainSound(sound.getHornString(),sound.getHornVolume(),1f, 0);
+        }
+        return null;
+    }
+
+    public TrainSound getBell(){
+        return new TrainSound(Info.resourceLocation + ":bell",0.5f,1f, 0);
+    }
+
+    public TrainSound getRunningSound(){
+        TrainSoundRecord sound = Traincraft.instance.traincraftRegistry.getTrainSoundRecord(this.getClass());
+        if(sound != null && !sound.getRunString().isEmpty()){
+            if(sound.getSoundChangeWithSpeed()){
+                return new TrainSound(sound.getRunString(), sound.getRunVolume(), 0.4f, sound.getRunSoundLength()).enableRunningPitch();
+            } else {
+                return new TrainSound(sound.getRunString(), sound.getRunVolume(), 0.4f, sound.getRunSoundLength());
+            }
+        }
+        return null;
+    }
+
+
+    public TrainSound getIdleSound(){
+        TrainSoundRecord sound = Traincraft.instance.traincraftRegistry.getTrainSoundRecord(this.getClass());
+        if(sound != null && !sound.getIdleString().isEmpty()){
+            return new TrainSound(sound.getIdleString(),sound.getIdleVolume(),0.001F, sound.getIdleSoundLength());
+        }
+        return null;
+    }
 }
