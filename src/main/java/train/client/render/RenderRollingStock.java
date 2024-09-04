@@ -150,20 +150,19 @@ public class RenderRollingStock extends Render {
             //GL11.glRotatef((float)(90-cart.rotationYawClientReal), 0.0F, 1.0F, 0.0F);
             if (cart.oldClientYaw == 0) cart.oldClientYaw = cart.rotationYawClientReal;
 
-            float rotationYawBogie = cart.rotationYawClientReal;
             float tempYaw = (cart.rotationYawClientReal - cart.oldClientYaw);
             float newYaw = 0;
             //System.out.println("rotationYawBogie "+rotationYawBogie+" oldYaw "+cart.oldClientYaw+" tempYaw "+(Math.abs(tempYaw)/10));
             //System.out.println(Math.abs(cart.oldClientYaw-rotationYawBogie));
-            if (Math.abs(cart.oldClientYaw - rotationYawBogie) > 170) {
-                cart.oldClientYaw = rotationYawBogie;
+            if (Math.abs(cart.oldClientYaw - cart.rotationYawClientReal) > 170) {
+                cart.oldClientYaw = cart.rotationYawClientReal;
             }
-            if (cart.oldClientYaw != rotationYawBogie && Math.abs(cart.oldClientYaw - rotationYawBogie) > (Math.abs(tempYaw) / 10)) {
+            if (cart.oldClientYaw != cart.rotationYawClientReal && Math.abs(cart.oldClientYaw - cart.rotationYawClientReal) > (Math.abs(tempYaw) / 10)) {
                 newYaw = cart.oldClientYaw + Math.copySign((Math.abs(tempYaw) / 10), tempYaw);
                 cart.oldClientYaw += Math.copySign((Math.abs(tempYaw) / 10), tempYaw);
             } else {
-                newYaw = rotationYawBogie;
-                cart.oldClientYaw = rotationYawBogie;
+                newYaw = cart.rotationYawClientReal;
+                cart.oldClientYaw = cart.rotationYawClientReal;
             }
             //System.out.println("newYaw "+newYaw);
             //System.out.println(90 - cart.rotationYawClientReal);
@@ -183,20 +182,19 @@ public class RenderRollingStock extends Render {
             } else {
                 if (cart.oldClientYaw == 0) cart.oldClientYaw = cart.rotationYawClientReal;
 
-                float rotationYaw = cart.rotationYawClientReal;
                 float tempYaw = (cart.rotationYawClientReal - cart.oldClientYaw);
                 float newYaw = 0;
                 //System.out.println("rotationYawBogie "+rotationYawBogie+" oldYaw "+cart.oldClientYaw+" tempYaw "+(Math.abs(tempYaw)/10));
                 //System.out.println(Math.abs(cart.oldClientYaw-rotationYawBogie));
-                if (Math.abs(cart.oldClientYaw - rotationYaw) > 170) {
-                    cart.oldClientYaw = rotationYaw;
+                if (Math.abs(cart.oldClientYaw - cart.rotationYawClientReal) > 170) {
+                    cart.oldClientYaw = cart.rotationYawClientReal;
                 }
-                if (cart.oldClientYaw != rotationYaw && Math.abs(cart.oldClientYaw - rotationYaw) > (Math.abs(tempYaw) / 10)) {
+                if (cart.oldClientYaw != cart.rotationYawClientReal && Math.abs(cart.oldClientYaw - cart.rotationYawClientReal) > (Math.abs(tempYaw) / 10)) {
                     newYaw = cart.oldClientYaw + Math.copySign((Math.abs(tempYaw) / 10), tempYaw);
                     cart.oldClientYaw += Math.copySign((Math.abs(tempYaw) / 10), tempYaw);
                 } else {
-                    newYaw = rotationYaw;
-                    cart.oldClientYaw = rotationYaw;
+                    newYaw = cart.rotationYawClientReal;
+                    cart.oldClientYaw = cart.rotationYawClientReal;
                 }
                 GL11.glRotatef((90.0f - (newYaw + 90.0f)), 0.0F, 1.0F, 0.0F);
                 cart.setRenderYaw(yaw);
@@ -227,14 +225,9 @@ public class RenderRollingStock extends Render {
             }
         }
         float var28 = cart.getRollingAmplitude() - time;
-        float var30 = cart.getDamage() - time;
-
-        if (var30 < 0.0F) {
-            var30 = 0.0F;
-        }
 
         if (var28 > 0.0F) {
-            float angle = MathHelper.sin(var28) * var28 * var30 / 10.0F;
+            float angle = MathHelper.sin(var28) * var28 * Math.max(0.0f,cart.getDamage() - time) / 10.0F;
             angle = Math.min(angle, 0.8F);
             angle = Math.copySign(angle, cart.getRollingDirection());
             GL11.glRotatef(angle, 1.0F, 0.0F, 0.0F);
@@ -252,69 +245,66 @@ public class RenderRollingStock extends Render {
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240f,
                     240f);
         }
-        if (cart instanceof AbstractTrains) {
-            //loadTexture(getTextureFile(renders.getTexture(), renders.getIsMultiTextured(), cart));
+        //loadTexture(getTextureFile(renders.getTexture(), renders.getIsMultiTextured(), cart));
 
-            for(int m=0; m<cart.getModel().length;m++) {
-                GL11.glPushMatrix();
+        for(int m=0; m<cart.getModel().length;m++) {
+            GL11.glPushMatrix();
 
-                if(cart.getModel()[m].getTrans()!=null){
-                    GL11.glTranslatef(cart.getModel()[m].getTrans()[0],cart.getModel()[m].getTrans()[1],cart.getModel()[m].getTrans()[2]);
+            if(cart.getModel()[m].getTrans()!=null){
+                GL11.glTranslatef(cart.getModel()[m].getTrans()[0],cart.getModel()[m].getTrans()[1],cart.getModel()[m].getTrans()[2]);
+            }
+            else if(cart.modelOffsets()[m]!=null) {
+                GL11.glTranslatef(cart.modelOffsets()[m][0], cart.modelOffsets()[m][1], cart.modelOffsets()[m][2]);
+            }
+            if(cart.getModel()[m].getRotate()!=null){
+                GL11.glRotatef(cart.getModel()[m].getRotate()[0], 1,0,0);
+                GL11.glRotatef(cart.getModel()[m].getRotate()[1], 0,1,0);
+                GL11.glRotatef(cart.getModel()[m].getRotate()[2], 0,0,1);
+            }
+            else if(cart.modelRotations()[m]!=null) {
+                GL11.glRotatef(cart.modelRotations()[m][0], 1,0,0);
+                GL11.glRotatef(cart.modelRotations()[m][1], 0,1,0);
+                GL11.glRotatef(cart.modelRotations()[m][2], 0,0,1);
+            }
+            if(cart.getModel()[m].getScale()!=null){
+                GL11.glScalef(cart.getModel()[m].getScale()[0],cart.getModel()[m].getScale()[1],cart.getModel()[m].getScale()[2]);
+            }
+            else if(cart.getRenderScale()[m]!=null) {
+                GL11.glScalef(cart.getRenderScale()[m][0], cart.getRenderScale()[m][1], cart.getRenderScale()[m][2]);
+            }
+            cart.getModel()[m].render(cart, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+            GL11.glPopMatrix();
+        }
+
+
+
+        //GL11.glEnable(GL11.GL_LIGHTING);
+        TrainRenderRecord render = cart.getRender();
+        if (render.hasSmoke()) {
+            if(cart.render_cache.smokePosition==null) {
+                cart.render_cache.smokePosition = new ArrayList<double[]>();
+                if (render.getModel().getSmokePosition() != null) {
+                    cart.render_cache.smokePosition = render.getModel().getSmokePosition();
                 }
-                else if(cart.modelOffsets()[m]!=null) {
-                    GL11.glTranslatef(cart.modelOffsets()[m][0], cart.modelOffsets()[m][1], cart.modelOffsets()[m][2]);
+                if (cart.getSmokePosition() != null) {
+                    cart.render_cache.smokePosition.addAll(cart.getSmokePosition());
                 }
-                if(cart.getModel()[m].getRotate()!=null){
-                    GL11.glRotatef(cart.getModel()[m].getRotate()[0], 1,0,0);
-                    GL11.glRotatef(cart.getModel()[m].getRotate()[1], 0,1,0);
-                    GL11.glRotatef(cart.getModel()[m].getRotate()[2], 0,0,1);
+                if (render.getSmokeFX() != null) {
+                    cart.render_cache.smokePosition.addAll(render.getSmokeFX());
                 }
-                else if(cart.modelRotations()[m]!=null) {
-                    GL11.glRotatef(cart.modelRotations()[m][0], 1,0,0);
-                    GL11.glRotatef(cart.modelRotations()[m][1], 0,1,0);
-                    GL11.glRotatef(cart.modelRotations()[m][2], 0,0,1);
-                }
-                if(cart.getModel()[m].getScale()!=null){
-                    GL11.glScalef(cart.getModel()[m].getScale()[0],cart.getModel()[m].getScale()[1],cart.getModel()[m].getScale()[2]);
-                }
-                else if(cart.getRenderScale()[m]!=null) {
-                    GL11.glScalef(cart.getRenderScale()[m][0], cart.getRenderScale()[m][1], cart.getRenderScale()[m][2]);
-                }
-                cart.getModel()[m].render(cart, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-                GL11.glPopMatrix();
             }
 
-
-
-            //GL11.glEnable(GL11.GL_LIGHTING);
-            TrainRenderRecord render = cart.getRender();
-            if (render.hasSmoke()) {
-                ArrayList<double[]> smokePosition = new ArrayList<double[]>();
-                try {
-                    if (render.getModel().getClass().getDeclaredMethod("getSmokePosition") != null) {
-                        Method theScaleMethod = render.getModel().getClass().getDeclaredMethod("getSmokePosition");
-                        ArrayList<double[]> thePos = (ArrayList<double[]>) theScaleMethod.invoke(render.getModel().getClass().newInstance());
-                        if (thePos != null) {
-                            smokePosition = thePos;
-                        }
-                    }
-                } catch (Exception e) {
-
-                    smokePosition = render.getSmokeFX();
-                }
-
-                if (cart.bogieLoco != null) {// || cart.bogieUtility[0]!=null){
-                    renderSmokeFX(cart, 90 + cart.rotationYawClientReal, (float) cart.anglePitchClient, render.getSmokeType(), smokePosition, render.getSmokeIterations(), time, render.hasSmokeOnSlopes());
-                } else {
-                    renderSmokeFX(cart, (yaw), pitch, render.getSmokeType(), smokePosition, render.getSmokeIterations(), time, render.hasSmokeOnSlopes());
-                }
+            if (cart.bogieLoco != null) {// || cart.bogieUtility[0]!=null){
+                renderSmokeFX(cart, 90 + cart.rotationYawClientReal, cart.anglePitchClient, render.getSmokeType(), cart.render_cache.smokePosition, render.getSmokeIterations(), time, render.hasSmokeOnSlopes());
+            } else {
+                renderSmokeFX(cart, (yaw), pitch, render.getSmokeType(), cart.render_cache.smokePosition, render.getSmokeIterations(), time, render.hasSmokeOnSlopes());
             }
-            if (render.hasExplosion()) {
-                if (cart.bogieLoco != null) {// || cart.bogieUtility[0]!=null){
-                    renderExplosionFX(cart, 90 + cart.rotationYawClientReal, (float) cart.anglePitchClient, render.getExplosionType(), render.getExplosionFX(), render.getExplosionFXIterations(), render.hasSmokeOnSlopes());
-                } else {
-                    renderExplosionFX(cart, yaw, pitch, render.getExplosionType(), render.getExplosionFX(), render.getExplosionFXIterations(), render.hasSmokeOnSlopes());
-                }
+        }
+        if (render.hasExplosion()) {
+            if (cart.bogieLoco != null) {// || cart.bogieUtility[0]!=null){
+                renderExplosionFX(cart, 90 + cart.rotationYawClientReal, cart.anglePitchClient, render.getExplosionType(), render.getExplosionFX(), render.getExplosionFXIterations(), render.hasSmokeOnSlopes());
+            } else {
+                renderExplosionFX(cart, yaw, pitch, render.getExplosionType(), render.getExplosionFX(), render.getExplosionFXIterations(), render.hasSmokeOnSlopes());
             }
         }
 
@@ -328,14 +318,9 @@ public class RenderRollingStock extends Render {
         if (Math.abs(pitch) > 30) return;
         //if (pitch != 0 && !hasSmokeOnSlopes) { return; }
         if ((cart instanceof Locomotive && ((Locomotive) cart).getFuel() > 0) || (cart instanceof EntityTracksBuilder && ((EntityTracksBuilder) cart).getFuel() > 0)) {
-            int r = random.nextInt(10 * smokeIterations);
-            double speed = 0;
-            if (cart instanceof Locomotive) speed = ((Locomotive) cart).getSpeed();
-            if (r < ((smokeIterations * 4) + (speed * 5))) {
+            if (random.nextInt(10 * smokeIterations) < ((smokeIterations * 4) + (cart.getSpeed() * 5))) {
                 double rotatedvec[];
                 for (int j = 0; j < smokeIterations; j++) {
-
-
                     for (double[] explosion : smokeFX) {
                         rotatedvec = rotatePointF(explosion[0], explosion[1], explosion[2], pitch, yaw);
                         cart.getWorld().spawnParticle(smokeType,

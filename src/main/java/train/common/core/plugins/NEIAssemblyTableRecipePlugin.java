@@ -24,6 +24,7 @@ import static codechicken.lib.gui.GuiDraw.*;
 
 public class NEIAssemblyTableRecipePlugin extends ShapedRecipeHandler {
 	private final List<TierRecipe> recipeList = assemblyListCleaner(TierRecipeManager.getInstance().getRecipeList());
+	private static TierRecipe currentRecipe;
 
 	private CachedShapedRecipe getShape(TierRecipe recipe) {
 		CachedShapedRecipe shape = new CachedShapedRecipe(0, 0, null, recipe.getOutput());
@@ -171,6 +172,7 @@ public class NEIAssemblyTableRecipePlugin extends ShapedRecipeHandler {
 		for (TierRecipe recipe : recipeList) {
 			if (NEIClientUtils.areStacksSameTypeCrafting(recipe.getOutput(), result)) {
 				this.arecipes.add(getShape(recipe));
+				currentRecipe = recipe;
 			}
 		}
 	}
@@ -209,8 +211,11 @@ public class NEIAssemblyTableRecipePlugin extends ShapedRecipeHandler {
 	public void drawBackground(int recipe) {
 		GL11.glColor4f(1, 1, 1, 1);
 		TierRecipe tierRecipe = null;
+
+
+
 		if (recipe < recipeList.size()) {
-			tierRecipe = recipeList.get(recipe);
+			tierRecipe = currentRecipe;
 			if (tierRecipe != null) {
 				changeTexture(getGuiTexture(tierRecipe.getTier()));
 			}

@@ -343,19 +343,7 @@ item.tc:minecartFreightTrailer.name=Freight Trailer
 item.tc:minecartFreightWellcar.name=Freight Wellcar
 item.tc:minecartKof_DB.name=Kof II (DB)
 item.tc:minecartV60_DB.name=V60 (DB)
-item.tc:hat_ticketMan_paintable.name=Ticket Man's Hat (Paintable) 
-item.tc:pants_ticketMan_paintable.name=Ticket Man's Pants (Paintable) 
-item.tc:jacket_ticketMan_paintable.name=Ticket Man's Jacket (Paintable) 
-item.tc:hat_driver_paintable.name=Driver's Hat (Paintable) 
-item.tc:pants_driver_paintable.name=Driver's Pants (Paintable) 
-item.tc:jacket_driver_paintable.name=Driver's Jacket (Paintable) 
-item.tc:helmet_suit_paintable.name=Composite Suit's Helmet (Paintable) 
-item.tc:pants_suit_paintable.name=Composite Suit's Pants (Paintable) 
-item.tc:boots_suit_paintable.name=Composite Suit's Boots (Paintable) 
-item.tc:jacket_suit_paintable.name=Composite Suit's Chest (Paintable) 
-item.tc:reinforcedPlastic.name=Fibre-Reinforced Plastic
-item.tc:reinforcedPlates.name=Reinforced Plates
-item.tc:composite_wrench.name=Composite Wrench
+
 item.tc:minecartPassengerHighSpeedCarZeroED.name=High Speed Passenger Car
 item.tc:minecartNYTram.name=Kawasaki PA4 (US)
 item.tc:minecartLocoHighSpeedZeroED.name=High Speed Train
@@ -805,6 +793,22 @@ item.tc:minecartM8DNF1Loco.name=M8D NF1 Loco
 item.tc:minecartM8DNF1Middlelong.name=M8D NF1 Middle (long)
 item.tc:minecartM8DNF1Middleshort.name=M8D NF1 Middle (short)
 item.tc:minecartM8DNF1Tail.name=M8D NF1 Tail
+
+
+item.tc:hat_ticketMan_paintable.name=Ticket Man's Hat (Paintable) 
+item.tc:pants_ticketMan_paintable.name=Ticket Man's Pants (Paintable) 
+item.tc:jacket_ticketMan_paintable.name=Ticket Man's Jacket (Paintable) 
+item.tc:hat_driver_paintable.name=Driver's Hat (Paintable) 
+item.tc:pants_driver_paintable.name=Driver's Pants (Paintable) 
+item.tc:jacket_driver_paintable.name=Driver's Jacket (Paintable) 
+item.tc:helmet_suit_paintable.name=Composite Suit's Helmet (Paintable) 
+item.tc:pants_suit_paintable.name=Composite Suit's Pants (Paintable) 
+item.tc:boots_suit_paintable.name=Composite Suit's Boots (Paintable) 
+item.tc:jacket_suit_paintable.name=Composite Suit's Chest (Paintable) 
+item.tc:reinforcedPlastic.name=Fibre-Reinforced Plastic
+item.tc:reinforcedPlates.name=Reinforced Plates
+item.tc:composite_wrench.name=Composite Wrench
+
 
 <!-- ## Achievements ## -->
 achievement.tc:engineer=Engineers clothes

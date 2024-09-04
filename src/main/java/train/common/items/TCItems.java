@@ -9,11 +9,10 @@ package train.common.items;
 
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraft.item.Item;
 import train.common.Traincraft;
 import train.common.adminbook.ItemAdminBook;
-import train.common.library.EnumTracks;
-import train.common.library.Info;
-import train.common.library.ItemIDs;
+import train.common.library.*;
 
 public class TCItems {
 
@@ -225,5 +224,26 @@ public class TCItems {
 				GameRegistry.registerItem(items.item, items.name());
 			}
 		}
+	}
+
+
+	public static void registerTCCERollingStock(){
+
+		for (TCCEItemIDs tcceItems : TCCEItemIDs.values()) {
+			if (tcceItems.className != null) {
+				if (tcceItems.className.equals("ItemRollingStock")) {
+					tcceItems.item = new ItemRollingStock(Info.modID.toLowerCase() + ":trains/" + tcceItems.iconName, Traincraft.tcCommunityTab);
+				}
+
+			}
+		}
+
+		for (TCCEItemIDs tcceItems : TCCEItemIDs.values()) {
+			if (tcceItems.item != null){
+				tcceItems.item.setUnlocalizedName(Info.modID + ":" + tcceItems.name());
+				GameRegistry.registerItem(tcceItems.item, tcceItems.name());
+			}
+		}
+
 	}
 }

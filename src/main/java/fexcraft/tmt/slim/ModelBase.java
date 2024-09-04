@@ -331,4 +331,10 @@ public class ModelBase extends ArrayList<ModelRendererTurbo> {
 	public float[] getTrans(){return null;}
 	public float[] getRotate(){return null;}
 	public float[] getScale(){return null;}
+
+	/**
+	 * MOVE TO ENTITY CLASS
+	 */
+	@Deprecated
+	public ArrayList<double[]> getSmokePosition() {return null;}
 }

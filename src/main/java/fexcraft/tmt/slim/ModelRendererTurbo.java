@@ -33,7 +33,6 @@ public class ModelRendererTurbo {
     public boolean mirror;
     public float rotateAngleX=0,rotateAngleY=0,rotateAngleZ=0;
     public float rotationPointX=0,rotationPointY=0,rotationPointZ=0;
-    public float width, height, depth;
     public boolean showModel; //previously known as !field_1402_i
     public boolean noCull=false;
     public boolean ignoresLighting=false;
@@ -250,7 +249,6 @@ public class ModelRendererTurbo {
      * @param scale
      */
     public ModelRendererTurbo addBox(float x, float y, float z, float w, float h, float d, float expansion, float scale, boolean[] sides){
-        width=w;height=h;depth=d;
         expansion +=0.005f;
         float x1 = (x + w+expansion)*scale;
         float y1 = (y + h+expansion)*scale;
@@ -1429,7 +1427,12 @@ public class ModelRendererTurbo {
 
     //ETERNAL: changed w/h/d to floats for better support of the custom render on the rails.
     public ModelRendererTurbo addShapeBox(float x, float y, float z, float w, float h, float d, float scale, float x0, float y0, float z0, float x1, float y1, float z1, float x2, float y2, float z2, float x3, float y3, float z3, float x4, float y4, float z4, float x5, float y5, float z5, float x6, float y6, float z6, float x7, float y7, float z7){
-        width=w;height=h;depth=d;
+        //fixes weird triangle bug
+        w+=0.001f;
+        h+=0.001f;
+        d+=0.001f;
+
+        //fixes zbuffer issue
         if(w==0){
             x-=0.005f;
             w=0.005f;
@@ -1450,7 +1453,7 @@ public class ModelRendererTurbo {
         }
 
         float[][] v  = {{x  - x0, y  - y0, z  - z0}, {f4 + x1, y  - y1, z  - z1},{f4 + x5, f5 + y5, z  - z5}, {x  - x4, f5 + y4, z  - z4}, {x  - x3, y  - y3, f6 + z3}, {f4 + x2, y  - y2, f6 + z2},{f4 + x6, f5 + y6, f6 + z6}, {x  - x7, f5 + y7, f6 + z7}};
-
+        //also fixes zbuffer issue
         if(w==0.005f){
             w=0;
         }
