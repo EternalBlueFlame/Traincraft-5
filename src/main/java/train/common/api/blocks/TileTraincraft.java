@@ -15,7 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 
@@ -172,7 +172,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
                 NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
                 byte byte0 = nbttagcompound1.getByte("Slot");
                 if (byte0 >= 0 && byte0 < this.slots.length) {
-                    this.slots[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+                    this.slots[byte0] = new ItemStack(nbttagcompound1);
                 }
             }
         }
@@ -190,14 +190,14 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     @Override
-    public S35PacketUpdateTileEntity getDescriptionPacket() {
+    public SPacketUpdateTileEntity getDescriptionPacket() {
         NBTTagCompound nbt = new NBTTagCompound();
         this.writeToNBT(nbt, true);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
+        return new SPacketUpdateTileEntity(getPos(), 1, nbt);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt){
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
         if(pkt != null){
             this.readFromNBT(pkt.func_148857_g(), true);
         }

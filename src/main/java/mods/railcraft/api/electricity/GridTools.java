@@ -31,7 +31,7 @@ public class GridTools {
 
         WorldCoordinate myPos = new WorldCoordinate(gridObject.getTile());
         for (Map.Entry<WorldCoordinate, EnumSet<ConnectType>> position : gridObject.getChargeHandler().getPossibleConnectionLocations().entrySet()) {
-            IElectricGrid otherObj = getGridObjectAt(gridObject.getTile().getgetWorld()(), position.getKey());
+            IElectricGrid otherObj = getGridObjectAt(gridObject.getTile().getWorld(), position.getKey());
             if (otherObj != null && position.getValue().contains(otherObj.getChargeHandler().getType())) {
                 EnumSet<ConnectType> otherType = otherObj.getChargeHandler().getPossibleConnectionLocations().get(myPos);
                 if (otherType != null && otherType.contains(gridObject.getChargeHandler().getType()))

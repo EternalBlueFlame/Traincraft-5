@@ -12,7 +12,7 @@ import train.common.mtc.packets.PacketATO;
 public class PacketATOHandler implements IMessageHandler<PacketATO, IMessage> {
 
    public IMessage onMessage(PacketATO message, MessageContext ctx) {
-      Entity theTrain = Minecraft.getMinecraft().theWorld.getEntityByID(message.entity);
+      Entity theTrain = Minecraft.getMinecraft().world.getEntityByID(message.entity);
       if(theTrain instanceof Locomotive) {
          ((Locomotive)theTrain).atoStatus = message.status;
       }

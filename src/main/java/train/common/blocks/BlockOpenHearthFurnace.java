@@ -135,7 +135,7 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 		TileEntityOpenHearthFurnace te = (TileEntityOpenHearthFurnace) world.getTileEntity(i, j, k);
 		if (te != null) {
 			int dir = MathHelper.floor_double((entityliving.rotationYaw * 4F) / 360F + 0.5D) & 3;
-			te.setFacing(EnumFacing.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
+			te.setFacing(EnumFacing.byHorizontalIndex(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
 			world.markBlockForUpdate(i, j, k);
 		}
 	}
@@ -153,7 +153,7 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getTexture(int x, int y, int z){
 		return new ResourceLocation(Info.modID,
-				((x==0&&y==0&&z==0)|| CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)==TCBlocks.distilActive)?
+				((x==0&&y==0&&z==0)|| CommonUtil.getBlockAt(Minecraft.getMinecraft().world,x,y,z)==TCBlocks.distilActive)?
 						"textures/blocks/furnace_on.png":"textures/blocks/furnace_off.png");
 	}
 

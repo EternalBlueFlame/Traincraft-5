@@ -60,8 +60,8 @@ public class PacketSeatUpdate implements IMessage {
                 playerEntity = ctx.getServerHandler().playerEntity.getWorld().getEntityByID(message.playerId);
 
             } else {
-                rollingStockEntity = (EntityRollingStock) Minecraft.getMinecraft().theWorld.getEntityByID(message.rollingStockId);
-                playerEntity = Minecraft.getMinecraft().theWorld.getEntityByID(message.playerId);
+                rollingStockEntity = (EntityRollingStock) Minecraft.getMinecraft().world.getEntityByID(message.rollingStockId);
+                playerEntity = Minecraft.getMinecraft().world.getEntityByID(message.playerId);
             }
             oldSeat = rollingStockEntity.seats.get(message.oldSeatIndex);
             newSeat = rollingStockEntity.seats.get(message.newSeatIndex);

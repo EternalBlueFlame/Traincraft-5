@@ -100,7 +100,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
             }
 
         }
-        if (riddenByEntity != null && riddenByEntity instanceof EntityPlayer && getWorld().isRemote && this.isControlSeat()) {
+        if (getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer && getWorld().isRemote && this.isControlSeat()) {
             if (TCKeyHandler.inventory.isPressed()) {
                 if (this.parent instanceof Locomotive) {
                     Traincraft.keyChannel.sendToServer(new PacketKeyPress(7));
@@ -189,7 +189,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     }
 
     public EntityLivingBase getPassenger(){
-        return (EntityLivingBase) this.riddenByEntity;
+        return (EntityLivingBase) this.getPassengers().get(0);
     }
 
     //@Override
@@ -197,7 +197,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 //        DebugUtil.println(passengerEntity==null, passengerEntity.ridingEntity==null, passenger instanceof EntityLivingBase);
         if(passenger==null && passenger instanceof EntityLivingBase) {
             //super.addPassenger(passenger);
-            this.riddenByEntity=passenger;
+            this.getPassengers().get(0)=passenger;
             passenger.ridingEntity=this;
             passenger.mountEntity(this);
         }
@@ -207,7 +207,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     public void removePassenger(Entity passenger){
         //super.removePassenger(passenger);
         //passengerEntity=null;
-        this.riddenByEntity=null;
+        this.getPassengers().get(0)=null;
         passenger.ridingEntity=null;
     }
 

@@ -30,7 +30,7 @@ public class BlockAnimalBoardingTrack extends TrackBaseTraincraft implements ITr
 	@Override
 	public void onMinecartPass(EntityMinecart cart) {
 		if (cart instanceof EntityStockCar || cart instanceof EntityStockCarDRWG) {
-			if (cart.riddenByEntity != null)
+			if (cart.getPassengers().get(0) != null)
 				return;
 			AxisAlignedBB box = null;
 			box = cart.boundingBox.expand(4, 4, 4);

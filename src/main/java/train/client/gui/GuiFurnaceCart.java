@@ -4,7 +4,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 import train.common.api.AbstractWorkCart;
 import train.common.inventory.InventoryWorkCart;
@@ -20,8 +20,8 @@ public class GuiFurnaceCart extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int i, int j) {
-        this.fontRenderer.drawString(StatCollector.translateToLocal("container.furnace"), 60, 6, 4210752);
-        this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString(I18n.format("container.furnace"), 60, 6, 4210752);
+        this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
     @Override

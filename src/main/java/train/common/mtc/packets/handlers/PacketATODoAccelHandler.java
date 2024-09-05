@@ -25,7 +25,7 @@ public class PacketATODoAccelHandler implements IMessageHandler<PacketDoAccel, I
 
          Locomotive theTrain = (Locomotive)entity;
          if((int)theTrain.getSpeed() - 2 <= theTrain.speedLimit) {
-            if (theTrain.riddenByEntity == null) {return;}
+            if (theTrain.getPassengers().get(0) == null) {return;}
             int dir = MathHelper
                     .floor_double(((theTrain).rotationYaw * 4F) / 360F + 0.5D) & 3;
             if (dir == 2){

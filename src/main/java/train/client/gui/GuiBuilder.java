@@ -8,7 +8,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 import train.common.Traincraft;
 import train.common.core.network.PacketSetTrainLockedToClient;
@@ -42,23 +42,23 @@ public class GuiBuilder extends GuiContainer {
         buttonList.clear();
 
         if ((builder).getFollowTracks() == 1) {
-            buttonList.add(new GuiButton(1, ((width - xSize) / 2) + 3, ((height - ySize) / 2) - 20, 80, 20, StatCollector.translateToLocal("builder.follow.name")));
+            buttonList.add(new GuiButton(1, ((width - xSize) / 2) + 3, ((height - ySize) / 2) - 20, 80, 20, I18n.format("builder.follow.name")));
         }
 
         if ((builder).getFollowTracks() == 0) {
-            buttonList.add(new GuiButton(1, ((width - xSize) / 2) + 3, ((height - ySize) / 2) - 20, 80, 20, StatCollector.translateToLocal("builder.remove.name")));
+            buttonList.add(new GuiButton(1, ((width - xSize) / 2) + 3, ((height - ySize) / 2) - 20, 80, 20, I18n.format("builder.remove.name")));
         }
 
-        buttonList.add(new GuiButton(2, ((width - xSize) / 2) + 85, ((height - ySize) / 2) - 40, 30, 20, StatCollector.translateToLocal("builder.up.name")));
-        buttonList.add(new GuiButton(3, ((width - xSize) / 2) + 85, ((height - ySize) / 2) - 20, 30, 20, StatCollector.translateToLocal("builder.down.name")));
+        buttonList.add(new GuiButton(2, ((width - xSize) / 2) + 85, ((height - ySize) / 2) - 40, 30, 20, I18n.format("builder.up.name")));
+        buttonList.add(new GuiButton(3, ((width - xSize) / 2) + 85, ((height - ySize) / 2) - 20, 30, 20, I18n.format("builder.down.name")));
 
         int buttonPosX = (this.width - xSize) / 2;
         int buttonPosY = (this.height - ySize) / 2;
 
         if (!(builder).getTrainLockedFromPacket()) {
-            this.buttonList.add(this.buttonLock = new GuiButton(4, buttonPosX + 3, buttonPosY - 30, 51, 10, StatCollector.translateToLocal("train.unlocked.name")));
+            this.buttonList.add(this.buttonLock = new GuiButton(4, buttonPosX + 3, buttonPosY - 30, 51, 10, I18n.format("train.unlocked.name")));
         } else {
-            this.buttonList.add(this.buttonLock = new GuiButton(4, buttonPosX + 3, buttonPosY - 30, 43, 10, StatCollector.translateToLocal("train.locked.name")));
+            this.buttonList.add(this.buttonLock = new GuiButton(4, buttonPosX + 3, buttonPosY - 30, 43, 10, I18n.format("train.locked.name")));
         }
     }
 
@@ -70,8 +70,8 @@ public class GuiBuilder extends GuiContainer {
         fontRenderer.drawString("with new tracks", 4, 170, 0x404040);
         fontRenderer.drawString("yet", 4, 180, 0x404040);
 
-        fontRenderer.drawString(StatCollector.translateToLocal("builder.currElev.name") + ": " + (int) builder.currentHeight, 120, -25, 0xFFFFFF);
-        fontRenderer.drawString(StatCollector.translateToLocal("builder.reqElev.name") + ": " + builder.getPlannedHeight(), 120, -10, 0xFFFFFF);
+        fontRenderer.drawString(I18n.format("builder.currElev.name") + ": " + (int) builder.currentHeight, 120, -25, 0xFFFFFF);
+        fontRenderer.drawString(I18n.format("builder.reqElev.name") + ": " + builder.getPlannedHeight(), 120, -10, 0xFFFFFF);
 
         if (intersectsWith(i, j)) {
             drawCreativeTabHoveringText("When a builder is locked,", i, j);
@@ -83,10 +83,10 @@ public class GuiBuilder extends GuiContainer {
         if (guibutton.id == 1) {
             if ((builder).getFollowTracks() == 1) {
                 sendFollow(0, builder.getEntityId());
-                guibutton.displayString = StatCollector.translateToLocal("builder.remove.name");
+                guibutton.displayString = I18n.format("builder.remove.name");
             } else {
                 sendFollow(1, builder.getEntityId());
-                guibutton.displayString = StatCollector.translateToLocal("builder.follow.name");
+                guibutton.displayString = I18n.format("builder.follow.name");
             }
         }
 
@@ -114,7 +114,7 @@ public class GuiBuilder extends GuiContainer {
                     }
 
                     builder.locked = true;
-                    guibutton.displayString = StatCollector.translateToLocal("train.locked.name");
+                    guibutton.displayString = I18n.format("train.locked.name");
                 } else {
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
@@ -125,12 +125,12 @@ public class GuiBuilder extends GuiContainer {
                     }
 
                     builder.locked = false;
-                    guibutton.displayString = StatCollector.translateToLocal("train.unlocked.name");
+                    guibutton.displayString = I18n.format("train.unlocked.name");
                 }
 
                 this.initGui();
             } else if (player != null) {
-                player.addChatMessage(new ChatComponentText(StatCollector.translateToLocal("train.owner.name")));
+                player.addChatMessage(new ChatComponentText(I18n.format("train.owner.name")));
             }
         }
     }

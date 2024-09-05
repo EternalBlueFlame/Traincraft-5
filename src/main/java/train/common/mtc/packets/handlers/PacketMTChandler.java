@@ -13,7 +13,7 @@ public class PacketMTChandler implements IMessageHandler<PacketMTC, IMessage> {
     @Override
     public IMessage onMessage(PacketMTC message, MessageContext ctx) {
 
-            Entity theTrain = Minecraft.getMinecraft().theWorld.getEntityByID(message.entity);
+            Entity theTrain = Minecraft.getMinecraft().world.getEntityByID(message.entity);
             if (theTrain != null && theTrain instanceof Locomotive) {
 
                 ((Locomotive) theTrain).mtcStatus = message.mtcStatus;

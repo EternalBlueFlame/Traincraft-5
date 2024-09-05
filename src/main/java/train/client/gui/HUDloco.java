@@ -19,11 +19,11 @@ public class HUDloco extends GuiScreen {
     @SubscribeEvent
     public void onGameRender(RenderGameOverlayEvent.Text event) {
         if (game != null
-                && game.thePlayer != null && game.thePlayer.ridingEntity != null
-                && (game.thePlayer.ridingEntity instanceof Locomotive || (game.thePlayer.ridingEntity instanceof EntitySeat
+                && game.thePlayer != null && game.thePlayer.getRidingEntity()!= null
+                && (game.thePlayer.getRidingEntity()instanceof Locomotive || (game.thePlayer.getRidingEntity()instanceof EntitySeat
                 && ((EntitySeat) game.thePlayer.ridingEntity).parent instanceof Locomotive))
                 && Minecraft.isGuiEnabled() && game.currentScreen == null) {
-            if (game.thePlayer.ridingEntity instanceof EntitySeat) {
+            if (game.thePlayer.getRidingEntity()instanceof EntitySeat) {
                 EntitySeat seat = (EntitySeat) game.thePlayer.ridingEntity;
                 if (seat.isControlSeat()) {
                     renderSkillHUD(event, (Locomotive) ((EntitySeat) game.thePlayer.ridingEntity).parent);

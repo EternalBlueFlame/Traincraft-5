@@ -7,7 +7,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import train.common.core.util.Energy;
 
@@ -22,7 +22,7 @@ public class TileWaterWheel extends Energy implements IEnergyProvider {
 	public String getName(){return "WaterWheel";}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
 		this.readFromNBT(pkt.func_148857_g());
 	}
 
@@ -69,7 +69,7 @@ public class TileWaterWheel extends Energy implements IEnergyProvider {
 			}
 
 			if (this.energy.getEnergyStored() >0) {
-				pushEnergy(getWorld(), this.xCoord, this.yCoord, this.zCoord, this.energy);
+				pushEnergy(getWorld(), getPos(), this.energy);
 			}
 
 			this.markDirty();

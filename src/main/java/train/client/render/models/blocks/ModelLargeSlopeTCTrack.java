@@ -93,7 +93,7 @@ public class ModelLargeSlopeTCTrack extends ModelBase {
 		String iconName;
 		Block block = Block.getBlockById(tcRail.getBallastMaterial());
 		IIcon icon = block.getIcon(1, tcRail.ballastMetadata);
-		int colour = block.colorMultiplier(tcRail.getgetWorld()(), tcRail.xCoord, tcRail.yCoord - 1, tcRail.zCoord);
+		int colour = block.colorMultiplier(tcRail.getWorld(), tcRail.xCoord, tcRail.yCoord - 1, tcRail.zCoord);
 		if (icon != null) {
 			iconName = icon.getIconName();
 		}
@@ -102,7 +102,7 @@ public class ModelLargeSlopeTCTrack extends ModelBase {
 			colour = 16777215;
 		}
 
-		render( type, tcRail.getgetWorld()().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1, iconName, colour);
+		render( type, tcRail.getWorld().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1, iconName, colour);
 	}
 
 	public void render(String type, int facing, double x, double y, double z, float r, float g, float b, float a, String ballastTexture, int colour)

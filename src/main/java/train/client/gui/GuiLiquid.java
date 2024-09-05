@@ -8,7 +8,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import org.lwjgl.opengl.GL11;
@@ -41,7 +41,7 @@ public class GuiLiquid extends GuiContainer {
 
         if (intersectsWith(t, g)) {
             if (liquid.getLiquidName() != null && !liquid.getLiquidName().isEmpty()) {
-                drawCreativeTabHoveringText(StatCollector.translateToLocal(liquid.getLiquidName()) + ": " + liquid.getAmount() + "mb/" + liquid.getCapacity() + "mb", t, g);
+                drawCreativeTabHoveringText(I18n.format(liquid.getLiquidName()) + ": " + liquid.getAmount() + "mb/" + liquid.getCapacity() + "mb", t, g);
             } else {
                 drawCreativeTabHoveringText("0mb/" + liquid.getCapacity() + "mb", t, g);
             }

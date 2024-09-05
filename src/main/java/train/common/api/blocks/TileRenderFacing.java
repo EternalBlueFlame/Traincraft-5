@@ -10,7 +10,7 @@ import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
@@ -177,7 +177,7 @@ public class TileRenderFacing extends TileEntity {
         if(this.getWorld() != null) {
             CommonUtil.markBlockForUpdate(getWorld(), xCoord, yCoord, zCoord);
             getWorld().markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
-            this.getWorld().func_147453_f(this.xCoord, this.yCoord, this.zCoord, host);
+            this.getWorld().func_147453_f(getPos(), host);
             if (getWorld().isRemote && blockGLID != null) {
             //    org.lwjgl.opengl.GL11.glDeleteLists(blockGLID, 1);
             //    blockGLID = null;
@@ -194,14 +194,14 @@ public class TileRenderFacing extends TileEntity {
     }
 
     @Override
-    public S35PacketUpdateTileEntity getDescriptionPacket() {
+    public SPacketUpdateTileEntity getDescriptionPacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         writeToNBT(nbttagcompound);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 0, nbttagcompound);
+        return new SPacketUpdateTileEntity(getPos(), 0, nbttagcompound);
     }
 
     @Override
-    public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt) {
+    public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         if(pkt ==null){return;}
         readFromNBT(pkt.func_148857_g());
         markDirty();

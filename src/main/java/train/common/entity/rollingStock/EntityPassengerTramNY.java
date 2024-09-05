@@ -27,7 +27,7 @@ public class EntityPassengerTramNY extends EntityRollingStock implements IPassen
 	@Override
 	public void updatePassenger(Entity passenger) {
 		if(passenger==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset()+0.1F, posZ);
+		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset()+0.1F, posZ);
 	}
 
 	@Override
@@ -45,11 +45,11 @@ public class EntityPassengerTramNY extends EntityRollingStock implements IPassen
 		if (!getWorld().isRemote) {
 			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 			if(lockThisCart(itemstack, entityplayer))return true;
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
+			if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) {
 				return true;
 			}
 			if (!getWorld().isRemote) {
-				entityplayer.mountEntity(this);
+				addPassenger(entityplayer);
 			}
 		}
 		return true;

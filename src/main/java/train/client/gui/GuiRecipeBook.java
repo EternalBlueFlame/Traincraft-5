@@ -12,7 +12,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 import train.client.core.handlers.RecipeBookHandler;
 import train.common.blocks.TCBlocks;
@@ -562,7 +562,7 @@ public class GuiRecipeBook extends GuiScreen {
 			this.drawTexturedModalRect(var5 - 55, var6 - 15, 0, 0, 256, 256);
 		}
 
-        pageIndic = String.format(StatCollector.translateToLocal("book.pageIndicator"), new Object[]{this.currPage + 1, this.bookTotalPages});
+        pageIndic = String.format(I18n.format("book.pageIndicator"), new Object[]{this.currPage + 1, this.bookTotalPages});
 
 		var9 = this.fontRenderer.getStringWidth(pageIndic);
 		if (this.currPage > 0) {

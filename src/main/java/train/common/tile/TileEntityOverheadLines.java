@@ -3,7 +3,7 @@ package train.common.tile;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import train.common.blocks.tracks.BlockEnergyTrack;
 import train.common.core.handlers.OverheadLinesEnergyNetHandler;
@@ -195,7 +195,7 @@ public class TileEntityOverheadLines extends TileEntity {
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
 
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
+		return new SPacketUpdateTileEntity(getPos(), 1, nbt);
 	}
 }
 

@@ -639,7 +639,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 					entity = (Entity) o;
 
-					if (entity != this.riddenByEntity) {
+					if (entity != this.getPassengers().get(0)) {
 
 						this.applyEntityCollision(entity);
 					}

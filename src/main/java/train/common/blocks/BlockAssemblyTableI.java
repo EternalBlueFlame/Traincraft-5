@@ -106,7 +106,7 @@ public class BlockAssemblyTableI extends BlockDynamic {
 		TileCrafterTierI te = (TileCrafterTierI) world.getTileEntity(i, j, k);
 		if (te != null) {
 			int dir = MathHelper.floor_double((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-			te.setFacing(EnumFacing.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
+			te.setFacing(EnumFacing.byHorizontalIndex(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
 			world.markBlockForUpdate(i, j, k);
 		}
 	}

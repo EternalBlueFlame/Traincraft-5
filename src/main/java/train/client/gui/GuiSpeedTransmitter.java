@@ -30,8 +30,8 @@ public class GuiSpeedTransmitter extends GuiScreen {
 
         if (entity instanceof TileInfoTransmitterSpeed) {
             transmitterBlock = (TileInfoTransmitterSpeed) entity;
-            Block transmitterBlocc = entity.getgetWorld()().getBlock(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
-            System.out.println(entity.getgetWorld()().isBlockIndirectlyGettingPowered(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord));
+            Block transmitterBlocc = entity.getWorld().getBlock(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
+            System.out.println(entity.getWorld().isBlockIndirectlyGettingPowered(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord));
         }
     }
 
@@ -87,7 +87,7 @@ public class GuiSpeedTransmitter extends GuiScreen {
     @SideOnly(Side.CLIENT)
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0) {
-            TileInfoTransmitterSpeed its = (TileInfoTransmitterSpeed) transmitterBlock.getgetWorld()().getTileEntity(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
+            TileInfoTransmitterSpeed its = (TileInfoTransmitterSpeed) transmitterBlock.getWorld().getTileEntity(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
             its.setSpeed = Integer.parseInt(speedLimitTextField.getText());
             Traincraft.itsChannel.sendToServer(new PacketSetSpeed(Integer.parseInt(speedLimitTextField.getText()), its.xCoord, its.yCoord, its.zCoord, 0));
             its.nextUpdateSpeed(Integer.parseInt(nextSpeedLimitTextField.getText()), Double.parseDouble(nextSpeedXTextField.getText()), Double.parseDouble(nextSpeedYTextField.getText()), Double.parseDouble(nextSpeedZTextField.getText()));

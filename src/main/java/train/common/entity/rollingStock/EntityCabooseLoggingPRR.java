@@ -37,7 +37,7 @@ public class EntityCabooseLoggingPRR extends AbstractWorkCart implements IInvent
 	@Override
 	public void updatePassenger(Entity passenger) {
 		if(passenger==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.15F, posZ);
+		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.15F, posZ);
 	}
 
 	@Override
@@ -48,14 +48,14 @@ public class EntityCabooseLoggingPRR extends AbstractWorkCart implements IInvent
 
 	@Override
 	public void pressKey(int i) {
-		if(locked && riddenByEntity != null && riddenByEntity instanceof EntityPlayer&& !((EntityPlayer)riddenByEntity).getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())){
+		if(locked && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer&& !((EntityPlayer)getPassengers().get(0)).getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())){
 			return;
 		}
-		if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+		if (i == 7 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
+			((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
-		if (i == 9 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+		if (i == 9 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
+			((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
@@ -78,11 +78,11 @@ public class EntityCabooseLoggingPRR extends AbstractWorkCart implements IInvent
 		if (!getWorld().isRemote) {
 			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 			if(lockThisCart(itemstack, entityplayer))return true;
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
+			if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) {
 				return true;
 			}
 			if (!getWorld().isRemote) {
-				entityplayer.mountEntity(this);
+				addPassenger(entityplayer);
 			}
 		}
 		return true;

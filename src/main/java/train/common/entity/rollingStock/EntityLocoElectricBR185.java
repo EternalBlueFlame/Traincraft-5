@@ -55,10 +55,10 @@ public class EntityLocoElectricBR185 extends ElectricTrain {
 			pitch -= pitchRads * 1.2;
 		}
 		if (pitchRads == 0.0) {
-			riddenByEntity.setPosition(bogieX1, pitch1, bogieZ1);
+			getPassengers().get(0).setPosition(bogieX1, pitch1, bogieZ1);
 		}
 		if (pitchRads > -1.01 && pitchRads < 1.01) {
-			riddenByEntity.setPosition(bogieX1, pitch, bogieZ1);
+			getPassengers().get(0).setPosition(bogieX1, pitch, bogieZ1);
 		}
 	}
 
@@ -70,8 +70,8 @@ public class EntityLocoElectricBR185 extends ElectricTrain {
 
 	@Override
 	public void pressKey(int i) {
-		if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+		if (i == 7 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
+			((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
@@ -103,7 +103,7 @@ public class EntityLocoElectricBR185 extends ElectricTrain {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 0xff;
 			if (j >= 0 && j < locoInvent.length) {
-				locoInvent[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				locoInvent[j] = new ItemStack(nbttagcompound1);
 			}
 		}
 	}
@@ -124,10 +124,10 @@ public class EntityLocoElectricBR185 extends ElectricTrain {
 			return false;
 		}
 		if (!getWorld().isRemote) {
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
+			if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) {
 				return true;
 			}
-			entityplayer.mountEntity(this);
+			addPassenger(entityplayer);
 		}
 		return true;
 	}

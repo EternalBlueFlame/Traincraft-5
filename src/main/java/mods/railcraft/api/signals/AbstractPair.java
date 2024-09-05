@@ -126,7 +126,7 @@ public abstract class AbstractPair {
                 int y = coord.y;
                 int z = coord.z;
 
-                World world = tile.getgetWorld()();
+                World world = tile.getWorld();
                 if (!world.blockExists(x, y, z))
                     continue;
 
@@ -190,7 +190,7 @@ public abstract class AbstractPair {
             return null;
         }
 
-        World world = tile.getgetWorld()();
+        World world = tile.getWorld();
         if (!world.blockExists(x, y, z))
             return null;
 
@@ -220,7 +220,7 @@ public abstract class AbstractPair {
 
     public WorldCoordinate getCoords() {
         if (coords == null)
-            coords = new WorldCoordinate(tile.getgetWorld()().provider.dimensionId, tile.xCoord, tile.yCoord, tile.zCoord);
+            coords = new WorldCoordinate(tile.getWorld().provider.dimensionId, tile.xCoord, tile.yCoord, tile.zCoord);
         return coords;
     }
 
@@ -312,17 +312,17 @@ public abstract class AbstractPair {
 
     @SideOnly(Side.CLIENT)
     public void addPair(int x, int y, int z) {
-        pairings.add(new WorldCoordinate(tile.getgetWorld()().provider.dimensionId, x, y, z));
+        pairings.add(new WorldCoordinate(tile.getWorld().provider.dimensionId, x, y, z));
     }
 
     @SideOnly(Side.CLIENT)
     public void removePair(int x, int y, int z) {
-        pairings.remove(new WorldCoordinate(tile.getgetWorld()().provider.dimensionId, x, y, z));
+        pairings.remove(new WorldCoordinate(tile.getWorld().provider.dimensionId, x, y, z));
     }
 
     public void clearPairings() {
         pairings.clear();
-        if (!tile.getgetWorld()().isRemote)
+        if (!tile.getWorld().isRemote)
             SignalTools.packetBuilder.sendPairPacketUpdate(this);
     }
 }

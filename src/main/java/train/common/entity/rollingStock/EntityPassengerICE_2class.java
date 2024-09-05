@@ -1,5 +1,6 @@
 package train.common.entity.rollingStock;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -31,15 +32,15 @@ public class EntityPassengerICE_2class extends EntityRollingStock implements IPa
 			dX/=2;
 			dZ/=2;*/
 			//System.out.println(getWorld().isRemote+ " "+(posX - dX) +" " + (posZ - dZ));
-			//riddenByEntity.setPosition(posX - dX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2, posZ-dZ);
+			//getPassengers().get(0).setPosition(posX - dX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2, posZ-dZ);
 		//}
 		/*double rads = this.rotationYawClientReal-90 * 3.141592653589793D / 180.0D;
 		double pitchRads = this.anglePitchClient * 3.141592653589793D / 180.0D;
 		double distance = 1.3;
-		riddenByEntity.setPosition(posX - Math.cos(rads)*distance, posY + (Math.tan(pitchRads)*-distance)+( getMountedYOffset() + passenger.getYOffset() + 0.2F), posZ - Math.sin(rads)*distance);
+		getPassengers().get(0).setPosition(posX - Math.cos(rads)*distance, posY + (Math.tan(pitchRads)*-distance)+( getMountedYOffset() + passenger.getYOffset() + 0.2F), posZ - Math.sin(rads)*distance);
 		*/
 		if(passenger==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2, posZ);
+		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2, posZ);
 	}
 
 	@Override
@@ -57,11 +58,11 @@ public class EntityPassengerICE_2class extends EntityRollingStock implements IPa
 		if (!getWorld().isRemote) {
 			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 			if(lockThisCart(itemstack, entityplayer))return true;
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
+			if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) {
 				return true;
 			}
 			if (!getWorld().isRemote) {
-				entityplayer.mountEntity(this);
+				addPassenger(entityplayer);
 			}
 		}
 		return true;

@@ -40,8 +40,8 @@ public class EntityFlatCartWoodUS extends Freight{
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(riddenByEntity!=null) {
-			riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.4, posZ);
+		if(getPassengers().get(0)!=null) {
+			getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.4, posZ);
 		}
 	}
 	@Override
@@ -112,7 +112,7 @@ public class EntityFlatCartWoodUS extends Freight{
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 0xff;
 			if (j >= 0 && j < cargoItems.length) {
-				cargoItems[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				cargoItems[j] = new ItemStack(nbttagcompound1);
 			}
 		}
 	}

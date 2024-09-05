@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 import train.common.Traincraft;
 import train.common.api.*;
@@ -262,7 +262,7 @@ public class GuiLoco2 extends GuiContainer {
 
     private EntityPlayer getEntityPlayer()
     {
-        EntityPlayer p = (EntityPlayer) loco.riddenByEntity;
+        EntityPlayer p = (EntityPlayer) loco.getPassengers().get(0);
         if (loco.seats.size() != 0 && loco.seats.get(0).getPassenger() instanceof EntityPlayer) {
             p = (EntityPlayer) loco.seats.get(0).getPassenger();
         }
@@ -341,7 +341,7 @@ public class GuiLoco2 extends GuiContainer {
             int k = (height - ySize) / 2;
             if (mouseX > j + 143 && mouseX < j + 161 && mouseY > k + 18 && mouseY < k + 68) {
                 if (((DieselTrain) loco).getDiesel() != 0) {
-                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("fluid.tc:" + ((DieselTrain) loco).getLiquidName()) + " " +
+                    drawHoveringText(Collections.singletonList(I18n.format("fluid.tc:" + ((DieselTrain) loco).getLiquidName()) + " " +
                                     ((DieselTrain) loco).getDiesel() + "mb / " + (((DieselTrain) loco).getCartTankCapacity()) + "mb"),
                             mouseX, mouseY, fontRenderer);
                 } else {

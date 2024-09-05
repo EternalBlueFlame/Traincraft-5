@@ -44,11 +44,11 @@ public class EntityPassengerGS4 extends EntityRollingStock implements IPassenger
 		if (!getWorld().isRemote) {
 			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 			if(lockThisCart(itemstack, entityplayer))return true;
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
+			if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) {
 				return true;
 			}
 			if (!getWorld().isRemote) {
-				entityplayer.mountEntity(this);
+				addPassenger(entityplayer);
 			}
 		}
 		return true;

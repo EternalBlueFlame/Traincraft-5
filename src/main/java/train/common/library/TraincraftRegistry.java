@@ -3,9 +3,9 @@ package train.common.library;
 import java.util.ArrayList;
 
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.render.CustomItemModel;
 import ebf.tim.utility.DebugUtil;
@@ -24,7 +24,7 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
@@ -381,7 +381,7 @@ public class TraincraftRegistry {
         if (oreDictionaryName != null) {
             OreDictionary.registerOre(oreDictionaryName, block);
         }
-        if (DebugUtil.dev && Traincraft.proxy.isClient() && block.getUnlocalizedName().equals(StatCollector.translateToLocal(block.getUnlocalizedName() +".name"))) {
+        if (DebugUtil.dev && Traincraft.proxy.isClient() && block.getUnlocalizedName().equals(I18n.format(block.getUnlocalizedName() +".name"))) {
             DebugUtil.println("Block missing lang entry: " + block.getUnlocalizedName());
         }
         if (block instanceof ITileEntityProvider) {
@@ -439,7 +439,7 @@ public class TraincraftRegistry {
         if (oreDictionaryName != null) {
             OreDictionary.registerOre(oreDictionaryName, itm);
         }
-        if (DebugUtil.dev && Traincraft.proxy != null && Traincraft.proxy.isClient() && itm.getUnlocalizedName().equals(StatCollector.translateToLocal(itm.getUnlocalizedName()+".name"))) {
+        if (DebugUtil.dev && Traincraft.proxy != null && Traincraft.proxy.isClient() && itm.getUnlocalizedName().equals(I18n.format(itm.getUnlocalizedName()+".name"))) {
             DebugUtil.println("Item missing lang entry: " + itm.getUnlocalizedName());
         }
         if (Traincraft.proxy.isClient() && itemRender != null) {
@@ -494,13 +494,13 @@ public class TraincraftRegistry {
         fluidMap.put(block, bucket);
 
         if (DebugUtil.dev && Traincraft.proxy.isClient()) {
-            if (fluid.getUnlocalizedName().equals(StatCollector.translateToLocal(fluid.getUnlocalizedName()))) {
+            if (fluid.getUnlocalizedName().equals(I18n.format(fluid.getUnlocalizedName()))) {
                 DebugUtil.println("Fluid missing lang entry: " + fluid.getUnlocalizedName());
             }
-            if (bucket.getUnlocalizedName().equals(StatCollector.translateToLocal(block.getUnlocalizedName()))) {
+            if (bucket.getUnlocalizedName().equals(I18n.format(block.getUnlocalizedName()))) {
                 DebugUtil.println("Item missing lang entry: " + bucket.getUnlocalizedName());
             }
-            if (block.getUnlocalizedName().equals(StatCollector.translateToLocal(block.getUnlocalizedName()))) {
+            if (block.getUnlocalizedName().equals(I18n.format(block.getUnlocalizedName()))) {
                 DebugUtil.println("Block missing lang entry: " + block.getUnlocalizedName());
             }
 

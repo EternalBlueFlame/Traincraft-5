@@ -25,55 +25,55 @@ public class TileHelper {
 	 * @param side - The side you are trying to find. A number between 0 and 5.
 	 * @return The side relative to the facing direction.
 	 */
-	public static EnumFacing getOrientationFromSide(EnumFacing front, EnumFacing side) {
+	public static EnumFacing byHorizontalIndexFromSide(EnumFacing front, EnumFacing side) {
 		if (front != EnumFacing.UNKNOWN && side != EnumFacing.UNKNOWN) {
 			switch (front.ordinal()) {
 			case 0:
 				switch (side.ordinal()) {
 				case 0:
-					return EnumFacing.getOrientation(3);
+					return EnumFacing.byHorizontalIndex(3);
 				case 1:
-					return EnumFacing.getOrientation(2);
+					return EnumFacing.byHorizontalIndex(2);
 				case 2:
-					return EnumFacing.getOrientation(1);
+					return EnumFacing.byHorizontalIndex(1);
 				case 3:
-					return EnumFacing.getOrientation(0);
+					return EnumFacing.byHorizontalIndex(0);
 				case 4:
-					return EnumFacing.getOrientation(5);
+					return EnumFacing.byHorizontalIndex(5);
 				case 5:
-					return EnumFacing.getOrientation(4);
+					return EnumFacing.byHorizontalIndex(4);
 				}
 
 			case 1:
 				switch (side.ordinal()) {
 				case 0:
-					return EnumFacing.getOrientation(4);
+					return EnumFacing.byHorizontalIndex(4);
 				case 1:
-					return EnumFacing.getOrientation(5);
+					return EnumFacing.byHorizontalIndex(5);
 				case 2:
-					return EnumFacing.getOrientation(0);
+					return EnumFacing.byHorizontalIndex(0);
 				case 3:
-					return EnumFacing.getOrientation(1);
+					return EnumFacing.byHorizontalIndex(1);
 				case 4:
-					return EnumFacing.getOrientation(2);
+					return EnumFacing.byHorizontalIndex(2);
 				case 5:
-					return EnumFacing.getOrientation(3);
+					return EnumFacing.byHorizontalIndex(3);
 				}
 
 			case 2:
 				switch (side.ordinal()) {
 				case 0:
-					return EnumFacing.getOrientation(0);
+					return EnumFacing.byHorizontalIndex(0);
 				case 1:
-					return EnumFacing.getOrientation(1);
+					return EnumFacing.byHorizontalIndex(1);
 				case 2:
-					return EnumFacing.getOrientation(3);
+					return EnumFacing.byHorizontalIndex(3);
 				case 3:
-					return EnumFacing.getOrientation(2);
+					return EnumFacing.byHorizontalIndex(2);
 				case 4:
-					return EnumFacing.getOrientation(5);
+					return EnumFacing.byHorizontalIndex(5);
 				case 5:
-					return EnumFacing.getOrientation(4);
+					return EnumFacing.byHorizontalIndex(4);
 				}
 
 			case 3:
@@ -82,33 +82,33 @@ public class TileHelper {
 			case 4:
 				switch (side.ordinal()) {
 				case 0:
-					return EnumFacing.getOrientation(0);
+					return EnumFacing.byHorizontalIndex(0);
 				case 1:
-					return EnumFacing.getOrientation(1);
+					return EnumFacing.byHorizontalIndex(1);
 				case 2:
-					return EnumFacing.getOrientation(5);
+					return EnumFacing.byHorizontalIndex(5);
 				case 3:
-					return EnumFacing.getOrientation(4);
+					return EnumFacing.byHorizontalIndex(4);
 				case 4:
-					return EnumFacing.getOrientation(3);
+					return EnumFacing.byHorizontalIndex(3);
 				case 5:
-					return EnumFacing.getOrientation(2);
+					return EnumFacing.byHorizontalIndex(2);
 				}
 
 			case 5:
 				switch (side.ordinal()) {
 				case 0:
-					return EnumFacing.getOrientation(0);
+					return EnumFacing.byHorizontalIndex(0);
 				case 1:
-					return EnumFacing.getOrientation(1);
+					return EnumFacing.byHorizontalIndex(1);
 				case 2:
-					return EnumFacing.getOrientation(4);
+					return EnumFacing.byHorizontalIndex(4);
 				case 3:
-					return EnumFacing.getOrientation(5);
+					return EnumFacing.byHorizontalIndex(5);
 				case 4:
-					return EnumFacing.getOrientation(2);
+					return EnumFacing.byHorizontalIndex(2);
 				case 5:
-					return EnumFacing.getOrientation(3);
+					return EnumFacing.byHorizontalIndex(3);
 				}
 			}
 		}

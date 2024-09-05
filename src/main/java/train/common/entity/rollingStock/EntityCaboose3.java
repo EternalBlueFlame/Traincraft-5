@@ -26,11 +26,11 @@ public class EntityCaboose3 extends EntityRollingStock implements IPassenger {
 
     @Override
     public void updatePassenger(Entity passenger) {
-        if (riddenByEntity == null) {
+        if (getPassengers().get(0) == null) {
             return;
         }
 
-        riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset(), posZ);
+        getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset(), posZ);
     }
 
     @Override
@@ -52,11 +52,11 @@ public class EntityCaboose3 extends EntityRollingStock implements IPassenger {
                 return true;
             }
 
-            if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
+            if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) {
                 return true;
             }
 
-            entityplayer.mountEntity(this);
+            addPassenger(entityplayer);
         }
         return true;
     }

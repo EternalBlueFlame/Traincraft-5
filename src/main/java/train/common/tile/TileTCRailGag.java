@@ -6,7 +6,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import train.common.blocks.BlockTCRail;
@@ -94,11 +94,11 @@ public class TileTCRailGag extends TileEntity {
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
 
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
+		return new SPacketUpdateTileEntity(getPos(), 1, nbt);
 	}
 	
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt){
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
 		this.readFromNBT(pkt.func_148857_g());
 		super.onDataPacket(net, pkt);
 	}

@@ -73,7 +73,7 @@ public class RenderSpeedSign extends TileEntitySpecialRenderer {
 
 		if (!skipRender) {
 
-			// tileEntity.getgetWorld()().getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getgetWorld()(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0
+			// tileEntity.getWorld().getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0
 
 			/*
 			if (((TileSpeedSign) tileEntity).getSkinstate() == 0) {

@@ -78,7 +78,7 @@ public class EntityTenderBerk1225 extends Tender implements IInventory {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 0xff;
 			if (j >= 0 && j < tenderItems.length) {
-				tenderItems[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				tenderItems[j] = new ItemStack(nbttagcompound1);
 			}
 		}
 	}

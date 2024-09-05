@@ -63,7 +63,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 			byte var5 = var4.getByte("Slot");
 
 			if (var5 >= 0 && var5 < this.furnaceItemStacks.length) {
-				this.furnaceItemStacks[var5] = ItemStack.loadItemStackFromNBT(var4);
+				this.furnaceItemStacks[var5] = new ItemStack(var4);
 			}
 		}
 		this.furnaceBurnTime = nbttagcompound.getShort("BurnTime");
@@ -324,8 +324,8 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 		setBeenAttacked();
 		setDamage(getDamage() + i * 10);
 		if (getDamage() > 40) {
-			if (riddenByEntity != null) {
-				riddenByEntity.mountEntity(this);
+			if (getPassengers().get(0) != null) {
+				getPassengers().get(0).mountEntity(this);
 			}
 			this.setDead();
 			ServerLogger.deleteWagon(this);
@@ -345,4 +345,31 @@ public abstract class AbstractWorkCart extends EntityRollingStock implements IIn
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack slot : furnaceItemStacks){
+			if(slot != ItemStack.EMPTY){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public boolean isUsableByPlayer(EntityPlayer p_70300_1_){return true;}
+
+	/*These seem unnecessary?*/
+	@Override
+	public int getField(int id) {return 0;}
+
+	@Override
+	public void setField(int id, int value) {}
+
+	@Override
+	public int getFieldCount() {return 0;}
+
+	@Override
+	public void clear() {}
 }

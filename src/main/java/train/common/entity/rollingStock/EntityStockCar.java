@@ -27,7 +27,7 @@ public class EntityStockCar extends EntityRollingStock implements IPassenger {
 	@Override
 	public void updatePassenger(Entity passenger) {
 		if(passenger==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2F, posZ);
+		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2F, posZ);
 	}
 
 	@Override
@@ -47,8 +47,8 @@ public class EntityStockCar extends EntityRollingStock implements IPassenger {
 			if(lockThisCart(itemstack, entityplayer))return true;
 		}
 		if (!getWorld().isRemote) {
-			if (riddenByEntity != null) {
-				riddenByEntity.mountEntity(this);
+			if (getPassengers().get(0) != null) {
+				getPassengers().get(0).mountEntity(this);
 				return true;
 			}
 		}
@@ -82,10 +82,10 @@ public class EntityStockCar extends EntityRollingStock implements IPassenger {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		super.writeEntityToNBT(nbttagcompound);
-		if (riddenByEntity != null) {
+		if (getPassengers().get(0) != null) {
 
 			NBTTagCompound c = new NBTTagCompound();
-			if(riddenByEntity.writeMountToNBT(c)) {
+			if(getPassengers().get(0).writeMountToNBT(c)) {
 				nbttagcompound.setTag("mob", c);
 			}
 		}

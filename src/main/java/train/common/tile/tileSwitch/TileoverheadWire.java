@@ -39,7 +39,7 @@ public class TileoverheadWire extends TileTraincraft {
                         entityitem.motionZ = (float) rand.nextGaussian() * f3;
                         getWorld().spawnEntityInWorld(entityitem);
                     }
-                    this.getWorld().setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
+                    this.getWorld().setBlockToAir(getPos());
                 }
                 syncTileEntity();
             }

@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraft.util.EnumFacing;
@@ -99,7 +99,7 @@ public class TileCrafterTierIII extends TileRenderFacing implements IInventory, 
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTag) {
 		super.readFromNBT(nbtTag);
-		facing = EnumFacing.getOrientation(nbtTag.getByte("Orientation"));
+		facing = EnumFacing.byHorizontalIndex(nbtTag.getByte("Orientation"));
 		slotSelected = nbtTag.getIntArray("Selected");
 		NBTTagList nbttaglist = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		this.crafterInventory = new ItemStack[this.getSizeInventory()];
@@ -107,7 +107,7 @@ public class TileCrafterTierIII extends TileRenderFacing implements IInventory, 
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			byte byte0 = nbttagcompound1.getByte("Slot");
 			if (byte0 >= 0 && byte0 < crafterInventory.length) {
-				this.crafterInventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				this.crafterInventory[byte0] = new ItemStack(nbttagcompound1);
 			}
 		}
 
@@ -116,7 +116,7 @@ public class TileCrafterTierIII extends TileRenderFacing implements IInventory, 
 			NBTTagCompound nbttagcompound2 = nbttaglist2.getCompoundTagAt(i);
 			byte byte1 = nbttagcompound2.getByte("Recipe");
 			if (byte1 >= 0) {
-				ItemStack stack = ItemStack.loadItemStackFromNBT(nbttagcompound2);
+				ItemStack stack = new ItemStack(nbttagcompound2);
 
 				if (stack!=null && !listContainsItem(knownRecipes, stack.getItem())) {
 
@@ -193,7 +193,7 @@ public class TileCrafterTierIII extends TileRenderFacing implements IInventory, 
 		if (getWorld() == null) {
 			return true;
 		}
-		if (getWorld().getTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (getWorld().getTileEntity(getPos()) != this) {
 			return false;
 		}
 		return player.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
@@ -207,12 +207,12 @@ public class TileCrafterTierIII extends TileRenderFacing implements IInventory, 
 	public void closeInventory(EntityPlayer p) {}
 
 	@Override
-	public S35PacketUpdateTileEntity getDescriptionPacket() {
+	public SPacketUpdateTileEntity getDescriptionPacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
 
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
+		return new SPacketUpdateTileEntity(getPos(), 1, nbt);
 	}
 
 	private boolean listContainsItem(List<Item> list, Item stack) {

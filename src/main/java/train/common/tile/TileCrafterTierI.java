@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraft.util.EnumFacing;
@@ -104,7 +104,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 
 		super.readFromNBT(nbtTag);
 
-		facing = EnumFacing.getOrientation(nbtTag.getByte("Orientation"));
+		facing = EnumFacing.byHorizontalIndex(nbtTag.getByte("Orientation"));
 		slotSelected = nbtTag.getIntArray("Selected");
 		NBTTagList nbttaglist = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 
@@ -117,7 +117,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 
 			if (byte0 >= 0 && byte0 < crafterInventory.length) {
 
-				this.crafterInventory[byte0] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				this.crafterInventory[byte0] = new ItemStack(nbttagcompound1);
 			}
 		}
 
@@ -129,7 +129,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 			byte byte1 = nbttagcompound2.getByte("Recipe");
 
 			if (byte1 >= 0) {
-				ItemStack stack = ItemStack.loadItemStackFromNBT(nbttagcompound2);
+				ItemStack stack = new ItemStack(nbttagcompound2);
 
 				if (stack!=null && !listContainsItem(knownRecipes, stack.getItem())) {
 
@@ -219,7 +219,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 		if (getWorld() == null) {
 			return true;
 		}
-		if (getWorld().getTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (getWorld().getTileEntity(getPos()) != this) {
 			return false;
 		}
 		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
@@ -233,12 +233,12 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 	public void closeInventory(EntityPlayer p) {}
 
 	@Override
-	public S35PacketUpdateTileEntity getDescriptionPacket() {
+	public SPacketUpdateTileEntity getDescriptionPacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
 
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
+		return new SPacketUpdateTileEntity(getPos(), 1, nbt);
 	}
 
 	private boolean listContainsItem(List<Item> list, Item stack) {

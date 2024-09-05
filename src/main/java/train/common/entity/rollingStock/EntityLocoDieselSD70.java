@@ -82,7 +82,7 @@ public class EntityLocoDieselSD70 extends DieselTrain {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 0xff;
 			if (j >= 0 && j < locoInvent.length) {
-				locoInvent[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				locoInvent[j] = new ItemStack(nbttagcompound1);
 			}
 		}
 	}
@@ -104,10 +104,10 @@ public class EntityLocoDieselSD70 extends DieselTrain {
 			return false;
 		}
 		if (!getWorld().isRemote) {
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
+			if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) {
 				return true;
 			}
-			entityplayer.mountEntity(this);
+			addPassenger(entityplayer);
 		}
 		return true;
 	}

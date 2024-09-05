@@ -57,6 +57,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public List<ChunkCoordIntPair> loadedChunks = new ArrayList<>();
     public boolean shouldChunkLoad = true;
     protected boolean itemdropped = false;
+    public float yOffset=0;
 
     public XmlBuilder entity_data = new XmlBuilder();
     public TransportRenderCache render_cache=new TransportRenderCache();
@@ -194,7 +195,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity p_70114_1_) {
-        if (riddenByEntity != p_70114_1_) {
+        if (getPassengers().get(0) != p_70114_1_) {
             return super.getCollisionBox(p_70114_1_);
         } else {
             return null;
@@ -613,7 +614,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
             s = "generic";
         }
 
-        return StatCollector.translateToLocal("entity." + s + ".name");
+        return I18n.format("entity." + s + ".name");
     }
 
 

@@ -360,8 +360,8 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
         setBeenAttacked();
         setDamage(getDamage() + i * 10);
         if (getDamage() > 40) {
-            if (riddenByEntity != null) {
-                riddenByEntity.mountEntity(this);
+            if (getPassengers().get(0) != null) {
+                getPassengers().get(0).mountEntity(this);
             }
             this.setDead();
             ServerLogger.deleteWagon(this);
