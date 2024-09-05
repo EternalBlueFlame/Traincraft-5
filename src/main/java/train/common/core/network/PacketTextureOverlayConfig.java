@@ -109,7 +109,7 @@ public class PacketTextureOverlayConfig implements IMessage {
                     return null;
                 }
             } else {
-                rollingStockEntity = Minecraft.getMinecraft().theWorld.getEntityByID(message.entityID);
+                rollingStockEntity = Minecraft.getMinecraft().world.getEntityByID(message.entityID);
             }
             if (rollingStockEntity instanceof EntityRollingStock) {
                 OverlayTextureManager overlayTextureManager = ((EntityRollingStock) rollingStockEntity).getOverlayTextureContainer();

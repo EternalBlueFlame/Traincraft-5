@@ -400,8 +400,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
             setDamage(getDamage() + i * 10);
             if (getDamage() > 40) {
-/*                if (riddenByEntity != null) {
-                    riddenByEntity.mountEntity(this);
+/*                if (getPassengers().get(0) != null) {
+                    getPassengers().get(0).mountEntity(this);
                 }*/ //#!#
                 ServerLogger.deleteWagon(this);
                 /**
@@ -519,7 +519,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     public boolean isLockedAndNotOwner() {
         if (this.getTrainLockedFromPacket()) {
-            if (this.riddenByEntity instanceof EntityPlayer && !((EntityPlayer) this.riddenByEntity).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
+            if (this.getPassengers().get(0) instanceof EntityPlayer && !((EntityPlayer) this.getPassengers().get(0)).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
                 return true;
             }
             if (this.seats.size() > 0 && this.seats.get(0).getPassenger() instanceof EntityPlayer && !((EntityPlayer) this.seats.get(0).getPassenger()).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
@@ -542,8 +542,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 } else {
                     playerEntity.openGui(Traincraft.instance,GuiIDs.CRAFTING_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
                 }
-            } else if (this.seats != null && this.seats.size() > 1 && this.getInventoryRows() == 0 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-                ((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.SEAT_GUI, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+            } else if (this.seats != null && this.seats.size() > 1 && this.getInventoryRows() == 0 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
+                ((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.SEAT_GUI, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
             }
         }
         if (i == 9) {
@@ -715,8 +715,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     }
                 }
             } else {
-                if (riddenByEntity instanceof EntityPlayer) {
-                    ((EntityPlayer) riddenByEntity).addPotionEffect(new PotionEffect(Potion.resistance.id,20,5,true));
+                if (getPassengers().get(0) instanceof EntityPlayer) {
+                    ((EntityPlayer) getPassengers().get(0)).addPotionEffect(new PotionEffect(Potion.resistance.id,20,5,true));
                 }
             }
         }
@@ -753,7 +753,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
             if (this.inPortal) {
                 if (var1.getAllowNether()) {
-                    if (this.ridingEntity == null && this.portalCounter++ >= var2) {
+                    if (this.getRidingEntity()== null && this.portalCounter++ >= var2) {
                         this.portalCounter = var2;
                         this.timeUntilPortal = this.getPortalCooldown();
                         byte var3;
@@ -967,7 +967,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (list != null && !list.isEmpty()) {
             Entity entity;
             for (Object obj : list) {
-                if (obj == this.riddenByEntity) {
+                if (obj == this.getPassengers().get(0)) {
                     continue;
                 }
                 entity = (Entity) obj;
@@ -995,7 +995,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         for (EntitySeat seat: seats) { //handle died in train
             if (seat.getPassenger() != null && (seat.getPassenger().isDead || seat != seat.getPassenger().ridingEntity)) {
-                this.seats.get(0).getPassenger().ridingEntity = null;
+                this.seats.get(0).getPassenger().getRidingEntity()= null;
                 this.seats.get(0).removePassenger(this.seats.get(0).getPassenger());
             }
         }
@@ -1792,7 +1792,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (super.interactFirst(entityplayer)) {
             return true;
         }
-        if (entityplayer.ridingEntity == this) {
+        if (entityplayer.getRidingEntity()== this) {
             return false;
         }
 
@@ -1960,7 +1960,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             return;
         }
         if (!this.getWorld().isRemote) {
-            if (par1Entity != this.riddenByEntity) { //so we don't collide with current entity TODO: convert for seats or remove?
+            if (par1Entity != this.getPassengers().get(0)) { //so we don't collide with current entity TODO: convert for seats or remove?
                 double d0 = par1Entity.posX - this.posX;
                 double d1 = par1Entity.posZ - this.posZ;
                 double distancesX[] = new double[4];
@@ -2739,7 +2739,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         //make sure the player is not null, and be sure that driver only rules are applied.
         if (player ==null){
             return false;
-        } else if (driverOnly && (!(player.ridingEntity instanceof EntitySeat) || ! ((EntitySeat) player.ridingEntity).isControlSeat())){
+        } else if (driverOnly && (!(player.getRidingEntity()instanceof EntitySeat) || ! ((EntitySeat) player.ridingEntity).isControlSeat())){
             return false;
         }
 

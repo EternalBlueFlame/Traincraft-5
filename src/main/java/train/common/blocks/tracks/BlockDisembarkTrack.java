@@ -26,10 +26,10 @@ public class BlockDisembarkTrack extends TrackBaseTraincraft implements ITrackEm
 	@Override
 	public void onMinecartPass(EntityMinecart cart) {
 		if (cart instanceof EntityStockCar || cart instanceof EntityStockCarDRWG) {
-			if (cart.riddenByEntity == null)
+			if (cart.getPassengers().get(0) == null)
 				return;
-			cart.riddenByEntity.mountEntity(cart);
-			cart.riddenByEntity.ridingEntity = null;
+			cart.getPassengers().get(0).mountEntity(cart);
+			cart.getPassengers().get(0).getRidingEntity()= null;
 			setTrackPowering();
 		}
 	}

@@ -18,7 +18,7 @@ public class RenderowoYardSwtichStand extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
-        boolean powered = tileEntity.getgetWorld()().getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getgetWorld()(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0;
+        boolean powered = tileEntity.getWorld().getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0;
         Tessellator.bindTexture(powered?texture2:texture);
         GL11.glPushMatrix();
         GL11.glTranslated(x+0.5,y+0.6,z+0.5);

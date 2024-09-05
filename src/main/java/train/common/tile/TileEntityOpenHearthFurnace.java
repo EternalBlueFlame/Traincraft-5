@@ -240,7 +240,7 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getTexture(int x, int y, int z){
 		return new ResourceLocation(Info.modID,
-				((x==0&&y==0&&z==0)|| CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)== TCBlocks.distilActive)?
+				((x==0&&y==0&&z==0)|| CommonUtil.getBlockAt(Minecraft.getMinecraft().world,x,y,z)== TCBlocks.distilActive)?
 						"textures/blocks/furnace_on.png":"textures/blocks/furnace_off.png");
 	}
 }

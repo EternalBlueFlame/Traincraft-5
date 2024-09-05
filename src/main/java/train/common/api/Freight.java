@@ -38,8 +38,8 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
         setDamage(getDamage() + i * 10);
 
         if (getDamage() > 40) {
-            if (riddenByEntity != null) {
-                riddenByEntity.mountEntity(this);
+            if (getPassengers().get(0) != null) {
+                getPassengers().get(0).mountEntity(this);
             }
 
             this.setDead();
@@ -191,7 +191,7 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
             int j = nbttagcompound1.getByte("Slot") & 0xff;
             if (j < cargoItemsCount.length) {
-                cargoItemsCount[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+                cargoItemsCount[j] = new ItemStack(nbttagcompound1);
             }
         }
 

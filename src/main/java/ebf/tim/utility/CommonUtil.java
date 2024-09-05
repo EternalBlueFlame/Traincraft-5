@@ -118,7 +118,7 @@ public class CommonUtil {
     }
 
     public static void playSound(TileEntity tile, String file, float volume, float pitch){
-        tile.getgetWorld()().playSound(tile.xCoord,tile.yCoord,tile.zCoord, file, volume,pitch,false);
+        tile.getWorld().playSound(tile.xCoord,tile.yCoord,tile.zCoord, file, volume,pitch,false);
     }
 
     public static void playSound(Entity entity, String file, float volume, float pitch){

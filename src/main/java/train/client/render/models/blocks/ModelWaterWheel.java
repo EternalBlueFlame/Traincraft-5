@@ -43,7 +43,7 @@ public class ModelWaterWheel extends ModelBase {
 		float f4 = (float) (j & 255) / 255.0F;
 		GL11.glColor4f(f1 * f2, f1 * f3, f1 * f4, 1);
 		// Render the object, using modelTutBox.renderAll();
-		int facing = waterWheel.getgetWorld()().getBlockMetadata((int) waterWheel.xCoord, (int) waterWheel.yCoord, (int) waterWheel.zCoord);
+		int facing = waterWheel.getWorld().getBlockMetadata((int) waterWheel.xCoord, (int) waterWheel.yCoord, (int) waterWheel.zCoord);
 		if (facing == 3) {
 			GL11.glScalef(0.7f, 0.5f, 0.5f);
 			GL11.glScalef(1f, 0.36f, 0.36f);

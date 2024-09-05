@@ -53,8 +53,8 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 
 	@Override
 	public void pressKey(int i) {
-		if (i == 7 && riddenByEntity instanceof EntityPlayer) {
-			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.FORNEY, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+		if (i == 7 && getPassengers().get(0) instanceof EntityPlayer) {
+			((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.FORNEY, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
@@ -113,7 +113,7 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 0xff;
 			if (j >= 0 && j < locoInvent.length) {
-				locoInvent[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				locoInvent[j] = new ItemStack(nbttagcompound1);
 			}
 		}
 	}
@@ -133,10 +133,10 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 			return false;
 		}
 		if (!getWorld().isRemote) {
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
+			if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) {
 				return true;
 			}
-			entityplayer.mountEntity(this);
+			addPassenger(entityplayer);
 		}
 		return true;
 	}
@@ -162,11 +162,11 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 
 	@Override
 	public float transportTopSpeed() {
-		return super.transportTopSpeed()*(riddenByEntity instanceof EntityPlayerMP &&(((EntityPlayerMP) riddenByEntity).getDisplayName().equals("EternalBlueFlame") || ((EntityPlayerMP) riddenByEntity).getDisplayName().equals("minecarftmano9"))?3:1);
+		return super.transportTopSpeed()*(getPassengers().get(0) instanceof EntityPlayerMP &&(((EntityPlayerMP) getPassengers().get(0)).getDisplayName().equals("EternalBlueFlame") || ((EntityPlayerMP) getPassengers().get(0)).getDisplayName().equals("minecarftmano9"))?3:1);
 	}
 
 	@Override
 	public float transportMetricHorsePower() {
-		return super.transportMetricHorsePower()*(riddenByEntity instanceof EntityPlayerMP &&(((EntityPlayerMP) riddenByEntity).getDisplayName().equals("EternalBlueFlame") || ((EntityPlayerMP) riddenByEntity).getDisplayName().equals("minecarftmano9"))?3:1);
+		return super.transportMetricHorsePower()*(getPassengers().get(0) instanceof EntityPlayerMP &&(((EntityPlayerMP) getPassengers().get(0)).getDisplayName().equals("EternalBlueFlame") || ((EntityPlayerMP) getPassengers().get(0)).getDisplayName().equals("minecarftmano9"))?3:1);
 	}
 }

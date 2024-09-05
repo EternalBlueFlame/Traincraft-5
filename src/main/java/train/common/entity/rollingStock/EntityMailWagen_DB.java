@@ -37,7 +37,7 @@ public class EntityMailWagen_DB extends AbstractWorkCart implements IInventory {
 	@Override
 	public void updatePassenger(Entity passenger) {
 		if(passenger==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.15F, posZ);
+		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.15F, posZ);
 	}
 
 	@Override
@@ -48,15 +48,15 @@ public class EntityMailWagen_DB extends AbstractWorkCart implements IInventory {
 
 	@Override
 	public void pressKey(int i) {
-		if (riddenByEntity instanceof EntityPlayer) {
-			if (locked && !((EntityPlayer) riddenByEntity).getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
+		if (getPassengers().get(0) instanceof EntityPlayer) {
+			if (locked && !((EntityPlayer) getPassengers().get(0)).getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
 				return;
 			}
 			if (i == 7) {
-				((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+				((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 			}
 			if (i == 9) {
-				((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+				((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 			}
 		}
 	}
@@ -80,11 +80,11 @@ public class EntityMailWagen_DB extends AbstractWorkCart implements IInventory {
 		if (!getWorld().isRemote) {
 			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 			if(lockThisCart(itemstack, entityplayer))return true;
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
+			if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) {
 				return true;
 			}
 			if (!getWorld().isRemote) {
-				entityplayer.mountEntity(this);
+				addPassenger(entityplayer);
 			}
 		}
 		return true;

@@ -41,7 +41,7 @@ public class EntityBUnitEMDF3 extends LiquidTank implements IFluidHandler {
 
     @Override
     public void updatePassenger(Entity passenger) {
-        if (riddenByEntity == null) {
+        if (getPassengers().get(0) == null) {
             return;
         }
 
@@ -75,11 +75,11 @@ public class EntityBUnitEMDF3 extends LiquidTank implements IFluidHandler {
         }
 
         if (pitchRads == 0.0) {
-            riddenByEntity.setPosition(bogieX1, pitch1, bogieZ1);
+            getPassengers().get(0).setPosition(bogieX1, pitch1, bogieZ1);
         }
 
         if (pitchRads > -1.01 && pitchRads < 1.01) {
-            riddenByEntity.setPosition(bogieX1, pitch, bogieZ1);
+            getPassengers().get(0).setPosition(bogieX1, pitch, bogieZ1);
         }
     }
 
@@ -159,7 +159,7 @@ public class EntityBUnitEMDF3 extends LiquidTank implements IFluidHandler {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
             int j = nbttagcompound1.getByte("Slot") & 0xff;
             if (j < cargoItems.length) {
-                cargoItems[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+                cargoItems[j] = new ItemStack(nbttagcompound1);
             }
         }
         if (nbttagcompound.hasKey("FluidName")) {

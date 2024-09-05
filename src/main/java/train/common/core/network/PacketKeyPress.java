@@ -54,19 +54,19 @@ public class PacketKeyPress implements IMessage {
     public static class Handler implements IMessageHandler<PacketKeyPress, IMessage> {
         @Override
         public IMessage onMessage(PacketKeyPress message, MessageContext context) {
-            Entity ridingEntity = context.getServerHandler().playerEntity.ridingEntity;
-            if (ridingEntity instanceof EntitySeat) {
-                ridingEntity = ((EntitySeat) ridingEntity).parent;
+            Entity getRidingEntity()= context.getServerHandler().playerEntity.ridingEntity;
+            if (getRidingEntity()instanceof EntitySeat) {
+                getRidingEntity()= ((EntitySeat) ridingEntity).parent;
             }
             /* "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks for when the value is null anyways. */
-            if (ridingEntity != null) {
-                if (ridingEntity instanceof Locomotive) {
+            if (getRidingEntity()!= null) {
+                if (getRidingEntity()instanceof Locomotive) {
                     ((Locomotive) ridingEntity).keyHandlerFromPacket(message.key);
-                } else if (ridingEntity instanceof EntityRollingStock) {
+                } else if (getRidingEntity()instanceof EntityRollingStock) {
                     ((EntityRollingStock) ridingEntity).keyHandlerFromPacket(message.key);
-                } else if (ridingEntity instanceof AbstractZeppelin) {
+                } else if (getRidingEntity()instanceof AbstractZeppelin) {
                     ((AbstractZeppelin) ridingEntity).pressKey(message.key);
-                } else if (ridingEntity instanceof EntityRotativeDigger) {
+                } else if (getRidingEntity()instanceof EntityRotativeDigger) {
                     ((EntityRotativeDigger) ridingEntity).pressKey(message.key);
                 }
             }

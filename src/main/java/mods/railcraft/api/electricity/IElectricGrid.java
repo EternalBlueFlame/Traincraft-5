@@ -41,7 +41,7 @@ public interface IElectricGrid {
 
                         @Override
                         public Map<WorldCoordinate, EnumSet<ConnectType>> getPossibleConnectionLocations(IElectricGrid gridObject) {
-                            int dim = gridObject.getTile().getgetWorld()().provider.dimensionId;
+                            int dim = gridObject.getTile().getWorld().provider.dimensionId;
                             int x = gridObject.getTile().xCoord;
                             int y = gridObject.getTile().yCoord;
                             int z = gridObject.getTile().zCoord;
@@ -77,7 +77,7 @@ public interface IElectricGrid {
             WIRE {
                         @Override
                         public Map<WorldCoordinate, EnumSet<ConnectType>> getPossibleConnectionLocations(IElectricGrid gridObject) {
-                            int dim = gridObject.getTile().getgetWorld()().provider.dimensionId;
+                            int dim = gridObject.getTile().getWorld().provider.dimensionId;
                             int x = gridObject.getTile().xCoord;
                             int y = gridObject.getTile().yCoord;
                             int z = gridObject.getTile().zCoord;
@@ -99,7 +99,7 @@ public interface IElectricGrid {
             BLOCK {
                         @Override
                         public Map<WorldCoordinate, EnumSet<ConnectType>> getPossibleConnectionLocations(IElectricGrid gridObject) {
-                            int dim = gridObject.getTile().getgetWorld()().provider.dimensionId;
+                            int dim = gridObject.getTile().getWorld().provider.dimensionId;
                             int x = gridObject.getTile().xCoord;
                             int y = gridObject.getTile().yCoord;
                             int z = gridObject.getTile().zCoord;

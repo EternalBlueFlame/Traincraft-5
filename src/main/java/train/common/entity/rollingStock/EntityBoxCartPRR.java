@@ -75,7 +75,7 @@ public class EntityBoxCartPRR extends Freight {
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 0xff;
 			if (j < cargoItems.length) {
-				cargoItems[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				cargoItems[j] = new ItemStack(nbttagcompound1);
 			}
 		}
 	}

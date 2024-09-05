@@ -12,7 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 import train.client.gui.GuiCrafterTier;
 import train.common.library.Info;
@@ -81,7 +81,7 @@ public class SideTabRecipes extends SideTab {
             }
 
             if (item != null) {
-                fontRenderer.drawString(StatCollector.translateToLocal(item.getUnlocalizedName()), x - 93, y + 78, headerColour);
+                fontRenderer.drawString(I18n.format(item.getUnlocalizedName()), x - 93, y + 78, headerColour);
                 gui.currentKnownItem = item;
             } else {
                 fontRenderer.drawString("Item name not found", x - 93, y + 78, headerColour);

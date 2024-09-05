@@ -27,7 +27,7 @@ public class ModelMediumDiagonalStraightTCTrack extends ModelBase {
     }
 
     public void render(String type, TileTCRail tcRail, double x, double y, double z) {
-        render( type, tcRail.getgetWorld()().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1 );
+        render( type, tcRail.getWorld().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1 );
     }
 
     public void render( String type, int facing, double x, double y, double z, float r, float g, float b, float a )

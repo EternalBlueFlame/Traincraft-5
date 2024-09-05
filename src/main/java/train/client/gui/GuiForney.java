@@ -139,10 +139,10 @@ public class GuiForney extends GuiContainer {
 
         if (guibutton.id == 3) {
             //System.out.println("1 "+loco.getTrainOwner());
-            //System.out.println("2 "+((EntityPlayer)loco.riddenByEntity).getDisplayName());
-            //System.out.println(((EntityPlayer)loco.riddenByEntity).getDisplayName().equals(loco.getTrainOwner().trim()));
+            //System.out.println("2 "+((EntityPlayer)loco.getPassengers().get(0)).getDisplayName());
+            //System.out.println(((EntityPlayer)loco.getPassengers().get(0)).getDisplayName().equals(loco.getTrainOwner().trim()));
 
-            if (loco.riddenByEntity != null && loco.riddenByEntity instanceof EntityPlayer && ((EntityPlayer) loco.riddenByEntity).getDisplayName().equals(loco.getTrainOwner())) {
+            if (loco.getPassengers().get(0) != null && loco.getPassengers().get(0) instanceof EntityPlayer && ((EntityPlayer) loco.getPassengers().get(0)).getDisplayName().equals(loco.getTrainOwner())) {
                 if (!loco.getTrainLockedFromPacket()) {
                     Traincraft.lockChannel.sendToServer(new PacketSetTrainLockedToClient(true, loco.getEntityId()));
                     loco.locked = true;
@@ -154,8 +154,8 @@ public class GuiForney extends GuiContainer {
                     guibutton.displayString = "Unlocked";
                     this.initGui();
                 }
-            } else if (loco.riddenByEntity != null && loco.riddenByEntity instanceof EntityPlayer) {
-                ((EntityPlayer) loco.riddenByEntity).addChatMessage(new ChatComponentText("You are not the owner"));
+            } else if (loco.getPassengers().get(0) != null && loco.getPassengers().get(0) instanceof EntityPlayer) {
+                ((EntityPlayer) loco.getPassengers().get(0)).addChatMessage(new ChatComponentText("You are not the owner"));
             }
         } else if (guibutton instanceof GUIButton) {
             ((GUIButton)guibutton).onClick();

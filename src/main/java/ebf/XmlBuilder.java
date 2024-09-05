@@ -365,7 +365,7 @@ public class XmlBuilder {
                         if ( itemTag == null ) {
                             xml.putItemStack( id, null );
                         } else {
-                            xml.putItemStack( id, ItemStack.loadItemStackFromNBT( itemTag ));
+                            xml.putItemStack( id, new ItemStack( itemTag ));
                         }
                         break;
                     case typeFluidChar:

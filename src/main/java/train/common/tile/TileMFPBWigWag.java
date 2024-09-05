@@ -7,7 +7,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.EnumFacing;
 import train.common.api.blocks.TileSwitch;
 import train.common.api.blocks.TileTraincraft;
@@ -37,7 +36,7 @@ public class TileMFPBWigWag extends TileSwitch {
                 getWorld().playSound(xCoord,yCoord,zCoord,Info.resourceLocation + ":" + "bell",1f,1f,true);
 
             }
-            powered = getgetWorld()().isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+            powered = getWorld().isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
             if (powered ) {
                 rotation += flip ? 1.75f : -1.75f;
             } else {

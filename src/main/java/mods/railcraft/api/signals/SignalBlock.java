@@ -66,17 +66,17 @@ public abstract class SignalBlock extends AbstractPair {
     private void printDebugPair(String msg, TileEntity ot) {
         if (SignalTools.printSignalDebug)
             if (ot == null)
-                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
+                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[null]", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ());
             else
-                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.xCoord, tile.yCoord, tile.zCoord, ot.xCoord, ot.yCoord, ot.zCoord, ot.getClass());
+                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] target class:{6}", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), ot.xCoord, ot.yCoord, ot.zCoord, ot.getClass());
     }
 
     private void printDebugPair(String msg, WorldCoordinate coord) {
         if (SignalTools.printSignalDebug)
             if (coord == null)
-                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[null]", tile.xCoord, tile.yCoord, tile.zCoord);
+                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[null]", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ());
             else
-                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.xCoord, tile.yCoord, tile.zCoord, coord.x, coord.y, coord.z);
+                log(DEBUG_LEVEL, msg + " source:[{0}, {1}, {2}] target:[{3}, {4}, {5}]", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), coord.x, coord.y, coord.z);
     }
 
     @Override
@@ -102,8 +102,8 @@ public abstract class SignalBlock extends AbstractPair {
 //                test.add(new WorldCoordinate(c[0], c[1], c[2], c[3]));
 //            }
 //            boolean isConsistent = test.containsAll(getPairs());
-//            printDebug("Signal Block saved NBT. [{0}, {1}, {2}] [verified: {3}] [changedAspect: {4}] [data: {5}]", tile.xCoord, tile.yCoord, tile.zCoord, isConsistent, changedAspect, test);
-        printDebug("Signal Block saved NBT. [{0}, {1}, {2}] [changedAspect: {3}] [data: {4}]", tile.xCoord, tile.yCoord, tile.zCoord, changedAspect, pairings);
+//            printDebug("Signal Block saved NBT. [{0}, {1}, {2}] [verified: {3}] [changedAspect: {4}] [data: {5}]", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), isConsistent, changedAspect, test);
+        printDebug("Signal Block saved NBT. [{0}, {1}, {2}] [changedAspect: {3}] [data: {4}]", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), changedAspect, pairings);
 //            savedData.put(uuid, new LinkedList<WorldCoordinate>(pairings));
 //        }
     }
@@ -131,7 +131,7 @@ public abstract class SignalBlock extends AbstractPair {
 //                    isConsistent = "false";
 //            }
 
-        printDebug("Signal Block loaded NBT. [{0}, {1}, {2}] [data: {3}]", tile.xCoord, tile.yCoord, tile.zCoord, pairings);
+        printDebug("Signal Block loaded NBT. [{0}, {1}, {2}] [data: {3}]", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), pairings);
 //        }
     }
 
@@ -144,12 +144,12 @@ public abstract class SignalBlock extends AbstractPair {
             int y = other.y;
             int z = other.z;
 
-            Block block = tile.getgetWorld()().getBlock(x, y, z);
+            Block block = tile.getWorld().getBlock(x, y, z);
             if (block != null)
                 log(DEBUG_LEVEL, "Signal Block target block [{0}, {1}, {2}] = {3}, {4}", x, y, z, block.getClass(), block.getUnlocalizedName());
             else
                 log(DEBUG_LEVEL, "Signal Block target block [{0}, {1}, {2}] = null", x, y, z);
-            TileEntity t = tile.getgetWorld()().getTileEntity(x, y, z);
+            TileEntity t = tile.getWorld().getTileEntity(x, y, z);
             if (t != null)
                 log(DEBUG_LEVEL, "Signal Block target tile [{0}, {1}, {2}] = {3}", t.xCoord, t.yCoord, t.zCoord, t.getClass());
             else
@@ -189,13 +189,13 @@ public abstract class SignalBlock extends AbstractPair {
     @Override
     public void cleanPairings() {
         if (!invalidPairings.isEmpty())
-            printDebug("Signal Block pairs cleaned: source:[{0}, {1}, {2}] targets: {3}", tile.xCoord, tile.yCoord, tile.zCoord, invalidPairings);
+            printDebug("Signal Block pairs cleaned: source:[{0}, {1}, {2}] targets: {3}", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), invalidPairings);
         super.cleanPairings();
     }
 
     //    @Override
 //    public void startPairing() {
-//        clearSignalBlockPairing("Signal Block pairing cleared in preparation to start a new pairing.  [{0}, {1}, {2}]", tile.xCoord, tile.yCoord, tile.zCoord);
+//        clearSignalBlockPairing("Signal Block pairing cleared in preparation to start a new pairing.  [{0}, {1}, {2}]", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ());
 //        super.startPairing();
 //    }
     public boolean createSignalBlock(SignalBlock other) {
@@ -212,7 +212,7 @@ public abstract class SignalBlock extends AbstractPair {
         }
         WorldCoordinate myTrack = getTrackLocation();
         WorldCoordinate otherTrack = other.getTrackLocation();
-        TrackScanner.ScanResult scan = TrackScanner.scanStraightTrackSection(tile.getgetWorld()(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
+        TrackScanner.ScanResult scan = TrackScanner.scanStraightTrackSection(tile.getWorld(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
         if (!scan.areConnected) {
             printDebugPair("Signal Block creation failed, could not find Path.", other.tile);
             return false;
@@ -264,7 +264,7 @@ public abstract class SignalBlock extends AbstractPair {
         int xOffset = otherTrack.x > myTrack.x ? -3 : 3;
         int zOffset = otherTrack.z > myTrack.z ? -3 : 3;
 
-        List<EntityMinecart> carts = CartTools.getMinecartsIn(tile.getgetWorld()(), x1, y1, z1, x2, y2, z2);
+        List<EntityMinecart> carts = CartTools.getMinecartsIn(tile.getWorld(), x1, y1, z1, x2, y2, z2);
 //        System.out.printf("%d, %d, %d, %d, %d, %d\n", i1, j1, k1, i2, j2, k2);
 //        System.out.println("carts = " + carts.size());
         SignalAspect newAspect = SignalAspect.GREEN;
@@ -294,7 +294,7 @@ public abstract class SignalBlock extends AbstractPair {
         TrackScanner.ScanResult scan = trackScans.get(otherTrack);
         if (scan == null) {
             WorldCoordinate myTrack = getTrackLocation();
-            scan = TrackScanner.scanStraightTrackSection(tile.getgetWorld()(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
+            scan = TrackScanner.scanStraightTrackSection(tile.getWorld(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
             trackScans.put(otherTrack, scan);
         }
         return scan;
@@ -335,7 +335,7 @@ public abstract class SignalBlock extends AbstractPair {
         if (otherTrack == null)
             return new TrackValidationStatus(true, "UNVERIFIABLE_OTHER_TRACK_NULL");
         WorldCoordinate myTrack = getTrackLocation();
-        TrackScanner.ScanResult scan = TrackScanner.scanStraightTrackSection(tile.getgetWorld()(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
+        TrackScanner.ScanResult scan = TrackScanner.scanStraightTrackSection(tile.getWorld(), myTrack.x, myTrack.y, myTrack.z, otherTrack.x, otherTrack.y, otherTrack.z);
         trackScans.put(otherTrack, scan);
         if (scan.verdict == TrackScanner.ScanResult.Verdict.VALID)
             return new TrackValidationStatus(true, "VALID");
@@ -360,19 +360,19 @@ public abstract class SignalBlock extends AbstractPair {
                 changedAspect = true;
             updateSignalAspect();
             if (getSignalAspect() == SignalAspect.BLINK_RED && prev != SignalAspect.BLINK_RED)
-                printDebug("Signal Block changed aspect to BLINK_RED: source:[{0}, {1}, {2}] pairs: {3}", tile.xCoord, tile.yCoord, tile.zCoord, pairings);
+                printDebug("Signal Block changed aspect to BLINK_RED: source:[{0}, {1}, {2}] pairs: {3}", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), pairings);
         }
         if (update % VALIDATION_CHECK_INTERVAL == 0) {
             Status trackStatus = getTrackStatus();
             switch (trackStatus) {
                 case INVALID:
-                    clearSignalBlockPairing(null, "Signal Block dropped because no track was found near Signal. [{0}, {1}, {2}]", tile.xCoord, tile.yCoord, tile.zCoord);
+                    clearSignalBlockPairing(null, "Signal Block dropped because no track was found near Signal. [{0}, {1}, {2}]", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ());
                     break;
                 case VALID:
                     for (WorldCoordinate otherCoord : waitingForRetest) {
                         TrackValidationStatus status = isSignalBlockValid(otherCoord);
                         if (!status.isValid)
-                            clearSignalBlockPairing(otherCoord, "Signal Block dropped because track between Signals was invalid. source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] reason:{6}", tile.xCoord, tile.yCoord, tile.zCoord, otherCoord.x, otherCoord.y, otherCoord.z, status.message);
+                            clearSignalBlockPairing(otherCoord, "Signal Block dropped because track between Signals was invalid. source:[{0}, {1}, {2}] target:[{3}, {4}, {5}] reason:{6}", tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ(), otherCoord.x, otherCoord.y, otherCoord.z, status.message);
                     }
                     waitingForRetest.clear();
                     for (WorldCoordinate otherCoord : getPairs()) {
@@ -402,9 +402,9 @@ public abstract class SignalBlock extends AbstractPair {
     public Status getTrackStatus() {
         if (trackLocation == null)
             return locateTrack();
-        if (!tile.getgetWorld()().blockExists(trackLocation.x, trackLocation.y, trackLocation.z))
+        if (!tile.getWorld().blockExists(trackLocation.x, trackLocation.y, trackLocation.z))
             return Status.UNKNOWN;
-        if (!RailTools.isRailBlockAt(tile.getgetWorld()(), trackLocation.x, trackLocation.y, trackLocation.z)) {
+        if (!RailTools.isRailBlockAt(tile.getWorld(), trackLocation.x, trackLocation.y, trackLocation.z)) {
             trackLocation = null;
             return locateTrack();
         }
@@ -412,9 +412,9 @@ public abstract class SignalBlock extends AbstractPair {
     }
 
     private Status locateTrack() {
-        int x = tile.xCoord;
-        int y = tile.yCoord;
-        int z = tile.zCoord;
+        int x = tile.getPos().getX();
+        int y = tile.getPos().getY();
+        int z = tile.getPos().getZ();
         Status status = testForTrack(x, y, z);
         if (status != Status.INVALID)
             return status;
@@ -446,7 +446,7 @@ public abstract class SignalBlock extends AbstractPair {
     }
 
     private Status testForTrack(int x, int y, int z) {
-        World world = tile.getgetWorld()();
+        World world = tile.getWorld();
         for (int jj = -2; jj < 4; jj++) {
             if (!world.blockExists(x, y - jj, z))
                 return Status.UNKNOWN;

@@ -29,15 +29,15 @@ public class RollingStockStatsEventHandler {
         int var7 = Math.round(MathHelper.sqrt_double(xDist * xDist + yDist * yDist + zDist * zDist) * 100);
         train.trainDistanceTraveled += (var7);
         //System.out.println(trainDistanceTraveled);
-        if (train.riddenByEntity != null && train.riddenByEntity instanceof EntityPlayer) {
+        if (train.getPassengers().get(0) != null && train.getPassengers().get(0) instanceof EntityPlayer) {
             for (playerDistance d : plDist) {
-                if (((EntityPlayer) train.riddenByEntity).getDisplayName().equals(d.getUsername())) {
+                if (((EntityPlayer) train.getPassengers().get(0)).getDisplayName().equals(d.getUsername())) {
                     d.setDistance(d.getDistance() + (var7));
-                    //System.out.println(d.getDistance()+" "+((EntityPlayer)riddenByEntity).username);
+                    //System.out.println(d.getDistance()+" "+((EntityPlayer)getPassengers().get(0)).username);
                     return;
                 }
             }
-            plDist.add(new playerDistance(((EntityPlayer) train.riddenByEntity).getDisplayName(), (var7)));
+            plDist.add(new playerDistance(((EntityPlayer) train.getPassengers().get(0)).getDisplayName(), (var7)));
         }
     }
 

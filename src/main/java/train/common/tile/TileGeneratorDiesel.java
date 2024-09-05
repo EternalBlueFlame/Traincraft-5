@@ -58,7 +58,7 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
             }
 
             if(this.energy.getEnergyStored() > 0){
-                pushEnergy(getWorld(), this.xCoord, this.yCoord, this.zCoord, this.energy);
+                pushEnergy(getWorld(), getPos(), this.energy);
             }
         }
 
@@ -125,7 +125,7 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
     }
 
     @Override
-    public World getgetWorld()(){
+    public World getWorld(){
         return this.getWorld();
     }
 

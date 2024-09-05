@@ -4,7 +4,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import train.common.containers.ContainerTrainWorkbench;
@@ -18,7 +18,7 @@ public class GuiTrainCraftingBlock extends GuiContainer {
     @Override
     protected void drawGuiContainerForegroundLayer(int par1, int par2) {
         this.fontRenderer.drawString("Train Workbench", 8, 6, 4210752);
-        this.fontRenderer.drawString(StatCollector.translateToLocal("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
     @Override

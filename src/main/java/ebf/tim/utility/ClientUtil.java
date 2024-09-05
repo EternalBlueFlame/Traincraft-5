@@ -10,7 +10,7 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
@@ -269,14 +269,14 @@ public class ClientUtil {
     }
 
     public static String translate(String text){
-        if (StatCollector.translateToLocal(text).equals(text)){
+        if (I18n.format(text).equals(text)){
             if(!loggedLangChecks.contains(text)) {
                 DebugUtil.println("Missing lang entry for: ", text, Thread.currentThread().getStackTrace()[2]);
                 loggedLangChecks.add(text);
             }
             return text;
         } else {
-            return StatCollector.translateToLocal(text);
+            return I18n.format(text);
         }
     }
 

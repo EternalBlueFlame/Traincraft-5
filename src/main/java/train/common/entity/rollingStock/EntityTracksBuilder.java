@@ -278,7 +278,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
 			int j = nbttagcompound1.getByte("Slot") & 0xff;
 			if (j >= 0 && j < BuilderInvent.length) {
-				BuilderInvent[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+				BuilderInvent[j] = new ItemStack(nbttagcompound1);
 			}
 		}
 	}
@@ -739,8 +739,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		setBeenAttacked();
 		setDamage(getDamage() + i * 10);
 		if (getDamage() > 40) {
-			if (riddenByEntity != null) {
-				riddenByEntity.mountEntity(this);
+			if (getPassengers().get(0) != null) {
+				getPassengers().get(0).mountEntity(this);
 			}
 			this.setDead();
 			ServerLogger.deleteWagon(this);

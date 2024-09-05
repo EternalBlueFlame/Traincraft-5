@@ -682,8 +682,8 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
             keyHandling();
         }
         if (!getWorld().isRemote) {
-            if (this.riddenByEntity instanceof EntityPlayer || (this.seats.size() > 0 && this.seats.get(0).getPassenger() != null)) {
-                EntityPlayer passenger = (EntityPlayer) this.riddenByEntity;
+            if (this.getPassengers().get(0) instanceof EntityPlayer || (this.seats.size() > 0 && this.seats.get(0).getPassenger() != null)) {
+                EntityPlayer passenger = (EntityPlayer) this.getPassengers().get(0);
                 if (this.seats.size() != 0 && this.seats.get(0).getPassenger() != null) {
                     passenger = (EntityPlayer) this.seats.get(0).getPassenger();
                 }
@@ -756,9 +756,9 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         if (whistleDelay > 0) {
             whistleDelay--;
         }
-        if (ticksExisted % 600 == 0 && this.riddenByEntity instanceof EntityPlayer) {
-            this.lastRider = ((EntityPlayer) this.riddenByEntity).getDisplayName();
-            this.lastEntityRider = (this.riddenByEntity);
+        if (ticksExisted % 600 == 0 && this.getPassengers().get(0) instanceof EntityPlayer) {
+            this.lastRider = ((EntityPlayer) this.getPassengers().get(0)).getDisplayName();
+            this.lastEntityRider = (this.getPassengers().get(0));
         }
         if (!this.getWorld().isRemote && this.getParkingBrakeFromPacket() && !getState().equals("broken")) {
             motionX *= 0.0;
@@ -1010,7 +1010,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
     }
 
     public boolean isNotOwner() {
-        if (this.riddenByEntity instanceof EntityPlayer && !((EntityPlayer) this.riddenByEntity).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
+        if (this.getPassengers().get(0) instanceof EntityPlayer && !((EntityPlayer) this.getPassengers().get(0)).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
             return true;
         }
         if (this.seats.size() > 0 && this.seats.get(0).getPassenger() instanceof EntityPlayer && !((EntityPlayer) this.seats.get(0).getPassenger()).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
@@ -1345,8 +1345,8 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         setBeenAttacked();
         setDamage(getDamage() + i * 10);
         if (getDamage() > 40) {
-            if (riddenByEntity != null) {
-                riddenByEntity.mountEntity(this);
+            if (getPassengers().get(0) != null) {
+                getPassengers().get(0).mountEntity(this);
             }
 
             this.setDead();
@@ -1479,7 +1479,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         if (this.getWorld() != null) {
             if (this.getSpeed() != desiredSpeed) {
                 if ((int) this.getSpeed() <= this.speedLimit) {
-                    if (this.riddenByEntity == null) {
+                    if (this.getPassengers().get(0) == null) {
                         double rotation = this.serverRealRotation;
                         if (rotation == 90.0) {
                             this.motionX -= 0.0020 * this.accelerate;
@@ -1491,7 +1491,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
                             this.motionZ -= 0.0020 * this.accelerate;
                         }
                     } else {
-                        int dir = MathHelper.floor_double((riddenByEntity.rotationYaw * 4F) / 360F + 0.5D) & 3;
+                        int dir = MathHelper.floor_double((getPassengers().get(0).rotationYaw * 4F) / 360F + 0.5D) & 3;
                         if (dir == 2) {
                             this.motionZ -= 0.0020 * this.accelerate;
                         } else if (dir == 0) {

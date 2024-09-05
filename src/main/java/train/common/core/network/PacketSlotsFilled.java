@@ -46,7 +46,7 @@ public class PacketSlotsFilled implements IMessage {
     public static class Handler implements IMessageHandler<PacketSlotsFilled, IMessage> {
         @Override
         public IMessage onMessage(PacketSlotsFilled message, MessageContext context) {
-            Entity entity = Minecraft.getMinecraft().theWorld.getEntityByID(message.entityID);
+            Entity entity = Minecraft.getMinecraft().world.getEntityByID(message.entityID);
 
             if (entity instanceof Locomotive) {
                 ((Locomotive) entity).recieveSlotsFilled(message.slotsFilled);

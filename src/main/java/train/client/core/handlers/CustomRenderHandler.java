@@ -31,7 +31,7 @@ public class CustomRenderHandler {
     }
 
     private void renderTCRailPreview(EntityClientPlayerMP player, ItemStack stack) {
-        World world = Minecraft.getMinecraft().theWorld;
+        World world = Minecraft.getMinecraft().world;
         if (world == null || Minecraft.getMinecraft().objectMouseOver == null) {
             return;
         }
@@ -417,7 +417,7 @@ public class CustomRenderHandler {
     }
 
     private void blockInfo() {
-        World world = Minecraft.getMinecraft().theWorld;
+        World world = Minecraft.getMinecraft().world;
         int x = Minecraft.getMinecraft().objectMouseOver.blockX;
         int y = Minecraft.getMinecraft().objectMouseOver.blockY;
         int z = Minecraft.getMinecraft().objectMouseOver.blockZ;

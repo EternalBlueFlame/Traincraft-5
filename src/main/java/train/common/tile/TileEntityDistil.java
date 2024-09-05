@@ -168,7 +168,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			else {
 				flag1 = false;
 				BlockDistil.updateDistilBlockState(distilBurnTime > 0, getWorld(), xCoord, yCoord, zCoord);
-				this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				this.getWorld().markBlockForUpdate(getPos());
 			}
 
 			if (slots[2] != null) {
@@ -202,7 +202,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 						flag1 = true;
 
 						this.markDirty();
-						this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+						this.getWorld().markBlockForUpdate(getPos());
 					}
 				}
 			}
@@ -221,7 +221,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 			if (updateTicks % 8 == 0){
 				this.markDirty();
-				this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				this.getWorld().markBlockForUpdate(getPos());
 			}
 			if (distilBurnTime > 0) {
 				distilBurnTime--;
@@ -300,7 +300,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 
 			this.markDirty();
-			this.getWorld().markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+			this.getWorld().markBlockForUpdate(getPos());
 		}
 
 		if (slots[0].getItem().hasContainerItem(slots[0])) {
@@ -394,7 +394,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ResourceLocation getTexture(int x, int y, int z){
-		return (getWorld()==null|| CommonUtil.getBlockAt(Minecraft.getMinecraft().theWorld,x,y,z)== TCBlocks.distilActive)?
+		return (getWorld()==null|| CommonUtil.getBlockAt(Minecraft.getMinecraft().world,x,y,z)== TCBlocks.distilActive)?
 						textureOn:textureOff;
 	}
 

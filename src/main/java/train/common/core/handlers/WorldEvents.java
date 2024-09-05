@@ -57,14 +57,14 @@ public class WorldEvents {
 
     @SubscribeEvent
     public void playerQuitEvent(PlayerEvent.PlayerLoggedOutEvent event) {
-        if (event.player.ridingEntity instanceof AbstractTrains) {
-            if (event.player.ridingEntity instanceof Locomotive) {
+        if (event.player.getRidingEntity()instanceof AbstractTrains) {
+            if (event.player.getRidingEntity()instanceof Locomotive) {
                 ((Locomotive) event.player.ridingEntity).isBraking = true;
                 ((Locomotive) event.player.ridingEntity).parkingBrake = true;
             }
 
             event.player.dismountEntity(event.player.ridingEntity);
-            event.player.ridingEntity = null;
+            event.player.getRidingEntity()= null;
         }
     }
 

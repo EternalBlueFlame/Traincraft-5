@@ -19,7 +19,7 @@ public class RenderSwitchStand extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
-        boolean skipRender = false, powered = tileEntity.getgetWorld()().getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getgetWorld()(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0;
+        boolean skipRender = false, powered = tileEntity.getWorld().getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0;
         TileSwitchStand tile = ((TileSwitchStand) tileEntity);
         if (tile.getFacing() != EnumFacing.UNKNOWN) {
             Tessellator.bindTexture(powered ? texture2 : texture);

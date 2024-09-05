@@ -14,7 +14,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraft.util.EnumFacing;
@@ -121,7 +121,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 		super.readFromNBT(nbtTag);
 
-		facing = EnumFacing.getOrientation(nbtTag.getByte("Orientation"));
+		facing = EnumFacing.byHorizontalIndex(nbtTag.getByte("Orientation"));
 		NBTTagList tagList = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		workbenchItemStacks = new ItemStack[getSizeInventory()];
 
@@ -132,7 +132,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 			if (slot >= 0 && slot < workbenchItemStacks.length) {
 
-				workbenchItemStacks[slot] = ItemStack.loadItemStackFromNBT(tagCompound);
+				workbenchItemStacks[slot] = new ItemStack(tagCompound);
 			}
 		}
 	}
@@ -177,7 +177,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
 
-		if (getWorld() == null || getWorld().getTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (getWorld() == null || getWorld().getTileEntity(getPos()) != this) {
 
 			return false;
 		}
@@ -188,12 +188,12 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 
 	@Override
-	public S35PacketUpdateTileEntity getDescriptionPacket() {
+	public SPacketUpdateTileEntity getDescriptionPacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
 
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
+		return new SPacketUpdateTileEntity(getPos(), 1, nbt);
 	}
 
 	@Override

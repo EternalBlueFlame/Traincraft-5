@@ -9,7 +9,7 @@ package train.common.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileBook extends TileEntity {
@@ -53,7 +53,7 @@ public class TileBook extends TileEntity {
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
 
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
+		return new SPacketUpdateTileEntity(getPos(), 1, nbt);
 	}
 	
 	/*

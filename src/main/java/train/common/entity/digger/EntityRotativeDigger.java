@@ -134,7 +134,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             return;
         }
 
-        if (entity != entity.riddenByEntity) {
+        if (entity != entity.getPassengers().get(0)) {
             double var2 = entity.posX - this.posX;
             double var4 = entity.posZ - this.posZ;
             double var6 = MathHelper.abs_max(var2, var4);
@@ -238,9 +238,9 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
     public void pressKey(int i) {
 
-        if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
+        if (i == 7 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
             //TODO there is no GUI for it currently
-            //((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.DIGGER, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+            //((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.DIGGER, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
         }
 
         if (i == 9) {
@@ -332,14 +332,14 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (fuel > 0 && riddenByEntity instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) riddenByEntity;
+        if (fuel > 0 && getPassengers().get(0) instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) getPassengers().get(0);
             motionX = motionX + player.moveForward * speedXFromPitch(player, 0.2) * 0.1;
             motionZ = motionZ + player.moveForward * speedZFromPitch(player, 0.2) * 0.1;
             rotationYaw += (float) (player.moveStrafing * .5);
         }
 
-        if (riddenByEntity == null) {
+        if (getPassengers().get(0) == null) {
             pitch = 0F;
         }
 
@@ -471,8 +471,8 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         moveEntity(motionX, motionY, motionZ);
 
         /* This is how the entity rotates with the look of the player */
-        if (getFuel() > 0 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-            Vec3 vecLook = ((EntityPlayer) riddenByEntity).getLook(2);// .addVector(posX, posY, posZ);
+        if (getFuel() > 0 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
+            Vec3 vecLook = ((EntityPlayer) getPassengers().get(0)).getLook(2);// .addVector(posX, posY, posZ);
             double da = rotationYaw;
             double db = 0 - vecLook.xCoord;
             double dc = 0 - vecLook.zCoord;
@@ -507,14 +507,14 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         if (list != null && !list.isEmpty()) {
             for (Object o : list) {
                 Entity entity = (Entity) o;
-                if (entity != riddenByEntity && entity.canBePushed() && !(entity instanceof EntityRotativeWheel)) {
+                if (entity != getPassengers().get(0) && entity.canBePushed() && !(entity instanceof EntityRotativeWheel)) {
                     entity.applyEntityCollision(this);
                 }
             }
 
         }
-        if (riddenByEntity != null && riddenByEntity.isDead) {
-            riddenByEntity = null;
+        if (getPassengers().get(0) != null && getPassengers().get(0).isDead) {
+            getPassengers().get(0) = null;
         }
 
         if (Math.sqrt((motionX * motionX) + (motionZ * motionZ)) > 0.01) {
@@ -573,13 +573,13 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
     @Override
     public void updatePassenger(Entity passenger) {
-        if (riddenByEntity == null) {
+        if (getPassengers().get(0) == null) {
             return;
         }
 
-        riddenByEntity.setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 1.1F, posZ);
-        if (riddenByEntity instanceof EntityLiving) {
-            pitch = riddenByEntity.rotationPitch;
+        getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 1.1F, posZ);
+        if (getPassengers().get(0) instanceof EntityLiving) {
+            pitch = getPassengers().get(0).rotationPitch;
             if (pitch > Math.toDegrees(pitchLimits))
                 pitch = (float) Math.toDegrees(pitchLimits);
             if (pitch < Math.toDegrees(-pitchLimits))
@@ -611,7 +611,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             NBTTagCompound nbttagcompound1 = (NBTTagCompound) nbttaglist.getCompoundTagAt(i);
             int j = nbttagcompound1.getByte("Slot") & 0xff;
             if (j < zeppInvent.length) {
-                zeppInvent[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+                zeppInvent[j] = new ItemStack(nbttagcompound1);
             }
         }
     }
@@ -671,8 +671,8 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
             itemstack.getCount() = getInventoryStackLimit();
         }
-        if (itemstack != null && itemstack.getItem() == Items.coal && i == 0 && riddenByEntity != null && (riddenByEntity instanceof EntityPlayer)) {
-            // ((EntityPlayer)riddenByEntity).func_25046_a(Train.field_27542_startTrain, 1);
+        if (itemstack != null && itemstack.getItem() == Items.coal && i == 0 && getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer)) {
+            // ((EntityPlayer)getPassengers().get(0)).func_25046_a(Train.field_27542_startTrain, 1);
         }
 
     }
@@ -714,7 +714,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     public boolean interactFirst(EntityPlayer entityplayer) {
         itemstack = entityplayer.inventory.getCurrentItem();
 
-        if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
+        if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) {
 
             return true;
         }
@@ -733,7 +733,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         }
 
         if (!getWorld().isRemote) {
-            entityplayer.mountEntity(this);
+            addPassenger(entityplayer);
         }
 
         return true;

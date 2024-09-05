@@ -15,7 +15,7 @@ public  class PacketNextSpeedHandler implements IMessageHandler<PacketNextSpeed,
     @Override
     public IMessage onMessage(PacketNextSpeed message, MessageContext context) {
 
-        Entity theTrain = Minecraft.getMinecraft().theWorld.getEntityByID(message.entity);
+        Entity theTrain = Minecraft.getMinecraft().world.getEntityByID(message.entity);
         //if (message.x == 0 && message.y == 0 && message.z == 0) {
          //   ((Locomotive) theTrain).speedLimit = "0";
          //   ((Locomotive) theTrain).speedChanged();
@@ -23,7 +23,7 @@ public  class PacketNextSpeedHandler implements IMessageHandler<PacketNextSpeed,
        //     return null;
       //  }
 
-        TileEntity its =  Minecraft.getMinecraft().theWorld.getTileEntity(message.x, message.y, message.z);
+        TileEntity its =  Minecraft.getMinecraft().world.getTileEntity(message.x, message.y, message.z);
 
 
         /* "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks for when the value is null anyways. */

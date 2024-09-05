@@ -65,7 +65,7 @@ public class ModelLantern extends ModelBase {
 		// Pop this matrix from the stack.
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
-		EntityItem ghostEntityItem = new EntityItem(lantern.getgetWorld()());
+		EntityItem ghostEntityItem = new EntityItem(lantern.getWorld());
 		ghostEntityItem.setEntityItemStack(new ItemStack(Blocks.torch, 1));
 		ghostEntityItem.hoverStart = 0.0F;
 

@@ -89,7 +89,7 @@ public class ModelRightSwitchTCTrack extends ModelBase {
 	}
 
 	public void render(String type, String variant, TileTCRail tcRail, double x, double y, double z) {
-		render( type, variant, tcRail.getgetWorld()().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), tcRail.getSwitchState(), x, y, z, 1, 1, 1, 1);
+		render( type, variant, tcRail.getWorld().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), tcRail.getSwitchState(), x, y, z, 1, 1, 1, 1);
 	}
 
 	public void render(String type, String variant, int facing, boolean active, double x, double y, double z, float r, float g, float b, float a) {

@@ -8,7 +8,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.handlers.WorldEvents;
@@ -67,7 +67,7 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 						entityitem.motionZ = (float) rand.nextGaussian() * f3;
 						getWorld().spawnEntityInWorld(entityitem);
 					}
-					this.getWorld().setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
+					this.getWorld().setBlockToAir(getPos());
 				}
 			}
 
@@ -102,7 +102,7 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 				}
 			}
 			if (this.energy.getEnergyStored() > 0) {
-				pushEnergy(getWorld(), this.xCoord, this.yCoord, this.zCoord, this.energy);
+				pushEnergy(getWorld(), getPos(), this.energy);
 			}
 
 			this.markDirty();

@@ -47,7 +47,7 @@ public class CollisionHandler {
 			for (Object aListRide : listRide) {
 				entity = (Entity) aListRide;
 				if (!(entity instanceof EntityLasersLines) && !entity.noClip) {
-					if (entity != entity.riddenByEntity && !(unAutorizedMob(entity, entityOne)) && (entity instanceof EntityLiving)) {
+					if (entity != entity.getPassengers().get(0) && !(unAutorizedMob(entity, entityOne)) && (entity instanceof EntityLiving)) {
 						applyRideEntity(entity, entityOne);
 					}
 				}
@@ -70,14 +70,14 @@ public class CollisionHandler {
 
 				if (!(entity instanceof EntityLasersLines) && !entity.noClip) {
 
-					if (entity != entity.riddenByEntity && (entity instanceof EntityLiving) && (!entity.getClass().getName().equals("EntityLittleMaid")) && (unAutorizedMob(entity, entityOne))) {
+					if (entity != entity.getPassengers().get(0) && (entity instanceof EntityLiving) && (!entity.getClass().getName().equals("EntityLittleMaid")) && (unAutorizedMob(entity, entityOne))) {
 
 						applyCollisionLiving(entity, entityOne);
 						// applyEntityCollision(entity, entityOne);
 						return;
 					}
-					if (entity != entity.riddenByEntity && (entity instanceof EntityPlayer) && (entityOne instanceof AbstractTrains)) {
-						if (entity.ridingEntity instanceof EntitySeat && ((EntitySeat)entity.ridingEntity).parent == entityOne) {
+					if (entity != entity.getPassengers().get(0) && (entity instanceof EntityPlayer) && (entityOne instanceof AbstractTrains)) {
+						if (entity.getRidingEntity()instanceof EntitySeat && ((EntitySeat)entity.ridingEntity).parent == entityOne) {
 							return;
 						}
 						applyEntityCollision(entity, entityOne);
@@ -96,7 +96,7 @@ public class CollisionHandler {
 				entity = (Entity) aListRide;
 				if (!(entity instanceof EntityLasersLines) && !entity.noClip && !(entity instanceof EntityLiving) && !(entityOne instanceof EntityLiving)) {
 
-					if (entity != entity.riddenByEntity && entity.canBePushed() && (entityOne instanceof AbstractTrains) && (entity instanceof AbstractTrains) && !((AbstractTrains) entityOne).isAttached) {
+					if (entity != entity.getPassengers().get(0) && entity.canBePushed() && (entityOne instanceof AbstractTrains) && (entity instanceof AbstractTrains) && !((AbstractTrains) entityOne).isAttached) {
 
 						//applyCollision3(entity, entityOne);
 						applyEntityCollisionVanilla(entity, (EntityMinecart) entityOne);
@@ -104,14 +104,14 @@ public class CollisionHandler {
 						// MinecraftForge.EVENT_BUS.post(new MinecartCollisionEvent((EntityMinecart)entityOne, entity));
 
 					}
-					else if (entity != entity.riddenByEntity && entity.canBePushed() && (entity instanceof EntityMinecart) && !(entity instanceof AbstractTrains) && (entityOne instanceof AbstractTrains) && !((AbstractTrains) entityOne).isAttached) {
+					else if (entity != entity.getPassengers().get(0) && entity.canBePushed() && (entity instanceof EntityMinecart) && !(entity instanceof AbstractTrains) && (entityOne instanceof AbstractTrains) && !((AbstractTrains) entityOne).isAttached) {
 
 						//applyCollision2(entity, entityOne);
 						applyEntityCollisionVanilla(entity, (EntityMinecart) entityOne);
 						return;
 						// MinecraftForge.EVENT_BUS.post(new MinecartCollisionEvent((EntityMinecart)entityOne, entity));
 					}
-					else if (entity != entity.riddenByEntity && entity.canBePushed() && (entity instanceof AbstractTrains) && (entityOne instanceof AbstractTrains) && !(entity == ((EntityRollingStock)entityOne).cartLinked1) && !(entity == ((EntityRollingStock)entityOne).cartLinked2)) {
+					else if (entity != entity.getPassengers().get(0) && entity.canBePushed() && (entity instanceof AbstractTrains) && (entityOne instanceof AbstractTrains) && !(entity == ((EntityRollingStock)entityOne).cartLinked1) && !(entity == ((EntityRollingStock)entityOne).cartLinked2)) {
 
 						//applyCollision2(entity, entityOne);
 						applyEntityCollisionVanilla(entity, (EntityMinecart) entityOne);
@@ -136,7 +136,7 @@ public class CollisionHandler {
 			return;
 		}
 		if (!this.getWorld().isRemote) {
-			if (par1Entity != entityOne.riddenByEntity) {
+			if (par1Entity != entityOne.getPassengers().get(0)) {
 
 				double d0 = par1Entity.posX - entityOne.posX;
 				double d1 = par1Entity.posZ - entityOne.posZ;
@@ -212,7 +212,7 @@ public class CollisionHandler {
 		}
 
 		if (!this.getWorld().isRemote) {
-			if (entity != entityOne.riddenByEntity) {
+			if (entity != entityOne.getPassengers().get(0)) {
 
 				double var2 = entity.posX - entityOne.posX;
 				double var4 = entity.posZ - entityOne.posZ;
@@ -323,7 +323,7 @@ public class CollisionHandler {
 		if (getWorld().isRemote) {
 			return;
 		}
-		if (entity == entityOne.riddenByEntity) {
+		if (entity == entityOne.getPassengers().get(0)) {
 			return;
 		}
 		if (!((AbstractTrains) entityOne).canBeRidden()) {
@@ -332,7 +332,7 @@ public class CollisionHandler {
 		if (!(entityOne instanceof EntityStockCar) && !(entityOne instanceof EntityStockCarDRWG)) {
 			return;
 		}
-		if ((entity instanceof EntityLiving) && ((AbstractTrains) entityOne).canBeRidden() && entityOne.riddenByEntity == null && entity.ridingEntity == null) {
+		if ((entity instanceof EntityLiving) && ((AbstractTrains) entityOne).canBeRidden() && entityOne.getPassengers().get(0) == null && entity.getRidingEntity()== null) {
 			entity.mountEntity(entityOne);
 		}
 
@@ -369,7 +369,7 @@ public class CollisionHandler {
 			d *= 0.5D;
 			d1 *= 0.5D;
 
-			if (entity.ridingEntity == null) {
+			if (entity.getRidingEntity()== null) {
 
 				Vec3 vec3d4 = Vec3.createVectorHelper(entityOne.posX, entityOne.posY, entityOne.posZ);
 				Vec3 vec3d5 = Vec3.createVectorHelper(entityOne.posX + entityOne.motionX, entityOne.posY + entityOne.motionY, entityOne.posZ + entityOne.motionZ);

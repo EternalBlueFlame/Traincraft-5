@@ -134,7 +134,7 @@ public class TileFiftyThreeFootContainer extends TileEntity implements IInventor
 
         for (int i = 0; i < list.tagCount(); ++i) { NBTTagCompound comp = list.getCompoundTagAt(i); int j = comp.getByte("Slot") & 255; if (j >= 0 && j < inventory.length)
         {
-            inventory[j] = ItemStack.loadItemStackFromNBT(comp);
+            inventory[j] = new ItemStack(comp);
         }
 
         }

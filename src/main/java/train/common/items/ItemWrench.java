@@ -25,7 +25,7 @@ public class ItemWrench extends ItemPart implements buildcraft.api.tools.IToolWr
 	@Override
 	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
 		Block blockId = world.getBlock(x, y, z);
-		if (blockId.rotateBlock(world, x, y, z, EnumFacing.getOrientation(side))) {
+		if (blockId.rotateBlock(world, x, y, z, EnumFacing.byHorizontalIndex(side))) {
 			player.swingItem();
 			return !world.isRemote;
 		}

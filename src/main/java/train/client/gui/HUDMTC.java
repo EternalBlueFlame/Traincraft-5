@@ -22,8 +22,8 @@ public class HUDMTC extends GuiScreen {
     public void onGameRender(RenderGameOverlayEvent.Text event) {
         if (game != null
 				&& game.thePlayer != null
-				&& game.thePlayer.ridingEntity != null
-				&& game.thePlayer.ridingEntity instanceof Locomotive && Minecraft.isGuiEnabled()
+				&& game.thePlayer.getRidingEntity()!= null
+				&& game.thePlayer.getRidingEntity()instanceof Locomotive && Minecraft.isGuiEnabled()
 				&& game.currentScreen == null) {
             renderSkillHUD(event, (Locomotive) game.thePlayer.ridingEntity);
         } else {

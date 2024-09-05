@@ -179,7 +179,7 @@ public abstract class CartTools {
     public static boolean isMinecartOnAnySide(World world, int i, int j, int k, float sensitivity, Class<? extends EntityMinecart> type, boolean subclass) {
         List<EntityMinecart> list = new ArrayList<EntityMinecart>();
         for (int side = 0; side < 6; side++) {
-            list.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, EnumFacing.getOrientation(side)));
+            list.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, EnumFacing.byHorizontalIndex(side)));
         }
 
         if (type == null)
@@ -212,7 +212,7 @@ public abstract class CartTools {
     public static List<EntityMinecart> getMinecartsOnAllSides(World world, int i, int j, int k, float sensitivity) {
         List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
         for (int side = 0; side < 6; side++) {
-            carts.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, EnumFacing.getOrientation(side)));
+            carts.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, EnumFacing.byHorizontalIndex(side)));
         }
 
         return carts;
@@ -222,7 +222,7 @@ public abstract class CartTools {
         List<EntityMinecart> list = new ArrayList<EntityMinecart>();
         List<EntityMinecart> carts = new ArrayList<EntityMinecart>();
         for (int side = 0; side < 6; side++) {
-            list.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, EnumFacing.getOrientation(side)));
+            list.addAll(getMinecartsOnSide(world, i, j, k, sensitivity, EnumFacing.byHorizontalIndex(side)));
         }
 
         for (EntityMinecart cart : list) {

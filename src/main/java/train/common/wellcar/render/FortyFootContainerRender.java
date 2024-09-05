@@ -18,21 +18,21 @@ public class FortyFootContainerRender extends TileEntitySpecialRenderer {
         //This will make your block brightness dependent from surroundings lighting.
 
         TileFortyFootContainer theTileEntity = (TileFortyFootContainer)tileEntity;
-        Block two = tileEntity.getgetWorld()().getBlock(tileEntity.xCoord,tileEntity.yCoord - 1,tileEntity.zCoord);
-        Block three = tileEntity.getgetWorld()().getBlock(tileEntity.xCoord,tileEntity.yCoord - 2,tileEntity.zCoord);
-        Block four = tileEntity.getgetWorld()().getBlock(tileEntity.xCoord,tileEntity.yCoord - 3,tileEntity.zCoord);
-               /* int skyLight = tileEntity.getgetWorld()().getSkyBlockTypeBrightness(EnumSkyBlock.Block, (int)x,(int)y,(int)z);
+        Block two = tileEntity.getWorld().getBlock(tileEntity.xCoord,tileEntity.yCoord - 1,tileEntity.zCoord);
+        Block three = tileEntity.getWorld().getBlock(tileEntity.xCoord,tileEntity.yCoord - 2,tileEntity.zCoord);
+        Block four = tileEntity.getWorld().getBlock(tileEntity.xCoord,tileEntity.yCoord - 3,tileEntity.zCoord);
+               /* int skyLight = tileEntity.getWorld().getSkyBlockTypeBrightness(EnumSkyBlock.Block, (int)x,(int)y,(int)z);
 
-               // skyLight= tileEntity.getgetWorld()().getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (skyLight<0?0:skyLight) << 4; OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);
+               // skyLight= tileEntity.getWorld().getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (skyLight<0?0:skyLight) << 4; OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);
                 GL11.glColor4f(1,1,1,1);
                 tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-                skyLight=tileEntity.getgetWorld()().getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (Math.max(skyLight, 0)) << 4;
+                skyLight=tileEntity.getWorld().getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (Math.max(skyLight, 0)) << 4;
                 OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);*/
       //  GL11.glColor4f(1,1,1,1);
 
         Tessellator.bindTexture(new ResourceLocation("tc:textures/trains/container40_" + theTileEntity.getAvailableColors().get(theTileEntity.currentColor) + ".png"));
        // GL11.glColor4f(1,1,1,1);
-       // tessellator.setBrightness(theBlock.getMixedBrightnessForBlock(tileEntity.getgetWorld()(), (int)x, (int)y, (int)z));
+       // tessellator.setBrightness(theBlock.getMixedBrightnessForBlock(tileEntity.getWorld(), (int)x, (int)y, (int)z));
        // tessellator.setBrightness(15);
        // Tessellator.bindTexture(new ResourceLocation("tc:textures/trains/test.png"));
         GL11.glPushMatrix();

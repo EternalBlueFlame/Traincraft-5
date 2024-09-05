@@ -46,7 +46,7 @@ public class TraincraftUtil {
     public static final double radian = (Math.PI / 180.0D);
 
     public static void updateRider(EntityRollingStock transport, double distance, double yOffset) {
-        if (transport.riddenByEntity == null) {
+        if (transport.getPassengers().get(0) == null) {
             return;
         }
         double pitchRads = transport.anglePitchClient * radian;
@@ -72,10 +72,10 @@ public class TraincraftUtil {
             pitch -= (float) (pitchRads * 1.2);
         }
         if (pitchRads == 0.0) {
-            transport.riddenByEntity.setPosition(bogieX1, (transport.posY + transport.getMountedYOffset() + transport.passenger.getYOffset() + yOffset), bogieZ1);
+            transport.getPassengers().get(0).setPosition(bogieX1, (transport.posY + transport.getMountedYOffset() + transport.passenger.getYOffset() + yOffset), bogieZ1);
         }
         if (pitchRads > -1.01 && pitchRads < 1.01) {
-            transport.riddenByEntity.setPosition(bogieX1, pitch, bogieZ1);
+            transport.getPassengers().get(0).setPosition(bogieX1, pitch, bogieZ1);
         }
     }
     public static void updateRider(EntityRollingStock transport, double xOffset, double yOffset, double zOffset, Entity rider) {
