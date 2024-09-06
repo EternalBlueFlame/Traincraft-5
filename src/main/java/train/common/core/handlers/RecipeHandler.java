@@ -108,6 +108,8 @@ public class RecipeHandler {
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailSmallStraight.item, 'T', ItemIDs.tcRailLargeTurn.item);
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailVeryLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailSmallStraight.item, 'T', ItemIDs.tcRailVeryLargeTurn.item);
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailSuperLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailSmallStraight.item, 'T', ItemIDs.tcRailSuperLargeTurn.item);
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemIDs.tcRail45DegreeTurn9x20.item, 2), ItemIDs.tcRail29X29Turn.item);
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemIDs.tcRail45DegreeTurn10x22.item,2),ItemIDs.tcRail32X32Turn.item);
 
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailSmallParallelCurve.item, 1), " S ", "SS ", "S  ", 'S', ItemIDs.tcRailSmallStraight.item);
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailMediumParallelCurve.item, 1), " S ", "S  ", "   ", 'S', ItemIDs.tcRailSmallParallelCurve.item);
@@ -179,6 +181,8 @@ public class RecipeHandler {
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailEmbeddedSmallStraight.item, 'T', ItemIDs.tcRailEmbeddedLargeTurn.item);
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedVeryLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailEmbeddedSmallStraight.item, 'T', ItemIDs.tcRailEmbeddedVeryLargeTurn.item);
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedSuperLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailEmbeddedSmallStraight.item, 'T', ItemIDs.tcRailEmbeddedSuperLargeTurn.item);
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemIDs.tcRailEmbedded45DegreeTurn9x20.item, 2), ItemIDs.tcRailEmbedded29X29Turn.item);
+        GameRegistry.addShapelessRecipe(new ItemStack(ItemIDs.tcRailEmbedded45DegreeTurn10x22.item,2),ItemIDs.tcRailEmbedded32X32Turn.item);
 
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedSmallParallelCurve.item, 1), " S ", "SS ", "S  ", 'S', ItemIDs.tcRailEmbeddedSmallStraight.item);
         GameRegistry.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedMediumParallelCurve.item, 1), " S ", "SS ", "S  ", 'S', ItemIDs.tcRailEmbeddedSmallParallelCurve.item);
@@ -532,13 +536,14 @@ public class RecipeHandler {
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailVeryLargeTurn.item, 1), "GG ","G  ","   ", Character.valueOf('G'), ItemIDs.tcRailLargeTurn.item );
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailSuperLargeTurn.item, 1), "GG ","G  ","   ", Character.valueOf('G'), ItemIDs.tcRailVeryLargeTurn.item );
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRail29X29Turn.item, 1), "GG ","G  ","   ", Character.valueOf('G'), ItemIDs.tcRailSuperLargeTurn.item );
-
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRail32X32Turn.item, 1), "GG ","G  ","   ", Character.valueOf('G'), ItemIDs.tcRail29X29Turn.item );
 
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailMedium45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailSmallStraight.item, 'T', ItemIDs.tcRailMediumTurn.item);
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailSmallStraight.item, 'T', ItemIDs.tcRailLargeTurn.item);
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailVeryLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailSmallStraight.item, 'T', ItemIDs.tcRailVeryLargeTurn.item);
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailSuperLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailSmallStraight.item, 'T', ItemIDs.tcRailSuperLargeTurn.item);
+        TrainCraftingManager.instance.addShapelessRecipe(new ItemStack(ItemIDs.tcRail45DegreeTurn9x20.item, 2), ItemIDs.tcRail29X29Turn.item);
+        TrainCraftingManager.instance.addShapelessRecipe(new ItemStack(ItemIDs.tcRail45DegreeTurn10x22.item,2),ItemIDs.tcRail32X32Turn.item);
 
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailSmallParallelCurve.item, 1), " S ", "SS ", "S  ", 'S', ItemIDs.tcRailSmallStraight.item);
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailMediumParallelCurve.item, 1), " S ", "S  ", "   ", 'S', ItemIDs.tcRailSmallParallelCurve.item);
@@ -607,6 +612,8 @@ public class RecipeHandler {
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailEmbeddedSmallStraight.item, 'T', ItemIDs.tcRailEmbeddedLargeTurn.item);
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedVeryLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailEmbeddedSmallStraight.item, 'T', ItemIDs.tcRailEmbeddedVeryLargeTurn.item);
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedSuperLarge45DegreeTurn.item, 1), "TG ", "G  ", "   ", 'G', ItemIDs.tcRailEmbeddedSmallStraight.item, 'T', ItemIDs.tcRailEmbeddedSuperLargeTurn.item);
+        TrainCraftingManager.instance.addShapelessRecipe(new ItemStack(ItemIDs.tcRailEmbedded45DegreeTurn9x20.item, 2), ItemIDs.tcRailEmbedded29X29Turn.item);
+        TrainCraftingManager.instance.addShapelessRecipe(new ItemStack(ItemIDs.tcRailEmbedded45DegreeTurn10x22.item,2),ItemIDs.tcRailEmbedded32X32Turn.item);
 
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedSmallParallelCurve.item, 1), " S ", "SS ", "S  ", 'S', ItemIDs.tcRailEmbeddedSmallStraight.item);
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.tcRailEmbeddedMediumParallelCurve.item, 1), " S ", "SS ", "S  ", 'S', ItemIDs.tcRailEmbeddedSmallParallelCurve.item);
