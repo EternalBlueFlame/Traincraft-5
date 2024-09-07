@@ -189,7 +189,6 @@ public class Traincraft {
         //proxy.getCape();
 
         /* GUI handler initiation */
-        cpw.mods.fml.common.registry.EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 16, Traincraft.instance,80,3,true);
         tcLog.info("Initialize Gui");
         NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
         FMLCommonHandler.instance().bus().register(new CraftingHandler());
