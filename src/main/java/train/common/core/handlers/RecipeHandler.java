@@ -276,7 +276,7 @@ public class RecipeHandler {
         GameRegistry.addRecipe(new ItemStack(BlockIDs.signalSpanish.block, 1), " L ", " I ", "RIR", 'L', new ItemStack(Blocks.redstone_lamp), 'I', new ItemStack(Items.iron_ingot), 'R', new ItemStack(Items.redstone));
         GameRegistry.addRecipe(new ItemStack(BlockIDs.kSignal.block, 1), "RIR", " I ", " L ", 'L', new ItemStack(Blocks.redstone_lamp), 'I', new ItemStack(Items.iron_ingot), 'R', new ItemStack(Items.redstone));
         GameRegistry.addRecipe(new ItemStack(TCBlocks.bridgePillar, 8), "SSS", "SLS", "SSS", 'S', new ItemStack(Items.stick), 'L', new ItemStack(Blocks.log));
-        GameRegistry.addRecipe(new ItemStack(BlockIDs.speedSign.block, 8), " R ", " I ", " I ", 'R', new ItemStack(Items.dye, 1, 1), 'I', new ItemStack(Items.iron_ingot));
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.speedSign, 8), " R ", " I ", " I ", 'R', new ItemStack(Items.dye, 1, 1), 'I', new ItemStack(Items.iron_ingot));
 
         //Gravel
         GameRegistry.addShapelessRecipe(new ItemStack(BlockIDs.oreTC.block, 4, 3), Blocks.gravel, Blocks.gravel, Items.clay_ball);
@@ -287,7 +287,7 @@ public class RecipeHandler {
 
         for (ItemStack ironingot : iron) {
             addDictRecipe(new ItemStack(TCBlocks.switchStand, 1), " W ", " I ", " R ", 'W', Blocks.lever, 'R', Items.stick, 'I', ironingot);
-            addDictRecipe(new ItemStack(BlockIDs.MILWSwitchStand.block, 1), " RW", "BWR", "AAA", 'A', new ItemStack(Items.stick), 'B', Blocks.iron_bars, 'R', new ItemStack(Items.dye, 1, 1), 'W', new ItemStack(Items.dye, 1, 15));
+            addDictRecipe(new ItemStack(TCBlocks.MFPBWigWag, 1), " RW", "BWR", "AAA", 'A', new ItemStack(Items.stick), 'B', Blocks.iron_bars, 'R', new ItemStack(Items.dye, 1, 1), 'W', new ItemStack(Items.dye, 1, 15));
             addDictRecipe(new ItemStack(TCBlocks.MFPBWigWag, 1), "IWI", " I ", " I ", 'W', Blocks.lever, 'I', ironingot);
             /*Buffer*/
             addDictRecipe(new ItemStack(BlockIDs.stopper.block, 1), "WWW", "I I", "RRR", 'W', "plankWood", 'R', Blocks.rail, 'I', ironingot);
@@ -330,10 +330,10 @@ public class RecipeHandler {
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.chunkLoaderActivator.item, 1), "  P", " S ", "S  ", 'S', Items.blaze_rod, 'P', Items.ender_pearl);
 
         // Switches -hariesh
-        GameRegistry.addRecipe(new ItemStack(BlockIDs.owoYardSwitchStand.block, 1), "   ", "OS ", "IW ", 'O', new ItemStack(Items.dye, 1, 14), 'S', Items.stick, 'I', Items.iron_ingot, 'W', Blocks.planks);
-        GameRegistry.addRecipe(new ItemStack(BlockIDs.owoSwitchStand.block, 1), " O ", " S ", " IW", 'O', new ItemStack(Items.dye, 1, 14), 'S', Items.stick, 'I', Items.iron_ingot, 'W', Blocks.planks);
-        GameRegistry.addRecipe(new ItemStack(BlockIDs.circleSwitchStand.block, 1), " R ", " S ", " IW", 'R', new ItemStack(Items.dye, 1, 1), 'S', Items.stick, 'I', Items.iron_ingot, 'W', Blocks.planks);
-        GameRegistry.addRecipe(new ItemStack(BlockIDs.autoSwtichStand.block, 1), "   ", "C  ", "BIW", 'C', new ItemStack(ItemIDs.electronicCircuit.item, 1), 'B', Blocks.iron_block, 'S', Items.stick, 'I', Items.iron_ingot, 'W', Blocks.planks);
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.owoYardSwitchStand, 1), "   ", "OS ", "IW ", 'O', new ItemStack(Items.dye, 1, 14), 'S', Items.stick, 'I', Items.iron_ingot, 'W', Blocks.planks);
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.owoSwitchStand, 1), " O ", " S ", " IW", 'O', new ItemStack(Items.dye, 1, 14), 'S', Items.stick, 'I', Items.iron_ingot, 'W', Blocks.planks);
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.circleSwitchStand, 1), " R ", " S ", " IW", 'R', new ItemStack(Items.dye, 1, 1), 'S', Items.stick, 'I', Items.iron_ingot, 'W', Blocks.planks);
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.autoSwtichStand, 1), "   ", "C  ", "BIW", 'C', new ItemStack(ItemIDs.electronicCircuit.item, 1), 'B', Blocks.iron_block, 'S', Items.stick, 'I', Items.iron_ingot, 'W', Blocks.planks);
         GameRegistry.addRecipe(new ItemStack(ItemIDs.paintbrushThing.item, 1), "GB ", "RIS", " ST", 'G', new ItemStack(Items.dye, 1, 2), 'B', new ItemStack(Items.dye, 1, 4), 'R', new ItemStack(Items.dye, 1, 1), 'I', new ItemStack(Items.iron_ingot), 'S', new ItemStack(Items.string), 'T', new ItemStack(Items.stick));
 
 

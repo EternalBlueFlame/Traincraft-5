@@ -1,39 +1,32 @@
-package train.common.blocks.blockSwitch;
+package train.common.blocks.switchStand;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import net.minecraft.block.BlockLever;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
-import train.common.library.Info;
-import train.common.tile.tileSwitch.TileMILWSwitchStand;
+import train.common.api.blocks.BlockSwitch;
+import train.common.tile.switchStand.TileSwitchStand;
 
-import java.util.List;
-import java.util.Random;
+public class BlockSwitchStand extends BlockSwitch {
 
-public class BlockMILWSwitchStand extends BlockLever {
-	private IIcon texture;
-
-	public BlockMILWSwitchStand() {
-		super();
+	public BlockSwitchStand() {
+		super(Material.wood, 0);
 		setCreativeTab(Traincraft.tcTab);
 		this.setTickRandomly(true);
-		//this.setBlockBounds(0.5F , 0.0F, 0.5F , 0.5F ,  2.0F, 0.5F);
+		setHardness(1.75F);
+		setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.75F, 0.8F);
+		setStepSound(soundTypeMetal);
 	}
 
 	@Override
-	public void addCollisionBoxesToList(World p_149743_1_, int p_149743_2_, int p_149743_3_, int p_149743_4_, AxisAlignedBB p_149743_5_, List p_149743_6_, Entity p_149743_7_)
-	{
-	}
+	public float[] hitboxShape(){return new float[]{0,0,0,1,2,1};}
+
 
 	@Override
 	public boolean hasTileEntity(int metadata) {
@@ -52,7 +45,11 @@ public class BlockMILWSwitchStand extends BlockLever {
 
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
-		return new TileMILWSwitchStand();
+		return new TileSwitchStand(this);
+	}
+	@Override
+	public TileEntity createNewTileEntity(World world, int metadata) {
+		return new TileSwitchStand(this);
 	}
 
 	@Override
@@ -61,19 +58,13 @@ public class BlockMILWSwitchStand extends BlockLever {
 	}
 
 	@SideOnly(Side.CLIENT)
-	/**
-	 * A randomly called display update to be able to add particles or other items for display
-	 */
-	@Override
-	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
 
-	}
 
 
 	@Override
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
 		super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
-		TileMILWSwitchStand te = (TileMILWSwitchStand) world.getTileEntity(i, j, k);
+		TileSwitchStand te = (TileSwitchStand) world.getTileEntity(i, j, k);
 		if (te != null) {
 			int dir = MathHelper.floor_double((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 			te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
@@ -89,8 +80,4 @@ public class BlockMILWSwitchStand extends BlockLever {
 		return true;
 	}
 
-	@Override
-	public IIcon getIcon(int i, int j) {
-		return texture;
-	}
 }

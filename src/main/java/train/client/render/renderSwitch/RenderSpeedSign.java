@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 import fexcraft.tmt.slim.Tessellator;
 import train.client.render.renderSwitch.models.ModelspeedSign;
 import train.common.library.Info;
-import train.common.tile.tileSwitch.TileSpeedSign;
+import train.common.tile.switchStand.TileSpeedSign;
 
 public class RenderSpeedSign extends TileEntitySpecialRenderer {
 	static final ModelspeedSign modelspeedSign = new ModelspeedSign();

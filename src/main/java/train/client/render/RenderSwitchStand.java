@@ -9,7 +9,7 @@ import fexcraft.tmt.slim.Tessellator;
 import train.client.render.models.ModelSwitchStandOff;
 import train.client.render.models.ModelSwitchStandOn;
 import train.common.library.Info;
-import train.common.tile.TileSwitchStand;
+import train.common.tile.switchStand.TileSwitchStand;
 
 public class RenderSwitchStand extends TileEntitySpecialRenderer {
     private static final ModelSwitchStandOn modelSwitch = new ModelSwitchStandOn();

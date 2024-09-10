@@ -1,30 +1,27 @@
-package train.common.tile.tileSwitch;
+package train.common.tile.switchStand;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
+import train.common.api.blocks.TileRenderFacing;
+import train.common.blocks.blockSwitch.BlockSpeedSign;
 
-public class TileSpeedSign extends TileEntity {
+public class TileSpeedSign extends TileRenderFacing {
 
 	private int skinstate;
-	private ForgeDirection facing;
 
-	public ForgeDirection getFacing() {
-		if(facing != null){
-			return this.facing;
-		}
-		return ForgeDirection.UNKNOWN;
+	public TileSpeedSign(){
 	}
-
+	public TileSpeedSign(BlockSpeedSign block){
+		host = block;
+	}
 	public void setSkinstate(int skinstate) {
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.skinstate = skinstate;
+		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+
 	}
 
 	public int getSkinstate() {
@@ -40,34 +37,29 @@ public class TileSpeedSign extends TileEntity {
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 	}
 
-	public void setFacing(ForgeDirection face) {
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
-		this.facing = face;
-	}
+
 
 	public void readFromNBT(NBTTagCompound nbtTag) {
-		if(nbtTag.hasKey("Orientation")) {
-			facing = ForgeDirection.getOrientation(nbtTag.getByte("Orientation"));
-		}
+		super.readFromNBT(nbtTag);
 		if(nbtTag.hasKey("skinstate")){
 			skinstate = nbtTag.getInteger("skinstate");
 		}
 
 		else {
-			System.out.println("No Skins or Direction");
+			System.out.println("No Skins");
 		}
-		super.readFromNBT(nbtTag);
+
 	}
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTag) {
-		nbtTag.setByte("Orientation", (byte) facing.ordinal());
+		super.writeToNBT(nbtTag);
 		nbtTag.setInteger("skinstate", this.skinstate);
 
-		super.writeToNBT(nbtTag);
+
 	}
 
-	public Packet getDescriptionPacket() {
+	public S35PacketUpdateTileEntity getDescriptionPacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
