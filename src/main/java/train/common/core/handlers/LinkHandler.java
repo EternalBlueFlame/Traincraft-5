@@ -8,10 +8,8 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import train.common.Traincraft;
 import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
-import train.common.core.util.TraincraftUtil;
 
 import java.util.List;
 
@@ -72,7 +70,7 @@ public class LinkHandler {
 		if (entity instanceof EntityRollingStock) {
 			((AbstractTrains) entity).Link1 = 0;
 			((AbstractTrains) entity).cartLinked1 = null;
-			((EntityRollingStock) entity).RollingStock.clear();
+			((EntityRollingStock) entity).consist.clear();
 			// System.out.println("free link1 "+entity);
 		}
 
@@ -87,7 +85,7 @@ public class LinkHandler {
 		if (entity instanceof EntityRollingStock) {
 			((AbstractTrains) entity).Link2 = 0;
 			((AbstractTrains) entity).cartLinked2 = null;
-			((EntityRollingStock) entity).RollingStock.clear();
+			((EntityRollingStock) entity).consist.clear();
 			// System.out.println("free link2 "+entity);
 		}
 	}
@@ -104,14 +102,14 @@ public class LinkHandler {
 			distanceBehindCart = cart1.getLinkageDistance((EntityMinecart) cart1);
 			if (cart2.isAttaching && cart1.isAttaching) {
 
-				double distancesX[] = new double[4];
-				double distancesZ[] = new double[4];
-				double euclidian[] = new double[4];
 
 				double d=0;
 				double d1=0;
 
 				if(cart1.bogieLoco!=null || cart2.bogieLoco!=null){
+					double distancesX[] = new double[4];
+					double distancesZ[] = new double[4];
+					double euclidian[] = new double[4];
 
 					if(cart1.bogieLoco!=null && cart2.bogieLoco==null){
 						distancesX[0] = cart1.posX - cart2.posX ;
@@ -292,8 +290,8 @@ public class LinkHandler {
 	/**
 	 * Handles the cart coupling physics
 	 */
-	private void StakePhysic(EntityRollingStock cart1, EntityRollingStock cart2, int linkIndex) {
-		if (worldObj.isRemote || cart1.updateTicks<5 || cart2.updateTicks<5) {
+	private void StakePhysic(AbstractTrains cart1, AbstractTrains cart2, int linkIndex) {
+		if (worldObj.isRemote || cart1.ticksExisted<5 || cart2.ticksExisted<5) {
 			return;
 		}
 		if (cart2.isAttached && cart1.isAttached && areLinked(cart2, cart1)) {

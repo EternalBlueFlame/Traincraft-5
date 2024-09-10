@@ -727,13 +727,13 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
             }
 
 
-            if (updateTicks % 20 == 0) HandleMaxAttachedCarts.PullPhysic(this);
+            if (ticksExisted % 20 == 0) HandleMaxAttachedCarts.PullPhysic(this);
             /**
              * Can't use datawatcher here. Locomotives use them all already
              * Check inventory The packet never arrives if it is sent when the
              * entity reads its NBT (player hasn't been initialised probably)
              */
-            if (updateTicks % 200 == 0) {
+            if (ticksExisted % 200 == 0) {
                 this.slotsFilled = 0;
                 for (int i = 0; i < getSizeInventory(); i++) {
                     ItemStack itemstack = getStackInSlot(i);
@@ -748,7 +748,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
              * Fuel consumption
              */
             //if (this instanceof DieselTrain) consumption /= 5;
-            if (updateTicks % 100 == 0) {
+            if (ticksExisted % 100 == 0) {
                 updateFuelTrain(this.getFuelConsumption());
             }
 
@@ -984,7 +984,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
             dataWatcher.updateObject(15, getMaxSpeed());
             dataWatcher.updateObject(26, guiDetailsJSON());
             dataWatcher.updateObject(28, lightingDetailsJSONString());
-            if (this.worldObj.handleMaterialAcceleration(this.boundingBox.expand(0.0D, -0.2000000059604645D, 0.0D).contract(0.001D, 0.001D, 0.001D), Material.water, this) && this.updateTicks % 4 == 0) {
+            if (this.worldObj.handleMaterialAcceleration(this.boundingBox.expand(0.0D, -0.2000000059604645D, 0.0D).contract(0.001D, 0.001D, 0.001D), Material.water, this) && this.ticksExisted % 4 == 0) {
                 if (!hasDrowned && !worldObj.isRemote && FMLCommonHandler.instance().getMinecraftServerInstance() != null && this.lastEntityRider instanceof EntityPlayer) {
                     FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(((EntityPlayer) this.lastEntityRider).getDisplayName() + " drowned " + this.getTrainOwner() + "'s locomotive"));
                 }

@@ -47,8 +47,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public double Link1;
     public double Link2;
     protected boolean linked = false;
-    public EntityRollingStock cartLinked1;
-    public EntityRollingStock cartLinked2;
+    public AbstractTrains cartLinked1;
+    public AbstractTrains cartLinked2;
     //private Set chunks;
     protected Ticket chunkTicket;
     public float renderYaw;
@@ -60,6 +60,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     public XmlBuilder entity_data = new XmlBuilder();
     public TransportRenderCache render_cache=new TransportRenderCache();
+
+
+    public EntityBogie bogieLoco=null;
+
+    public ArrayList<AbstractTrains> consist;
     /**
      * A reference to EnumTrains containing all spec for this specific train
      */
@@ -236,6 +241,10 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     protected abstract boolean canOverheat();
 
     protected abstract int getOverheatTime();
+
+    public float getLinkageDistanceFront(EntityMinecart cart){return 0.0f;}
+
+    public float getLinkageDistanceBack(EntityMinecart cart){return 0.0f;}
 
     public abstract float getLinkageDistance(EntityMinecart cart);
 

@@ -145,9 +145,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      * that are part of the train
      */
     public static ArrayList<TrainHandler> allTrains = new ArrayList<TrainHandler>();
-    public int updateTicks = 0;
     private HandleOverheating handleOverheating;
-    public ArrayList<EntityRollingStock> RollingStock;
     /**
      * each ticks: numLaps++ used for fuel consumption rate
      */
@@ -162,7 +160,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     private double bogieShift = 0;
     private boolean needsBogieUpdate;
     private boolean firstLoad = true;
-    public EntityBogie bogieLoco = null;
+    public EntityBogie bogieFront = null;
+    public EntityBogie bogieBack = null;
     private boolean hasSpawnedBogie = false;
     private double mountedOffset = -0.5;
     public double posYFromServer;
@@ -217,7 +216,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         boundingBoxSmall = AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 2.0D, 1.0D);
         //setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 0.98F, 0.7F);
         setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 2.0F, 1.5F);
-        RollingStock = new ArrayList<EntityRollingStock>();
+        consist = new ArrayList<AbstractTrains>();
         handleOverheating = new HandleOverheating(this);
 
         collisionhandler = new CollisionHandler(world);
@@ -431,12 +430,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 if (cartLinked1.Link1 == this.uniqueID) {
                     cartLinked1.Link1 = 0;
                     cartLinked1.cartLinked1 = null;
-                    if (cartLinked1.RollingStock != null) cartLinked1.RollingStock.clear();
+                    if (cartLinked1.consist != null) cartLinked1.consist.clear();
 
                 } else if (cartLinked1.Link2 == this.uniqueID) {
                     cartLinked1.Link2 = 0;
                     cartLinked1.cartLinked2 = null;
-                    if (cartLinked1.RollingStock != null) cartLinked1.RollingStock.clear();
+                    if (cartLinked1.consist != null) cartLinked1.consist.clear();
 
                 }
             }
@@ -444,12 +443,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 if (cartLinked2.Link1 == this.uniqueID) {
                     cartLinked2.Link1 = 0;
                     cartLinked2.cartLinked1 = null;
-                    if (cartLinked2.RollingStock != null) cartLinked2.RollingStock.clear();
+                    if (cartLinked2.consist != null) cartLinked2.consist.clear();
 
                 } else if (cartLinked2.Link2 == this.uniqueID) {
                     cartLinked2.Link2 = 0;
                     cartLinked2.cartLinked2 = null;
-                    if (cartLinked2.RollingStock != null) cartLinked2.RollingStock.clear();
+                    if (cartLinked2.consist != null) cartLinked2.consist.clear();
 
                 }
             }
@@ -600,7 +599,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
          * if the global train list is empty this is only used when the first @EntityRollingStock
          * is put down or when the world reloads
          */
-        if (updateTicks % 40 != 0) return;
+        if (ticksExisted % 40 != 0) return;
         if (allTrains.isEmpty()) {
             if ((this.cartLinked1 != null || this.cartLinked2 != null)) {
                 train = new TrainHandler(this);
@@ -681,6 +680,21 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 this.needsBogieUpdate = true;
             }
             this.hasSpawnedBogie = true;
+        }
+
+        if(addedToChunk && bogieFront==null && bogieBack == null){
+            this.bogieFront = new EntityBogie(worldObj,
+                    (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[0]),
+                    posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.rotationPoints()[0]) + getMountedYOffset() - 0.1d),
+                    (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[0]), this, this.uniqueID, 0, this.rotationPoints()[0]);
+
+            this.bogieBack = new EntityBogie(worldObj,
+                    (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]),
+                    posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.rotationPoints()[1]) + getMountedYOffset() - 0.1d),
+                    (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]), this, this.uniqueID, 0, this.rotationPoints()[1]);
+
+            //if (!worldObj.isRemote) worldObj.spawnEntityInWorld(bogieFront);
+            //if (!worldObj.isRemote) worldObj.spawnEntityInWorld(bogieBack);
         }
 
         /**
@@ -879,8 +893,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         updateOnTrack(floor_posX, floor_posY, floor_posZ, l);
 
-
-        updateTicks++;
         d6 = prevPosX - posX;
         d7 = prevPosZ - posZ;
         prevRotationYaw = rotationYaw;
@@ -951,7 +963,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
 
 
-        if (updateTicks % 2 == 0) {
+        if (ticksExisted % 2 == 0) {
             Traincraft.rotationChannel.sendToAllAround(new PacketRollingStockRotation(this, (int) (anglePitch * 60)), new TargetPoint(worldObj.provider.dimensionId, posX, posY, posZ, 300.0D));
         }
         if (!worldObj.isRemote) {
@@ -989,7 +1001,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         //setBoundingBoxSmall(posX, posY, posZ, 0.98F, 0.7F);
         numLaps++;
         if ((this instanceof Locomotive) && (this.Link1 == 0) && (this.Link2 == 0) && numLaps > 700) {
-            this.RollingStock.clear();
+            this.consist.clear();
         }
 
 
@@ -1018,7 +1030,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 seats.get(i1).setPosition(cachedVectors[0].xCoord, cachedVectors[0].yCoord, cachedVectors[0].zCoord);
             }
         }
-        if (ConfigHandler.ENABLE_LOGGING && !worldObj.isRemote && updateTicks % 120 == 0) {
+        if (ConfigHandler.ENABLE_LOGGING && !worldObj.isRemote && ticksExisted % 120 == 0) {
             ServerLogger.writeWagonToFolder(this);
         }
     }
@@ -1123,7 +1135,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     d9 = 0;
                 }
                 if (FMLCommonHandler.instance().getMinecraftServerInstance() != null &&
-                        this.seats != null && this.seats.get(0).getPassenger() != null && this.seats.get(0).getPassenger() instanceof EntityPlayer) {
+                        this.seats != null && this.seats.size()>0 && this.seats.get(0).getPassenger() != null && this.seats.get(0).getPassenger() instanceof EntityPlayer) {
                     FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new
                             ChatComponentText(((EntityPlayer) this.seats.get(0).getPassenger()).getDisplayName() + "derailed"
                             + this.trainOwner + "'s locomotive"));
@@ -1498,7 +1510,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (train == null) {
             return 1;
         }
-        for(EntityRollingStock entity: train.getTrains()) {
+        for(AbstractTrains entity: train.getTrains()) {
             int floorX = (int) Math.floor(entity.posX);
             int floorY = (int) Math.floor(entity.posY);
             int floorZ = (int) Math.floor(entity.posZ);
