@@ -255,7 +255,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					|| tile.getType().equals(EnumTracks.EMBEDDED_MEDIUM_DIAGONAL_STRAIGHT.getLabel())
 					|| tile.getType().equals(EnumTracks.EMBEDDED_LONG_DIAGONAL_STRAIGHT.getLabel())
 					|| tile.getType().equals(EnumTracks.EMBEDDED_VERY_LONG_DIAGONAL_STRAIGHT.getLabel()))){
-				if (tile.getTrackType().getLabel().contains("DIAGONAL")){
+				if (tile.getTrackFromName().getRailType().equals(TCRailTypes.RailTypes.DIAGONAL)){
 					if (tileGag.canPlaceRollingstock) {
 						this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
 						return true;

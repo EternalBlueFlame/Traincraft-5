@@ -8,8 +8,9 @@
 package train.common.library;
 
 import net.minecraft.item.Item;
+import train.common.api.IItemIDs;
 
-public enum TCCEItemIDs {
+public enum TCCEItemIDs implements IItemIDs {
 
     minecartBoulderWagon("ItemRollingStock", "BoulderWagon", 1),
     minecartKVB_2300("ItemRollingStock", "kvb_2300", 3),
@@ -363,4 +364,8 @@ public enum TCCEItemIDs {
         this.amountForEmerald = amountForEmerald;
     }
 
+    @Override
+    public Item getItem() {
+        return null;
+    }
 }

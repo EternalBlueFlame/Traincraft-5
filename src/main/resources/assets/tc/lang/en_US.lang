@@ -147,6 +147,7 @@ item.tc:emptyCanister.name=Empty Canister
 item.tc:bolt.name=Rail Spike
 item.tc:recipeBook.name=Traincraft Guide
 item.tc:adminBook.name=Traincraft Admin Book
+item.tc:trackDebugger.name=Track Debugger
 
 
 item.tc:tcRailSmallStraight.name=Straight (1x1)

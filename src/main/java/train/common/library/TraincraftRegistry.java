@@ -56,10 +56,13 @@ public class TraincraftRegistry {
     private List<TrainRecord> trainRecords = new ArrayList<>();
     private Map<Item, TrainRecord> trainRecordsByItem = new HashMap<>();
 
-    private List<TrackRecord> trackRecords = new ArrayList<>();
-    private Map<Object, TrackRecord> trackRecordByItem = new HashMap<Object, TrackRecord>();
     private Map<Class<?>, TrainRenderRecord> trainRenderRecords = new HashMap<>();
     private List<TrainSoundRecord> trainSoundRecords = new ArrayList<>();
+
+    private static final List<TrackRecord> trackRecords = new ArrayList<>();
+
+    private static Map<Item, TrackRecord> trackRecordsByItem = new HashMap<>();
+
 
     public TraincraftRegistry() {
     }
@@ -69,8 +72,9 @@ public class TraincraftRegistry {
             TraincraftRegistry.this.registerTrainRecord(train);
         }
 
-        for (EnumTracks tracks : EnumTracks.values()){
-            TraincraftRegistry.this.registerTrackRecord(tracks);
+        for (TrackRecord track : EnumTracks.values()){
+            TraincraftRegistry.this.registerTrackRecord(track);
+
         }
 
 
@@ -116,16 +120,6 @@ public class TraincraftRegistry {
     }
 
 
-    public TrackRecord findTrackRecordByItem(Item item){
-        return trackRecordByItem.get(item);
-    }
-
-
-    public void registerTrackRecord(TrackRecord trackRecord){
-        trackRecords.add(trackRecord);
-        trackRecordByItem.put(trackRecord.getItem(), trackRecord);
-    }
-
     public TrainRecord findTrainRecordByItem(Item item) {
         return trainRecordsByItem.get(item);
     }
@@ -153,6 +147,28 @@ public class TraincraftRegistry {
                 record.skins.add(name);
             }
         }
+    }
+
+    /**Tracks */
+
+    public void registerTrackRecord(TrackRecord record) {
+        trackRecords.add(record);
+        trackRecordsByItem.put(record.getItem().getItem(), record);
+    }
+
+
+
+    public static TrackRecord findTrackRecordByName(String label){
+        for (TrackRecord track : trackRecords){
+            if (track.getLabel().equals(label)){
+                return track;
+            }
+        }
+        return null;
+    }
+
+    public static TrackRecord findTrackRecordByItem(Item item){
+        return trackRecordsByItem.get(item);
     }
 
 
