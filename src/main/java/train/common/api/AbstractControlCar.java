@@ -115,11 +115,10 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
             lightingDetailsJSONObject = lightingDetailsAsJSON();
         }
 
-        isLightsEnabled = lightingDetailsJSONObject.get("isLightsEnabled").getAsBoolean();
-        isBeaconEnabled = lightingDetailsJSONObject.get("isBeaconEnabled").getAsBoolean();
-        ditchLightMode = lightingDetailsJSONObject.get("ditchLightMode").getAsByte();
-        beaconCycleIndex = lightingDetailsJSONObject.get("beaconCycleIndex").getAsByte();
-
+        isLightsEnabled = lightingDetailsJSONObject.get(DataMemberName.isLightsEnabled.AsString()).getAsBoolean();
+        isBeaconEnabled = lightingDetailsJSONObject.get(DataMemberName.isBeaconEnabled.AsString()).getAsBoolean();
+        ditchLightMode = lightingDetailsJSONObject.get(DataMemberName.ditchLightMode.AsString()).getAsByte();
+        beaconCycleIndex = lightingDetailsJSONObject.get(DataMemberName.beaconCycleIndex.AsString()).getAsByte();
         dataWatcher.updateObject(28, lightingDetailsJSONString());
     }
 
@@ -439,10 +438,10 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     public JsonObject lightingDetailsAsJSON()
     {
         JsonObject lightingDetailsJSON = new JsonObject();
-        lightingDetailsJSON.addProperty("isLightsEnabled", isLightsEnabled);
-        lightingDetailsJSON.addProperty("isBeaconEnabled", isBeaconEnabled);
-        lightingDetailsJSON.addProperty("beaconCycleIndex", beaconCycleIndex);
-        lightingDetailsJSON.addProperty("ditchLightMode", ditchLightMode);
+        lightingDetailsJSON.addProperty(DataMemberName.isLightsEnabled.AsString(), isLightsEnabled);
+        lightingDetailsJSON.addProperty(DataMemberName.isBeaconEnabled.AsString(), isBeaconEnabled);
+        lightingDetailsJSON.addProperty(DataMemberName.beaconCycleIndex.AsString(), beaconCycleIndex);
+        lightingDetailsJSON.addProperty(DataMemberName.ditchLightMode.AsString(), ditchLightMode);
         return lightingDetailsJSON;
     }
 
@@ -480,22 +479,22 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
 
     public boolean isLightsEnabled()
     {
-        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get("isLightsEnabled").getAsBoolean();
+        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.isLightsEnabled.AsString()).getAsBoolean();
     }
 
     public boolean isBeaconEnabled()
     {
-        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get("isBeaconEnabled").getAsBoolean();
+        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.isBeaconEnabled.AsString()).getAsBoolean();
     }
 
     public byte getBeaconCycleIndex()
     {
-        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get("beaconCycleIndex").getAsByte();
+        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.beaconCycleIndex.AsString()).getAsByte();
     }
 
     public boolean isDitchLightsEnabled()
     {
-        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get("ditchLightMode").getAsByte() > 0;
+        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.ditchLightMode.AsString()).getAsByte() > 0;
     }
 
     private JsonObject AsJsonObject(String string)
