@@ -1,6 +1,6 @@
 # Blender 4.2.1 LTS
 # www.blender.org
-mtllib track_concrete.mtl
+mtllib trackpart_concrete.mtl
 o track_concrete
 v 0.300477 0.025803 0.500000
 v 0.360477 0.025803 0.500000
