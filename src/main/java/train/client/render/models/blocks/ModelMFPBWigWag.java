@@ -7,6 +7,7 @@ import fexcraft.fvtm.TurboList;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import fexcraft.tmt.slim.Vec3f;
 import net.minecraft.entity.Entity;
+import train.common.Traincraft;
 
 /** This file was exported via the TiM Exporter V1.0 of<br>
  *  FMT (Fex's Modelling Toolbox) v.2.6.5 &copy; 2021 - Fexcraft.net<br>
@@ -16,6 +17,7 @@ public class ModelMFPBWigWag extends RollingStockModel {
 
 	@Override
 	public void render(Entity entity, float f0, float f1, float f2, float f3, float f4, float scale){
+
 		for(ModelRendererTurbo turbo : groups.get(1)){
 			turbo.rotateAngleX=f0*0.0174533f;
 		}

@@ -315,6 +315,14 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         if (motionZ > maxSpeed) {
             motionZ = maxSpeed;
         }
+
+        double speedNorm = Math.sqrt(motionX * motionX + motionZ * motionZ);
+
+        if (speedNorm > maxSpeed){
+            motionX *= 0.99;
+            motionZ *= 0.99;
+        }
+
     }
 
     /**

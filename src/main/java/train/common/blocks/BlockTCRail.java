@@ -69,15 +69,18 @@ public class BlockTCRail extends Block {
 	@Override
 	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
 		TileTCRail tileEntity = (TileTCRail) world.getTileEntity(x,y,z);
-		if (tileEntity == null) {
-			TileTCRailGag gagRail = (TileTCRailGag) world.getTileEntity(x,y,z);
-			tileEntity = (TileTCRail) world.getTileEntity(gagRail.originX, gagRail.originY, gagRail.originZ);
-		}
-		if (tileEntity == null) {
+		if (tileEntity == null){
 			return;
 		}
-		tileEntity.lastPlayerToInteract = player;
-	}
+
+		if (tileEntity.isLinkedToRail){
+			TileTCRailGag tileGag = (TileTCRailGag) world.getTileEntity(tileEntity.linkedX, tileEntity.linkedY, tileEntity.linkedZ);
+			tileEntity = (TileTCRail) world.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
+        }
+        tileEntity.lastPlayerToInteract = player;
+
+
+    }
 
 	@Override
 	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
