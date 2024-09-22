@@ -27,8 +27,8 @@ public class LinkHandler {
 
 		if (entityOne.isAttaching) {
 			List lis = worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, customBoundingBox.expand(15, 5, 15));
-			if (entityOne.bogieLoco != null) {
-				lis.addAll(worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, entityOne.bogieLoco.boundingBox.expand(7, 5, 7)));
+			if (entityOne.bogieFront != null) {
+				lis.addAll(worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, entityOne.bogieFront.boundingBox.expand(7, 5, 7)));
 			}
 
 
@@ -91,7 +91,6 @@ public class LinkHandler {
 	}
 
 
-	private float distanceBehindCart;
 	/**
 	 * Attaching to colliding carts
 	 */
@@ -99,80 +98,45 @@ public class LinkHandler {
 		if (worldObj.isRemote) {
 			return;
 		}
-			distanceBehindCart = cart1.getLinkageDistance((EntityMinecart) cart1);
 			if (cart2.isAttaching && cart1.isAttaching) {
 
 
 				double d=0;
 				double d1=0;
 
-				if(cart1.bogieLoco!=null || cart2.bogieLoco!=null){
-					double distancesX[] = new double[4];
-					double distancesZ[] = new double[4];
-					double euclidian[] = new double[4];
+				double distancesX[] = new double[4];
+				double distancesZ[] = new double[4];
+				double euclidian[] = new double[4];
 
-					if(cart1.bogieLoco!=null && cart2.bogieLoco==null){
-						distancesX[0] = cart1.posX - cart2.posX ;
-						distancesZ[0] = cart1.posZ - cart2.posZ ;
+				distancesX[0] = cart1.posX - cart2.posX ;
+				distancesZ[0] = cart1.posZ - cart2.posZ ;
+				distancesX[1] = cart1.bogieFront.posX - cart2.posX ;
+				distancesZ[1] = cart1.bogieFront.posZ - cart2.posZ ;
+				distancesX[2] = cart1.posX - cart2.bogieFront.posX ;
+				distancesZ[2] = cart1.posZ - cart2.bogieFront.posZ ;
+				distancesX[3] = cart1.bogieFront.posX - cart2.bogieFront.posX ;
+				distancesZ[3] = cart1.bogieFront.posZ - cart2.bogieFront.posZ ;
 
-						distancesX[1] = cart1.bogieLoco.posX - cart2.posX ;
-						distancesZ[1] = cart1.bogieLoco.posZ - cart2.posZ ;
-
-						distancesX[2] = 100;
-						distancesZ[2] = 100;
-						distancesX[3] = 100;
-						distancesZ[3] = 100;
-						for(int i = 0; i< distancesX.length;i++){
-							euclidian[i] = MathHelper.sqrt_double((distancesX[i] * distancesX[i]) + (distancesZ[i] * distancesZ[i]));
-						}
-
-					}else if(cart1.bogieLoco==null){
-						distancesX[0] = cart1.posX - cart2.posX ;
-						distancesZ[0] = cart1.posZ - cart2.posZ ;
-						distancesX[1] = cart1.posX - cart2.bogieLoco.posX ;
-						distancesZ[1] = cart1.posZ - cart2.bogieLoco.posZ ;
-
-						distancesX[2] = 100;
-						distancesZ[2] = 100;
-						distancesX[3] = 100;
-						distancesZ[3] = 100;
-						for(int i = 0; i< distancesX.length;i++){
-							euclidian[i] = MathHelper.sqrt_double((distancesX[i] * distancesX[i]) + (distancesZ[i] * distancesZ[i]));
-						}
-
-					}else{
-						distancesX[0] = cart1.posX - cart2.posX ;
-						distancesZ[0] = cart1.posZ - cart2.posZ ;
-						distancesX[1] = cart1.bogieLoco.posX - cart2.posX ;
-						distancesZ[1] = cart1.bogieLoco.posZ - cart2.posZ ;
-						distancesX[2] = cart1.posX - cart2.bogieLoco.posX ;
-						distancesZ[2] = cart1.posZ - cart2.bogieLoco.posZ ;
-						distancesX[3] = cart1.bogieLoco.posX - cart2.bogieLoco.posX ;
-						distancesZ[3] = cart1.bogieLoco.posZ - cart2.bogieLoco.posZ ;
-
-						for(int i = 0; i< distancesX.length;i++){
-							euclidian[i] = MathHelper.sqrt_double((distancesX[i] * distancesX[i]) + (distancesZ[i] * distancesZ[i]));
-						}
-					}
-					double minX = euclidian[0];
-					int minIndex=0;
-					for ( int k=0; k<euclidian.length; k++ )
-					{
-						if ( Math.abs(euclidian[k]) < Math.abs(minX)){
-							minX = euclidian[k];
-							minIndex = k;
-						}
-					}
-
-					d = distancesX[minIndex];
-					d1 = distancesZ[minIndex];
-
-				}else{
-					d = cart1.posX - cart2.posX;
-					d1 = cart1.posZ - cart2.posZ;
+				for(int i = 0; i< distancesX.length;i++){
+					euclidian[i] = MathHelper.sqrt_double((distancesX[i] * distancesX[i]) + (distancesZ[i] * distancesZ[i]));
 				}
+
+				double minX = euclidian[0];
+				int minIndex=0;
+				for ( int k=0; k<euclidian.length; k++ )
+				{
+					if ( Math.abs(euclidian[k]) < Math.abs(minX)){
+						minX = euclidian[k];
+						minIndex = k;
+					}
+				}
+
+				d = distancesX[minIndex];
+				d1 = distancesZ[minIndex];
+
+
 				//System.out.println(d2);
-				if (MathHelper.sqrt_double((d * d) + (d1 * d1)) <= distanceBehindCart) {
+				if (MathHelper.sqrt_double((d * d) + (d1 * d1)) <= cart1.getLinkageDistance(cart1)) {
 					/**
 					 * attach only if the link is free, each cart has two link obviously
 					 */
@@ -307,76 +271,36 @@ public class LinkHandler {
 			int minIndex=0;
 
 
-			if(cart1.bogieLoco!=null || cart2.bogieLoco!=null){
-				double distancesX[] = new double[4];
-				double distancesZ[] = new double[4];
-				double euclidian[] = new double[4];
+			double distancesX[] = new double[4];
+			double distancesZ[] = new double[4];
+			double euclidian[] = new double[4];
 
-				if(cart1.bogieLoco!=null && cart2.bogieLoco==null){
-					distancesX[0] = cart1.posX - cart2.posX ;
-					distancesZ[0] = cart1.posZ - cart2.posZ ;
+			distancesX[0] = cart1.posX - cart2.posX;
+			distancesZ[0] = cart1.posZ - cart2.posZ;
+			distancesX[1] = cart1.bogieFront.posX - cart2.posX ;
+			distancesZ[1] = cart1.bogieFront.posZ - cart2.posZ ;
+			distancesX[2] = cart1.posX - cart2.bogieFront.posX ;
+			distancesZ[2] = cart1.posZ - cart2.bogieFront.posZ ;
+			distancesX[3] = cart1.bogieFront.posX - cart2.bogieFront.posX ;
+			distancesZ[3] = cart1.bogieFront.posZ - cart2.bogieFront.posZ ;
 
-					distancesX[1] = cart1.bogieLoco.posX - cart2.posX ;
-					distancesZ[1] = cart1.bogieLoco.posZ - cart2.posZ ;
-
-					distancesX[2] = 100;
-					distancesZ[2] = 100;
-					distancesX[3] = 100;
-					distancesZ[3] = 100;
-					for(int i = 0; i< distancesX.length;i++){
-						euclidian[i] = MathHelper.sqrt_double((distancesX[i] * distancesX[i]) + (distancesZ[i] * distancesZ[i]));
-					}
-
-				}else if(cart1.bogieLoco==null){
-					distancesX[0] = cart1.posX - cart2.posX ;
-					distancesZ[0] = cart1.posZ - cart2.posZ ;
-					distancesX[1] = cart1.posX - cart2.bogieLoco.posX ;
-					distancesZ[1] = cart1.posZ - cart2.bogieLoco.posZ ;
-
-					distancesX[2] = 100;
-					distancesZ[2] = 100;
-					distancesX[3] = 100;
-					distancesZ[3] = 100;
-					for(int i = 0; i< distancesX.length;i++){
-						euclidian[i] = MathHelper.sqrt_double((distancesX[i] * distancesX[i]) + (distancesZ[i] * distancesZ[i]));
-					}
-
-				}
-				else{
-					distancesX[0] = cart1.posX - cart2.posX;
-					distancesZ[0] = cart1.posZ - cart2.posZ;
-					distancesX[1] = cart1.bogieLoco.posX - cart2.posX ;
-					distancesZ[1] = cart1.bogieLoco.posZ - cart2.posZ ;
-					distancesX[2] = cart1.posX - cart2.bogieLoco.posX ;
-					distancesZ[2] = cart1.posZ - cart2.bogieLoco.posZ ;
-					distancesX[3] = cart1.bogieLoco.posX - cart2.bogieLoco.posX ;
-					distancesZ[3] = cart1.bogieLoco.posZ - cart2.bogieLoco.posZ ;
-
-					for(int i = 0; i< distancesX.length;i++){
-						euclidian[i] = MathHelper.sqrt_double(((distancesX[i]) * (distancesX[i])) + ((distancesZ[i]) * (distancesZ[i])));
-					}
-				}
-				double minX = euclidian[0];
-				for ( int k=0; k<euclidian.length; k++ )
-				{
-					if ( Math.abs(euclidian[k]) < Math.abs(minX)){
-						minX = euclidian[k];
-						minIndex = k;
-					}
-				}
-
-				d = distancesX[minIndex];
-				d1 = distancesZ[minIndex];
-				vecX=d;
-				vecZ=d1;
-
+			for(int i = 0; i< distancesX.length;i++){
+				euclidian[i] = MathHelper.sqrt_double(((distancesX[i]) * (distancesX[i])) + ((distancesZ[i]) * (distancesZ[i])));
 			}
-			else{
-				d = cart1.posX - cart2.posX;
-				d1 = cart1.posZ - cart2.posZ;
-				vecX = cart1.posX - cart2.posX;
-				vecZ = cart1.posZ - cart2.posZ;
+			double minX = euclidian[0];
+			for ( int k=0; k<euclidian.length; k++ )
+			{
+				if ( Math.abs(euclidian[k]) < Math.abs(minX)){
+					minX = euclidian[k];
+					minIndex = k;
+				}
 			}
+
+			d = distancesX[minIndex];
+			d1 = distancesZ[minIndex];
+			vecX=d;
+			vecZ=d1;
+
 
 			double d2 = MathHelper.sqrt_double((d * d) + (d1 * d1));
 			if(d2>20){

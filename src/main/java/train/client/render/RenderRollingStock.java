@@ -146,7 +146,7 @@ public class RenderRollingStock extends Render {
         if (cart.worldObj != null && cart.worldObj.getBlock(i, j, k).getClass().getName().equals("ebf.tim.blocks.rails.BlockRailCore")) {
             GL11.glTranslatef(0f, 0.15f, 0f);
         }
-        if (cart.bogieLoco != null) {// || cart.bogieUtility[0]!=null){
+        if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
             //GL11.glRotatef((float)(90-cart.rotationYawClientReal), 0.0F, 1.0F, 0.0F);
             if (cart.oldClientYaw == 0) cart.oldClientYaw = cart.rotationYawClientReal;
 
@@ -169,60 +169,13 @@ public class RenderRollingStock extends Render {
             GL11.glRotatef((90.0f - newYaw), 0.0F, 1.0F, 0.0F);
             cart.setRenderYaw(newYaw);
             cart.setRenderPitch(pitch);
-        } else {
-            // NOTE: func_150049_b_ = isRailBlockAt
-            if (cart.worldObj != null && (BlockRailBase.func_150049_b_(cart.worldObj, i, j, k) || BlockRailBase.func_150049_b_(cart.worldObj, i, j - 1, k))) {
-                if (cart.isClientInReverse) {
-                    yaw += 180;
-                    pitch = -pitch;
-                }
-                GL11.glRotatef(180.0F - yaw, 0.0F, 1.0F, 0.0F);
-                cart.setRenderYaw(yaw);
-                cart.setRenderPitch(pitch);
-            } else {
-                if (cart.oldClientYaw == 0) cart.oldClientYaw = cart.rotationYawClientReal;
-
-                float tempYaw = (cart.rotationYawClientReal - cart.oldClientYaw);
-                float newYaw = 0;
-                //System.out.println("rotationYawBogie "+rotationYawBogie+" oldYaw "+cart.oldClientYaw+" tempYaw "+(Math.abs(tempYaw)/10));
-                //System.out.println(Math.abs(cart.oldClientYaw-rotationYawBogie));
-                if (Math.abs(cart.oldClientYaw - cart.rotationYawClientReal) > 170) {
-                    cart.oldClientYaw = cart.rotationYawClientReal;
-                }
-                if (cart.oldClientYaw != cart.rotationYawClientReal && Math.abs(cart.oldClientYaw - cart.rotationYawClientReal) > (Math.abs(tempYaw) / 10)) {
-                    newYaw = cart.oldClientYaw + Math.copySign((Math.abs(tempYaw) / 10), tempYaw);
-                    cart.oldClientYaw += Math.copySign((Math.abs(tempYaw) / 10), tempYaw);
-                } else {
-                    newYaw = cart.rotationYawClientReal;
-                    cart.oldClientYaw = cart.rotationYawClientReal;
-                }
-                GL11.glRotatef((90.0f - (newYaw + 90.0f)), 0.0F, 1.0F, 0.0F);
-                cart.setRenderYaw(yaw);
-                cart.setRenderPitch(pitch);
-            }
         }
 
         //if(cart.bogie!=null)cart.worldObj.spawnParticle("reddust", cart.bogie.posX, cart.bogie.posY, cart.bogie.posZ, 0.1, 0.4, 0.1);
 
         //GL11.glRotatef(180.0F - yaw, 0.0F, 1.0F, 0.0F);
-        if (cart.bogieLoco != null) {// || cart.bogieUtility[0]!=null){
+        if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
             GL11.glRotatef(-cart.anglePitchClient, 0.0F, 0.0F, 1.0F);
-        } else {
-            if (renderYVect != null) {
-                pitch = cart.anglePitchClient / 60;
-                if (cart.rotationYawClientReal > -5 && cart.rotationYawClientReal < 5) {
-                    pitch = -pitch;
-                }
-                if (!cart.isClientInReverse && (cart.rotationYawClientReal > 85 && cart.rotationYawClientReal < 95)) {
-                    pitch = -pitch;
-                }
-                if (cart.isClientInReverse && (cart.rotationYawClientReal < -265 && cart.rotationYawClientReal > -275)) {
-                    pitch = -pitch;
-                }
-                GL11.glRotatef(pitch, 0.0F, 0.0F, 1.0F);
-            } else {
-                GL11.glRotatef(-pitch, 0.0F, 0.0F, 1.0F);
-            }
         }
         float var28 = cart.getRollingAmplitude() - time;
 
@@ -294,17 +247,13 @@ public class RenderRollingStock extends Render {
                 }
             }
 
-            if (cart.bogieLoco != null) {// || cart.bogieUtility[0]!=null){
+            if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
                 renderSmokeFX(cart, 90 + cart.rotationYawClientReal, cart.anglePitchClient, render.getSmokeType(), cart.render_cache.smokePosition, render.getSmokeIterations(), time, render.hasSmokeOnSlopes());
-            } else {
-                renderSmokeFX(cart, (yaw), pitch, render.getSmokeType(), cart.render_cache.smokePosition, render.getSmokeIterations(), time, render.hasSmokeOnSlopes());
             }
         }
         if (render.hasExplosion()) {
-            if (cart.bogieLoco != null) {// || cart.bogieUtility[0]!=null){
+            if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
                 renderExplosionFX(cart, 90 + cart.rotationYawClientReal, cart.anglePitchClient, render.getExplosionType(), render.getExplosionFX(), render.getExplosionFXIterations(), render.hasSmokeOnSlopes());
-            } else {
-                renderExplosionFX(cart, yaw, pitch, render.getExplosionType(), render.getExplosionFX(), render.getExplosionFXIterations(), render.hasSmokeOnSlopes());
             }
         }
 

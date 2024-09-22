@@ -101,7 +101,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (worldObj.isRemote || bogieLoco==null) {
+		if (worldObj.isRemote || bogieFront==null || bogieBack==null) {
 			return;
 		}
 		checkInvent(locoInvent[0], locoInvent[1], this);
@@ -109,8 +109,8 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 			 fakePlayer = new FakePlayer(worldObj);
 		}
 		rotation = MathHelper.floor_float(TraincraftUtil.atan2degreesf(
-				bogieLoco.posZ - posZ,
-				bogieLoco.posX - posX));
+				bogieFront.posZ - bogieBack.posZ,
+				bogieFront.posX - bogieBack.posX));
 
 		point1 = rotateVec3(blockpos[0], getPitch(), rotation);
 		point1[0] += posX;point1[1] += posY;point1[2] += posZ;

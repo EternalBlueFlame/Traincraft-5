@@ -60,9 +60,9 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     public XmlBuilder entity_data = new XmlBuilder();
     public TransportRenderCache render_cache=new TransportRenderCache();
-
-
-    public EntityBogie bogieLoco=null;
+    
+    public EntityBogie bogieFront=null;
+    public EntityBogie bogieBack=null;
 
     public ArrayList<AbstractTrains> consist;
     /**
@@ -767,7 +767,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * example:
      * return new float{2f, -1f};
      * may not return null*/
-    public float[] rotationPoints(){return new float[]{1,-1};}
+    public float[] rotationPoints(){
+        if(getSpec().getBogieLocoPosition()==0){
+            return new float[]{0.5f,-0.5f};
+        }
+        return new float[]{(float)getSpec().getBogieLocoPosition(),0};}
 
     /**defines the scale to render the model at. Default is 0.0625*/
     public float[][] getRenderScale(){return new float[][]{getRender().getScale()};}
