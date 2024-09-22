@@ -9,6 +9,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.entities.EntitySeat;
+import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Vec3f;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.CartTools;
@@ -481,9 +482,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             train.getTrains().clear();
             allTrains.remove(train);
         }
-        if (this.bogieLoco != null) {
-            bogieLoco.setDead();
-            bogieLoco.isDead = true;
+        if (this.bogieFront != null) {
+            bogieFront.setDead();
+            bogieFront.isDead = true;
+        }
+        if (this.bogieBack != null) {
+            bogieBack.setDead();
+            bogieBack.isDead = true;
         }
         isDead = true;
         Side side = FMLCommonHandler.instance().getEffectiveSide();
@@ -666,35 +671,28 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     public void onUpdate() {
-        if (addedToChunk && !this.hasSpawnedBogie && this.getSpec().getBogieLocoPosition() != 0) {
+        if (addedToChunk && !this.hasSpawnedBogie) {
 
-            if (bogieLoco == null) {
-                this.bogieShift = this.getSpec().getBogieLocoPosition();
-                this.bogieLoco = new EntityBogie(worldObj,
+            if (bogieFront == null) {
+                this.bogieShift = this.rotationPoints()[0];
+                this.bogieFront = new EntityBogie(worldObj,
                         (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.bogieShift),
                         posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.bogieShift) + getMountedYOffset() - 0.1d),
-                        (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.bogieShift), this, this.uniqueID, 0, this.bogieShift);
+                        (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.bogieShift), this, this.uniqueID, this.bogieShift);
 
 
-                if (!worldObj.isRemote) worldObj.spawnEntityInWorld(bogieLoco);
+                if (!worldObj.isRemote) worldObj.spawnEntityInWorld(bogieFront);
+
+                this.bogieBack = new EntityBogie(worldObj,
+                        (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]),
+                        posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.rotationPoints()[1]) + getMountedYOffset() - 0.1d),
+                        (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]), this, this.uniqueID, this.rotationPoints()[1]);
+
+
+                if (!worldObj.isRemote) worldObj.spawnEntityInWorld(bogieBack);
                 this.needsBogieUpdate = true;
             }
             this.hasSpawnedBogie = true;
-        }
-
-        if(addedToChunk && bogieFront==null && bogieBack == null){
-            this.bogieFront = new EntityBogie(worldObj,
-                    (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[0]),
-                    posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.rotationPoints()[0]) + getMountedYOffset() - 0.1d),
-                    (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[0]), this, this.uniqueID, 0, this.rotationPoints()[0]);
-
-            this.bogieBack = new EntityBogie(worldObj,
-                    (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]),
-                    posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.rotationPoints()[1]) + getMountedYOffset() - 0.1d),
-                    (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]), this, this.uniqueID, 0, this.rotationPoints()[1]);
-
-            //if (!worldObj.isRemote) worldObj.spawnEntityInWorld(bogieFront);
-            //if (!worldObj.isRemote) worldObj.spawnEntityInWorld(bogieBack);
         }
 
         /**
@@ -863,7 +861,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         int floor_posZ = MathHelper.floor_double(posZ);
 
         if (needsBogieUpdate) {
-            if (bogieLoco != null) {
+            if (bogieFront != null) {
                 float rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation));
                 float rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation)));
                 if (!firstLoad) {
@@ -872,15 +870,30 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
                 double bogieX1 = (this.posX + (rotationCos1 * Math.abs(bogieShift)));
                 double bogieZ1 = (this.posZ + (rotationSin1 * Math.abs(bogieShift)));
-                this.bogieLoco.setPosition(bogieX1, bogieLoco.posY, bogieZ1);
+                this.bogieFront.setPosition(bogieX1, bogieFront.posY, bogieZ1);
+
+            }
+            if (bogieBack != null) {
+                float rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation));
+                float rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation)));
+                if (!firstLoad) {
+                    rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation + 90));
+                    rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation + 90)));
+                }
+                double bogieX1 = (this.posX + (rotationCos1 * Math.abs(rotationPoints()[1])));
+                double bogieZ1 = (this.posZ + (rotationSin1 * Math.abs(rotationPoints()[1])));
+                this.bogieBack.setPosition(bogieX1, bogieBack.posY, bogieZ1);
 
             }
             firstLoad = false;
 
             needsBogieUpdate = false;
         }
-        if (bogieLoco != null) {
-            bogieLoco.updateDistance();
+        if (bogieFront != null) {
+            bogieFront.updateDistance();
+        }
+        if (bogieBack != null) {
+            bogieBack.updateDistance();
         }
 
         if (worldObj.isAirBlock(floor_posX, floor_posY, floor_posZ)) {
@@ -909,16 +922,17 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         //double var49 = MathHelper.wrapAngleTo180_float(this.rotationYaw - this.prevRotationYaw);
 
         float anglePitch = 0;
-        if (bogieLoco != null) {
+        if (bogieFront != null) {
 
-            serverRealRotation = MathHelper.wrapAngleTo180_float((float) Math.toDegrees(Math.atan2((float) (bogieLoco.posZ - this.posZ), (float) (bogieLoco.posX - this.posX))) - 90F);
+            serverRealRotation = MathHelper.wrapAngleTo180_float((float) Math.toDegrees(Math.atan2((float) (bogieFront.posZ - this.posZ), (float) (bogieFront.posX - this.posX))) - 90F);
 
-            anglePitch = (float) Math.atan(((bogieLoco.posY - posY)) /
-                    MathHelper.sqrt_double(((bogieLoco.posX - posX) * (bogieLoco.posX - posX)) +
-                            ((bogieLoco.posZ - posZ) * (bogieLoco.posZ - posZ))));//1.043749988079071
+            anglePitch = (float) Math.atan(((bogieFront.posY - posY)) /
+                    MathHelper.sqrt_double(((bogieFront.posX - posX) * (bogieFront.posX - posX)) +
+                            ((bogieFront.posZ - posZ) * (bogieFront.posZ - posZ))));//1.043749988079071
             serverRealPitch = anglePitch + (float)
-                    ((bogieLoco.posZ - posZ) * (bogieLoco.posZ - posZ));//1.043749988079071
+                    ((bogieFront.posZ - posZ) * (bogieFront.posZ - posZ));//1.043749988079071
         } else {
+            DebugUtil.println("obsolete me");
             float rotation = rotationYaw;
 
             float delta = MathHelper.wrapAngleTo180_float(this.rotationYaw - this.previousServerRealRotation);
@@ -1111,8 +1125,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 d17 = (d22 * d9 + d24 * d10) * 2D;
                 //double derailSpeed = 0;//0.46;
             }
-            if (bogieLoco != null) {
-                if (!bogieLoco.isOnRail()) {
+            if (bogieFront != null) {
+                if (!bogieFront.isOnRail()) {
                     derailSpeed = 0;
                     this.unLink();
                 }
@@ -1213,8 +1227,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
                 moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
             } else if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState())) {
-                if (bogieLoco != null) {
-                    if (!bogieLoco.isOnRail()) {
+                if (bogieFront != null) {
+                    if (!bogieFront.isOnRail()) {
+                        derailSpeed = 0;
+                    }
+                }
+                if (bogieBack != null) {
+                    if (!bogieBack.isOnRail()) {
                         derailSpeed = 0;
                     }
                 }
@@ -1685,7 +1704,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     protected void moveOnTCDiamondCrossing(int i, int j, int k, double cx, double cy, double cz, int meta) {
 
         int l;
-        if ((this.bogieLoco == null)) {
+        if ((this.bogieFront == null)) {
             l = MathHelper.floor_double(serverRealRotation * 8.0F / 360.0F + 0.5) & 7;
         } else {
             l = MathHelper.floor_double(rotationYaw * 8.0F / 360.0F + 0.5) & 7;
@@ -1945,7 +1964,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     @Override
     public void applyEntityCollision(Entity par1Entity) {
         //if(par1Entity instanceof EntityPlayer)return;
-        if (this.bogieLoco == null) return;
+        if (this.bogieFront == null) return;
 
         if (par1Entity == this) {
             return;
@@ -1959,7 +1978,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 if (((EntityBogie) par1Entity).entityMainTrainID == cartLinked2.uniqueID) return;
             }
         }
-        if (par1Entity == bogieLoco) {
+        if (par1Entity == bogieFront || par1Entity == bogieBack) {
             return;
         }
         if (par1Entity instanceof EntityRollingStock) {
@@ -1980,48 +1999,22 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 double euclidian[] = new double[4];
                 if (par1Entity instanceof EntityRollingStock) {
                     EntityRollingStock entity = (EntityRollingStock) par1Entity;
-                    if (((EntityRollingStock) par1Entity).bogieLoco != null || this.bogieLoco != null) {
+                    if (((EntityRollingStock) par1Entity).bogieFront != null || this.bogieFront != null) {
 
-                        if (((EntityRollingStock) par1Entity).bogieLoco != null && this.bogieLoco == null) {
-                            distancesX[0] = entity.posX - this.posX;
-                            distancesZ[0] = entity.posZ - this.posZ;
-                            euclidian[0] = MathHelper.sqrt_double((distancesX[0] * distancesX[0]) + (distancesZ[0] * distancesZ[0]));
-                            distancesX[1] = entity.bogieLoco.posX - this.posX;
-                            distancesZ[1] = entity.bogieLoco.posZ - this.posZ;
-                            euclidian[1] = MathHelper.sqrt_double((distancesX[1] * distancesX[1]) + (distancesZ[1] * distancesZ[1]));
-                            distancesX[2] = 100;
-                            distancesZ[2] = 100;
-                            euclidian[2] = MathHelper.sqrt_double((distancesX[2] * distancesX[2]) + (distancesZ[2] * distancesZ[2]));
-                            distancesX[3] = 100;
-                            distancesZ[3] = 100;
-                            euclidian[3] = MathHelper.sqrt_double((distancesX[3] * distancesX[3]) + (distancesZ[3] * distancesZ[3]));
-                        } else if (((EntityRollingStock) par1Entity).bogieLoco == null && this.bogieLoco != null) {
-                            distancesX[0] = entity.posX - this.posX;
-                            distancesZ[0] = entity.posZ - this.posZ;
-                            euclidian[0] = MathHelper.sqrt_double((distancesX[0] * distancesX[0]) + (distancesZ[0] * distancesZ[0]));
-                            distancesX[1] = entity.posX - this.bogieLoco.posX;
-                            distancesZ[1] = entity.posZ - this.bogieLoco.posZ;
-                            euclidian[1] = MathHelper.sqrt_double((distancesX[1] * distancesX[1]) + (distancesZ[1] * distancesZ[1]));
-                            distancesX[2] = 100;
-                            distancesZ[2] = 100;
-                            euclidian[2] = MathHelper.sqrt_double((distancesX[2] * distancesX[2]) + (distancesZ[2] * distancesZ[2]));
-                            distancesX[3] = 100;
-                            distancesZ[3] = 100;
-                            euclidian[3] = MathHelper.sqrt_double((distancesX[3] * distancesX[3]) + (distancesZ[3] * distancesZ[3]));
-                        } else {
-                            distancesX[0] = entity.posX - this.posX;
-                            distancesZ[0] = entity.posZ - this.posZ;
-                            euclidian[0] = MathHelper.sqrt_double((distancesX[0] * distancesX[0]) + (distancesZ[0] * distancesZ[0]));
-                            distancesX[1] = entity.bogieLoco.posX - this.posX;
-                            distancesZ[1] = entity.bogieLoco.posZ - this.posZ;
-                            euclidian[1] = MathHelper.sqrt_double((distancesX[1] * distancesX[1]) + (distancesZ[1] * distancesZ[1]));
-                            distancesX[2] = entity.posX - this.bogieLoco.posX;
-                            distancesZ[2] = entity.posZ - this.bogieLoco.posZ;
-                            euclidian[2] = MathHelper.sqrt_double((distancesX[2] * distancesX[2]) + (distancesZ[2] * distancesZ[2]));
-                            distancesX[3] = entity.bogieLoco.posX - this.bogieLoco.posX;
-                            distancesZ[3] = entity.bogieLoco.posZ - this.bogieLoco.posZ;
-                            euclidian[3] = MathHelper.sqrt_double((distancesX[3] * distancesX[3]) + (distancesZ[3] * distancesZ[3]));
-                        }
+
+                        distancesX[0] = entity.posX - this.posX;
+                        distancesZ[0] = entity.posZ - this.posZ;
+                        euclidian[0] = MathHelper.sqrt_double((distancesX[0] * distancesX[0]) + (distancesZ[0] * distancesZ[0]));
+                        distancesX[1] = entity.bogieFront.posX - this.posX;
+                        distancesZ[1] = entity.bogieFront.posZ - this.posZ;
+                        euclidian[1] = MathHelper.sqrt_double((distancesX[1] * distancesX[1]) + (distancesZ[1] * distancesZ[1]));
+                        distancesX[2] = entity.posX - this.bogieFront.posX;
+                        distancesZ[2] = entity.posZ - this.bogieFront.posZ;
+                        euclidian[2] = MathHelper.sqrt_double((distancesX[2] * distancesX[2]) + (distancesZ[2] * distancesZ[2]));
+                        distancesX[3] = entity.bogieFront.posX - this.bogieFront.posX;
+                        distancesZ[3] = entity.bogieFront.posZ - this.bogieFront.posZ;
+                        euclidian[3] = MathHelper.sqrt_double((distancesX[3] * distancesX[3]) + (distancesZ[3] * distancesZ[3]));
+
                         double min = euclidian[0];
                         int minIndex = 0;
                         for (int k = 0; k < euclidian.length; k++) {
