@@ -125,7 +125,7 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
     }
 
     @Override
-    public abstract int getSizeInventory();
+    public int getSizeInventory(){return getInventoryRows()*9;}
 
     /**
      * Returns true if this cart is a storage cart Some carts may have inventories but not be storage carts and some carts without inventories may be storage carts.
