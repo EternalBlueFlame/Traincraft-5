@@ -589,6 +589,8 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         return destination;
     }
 
+    public float transportTopSpeed(){return forwardPressed?getSpec().getMaxSpeed():transportTopSpeedReverse();}
+
     private double convertSpeed(double speed) {
         //System.out.println("X "+motionX +" Z "+motionZ);
         if (ConfigHandler.REAL_TRAIN_SPEED) {
