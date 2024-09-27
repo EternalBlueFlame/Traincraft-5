@@ -137,7 +137,9 @@ public class TraincraftRegistry {
 
     public void registerTrainRenderRecord(TrainRenderRecord record) {
         trainRenderRecords.put(record.getEntityClass(), record);
-        SkinRegistry.liveryMap.put(record.getEntityClass(),getTrainRecord(record.getEntityClass()).getColors());
+        if(getTrainRecord(record.getEntityClass())!=null) {
+            SkinRegistry.liveryMap.put(record.getEntityClass(), getTrainRecord(record.getEntityClass()).getColors());
+        }
     }
 
     public void registerTrainSoundRecord(TrainSoundRecord sound) {

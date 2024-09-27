@@ -39,23 +39,17 @@ import train.common.mtc.packets.*;
 import java.util.List;
 import java.util.Random;
 
-public abstract class Locomotive extends EntityRollingStock implements IInventory, WirelessTransmitter, IRollingStockLightControls
+public abstract class Locomotive extends Freight implements WirelessTransmitter, IRollingStockLightControls
 {
 
-    public int inventorySize;
-    protected ItemStack[] locoInvent;
     private int soundPosition = 0;
     public boolean parkingBrake = false;
     private int whistleDelay = 0;
     private int blowUpDelay = 0;
     private String lastRider = "";
     private Entity lastEntityRider;
-    public int numCargoSlots;
-    public int numCargoSlots1;
-    public int numCargoSlots2;
     private boolean hasDrowned = false;
     protected boolean canCheckInvent = true;
-    private int slotsFilled = 0;
     public boolean isLocoTurnedOn = false;
     public boolean forwardPressed = false;
     public boolean backwardPressed = false;
@@ -141,13 +135,12 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         super(world);
         if(world==null){return;}
         setFuelConsumption(0);
-        inventorySize = numCargoSlots + numCargoSlots2 + numCargoSlots1;
         dataWatcher.addObject(2, 0);
         this.setDefaultMass(0);
         this.setCustomSpeed(transportTopSpeed());
         dataWatcher.addObject(3, destination);
         dataWatcher.addObject(15, (float) Math.round((getCustomSpeed() * 3.6f)));
-        dataWatcher.addObject(22, locoState);
+        dataWatcher.addObject(23, locoState);
         dataWatcher.addObject(24, fuelTrain);
         dataWatcher.addObject(25, (int) convertSpeed(Math.sqrt(Math.abs(motionX * motionX) + Math.abs(motionZ * motionZ))));//convertSpeed((Math.abs(this.motionX) + Math.abs(this.motionZ))
         dataWatcher.addObject(26, guiDetailsJSON());
@@ -172,13 +165,10 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         }
 
         fuelTrain = 0;
-        locoInvent = new ItemStack[getSizeInventory()];
     }
 
     public Locomotive(World world, double d, double d1, double d2) {
         super(world, d, d1, d2);
-        inventorySize = numCargoSlots + numCargoSlots2 + numCargoSlots1;
-        locoInvent = new ItemStack[getSizeInventory()];
         fuelTrain = 0;
     }
 
@@ -429,6 +419,8 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         nbttagcompound.setBoolean("isConnected", isConnected);
         nbttagcompound.setBoolean("stationStop", stationStop);
         nbttagcompound.setString(DataMemberName.lightingDetailsJSONString.AsString(), lightingDetailsJSONString());
+        nbttagcompound.setShort("fuelTrain", (short) fuelTrain);
+        nbttagcompound.setBoolean("canBeAdjusted", canBeAdjusted);
     }
 
     @Override
@@ -483,6 +475,8 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         stationStop = ntc.getBoolean("stationStop");
 
         dataWatcher.updateObject(28, lightingDetailsJSONString());
+        fuelTrain = ntc.getShort("fuelTrain");
+        canBeAdjusted = ntc.getBoolean("canBeAdjusted");
     }
 
     /**
@@ -1004,7 +998,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
             dataWatcher.updateObject(25, (int) convertSpeed(Math.sqrt(motionX * motionX + motionZ * motionZ)));
             dataWatcher.updateObject(24, fuelTrain);
             dataWatcher.updateObject(20, overheatLevel);
-            dataWatcher.updateObject(22, locoState);
+            dataWatcher.updateObject(23, locoState);
             dataWatcher.updateObject(3, destination);
 
             //dataWatcher.updateObject(31, ("1c/" + castToString((int) (currentFuelConsumptionChange)) + " per tick"));
@@ -1108,7 +1102,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
      * @return cold warm hot very hot too hot broken
      */
     public String getState() {
-        return (this.dataWatcher.getWatchableObjectString(22));
+        return (this.dataWatcher.getWatchableObjectString(23));
     }
 
     /**
@@ -1119,7 +1113,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
      */
     public void setState(String state) {
         locoState = state;
-        this.dataWatcher.updateObject(22, state);
+        this.dataWatcher.updateObject(23, state);
     }
 
     /**
@@ -1271,90 +1265,6 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         this.ditchLightMode = ditchLightMode;
     }
 
-    public void setLocomotiveBeaconTick(byte beaconCycleIndex)
-    {
-        beaconCycleIndex = beaconCycleIndex;
-    }
-
-    // private int placeInSpecialInvent(ItemStack itemstack1, int i, boolean doAdd) {
-    // if (locoInvent[i] == null) {
-    // if (doAdd) locoInvent[i] = itemstack1;
-    // return itemstack1.stackSize;
-    // }
-    // else if (locoInvent[i] != null && locoInvent[i] == itemstack1 && itemstack1.isStackable() &&
-    // (!itemstack1.getHasSubtypes() || locoInvent[i].getItemDamage() == itemstack1.getItemDamage())
-    // && ItemStack.areItemStackTagsEqual(locoInvent[i], itemstack1)) {
-    //
-    // int var9 = locoInvent[i].stackSize + itemstack1.stackSize;
-    // if (var9 <= itemstack1.getMaxStackSize()) {
-    // if (doAdd) locoInvent[i].stackSize = var9;
-    // return var9;
-    // }
-    // else if (locoInvent[i].stackSize < itemstack1.getMaxStackSize()) {
-    // if (doAdd) locoInvent[i].stackSize = locoInvent[i].getMaxStackSize();
-    // return Math.abs(locoInvent[i].getMaxStackSize() - locoInvent[i].stackSize -
-    // itemstack1.stackSize);
-    //
-    // }
-    // }
-    // return itemstack1.stackSize;
-    //
-    // }
-
-
-    //TODO Fix ISided Inventory buildcraft support
-	/*
-	/**
-	 * Offers an ItemStack for addition to the inventory.
-	 *
-	 * @param stack
-	 *            ItemStack offered for addition. Do not manipulate this!
-	 * @param doAdd
-	 *            If false no actual addition should take place.
-	 * @param from
-	 *            Orientation the ItemStack is offered from.
-	 * @return Amount of items used from the passed stack.
-	 */
-	/*
-	@Override
-	public int addItem(ItemStack stack, boolean doAdd, ForgeDirection from) {
-		if (stack == null) { return 0; }
-		//FuelHandler.steamFuelLast(itemstack) > 0 || LiquidManager.getInstance().isDieselLocoFuel(itemstack)||(itemstack.getItem().shiftedIndex==Item.redstone.shiftedIndex) || (itemstack.getItem() instanceof IElectricItem)
-		//LiquidManager.getInstance().isContainer(itemstack1)&&loco instanceof SteamTrain
-		if (this instanceof SteamTrain) {
-			//System.out.println("is fuel? "+(FuelHandler.steamFuelLast(stack) > 0) + "return "+placeInSpecialInvent(stack,0,false));
-			if (FuelHandler.steamFuelLast(stack) > 0) return placeInSpecialInvent(stack, 0, doAdd);
-			if (LiquidManager.getInstance().isContainer(stack)) return placeInSpecialInvent(stack, 1, doAdd);
-		}
-		if (this instanceof DieselTrain) {
-			//System.out.println("is diesel? "+(LiquidManager.getInstance().isDieselLocoFuel(stack)) + "return "+placeInSpecialInvent(stack,0,false));
-			if (LiquidManager.getInstance().isDieselLocoFuel(stack)) return placeInSpecialInvent(stack, 0, doAdd);
-		}
-		if (this instanceof ElectricTrain) {
-			if ((stack.getItem() == Item.itemRegistry.getObject("redstone")) || (stack.getItem() instanceof IElectricItem)) return placeInSpecialInvent(stack, 0, doAdd);
-		}
-		return 0;
-
-	}
-	*/
-
-    //  Quoted out as it doesn't seem to have any use nor to be called at all.
-    //	/**
-    //	 * Requests items to be extracted from the inventory
-    //	 *
-    //	 * @param doRemove
-    //	 *            If false no actual extraction may occur.
-    //	 * @param from
-    //	 *            Orientation the ItemStack is requested from.
-    //	 * @param maxItemCount
-    //	 *            Maximum amount of items to extract (spread over all returned
-    //	 *            item stacks)
-    //	 * @return Array of item stacks extracted from the inventory
-    //	 */
-    //	@Override
-    //	public ItemStack[] extractItem(boolean doRemove, ForgeDirection from, int maxItemCount) {
-    //		return null;
-    //	}
 
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, float i) {
@@ -1389,18 +1299,6 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         return true;
     }
 
-    @Override
-    public void dropCartAsItem(boolean isCreative) {
-        if (!itemdropped) {
-            super.dropCartAsItem(isCreative);
-            for (ItemStack stack : locoInvent) {
-                if (stack != null) {
-                    entityDropItem(stack, 0);
-                }
-            }
-        }
-    }
-
     /** RC routing integration */
     @Override
     public boolean setDestination(ItemStack ticket) {
@@ -1411,93 +1309,17 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         return false;
     }
 
-    /* IInventory implements */
-    @Override
-    public ItemStack getStackInSlot(int i) {
-        return locoInvent[i];
-    }
-
-    @Override
-    public ItemStack getStackInSlotOnClosing(int par1) {
-        if (this.locoInvent[par1] != null) {
-            ItemStack var2 = this.locoInvent[par1];
-            this.locoInvent[par1] = null;
-            return var2;
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public ItemStack decrStackSize(int i, int j) {
-        if (locoInvent[i] != null) {
-            if (locoInvent[i].stackSize <= j) {
-                ItemStack itemstack = locoInvent[i];
-                locoInvent[i] = null;
-                return itemstack;
-            }
-
-            ItemStack itemstack1 = locoInvent[i].splitStack(j);
-
-            if (locoInvent[i].stackSize == 0) {
-                locoInvent[i] = null;
-            }
-            return itemstack1;
-
-        } else {
-            return null;
-        }
-    }
-
-    @Override
-    public void setInventorySlotContents(int i, ItemStack itemstack) {
-        locoInvent[i] = itemstack;
-        if (itemstack != null && itemstack.stackSize > getInventoryStackLimit()) {
-            itemstack.stackSize = getInventoryStackLimit();
-        }
-    }
-
-    @Override
-    public void openInventory() {
-    }
-
-    @Override
-    public void closeInventory() {
-    }
 
     @Override
     public void markDirty() {
+        super.markDirty();
         if (!worldObj.isRemote) {
-            this.slotsFilled = 0;
-
-            for (int i = 0; i < getSizeInventory(); i++) {
-                ItemStack itemstack = getStackInSlot(i);
-
-                if (itemstack != null) {
-                    slotsFilled++;
-                }
-            }
-
             Traincraft.slotschannel.sendToAllAround(new PacketSlotsFilled(this, slotsFilled), new TargetPoint(this.worldObj.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
         }
     }
 
-    public int getAmmountOfCargo() {
-        return slotsFilled;
-    }
-
     public void recieveSlotsFilled(int amount) {
         this.slotsFilled = amount;
-    }
-
-    @Override
-    public int getInventoryStackLimit() {
-        return 64;
-    }
-
-    @Override
-    public ItemStack[] getInventory() {
-        return locoInvent;
     }
 
 
@@ -1663,22 +1485,5 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
             this.serverUUID = "";
             isConnected = false;
         }
-    }
-
-
-    @Override
-    public int getSizeInventory() {
-        return inventorySize;
-    }
-
-
-    @Override
-    public String getInventoryName() {
-        return getTrainName();
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemstack) {
-        return true;
     }
 }

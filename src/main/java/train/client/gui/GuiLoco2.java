@@ -402,15 +402,15 @@ public class GuiLoco2 extends GuiContainer {
                 drawTexturedModalRect(j + 10, (k + 36 + 13) - l, 178, 12 - l, 14, l + 2);
             }
         } else {
-            for (int i1 = loco.numCargoSlots; i1 < 5; i1++) {
+            for (int i1 = loco instanceof ElectricTrain?5:3; i1 < 5; i1++) {
                 drawTexturedModalRect(j + 79 + 18 * i1, k + 17, 190, 0, 18, 18);
             }
 
-            for (int j1 = loco.numCargoSlots1; j1 < 5; j1++) {
+            for (int j1 = loco instanceof ElectricTrain?5:3; j1 < 5; j1++) {
                 drawTexturedModalRect(j + 79 + 18 * j1, k + 35, 190, 0, 18, 18);
             }
 
-            for (int k1 = loco.numCargoSlots2; k1 < 5; k1++) {
+            for (int k1 = loco instanceof ElectricTrain?5:3; k1 < 5; k1++) {
                 drawTexturedModalRect(j + 79 + 18 * k1, k + 53, 190, 0, 18, 18);
             }
 

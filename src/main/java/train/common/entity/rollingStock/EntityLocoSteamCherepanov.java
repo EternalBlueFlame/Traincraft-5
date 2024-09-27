@@ -16,12 +16,6 @@ import train.common.library.GuiIDs;
 public class EntityLocoSteamCherepanov extends SteamTrain {
 	public EntityLocoSteamCherepanov(World world) {
 		super(world, LiquidManager.WATER_FILTER);
-		initLocoSteam();
-	}
-
-	public void initLocoSteam() {
-		fuelTrain = 0;
-		locoInvent = new ItemStack[inventorySize];
 	}
 
 	public EntityLocoSteamCherepanov(World world, double d, double d1, double d2) {
@@ -42,11 +36,6 @@ public class EntityLocoSteamCherepanov extends SteamTrain {
 	}
 
 	@Override
-	public int getSizeInventory() {
-		return inventorySize;
-	}
-
-	@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -55,45 +44,6 @@ public class EntityLocoSteamCherepanov extends SteamTrain {
 	public void pressKey(int i) {
 		if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
 			((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
-		}
-	}
-
-	@Override
-	public void onUpdate() {
-		super.onUpdate();
-		checkInvent(locoInvent[0], locoInvent[1], this);
-	}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
-
-		nbttagcompound.setShort("fuelTrain", (short) fuelTrain);
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < locoInvent.length; i++) {
-			if (locoInvent[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				locoInvent[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
-		}
-		nbttagcompound.setTag("Items", nbttaglist);
-	}
-
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
-
-		fuelTrain = nbttagcompound.getShort("fuelTrain");
-		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-		locoInvent = new ItemStack[getSizeInventory()];
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			int j = nbttagcompound1.getByte("Slot") & 0xff;
-			if (j >= 0 && j < locoInvent.length) {
-				locoInvent[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
-			}
 		}
 	}
 

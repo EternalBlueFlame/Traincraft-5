@@ -49,7 +49,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
         IFluidTank[] tankArray = new IFluidTank[1];
         tankArray[0] = theTank;
         dataWatcher.addObject(4, 0);
-        this.dataWatcher.addObject(23, 0);
+        this.dataWatcher.addObject(27, 0);
     }
 
     @Override
@@ -73,10 +73,10 @@ public abstract class Tender extends Freight implements IFluidHandler {
         if (worldObj.isRemote)
             return;
         if (theTank != null && theTank.getFluid() != null) {
-            this.dataWatcher.updateObject(23, theTank.getFluid().amount);
+            this.dataWatcher.updateObject(27, theTank.getFluid().amount);
             this.dataWatcher.updateObject(4, theTank.getFluid().getFluidID());
         } else if (theTank != null && theTank.getFluid() == null) {
-            this.dataWatcher.updateObject(23, 0);
+            this.dataWatcher.updateObject(27, 0);
             this.dataWatcher.updateObject(4, 0);
         }
     }
@@ -109,7 +109,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
      * @return
      */
     public int getWater() {
-        return (this.dataWatcher.getWatchableObjectInt(23));
+        return (this.dataWatcher.getWatchableObjectInt(27));
     }
 
     /**

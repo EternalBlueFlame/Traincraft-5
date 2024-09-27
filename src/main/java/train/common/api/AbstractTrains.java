@@ -728,7 +728,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     /**defines the size of the inventory row by row, not counting any special slots like for fuel.
      * end result number of slots is this times 9. plus any crafting/fuel slots
      * may not return null*/
-    public int getInventoryRows(){return Math.max((int)(getSpec().getCargoCapacity()*0.1111111111112),1);}
+    public int getInventoryRows(){return 0;}
 
     /**defines the capacity of the fluidTank tank.
      * each value defibes another tank.

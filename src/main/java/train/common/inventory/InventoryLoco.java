@@ -7,10 +7,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import train.common.api.EntityRollingStock;
-import train.common.api.LiquidManager;
-import train.common.api.Locomotive;
-import train.common.api.SteamTrain;
+import train.common.api.*;
 import train.common.core.handlers.FuelHandler;
 import train.common.slots.SpecialSlots;
 
@@ -22,7 +19,7 @@ public class InventoryLoco extends Container {
 	private SpecialSlots specialSlots = SpecialSlots.getInstance();
 
 	public InventoryLoco(InventoryPlayer iinventory, EntityRollingStock entityminecart) {
-		inventorySize = ((Locomotive) entityminecart).inventorySize;
+		inventorySize = ((Locomotive) entityminecart).getSizeInventory();
 		player = iinventory;
 		loco = (Locomotive) entityminecart;
 		int i = 1;
@@ -32,15 +29,15 @@ public class InventoryLoco extends Container {
 			addSlotToContainer(specialSlots.new SlotLiquid((IInventory) entityminecart, 1, 32, 53));
 			i = 2;
 		}
-		for (int j = 0; j < loco.numCargoSlots; j++) {
+		for (int j = 0; j < (loco instanceof ElectricTrain ?5:3); j++) {
 			addSlotToContainer(new Slot((IInventory) entityminecart, i, 80 + j * 18, 18));
 			i++;
 		}
-		for (int k = 0; k < loco.numCargoSlots1; k++) {
+		for (int k = 0; k < (loco instanceof ElectricTrain ?5:3); k++) {
 			addSlotToContainer(new Slot((IInventory) entityminecart, i, 80 + k * 18, 36));
 			i++;
 		}
-		for (int l = 0; l < loco.numCargoSlots2; l++) {
+		for (int l = 0; l < (loco instanceof ElectricTrain ?5:3); l++) {
 			addSlotToContainer(new Slot((IInventory) entityminecart, i, 80 + l * 18, 54));
 			i++;
 		}
