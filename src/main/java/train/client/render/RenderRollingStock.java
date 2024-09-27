@@ -69,9 +69,9 @@ public class RenderRollingStock extends Render {
         double var15 = cart.lastTickPosX + (cart.posX - cart.lastTickPosX) * time;
         double var17 = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * time;
         double var19 = cart.lastTickPosZ + (cart.posZ - cart.lastTickPosZ) * time;
-        Vec3 var23 = cart.func_70489_a(var15, var17, var19);
+        Vec3 var23 = cart.worldObj==null?null:cart.func_70489_a(var15, var17, var19);
         float pitch = cart.prevRotationPitch + (cart.rotationPitch - cart.prevRotationPitch) * time;
-        Vec3 renderYVect = cart.yVector(var15, var17, var19);//only on TC rails
+        Vec3 renderYVect = cart.worldObj==null?null:cart.yVector(var15, var17, var19);//only on TC rails
         if (var23 != null) {
             Vec3 var25 = cart.func_70495_a(var15, var17, var19, 0.30000001192092896D);
             Vec3 var26 = cart.func_70495_a(var15, var17, var19, -0.30000001192092896D);
@@ -187,7 +187,7 @@ public class RenderRollingStock extends Render {
         }
 
         GL11.glEnable(GL11.GL_LIGHTING);
-        int skyLight = cart.worldObj.getLightBrightnessForSkyBlocks(i, j, k, 0);
+        int skyLight = cart.worldObj==null?0:cart.worldObj.getLightBrightnessForSkyBlocks(i, j, k, 0);
         if (!renderModeGUI) {
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, skyLight % 65536,
                     skyLight / 65536f);
@@ -206,7 +206,7 @@ public class RenderRollingStock extends Render {
             if(cart.getModel()[m].getTrans()!=null){
                 GL11.glTranslatef(cart.getModel()[m].getTrans()[0],cart.getModel()[m].getTrans()[1],cart.getModel()[m].getTrans()[2]);
             }
-            else if(cart.modelOffsets()[m]!=null) {
+            else if(cart.modelOffsets()!=null &&cart.modelOffsets()[m]!=null) {
                 GL11.glTranslatef(cart.modelOffsets()[m][0], cart.modelOffsets()[m][1], cart.modelOffsets()[m][2]);
             }
             if(cart.getModel()[m].getRotate()!=null){

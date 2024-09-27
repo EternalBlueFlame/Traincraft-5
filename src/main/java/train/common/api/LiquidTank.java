@@ -44,6 +44,9 @@ public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISi
         dataWatcher.addObject(22, "");
 
     }
+    public LiquidTank(World world, double d, double d1, double d2) {
+        super(world, d, d1, d2);
+    }
 
     public int getAmount() {
         return (this.dataWatcher.getWatchableObjectInt(18));

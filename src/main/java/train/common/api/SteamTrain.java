@@ -45,6 +45,9 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 		inventorySize = numCargoSlots + numCargoSlots2 + numCargoSlots1 + fuelSlot + waterSlot;//
 		this.dataWatcher.addObject(23, 0);
 	}
+	public SteamTrain(World world, double d, double d1, double d2) {
+		super(world, d, d1, d2);
+	}
 
 	/**
 	 * returns the waterConsumption for each steam loco default is 200: rand.nextInt(200)==0

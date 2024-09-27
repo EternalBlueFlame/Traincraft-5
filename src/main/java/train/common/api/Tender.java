@@ -29,7 +29,12 @@ public abstract class Tender extends Freight implements IFluidHandler {
     public Tender(World world, Fluid fluid, int quantity) {
         this(new FluidStack(fluid, quantity), world, null);
     }
-
+    public Tender(World world){
+        super(world);
+    }
+    public Tender(World world, double x, double y, double z){
+        super(world,x,y,z);
+    }
     public Tender(World world, Fluid fluid, int quantity, FluidStack filter) {
         this(new FluidStack(fluid, quantity), world, filter);
     }

@@ -51,7 +51,7 @@ public class TextureManager {
      */
     public static int bindTexture(ResourceLocation textureURI) {
         if (textureURI == null){
-            Minecraft.getMinecraft().getTextureManager().bindTexture(new ResourceLocation(Info.modID,"nullTrain"));
+            GL11.glBindTexture(GL_TEXTURE_2D, TextureUtil.missingTexture.getGlTextureId());
             return 0;
         }
         //clean out the texture bind map when texturepacks are reloaded.
@@ -204,7 +204,9 @@ public class TextureManager {
 
 
     public static boolean textureExists(ResourceLocation textureURI){
-
+        if(textureURI==null){
+            return false;
+        }
         object = Minecraft.getMinecraft().getTextureManager().getTexture(textureURI);
         if (object == null) {
             object = new SimpleTexture(textureURI);

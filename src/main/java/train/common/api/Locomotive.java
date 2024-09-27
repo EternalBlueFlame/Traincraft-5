@@ -175,6 +175,13 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         locoInvent = new ItemStack[getSizeInventory()];
     }
 
+    public Locomotive(World world, double d, double d1, double d2) {
+        super(world, d, d1, d2);
+        inventorySize = numCargoSlots + numCargoSlots2 + numCargoSlots1;
+        locoInvent = new ItemStack[getSizeInventory()];
+        fuelTrain = 0;
+    }
+
     /**
      * this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared.
      */
@@ -288,7 +295,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
 
     @Override
     public int getOverheatTime() {
-        return getSpec().getHeatingTime();
+        return getSpec()==null?200:getSpec().getHeatingTime();
     }
 
     @Override
@@ -329,15 +336,18 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
      * set the fuel consumption rate for each loco if i is 0 then default
      * consumption is used
      *
-     * //@param i //this is for making documentation of some sort via javadoc, shouldn't be relevant to the operation of the mod
+     * @param c
      * @return
      */
     public int setFuelConsumption(int c) {
         if (c != 0) {
             return fuelRate = c;
         }
-        return fuelRate = getSpec().getFuelConsumption();
+        return fuelRate = setFuelConsumption();
 
+    }
+    public int setFuelConsumption() {
+        return getSpec()==null?80:getSpec().getFuelConsumption();
     }
 
     /**
@@ -358,8 +368,11 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         if (rate != 0) {
             return accelerate = rate;
         } else {
-            return accelerate = getSpec().getAccelerationRate();
+            return accelerate = setAccel();
         }
+    }
+    public double setAccel() {
+        return getSpec()==null?0.4:getSpec().getAccelerationRate();
     }
 
     /**
@@ -371,8 +384,12 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         if (rate != 0) {
             return brake = rate;
         } else {
-            return brake = getSpec().getBrakeRate();
+            return brake = setBrake();
         }
+    }
+
+    public double setBrake() {
+        return getSpec()==null?0.97:getSpec().getBrakeRate();
     }
 
     @Override
@@ -589,7 +606,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
         return destination;
     }
 
-    public float transportTopSpeed(){return forwardPressed?getSpec().getMaxSpeed():transportTopSpeedReverse();}
+    public float transportTopSpeed(){return getSpec().getMaxSpeed();}
 
     private double convertSpeed(double speed) {
         //System.out.println("X "+motionX +" Z "+motionZ);
@@ -635,7 +652,7 @@ public abstract class Locomotive extends EntityRollingStock implements IInventor
             whistleDelay = 65;
         }
     }
-    
+
     @SideOnly(Side.CLIENT)
     public void keyHandling() {
         if (Keyboard.isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindForward.getKeyCode())

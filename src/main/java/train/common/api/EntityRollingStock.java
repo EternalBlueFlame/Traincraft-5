@@ -8,6 +8,7 @@ import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.api.SkinRegistry;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Vec3f;
@@ -112,7 +113,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     public double rotationYawClient;
     public float rotationYawClientReal;
     public float anglePitchClient;//was a double
-    public float serverRealRotation;
     private float previousServerRealRotation;
     public boolean isServerInReverse = false;
     public boolean isClientInReverse = false;
@@ -249,28 +249,28 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
 
-	/**
-	 * this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared.
-	 */
-	@Override
-	public void readSpawnData(ByteBuf additionalData) {
-		isBraking = additionalData.readBoolean();
-		setTrainLockedFromPacket(additionalData.readBoolean());
-		if (additionalData.readBoolean()) { // If accepts overlay textures...
-			getOverlayTextureContainer().importFromConfigTag(ByteBufUtils.readTag(additionalData));
-		}
-	}
-	@Override
-	public void writeSpawnData(ByteBuf buffer) {
-		buffer.writeBoolean(isBraking);
-		buffer.writeBoolean(getTrainLockedFromPacket());
-		buffer.writeBoolean(acceptsOverlayTextures());
-		if (acceptsOverlayTextures()) {
-			if (acceptsOverlayTextures()) {
-				ByteBufUtils.writeTag(buffer, getOverlayTextureContainer().getOverlayConfigTag());
-			}
-		}
-	}
+    /**
+     * this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared.
+     */
+    @Override
+    public void readSpawnData(ByteBuf additionalData) {
+        isBraking = additionalData.readBoolean();
+        setTrainLockedFromPacket(additionalData.readBoolean());
+        if (additionalData.readBoolean()) { // If accepts overlay textures...
+            getOverlayTextureContainer().importFromConfigTag(ByteBufUtils.readTag(additionalData));
+        }
+    }
+    @Override
+    public void writeSpawnData(ByteBuf buffer) {
+        buffer.writeBoolean(isBraking);
+        buffer.writeBoolean(getTrainLockedFromPacket());
+        buffer.writeBoolean(acceptsOverlayTextures());
+        if (acceptsOverlayTextures()) {
+            if (acceptsOverlayTextures()) {
+                ByteBufUtils.writeTag(buffer, getOverlayTextureContainer().getOverlayConfigTag());
+            }
+        }
+    }
 
     public String getTrainName() {
         return dataWatcher.getWatchableObjectString(9);
@@ -1314,7 +1314,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             if (closest != null) {
                 this.setPosition( closest.xCoord, closest.yCoord, closest.zCoord);
             } else {*/
-                moveMinecartOffRail(floor_posX, floor_posY, floor_posZ);
+            moveMinecartOffRail(floor_posX, floor_posY, floor_posZ);
             //}
             super.onUpdate();
         }
@@ -1875,10 +1875,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
          * itemstack size
          */
         if (itemstack != null && itemstack.getItem() instanceof ItemDye) {
-            if (this.getSpec().getLiveries().size() > 0) {
-                for (int i = 0; i < this.getSpec().getLiveries().size(); i++) {
-                    if (itemstack.getItemDamage() == DepreciatedUtil.getColorFromString(this.getSpec().getLiveries().get(i))) {
-                        this.setColor(this.getSpec().getLiveries().get(i));
+            if (SkinRegistry.get(this).size() > 0) {
+                for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
+                    if (itemstack.getItemDamage() == DepreciatedUtil.getColorFromString(SkinRegistry.get(this).get(i))) {
+                        this.setColor(SkinRegistry.get(this).get(i));
                         itemstack.stackSize--;
 
                         //if (!worldObj.isRemote)PacketHandler.sendPacketToClients(PacketHandler.sendStatsToServer(10,this.uniqueID,trainName ,trainType, this.trainOwner, this.getColorAsString(itemstack.getItemDamage()), (int)posX, (int)posY, (int)posZ),this.worldObj, (int)posX,(int)posY,(int)posZ, 12.0D);
@@ -1888,14 +1888,14 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
                 if (worldObj.isRemote && ConfigHandler.SHOW_POSSIBLE_COLORS) {
                     String concatColors = ": ";
-                    for (int t = 0; t < this.getSpec().getLiveries().size(); t++) {
-                        concatColors = concatColors.concat(this.getSpec().getLiveries().get(t) + ", ");
+                    for (int t = 0; t < SkinRegistry.get(this).size(); t++) {
+                        concatColors = concatColors.concat(SkinRegistry.get(this).get(t) + ", ");
                     }
                     entityplayer.addChatMessage(new ChatComponentText("Possible colors" + concatColors));
                     entityplayer.addChatMessage(new ChatComponentText("To paint, click me with the right dye"));
                     return true;
                 }
-            } else if (this.getSpec().getLiveries() != null || this.getSpec().getLiveries().size() == 0) {
+            } else if (SkinRegistry.get(this) != null || SkinRegistry.get(this).size() == 0) {
                 entityplayer.addChatMessage(new ChatComponentText("No other colors available"));
             }
         }
@@ -1904,19 +1904,19 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
 
         if (itemstack != null && itemstack.getItem() instanceof ItemPaintbrushThing && !entityplayer.isSneaking()) {
-            if (this.getSpec().getLiveries().size() > 0) {
+            if (SkinRegistry.get(this).size() > 0) {
                 entityplayer.openGui(Traincraft.instance, GuiIDs.PAINTBRUSH, entityplayer.getEntityWorld(), this.getEntityId(), -1, (int) this.posZ);
             }
 
-            if (this.getSpec().getLiveries().size() == 0) {
+            if (SkinRegistry.get(this).size() == 0) {
                 entityplayer.addChatMessage(new ChatComponentText("There are no other colors available."));
             }
             return true;
         }
         else if (itemstack != null && itemstack.getItem() instanceof ItemPaintbrushThing && entityplayer.isSneaking()){
-            for (int i = 0; i < this.getSpec().getLiveries().size(); i++) {
-                if (this.getColor().equals(this.getSpec().getLiveries().get(i))) {
-                    if(this.getSpec().getLiveries().size()>i+1){
+            for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
+                if (this.getColor().equals(SkinRegistry.get(this).get(i))) {
+                    if(SkinRegistry.get(this).size()>i+1){
                         setColor(i+1);
                     } else {
                         setColor(0);
@@ -1999,7 +1999,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 double euclidian[] = new double[4];
                 if (par1Entity instanceof EntityRollingStock) {
                     EntityRollingStock entity = (EntityRollingStock) par1Entity;
-                    if (((EntityRollingStock) par1Entity).bogieFront != null || this.bogieFront != null) {
+                    if (((EntityRollingStock) par1Entity).bogieFront != null && this.bogieFront != null) {
 
 
                         distancesX[0] = entity.posX - this.posX;
@@ -2029,26 +2029,26 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
                 double d2 = d0 * d0 + d1 * d1;
 
-				if ((par1Entity instanceof AbstractTrains && d2 <= ((AbstractTrains) par1Entity).getLinkageDistance((EntityMinecart) par1Entity) * 0.7 && d2 >= 9.999999747378752E-5D) || (par1Entity instanceof EntityBogie && ((EntityBogie) par1Entity).entityMainTrain != null && d2 <= ((EntityBogie) par1Entity).entityMainTrain.getLinkageDistance((EntityMinecart) par1Entity) * 0.7 && d2 >= 9.999999747378752E-5D) || (!(par1Entity instanceof AbstractTrains) && d2 >= 9.999999747378752E-5D))// >= 9.999999747378752E-5D)
-				{
-					d2 = MathHelper.sqrt_double(d2);
-					double d2Clone = d2;
-					if (d0 != 0) {
-						d0 /= d2;
-					} else {
-						d2=0;
-					}
-					if (d1 != 0) {
-						d1 /= d2Clone;
-					} else {
-						d2Clone = 0;
-					}
-					if (d2 != d2Clone && d2 != 0) {
-						d2 = d2Clone;
-					}
-					if (d2 > 1.0D) {
-						d2 = 1.0D;
-					}
+                if ((par1Entity instanceof AbstractTrains && d2 <= ((AbstractTrains) par1Entity).getLinkageDistance((EntityMinecart) par1Entity) * 0.7 && d2 >= 9.999999747378752E-5D) || (par1Entity instanceof EntityBogie && ((EntityBogie) par1Entity).entityMainTrain != null && d2 <= ((EntityBogie) par1Entity).entityMainTrain.getLinkageDistance((EntityMinecart) par1Entity) * 0.7 && d2 >= 9.999999747378752E-5D) || (!(par1Entity instanceof AbstractTrains) && d2 >= 9.999999747378752E-5D))// >= 9.999999747378752E-5D)
+                {
+                    d2 = MathHelper.sqrt_double(d2);
+                    double d2Clone = d2;
+                    if (d0 != 0) {
+                        d0 /= d2;
+                    } else {
+                        d2=0;
+                    }
+                    if (d1 != 0) {
+                        d1 /= d2Clone;
+                    } else {
+                        d2Clone = 0;
+                    }
+                    if (d2 != d2Clone && d2 != 0) {
+                        d2 = d2Clone;
+                    }
+                    if (d2 > 1.0D) {
+                        d2 = 1.0D;
+                    }
 
                     d0 *= d2;
                     d1 *= d2;
@@ -2236,7 +2236,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     @Override
     public float getOptimalDistance(EntityMinecart cart) {
-        return this.getOptimalDistance(cart);
+        return getHitboxSize()[0];
     }
 
     /**
@@ -2643,7 +2643,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     // replace this with a proper atan2 over time later
     @Deprecated
     public Vec3 yVector(double par1, double par3, double par5) {
-        if(getSpec().getBogieLocoPosition()!=0){
+        if(rotationPoints()[0]!=0){
             return null;
         }
         int i = MathHelper.floor_double(par1);

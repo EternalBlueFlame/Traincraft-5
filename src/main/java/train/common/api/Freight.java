@@ -19,6 +19,11 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
     public Freight(World world) {
         super(world);
         dataWatcher.addObject(22, 0);
+        cargoItems = new ItemStack[getInventoryRows()*9];
+    }
+    public Freight(World world, double d, double d1, double d2) {
+        super(world, d, d1, d2);
+        cargoItems = new ItemStack[getInventoryRows()*9];
     }
 
     @Override

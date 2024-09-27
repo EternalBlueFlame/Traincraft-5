@@ -7,6 +7,7 @@ import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.api.SkinRegistry;
 import ebf.tim.render.CustomItemModel;
 import ebf.tim.utility.DebugUtil;
 import ebf.tim.utility.OreGen;
@@ -25,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
@@ -135,16 +137,17 @@ public class TraincraftRegistry {
 
     public void registerTrainRenderRecord(TrainRenderRecord record) {
         trainRenderRecords.put(record.getEntityClass(), record);
+        SkinRegistry.liveryMap.put(record.getEntityClass(),getTrainRecord(record.getEntityClass()).getColors());
     }
 
     public void registerTrainSoundRecord(TrainSoundRecord sound) {
         trainSoundRecords.add(sound);
     }
 
-    public void addLivery(Class<?> entityClass, String name){
+    public void addLivery(Class<? extends AbstractTrains> entityClass, String name){
         for (TrainRecord record : trainRecords) {
             if (entityClass.equals(record.getEntityClass()) && !record.getLiveries().contains(name)) {
-                record.skins.add(name);
+                SkinRegistry.addSkin(entityClass,name);
             }
         }
     }
@@ -179,6 +182,9 @@ public class TraincraftRegistry {
         AbstractTrains entity = record.getEntity(null);
         if(entity!=null) {
             entity.registerSkins();
+            for(String c: record.getColors()){
+                SkinRegistry.addSkin(record.getEntityClass(),c);
+            }
             if(entity.getRecipe()!=null){
                 TierRecipeManager.getInstance().addRecipe(entity.getTier(),
                         entity.getRecipe()[0],entity.getRecipe()[1],entity.getRecipe()[2],entity.getRecipe()[3],
@@ -196,7 +202,7 @@ public class TraincraftRegistry {
         for(final AbstractTrains trains : entities){
             EntityRegistry.registerModEntity(trains.getClass(), MODID+":"+trains.transportName(), trainID, Traincraft.instance, 512, 1, true);
             trains.registerSkins();
-            GameRegistry.registerItem(trains.getItem(), MODID+":entity/"+trains.transportName());
+            GameRegistry.registerItem(trains.getItem(), "entity/"+trains.transportName());
             trainID+=1;
             if(trains.getRecipe()!=null){
                 TierRecipeManager.getInstance().addRecipe(trains.getTier(),
@@ -204,6 +210,7 @@ public class TraincraftRegistry {
                         trains.getRecipe()[4],trains.getRecipe()[5],trains.getRecipe()[6],trains.getRecipe()[7],
                         trains.getRecipe()[8],trains.getRecipe()[9], trains.getCartItem(),1);
             }
+
             //todo:this part should be unnecessary? double-check.
             if(Traincraft.proxy.isClient()){
                 Traincraft.instance.traincraftRegistry.registerTrainRenderRecord(new TrainRenderRecord() {
@@ -259,12 +266,12 @@ public class TraincraftRegistry {
 
                     @Override
                     public float[] getRotate() {
-                        return new float[]{0,0,0};
+                        return new float[]{180,0,0};
                     }
 
                     @Override
                     public float[] getScale() {
-                        return new float[]{0,0,0};
+                        return new float[]{0.625f,0.625f,0.625f};
                     }
 
                     @Override

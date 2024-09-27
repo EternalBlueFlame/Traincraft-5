@@ -2,6 +2,7 @@ package train.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.api.SkinRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -111,7 +112,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
             throw new RuntimeException(e);
         }
         record = rollingStock.getSpec();
-        totalOptions = rollingStock.getSpec().getLiveries().size();
+        totalOptions = SkinRegistry.get(rollingStock).size();
         for (int i = 0; i < totalOptions; i++) { // Set page to the page with the currently selected texture.
             if (record.getLiveries().get(i).equals(rollingStock.getColor())) {
                 currentDisplayTexture = i;
@@ -160,8 +161,8 @@ public class GuiPaintbrushMenu extends GuiScreen {
         this.lastNonSkins=buttonList.size();
         int entry = lastNonSkins+2;
         int amt = MAX_LISTED_SKINS;
-        if (amt > rollingStock.getSpec().getLiveries().size()) {
-            amt = rollingStock.getSpec().getLiveries().size();
+        if (amt > SkinRegistry.get(rollingStock).size()) {
+            amt = SkinRegistry.get(rollingStock).size();
         }
         for(int i=0;i<amt;i++) {
             this.buttonList.add(new GuiButtonPaintbrushMenu(entry,GUI_ANCHOR_X + 80 + 64, GUI_ANCHOR_Y + 10+yOffset,128,16, GuiButtonPaintbrushMenu.Type.SKINS));
@@ -201,7 +202,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
         this.skinListArrowUp.visible = true;
         this.skinListArrowUp.showButton = (this.drawList && topVisSkin > 0);
         this.skinListArrowDown.visible = true;
-        this.skinListArrowDown.showButton = (this.drawList && topVisSkin+10 < rollingStock.getSpec().getLiveries().size());
+        this.skinListArrowDown.showButton = (this.drawList && topVisSkin+10 < SkinRegistry.get(rollingStock).size());
         this.skinListDropdown.showButton = true;
         this.skinListDropdown.visible = true;
         this.renderModelsButton.visible = true;
@@ -354,8 +355,8 @@ public class GuiPaintbrushMenu extends GuiScreen {
         } else {
             int yOffset = 22;
             for (int i=0;i<MAX_LISTED_SKINS;i++) {
-                if(i+topVisSkin<rollingStock.getSpec().getLiveries().size()) {
-                    String t = rollingStock.getSpec().getLiveries().get(i + topVisSkin);
+                if(i+topVisSkin<SkinRegistry.get(rollingStock).size()) {
+                    String t = SkinRegistry.get(rollingStock).get(i + topVisSkin);
                     fontRendererObj.drawString(t, GUI_ANCHOR_MID_X - ((int) (fontRendererObj.getStringWidth(t) * 0.5)), GUI_ANCHOR_Y + 10 + yOffset, 0);
                     yOffset += 16;
                 }
@@ -537,8 +538,8 @@ public class GuiPaintbrushMenu extends GuiScreen {
                     break;
                 default:
                     if(clickedButton.id >= this.lastNonSkins && drawList) {
-                        currentDisplayTexture = rollingStock.getSpec().getLiveries().indexOf(
-                                rollingStock.getSpec().getLiveries().get(this.buttonList.indexOf(clickedButton)-this.lastNonSkins+topVisSkin));
+                        currentDisplayTexture = SkinRegistry.get(rollingStock).indexOf(
+                                SkinRegistry.get(rollingStock).get(this.buttonList.indexOf(clickedButton)-this.lastNonSkins+topVisSkin));
                         drawList = !drawList;
                         renderModels = !renderModels;
                         updateSelectedTextureProperties();
@@ -561,7 +562,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
                 updateButtons();
             }
         } else {
-            if(topVisSkin+10 < rollingStock.getSpec().getLiveries().size()) {
+            if(topVisSkin+10 < SkinRegistry.get(rollingStock).size()) {
                 topVisSkin++;
                 updateButtons();
             }
@@ -634,7 +635,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
 
     private void updateSelectedTextureProperties() {
         descriptionScrollerIndex = 0;
-        currentDisplayTextureString = rollingStock.getSpec().getLiveries().get(currentDisplayTexture);
+        currentDisplayTextureString = SkinRegistry.get(rollingStock).get(currentDisplayTexture);
         String currentDisplayTextureDescriptionString;
         if (rollingStock.textureDescriptionMap.containsKey(currentDisplayTextureString)) {
             if (rollingStock.textureDescriptionMap.get(currentDisplayTextureString).title != null) {
