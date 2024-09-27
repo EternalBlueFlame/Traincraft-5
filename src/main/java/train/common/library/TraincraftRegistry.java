@@ -273,12 +273,12 @@ public class TraincraftRegistry {
 
                     @Override
                     public float[] getScale() {
-                        return new float[]{0.625f,0.625f,0.625f};
+                        return new float[]{1,1,1};
                     }
 
                     @Override
                     public ResourceLocation getTextureFile(String colorString) {
-                        return null;
+                        return new ResourceLocation(colorString);
                     }
 
                     @Override

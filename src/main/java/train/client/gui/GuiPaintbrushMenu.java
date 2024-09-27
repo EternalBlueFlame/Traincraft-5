@@ -3,6 +3,7 @@ package train.client.gui;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
+import ebf.tim.utility.DebugUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -84,7 +85,6 @@ public class GuiPaintbrushMenu extends GuiScreen {
     private final int totalOptions;
     private int currentDisplayTexture = 0;
     private final AbstractTrains renderEntity;
-    private final TrainRecord record;
     private boolean doAnimation;
     private static Integer activeButtonID;
     private int descriptionScrollerIndex = 0;
@@ -111,10 +111,9 @@ public class GuiPaintbrushMenu extends GuiScreen {
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
-        record = rollingStock.getSpec();
         totalOptions = SkinRegistry.get(rollingStock).size();
         for (int i = 0; i < totalOptions; i++) { // Set page to the page with the currently selected texture.
-            if (record.getLiveries().get(i).equals(rollingStock.getColor())) {
+            if (SkinRegistry.get(rollingStock).get(i).equals(rollingStock.getColor())) {
                 currentDisplayTexture = i;
                 break;
             }
@@ -304,7 +303,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
         String loopRenderColor;
         if (renderModels) {
             // Rolling stock pieces with more than one bogie need offset based on bogie position to render properly.
-            float bogieOffset = (float) Math.abs(record.getBogieLocoPosition()) * 0.5f;
+            float bogieOffset = Math.abs(rollingStock.rotationPoints()[0]) * 0.5f;
             float offsetX = GUI_ANCHOR_X;
             float offsetY = GUI_ANCHOR_Y + 10;
             // Display the model with each texture.
@@ -314,11 +313,11 @@ public class GuiPaintbrushMenu extends GuiScreen {
             int endIndex = hasNextTexture ? 1 : 0;
             for (int i = startIndex; i <= endIndex; i++) {
                 if (i + currentDisplayTexture != -1 && i + currentDisplayTexture != totalOptions) {
-                    loopRenderColor = record.getLiveries().get(i + currentDisplayTexture);
+                    loopRenderColor = SkinRegistry.get(rollingStock).get(i + currentDisplayTexture);
                 } else if (i + currentDisplayTexture == -1) {
-                    loopRenderColor = record.getLiveries().get(totalOptions - 1);
+                    loopRenderColor = SkinRegistry.get(rollingStock).get(totalOptions - 1);
                 } else {
-                    loopRenderColor = record.getLiveries().get(0);
+                    loopRenderColor = SkinRegistry.get(rollingStock).get(0);
                 }
                 renderEntity.setColor(loopRenderColor);
                 GL11.glColor4f(1, 1, 1, 1);
@@ -573,11 +572,11 @@ public class GuiPaintbrushMenu extends GuiScreen {
         int i = Mouse.getEventDWheel();
         if(i!=0){
             //handle scrolling through the dropdown
-          if(drawList) {
-              handleMenuScroll(i);
-          }
+            if(drawList) {
+                handleMenuScroll(i);
+            }
         }
-            //desc box scroll here
+        //desc box scroll here
         super.handleMouseInput();
     }
     @Override

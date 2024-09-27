@@ -77,6 +77,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	public ItemRollingStock(AbstractTrains train, String modid, CreativeTabs tab){
 		this(modid+"."+train.transportName(),tab);
+		setUnlocalizedName(train.transportName());
 		entity=train;
 	}
 
@@ -129,10 +130,10 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 			s.append(": ");
 			if (getEntity() instanceof Locomotive){
 				s.append(t("menu.item.locomotive")+", ");
-				if(entity instanceof IPassenger){
+				if(entity.getRiderOffsets().length>1){
 					s.append(t("menu.item.passenger")+", ");
 				}
-				if(entity instanceof Freight){
+				if(entity.getInventoryRows()>0){
 					s.append(t("menu.item.freight")+", ");
 				}
 			} else {
@@ -291,8 +292,8 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 
 		try {
-			rollingStock=getEntity().getClass().getConstructor(World.class, double.class, double.class, double.class)
-					.newInstance(world, i + 0.5D, j, k + 0.5D);
+			rollingStock=getEntity().getClass().getConstructor(World.class)
+					.newInstance(world);
 		} catch (Exception e){
 			if(DebugUtil.dev){
 				e.printStackTrace();
@@ -302,6 +303,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 
 		if (rollingStock != null) {
+			rollingStock.setPosition( i + 0.5D, j, k);
 			if (SkinRegistry.get(rollingStock).size()>0) {
 				rollingStock.setColor(rollingStock.getDefaultSkin());
 			}
