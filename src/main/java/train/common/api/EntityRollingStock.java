@@ -161,8 +161,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     private double bogieShift = 0;
     private boolean needsBogieUpdate;
     private boolean firstLoad = true;
-    public EntityBogie bogieFront = null;
-    public EntityBogie bogieBack = null;
     private boolean hasSpawnedBogie = false;
     private double mountedOffset = -0.5;
     public double posYFromServer;
