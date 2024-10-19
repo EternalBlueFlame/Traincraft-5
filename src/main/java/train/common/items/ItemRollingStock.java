@@ -130,26 +130,26 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 			s.append(": ");
 			if (getEntity() instanceof Locomotive){
 				s.append(t("menu.item.locomotive")+", ");
-				if(entity.getRiderOffsets()!=null && entity.getRiderOffsets().length>0){
+				if(getEntity().getRiderOffsets()!=null && entity.getRiderOffsets().length>0){
 					s.append(t("menu.item.passenger")+", ");
 				}
-				if(entity.getInventoryRows()>0){
+				if(getEntity().getInventoryRows()>0){
 					s.append(t("menu.item.freight")+", ");
 				}
 			} else {
 				s.append(t("menu.item.rollingstock")+", ");
-				if(entity instanceof IPassenger){
+				if(getEntity() instanceof IPassenger){
 					s.append(t("menu.item.passenger")+", ");
 				}
-				if(entity instanceof Tender){
+				if(getEntity() instanceof Tender){
 					s.append(t("menu.item.tender")+", ");
-				} else if(entity instanceof LiquidTank){
+				} else if(getEntity() instanceof LiquidTank){
 					s.append(t("menu.item.tanker")+", ");
 				}
-				if(entity instanceof AbstractWorkCart){
+				if(getEntity() instanceof AbstractWorkCart){
 					s.append(t("menu.item.workcart")+", ");
 				}
-				if(entity instanceof Freight){
+				if(getEntity() instanceof Freight){
 					s.append(t("menu.item.freight")+", ");
 				}
 			}
@@ -443,7 +443,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 							return rollingStock;
 						}
 					}
-					
+
 					if ((meta == 1 || meta == 3) && (world.getBlock(i - 1, j, k) == BlockIDs.tcRail.block || world.getBlock(i - 1, j, k) == BlockIDs.tcRailGag.block || BlockRailBase.func_150051_a(world.getBlock(i - 1, j, k))) && (world.getBlock(i - 2, j, k) == BlockIDs.tcRail.block || world.getBlock(i - 2, j, k) == BlockIDs.tcRailGag.block || BlockRailBase.func_150051_a(world.getBlock(i - 2, j, k)))) {
 						rollingStock.serverRealRotation = 180; //RIGHT
 					}
