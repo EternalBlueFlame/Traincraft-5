@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 import fexcraft.tmt.slim.Tessellator;
 import train.client.render.renderSwitch.models.ModelsignalSpanish;
 import train.common.library.Info;
-import train.common.tile.tileSwitch.TilesignalSpanish;
+import train.common.tile.switchStand.TilesignalSpanish;
 
 public class RendersignalSpanish extends TileEntitySpecialRenderer {
     static final ModelsignalSpanish modelspanishSignal = new ModelsignalSpanish();

@@ -5,6 +5,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.XmlBuilder;
+import ebf.tim.api.SkinRegistry;
 import fexcraft.tmt.slim.ModelBase;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.IMinecart;
@@ -34,6 +35,7 @@ import train.common.items.ItemChunkLoaderActivator;
 import train.common.items.ItemRollingStock;
 import train.common.items.ItemWrench;
 import train.common.library.Info;
+import train.common.library.TraincraftRegistry;
 import train.common.overlaytexture.OverlayTextureManager;
 
 import java.util.*;
@@ -47,12 +49,13 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public double Link1;
     public double Link2;
     protected boolean linked = false;
-    public EntityRollingStock cartLinked1;
-    public EntityRollingStock cartLinked2;
+    public AbstractTrains cartLinked1;
+    public AbstractTrains cartLinked2;
     //private Set chunks;
     protected Ticket chunkTicket;
     public float renderYaw;
     protected float renderPitch;
+    public float serverRealRotation;
     public TrainHandler train;
     public List<ChunkCoordIntPair> loadedChunks = new ArrayList<>();
     public boolean shouldChunkLoad = true;
@@ -61,6 +64,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     public XmlBuilder entity_data = new XmlBuilder();
     public TransportRenderCache render_cache=new TransportRenderCache();
+
+    public EntityBogie bogieFront=null;
+    public EntityBogie bogieBack=null;
+
+    public ArrayList<AbstractTrains> consist;
     /**
      * A reference to EnumTrains containing all spec for this specific train
      */
@@ -88,7 +96,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     //@Override
-   // public boolean shouldRenderInPass(int pass){return pass==1;}
+    // public boolean shouldRenderInPass(int pass){return pass==1;}
     /**
      * The name of the train based on the item name
      */
@@ -132,12 +140,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public String trainCreator = "";
 
     /**
-     * The type of the train: steam tender diesel electric freight flat tank
-     * passenger work special
-     */
-    public String trainType = "";
-
-    /**
      * player who destroyed the train
      */
     protected String trainDestroyer = "";
@@ -159,18 +161,17 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public double trainDistanceTraveled = 0;
 
     public String destination = "";
-	public final Map<String, TextureDescription> textureDescriptionMap = new HashMap<>();
-	private OverlayTextureManager overlayTextureContainer;
-	private boolean acceptsOverlayTextures = false;
+    public final Map<String, TextureDescription> textureDescriptionMap = new HashMap<>();
+    private OverlayTextureManager overlayTextureContainer;
+    private boolean acceptsOverlayTextures = false;
 
 
     public AbstractTrains(World world) {
         super(world);
         if(world==null){return;}
         renderDistanceWeight = 2.0D;
-        entity_data.putString("color", !getSpec().getLiveries().isEmpty() ? getSpec().getLiveries().get(0) : "");
+        entity_data.putString("color", SkinRegistry.get(this).size()>0 ? SkinRegistry.get(this).get(0) : "");
         dataWatcher.addObject(12, entity_data.toXMLString());
-        dataWatcher.addObject(6, trainType);
         dataWatcher.addObject(7, trainOwner);
         dataWatcher.addObject(8, trainDestroyer);
         dataWatcher.addObject(9, trainName);
@@ -200,6 +201,10 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         } else {
             return null;
         }
+    }
+
+    public String getTrainType(){
+        return TraincraftRegistry.findTrainType(this);
     }
 
     /**
@@ -237,6 +242,10 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     protected abstract boolean canOverheat();
 
     protected abstract int getOverheatTime();
+
+    public float getLinkageDistanceFront(EntityMinecart cart){return 0.0f;}
+
+    public float getLinkageDistanceBack(EntityMinecart cart){return 0.0f;}
 
     public abstract float getLinkageDistance(EntityMinecart cart);
 
@@ -328,9 +337,9 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public void setColor(String color) {
-        if (getSpec() != null && getSpec().getLiveries() != null && getSpec().getLiveries().size()>0) {
-            if (color.equals("-1") || !getSpec().getLiveries().contains(color)) {
-                color = (getSpec().getLiveries().get(getSpec().getLiveries().indexOf(color)+1>getSpec().getLiveries().size()-1?0:getSpec().getLiveries().indexOf(color)+1));
+        if (SkinRegistry.get(this) != null && SkinRegistry.get(this).size()>0) {
+            if (color.equals("-1") || !SkinRegistry.get(this).contains(color)) {
+                color = (SkinRegistry.get(this).get(SkinRegistry.get(this).indexOf(color)+1>SkinRegistry.get(this).size()-1?0:SkinRegistry.get(this).indexOf(color)+1));
             }
         }
 
@@ -348,12 +357,13 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public String getColor() {
-        entity_data.updateData(dataWatcher.getWatchableObjectString(12));
-        if(entity_data.hasString("color")) {
-            return entity_data.getString("color");
-        } else {
-            return trainSpec.getLiveries().get(0);
+        if (worldObj != null) {
+            entity_data.updateData(dataWatcher.getWatchableObjectString(12));
+            if (entity_data.hasString("color")) {
+                return entity_data.getString("color");
+            }
         }
+        return SkinRegistry.get(this).get(0);
     }
 
     @Override
@@ -368,7 +378,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         nbttagcompound.setBoolean("locked", locked);
         nbttagcompound.setString("theCreator", trainCreator);
         nbttagcompound.setString("theName", trainName);
-        nbttagcompound.setString("theType", trainType);
         nbttagcompound.setInteger("uniqueID", uniqueID);
         //nbttagcompound.setInteger("uniqueIDs",uniqueIDs);
 
@@ -383,13 +392,13 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
         nbttagcompound.setInteger("Dim", this.dimension);
 
-		nbttagcompound.setLong("UUIDM", this.getUniqueID().getMostSignificantBits());
-		nbttagcompound.setLong("UUIDL", this.getUniqueID().getLeastSignificantBits());
-		nbttagcompound.setBoolean("acceptsOverlayTextures", acceptsOverlayTextures);
-		if (acceptsOverlayTextures) {
-			nbttagcompound.setTag("overlayTextureConfigTag", overlayTextureContainer.getOverlayConfigTag());
-		}
-	}
+        nbttagcompound.setLong("UUIDM", this.getUniqueID().getMostSignificantBits());
+        nbttagcompound.setLong("UUIDL", this.getUniqueID().getLeastSignificantBits());
+        nbttagcompound.setBoolean("acceptsOverlayTextures", acceptsOverlayTextures);
+        if (acceptsOverlayTextures) {
+            nbttagcompound.setTag("overlayTextureConfigTag", overlayTextureContainer.getOverlayConfigTag());
+        }
+    }
 
     @Override
     protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
@@ -406,32 +415,31 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         setFlag(8, locked);
         trainCreator = nbttagcompound.getString("theCreator");
         trainName = nbttagcompound.getString("theName");
-        trainType = nbttagcompound.getString("theType");
         uniqueID = nbttagcompound.getInteger("uniqueID");
         //uniqueIDs = nbttagcompound.getInteger("uniqueIDs");
-        setInformation(trainType, trainOwner, trainCreator, trainName, uniqueID);
+        setInformation(trainOwner, trainCreator, trainName, uniqueID);
 
-		numberOfTrains = nbttagcompound.getInteger("numberOfTrains");
-		isAttached = nbttagcompound.getBoolean("isAttached");
-		linked = nbttagcompound.getBoolean("linked");
-		//motionX = nbttagcompound.getDouble("motionX");
-		//motionZ = nbttagcompound.getDouble("motionZ");
+        numberOfTrains = nbttagcompound.getInteger("numberOfTrains");
+        isAttached = nbttagcompound.getBoolean("isAttached");
+        linked = nbttagcompound.getBoolean("linked");
+        //motionX = nbttagcompound.getDouble("motionX");
+        //motionZ = nbttagcompound.getDouble("motionZ");
         NBTTagList nbttaglist1 = nbttagcompound.getTagList("Motion", 6);            this.motionX = nbttaglist1.func_150309_d(0);
         this.motionX = nbttaglist1.func_150309_d(0);
         this.motionZ = nbttaglist1.func_150309_d(2);
-		Link1 = nbttagcompound.getDouble("Link1");
-		Link2 = nbttagcompound.getDouble("Link2");
-		if(nbttagcompound.hasKey("Dim")){
-			this.dimension=nbttagcompound.getInteger("Dim");
-		}
-		if(nbttagcompound.hasKey("UUIDM")){
-			this.entityUniqueID = new UUID(nbttagcompound.getLong("UUIDM"), nbttagcompound.getLong("UUIDL"));
-		}
-		if (nbttagcompound.getBoolean("acceptsOverlayTextures")) {
-			acceptsOverlayTextures = true;
-			overlayTextureContainer.importFromConfigTag(nbttagcompound.getCompoundTag("overlayTextureConfigTag"));
-		}
-	}
+        Link1 = nbttagcompound.getDouble("Link1");
+        Link2 = nbttagcompound.getDouble("Link2");
+        if(nbttagcompound.hasKey("Dim")){
+            this.dimension=nbttagcompound.getInteger("Dim");
+        }
+        if(nbttagcompound.hasKey("UUIDM")){
+            this.entityUniqueID = new UUID(nbttagcompound.getLong("UUIDM"), nbttagcompound.getLong("UUIDL"));
+        }
+        if (nbttagcompound.getBoolean("acceptsOverlayTextures")) {
+            acceptsOverlayTextures = true;
+            overlayTextureContainer.importFromConfigTag(nbttagcompound.getCompoundTag("overlayTextureConfigTag"));
+        }
+    }
 
     @Override
     public boolean writeMountToNBT(NBTTagCompound tag) {
@@ -483,12 +491,12 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
         if (this.uniqueID != -1) stack.getTagCompound().setInteger("uniqueID", this.uniqueID);
         if (this.trainCreator != null && !this.trainCreator.isEmpty()) stack.getTagCompound().setString("trainCreator", this.trainCreator);
-		stack.getTagCompound().setString("trainColor", this.getColor());
-		// Only save the overlay configuration to NBT if it exists. No need to store an empty configuration in NBT as it will be initialized as the default when the entity spawns in.
-		if (this.acceptsOverlayTextures && this.getOverlayTextureContainer().getType() != OverlayTextureManager.Type.NONE) {
-			stack.getTagCompound().setTag("overlayTextureConfigTag", getOverlayTextureContainer().getOverlayConfigTag());
-		}
-	}
+        stack.getTagCompound().setString("trainColor", this.getColor());
+        // Only save the overlay configuration to NBT if it exists. No need to store an empty configuration in NBT as it will be initialized as the default when the entity spawns in.
+        if (this.acceptsOverlayTextures && this.getOverlayTextureContainer().getType() != OverlayTextureManager.Type.NONE) {
+            stack.getTagCompound().setTag("overlayTextureConfigTag", getOverlayTextureContainer().getOverlayConfigTag());
+        }
+    }
 
     protected void setDefaultMass(double def) {
         this.mass = def;
@@ -644,29 +652,43 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
     }
 
-	/**
-	 * @author 02skaplan
-	 * <p>Called to setup the overlay texture manager for the given AbstractTrain. It is recommended
-	 * to call this from the constructor of the AbstractTrain-derived entity class.</p>
-	 * <p>After calling, it is recommended to use getOverlayTextureContainer to initialze the fixed, dynamic, or both
-	 * fixed and dynamic overlays with their respective settings.</p>
-	 * @param acceptedType Whether the overlay manager will allow fixed, dynamic, or both fixed and dynamic overlays.
-	 */
-	public void initOverlayTextures(OverlayTextureManager.Type acceptedType) {
-		overlayTextureContainer = new OverlayTextureManager(acceptedType, this);
-		acceptsOverlayTextures = true;
-	}
+    /**
+     * @author 02skaplan
+     * <p>Called to setup the overlay texture manager for the given AbstractTrain. It is recommended
+     * to call this from the constructor of the AbstractTrain-derived entity class.</p>
+     * <p>After calling, it is recommended to use getOverlayTextureContainer to initialze the fixed, dynamic, or both
+     * fixed and dynamic overlays with their respective settings.</p>
+     * @param acceptedType Whether the overlay manager will allow fixed, dynamic, or both fixed and dynamic overlays.
+     */
+    public void initOverlayTextures(OverlayTextureManager.Type acceptedType) {
+        overlayTextureContainer = new OverlayTextureManager(acceptedType, this);
+        acceptsOverlayTextures = true;
+    }
 
-	public OverlayTextureManager getOverlayTextureContainer() {
-		return overlayTextureContainer;
-	}
+    public OverlayTextureManager getOverlayTextureContainer() {
+        return overlayTextureContainer;
+    }
 
-	public boolean acceptsOverlayTextures() {
-		return acceptsOverlayTextures;
-	}
+    public boolean acceptsOverlayTextures() {
+        return acceptsOverlayTextures;
+    }
 
 
-	public Item getItem(){return getSpec().getItem();}
+    public Item getItem(){return getSpec().getItem();}
+
+
+    /**
+     * This function returns an ItemStack that represents this cart. This should
+     * be an ItemStack that can be used by the player to place the cart. This is
+     * the item that was registered with the cart via the registerMinecart
+     * function, but is not necessary the item the cart drops when destroyed.
+     *
+     * @return An ItemStack that can be used to place the cart.
+     */
+    @Override
+    public ItemStack getCartItem() {
+        return new ItemStack(getItem());
+    }
     /**
      * Functionality imported from TC5
      */
@@ -708,7 +730,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     /**defines the size of the inventory row by row, not counting any special slots like for fuel.
      * end result number of slots is this times 9. plus any crafting/fuel slots
      * may not return null*/
-    public int getInventoryRows(){return (int)(getSpec().getCargoCapacity()*0.1111111111112);}
+    public int getInventoryRows(){return 0;}
 
     /**defines the capacity of the fluidTank tank.
      * each value defibes another tank.
@@ -731,7 +753,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * example:
      * return new float[]{x,y,z};
      * may not return null*/
-    public float[] getHitboxSize(){return new float[]{getOptimalDistance(null)-((float)getSpec().getBogieLocoPosition()*0.5f),1.5f,0.21f};}
+    public float[] getHitboxSize(){return new float[]{getOptimalDistance(null)-((float)rotationPoints()[0]*0.5f),1.5f,0.21f};}
 
     /**defines if the transport is immune to explosions*/
     public boolean isReinforced(){return false;}
@@ -759,7 +781,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * example:
      * return new float{2f, -1f};
      * may not return null*/
-    public float[] rotationPoints(){return new float[]{1,-1};}
+    public float[] rotationPoints(){
+        if(getSpec()==null || getSpec().getBogieLocoPosition()==0){
+            return new float[]{0.5f,-0.5f};
+        }
+        return new float[]{(float)getSpec().getBogieLocoPosition(),0};}
 
     /**defines the scale to render the model at. Default is 0.0625*/
     public float[][] getRenderScale(){return new float[][]{getRender().getScale()};}
@@ -798,7 +824,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * return the name for the default TransportSkin of the transport.
      */
     public String getDefaultSkin(){
-        return getSpec().getLiveries().get(0);
+        return SkinRegistry.get(this).get(0);
     }
 
     /**returns a list of models to be used for the transport

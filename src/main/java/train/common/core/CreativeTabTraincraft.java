@@ -13,7 +13,6 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.client.resources.I18n;
-import train.common.library.ItemIDs;
 import train.common.library.TraincraftRegistry;
 
 import java.util.List;
@@ -25,6 +24,11 @@ public class CreativeTabTraincraft extends CreativeTabs {
     public CreativeTabTraincraft(String name, String MODID, String textureName) {
         super(CreativeTabs.getNextID(), name);
         tabItem= TraincraftRegistry.RegisterItem(new Item(),MODID,textureName,null);
+    }
+
+    public CreativeTabTraincraft(String name, Item itm) {
+        super(CreativeTabs.getNextID(), name);
+        tabItem= itm;
     }
 
     @Override

@@ -38,7 +38,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	public int meta;
 	public EntityRollingStock entityMainTrain;
 	public int entityMainTrainID;
-	protected int bogieIndex;
 	public double bogieShift;
 	protected Side side;
 	public TileTCRail lastTrack=null;
@@ -83,7 +82,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		isImmuneToFire = true;
 	}
 
-	public EntityBogie(World world, double d, double d1, double d2, EntityRollingStock mainTrain, int id, int index, double bogieShift) {
+	public EntityBogie(World world, double d, double d1, double d2, EntityRollingStock mainTrain, int id, double bogieShift) {
 
 		this(world);
 
@@ -95,7 +94,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		this.prevPosY = d1;
 		this.prevPosZ = d2;
 		this.entityMainTrainID = id;
-		this.bogieIndex = index;
 		this.bogieShift = bogieShift;
 		this.setPosition(d, d1 + this.yOffset, d2);
 		isImmuneToFire = true;
@@ -228,7 +226,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 
 		this.entityMainTrainID = nbttagcompound.getInteger("trainID");
-		this.bogieIndex = nbttagcompound.getInteger("bogieIndex");
 		this.bogieShift = nbttagcompound.getDouble("bogieShift");
 
 		super.readEntityFromNBT(nbttagcompound);
@@ -238,7 +235,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 
 		nbttagcompound.setInteger("trainID", entityMainTrainID);
-		nbttagcompound.setInteger("bogieIndex", bogieIndex);
 		nbttagcompound.setDouble("bogieShift", bogieShift);
 
 		super.writeEntityToNBT(nbttagcompound);

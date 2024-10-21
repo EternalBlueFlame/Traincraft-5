@@ -16,12 +16,7 @@ import train.common.library.GuiIDs;
 public class EntityLocoDieselDD35A extends DieselTrain {
 	public EntityLocoDieselDD35A(World world) {
 		super(world, LiquidManager.dieselFilter());
-		initLoco();
-	}
 
-	public void initLoco() {
-		fuelTrain = 0;
-		locoInvent = new ItemStack[inventorySize];
 	}
 
 	public EntityLocoDieselDD35A(World world, double d, double d1, double d2) {
@@ -82,52 +77,8 @@ public class EntityLocoDieselDD35A extends DieselTrain {
 			((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
-	
 	@Override
-	public void onUpdate() {
-		checkInvent(locoInvent[0]);
-		super.onUpdate();
-	}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
-
-		nbttagcompound.setShort("fuelTrain", (short) fuelTrain);
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < locoInvent.length; i++) {
-			if (locoInvent[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				locoInvent[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
-		}
-		nbttagcompound.setTag("Items", nbttaglist);
-	}
-
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
-
-		fuelTrain = nbttagcompound.getShort("fuelTrain");
-		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-		locoInvent = new ItemStack[getSizeInventory()];
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			int j = nbttagcompound1.getByte("Slot") & 0xff;
-			if (j >= 0 && j < locoInvent.length) {
-				locoInvent[j] = new ItemStack(nbttagcompound1);
-			}
-		}
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return inventorySize;
-	}
-	@Override
-	public String getName() {
+	public String getInventoryName() {
 		return "DD35A";
 	}
 

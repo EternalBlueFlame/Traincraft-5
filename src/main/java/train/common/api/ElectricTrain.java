@@ -22,17 +22,20 @@ public abstract class ElectricTrain extends Locomotive {
 	public ElectricTrain(World world) {
 		super(world);
 		fuelTrain = 0;
-
-		numCargoSlots = 5;
-		numCargoSlots1 = 5;
-		numCargoSlots2 = 5;
-		inventorySize = numCargoSlots + numCargoSlots2 + numCargoSlots1 + 1;
-		locoInvent = new ItemStack[inventorySize];
 		//hasUranium = false;
 		//reduceExplosionChance = 1000;
 		Ignite = false;
 		timeSinceIgnited = 0;
 	}
+	public ElectricTrain(World world, double x, double y, double z){
+		super(world,x,y,z);
+	}
+
+	@Override//todo:why was this so much?
+	public int getSizeInventory() {
+		return 16+(getInventoryRows()*9);
+	}
+
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -49,9 +52,9 @@ public abstract class ElectricTrain extends Locomotive {
 		if(!this.canCheckInvent)return;
 		
 		/* if the loco has fuel */
-		if (getFuel() < maxEnergy && locoInvent[0] != null)
+		if (getFuel() < maxEnergy && cargoItems[0] != null)
 		{
-			Item item = locoInvent[0].getItem();
+			Item item = cargoItems[0].getItem();
 			if (item == Items.redstone && ((getFuel() + 2000) <= maxEnergy))
 			{
 				fuelTrain += 2000;
@@ -64,7 +67,7 @@ public abstract class ElectricTrain extends Locomotive {
 			}else if (item instanceof IEnergyContainerItem)
 			{
 				int draw = MathHelper.floor_double(Math.min(200, maxEnergy - getFuel()) * 0.1); // amount of energy to attempt to draw this tick
-				fuelTrain += ((IEnergyContainerItem) item).extractEnergy(locoInvent[0], draw, false) * 10;
+				fuelTrain += ((IEnergyContainerItem) item).extractEnergy(cargoItems[0], draw, false) * 10;
 			}
 			/*else if ((PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[4]) && PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[3])) && (item == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[4]).getItem())) {
 

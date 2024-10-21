@@ -5,7 +5,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,28 +16,19 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
-import train.common.library.Info;
-import train.common.tile.tileSwitch.TileSpeedSign;
+import train.common.api.blocks.BlockDynamic;
+import train.common.tile.switchStand.TileSpeedSign;
 
 import java.util.List;
 
-public class BlockSpeedSign extends Block implements ITileEntityProvider {
+public class BlockSpeedSign extends BlockDynamic {
 	private IIcon texture;
 	private int skinstate = 0;
 
 	public BlockSpeedSign() {
-		super(Material.wood);
-		setCreativeTab(Traincraft.tcTab);
-		//this.setTickRandomly(true);
-		//this.setBlockBounds(0.5F , 0.0F, 0.5F , 0.5F ,  2.0F, 0.5F);
-	}
-
-	public void setSkinstate(int skinstate) {
-		this.skinstate = skinstate;
-	}
-
-	public int getSkinstate() {
-		return skinstate;
+		super(Material.iron, 0);
+		this.setTickRandomly(true);
+		setBlockBounds(0.2F,0.0F,0.2F,0.8F,1.25F,0.8F);
 	}
 
 	@Override
@@ -89,12 +79,12 @@ public class BlockSpeedSign extends Block implements ITileEntityProvider {
 
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
-		return new TileSpeedSign();
+		return new TileSpeedSign(this);
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int metadata) {
-		return new TileSpeedSign();
+		return new TileSpeedSign(this);
 	}
 
 

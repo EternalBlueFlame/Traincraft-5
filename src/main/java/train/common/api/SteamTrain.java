@@ -12,8 +12,6 @@ import train.common.core.handlers.FuelHandler;
 
 public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 
-	public int fuelSlot = 1;
-	public int waterSlot = 1;
 	protected int maxTank;
 	private int maxFuel = 20000;
 	private int update = 8;
@@ -39,11 +37,15 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 		}
 		tankArray[0] = theTank;
 		dataWatcher.addObject(4, 0);
-		numCargoSlots = 3;
-		numCargoSlots1 = 3;
-		numCargoSlots2 = 3;
-		inventorySize = numCargoSlots + numCargoSlots2 + numCargoSlots1 + fuelSlot + waterSlot;//
-		this.dataWatcher.addObject(23, 0);
+		this.dataWatcher.addObject(27, 0);
+	}
+	public SteamTrain(World world, double d, double d1, double d2) {
+		super(world, d, d1, d2);
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return 11+(getInventoryRows()*9);
 	}
 
 	/**
@@ -65,7 +67,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			return;
 		}
 		if (theTank != null && theTank.getFluid() != null) {
-			this.dataWatcher.updateObject(23, theTank.getFluid().amount);
+			this.dataWatcher.updateObject(27, theTank.getFluid().amount);
 			this.dataWatcher.updateObject(4, theTank.getFluid().getFluidID());
 		}
 
@@ -76,12 +78,14 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			}
 		}
 		else if (theTank != null && theTank.getFluid() == null) {
-			this.dataWatcher.updateObject(23, 0);
+			this.dataWatcher.updateObject(27, 0);
 			this.dataWatcher.updateObject(4, 0);
 		}
 		if (rand.nextInt(100) == 0 && getWater() > 0 && getIsFuelled()) {
 			drain(EnumFacing.UNKNOWN, getWaterConsumption() / 5, true);
 		}
+
+		checkInvent(cargoItems[0], cargoItems[1], this);
 	}
 
 	/**
@@ -90,7 +94,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	 * @return
 	 */
 	public int getWater() {
-		return (this.dataWatcher.getWatchableObjectInt(23));
+		return (this.dataWatcher.getWatchableObjectInt(27));
 	}
 
 	/**
@@ -110,14 +114,12 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		super.writeEntityToNBT(nbttagcompound);
 		this.theTank.writeToNBT(nbttagcompound);
-		nbttagcompound.setBoolean("canBeAdjusted", canBeAdjusted);
 	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		super.readEntityFromNBT(nbttagcompound);
 		this.theTank.readFromNBT(nbttagcompound);
-		canBeAdjusted = nbttagcompound.getBoolean("canBeAdjusted");
 	}
 
 	public int getCartTankCapacity() {
@@ -125,24 +127,24 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	}
 
 	private void placeInInvent(ItemStack itemstack1, SteamTrain loco) {
-		for (int i = 2; i < loco.locoInvent.length; i++) {
-			if (loco.locoInvent[i] == null) {
-				loco.locoInvent[i] = itemstack1;
+		for (int i = 2; i < loco.cargoItems.length; i++) {
+			if (loco.cargoItems[i] == null) {
+				loco.cargoItems[i] = itemstack1;
 				return;
 			}
-			else if (loco.locoInvent[i] != null && loco.locoInvent[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() &&
-					(!itemstack1.getHasSubtypes() || locoInvent[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(locoInvent[i], itemstack1)) {
-				int var9 = locoInvent[i].stackSize + itemstack1.stackSize;
+			else if (loco.cargoItems[i] != null && loco.cargoItems[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() &&
+					(!itemstack1.getHasSubtypes() || cargoItems[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(cargoItems[i], itemstack1)) {
+				int var9 = cargoItems[i].stackSize + itemstack1.stackSize;
 				if (var9 <= itemstack1.getMaxStackSize()) {
-					loco.locoInvent[i].stackSize = var9;
+					loco.cargoItems[i].stackSize = var9;
 					return;
 				}
-				else if (locoInvent[i].stackSize < locoInvent[i].getMaxStackSize()) {
-					loco.locoInvent[i].stackSize += 1;
+				else if (cargoItems[i].stackSize < cargoItems[i].getMaxStackSize()) {
+					loco.cargoItems[i].stackSize += 1;
 					return;
 				}
 			}
-			else if (i == loco.locoInvent.length - 1) {
+			else if (i == loco.cargoItems.length - 1) {
 				entityDropItem(itemstack1,1);
 				return;
 			}

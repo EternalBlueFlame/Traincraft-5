@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 import fexcraft.tmt.slim.Tessellator;
 import train.client.render.renderSwitch.models.ModeloverheadWireDouble;
 import train.common.library.Info;
-import train.common.tile.tileSwitch.TileoverheadWireDouble;
+import train.common.tile.switchStand.TileoverheadWireDouble;
 
 public class RenderoverheadWireDouble extends TileEntitySpecialRenderer {
     static final ModeloverheadWireDouble modeloverheadWireDouble = new ModeloverheadWireDouble();

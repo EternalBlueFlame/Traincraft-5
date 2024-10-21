@@ -7,6 +7,7 @@ import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import ebf.tim.api.SkinRegistry;
 import ebf.tim.render.CustomItemModel;
 import ebf.tim.utility.DebugUtil;
 import ebf.tim.utility.OreGen;
@@ -25,6 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
@@ -56,10 +58,13 @@ public class TraincraftRegistry {
     private List<TrainRecord> trainRecords = new ArrayList<>();
     private Map<Item, TrainRecord> trainRecordsByItem = new HashMap<>();
 
-    private List<TrackRecord> trackRecords = new ArrayList<>();
-    private Map<Object, TrackRecord> trackRecordByItem = new HashMap<Object, TrackRecord>();
     private Map<Class<?>, TrainRenderRecord> trainRenderRecords = new HashMap<>();
     private List<TrainSoundRecord> trainSoundRecords = new ArrayList<>();
+
+    private static final List<TrackRecord> trackRecords = new ArrayList<>();
+
+    private static Map<Item, TrackRecord> trackRecordsByItem = new HashMap<>();
+
 
     public TraincraftRegistry() {
     }
@@ -69,8 +74,9 @@ public class TraincraftRegistry {
             TraincraftRegistry.this.registerTrainRecord(train);
         }
 
-        for (EnumTracks tracks : EnumTracks.values()){
-            TraincraftRegistry.this.registerTrackRecord(tracks);
+        for (TrackRecord track : EnumTracks.values()){
+            TraincraftRegistry.this.registerTrackRecord(track);
+
         }
 
 
@@ -116,16 +122,6 @@ public class TraincraftRegistry {
     }
 
 
-    public TrackRecord findTrackRecordByItem(Item item){
-        return trackRecordByItem.get(item);
-    }
-
-
-    public void registerTrackRecord(TrackRecord trackRecord){
-        trackRecords.add(trackRecord);
-        trackRecordByItem.put(trackRecord.getItem(), trackRecord);
-    }
-
     public TrainRecord findTrainRecordByItem(Item item) {
         return trainRecordsByItem.get(item);
     }
@@ -141,18 +137,43 @@ public class TraincraftRegistry {
 
     public void registerTrainRenderRecord(TrainRenderRecord record) {
         trainRenderRecords.put(record.getEntityClass(), record);
+        if(getTrainRecord(record.getEntityClass())!=null) {
+            SkinRegistry.liveryMap.put(record.getEntityClass(), getTrainRecord(record.getEntityClass()).getColors());
+        }
     }
 
     public void registerTrainSoundRecord(TrainSoundRecord sound) {
         trainSoundRecords.add(sound);
     }
 
-    public void addLivery(Class<?> entityClass, String name){
+    public void addLivery(Class<? extends AbstractTrains> entityClass, String name){
         for (TrainRecord record : trainRecords) {
             if (entityClass.equals(record.getEntityClass()) && !record.getLiveries().contains(name)) {
-                record.skins.add(name);
+                SkinRegistry.addSkin(entityClass,name);
             }
         }
+    }
+
+    /**Tracks */
+
+    public void registerTrackRecord(TrackRecord record) {
+        trackRecords.add(record);
+        trackRecordsByItem.put(record.getItem().getItem(), record);
+    }
+
+
+
+    public static TrackRecord findTrackRecordByName(String label){
+        for (TrackRecord track : trackRecords){
+            if (track.getLabel().equals(label)){
+                return track;
+            }
+        }
+        return null;
+    }
+
+    public static TrackRecord findTrackRecordByItem(Item item){
+        return trackRecordsByItem.get(item);
     }
 
 
@@ -163,6 +184,9 @@ public class TraincraftRegistry {
         AbstractTrains entity = record.getEntity(null);
         if(entity!=null) {
             entity.registerSkins();
+            for(String c: record.getColors()){
+                SkinRegistry.addSkin(record.getEntityClass(),c);
+            }
             if(entity.getRecipe()!=null){
                 TierRecipeManager.getInstance().addRecipe(entity.getTier(),
                         entity.getRecipe()[0],entity.getRecipe()[1],entity.getRecipe()[2],entity.getRecipe()[3],
@@ -180,7 +204,7 @@ public class TraincraftRegistry {
         for(final AbstractTrains trains : entities){
             EntityRegistry.registerModEntity(trains.getClass(), MODID+":"+trains.transportName(), trainID, Traincraft.instance, 512, 1, true);
             trains.registerSkins();
-            GameRegistry.registerItem(trains.getItem(), MODID+":entity/"+trains.transportName());
+            GameRegistry.registerItem(trains.getItem(), "entity/"+trains.transportName());
             trainID+=1;
             if(trains.getRecipe()!=null){
                 TierRecipeManager.getInstance().addRecipe(trains.getTier(),
@@ -188,6 +212,7 @@ public class TraincraftRegistry {
                         trains.getRecipe()[4],trains.getRecipe()[5],trains.getRecipe()[6],trains.getRecipe()[7],
                         trains.getRecipe()[8],trains.getRecipe()[9], trains.getCartItem(),1);
             }
+
             //todo:this part should be unnecessary? double-check.
             if(Traincraft.proxy.isClient()){
                 Traincraft.instance.traincraftRegistry.registerTrainRenderRecord(new TrainRenderRecord() {
@@ -243,17 +268,17 @@ public class TraincraftRegistry {
 
                     @Override
                     public float[] getRotate() {
-                        return new float[]{0,0,0};
+                        return new float[]{180,0,0};
                     }
 
                     @Override
                     public float[] getScale() {
-                        return new float[]{0,0,0};
+                        return new float[]{1,1,1};
                     }
 
                     @Override
                     public ResourceLocation getTextureFile(String colorString) {
-                        return null;
+                        return new ResourceLocation(colorString);
                     }
 
                     @Override

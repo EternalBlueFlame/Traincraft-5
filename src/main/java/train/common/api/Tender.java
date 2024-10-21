@@ -29,7 +29,12 @@ public abstract class Tender extends Freight implements IFluidHandler {
     public Tender(World world, Fluid fluid, int quantity) {
         this(new FluidStack(fluid, quantity), world, null);
     }
-
+    public Tender(World world){
+        super(world);
+    }
+    public Tender(World world, double x, double y, double z){
+        super(world,x,y,z);
+    }
     public Tender(World world, Fluid fluid, int quantity, FluidStack filter) {
         this(new FluidStack(fluid, quantity), world, filter);
     }
@@ -44,7 +49,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
         IFluidTank[] tankArray = new IFluidTank[1];
         tankArray[0] = theTank;
         dataWatcher.addObject(4, 0);
-        this.dataWatcher.addObject(23, 0);
+        this.dataWatcher.addObject(27, 0);
     }
 
     @Override
@@ -68,10 +73,10 @@ public abstract class Tender extends Freight implements IFluidHandler {
         if (getWorld().isRemote)
             return;
         if (theTank != null && theTank.getFluid() != null) {
-            this.dataWatcher.updateObject(23, theTank.getFluid().amount);
+            this.dataWatcher.updateObject(27, theTank.getFluid().amount);
             this.dataWatcher.updateObject(4, theTank.getFluid().getFluidID());
         } else if (theTank != null && theTank.getFluid() == null) {
-            this.dataWatcher.updateObject(23, 0);
+            this.dataWatcher.updateObject(27, 0);
             this.dataWatcher.updateObject(4, 0);
         }
     }
@@ -81,7 +86,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
      */
     @Override
     protected void handleMass() {
-        if (this.updateTicks % 10 != 0) return;
+        if (this.ticksExisted % 10 != 0) return;
         double preciseAmount = 0;
         this.mass = this.getDefaultMass();
         if (theTank != null && theTank.getFluid() != null && theTank.getFluid().amount > 0) {
@@ -104,7 +109,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
      * @return
      */
     public int getWater() {
-        return (this.dataWatcher.getWatchableObjectInt(23));
+        return (this.dataWatcher.getWatchableObjectInt(27));
     }
 
     /**

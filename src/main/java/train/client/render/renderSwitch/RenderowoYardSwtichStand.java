@@ -8,8 +8,7 @@ import fexcraft.tmt.slim.Tessellator;
 import train.client.render.renderSwitch.models.ModelowoYardSwitchStandOff;
 import train.client.render.renderSwitch.models.ModelowoYardSwitchStandOn;
 import train.common.library.Info;
-import train.common.tile.tileSwitch.TileowoYardSwitchStand;
-
+import train.common.tile.switchStand.TileOWOYardSwitchStand;
 public class RenderowoYardSwtichStand extends TileEntitySpecialRenderer {
     private static final ModelowoYardSwitchStandOn modelSwitch2 = new ModelowoYardSwitchStandOn();
     private static final ModelowoYardSwitchStandOff modelSwitch = new ModelowoYardSwitchStandOff();
@@ -25,7 +24,7 @@ public class RenderowoYardSwtichStand extends TileEntitySpecialRenderer {
         GL11.glRotated(180,0,1,0);
         boolean skipRender = false;
 
-        switch (((TileowoYardSwitchStand)tileEntity).getFacing()){
+        switch (((TileOWOYardSwitchStand)tileEntity).getFacing()){
             case NORTH:{
                 GL11.glRotated(180,0,0,1);
                 GL11.glRotated(270,0,1,0);

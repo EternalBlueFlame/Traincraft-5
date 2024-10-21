@@ -14,6 +14,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import train.common.Traincraft;
 import train.common.blocks.blockSwitch.*;
+import train.common.blocks.switchStand.*;
 import train.common.blocks.slabs.*;
 import train.common.blocks.stairs.*;
 import train.common.library.BlockIDs;
@@ -39,8 +40,16 @@ public class TCBlocks {
 	public static Block assemblyTableIII=new BlockAssemblyTableIII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
 	public static Block trainWorkbench=new BlockTrainWorkbench(16).setHardness(1.7F).setStepSound(Block.soundTypeWood);
 	public static Block lantern=new BlockLantern().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
-	public static Block switchStand=new BlockSwitchStand().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
 	public static Block MFPBWigWag=new BlockMFPBWigWag().setHardness(2.5F).setStepSound(Block.soundTypeMetal);
+	public static Block switchStand=new BlockSwitchStand().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
+	public static Block autoSwtichStand = new BlockAutoSwitchStand().setHardness(1F).setStepSound(Block.soundTypeMetal);
+	public static Block owoSwitchStand = new BlockOWOSwitchStand().setHardness(2F).setStepSound(Block.soundTypeMetal);
+	public static Block circleSwitchStand = new BlockCircleSwitchStand().setHardness(2F).setStepSound(Block.soundTypeMetal);
+	public static Block owoYardSwitchStand = new BlockOWOYardSwitchStand().setHardness(4F).setStepSound(Block.soundTypeMetal);
+	public static Block MILWSwitchStand = new BlockMILWSwitchStand().setHardness(1F).setStepSound(Block.soundTypeMetal);
+	public static Block speedSign = new BlockSpeedSign().setHardness(1F);
+
+
 
 	public static void loadBlocks() {
 		TraincraftRegistry.registerBlock(bridgePillar,Traincraft.tcTab, Info.modID,"bridgePillar");
@@ -53,9 +62,14 @@ public class TCBlocks {
 		TraincraftRegistry.registerBlock(openFurnaceIdle,Traincraft.tcTab, Info.modID,"openFurnaceIdle");
 		TraincraftRegistry.registerBlock(openFurnaceActive,null, Info.modID,"openFurnaceActive");
 		TraincraftRegistry.registerBlock(lantern,Traincraft.tcTab, Info.modID,"lantern");
-		TraincraftRegistry.registerBlock(switchStand,Traincraft.tcTab, Info.modID,"switchStand");
 		TraincraftRegistry.registerBlock(MFPBWigWag,Traincraft.tcTab, Info.modID,"MFPBWigWag");
-
+		TraincraftRegistry.registerBlock(switchStand,Traincraft.tcTab, Info.modID,"switchStand");
+		TraincraftRegistry.registerBlock(autoSwtichStand, Traincraft.tcTab, Info.modID, "autoswtichStand");
+		TraincraftRegistry.registerBlock(circleSwitchStand, Traincraft.tcTab, Info.modID, "circleSwitchStand");
+		TraincraftRegistry.registerBlock(owoSwitchStand, Traincraft.tcTab, Info.modID, "owoSwitchStand");
+		TraincraftRegistry.registerBlock(owoYardSwitchStand, Traincraft.tcTab, Info.modID, "owoYardSwitchStand");
+		TraincraftRegistry.registerBlock(MILWSwitchStand, Traincraft.tcTab, Info.modID, "MILWSwitchStand");
+		TraincraftRegistry.registerBlock(speedSign, Traincraft.tcTab, Info.modID, "speedSign");
 
 
 		BlockIDs.waterWheel.block = new BlockWaterWheel().setHardness(1.7F).setStepSound(Block.soundTypeWood);
@@ -101,16 +115,11 @@ public class TCBlocks {
 		BlockIDs.tcRail.block = new BlockTCRail().setHardness(1.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
 		BlockIDs.tcRailGag.block = new BlockTCRailGag().setHardness(1.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
 
-		BlockIDs.MILWSwitchStand.block = new BlockMILWSwitchStand().setHardness(1F).setStepSound(Block.soundTypeStone);
-		BlockIDs.autoSwtichStand.block = new BlockautoSwitchStand().setHardness(1F).setStepSound(Block.soundTypeAnvil);
-		BlockIDs.owoSwitchStand.block = new BlockowoSwitchStand().setHardness(2F).setStepSound(Block.soundTypeMetal);
-		BlockIDs.circleSwitchStand.block = new BlockcircleSwitchStand().setHardness(2F).setStepSound(Block.soundTypeAnvil);
-		BlockIDs.owoYardSwitchStand.block = new BlockowoYardSwitchStand().setHardness(4F).setStepSound(Block.soundTypeLadder);
+
 		BlockIDs.overheadWire.block = new BlockoverheadWire().setHardness(2F);
 		BlockIDs.overheadWireDouble.block = new BlockoverheadWireDouble().setHardness(2F);
 		BlockIDs.signalSpanish.block = new BlocksignalSpanish().setHardness(1F).setResistance(10F).setLightLevel(0.2F).setCreativeTab(Traincraft.tcTab).setStepSound(Block.soundTypeMetal);
 		BlockIDs.kSignal.block = new BlockkSignal().setHardness(1F).setResistance(10F).setLightLevel(0.2F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
-		BlockIDs.speedSign.block = new BlockSpeedSign().setCreativeTab(Traincraft.tcTab);
 		BlockIDs.metroMadridPole.block = new BlockMetroMadridPole( Material.iron).setHardness(2F).setCreativeTab(Traincraft.tcTab).setBlockName("MetroMadridPole");
 		//BlockIDs.FortyFootContainer.block = new BlockFortyFootContainer(Material.rock).setHardness(4.5F).setCreativeTab(Traincraft.tcTab).setStepSound(Block.soundTypeMetal);
 

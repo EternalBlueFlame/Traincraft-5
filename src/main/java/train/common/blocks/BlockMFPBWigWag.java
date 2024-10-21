@@ -16,13 +16,15 @@ import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
 import train.common.api.blocks.BlockDynamic;
+import train.common.api.blocks.BlockSignal;
 import train.common.library.Info;
 import train.common.tile.TileMFPBWigWag;
+import train.common.tile.switchStand.TileSwitchStand;
 
 import java.util.List;
 import java.util.Random;
 
-public class BlockMFPBWigWag extends BlockDynamic {
+public class BlockMFPBWigWag extends BlockSignal {
 
 	public BlockMFPBWigWag() {
 		super(Material.rock,0);
@@ -50,8 +52,14 @@ public class BlockMFPBWigWag extends BlockDynamic {
 
 	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
-		return new TileMFPBWigWag();
+		return new TileMFPBWigWag(this);
 	}
+
+	@Override
+	public TileEntity createNewTileEntity(World world, int metadata) {
+		return new TileMFPBWigWag(this);
+	}
+
 
 	@Override
 	public int getRenderType() {

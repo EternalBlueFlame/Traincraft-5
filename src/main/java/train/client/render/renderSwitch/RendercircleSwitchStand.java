@@ -8,8 +8,7 @@ import fexcraft.tmt.slim.Tessellator;
 import train.client.render.renderSwitch.models.ModelcircleSwitchStandOff;
 import train.client.render.renderSwitch.models.ModelcircleSwitchStandOn;
 import train.common.library.Info;
-import train.common.tile.tileSwitch.TilecircleSwitchStand;
-
+import train.common.tile.switchStand.TileCircleSwitchStand;
 
 public class RendercircleSwitchStand extends TileEntitySpecialRenderer {
     private static final ModelcircleSwitchStandOn modelSwitch2 = new ModelcircleSwitchStandOn();
@@ -27,7 +26,7 @@ public class RendercircleSwitchStand extends TileEntitySpecialRenderer {
         GL11.glRotated(180,0,1,0);
         boolean skipRender = false;
 
-        switch (((TilecircleSwitchStand)tileEntity).getFacing()){
+        switch (((TileCircleSwitchStand)tileEntity).getFacing()){
             case NORTH:{
                 GL11.glRotated(180,0,0,1);
                 GL11.glRotated(270,0,1,0);

@@ -14,11 +14,16 @@ import train.common.api.blocks.EnumCargoTypes;
 public abstract class Freight extends EntityRollingStock implements IInventory {
     public ItemStack[] cargoItems;
     protected double itemInsideCount = 0;
-    private int slotsFilled = 0;
+    public int slotsFilled = 0;
 
     public Freight(World world) {
         super(world);
         dataWatcher.addObject(22, 0);
+        cargoItems = new ItemStack[getSizeInventory()];
+    }
+    public Freight(World world, double d, double d1, double d2) {
+        super(world, d, d1, d2);
+        cargoItems = new ItemStack[getSizeInventory()];
     }
 
     @Override
@@ -125,7 +130,7 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
     }
 
     @Override
-    public abstract int getSizeInventory();
+    public int getSizeInventory(){return getSpec()==null?getInventoryRows()*9:getSpec().getCargoCapacity();}
 
     /**
      * Returns true if this cart is a storage cart Some carts may have inventories but not be storage carts and some carts without inventories may be storage carts.
@@ -156,7 +161,7 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
      * Handle mass depending on item count tenders are done differently
      */
     protected void handleMass() {
-        if (this.updateTicks % 10 != 0)
+        if (this.ticksExisted % 10 != 0)
             return;
         if (getWorld().isRemote)
             return;
@@ -183,27 +188,36 @@ public abstract class Freight extends EntityRollingStock implements IInventory {
     @Override
     protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
         super.readEntityFromNBT(nbttagcompound);
-        ItemStack[] cargoItemsCount;
-        NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-        cargoItemsCount = new ItemStack[getSizeInventory()];
 
+        slotsFilled = 0;
+        NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
+        cargoItems = new ItemStack[getSizeInventory()];
         for (int i = 0; i < nbttaglist.tagCount(); i++) {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
             int j = nbttagcompound1.getByte("Slot") & 0xff;
-            if (j < cargoItemsCount.length) {
-                cargoItemsCount[j] = new ItemStack(nbttagcompound1);
-            }
-        }
-
-        slotsFilled = 0;
-
-        for (int i = 0; i < getSizeInventory(); i++) {
-            ItemStack itemstack = cargoItemsCount[i];
-            if (itemstack != null) {
-                slotsFilled++;
+            if (j >= 0 && j < cargoItems.length) {
+                cargoItems[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+                if(cargoItems[j]!=null){
+                    slotsFilled++;
+                }
             }
         }
         this.dataWatcher.updateObject(22, slotsFilled);
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
+        super.writeEntityToNBT(nbttagcompound);
+        NBTTagList nbttaglist = new NBTTagList();
+        for (int i = 0; i < cargoItems.length; i++) {
+            if (cargoItems[i] != null) {
+                NBTTagCompound nbttagcompound1 = new NBTTagCompound();
+                nbttagcompound1.setByte("Slot", (byte) i);
+                cargoItems[i].writeToNBT(nbttagcompound1);
+                nbttaglist.appendTag(nbttagcompound1);
+            }
+        }
+        nbttagcompound.setTag("Items", nbttaglist);
     }
 
     @Override

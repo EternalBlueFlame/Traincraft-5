@@ -274,8 +274,6 @@ public enum RenderEnum implements TrainRenderRecord {
     locoBR185(EntityLocoElectricBR185.class, new BR185_EngineModel(), "BR185_Engine_", true, new float[]{-2.0F, 0.1F, 0.0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
     locoClass85(EntityLocoElectricClass85.class, new ModelClass85(), "Class85_", true, new float[]{-3.0F, 0.65F, 0.0F}, new float[]{0F, 90F, 180F}, null, "", 0, null, "", null, 0, false),
     locoBP4(EntityLocoElectricBP4.class, new ModelBP4(), "bp4_", true, new float[]{-2.2F, 0.15F, 0.0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
-    //passengerBNLRV_B(EntityPassengerBNLRV_B.class, new ModelBNLRV_B(), "bnlrv_", true, new float[]{0.0f, 0.10f, 0.0f}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
-    //locoBNLRV_A(EntityLocoElectricBNLRV_A.class, new ModelBNLRV_A(), "bnlrv_", true, new float[]{-2f, 0.10f, 0.0f}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
 
     locoDeltic(EntityLocoDieselDeltic.class, new ModelDeltic(), "Deltic", false, new float[]{-2.25F, 0.8F, 0.0F}, new float[]{0F, 90F, 180F}, null, "largesmoke", 1, new ArrayList<double[]>() {
         {
@@ -649,7 +647,6 @@ public enum RenderEnum implements TrainRenderRecord {
 
 
     locoSteamA4Tender(EntityTenderA4.class, new ModelTenderA4(), "tenderA4_UK_", true, new float[]{-0.2F, 0.2F, 0.0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
-   // LocoBR_Black_5_Tender(EntityTenderBR_Black_5.class, new ModelBR_Black_5_Tender(), "BR_Black_5_Tender_", true, new float[]{-0.05f, 0f, 0f,}, new float[]{0F, 180f, 180F}, null, "", 0, null, "", null, 0, false),
    // LocoBR1_Tender(EntityTenderBR1.class, new ModelBR1_Tender(), "BR1_Tender_", true, new float[]{0f, -0.01f, 0f,}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
    // LocoRW_Type_2_Tender(EntityTenderRWType2.class, new ModelRW_Type_2_Tender(), "Type_2_", true, new float[]{0f, 0.16f, 0f,}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
     PropagandaUS(EntityPropagandaUS.class, new ModelPropagandaCar(), "propaganda_US_", true, new float[]{1.1F, 0.2F, -0.1F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
