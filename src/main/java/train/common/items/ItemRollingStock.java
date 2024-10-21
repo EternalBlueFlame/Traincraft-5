@@ -130,7 +130,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 			s.append(": ");
 			if (getEntity() instanceof Locomotive){
 				s.append(t("menu.item.locomotive")+", ");
-				if(getEntity().getRiderOffsets()!=null && entity.getRiderOffsets().length>0){
+				if(getEntity().getRiderOffsets()!=null && getEntity().getRiderOffsets().length>0){
 					s.append(t("menu.item.passenger")+", ");
 				}
 				if(getEntity().getInventoryRows()>0){
