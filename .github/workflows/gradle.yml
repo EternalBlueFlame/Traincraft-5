@@ -14,7 +14,7 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4
       
     - name: Install 7z and extract data
       run: |
@@ -40,7 +40,7 @@ jobs:
       run: ./gradlew setupDecompWorkspace --refresh-dependencies build
 
     - name: Create artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: TC4-5-Experimental
         path: build/libs/*

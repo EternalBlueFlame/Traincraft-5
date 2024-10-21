@@ -55,7 +55,7 @@ public class ItemTrackDebugger extends Item {
                     player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Meta: " +  EnumChatFormatting.WHITE + tile.getBlockMetadata()));
                     player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "cx: "   +  EnumChatFormatting.WHITE + tile.cx  + EnumChatFormatting.GOLD + " cy: "+ EnumChatFormatting.WHITE + tile.cy  + EnumChatFormatting.GOLD + " cz: " + EnumChatFormatting.WHITE + tile.cz));
                     player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "r: " + EnumChatFormatting.WHITE + tile.r));
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "SwitchState: " + EnumChatFormatting.WHITE + tile.getSwitchState() + EnumChatFormatting.GOLD + " ManualOverride: " + EnumChatFormatting.WHITE + tile.canTypeBeModifiedBySwitch) );
+                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "SwitchState: " + EnumChatFormatting.WHITE + tile.getSwitchState() + EnumChatFormatting.GOLD + " ManualOverride: " + EnumChatFormatting.WHITE + tile.canTypeBeModifiedBySwitch + EnumChatFormatting.GOLD + " SwitchSize: " + EnumChatFormatting.WHITE + tile.getTrackFromName().getSwitchSize()) );
                     player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "LinkedX: "    +  EnumChatFormatting.WHITE +  tile.linkedX + EnumChatFormatting.GOLD +  " LinkedY: " +  EnumChatFormatting.WHITE +tile.linkedY +  EnumChatFormatting.GOLD + " LinkedZ: "+  EnumChatFormatting.WHITE + tile.linkedZ));
                     player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "SlopeLength: "    +  EnumChatFormatting.WHITE +  tile.slopeLength + EnumChatFormatting.GOLD +  " SlopeHeight: " +  EnumChatFormatting.WHITE +tile.slopeHeight +  EnumChatFormatting.GOLD + " SlopeAngle: "+  EnumChatFormatting.WHITE + tile.slopeAngle));
                     player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "RailLength: " + EnumChatFormatting.WHITE + tile.railLength));
@@ -72,7 +72,7 @@ public class ItemTrackDebugger extends Item {
                     player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "x: "    +  EnumChatFormatting.WHITE +  tile.xCoord + EnumChatFormatting.GOLD +  " y: " +  EnumChatFormatting.WHITE + tile.yCoord +  EnumChatFormatting.GOLD + " z: "+  EnumChatFormatting.WHITE + tile.zCoord));
                     player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Meta: " +  EnumChatFormatting.WHITE + tile.getBlockMetadata()));
                     player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "OriginX: "    +  EnumChatFormatting.WHITE +  tile.originX + EnumChatFormatting.GOLD +  " OriginY: " +  EnumChatFormatting.WHITE + tile.originY +  EnumChatFormatting.GOLD + " OriginZ: "+  EnumChatFormatting.WHITE + tile.originZ));
-                    player.addChatMessage(new ChatComponentText( EnumChatFormatting.GOLD + "CanPlaceRollingStock: " +  EnumChatFormatting.WHITE + tile.canPlaceRollingstock));
+                    player.addChatMessage(new ChatComponentText( EnumChatFormatting.GOLD + "CanPlaceRollingStockOnDiagonal: " +  EnumChatFormatting.WHITE + tile.canPlaceRollingstock));
                     player.addChatMessage(new ChatComponentText(" "));
 
                 }

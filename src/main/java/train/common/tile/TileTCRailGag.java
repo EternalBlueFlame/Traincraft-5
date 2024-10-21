@@ -10,6 +10,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import train.common.blocks.BlockTCRail;
+import train.common.items.TCRailTypes;
 
 import java.util.Random;
 
@@ -22,7 +23,7 @@ public class TileTCRailGag extends TileEntity {
 	public int originZ;
 	public String type = "";
 	public float bbHeight = 0.125f;
-	public boolean canPlaceRollingstock = true;
+	public boolean canPlaceRollingstock = false;
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -38,7 +39,14 @@ public class TileTCRailGag extends TileEntity {
 		super.readFromNBT(nbt);
 	}
 
-
+	public void setCanPlaceRollingStock(boolean canPlace){
+		TileTCRail tile = (TileTCRail) worldObj.getTileEntity(originX, originY, originZ);
+		if (tile != null){
+			if (tile.getTrackFromName().getRailType() == TCRailTypes.RailTypes.STRAIGHT || tile.getTrackFromName().getRailType() == TCRailTypes.RailTypes.DIAGONAL){
+				canPlaceRollingstock = canPlace;
+			}
+		}
+	}
 
 
 

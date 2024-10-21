@@ -16,12 +16,15 @@ import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import train.common.Traincraft;
+import train.common.api.TrackRecord;
+import train.common.api.TrainRecord;
 import train.common.blocks.TCBlocks;
 import train.common.core.handlers.ConfigHandler;
 import train.common.items.ItemTCRail;
 import train.common.items.TCRailTypes;
 import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
+import train.common.library.TraincraftRegistry;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -146,16 +149,15 @@ public class TileTCRail extends TileEntity {
 	private EnumTracks renderType = null;
 
 	public TCRailTypes.RailTypes getRailType(){
-		for(EnumTracks rail : EnumTracks.values()){
-			if(rail.getLabel().equals(getType())){
-				railType = rail.getRailType();
-			}
-		}
+
+		railType = getTrackFromName().getRailType();
+
 		return railType;
 	}
 
 	private EnumTracks track = null;
 
+	@Deprecated
 	public EnumTracks getTrack(){
 		for(EnumTracks rail : EnumTracks.values()){
 			if(rail.getLabel().equals(getType())){
@@ -163,6 +165,10 @@ public class TileTCRail extends TileEntity {
 			}
 		}
 		return track;
+	}
+
+	public TrackRecord getTrackFromName(){
+		return TraincraftRegistry.findTrackRecordByName(this.getType());
 	}
 
 

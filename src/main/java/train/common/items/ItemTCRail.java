@@ -3128,11 +3128,11 @@ public class ItemTCRail extends ItemPart {
 
         placeTrack(world, x, y + 1, z + dz, BlockIDs.tcRailGag.block, l);
         tileGag[0] = (TileTCRailGag) world.getTileEntity(x, y + 1, z + dz);
-        tileGag[0].canPlaceRollingstock = false;
+        tileGag[0].setCanPlaceRollingStock(false);
 
         placeTrack(world, x + dx , y + 1, z, BlockIDs.tcRailGag.block, l);
         tileGag[1] = (TileTCRailGag) world.getTileEntity(x + dx, y + 1, z);
-        tileGag[1].canPlaceRollingstock = false;
+        tileGag[1].setCanPlaceRollingStock(false);
         tcRail.setFacing(l);
         tcRail.setType(type.getLabel());
         tcRail.setRailLength(1D);
@@ -3147,7 +3147,7 @@ public class ItemTCRail extends ItemPart {
             tileTCRailGag.originY = y + 1;
             tileTCRailGag.originZ = z;
             tileTCRailGag.type = type.getLabel();
-            tileTCRailGag.canPlaceRollingstock = false;
+            tileTCRailGag.setCanPlaceRollingStock(false);
         }
         return true;
     }
@@ -3205,17 +3205,17 @@ public class ItemTCRail extends ItemPart {
 
             placeTrack(world, x + (i * dx) + dx, y + 1, z + (i * dz) + dz, BlockIDs.tcRailGag.block, l);
             tcRailGag[(3* i) - (i / 3)] = (TileTCRailGag) world.getTileEntity(x + (i * dx) + dx, y + 1, z + (i * dz) + dz);
-            tcRailGag[(3* i) - (i / 3)].canPlaceRollingstock = true;
+            tcRailGag[(3* i) - (i / 3)].setCanPlaceRollingStock(true);
             placeTrack(world,x + (i * dx) + (2 * dx), y + 1, z + (i * dz) + (2 * dz), BlockIDs.tcRailGag.block, l);
             tcRailGag[((3* i) - (i / 3)) + 1] = (TileTCRailGag) world.getTileEntity(x + (i * dx) +  (2 * dx), y + 1, z + (i * dz) + (2 * dz));
-            tcRailGag[((3* i) - (i / 3)) + 1].canPlaceRollingstock = true;
+            tcRailGag[((3* i) - (i / 3)) + 1].setCanPlaceRollingStock(true);
             for (int j = 0; j < 3; j++){
                 placeTrack(world, x + (i * dx) + (j * dx ) + dx , y + 1, z + (i * dz) + (j * dz), BlockIDs.tcRailGag.block, l);
                 tcRailGag[((3 * i) - (i / 3)) + ((2 * j) + 2)] = (TileTCRailGag) world.getTileEntity(x + (i * dx) + (j * dx) + dx, y + 1, z + (i * dz) + (j * dz) );
-                tcRailGag[((3 * i) - (i / 3)) + ((2 * j) + 2)].canPlaceRollingstock = false;
+                tcRailGag[((3 * i) - (i / 3)) + ((2 * j) + 2)].setCanPlaceRollingStock(false);
                 placeTrack(world, x + (i * dx) + (j * dx), y + 1, z + (i * dz) + (j * dz) + dz, BlockIDs.tcRailGag.block, l);
                 tcRailGag[((3 * i) - (i / 3)) + ((2 * j) + 3)] = (TileTCRailGag) world.getTileEntity(x + (i * dx) + (j * dx), y + 1, z + (i * dz) + (j * dz) + dz);
-                tcRailGag[((3 * i) - (i / 3)) + ((2 * j) + 3)].canPlaceRollingstock = false;
+                tcRailGag[((3 * i) - (i / 3)) + ((2 * j) + 3)].setCanPlaceRollingStock(false);
             }
 
         }

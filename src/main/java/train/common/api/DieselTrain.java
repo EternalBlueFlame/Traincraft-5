@@ -17,7 +17,6 @@ import train.common.entity.rollingStock.EntityBUnitEMDF7;
 
 public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 
-	public int fuelSlot = 1;
 	private int maxTank = 7 * 1000;
 	private int update = 8;
 	private StandardTank theTank;
@@ -45,12 +44,16 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 			this.theTank = LiquidManager.getInstance().new FilteredTank(maxTank, multiFilter);
 		}
 		dataWatcher.addObject(4, 0);
-		numCargoSlots = 3;
-		numCargoSlots1 = 3;
-		numCargoSlots2 = 3;
-		inventorySize = numCargoSlots + numCargoSlots2 + numCargoSlots1 + fuelSlot;
-		this.dataWatcher.addObject(23, 0);
+		this.dataWatcher.addObject(27, 0);
 		this.dataWatcher.addObject(5, "");
+	}
+	public DieselTrain(World world, double d, double d1, double d2) {
+		super(world, d, d1, d2);
+	}
+
+	@Override
+	public int getSizeInventory() {
+		return 10+(getInventoryRows()*9);
 	}
 
 	@Override
@@ -69,11 +72,12 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 					motionZ *= 0.94;
 				}
 			}
+			checkInvent(cargoItems[0]);
 		}
 	}
 
 	public int getDiesel() {
-		return getFuel()==0?(this.dataWatcher.getWatchableObjectInt(23)):getFuel();
+		return getFuel()==0?(this.dataWatcher.getWatchableObjectInt(27)):getFuel();
 	}
 	public String getLiquidName(){ return  this.dataWatcher.getWatchableObjectString(5);}
 
@@ -89,14 +93,12 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		super.writeEntityToNBT(nbttagcompound);
 		this.theTank.writeToNBT(nbttagcompound);
-		nbttagcompound.setBoolean("canBeAdjusted", canBeAdjusted);
 	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 		super.readEntityFromNBT(nbttagcompound);
 		this.theTank.readFromNBT(nbttagcompound);
-		canBeAdjusted = nbttagcompound.getBoolean("canBeAdjusted");
 	}
 
 	public int getCartTankCapacity() {
@@ -104,23 +106,23 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	}
 
 	private void placeInInvent(ItemStack itemstack1) {
-		for (int i = 1; i < locoInvent.length; i++) {
-			if (locoInvent[i] == null) {
-				locoInvent[i] = itemstack1;
+		for (int i = 1; i < cargoItems.length; i++) {
+			if (cargoItems[i] == null) {
+				cargoItems[i] = itemstack1;
 				return;
 			}
-			else if (locoInvent[i] != null && locoInvent[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() && (!itemstack1.getHasSubtypes() || locoInvent[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(locoInvent[i], itemstack1)) {
-				int var9 = locoInvent[i].stackSize + itemstack1.stackSize;
+			else if (cargoItems[i] != null && cargoItems[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() && (!itemstack1.getHasSubtypes() || cargoItems[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(cargoItems[i], itemstack1)) {
+				int var9 = cargoItems[i].stackSize + itemstack1.stackSize;
 				if (var9 <= itemstack1.getMaxStackSize()) {
-					locoInvent[i].stackSize = var9;
+					cargoItems[i].stackSize = var9;
 
 				}
-				else if (locoInvent[i].stackSize < itemstack1.getMaxStackSize()) {
-					locoInvent[i].stackSize += 1;
+				else if (cargoItems[i].stackSize < itemstack1.getMaxStackSize()) {
+					cargoItems[i].stackSize += 1;
 				}
 				return;
 			}
-			else if (i == locoInvent.length - 1) {
+			else if (i == cargoItems.length - 1) {
 				entityDropItem(itemstack1,1);
 				return;
 			}

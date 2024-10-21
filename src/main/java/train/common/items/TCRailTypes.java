@@ -15,7 +15,7 @@ public class TCRailTypes {
         DIAGONAL_CROSSING(),
         SWITCH(),
         SLOPE(),
-        CURVED_SLOPE(),
+        CURVED_SLOPE()
     }
 
     public static boolean isStraightTrack(TileTCRail tile){

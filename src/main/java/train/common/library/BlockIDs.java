@@ -67,20 +67,12 @@ public enum BlockIDs {
 	
 	tcRailGag(false,null),
 	tcRail(false,null),
-
-	MILWSwitchStand(false, null),
-	autoSwtichStand(false, null),
-	owoSwitchStand(true,ItemBlockOWOSwitchStand.class),
-	circleSwitchStand(false,null),
-	owoYardSwitchStand(true,ItemBlockOWOYardSwitch.class),
 	overheadWire(false,null),
 	overheadWireDouble(false,null),
 	signalSpanish(false,null),//ItemsignalSpanish.class
 	kSignal(false,null),
 	metroMadridPole(false, null),
 	FortyFootContainer(true, ItemFortyFootContainer.class),
-	speedSign(false, null),
-
 
 
 	;

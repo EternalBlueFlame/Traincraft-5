@@ -1,22 +1,17 @@
 package train.common.tile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.block.Block;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumFacing;
 import train.common.api.blocks.TileSwitch;
-import train.common.api.blocks.TileTraincraft;
-import train.common.blocks.TCBlocks;
-import train.common.library.BlockIDs;
+import train.common.blocks.BlockMFPBWigWag;
 import train.common.library.Info;
 
-import java.util.Random;
-
 public class TileMFPBWigWag extends TileSwitch {
+
+    public TileMFPBWigWag(){
+
+    }
+    public TileMFPBWigWag(BlockMFPBWigWag block ){
+        host = block;
+    }
 
     public float rotation =0;
     public boolean flip=true, powered =false;

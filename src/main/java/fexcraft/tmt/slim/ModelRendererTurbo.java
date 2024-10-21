@@ -129,10 +129,11 @@ public class ModelRendererTurbo {
 
     private TexturedPolygon textureQuad(TexturedVertex vert1, TexturedVertex vert2, TexturedVertex vert3, TexturedVertex vert4, float f, float g, float h, float j){
         List<TexturedVertex> verts = new ArrayList<>();
-        verts.add(vert1.setTexturePosition(h / textureWidth, g / textureHeight));
-        verts.add(vert2.setTexturePosition(f / textureWidth, g / textureHeight));
-        verts.add(vert3.setTexturePosition(f / textureWidth, j / textureHeight));
-        verts.add(vert4.setTexturePosition(h / textureWidth, j / textureHeight));
+        //casting to int will floor the input, this SHOULD fix the pixel offsets in weird shapeboxes
+        verts.add(vert1.setTexturePosition((int)h / textureWidth, (int)g / textureHeight));
+        verts.add(vert2.setTexturePosition((int)f / textureWidth, (int)g / textureHeight));
+        verts.add(vert3.setTexturePosition((int)f / textureWidth, (int)j / textureHeight));
+        verts.add(vert4.setTexturePosition((int)h / textureWidth, (int)j / textureHeight));
         return new TexturedPolygon(verts);
     }
 

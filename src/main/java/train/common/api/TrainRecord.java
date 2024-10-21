@@ -1,6 +1,7 @@
 package train.common.api;
 
 import cpw.mods.fml.common.registry.EntityRegistry;
+import ebf.tim.api.SkinRegistry;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
@@ -14,8 +15,6 @@ import java.util.Arrays;
 import java.util.List;
 
 public abstract class TrainRecord {
-
-    public List<String> skins = new ArrayList<>();
 
     @Deprecated
     public abstract String getName();
@@ -51,10 +50,10 @@ public abstract class TrainRecord {
     public abstract List<String> getColors();
 
     public List<String> getLiveries() {
-        if (skins.isEmpty() && getColors() != null) {
-            skins = getColors();
+        if (!SkinRegistry.liveryMap.containsKey(getEntityClass()) && getColors() != null) {
+            SkinRegistry.liveryMap.put(getEntityClass(),getColors());
         }
-        return skins;
+        return SkinRegistry.liveryMap.get(getEntityClass());
     }
 
     public abstract double getBogieLocoPosition();

@@ -7,7 +7,7 @@ import org.lwjgl.opengl.GL11;
 import fexcraft.tmt.slim.Tessellator;
 import train.client.render.renderSwitch.models.ModelkSignal;
 import train.common.library.Info;
-import train.common.tile.tileSwitch.TilekSignal;
+import train.common.tile.switchStand.TilekSignal;
 
 
 public class RenderkSignal extends TileEntitySpecialRenderer {

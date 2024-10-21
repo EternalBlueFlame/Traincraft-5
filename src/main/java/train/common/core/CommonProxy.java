@@ -34,7 +34,7 @@ import train.common.inventory.*;
 import train.common.library.GuiIDs;
 import train.common.mtc.*;
 import train.common.tile.*;
-import train.common.tile.tileSwitch.*;
+import train.common.tile.switchStand.*;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -88,7 +88,6 @@ public class CommonProxy implements IGuiHandler {
         GameRegistry.registerTileEntity(TileAmericanStopper.class, "TileAmericanStopper");
         GameRegistry.registerTileEntity(TileSignal.class, "TileTrainSignal");
         GameRegistry.registerTileEntity(TileLantern.class, "tileLantern");
-        GameRegistry.registerTileEntity(TileSwitchStand.class, "tileSwitchStand");
         GameRegistry.registerTileEntity(TileMFPBWigWag.class, "tileMFPBWigWag");
         GameRegistry.registerTileEntity(TileWaterWheel.class, "tileWaterWheel");
         GameRegistry.registerTileEntity(TileWindMill.class, "tileWindMill");
@@ -99,12 +98,14 @@ public class CommonProxy implements IGuiHandler {
         GameRegistry.registerTileEntity(TileBridgePillar.class, "tileTCBridgePillar");
         GameRegistry.registerTileEntity(TileMetroMadridPole.class, "tileMetroMadridPole");
 
-        //switches -hariesh
-        GameRegistry.registerTileEntity(TileowoSwitchStand.class, "tileowoswitchstand");
-        GameRegistry.registerTileEntity(TilecircleSwitchStand.class, "tilecircleswitchstand");
+        /**SwitchStands*/
+        GameRegistry.registerTileEntity(TileSwitchStand.class, "tileSwitchStand");
+
+        GameRegistry.registerTileEntity(TileOWOSwitchStand.class, "tileowoswitchstand");
+        GameRegistry.registerTileEntity(TileCircleSwitchStand.class, "tilecircleswitchstand");
         GameRegistry.registerTileEntity(TileMILWSwitchStand.class, "tileMILWSwitchStand");
-        GameRegistry.registerTileEntity(TileautoSwitchStand.class, "tileautoSwitchStand");
-        GameRegistry.registerTileEntity(TileowoYardSwitchStand.class, "tileowoYardSwitchStand");
+        GameRegistry.registerTileEntity(TileAutoSwitchStand.class, "tileautoSwitchStand");
+        GameRegistry.registerTileEntity(TileOWOYardSwitchStand.class, "tileowoYardSwitchStand");
 
         GameRegistry.registerTileEntity(TileoverheadWire.class, "tileoverheadwire");
         GameRegistry.registerTileEntity(TileoverheadWireDouble.class, "tileoverheadwiredouble");

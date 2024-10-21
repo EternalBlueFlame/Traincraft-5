@@ -7,6 +7,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import train.common.Traincraft;
 import train.common.api.LiquidTank;
 import train.common.core.util.TraincraftUtil;
@@ -114,5 +117,10 @@ public class EntityTankLava extends LiquidTank {
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 1.85F;
+	}
+
+	@Override
+	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		return fluid==null || fluid == FluidRegistry.LAVA;
 	}
 }

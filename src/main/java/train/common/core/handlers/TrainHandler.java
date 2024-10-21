@@ -1,5 +1,6 @@
 package train.common.core.handlers;
 
+import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TrainHandler {
-	private final List<EntityRollingStock> train = new ArrayList<>();
+	private final List<AbstractTrains> train = new ArrayList<>();
 	private int trainPower;
 
 	public TrainHandler() {
@@ -18,8 +19,8 @@ public class TrainHandler {
 		EntityRollingStock.allTrains.add(this);
 	}
 
-	public void addRollingStock(EntityRollingStock rolling) {
-        for (EntityRollingStock entityRollingStock : train) {
+	public void addRollingStock(AbstractTrains rolling) {
+        for (AbstractTrains entityRollingStock : train) {
             if (entityRollingStock.equals(rolling)) {
                 return;
             }
@@ -33,23 +34,23 @@ public class TrainHandler {
 		(rolling).train = this;
 		//System.out.println("added "+rolling);
 		if (rolling.cartLinked1 != null) {
-			addRollingStock((rolling.cartLinked1));
+			addRollingStock(rolling.cartLinked1);
 		}
 
 		if (rolling.cartLinked2 != null) {
-			addRollingStock((rolling.cartLinked2));
+			addRollingStock(rolling.cartLinked2);
 		}
 	}
 
 	public void resetTrain() {
-        for (EntityRollingStock entityRollingStock : train) {
+        for (AbstractTrains entityRollingStock : train) {
             if (entityRollingStock != null)
                 entityRollingStock.train = null;
         }
 		train.clear();
 	}
 
-	public List<EntityRollingStock> getTrains() {
+	public List<AbstractTrains> getTrains() {
 		return this.train;
 	}
 

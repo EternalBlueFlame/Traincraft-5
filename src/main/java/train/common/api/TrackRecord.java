@@ -1,6 +1,5 @@
 package train.common.api;
 
-import net.minecraft.item.Item;
 import train.common.items.TCRailTypes;
 import train.common.library.ItemIDs;
 
@@ -11,7 +10,7 @@ public interface TrackRecord  {
     TCRailTypes.RailTypes getRailType();
 
     String getVariant();
-    Object getItem();
+    IItemIDs getItem();
 
     int getSwitchSize();
 

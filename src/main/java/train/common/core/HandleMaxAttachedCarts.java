@@ -1,5 +1,6 @@
 package train.common.core;
 
+import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 
@@ -56,7 +57,7 @@ public class HandleMaxAttachedCarts {
         if ((cart1).train != null && !(cart1).train.getTrains().isEmpty() && (cart1).train.getTrains().size() > 1) {
             power =cart1.transportMetricHorsePower();
             for (int i = 0; i < (cart1).train.getTrains().size(); i++) {
-                EntityRollingStock stock = (cart1).train.getTrains().get(i);
+                AbstractTrains stock = (cart1).train.getTrains().get(i);
                 if (stock instanceof Locomotive && stock.uniqueID != (cart1).uniqueID) {
                     power += stock.transportMetricHorsePower();
                 }

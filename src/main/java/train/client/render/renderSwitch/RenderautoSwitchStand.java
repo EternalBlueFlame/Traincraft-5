@@ -8,7 +8,7 @@ import fexcraft.tmt.slim.Tessellator;
 import train.client.render.renderSwitch.models.ModelautoSwitchOff;
 import train.client.render.renderSwitch.models.ModelautoSwitchOn;
 import train.common.library.Info;
-import train.common.tile.tileSwitch.TileautoSwitchStand;
+import train.common.tile.switchStand.TileAutoSwitchStand;
 
 
 public class RenderautoSwitchStand extends TileEntitySpecialRenderer {
@@ -27,7 +27,7 @@ public class RenderautoSwitchStand extends TileEntitySpecialRenderer {
         GL11.glRotated(180,0,1,0);
         boolean skipRender = false;
 
-        switch (((TileautoSwitchStand)tileEntity).getFacing()){
+        switch (((TileAutoSwitchStand)tileEntity).getFacing()){
             case NORTH:{
                 GL11.glRotated(180,0,0,1);
                 GL11.glRotated(270,0,1,0);

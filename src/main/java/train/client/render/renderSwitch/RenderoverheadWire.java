@@ -8,7 +8,7 @@ import fexcraft.tmt.slim.Tessellator;
 import train.client.render.renderSwitch.models.ModeloverheadWire;
 import train.client.render.renderSwitch.models.ModeloverheadWireOn;
 import train.common.library.Info;
-import train.common.tile.tileSwitch.TileoverheadWire;
+import train.common.tile.switchStand.TileoverheadWire;
 
 public class RenderoverheadWire extends TileEntitySpecialRenderer {
     static final ModeloverheadWire modeloverheadWire = new ModeloverheadWire();

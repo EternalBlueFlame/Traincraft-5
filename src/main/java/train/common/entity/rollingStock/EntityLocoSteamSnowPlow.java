@@ -25,12 +25,6 @@ import java.util.Random;
 public class EntityLocoSteamSnowPlow extends SteamTrain {
 	public EntityLocoSteamSnowPlow(World world) {
 		super(world, LiquidManager.WATER_FILTER);
-		initLocoSteam();
-	}
-
-	public void initLocoSteam() {
-		fuelTrain = 0;
-		locoInvent = new ItemStack[inventorySize];
 	}
 
 	public EntityLocoSteamSnowPlow(World world, double d, double d1, double d2) {
@@ -101,16 +95,16 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (getWorld().isRemote || bogieLoco==null) {
+		if (worldObj.isRemote || bogieFront==null || bogieBack==null) {
 			return;
 		}
-		checkInvent(locoInvent[0], locoInvent[1], this);
+		checkInvent(cargoItems[0], cargoItems[1], this);
 		if (fakePlayer == null){
 			 fakePlayer = new FakePlayer(getWorld());
 		}
 		rotation = MathHelper.floor_float(TraincraftUtil.atan2degreesf(
-				bogieLoco.posZ - posZ,
-				bogieLoco.posX - posX));
+				bogieFront.posZ - bogieBack.posZ,
+				bogieFront.posX - bogieBack.posX));
 
 		point1 = rotateVec3(blockpos[0], getPitch(), rotation);
 		point1[0] += posX;point1[1] += posY;point1[2] += posZ;
@@ -146,13 +140,13 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 		if((b == Blocks.snow || b == Blocks.snow_layer) && b.canHarvestBlock(fakePlayer, blockMeta)){
 			getWorld().setBlockToAir(MathHelper.floor_double(point[0]),MathHelper.floor_double(point[1]),MathHelper.floor_double(point[2]));
 			int snowballs = new Random().nextInt(9);
-			for(int i=2; i<locoInvent.length && snowballs>0; i++){
-				if (locoInvent[i] == null){
-					locoInvent[i] = new ItemStack(Items.snowball, snowballs);
+			for(int i=2; i<cargoItems.length && snowballs>0; i++){
+				if (cargoItems[i] == null){
+					cargoItems[i] = new ItemStack(Items.snowball, snowballs);
 					snowballs--;
-				} else if (locoInvent[i].getItem() == Items.snowball && locoInvent[i].stackSize < Items.snowball.getItemStackLimit()){
-					while (locoInvent[i].stackSize < locoInvent[i].getMaxStackSize() && snowballs >0){
-						locoInvent[i].stackSize++;
+				} else if (cargoItems[i].getItem() == Items.snowball && cargoItems[i].stackSize < Items.snowball.getItemStackLimit()){
+					while (cargoItems[i].stackSize < cargoItems[i].getMaxStackSize() && snowballs >0){
+						cargoItems[i].stackSize++;
 						snowballs--;
 					}
 				}
@@ -191,45 +185,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 	}
 
 	@Override
-	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
-		super.writeEntityToNBT(nbttagcompound);
-
-		nbttagcompound.setShort("fuelTrain", (short) fuelTrain);
-		NBTTagList nbttaglist = new NBTTagList();
-		for (int i = 0; i < locoInvent.length; i++) {
-			if (locoInvent[i] != null) {
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				locoInvent[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
-		}
-		nbttagcompound.setTag("Items", nbttaglist);
-	}
-
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		super.readEntityFromNBT(nbttagcompound);
-
-		fuelTrain = nbttagcompound.getShort("fuelTrain");
-		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-		locoInvent = new ItemStack[getSizeInventory()];
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			int j = nbttagcompound1.getByte("Slot") & 0xff;
-			if (j >= 0 && j < locoInvent.length) {
-				locoInvent[j] = new ItemStack(nbttagcompound1);
-			}
-		}
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return inventorySize;
-	}
-
-	@Override
-	public String getName() {
+	public String getInventoryName() {
 		return "Steam Snow Plow";
 	}
 

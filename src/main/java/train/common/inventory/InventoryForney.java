@@ -22,7 +22,7 @@ public class InventoryForney extends Container {
 	public InventoryForney(InventoryPlayer iinventory, EntityRollingStock entityminecart) {
 		player = iinventory;
 		loco = (Locomotive) entityminecart;
-		inventorySize = loco.inventorySize;
+		inventorySize = loco.getSizeInventory();
 		int i = 2;
 		int numCargoSlots = 5;
 		addSlotToContainer(new Slot((IInventory) entityminecart, 0, 8, 34));

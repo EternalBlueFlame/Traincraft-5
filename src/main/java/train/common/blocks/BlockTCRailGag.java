@@ -17,6 +17,7 @@ import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.library.BlockIDs;
 import train.common.library.Info;
+import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
 
 import java.util.Random;
@@ -73,8 +74,28 @@ public class BlockTCRailGag extends Block {
 	}
 
 	@Override
+	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
+
+		TileTCRailGag gagRail = (TileTCRailGag) world.getTileEntity(x,y,z);
+		TileTCRail tileEntity = (TileTCRail) world.getTileEntity(gagRail.originX, gagRail.originY, gagRail.originZ);
+
+		if (tileEntity == null) {
+			return;
+		}
+		tileEntity.lastPlayerToInteract = player;
+	}
+
+	@Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-		return null;
+		TileTCRailGag tileGag = (TileTCRailGag) world.getTileEntity(x, y, z);
+		TileTCRail tile = (TileTCRail) world.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
+		if (tile != null && tile.idDrop != null){
+			return new ItemStack(tile.idDrop);
+
+		}
+		else{
+			return null;
+		}
 	}
 	
 	@Override

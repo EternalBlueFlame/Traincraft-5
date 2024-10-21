@@ -147,6 +147,7 @@ item.tc:emptyCanister.name=Empty Canister
 item.tc:bolt.name=Rail Spike
 item.tc:recipeBook.name=Traincraft Guide
 item.tc:adminBook.name=Traincraft Admin Book
+item.tc:trackDebugger.name=Track Debugger
 
 
 item.tc:tcRailSmallStraight.name=Straight (1x1)
@@ -473,8 +474,6 @@ item.tc:minecartLocoC41_080.name=C41 0-8-0
 item.tc:minecartLocoAlcoSC4.name=Alco SC4
 item.tc:minecartFreightL.name=Freight Car L
 item.tc:minecartHeavySteam.name=Heavy Steam Locomotive
-item.tc:minecartBNLRV_A.name=BNLRV Powered End
-item.tc:minecartBNLRV_B.name=BNLRV Unpowered End
 item.tc:minecartMetro2000Loco.name=Metro Madrid 2000 Motor
 item.tc:minecartMetro2000Passenger.name=Metro Madrid 2000 Tail
 item.tc:minecartLocoCF7.name=CF7
@@ -1150,8 +1149,7 @@ entity.tc.Loco WLs40.name=WLs40
 entity.tc.Freight Car L.name=Freight Car L
 entity.tc.Loco Steam C41 0-8-0.name=C41 0-8-0
 entity.tc.Loco Steam Alco SC4.name=Alco SC4
-entity.tc.BNLRV_A.name=BNLRV Powered End
-entity.tc.BNLRV_B.name=BNLRV Unpowered End
+
 entity.tc.Metro2000Passenger.name=Metro Madrid 2000 Tail
 entity.tc.Metro2000loco.name=Metro Madrid 2000 Motor
 entity.tc.Loco Diesel CF7.name=CF7
