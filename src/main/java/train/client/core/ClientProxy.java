@@ -333,6 +333,14 @@ public class ClientProxy extends CommonProxy {
                 } else {
                     return null;
                 }
+            case (GuiIDs.CONTROL_CAR):
+                if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntityRollingStock) {
+                    return new GuiControlCar(riddenByEntity.inventory, entity);
+                } else if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntitySeat) {
+                    return new GuiControlCar(riddenByEntity.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
+                } else {
+                    return null;
+                }
             case (GuiIDs.FORNEY):
                 if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntityRollingStock) {
                     return new GuiForney(riddenByEntity.inventory, entity);
