@@ -130,10 +130,10 @@ public class ModelRendererTurbo {
     private TexturedPolygon textureQuad(TexturedVertex vert1, TexturedVertex vert2, TexturedVertex vert3, TexturedVertex vert4, float f, float g, float h, float j){
         List<TexturedVertex> verts = new ArrayList<>();
         //casting to int will floor the input, this SHOULD fix the pixel offsets in weird shapeboxes
-        verts.add(vert1.setTexturePosition((int)h / textureWidth, (int)g / textureHeight));
-        verts.add(vert2.setTexturePosition((int)f / textureWidth, (int)g / textureHeight));
-        verts.add(vert3.setTexturePosition((int)f / textureWidth, (int)j / textureHeight));
-        verts.add(vert4.setTexturePosition((int)h / textureWidth, (int)j / textureHeight));
+        verts.add(vert1.setTexturePosition(h / textureWidth, g / textureHeight));
+        verts.add(vert2.setTexturePosition(f / textureWidth, g / textureHeight));
+        verts.add(vert3.setTexturePosition(f / textureWidth, j / textureHeight));
+        verts.add(vert4.setTexturePosition(h / textureWidth, j / textureHeight));
         return new TexturedPolygon(verts);
     }
 
@@ -164,13 +164,13 @@ public class ModelRendererTurbo {
         TexturedVertex vert7 = new TexturedVertex(v7[0], v7[1], v7[2], 8.0F, 0.0F);
 
         if(w % 1 != 0){
-            w = w < 1 ? 1 : (int)w + (w % 1 > 0.5f ? 1 : 0);
+            w = w < 1 ? w % 1 < 0.5f ? 0 : 1 : (int)w + (w % 1 >= 0.5f ? 1 : 0);
         }
         if(h % 1 != 0){
-            h = h < 1 ? 1 : (int)h + (h % 1 > 0.5f ? 1 : 0);
+            h = h < 1 ? h % 1 < 0.5f ? 0 : 1 : (int)h + (h % 1 >= 0.5f ? 1 : 0);
         }
         if(d % 1 != 0){
-            d = d < 1 ? 1 : (int)d + (d % 1 > 0.5f ? 1 : 0);
+            d = d < 1 ? d % 1 < 0.5f ? 0 : 1 : (int)d + (d % 1 >= 0.5f ? 1 : 0);
         }
         if(sides == null){
             poly.add(textureQuad(vert5, vert1, vert2, vert6, textureOffsetX + d + w, textureOffsetY + d, textureOffsetX + d + w + d, textureOffsetY + d + h));
