@@ -4,6 +4,7 @@ import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.entities.EntitySeat;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.carts.IRoutableCart;
 import net.minecraft.block.Block;
@@ -122,7 +123,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	@Override
 	public void applyEntityCollision(Entity entity) {
 
-		if (this.entityMainTrain != null && entity != this.entityMainTrain) {
+		if (this.entityMainTrain != null && entity != this.entityMainTrain && !(entity instanceof EntitySeat) ) {
 
 			this.entityMainTrain.applyEntityCollision(entity);
 

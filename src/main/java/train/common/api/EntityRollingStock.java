@@ -1900,9 +1900,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if ((trainsOnClick.onClickWithStake(this, itemstack, playerEntity, worldObj))) {
             return true;
         }
-        if ((trainsOnClick.onClickWithDebugger(this, itemstack, playerEntity, worldObj))) {
-            return true;
-        }
 
         if (itemstack != null && itemstack.getItem() instanceof ItemPaintbrushThing && !entityplayer.isSneaking()) {
             if (SkinRegistry.get(this).size() > 0) {
