@@ -303,7 +303,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 
 		if (rollingStock != null) {
-			rollingStock.setPosition( i , j+ 0.5D, k);
+			rollingStock.setPosition( i + 0.5D , j+ 0.18D, k + 0.5D);
 			if (SkinRegistry.get(rollingStock).size()>0) {
 				rollingStock.setColor(rollingStock.getDefaultSkin());
 			}
@@ -511,7 +511,8 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					}
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 0 || meta == 2) {
-							rollingStock.rotationYaw = 90; // LEFT
+							rollingStock.rotationYaw = 0; // LEFT
+							rollingStock.serverRealRotation = -90; // RIGHT
 						}
 						else if (meta == 5 || meta == 7) {
 							rollingStock.rotationYaw = 45; // LEFT

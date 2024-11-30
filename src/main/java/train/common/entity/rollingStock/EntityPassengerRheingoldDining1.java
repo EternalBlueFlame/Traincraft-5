@@ -46,6 +46,11 @@ public class EntityPassengerRheingoldDining1 extends AbstractWorkCart implements
 	}
 
 	@Override
+	public float[] rotationPoints() {
+		return new float[]{3.125f, -3.125f};
+	}
+
+	@Override
 	public void pressKey(int i) {
 		if (riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
 			if (locked && !((EntityPlayer) riddenByEntity).getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {

@@ -860,23 +860,23 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         if (needsBogieUpdate) {
             if (bogieFront != null) {
-                float rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation));
-                float rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation)));
+                float rotationCos1 = (float) Math.cos(this.serverRealRotation * TraincraftUtil.radian);
+                float rotationSin1 = (float) Math.sin(this.serverRealRotation * TraincraftUtil.radian);
                 if (!firstLoad) {
-                    rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation + 90));
-                    rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation + 90)));
+                    rotationCos1 = (float) Math.cos((this.serverRealRotation + 90) * TraincraftUtil.radian);
+                    rotationSin1 = (float) Math.sin((this.serverRealRotation + 90) * TraincraftUtil.radian);
                 }
-                double bogieX1 = (this.posX + (rotationCos1 * Math.abs(bogieShift)));
-                double bogieZ1 = (this.posZ + (rotationSin1 * Math.abs(bogieShift)));
+                double bogieX1 = (this.posX + (rotationCos1 * (-bogieShift)));
+                double bogieZ1 = (this.posZ + (rotationSin1 *(-bogieShift)));
                 this.bogieFront.setPosition(bogieX1, bogieFront.posY, bogieZ1);
 
             }
             if (bogieBack != null) {
-                float rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation));
-                float rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation)));
+                float rotationCos1 = (float) Math.cos(this.serverRealRotation * TraincraftUtil.radian);
+                float rotationSin1 = (float) Math.sin(this.serverRealRotation * TraincraftUtil.radian);
                 if (!firstLoad) {
-                    rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation + 90));
-                    rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation + 90)));
+                    rotationCos1 = (float) Math.cos((this.serverRealRotation + 90) * TraincraftUtil.radian);
+                    rotationSin1 = (float) Math.sin((this.serverRealRotation + 90) * TraincraftUtil.radian);
                 }
                 double bogieX1 = (this.posX + (rotationCos1 * Math.abs(rotationPoints()[1])));
                 double bogieZ1 = (this.posZ + (rotationSin1 * Math.abs(rotationPoints()[1])));
@@ -1898,6 +1898,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         }
         if ((trainsOnClick.onClickWithStake(this, itemstack, playerEntity, worldObj))) {
+            return true;
+        }
+        if ((trainsOnClick.onClickWithDebugger(this, itemstack, playerEntity, worldObj))) {
             return true;
         }
 
