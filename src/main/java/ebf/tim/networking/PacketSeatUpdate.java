@@ -9,6 +9,7 @@ import ebf.tim.entities.EntitySeat;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import train.common.Traincraft;
 import train.common.api.EntityRollingStock;
 
@@ -52,16 +53,16 @@ public class PacketSeatUpdate implements IMessage {
     public static class Handler implements IMessageHandler<PacketSeatUpdate,IMessage> {
         @Override public IMessage onMessage(PacketSeatUpdate message, MessageContext ctx) {
             EntityRollingStock rollingStockEntity;
-            Entity playerEntity;
+            EntityPlayer playerEntity;
             EntitySeat oldSeat;
             EntitySeat newSeat;
             if (ctx.side == Side.SERVER) {
                 rollingStockEntity = (EntityRollingStock) ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.rollingStockId);
-                playerEntity = ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.playerId);
+                playerEntity = (EntityPlayer) ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.playerId);
 
             } else {
                 rollingStockEntity = (EntityRollingStock) Minecraft.getMinecraft().theWorld.getEntityByID(message.rollingStockId);
-                playerEntity = Minecraft.getMinecraft().theWorld.getEntityByID(message.playerId);
+                playerEntity = (EntityPlayer) Minecraft.getMinecraft().theWorld.getEntityByID(message.playerId);
             }
             oldSeat = rollingStockEntity.seats.get(message.oldSeatIndex);
             newSeat = rollingStockEntity.seats.get(message.newSeatIndex);

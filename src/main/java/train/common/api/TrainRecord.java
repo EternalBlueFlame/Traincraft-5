@@ -209,11 +209,11 @@ public abstract class TrainRecord {
             @Override
             public AbstractTrains getEntity(World world, double x, double y, double z) {
                 try {
-                    if (world.isRemote) {
-                        entityClass.getConstructor(World.class).newInstance(world);
-                    } else {
+                    //if (world.isRemote) {
+                        //entityClass.getConstructor(World.class).newInstance(world);
+                    //} else {
                         return (AbstractTrains) entityClass.getConstructor(World.class, double.class, double.class, double.class).newInstance(world, x, y, z);
-                    }
+                    //}
                 } catch (IllegalArgumentException | SecurityException | InstantiationException |
                          IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
                     e.printStackTrace();

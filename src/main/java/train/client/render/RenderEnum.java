@@ -4,7 +4,7 @@ import fexcraft.tmt.slim.ModelBase;
 import train.client.render.models.*;
 import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
-import train.common.entity.rollingStock.*;
+import train.common.entity.rollingStockOld.*;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,6 @@ public enum RenderEnum implements TrainRenderRecord {
     /**
      * Passengers
      */
-    passengerCartBlue(EntityPassengerBlue.class, new ModelPassenger6(), "passenger_", true, new float[]{0.0F, -0.47F, 0.0F}, null, null, "", 0, null, "", null, 0, false),
     passengerCartBlackSmall(EntityPassenger2.class, new ModelPassenger2(), "passenger3", false, new float[]{0.0F, -0.32F, -0.1F}, null, null, "", 0, null, "", null, 0, false),
     passengerLongGreen(EntityPassenger5.class, new ModelPassenger5(), "passenger5_", true, new float[]{0.0F, -0.32F, 0.0F}, null, null, "", 0, null, "", null, 0, false),
     passengerShortGreen(EntityPassenger7.class, new ModelPassenger7(), "passenger7", false, new float[]{0.0F, -0.44F, 0.0F}, new float[]{0F, 90F, 0F}, null, "", 0, null, "", null, 0, false),

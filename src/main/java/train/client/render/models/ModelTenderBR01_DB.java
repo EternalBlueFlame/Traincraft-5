@@ -6,7 +6,7 @@ import org.lwjgl.opengl.GL11;
 import fexcraft.tmt.slim.ModelBase;
 import train.client.core.ClientProxy;
 import train.client.render.CustomModelRenderer;
-import train.common.entity.rollingStock.EntityTenderBR01_DB;
+import train.common.entity.rollingStockOld.EntityTenderBR01_DB;
 import train.common.library.Info;
 
 public class ModelTenderBR01_DB extends ModelBase {

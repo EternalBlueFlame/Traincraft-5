@@ -11,8 +11,8 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import train.common.entity.rollingStock.EntityStockCar;
-import train.common.entity.rollingStock.EntityStockCarDRWG;
+import train.common.entity.rollingStockOld.EntityStockCar;
+import train.common.entity.rollingStockOld.EntityStockCarDRWG;
 import train.common.library.Tracks;
 
 import java.io.DataInputStream;

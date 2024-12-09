@@ -221,7 +221,6 @@ public enum ItemIDs implements IItemIDs {
 	 * RollingStock
 	 */
 
-	minecartPassengerBlue("ItemRollingStock", "train_passenger_3", 2),
 	minecartPassenger2("ItemRollingStock", "train_passenger_1", 2),
 	minecartPassenger5("ItemRollingStock", "train_passenger_2", 2),
 	minecartPassenger7("ItemRollingStock", "train_passenger_4", 2),
@@ -439,6 +438,10 @@ public enum ItemIDs implements IItemIDs {
 	@Override
 	public Item getItem() {
 		return this.item;
+	}
+
+	public String getItemName() {
+		return this.item.getUnlocalizedName().replace("tc:", "");
 	}
 }
 

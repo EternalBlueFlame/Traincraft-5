@@ -3,6 +3,7 @@ package train.common.library;
 import net.minecraft.item.Item;
 import net.minecraft.stats.Achievement;
 import train.common.blocks.TCBlocks;
+import train.common.entity.rollingStock.EntityPassengerPassengerCar1;
 
 public enum AchievementIDs {
 	steel(new Item[] { ItemIDs.steel.item }),
@@ -16,7 +17,7 @@ public enum AchievementIDs {
 	normalSteam(new Item[] { ItemIDs.minecartPower.item, ItemIDs.minecartLocoBR01_DB.item,
 			ItemIDs.minecartLocoBR80_DB.item, ItemIDs.minecartLocoEr.item, ItemIDs.minecartLocoForneyRed.item,
 			ItemIDs.minecartLocomogulBlue.item, }),
-	passenger(new Item[] { ItemIDs.minecartPassenger5.item, ItemIDs.minecartPassengerBlue.item,
+	passenger(new Item[] { ItemIDs.minecartPassenger5.item, EntityPassengerPassengerCar1.thisItem,
 			ItemIDs.minecartPassenger2.item, ItemIDs.minecartCaboose.item, ItemIDs.minecartCaboose3.item,
 			ItemIDs.minecartPassenger7.item, ItemIDs.minecartPassenger8_1class_DB.item,
 			ItemIDs.minecartPassenger9_2class_DB.item }),

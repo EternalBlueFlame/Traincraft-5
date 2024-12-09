@@ -35,6 +35,7 @@ import train.common.core.CreativeTabTraincraft;
 import train.common.core.TrainModCore;
 import train.common.core.handlers.*;
 import train.common.core.util.TraincraftUtil;
+import train.common.entity.rollingStock.EntityPassengerPassengerCar1;
 import train.common.generation.ComponentVillageTrainstation;
 import train.common.generation.WorldGenWorld;
 import train.common.items.TCItems;
@@ -166,6 +167,16 @@ public class Traincraft {
             Traincraft.tcLog.info("Enabled Traincraft: Community Edition rollingstock");
         }
 
+
+        TraincraftRegistry.registerTransports("", listSteamTrains());
+        TraincraftRegistry.registerTransports("", listFreight());
+        TraincraftRegistry.registerTransports("", listPassenger());
+        TraincraftRegistry.registerTransports("", listTanker());
+        TraincraftRegistry.registerTransports("", listElectricTrains());
+        TraincraftRegistry.registerTransports("", listDieselTrains());
+        TraincraftRegistry.registerTransports("", listTender());
+
+
         proxy.registerTileEntities();
 
         tcLog.info("Initialize Fluids");
@@ -244,6 +255,8 @@ public class Traincraft {
         tcLog.info("Activation Mod Compatibility");
         TrainModCore.ModsLoaded();
 
+        trainConverter.write();
+
         tcLog.info("Finished PostInitialization");
     }
 
@@ -265,4 +278,31 @@ public class Traincraft {
     }
 
     public static boolean hasTCCEAddon() {return Loader.isModLoaded("tcce");}
+
+
+
+
+    public static AbstractTrains[] listElectricTrains() {
+        return new AbstractTrains[]{};
+    }
+    public static AbstractTrains[] listDieselTrains() {
+        return new AbstractTrains[]{};
+    }
+    public static AbstractTrains[] listSteamTrains() {
+        return new AbstractTrains[]{};
+    }
+    public static AbstractTrains[] listPassenger() {
+        return new AbstractTrains[]{new EntityPassengerPassengerCar1(null)};
+    }
+    public static AbstractTrains[] listFreight() {
+        return new AbstractTrains[]{};
+    }
+    public static AbstractTrains[] listTanker() {
+        return new AbstractTrains[]{};
+    }
+    public static AbstractTrains[] listTender() {
+        return new AbstractTrains[]{};
+    }
+
+
 }

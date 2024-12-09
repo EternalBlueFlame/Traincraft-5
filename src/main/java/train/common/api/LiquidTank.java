@@ -11,7 +11,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import train.common.adminbook.ServerLogger;
-import train.common.entity.rollingStock.EntityTankLava;
+import train.common.entity.rollingStockOld.EntityTankLava;
 import train.common.library.ItemIDs;
 
 import javax.annotation.Nullable;
