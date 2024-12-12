@@ -8,9 +8,7 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import train.common.api.EntityRollingStock;
 import train.common.blocks.TCBlocks;
-import train.common.core.util.DepreciatedUtil;
-import train.common.entity.rollingStock.*;
-import train.common.library.BlockIDs;
+import train.common.entity.rollingStockOld.*;
 
 import java.util.List;
 import java.util.Random;

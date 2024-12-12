@@ -44,7 +44,7 @@ import train.common.core.Traincraft_EventSounds;
 import train.common.core.handlers.ConfigHandler;
 import train.common.entity.digger.EntityRotativeDigger;
 import train.common.entity.digger.EntityRotativeWheel;
-import train.common.entity.rollingStock.EntityJukeBoxCart;
+import train.common.entity.rollingStockOld.EntityJukeBoxCart;
 import train.common.entity.zeppelin.EntityZeppelinOneBalloon;
 import train.common.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.common.library.BlockIDs;
@@ -330,6 +330,14 @@ public class ClientProxy extends CommonProxy {
                     return new GuiLoco2(riddenByEntity.inventory, entity);
                 } else if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntitySeat) {
                     return new GuiLoco2(riddenByEntity.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
+                } else {
+                    return null;
+                }
+            case (GuiIDs.CONTROL_CAR):
+                if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntityRollingStock) {
+                    return new GuiControlCar(riddenByEntity.inventory, entity);
+                } else if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntitySeat) {
+                    return new GuiControlCar(riddenByEntity.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
                 } else {
                     return null;
                 }

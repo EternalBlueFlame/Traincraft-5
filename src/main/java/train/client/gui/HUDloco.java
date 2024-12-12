@@ -7,6 +7,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import org.lwjgl.opengl.GL11;
+import train.common.api.AbstractControlCar;
 import train.common.api.DieselTrain;
 import train.common.api.Locomotive;
 import train.common.api.SteamTrain;
@@ -17,21 +18,40 @@ public class HUDloco extends GuiScreen {
     private int windowWidth, windowHeight;
 
     @SubscribeEvent
-    public void onGameRender(RenderGameOverlayEvent.Text event) {
-        if (game != null
-                && game.thePlayer != null && game.thePlayer.ridingEntity != null
-                && (game.thePlayer.ridingEntity instanceof Locomotive || (game.thePlayer.ridingEntity instanceof EntitySeat
-                && ((EntitySeat) game.thePlayer.ridingEntity).parent instanceof Locomotive))
-                && Minecraft.isGuiEnabled() && game.currentScreen == null) {
-            if (game.thePlayer.ridingEntity instanceof EntitySeat) {
+    public void onGameRender(RenderGameOverlayEvent.Text event)
+    {
+        if (game != null && game.thePlayer != null && game.thePlayer.ridingEntity != null && Minecraft.isGuiEnabled() && game.currentScreen == null
+                && (game.thePlayer.ridingEntity instanceof Locomotive
+                    || game.thePlayer.ridingEntity instanceof AbstractControlCar
+                    || (game.thePlayer.ridingEntity instanceof EntitySeat && ((EntitySeat) game.thePlayer.ridingEntity).parent instanceof Locomotive)))
+        {
+            if (game.thePlayer.ridingEntity instanceof AbstractControlCar)
+            {
+                if (game.theWorld.getEntityByID(game.thePlayer.ridingEntity.getDataWatcher().getWatchableObjectInt(29)) != null)
+                {
+                    renderSkillHUD(event, (Locomotive) game.theWorld.getEntityByID(game.thePlayer.ridingEntity.getDataWatcher().getWatchableObjectInt(29)));
+                }
+                else
+                {
+                    this.game = this.mc = Minecraft.getMinecraft();
+                    this.fontRendererObj = this.game.fontRenderer;
+                }
+            }
+            else if (game.thePlayer.ridingEntity instanceof EntitySeat)
+            {
                 EntitySeat seat = (EntitySeat) game.thePlayer.ridingEntity;
-                if (seat.isControlSeat()) {
+                if (seat.isControlSeat())
+                {
                     renderSkillHUD(event, (Locomotive) ((EntitySeat) game.thePlayer.ridingEntity).parent);
                 }
-            } else {
+            }
+            else
+            {
                 renderSkillHUD(event, (Locomotive) game.thePlayer.ridingEntity);
             }
-        } else {
+        }
+        else
+        {
             this.game = this.mc = Minecraft.getMinecraft();
             this.fontRendererObj = this.game.fontRenderer;
         }

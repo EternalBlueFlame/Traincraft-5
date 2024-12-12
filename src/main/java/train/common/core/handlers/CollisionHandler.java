@@ -18,8 +18,8 @@ import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 import train.common.entity.EntityLasersLines;
-import train.common.entity.rollingStock.EntityStockCar;
-import train.common.entity.rollingStock.EntityStockCarDRWG;
+import train.common.entity.rollingStockOld.EntityStockCar;
+import train.common.entity.rollingStockOld.EntityStockCarDRWG;
 
 import java.util.List;
 import java.util.Random;

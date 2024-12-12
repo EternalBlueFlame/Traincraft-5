@@ -27,8 +27,8 @@ import train.common.core.handlers.ChunkEvents;
 import train.common.core.handlers.WorldEvents;
 import train.common.core.util.MP3Player;
 import train.common.entity.digger.EntityRotativeDigger;
-import train.common.entity.rollingStock.EntityJukeBoxCart;
-import train.common.entity.rollingStock.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.EntityJukeBoxCart;
+import train.common.entity.rollingStockOld.EntityTracksBuilder;
 import train.common.entity.zeppelin.AbstractZeppelin;
 import train.common.inventory.*;
 import train.common.library.GuiIDs;
@@ -181,9 +181,12 @@ public class CommonProxy implements IGuiHandler {
             case (GuiIDs.TRAIN_WORKBENCH):
                 return te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
             case (GuiIDs.LOCO):
-                if (entity instanceof EntityRollingStock) {
+                if (entity instanceof EntityRollingStock)
+                {
                     return riddenByEntity != null ? new InventoryLoco(riddenByEntity.inventory,(EntityRollingStock)entity) : null;
                 }
+            case (GuiIDs.CONTROL_CAR):
+                return riddenByEntity != null ? new InventoryControlCar(riddenByEntity.inventory, (EntityRollingStock) entity) : null;
             case (GuiIDs.FORNEY):
                 if (entity instanceof EntityRollingStock) {
                     return riddenByEntity != null ? new InventoryForney(player.inventory, (EntityRollingStock) entity) : null;

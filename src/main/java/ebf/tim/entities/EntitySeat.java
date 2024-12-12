@@ -193,9 +193,9 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     }
 
     //@Override
-    public void addPassenger(Entity passenger) {
+    public void addPassenger(EntityPlayer passenger) {
 //        DebugUtil.println(passengerEntity==null, passengerEntity.ridingEntity==null, passenger instanceof EntityLivingBase);
-        if(riddenByEntity==null && passenger instanceof EntityLivingBase) {
+        if(riddenByEntity==null && passenger != null) {
             //super.addPassenger(passenger);
             this.riddenByEntity=passenger;
             passenger.ridingEntity=this;

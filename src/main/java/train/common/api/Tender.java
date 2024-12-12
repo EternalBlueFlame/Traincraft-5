@@ -8,9 +8,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import train.common.api.LiquidManager.StandardTank;
-import train.common.entity.rollingStock.EntityBUnitDD35;
-import train.common.entity.rollingStock.EntityBUnitEMDF3;
-import train.common.entity.rollingStock.EntityBUnitEMDF7;
+import train.common.entity.rollingStockOld.EntityBUnitDD35;
+import train.common.entity.rollingStockOld.EntityBUnitEMDF3;
+import train.common.entity.rollingStockOld.EntityBUnitEMDF7;
 
 public abstract class Tender extends Freight implements IFluidHandler {
 
