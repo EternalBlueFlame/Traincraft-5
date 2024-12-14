@@ -7,7 +7,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import train.common.recipes.DistilRecipes;
 
 public class SlotDistil extends Slot {
@@ -67,7 +67,7 @@ public class SlotDistil extends Slot {
 				var2 = 0;
 			}
 			else if (var3 < 1.0F) {
-				var4 = MathHelper.floor_float((float) var2 * var3);
+				var4 = MathHelper.floor((float) var2 * var3);
 
 				if (var4 < MathHelper.ceiling_float_int((float) var2 * var3) && (float) Math.random() < (float) var2 * var3 - (float) var4) {
 					++var4;

@@ -1,7 +1,7 @@
 package train.common.core.handlers;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import train.common.api.AbstractTrains;
 
 import java.util.ArrayList;

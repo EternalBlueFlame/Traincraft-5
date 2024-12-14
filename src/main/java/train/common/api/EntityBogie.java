@@ -167,9 +167,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		if(isDerail) {
 			return false;
 		}
-		int i = MathHelper.floor_double(this.posX);
-		int j = MathHelper.floor_double(this.posY);
-		int k = MathHelper.floor_double(this.posZ);
+		int i = MathHelper.floor(this.posX);
+		int j = MathHelper.floor(this.posY);
+		int k = MathHelper.floor(this.posZ);
 
 		if (isRailBlockAt(getWorld(), i, j - 1, k) || getWorld().getBlock(i, j - 1, k) == BlockIDs.tcRail.block || getWorld().getBlock(i, j - 1, k) == BlockIDs.tcRailGag.block) {
 			j--;
@@ -400,12 +400,12 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 			moveMinecartOnRail(i, j, k, 0.0D);
 
-			if (ai[0][1] != 0 && MathHelper.floor_double(posX) - i == ai[0][0] &&
-					MathHelper.floor_double(posZ) - k == ai[0][2]) {
+			if (ai[0][1] != 0 && MathHelper.floor(posX) - i == ai[0][0] &&
+					MathHelper.floor(posZ) - k == ai[0][2]) {
 				setPosition(posX, posY + ai[0][1], posZ);
 			}
-			else if (ai[1][1] != 0 && MathHelper.floor_double(posX) - i == ai[1][0] &&
-					MathHelper.floor_double(posZ) - k == ai[1][2]) {
+			else if (ai[1][1] != 0 && MathHelper.floor(posX) - i == ai[1][0] &&
+					MathHelper.floor(posZ) - k == ai[1][2]) {
 				setPosition(posX, posY + ai[1][1], posZ);
 			}
 
@@ -415,8 +415,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 				motionZ = (motionZ / d14) * (d14);
 			}
 			setPosition(posX, posY + yOffset - 0.8d, posZ);
-			int k1 = MathHelper.floor_double(posX);
-			int l1 = MathHelper.floor_double(posZ);
+			int k1 = MathHelper.floor(posX);
+			int l1 = MathHelper.floor(posZ);
 			if (k1 != i || l1 != k) {
 				double d15 = Math.sqrt(motionX * motionX + motionZ * motionZ);
 				motionX = d15 * (k1 - i);
@@ -586,9 +586,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			if(ticksExisted>60 && ticksExisted%120==0 && entityMainTrain == null){
 				getWorld().removeEntity(this);
 			}
-			int i = MathHelper.floor_double(this.posX);
-			int j = MathHelper.floor_double(this.posY);
-			int k = MathHelper.floor_double(this.posZ);
+			int i = MathHelper.floor(this.posX);
+			int j = MathHelper.floor(this.posY);
+			int k = MathHelper.floor(this.posZ);
 			if (getWorld().isAirBlock(i,j,k)) {
 				j--;
 			}
@@ -664,7 +664,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		}
 /*
 
-		int l = MathHelper.floor_double(rotationYaw * 8.0F / 360.0F + 0.5) & 7;
+		int l = MathHelper.floor(rotationYaw * 8.0F / 360.0F + 0.5) & 7;
 
 
 		if (l == 0 || l == 4) {

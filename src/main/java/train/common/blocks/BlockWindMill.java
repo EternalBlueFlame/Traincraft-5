@@ -9,7 +9,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.library.Info;
@@ -68,7 +68,7 @@ public class BlockWindMill extends Block {
 	 */
 	@Override
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLiving, ItemStack par6ItemStack) {
-		int l = MathHelper.floor_double((double) (par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int l = MathHelper.floor((double) (par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int i1 = par1World.getBlockMetadata(par2, par3, par4) >> 2;
 		++l;
 		l %= 4;

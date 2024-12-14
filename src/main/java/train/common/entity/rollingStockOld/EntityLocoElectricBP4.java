@@ -45,7 +45,7 @@ public class EntityLocoElectricBP4 extends ElectricTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "BP4";
 	}
 

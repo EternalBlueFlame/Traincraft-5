@@ -2,11 +2,10 @@ package train.common.api;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import cpw.mods.fml.client.FMLClientHandler;
+import fexcraft.tmt.slim.Vec3d;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.network.NetworkRegistry;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.entities.EntitySeat;
@@ -15,7 +14,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -255,7 +253,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
      *
      * @return double
      */
-    public float getMaxSpeed() {
+    public double getMaxSpeed() {
         if (getSpec() != null) {
             if (currentMassPulled > 1) {
                 float power = (float) currentMassPulled / (transportMetricHorsePower() * 0.37f);
@@ -642,7 +640,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
             soundBell=getBell();
         }
         if (soundBell != null && !soundBell.addr.isEmpty() && whistleDelay == 0) {
-            worldObj.playSoundAtEntity(this, soundBell.addr, soundBell.vol, soundBell.pit);
+            getWorld().playSoundAtEntity(this, soundBell.addr, soundBell.vol, soundBell.pit);
             whistleDelay = 65;
         }
     }
@@ -714,7 +712,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                             return;
                         }
                         int dir = MathHelper
-                                .floor_double((passenger.rotationYaw * 4F) / 360F + 0.5D) & 3;
+                                .floor((passenger.rotationYaw * 4F) / 360F + 0.5D) & 3;
                         if (dir == 2){
                             if (forwardPressed) {
                                 motionZ -= 0.0075 * this.accelerate;
@@ -947,10 +945,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
 
                     if (distanceFromStopPoint < this.getSpeed()) {
                         //Stop it at a certain point
-                        stop(Vec3.createVectorHelper(this.xFromStopPoint, this.yFromStopPoint, this.zFromStopPoint));
+                        stop(new Vec3d(this.xFromStopPoint, this.yFromStopPoint, this.zFromStopPoint));
                     }
                     if (distanceFromStationStop < this.getSpeed()) {
-                        stop(Vec3.createVectorHelper(this.xStationStop, this.yStationStop, this.zStationStop));
+                        stop(new Vec3d(this.xStationStop, this.yStationStop, this.zStationStop));
                         stationStopping = true;
 
                     } else {
@@ -1388,7 +1386,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                             this.motionZ -= 0.0020 * this.accelerate;
                         }
                     } else {
-                        int dir = MathHelper.floor_double((getPassengers().get(0).rotationYaw * 4F) / 360F + 0.5D) & 3;
+                        int dir = MathHelper.floor((getPassengers().get(0).rotationYaw * 4F) / 360F + 0.5D) & 3;
                         if (dir == 2) {
                             this.motionZ -= 0.0020 * this.accelerate;
                         } else if (dir == 0) {
@@ -1411,8 +1409,8 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         }
     }
 
-    public void stop(Vec3 signalPosition) {
-        double currentDistance = Math.copySign(Vec3.createVectorHelper(this.posX, this.posY, this.posZ).distanceTo(signalPosition), 1.0D);
+    public void stop(Vec3d signalPosition) {
+        double currentDistance = Math.copySign(new Vec3d(this.posX, this.posY, this.posZ).distanceTo(signalPosition), 1.0D);
         double originalDistance;
         originalDistance = currentDistance;
         double slowPercentage = 0.5D;

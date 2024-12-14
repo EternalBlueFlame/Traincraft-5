@@ -20,7 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import train.common.Traincraft;
@@ -382,7 +382,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (player != null)
-					dir = MathHelper.floor_double((player.rotationYaw * 8F) / 360F + 0.5D) & 7;
+					dir = MathHelper.floor((player.rotationYaw * 8F) / 360F + 0.5D) & 7;
 				// 0    = 0 = SOUTH
 				// 45   = 1 = SOUTH-WEST
 				// 90   = 2 = WEST

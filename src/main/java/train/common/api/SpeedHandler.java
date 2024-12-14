@@ -4,13 +4,13 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import train.common.core.handlers.ConfigHandler;
 
 public class SpeedHandler {
 
-	public static float handleSpeed(float railMaxSpeed, float maxSpeed, Entity entity) {
+	public static double handleSpeed(double railMaxSpeed, double maxSpeed, Entity entity) {
 		if(entity instanceof Locomotive) {
 			if (railMaxSpeed < 0.4f) {
 				return Math.min(convertSpeed(entity, maxSpeed), railMaxSpeed);
@@ -55,9 +55,9 @@ public class SpeedHandler {
 	/**
 	 * 
 	 */
-	private static float convertSpeed(Entity entity, float maxSpeed) {
-		float speed = ((Locomotive) entity).getMaxSpeed()*0.2775f;// speed is in m/s
-		speed /= ConfigHandler.REAL_TRAIN_SPEED?2f:6f;// applying ratio
-		return speed/10;// converted in minecraft speed
+	private static double convertSpeed(Entity entity, double maxSpeed) {
+		double speed = ((Locomotive) entity).getMaxSpeed()*0.2775d;// speed is in m/s
+		speed /= ConfigHandler.REAL_TRAIN_SPEED?2d:6d;// applying ratio
+		return speed/10d;// converted in minecraft speed
 	}
 }

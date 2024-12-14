@@ -49,7 +49,7 @@ public class EntityLocoSteamHallClass extends SteamTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Hall Class";
 	}
 

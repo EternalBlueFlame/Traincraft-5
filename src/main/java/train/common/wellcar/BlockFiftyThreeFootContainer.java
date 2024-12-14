@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
@@ -195,7 +195,7 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack)
     {
         TileFortyFootContainer te = (TileFortyFootContainer) world.getTileEntity(x, y, z);
-        int playerYaw = MathHelper.floor_double((player.rotationYaw / 90.0F) + 2.5D) & 3;
+        int playerYaw = MathHelper.floor((player.rotationYaw / 90.0F) + 2.5D) & 3;
 
         if (te != null && stack.getTagCompound() != null)
         {

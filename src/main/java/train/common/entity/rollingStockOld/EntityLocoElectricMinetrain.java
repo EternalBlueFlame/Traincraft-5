@@ -26,7 +26,7 @@ public class EntityLocoElectricMinetrain extends ElectricTrain {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.10F, posZ);
 	}
 
@@ -44,7 +44,7 @@ public class EntityLocoElectricMinetrain extends ElectricTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Cart hauler";
 	}
 

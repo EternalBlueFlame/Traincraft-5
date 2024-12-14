@@ -29,7 +29,7 @@ public class EntityLocoDieselIC4_DSB_MG extends DieselTrain {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 
 		TraincraftUtil.updateRider(this, 7.2, -0.15);
 	}
@@ -47,7 +47,7 @@ public class EntityLocoDieselIC4_DSB_MG extends DieselTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "IC4MG";
 	}
 	@Override

@@ -43,7 +43,7 @@ public class EntityLocoElectricCD151 extends ElectricTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "CD 151";
 	}
 

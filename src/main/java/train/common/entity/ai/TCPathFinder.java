@@ -6,7 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
@@ -55,9 +55,9 @@ public class TCPathFinder extends PathFinder {
                         int k1 = block.getRenderType();
 
                         if (entity.getWorld().getBlock(i, j, k).getRenderType() == 9) {
-                            int j2 = MathHelper.floor_double(entity.posX);
-                            int l1 = MathHelper.floor_double(entity.posY);
-                            int i2 = MathHelper.floor_double(entity.posZ);
+                            int j2 = MathHelper.floor(entity.posX);
+                            int l1 = MathHelper.floor(entity.posY);
+                            int i2 = MathHelper.floor(entity.posZ);
 
                             if (entity.getWorld().getBlock(j2, l1, i2).getRenderType() != 9 && entity.getWorld().getBlock(j2, l1 - 1, i2).getRenderType() != 9) {
                                 return -3;

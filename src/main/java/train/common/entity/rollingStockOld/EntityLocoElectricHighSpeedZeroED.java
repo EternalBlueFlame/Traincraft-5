@@ -34,7 +34,7 @@ public class EntityLocoElectricHighSpeedZeroED extends ElectricTrain {
 		isDead = true;
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "High Speed";
 	}
 

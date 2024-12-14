@@ -6,7 +6,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.oredict.OreDictionary;
 import train.common.inventory.TrainCraftingManager;
 import train.common.library.AchievementIDs;
@@ -75,7 +75,7 @@ public class SlotOpenHearthFurnace extends Slot {
 				var2 = 0;
 			}
 			else if (var3 < 1.0F) {
-				var4 = MathHelper.floor_float((float) var2 * var3);
+				var4 = MathHelper.floor((float) var2 * var3);
 
 				if (var4 < MathHelper.ceiling_float_int((float) var2 * var3) && (float) Math.random() < (float) var2 * var3 - (float) var4) {
 					++var4;

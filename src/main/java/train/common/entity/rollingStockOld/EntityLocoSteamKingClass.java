@@ -49,7 +49,7 @@ public class EntityLocoSteamKingClass extends SteamTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "King Class";
 	}
 

@@ -4,7 +4,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 import train.common.core.handlers.ConfigHandler;

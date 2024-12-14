@@ -46,7 +46,7 @@ public class EntityLocoDieselBamboo extends DieselTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Bamboo Flatcar With Engine";
 	}
 

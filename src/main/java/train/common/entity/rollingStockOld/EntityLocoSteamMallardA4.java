@@ -49,7 +49,7 @@ public class EntityLocoSteamMallardA4 extends SteamTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "A4 Mallard";
 	}
 

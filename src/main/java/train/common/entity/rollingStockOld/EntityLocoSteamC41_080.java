@@ -27,7 +27,7 @@ public class EntityLocoSteamC41_080 extends SteamTrain {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		double pitchRads = this.anglePitchClient * Math.PI / 180.0D;
 		double distance = -0.2;
 		double yOffset = 0.5;
@@ -74,7 +74,7 @@ public class EntityLocoSteamC41_080 extends SteamTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "C41";
 	}
 

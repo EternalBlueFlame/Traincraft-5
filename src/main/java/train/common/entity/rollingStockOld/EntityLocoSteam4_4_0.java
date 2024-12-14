@@ -27,7 +27,7 @@ public class EntityLocoSteam4_4_0 extends SteamTrain {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.45, posZ);// default
 	}
 
@@ -44,7 +44,7 @@ public class EntityLocoSteam4_4_0 extends SteamTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "4-4-0 (US)";
 	}
 

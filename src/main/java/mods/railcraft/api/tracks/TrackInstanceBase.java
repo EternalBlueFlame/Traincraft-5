@@ -19,7 +19,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 
@@ -106,7 +106,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         if (entityliving == null)
             return;
         if (this instanceof ITrackReversable) {
-            int dir = MathHelper.floor_double((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+            int dir = MathHelper.floor((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
             ((ITrackReversable) this).setReversed(dir == 0 || dir == 1);
         }
         markBlockNeedsUpdate();

@@ -1,5 +1,7 @@
 package train.common.entity.rollingStockOld;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -26,8 +28,9 @@ public class EntityFlatCart extends EntityRollingStock implements IPassenger {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
-		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.4, posZ);
+		if(passenger instanceof EntityLiving) {
+			getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.4, posZ);
+		}
 	}
 
 	@Override

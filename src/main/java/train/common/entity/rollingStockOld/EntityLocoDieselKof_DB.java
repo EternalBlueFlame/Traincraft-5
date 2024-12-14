@@ -28,7 +28,7 @@ public class EntityLocoDieselKof_DB extends DieselTrain {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() - 0.1F, posZ);
 	}
 	
@@ -46,7 +46,7 @@ public class EntityLocoDieselKof_DB extends DieselTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Kof";
 	}
 	@Override

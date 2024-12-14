@@ -45,7 +45,7 @@ public class EntityLocoSteamFowler extends SteamTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Fowler 4F";
 	}
 

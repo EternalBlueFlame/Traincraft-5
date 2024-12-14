@@ -10,7 +10,7 @@ import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.library.ItemIDs;
@@ -80,7 +80,7 @@ public class BlockSignal extends BlockContainer {
 
 		/*
 		 * if (l == 0) { world.setBlockMetadataWithNotify(i, j, k, 2); te.rot = 2; } if (l == 1) { world.setBlockMetadataWithNotify(i, j, k, 5); te.rot = 5; } if (l == 2) { world.setBlockMetadataWithNotify(i, j, k, 3); te.rot = 3; } if (l == 3) { world.setBlockMetadataWithNotify(i, j, k, 4); te.rot = 4; } */
-		int var6 = MathHelper.floor_double((double) (entityliving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int var6 = MathHelper.floor((double) (entityliving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		int var7 = world.getBlockMetadata(i, j, k) >> 2;
 		++var6;
 		var6 %= 4;

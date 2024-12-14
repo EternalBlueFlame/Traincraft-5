@@ -4,7 +4,7 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
@@ -161,6 +161,6 @@ public class TraincraftUtil {
     public static final float degreesF = (float) (180.0d / Math.PI);
 
     public static Vec3 func_514_g(double d, double d1, double d2) {
-        return Vec3.createVectorHelper(MathHelper.floor_double(d), MathHelper.floor_double(d1), MathHelper.floor_double(d2));
+        return Vec3.createVectorHelper(MathHelper.floor(d), MathHelper.floor(d1), MathHelper.floor(d2));
     }
 }

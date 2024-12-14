@@ -46,7 +46,7 @@ public class EntityLocoDieselFOLM1 extends DieselTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "FOL M1";
 	}
 

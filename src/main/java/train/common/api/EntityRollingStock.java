@@ -2,6 +2,10 @@ package train.common.api;
 
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.FMLClientHandler;
+import fexcraft.tmt.slim.Vec3d;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.network.ByteBufUtils;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
@@ -88,7 +92,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     private AxisAlignedBB boundingBoxSmall;
 
-    public float maxSpeed;
+    public double maxSpeed;
     public float railMaxSpeed;
     public double speedLimiter = 1;
     public boolean speedWasSet = false;
@@ -652,7 +656,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      * Sets the position and rotation. Only difference from the other one is no bounding on the rotation. Args: posX,
      * posY, posZ, yaw, pitch
      */
-    public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9) {
+    public void setPositionAndRotationDirect(double par1, double par3, double par5, float par7, float par8, int par9, boolean teleport) {
         this.rollingX = par1;
         this.rollingY = par3;
         this.rollingZ = par5;
@@ -854,9 +858,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         prevPosY = posY;
         prevPosZ = posZ;
 
-        int floor_posX = MathHelper.floor_double(posX);
-        int floor_posY = MathHelper.floor_double(posY);
-        int floor_posZ = MathHelper.floor_double(posZ);
+        int floor_posX = MathHelper.floor(posX);
+        int floor_posY = MathHelper.floor(posY);
+        int floor_posZ = MathHelper.floor(posZ);
 
         if (needsBogieUpdate) {
             if (bogieFront != null) {
@@ -1161,11 +1165,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
             moveMinecartOnRail(floor_posX, floor_posY, floor_posZ, 0.0D);
 
-            if (metaMatrix[0][1] != 0 && MathHelper.floor_double(posX) - floor_posX == metaMatrix[0][0] &&
-                    MathHelper.floor_double(posZ) - floor_posZ == metaMatrix[0][2]) {
+            if (metaMatrix[0][1] != 0 && MathHelper.floor(posX) - floor_posX == metaMatrix[0][0] &&
+                    MathHelper.floor(posZ) - floor_posZ == metaMatrix[0][2]) {
                 setPosition(posX, posY + metaMatrix[0][1], posZ);
-            } else if (metaMatrix[1][1] != 0 && MathHelper.floor_double(posX) - floor_posX == metaMatrix[1][0] &&
-                    MathHelper.floor_double(posZ) - floor_posZ == metaMatrix[1][2]) {
+            } else if (metaMatrix[1][1] != 0 && MathHelper.floor(posX) - floor_posX == metaMatrix[1][0] &&
+                    MathHelper.floor(posZ) - floor_posZ == metaMatrix[1][2]) {
                 setPosition(posX, posY + metaMatrix[1][1], posZ);
             }
 
@@ -1180,8 +1184,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 motionZ = (motionZ / d14) * (d14 + d28);
             }
             setPosition(posX, posY + yOffset - 0.8d, posZ);
-            int entity_floor_posX = MathHelper.floor_double(posX);
-            int entity_floor_posZ = MathHelper.floor_double(posZ);
+            int entity_floor_posX = MathHelper.floor(posX);
+            int entity_floor_posZ = MathHelper.floor(posZ);
             if (entity_floor_posX != floor_posX || entity_floor_posZ != floor_posZ) {
                 double d15 = Math.sqrt(motionX * motionX + motionZ * motionZ);
                 motionX = d15 * (entity_floor_posX - floor_posX);
@@ -1682,14 +1686,14 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     protected void moveOnTCTwoWaysCrossing(int i, int j, int k, double cx, double cy, double cz, int meta) {
         posY = j + 0.2;
         if (!(this instanceof Locomotive)) {
-            int l = MathHelper.floor_double(serverRealRotation * 4.0F / 360.0F + 0.5D) & 3;
+            int l = MathHelper.floor(serverRealRotation * 4.0F / 360.0F + 0.5D) & 3;
             if (l == 2 || l == 0) {
                 moveEntity(motionX, 0.0D, 0.0D);
             } else if (l == 1 || l == 3) {
                 moveEntity(0.0D, 0.0D, motionZ);
             }
         } else {
-            int l = MathHelper.floor_double(rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+            int l = MathHelper.floor(rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
             if (l == 2 || l == 0) {
                 moveEntity(motionX, 0.0D, 0.0D);
             } else if (l == 1 || l == 3) {
@@ -1703,9 +1707,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         int l;
         if ((this.bogieFront == null)) {
-            l = MathHelper.floor_double(serverRealRotation * 8.0F / 360.0F + 0.5) & 7;
+            l = MathHelper.floor(serverRealRotation * 8.0F / 360.0F + 0.5) & 7;
         } else {
-            l = MathHelper.floor_double(rotationYaw * 8.0F / 360.0F + 0.5) & 7;
+            l = MathHelper.floor(rotationYaw * 8.0F / 360.0F + 0.5) & 7;
 
         }
         if (l == 0 || l == 4) {
@@ -2351,7 +2355,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
     @Override
-    public void moveMinecartOnRail(int i, int j, int k, double d) {
+    public void moveMinecartOnRail(BlockPos pos) {
         Block id = getWorld().getBlock(i, j, k);
         if (!BlockRailBase.func_150051_a(id)) {
             return;
@@ -2385,7 +2389,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         moveEntity(motionX, 0.0D, motionZ);
     }
 
-    public void adjustSpeed(float maxSpeed, double limiter) {
+    public void adjustSpeed(double maxSpeed, double limiter) {
         float targetSpeed = (float) (maxSpeed * limiter);
         float targetSpeedX = (float) Math.copySign(targetSpeed, motionX);
         float targetSpeedZ = (float) Math.copySign(targetSpeed, motionZ);
@@ -2521,12 +2525,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     protected void func_145775_I() {
-        int var1 = MathHelper.floor_double(this.boundingBoxSmall.minX + 0.001D);
-        int var2 = MathHelper.floor_double(this.boundingBoxSmall.minY + 0.001D);
-        int var3 = MathHelper.floor_double(this.boundingBoxSmall.minZ + 0.001D);
-        int var4 = MathHelper.floor_double(this.boundingBoxSmall.maxX - 0.001D);
-        int var5 = MathHelper.floor_double(this.boundingBoxSmall.maxY - 0.001D);
-        int var6 = MathHelper.floor_double(this.boundingBoxSmall.maxZ - 0.001D);
+        int var1 = MathHelper.floor(this.boundingBoxSmall.minX + 0.001D);
+        int var2 = MathHelper.floor(this.boundingBoxSmall.minY + 0.001D);
+        int var3 = MathHelper.floor(this.boundingBoxSmall.minZ + 0.001D);
+        int var4 = MathHelper.floor(this.boundingBoxSmall.maxX - 0.001D);
+        int var5 = MathHelper.floor(this.boundingBoxSmall.maxY - 0.001D);
+        int var6 = MathHelper.floor(this.boundingBoxSmall.maxZ - 0.001D);
 
         if (this.getWorld().checkChunksExist(var1, var2, var3, var4, var5, var6)) {
             for (int var7 = var1; var7 <= var4; ++var7) {
@@ -2573,10 +2577,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
     @SideOnly(Side.CLIENT)
-    public Vec3 renderY(double par1, double par3, double par5, double par7) {
-        int i = MathHelper.floor_double(par1);
-        int j = MathHelper.floor_double(par3);
-        int k = MathHelper.floor_double(par5);
+    public Vec3d renderY(double par1, double par3, double par5, double par7) {
+        int i = MathHelper.floor(par1);
+        int j = MathHelper.floor(par3);
+        int k = MathHelper.floor(par5);
 
         if (getWorld().getBlock(i, j - 1, k) == BlockIDs.tcRail.block || getWorld().getBlock(i, j - 1, k) == BlockIDs.tcRailGag.block) {
             --j;
@@ -2628,9 +2632,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         par5 += d5 * par7;
 
         if (l != BlockIDs.tcRail.block && l != BlockIDs.tcRailGag.block) {
-            if (aint[0][1] != 0 && MathHelper.floor_double(par1) - i == aint[0][0] && MathHelper.floor_double(par5) - k == aint[0][2]) {
+            if (aint[0][1] != 0 && MathHelper.floor(par1) - i == aint[0][0] && MathHelper.floor(par5) - k == aint[0][2]) {
                 par3 += aint[0][1];
-            } else if (aint[1][1] != 0 && MathHelper.floor_double(par1) - i == aint[1][0] && MathHelper.floor_double(par5) - k == aint[1][2]) {
+            } else if (aint[1][1] != 0 && MathHelper.floor(par1) - i == aint[1][0] && MathHelper.floor(par5) - k == aint[1][2]) {
                 par3 += aint[1][1];
             }
         }
@@ -2640,13 +2644,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     //this does weird math for putch on stuff without bogies, that shouldn't even be needed. but kinda is.
     // replace this with a proper atan2 over time later
     @Deprecated
-    public Vec3 yVector(double par1, double par3, double par5) {
+    public Vec3d yVector(double par1, double par3, double par5) {
         if(rotationPoints()[0]!=0){
             return null;
         }
-        int i = MathHelper.floor_double(par1);
-        int j = MathHelper.floor_double(par3);
-        int k = MathHelper.floor_double(par5);
+        int i = MathHelper.floor(par1);
+        int j = MathHelper.floor(par3);
+        int k = MathHelper.floor(par5);
         if (getWorld().getBlock(i, j - 1, k) == BlockIDs.tcRail.block || getWorld().getBlock(i, j - 1, k) == BlockIDs.tcRailGag.block) {
             --j;
         } else if (getWorld().getBlock(i, j + 1, k) == BlockIDs.tcRail.block || getWorld().getBlock(i, j + 1, k) == BlockIDs.tcRailGag.block) {

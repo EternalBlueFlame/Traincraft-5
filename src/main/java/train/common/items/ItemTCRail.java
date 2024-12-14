@@ -11,7 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.lwjgl.util.vector.Matrix2f;
 import org.lwjgl.util.vector.Vector2f;
@@ -454,7 +454,7 @@ public class ItemTCRail extends ItemPart {
         if (world.getBlock(x, y, z) == TCBlocks.bridgePillar && item.getTrackType().getLabel().contains("DYNAMIC")) {
             return false;
         }
-        int facing0 = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        int facing0 = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         Vector2f dir0 = ItemTCRail.getDirectionVector(facing0);
 
         float yaw = MathHelper.wrapAngleTo180_float(player.rotationYaw);
@@ -524,16 +524,16 @@ public class ItemTCRail extends ItemPart {
             int[] curveZArray2;
 
             if (type.getRailType() == RailTypes.DIAGONAL) {
-                l = MathHelper.floor_double((player != null ? player.rotationYaw : par10) * 4.0F / 360.0F) & 3;
+                l = MathHelper.floor((player != null ? player.rotationYaw : par10) * 4.0F / 360.0F) & 3;
                 l += 4;
             } else {
-                l = MathHelper.floor_double((player != null ? player.rotationYaw : par10) * 4.0F / 360.0F + 0.5D) & 3;
+                l = MathHelper.floor((player != null ? player.rotationYaw : par10) * 4.0F / 360.0F + 0.5D) & 3;
             }
 
 
             tempType = getPlacementDirection(player, world, l, par10);
 
-            /**Maybe new thing if   MathHelper.floor_double((player != null ? player.rotationYaw : par10) * 8.0F / 360.0F + 0.5D) & 7; is used
+            /**Maybe new thing if   MathHelper.floor((player != null ? player.rotationYaw : par10) * 8.0F / 360.0F + 0.5D) & 7; is used
              fun thing is, diagonals are uneven, straights are even, maybe do something with that?
             * l = direction
             * l = 0 = south

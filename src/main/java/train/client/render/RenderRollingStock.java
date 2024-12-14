@@ -9,7 +9,7 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
@@ -129,9 +129,9 @@ public class RenderRollingStock extends Render {
         //System.out.println("yaw after "+yaw+" server yaw after "+serverYaw);
 
         GL11.glTranslatef((float) x, (float) y, (float) z);
-        int i = MathHelper.floor_double(cart.posX);
-        int j = MathHelper.floor_double(cart.posY);
-        int k = MathHelper.floor_double(cart.posZ);
+        int i = MathHelper.floor(cart.posX);
+        int j = MathHelper.floor(cart.posY);
+        int k = MathHelper.floor(cart.posZ);
 
         // NOTE: func_150049_b_ = isRailBlockAt
         if (cart.getWorld() != null && (BlockRailBase.func_150049_b_(cart.getWorld(), i, j, k)

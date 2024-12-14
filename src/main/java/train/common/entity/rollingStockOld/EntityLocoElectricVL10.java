@@ -25,7 +25,7 @@ public class EntityLocoElectricVL10 extends ElectricTrain {
 	}
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		double pitchRads = this.anglePitchClient * Math.PI / 180.0D;
 		double distance = 2.2;
 		double yOffset = 0.2;
@@ -69,7 +69,7 @@ public class EntityLocoElectricVL10 extends ElectricTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "VL10";
 	}
 	@Override

@@ -76,7 +76,7 @@ public class EntityLocoElectricTramWood extends ElectricTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Tram";
 	}
 

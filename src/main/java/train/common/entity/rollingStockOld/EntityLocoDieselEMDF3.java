@@ -29,7 +29,7 @@ public class EntityLocoDieselEMDF3 extends DieselTrain {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		TraincraftUtil.updateRider(this, 2.2, 0.4);
 	}
 
@@ -47,7 +47,7 @@ public class EntityLocoDieselEMDF3 extends DieselTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "EMD F3";
 	}
 

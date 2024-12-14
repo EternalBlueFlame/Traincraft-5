@@ -49,7 +49,7 @@ public class EntityLocoSteamMILWClassA extends SteamTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "MILW Class A";
 	}
 

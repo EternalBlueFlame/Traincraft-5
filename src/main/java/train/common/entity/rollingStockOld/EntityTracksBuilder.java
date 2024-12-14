@@ -21,7 +21,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
@@ -160,9 +160,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 
 		updatePushForces();
 		
-		int i = MathHelper.floor_double(posX);
-		int j = MathHelper.floor_double(posY);
-		int k = MathHelper.floor_double(posZ);
+		int i = MathHelper.floor(posX);
+		int j = MathHelper.floor(posY);
+		int k = MathHelper.floor(posZ);
 		
 		if(this.skipTick) {
 			this.skipTick = false;
@@ -709,12 +709,12 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 				return lastFace;
 			}
 			rotation = TraincraftUtil.atan2degreesf(d7,d6);
-			lastFace = MathHelper.floor_double(rotation * 4.0F / 360.0F + 0.5D) & 3;
+			lastFace = MathHelper.floor(rotation * 4.0F / 360.0F + 0.5D) & 3;
 		}
 		else {
 			rotation = (TraincraftUtil.atan2degreesf(0 - motionX, 0 - motionZ));
 		}
-		return MathHelper.floor_double(rotation * 4.0F / 360.0F + 0.5D) & 3;
+		return MathHelper.floor(rotation * 4.0F / 360.0F + 0.5D) & 3;
 	}
 
 	/** Compares the currentHeight with given height in GUI */

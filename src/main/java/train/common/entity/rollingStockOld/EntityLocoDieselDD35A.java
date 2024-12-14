@@ -28,7 +28,7 @@ public class EntityLocoDieselDD35A extends DieselTrain {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		double pitchRads = this.anglePitchClient * Math.PI / 180.0D;
 		double distance = 4.9;
 		double yOffset = 0.6;
@@ -74,7 +74,7 @@ public class EntityLocoDieselDD35A extends DieselTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "DD35A";
 	}
 

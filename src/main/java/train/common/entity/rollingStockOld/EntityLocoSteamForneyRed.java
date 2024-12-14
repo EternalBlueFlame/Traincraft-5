@@ -37,7 +37,7 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		TraincraftUtil.updateRider(this,0.5,0.4);
 	}
 
@@ -81,7 +81,7 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "Forney";
 	}
 	@Override

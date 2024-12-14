@@ -5,7 +5,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.ChunkCache;
 import train.common.api.Locomotive;
@@ -60,7 +60,7 @@ public class EntityAIFearHorn extends EntityAIBase {
      * Returns the path to the given coordinates
      */
     private PathEntity getPathToXYZ(double x, double y, double z) {
-        return getEntityPathToXYZ(MathHelper.floor_double(x), (int) y, MathHelper.floor_double(z),
+        return getEntityPathToXYZ(MathHelper.floor(x), (int) y, MathHelper.floor(z),
                 entity.getNavigator().getPathSearchRange(), false, false, false);
     }
 
@@ -68,14 +68,14 @@ public class EntityAIFearHorn extends EntityAIBase {
      * Try to find and set a path to XYZ. Returns true if successful.
      */
     private boolean tryMoveToXYZ(double x, double y, double z, double speed) {
-        PathEntity pathentity = this.getPathToXYZ((double) MathHelper.floor_double(x), (double) ((int) y), (double) MathHelper.floor_double(z));
+        PathEntity pathentity = this.getPathToXYZ((double) MathHelper.floor(x), (double) ((int) y), (double) MathHelper.floor(z));
         return entity.getNavigator().setPath(pathentity, speed);
     }
 
     private PathEntity getEntityPathToXYZ(int targetX, int targetY, int targetZ, float range, boolean canPassOpenDoor, boolean canPassClosedDoor, boolean canSwim) {
-        int x = MathHelper.floor_double(entity.posX);
-        int y = MathHelper.floor_double(entity.posY);
-        int z = MathHelper.floor_double(entity.posZ);
+        int x = MathHelper.floor(entity.posX);
+        int y = MathHelper.floor(entity.posY);
+        int z = MathHelper.floor(entity.posZ);
         int r = (int) (range + 8.0F);
         int xmin = x - r;
         int ymin = y - r;

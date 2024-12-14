@@ -30,7 +30,7 @@ public class EntityLocoSteamPannier extends SteamTrain {
 	public boolean shouldRiderSit(){return false;}
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 
 		TraincraftUtil.updateRider(this, 0, 0.5);
 	}
@@ -49,7 +49,7 @@ public class EntityLocoSteamPannier extends SteamTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "0-6-0 Pannier";
 	}
 

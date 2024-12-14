@@ -17,7 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
@@ -248,7 +248,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	 * posY, posZ, yaw, pitch
 	 */
 	@Override
-	public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9) {
+	public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9, boolean teleport) {
 		if (this.field_70279_a) {
 			this.boatPosRotationIncrements = par9 + 5;
 		}

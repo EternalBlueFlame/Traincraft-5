@@ -8,7 +8,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import org.lwjgl.opengl.GL11;
@@ -61,8 +61,8 @@ public class CustomRenderHandler {
         double py = TileEntityRendererDispatcher.staticPlayerY;
         double pz = TileEntityRendererDispatcher.staticPlayerZ;
         int facing = item.getTrackType().getRailType() == TCRailTypes.RailTypes.DIAGONAL
-                ? (MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F) & 3) + 4
-                : MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+                ? (MathHelper.floor(player.rotationYaw * 4.0F / 360.0F) & 3) + 4
+                : MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         Vector2f dir = ItemTCRail.getDirectionVector(facing);
         String variant = item.getTrackType().getLabel().contains("EMBEDDED") ? "embedded" : "normal";
 

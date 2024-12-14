@@ -1,5 +1,6 @@
 package train.common.entity.rollingStockOld;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -27,7 +28,7 @@ public class EntityLocoSteamUSATCUS extends SteamTrain {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		double pitchRads = this.anglePitchClient * Math.PI / 180.0D;
 		double distance = -0.2;
 		double yOffset = 0.05;
@@ -74,7 +75,7 @@ public class EntityLocoSteamUSATCUS extends SteamTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "S100 USATCUS";
 	}
 

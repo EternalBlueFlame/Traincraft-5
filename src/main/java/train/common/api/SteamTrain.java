@@ -3,10 +3,12 @@ package train.common.api;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.api.LiquidManager.StandardTank;
 import train.common.core.handlers.FuelHandler;
 
@@ -174,10 +176,10 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			FluidStack drain = null;
 
 			if(fill(EnumFacing.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
-				blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY - 1), MathHelper.floor_double(posZ)),
-						getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 2), MathHelper.floor_double(posZ)),
-						getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 3), MathHelper.floor_double(posZ)),
-						getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY + 4), MathHelper.floor_double(posZ))
+				blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
+						getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
+						getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
+						getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
 				};
 
 				for (TileEntity block : blocksToCheck) {
@@ -273,12 +275,12 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	}
 
 	@Override
-	public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+	public int fill(FluidStack resource, boolean doFill) {
 		return theTank.fill(resource, doFill);
 	}
 
 	@Override
-	public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
+	public FluidStack drain(FluidStack resource, boolean doDrain) {
 		if (resource == null || !resource.isFluidEqual(theTank.getFluid())) {
 			return null;
 		}
@@ -286,22 +288,16 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	}
 
 	@Override
-	public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
+	public FluidStack drain(int maxDrain, boolean doDrain) {
 		return theTank.drain(maxDrain, doDrain);
 	}
 
-	@Override
-	public boolean canFill(EnumFacing from, Fluid fluid) {
-		return true;
-	}
+
+
+
 
 	@Override
-	public boolean canDrain(EnumFacing from, Fluid fluid) {
-		return true;
-	}
-
-	@Override
-	public FluidTankInfo[] getTankInfo(EnumFacing from) {
+	public IFluidTankProperties[] getTankProperties() {
 		return new FluidTankInfo[] { theTank.getInfo() };
 	}
 

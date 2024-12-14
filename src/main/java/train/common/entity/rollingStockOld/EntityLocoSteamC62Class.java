@@ -27,7 +27,7 @@ public class EntityLocoSteamC62Class extends SteamTrain {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		
 		/*double rads = this.renderYaw * 3.141592653589793D / 180.0D;
 		double pitchRads = this.renderPitch * 3.141592653589793D / 180.0D;
@@ -49,7 +49,7 @@ public class EntityLocoSteamC62Class extends SteamTrain {
 		}
 	}
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "C62 Class [JNR]";
 	}
 

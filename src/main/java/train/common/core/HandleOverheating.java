@@ -1,6 +1,6 @@
 package train.common.core;
 
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 import train.common.api.SteamTrain;

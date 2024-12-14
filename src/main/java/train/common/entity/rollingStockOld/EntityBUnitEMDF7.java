@@ -212,12 +212,12 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
 
 
     @Override
-    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+    public int fill(FluidStack resource, boolean doFill) {
         return theTank.fill(resource, doFill);
     }
 
     @Override
-    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(FluidStack resource, boolean doDrain) {
         if (resource == null || !resource.isFluidEqual(theTank.getFluid())) {
             return null;
         }
@@ -225,12 +225,12 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
     }
 
     @Override
-    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(int maxDrain, boolean doDrain) {
         return theTank.drain(maxDrain, doDrain);
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(EnumFacing from) {
+    public IFluidTankProperties[] getTankProperties() {
         return new FluidTankInfo[]{theTank.getInfo()};
     }
 

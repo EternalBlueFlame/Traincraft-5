@@ -13,7 +13,7 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import train.common.entity.rollingStockOld.EntityTracksBuilder;
@@ -75,9 +75,9 @@ public abstract class RailTools {
      * @return True if being held
      */
     public static boolean isCartLockedDown(EntityMinecart cart) {
-        int x = MathHelper.floor_double(cart.posX);
-        int y = MathHelper.floor_double(cart.posY);
-        int z = MathHelper.floor_double(cart.posZ);
+        int x = MathHelper.floor(cart.posX);
+        int y = MathHelper.floor(cart.posY);
+        int z = MathHelper.floor(cart.posZ);
 
         if (BlockRailBase.func_150049_b_(cart.getWorld(), x, y - 1, z))
             y--;

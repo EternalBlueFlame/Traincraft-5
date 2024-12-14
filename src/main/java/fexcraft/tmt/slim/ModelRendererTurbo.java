@@ -3,7 +3,7 @@ package fexcraft.tmt.slim;
 import fexcraft.fvtm.TurboList;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 import train.common.enums.BoxName;
 

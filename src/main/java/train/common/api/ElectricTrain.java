@@ -7,7 +7,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 
@@ -66,7 +66,7 @@ public abstract class ElectricTrain extends Locomotive {
 
 			}else if (item instanceof IEnergyContainerItem)
 			{
-				int draw = MathHelper.floor_double(Math.min(200, maxEnergy - getFuel()) * 0.1); // amount of energy to attempt to draw this tick
+				int draw = MathHelper.floor(Math.min(200, maxEnergy - getFuel()) * 0.1); // amount of energy to attempt to draw this tick
 				fuelTrain += ((IEnergyContainerItem) item).extractEnergy(cargoItems[0], draw, false) * 10;
 			}
 			/*else if ((PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[4]) && PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[3])) && (item == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[4]).getItem())) {
@@ -79,10 +79,10 @@ public abstract class ElectricTrain extends Locomotive {
 		  * 
 		  * if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!getWorld().isRemote)) { locoInvent[u].setItemDamage(1); } } } } } else if ((locoInvent[0].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[23]).itemID)) { hasUranium = true; fuelTrain = 800 + 1000000; // locoInvent[0] = null; if (!getWorld().isRemote) { decrStackSize(0, 1); } reduceExplosionChance = 1000; for (int u = 1; u < locoInvent.length; u++) {// checks the inventory if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!getWorld().isRemote)) { locoInvent[u].setItemDamage(1); } } } } } } } */
 
-		blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY-1),MathHelper.floor_double(posZ)),
-				getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY+2),MathHelper.floor_double(posZ)),
-				getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY+3),MathHelper.floor_double(posZ)),
-				getWorld().getTileEntity(MathHelper.floor_double(posX), MathHelper.floor_double(posY+4),MathHelper.floor_double(posZ))
+		blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY-1),MathHelper.floor(posZ)),
+				getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY+2),MathHelper.floor(posZ)),
+				getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY+3),MathHelper.floor(posZ)),
+				getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY+4),MathHelper.floor(posZ))
 		};
 
 		int draw = 0;
@@ -94,7 +94,7 @@ public abstract class ElectricTrain extends Locomotive {
 					}
 					int max = ((IEnergyHandler) block).getEnergyStored(direction);
 					if (max > 0) {
-						draw = ((IEnergyHandler) block).receiveEnergy(direction, Math.max(-MathHelper.floor_double(Math.min(200, maxEnergy - getFuel()) * 0.1), -max), false);
+						draw = ((IEnergyHandler) block).receiveEnergy(direction, Math.max(-MathHelper.floor(Math.min(200, maxEnergy - getFuel()) * 0.1), -max), false);
 					}
 				}
 				fuelTrain += -draw;

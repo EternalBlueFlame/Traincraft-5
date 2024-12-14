@@ -29,7 +29,7 @@ public class EntityLocoSteamClimax extends SteamTrain {
 	public boolean shouldRiderSit(){return false;}
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset()+0.6F, posZ);// default
 	}
 
@@ -47,7 +47,7 @@ public class EntityLocoSteamClimax extends SteamTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "4-0-4 Climax";
 	}
 

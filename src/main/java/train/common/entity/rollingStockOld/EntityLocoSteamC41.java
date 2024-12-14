@@ -41,7 +41,7 @@ public class EntityLocoSteamC41 extends SteamTrain {
 	}
 
 	@Override
-	public String getInventoryName() {
+	public String getName() {
 		return "C41";
 	}
 

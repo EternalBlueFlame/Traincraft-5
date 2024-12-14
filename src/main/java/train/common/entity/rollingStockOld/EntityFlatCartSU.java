@@ -26,7 +26,7 @@ public class EntityFlatCartSU extends EntityRollingStock implements IPassenger {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if(passenger==null){return;}
+		if(!(passenger instanceof Entity)){return;}
 		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.4, posZ);
 	}
 
