@@ -18,6 +18,7 @@ import train.client.core.handlers.RecipeBookHandler;
 import train.common.blocks.TCBlocks;
 import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
+import train.common.entity.rollingStock.EntityPassengerPassengerCar1;
 import train.common.inventory.TrainCraftingManager;
 import train.common.items.ItemRecipeBook;
 import train.common.items.ItemRollingStock;
@@ -85,18 +86,18 @@ public class GuiRecipeBook extends GuiScreen {
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartTankWagon_DB.item), 80, 175));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartFlatCartRail_DB.item), 100, 175));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartFreightWagon_DB.item), 120, 175));
-                add(new StackToDraw(new ItemStack(ItemIDs.minecartPassengerBlue.item), 140, 175));
+                add(new StackToDraw(new ItemStack(EntityPassengerPassengerCar1.thisItem), 140, 175));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartV60_DB.item), 160, 175));
             }
         });
-        addPage("Modelers:\nDAYdiecast,\nhelldiver,\nBlockStormTwo,\nChandlerBingUA.\n\nGitHub 1.7.10 port Team: \nEternal BlueFlame,\nNitroxydeX,\nFirEmerald,\nHagurd\n \nWebsite:\nhttp://traincraft-mod.\nblogspot.com", "", "right", new ArrayList<StackToDraw>() {
+        addPage("Modelers:\nDAYdiecast,\nhelldiver,\nBlockStormTwo,\nChandlerBingUA.\n\nGitHub 1.7.10 port Team: \nEternal BlueFlame,\nNitroxydeX,\nFirEmerald,\nHagurd\n \nWebsite:\nhttps://traincraft.org", "", "right", new ArrayList<StackToDraw>() {
             {
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartLocoSteamAdler.item), 20, 16));
                 add(new StackToDraw(new ItemStack(TCBlocks.assemblyTableII), 170, 16));
 
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartLocoForneyRed.item), 20, 175));
-                add(new StackToDraw(new ItemStack(ItemIDs.minecartPassengerBlue.item), 40, 175));
-                add(new StackToDraw(new ItemStack(ItemIDs.minecartPassengerBlue.item), 60, 175));
+                add(new StackToDraw(new ItemStack(EntityPassengerPassengerCar1.thisItem), 40, 175));
+                add(new StackToDraw(new ItemStack(EntityPassengerPassengerCar1.thisItem), 60, 175));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartFreightWagon_DB.item), 80, 175));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartWood.item), 100, 175));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartCabooseLogging.item), 120, 175));

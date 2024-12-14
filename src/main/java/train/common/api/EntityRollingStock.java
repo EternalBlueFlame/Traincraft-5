@@ -53,7 +53,7 @@ import train.common.core.handlers.*;
 import train.common.core.network.PacketRollingStockRotation;
 import train.common.core.util.DepreciatedUtil;
 import train.common.core.util.TraincraftUtil;
-import train.common.entity.rollingStock.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.EntityTracksBuilder;
 import train.common.items.*;
 import train.common.library.BlockIDs;
 import train.common.library.GuiIDs;
@@ -741,7 +741,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (this.ticksExisted > 60) { //add a delay to spawn the seats so you don't bug out; has an issue where when the seats haven't spawned you can still get in the main entity
             if (getRiderOffsets() != null && getRiderOffsets().length > 0 && seats.size() < getRiderOffsets().length) {
                 for (int i = 0; i < getRiderOffsets().length; i++) {
-                    EntitySeat seat = new EntitySeat(getWorld(), posX, posY, posZ, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 1, getRiderOffsets()[i][2], this, i);
+                    EntitySeat seat = new EntitySeat(getWorld(), posX, posY, posZ, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 2, getRiderOffsets()[i][2], this, i);
                     seats.add(seat);
                     if (i == 0) {
                         seats.get(i).setControlSeat();
@@ -821,7 +821,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             if (seats.size() != 0) {
                 for (int i = 0; i < seats.size(); i++) {
                     if (seats.get(i) != null) {
-                        TraincraftUtil.updateRider(this, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 1, getRiderOffsets()[i][2], seats.get(i));
+                        TraincraftUtil.updateRider(this, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 2, getRiderOffsets()[i][2], seats.get(i));
                     }
                 }
             }
@@ -860,23 +860,23 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         if (needsBogieUpdate) {
             if (bogieFront != null) {
-                float rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation));
-                float rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation)));
+                float rotationCos1 = (float) Math.cos(this.serverRealRotation * TraincraftUtil.radian);
+                float rotationSin1 = (float) Math.sin(this.serverRealRotation * TraincraftUtil.radian);
                 if (!firstLoad) {
-                    rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation + 90));
-                    rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation + 90)));
+                    rotationCos1 = (float) Math.cos((this.serverRealRotation + 90) * TraincraftUtil.radian);
+                    rotationSin1 = (float) Math.sin((this.serverRealRotation + 90) * TraincraftUtil.radian);
                 }
-                double bogieX1 = (this.posX + (rotationCos1 * Math.abs(bogieShift)));
-                double bogieZ1 = (this.posZ + (rotationSin1 * Math.abs(bogieShift)));
+                double bogieX1 = (this.posX + (rotationCos1 * (-bogieShift)));
+                double bogieZ1 = (this.posZ + (rotationSin1 *(-bogieShift)));
                 this.bogieFront.setPosition(bogieX1, bogieFront.posY, bogieZ1);
 
             }
             if (bogieBack != null) {
-                float rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation));
-                float rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation)));
+                float rotationCos1 = (float) Math.cos(this.serverRealRotation * TraincraftUtil.radian);
+                float rotationSin1 = (float) Math.sin(this.serverRealRotation * TraincraftUtil.radian);
                 if (!firstLoad) {
-                    rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation + 90));
-                    rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation + 90)));
+                    rotationCos1 = (float) Math.cos((this.serverRealRotation + 90) * TraincraftUtil.radian);
+                    rotationSin1 = (float) Math.sin((this.serverRealRotation + 90) * TraincraftUtil.radian);
                 }
                 double bogieX1 = (this.posX + (rotationCos1 * Math.abs(rotationPoints()[1])));
                 double bogieZ1 = (this.posZ + (rotationSin1 * Math.abs(rotationPoints()[1])));
@@ -1019,8 +1019,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         for (EntitySeat seat: seats) { //handle died in train
             if (seat.getPassenger() != null && (seat.getPassenger().isDead || seat != seat.getPassenger().ridingEntity)) {
-                this.seats.get(0).getPassenger().getRidingEntity()= null;
-                this.seats.get(0).removePassenger(this.seats.get(0).getPassenger());
+                seat.getPassenger().ridingEntity = null;
+                seat.removePassenger(seat.getPassenger());
             }
         }
         this.dataWatcher.updateObject(14, (int) (motionX * 100));
@@ -1037,7 +1037,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     getWorld().spawnEntityInWorld(seats.get(i1));
                 }
                 cachedVectors[0] = new Vec3f(getRiderOffsets()[i1][0], getRiderOffsets()[i1][1], getRiderOffsets()[i1][2])
-                        .rotatePoint(rotationPitch, rotationYaw, 0f);
+                        .rotatePoint(rotationPitch, serverRealRotation, 0f);
                 cachedVectors[0].addVector(posX,posY,posZ);
                 seats.get(i1).setPosition(cachedVectors[0].xCoord, cachedVectors[0].yCoord, cachedVectors[0].zCoord);
             }

@@ -16,7 +16,7 @@ import train.common.Traincraft;
 import train.common.api.AbstractTrains;
 import train.common.core.network.PacketSetJukeboxStreamingUrl;
 import train.common.core.network.PacketSetTrainLockedToClient;
-import train.common.entity.rollingStock.EntityJukeBoxCart;
+import train.common.entity.rollingStockOld.EntityJukeBoxCart;
 import train.common.library.Info;
 
 import java.awt.*;

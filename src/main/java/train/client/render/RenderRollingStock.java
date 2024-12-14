@@ -19,15 +19,13 @@ import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 import train.common.api.TrainRenderRecord;
 import train.common.core.util.TraincraftUtil;
-import train.common.entity.rollingStock.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.EntityTracksBuilder;
 import train.common.overlaytexture.OverlayTextureManager;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Random;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.GL_CLAMP_TO_EDGE;
 
 @SideOnly(Side.CLIENT)
 public class RenderRollingStock extends Render {

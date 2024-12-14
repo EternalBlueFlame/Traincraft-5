@@ -4,7 +4,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import fexcraft.tmt.slim.ModelBase;
 import train.client.render.CustomModelRenderer;
-import train.common.entity.rollingStock.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.EntityTracksBuilder;
 import train.common.library.Info;
 
 public class ModelBuilder extends ModelBase {

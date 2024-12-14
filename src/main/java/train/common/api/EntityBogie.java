@@ -122,7 +122,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	@Override
 	public void applyEntityCollision(Entity entity) {
 
-		if (this.entityMainTrain != null && entity != this.entityMainTrain) {
+		if (this.entityMainTrain != null && entity != this.entityMainTrain && !(entity instanceof EntitySeat) ) {
 
 			this.entityMainTrain.applyEntityCollision(entity);
 

@@ -1,8 +1,12 @@
 package train.common.library;
 
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.item.Item;
+import net.minecraft.world.World;
+import train.common.api.AbstractTrains;
 import train.common.api.TrainRecord;
-import train.common.entity.rollingStock.*;
+import train.common.entity.rollingStockOld.*;
+
+import java.lang.reflect.InvocationTargetException;
 
 public class EnumTrains {
 
@@ -11,7 +15,6 @@ public class EnumTrains {
 	 */
 	public static TrainRecord[] trains() {
 		return new TrainRecord[]{
-				TrainRecord.makeEntry("passengerCartBlue", "Passenger Blue", EntityPassengerBlue.class, ItemIDs.minecartPassengerBlue.item, "passenger", 0, 0, 1, 0, 0, 0, 0, 0, 0, new String[]{"Blue", "Red", "Green", "White", "Black", "Cyan", "Orange", "Grey", "LightGrey", "Brown", "Pink", "Purple", "Lime", "Magenta", "LightBlue", "Yellow", "Skin17", "Skin19"}, 18, 0),
 				TrainRecord.makeEntry("passengerCartBlackSmall", "Passenger Small Black", EntityPassenger2.class, ItemIDs.minecartPassenger2.item, "passenger", 0, 0, 0.5, 0, 0, 0, 0, 0, 0, null, 18, 0),
 				TrainRecord.makeEntry("passengerLongGreen", "Passenger Green Long", EntityPassenger5.class, ItemIDs.minecartPassenger5.item, "passenger", 0, 0, 1, 0, 0, 0, 0, 0, 0, new String[]{"Green", "Yellow"}, 18, 0),
 				TrainRecord.makeEntry("passengerShortGreen", "Passenger Short Green", EntityPassenger7.class, ItemIDs.minecartPassenger7.item, "passenger", 0, 0, 1, 0, 0, 0, 0, 0, 0, null, 18, 0),
@@ -262,9 +265,10 @@ public class EnumTrains {
 	}
 
 
+
 	//String trainType,int MHP,int maxSpeed, double mass, int fuelConsumption, int waterConsumption, int heatingTime, double accelerationRate, double brakeRate, int tankCapacity, String[] colors,
 	
-	/*private String internalName;
+	private String internalName;
 	private Class entityClass;
 	private Item item;
 	private String trainType;
@@ -301,7 +305,8 @@ public class EnumTrains {
 	 * @param colors: an array with all possible colors. Index 0 is used as default color when train is first spawned. leave null if no color available
 	 * @param guiRenderScale: scale at which the entity will be rendered inside the GUI (crafting GUI)
 	 *
-	private EnumTrains(String internalName,Class entityClass, Item item, String trainType,int MHP,int maxSpeed, double mass, int fuelConsumption, int waterConsumption, int heatingTime, double accelerationRate, double brakeRate, int tankCapacity, int[] colors, int guiRenderScale, double bogieLocoPosition){
+	 *                      */
+	private EnumTrains(String internalName, Class entityClass, Item item, String trainType, int MHP, int maxSpeed, double mass, int fuelConsumption, int waterConsumption, int heatingTime, double accelerationRate, double brakeRate, int tankCapacity, int[] colors, int guiRenderScale, double bogieLocoPosition){
 		this.internalName = internalName;
 		this.entityClass = entityClass;
 		this.item = item;
@@ -339,7 +344,7 @@ public class EnumTrains {
 	 * @param guiRenderScale
 	 * @param bogieLocoPositions
 	 * @param additionnalTooltip
-	 *
+	 **/
 	private EnumTrains(String internalName,Class entityClass, Item item, String trainType,int MHP,int maxSpeed, double mass, int fuelConsumption,int waterConsumption, int heatingTime, double accelerationRate, double brakeRate, int tankCapacity, int[] colors, int guiRenderScale, double bogieLocoPositions, String additionnalTooltip){
 		this.internalName = internalName;
 		this.entityClass = entityClass;
@@ -373,7 +378,7 @@ public class EnumTrains {
 	 * //@param bogieUtilityPositions
 	 * @param cargoCapacity
 	 * @param additionnalTooltip
-	 *
+	 **/
 	private EnumTrains(String internalName,Class entityClass, Item item, String trainType, double mass, int[] colors, int guiRenderScale, int cargoCapacity, String additionnalTooltip){
 		this.internalName = internalName;
 		this.entityClass = entityClass;
@@ -387,102 +392,82 @@ public class EnumTrains {
 	}
 
 
-	@Override
 	public String getName(){
-		return this.name();
+		return this.getName()	;
 	}
 
-	@Override
 	public String getInternalName(){
 		return this.internalName;
 	}
 
-	@Override
 	public Item getItem(){
 		return this.item;
 	}
 
-	@Override
 	public String getTrainType(){
 		return this.trainType;
 	}
 
-	@Override
 	public int getMHP(){
 		return this.MHP;
 	}
 
-	@Override
 	public int getMaxSpeed(){
 		return this.maxSpeed;
 	}
 
-	@Override
 	public double getMass(){
 		return this.mass;
 	}
 
-	@Override
 	public int getFuelConsumption(){
 		return this.fuelConsumption;
 	}
 
-	@Override
 	public int getWaterConsumption(){
 		return this.waterConsumption;
 	}
 
-	@Override
 	public int getHeatingTime(){
 		return this.heatingTime;
 	}
 
-	@Override
 	public double getAccelerationRate(){
 		return this.accelerationRate;
 	}
 
-	@Override
 	public double getBrakeRate(){
 		return this.brakeRate;
 	}
 
-	@Override
 	public int getTankCapacity(){
 		return this.tankCapacity;
 	}
 
-	@Override
 	public int[] getColors(){
 		return this.colors;
 	}
 
-	@Override
 	public double getBogieLocoPosition(){
 		return this.bogieLocoPosition;
 	}
 
 
-	@Override
 	public Class getEntityClass() {
 		return this.entityClass;
 	}
 
-	@Override
 	public int getGuiRenderScale(){
 		return this.guiRenderScale;
 	}
 
-	@Override
 	public String getAdditionnalTooltip(){
 		return this.additionnalTooltip;
 	}
 
-	@Override
 	public int getCargoCapacity(){
 		return cargoCapacity;
 	}
-	@Override
 	public AbstractTrains getEntity(World world){
 		try {
 			return (AbstractTrains) entityClass.getConstructor(World.class).newInstance(world);
@@ -501,7 +486,6 @@ public class EnumTrains {
 		}
 		return null;
 	}
-	@Override
 	public AbstractTrains getEntity(World world, double x, double y, double z){
 		try {
 			if(world.isRemote){
@@ -523,5 +507,5 @@ public class EnumTrains {
 			e.printStackTrace();
 		}
 		return null;
-	}*/
+	}
 }

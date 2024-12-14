@@ -8,7 +8,7 @@ import net.minecraft.util.MathHelper;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 import train.common.core.handlers.ConfigHandler;
-import train.common.entity.rollingStock.EntityJukeBoxCart;
+import train.common.entity.rollingStockOld.EntityJukeBoxCart;
 
 //TODO Fix the sounds
 @SideOnly(Side.CLIENT)

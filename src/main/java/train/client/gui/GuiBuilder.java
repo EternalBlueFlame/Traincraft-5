@@ -14,7 +14,7 @@ import train.common.Traincraft;
 import train.common.core.network.PacketSetTrainLockedToClient;
 import train.common.core.network.PacketTrackBuilderFollow;
 import train.common.core.network.PacketTrackBuilderHeight;
-import train.common.entity.rollingStock.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.EntityTracksBuilder;
 import train.common.inventory.InventoryBuilder;
 import train.common.library.Info;
 

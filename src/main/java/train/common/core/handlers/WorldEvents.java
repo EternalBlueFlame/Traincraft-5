@@ -10,7 +10,7 @@ import net.minecraftforge.event.world.ChunkEvent;
 import train.common.api.AbstractTrains;
 import train.common.api.Locomotive;
 import train.common.entity.ai.EntityAIFearHorn;
-import train.common.entity.rollingStock.EntityJukeBoxCart;
+import train.common.entity.rollingStockOld.EntityJukeBoxCart;
 
 import java.util.Random;
 
