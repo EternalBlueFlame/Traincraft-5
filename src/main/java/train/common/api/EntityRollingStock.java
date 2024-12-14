@@ -741,7 +741,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (this.ticksExisted > 60) { //add a delay to spawn the seats so you don't bug out; has an issue where when the seats haven't spawned you can still get in the main entity
             if (getRiderOffsets() != null && getRiderOffsets().length > 0 && seats.size() < getRiderOffsets().length) {
                 for (int i = 0; i < getRiderOffsets().length; i++) {
-                    EntitySeat seat = new EntitySeat(getWorld(), posX, posY, posZ, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 1, getRiderOffsets()[i][2], this, i);
+                    EntitySeat seat = new EntitySeat(getWorld(), posX, posY, posZ, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 2, getRiderOffsets()[i][2], this, i);
                     seats.add(seat);
                     if (i == 0) {
                         seats.get(i).setControlSeat();
@@ -821,7 +821,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             if (seats.size() != 0) {
                 for (int i = 0; i < seats.size(); i++) {
                     if (seats.get(i) != null) {
-                        TraincraftUtil.updateRider(this, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 1, getRiderOffsets()[i][2], seats.get(i));
+                        TraincraftUtil.updateRider(this, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 2, getRiderOffsets()[i][2], seats.get(i));
                     }
                 }
             }
@@ -1019,8 +1019,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         for (EntitySeat seat: seats) { //handle died in train
             if (seat.getPassenger() != null && (seat.getPassenger().isDead || seat != seat.getPassenger().ridingEntity)) {
-                this.seats.get(0).getPassenger().ridingEntity = null;
-                this.seats.get(0).removePassenger(this.seats.get(0).getPassenger());
+                seat.getPassenger().ridingEntity = null;
+                seat.removePassenger(seat.getPassenger());
             }
         }
         this.dataWatcher.updateObject(14, (int) (motionX * 100));
@@ -1037,7 +1037,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     getWorld().spawnEntityInWorld(seats.get(i1));
                 }
                 cachedVectors[0] = new Vec3f(getRiderOffsets()[i1][0], getRiderOffsets()[i1][1], getRiderOffsets()[i1][2])
-                        .rotatePoint(rotationPitch, rotationYaw, 0f);
+                        .rotatePoint(rotationPitch, serverRealRotation, 0f);
                 cachedVectors[0].addVector(posX,posY,posZ);
                 seats.get(i1).setPosition(cachedVectors[0].xCoord, cachedVectors[0].yCoord, cachedVectors[0].zCoord);
             }

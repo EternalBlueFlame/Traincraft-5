@@ -168,15 +168,6 @@ public class Traincraft {
         }
 
 
-        TraincraftRegistry.registerTransports("", listSteamTrains());
-        TraincraftRegistry.registerTransports("", listFreight());
-        TraincraftRegistry.registerTransports("", listPassenger());
-        TraincraftRegistry.registerTransports("", listTanker());
-        TraincraftRegistry.registerTransports("", listElectricTrains());
-        TraincraftRegistry.registerTransports("", listDieselTrains());
-        TraincraftRegistry.registerTransports("", listTender());
-
-
         proxy.registerTileEntities();
 
         tcLog.info("Initialize Fluids");
@@ -218,6 +209,15 @@ public class Traincraft {
         EntityHandler.init();
 
 
+        TraincraftRegistry.registerTransports("", listSteamTrains());
+        TraincraftRegistry.registerTransports("", listFreight());
+        TraincraftRegistry.registerTransports("", listPassenger());
+        TraincraftRegistry.registerTransports("", listTanker());
+        TraincraftRegistry.registerTransports("", listElectricTrains());
+        TraincraftRegistry.registerTransports("", listDieselTrains());
+        TraincraftRegistry.registerTransports("", listTender());
+
+
 
         /* Liquid FX */
         proxy.registerTextureFX();
@@ -255,7 +255,9 @@ public class Traincraft {
         tcLog.info("Activation Mod Compatibility");
         TrainModCore.ModsLoaded();
 
-        trainConverter.write();
+        if(proxy.isClient()) {
+            trainConverter.write();
+        }
 
         tcLog.info("Finished PostInitialization");
     }
