@@ -16,7 +16,7 @@ import train.common.library.ItemIDs;
 
 import javax.annotation.Nullable;
 
-public class LiquidTank extends EntityRollingStock implements IFluidHandler, ISidedInventory {
+public class LiquidTank extends EntityRollingStock implements ISidedInventory {
     private int capacity;
     protected ItemStack[] cargoItems;
     private int update = 8;

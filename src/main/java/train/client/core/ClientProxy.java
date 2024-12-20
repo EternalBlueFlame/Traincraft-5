@@ -42,6 +42,7 @@ import train.common.blocks.TCBlocks;
 import train.common.core.CommonProxy;
 import train.common.core.Traincraft_EventSounds;
 import train.common.core.handlers.ConfigHandler;
+import train.common.entity.CollisionBox;
 import train.common.entity.digger.EntityRotativeDigger;
 import train.common.entity.digger.EntityRotativeWheel;
 import train.common.entity.rollingStockOld.EntityJukeBoxCart;
@@ -158,6 +159,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerRenderInformation() {
         FMLCommonHandler.instance().bus().register(new ClientTickHandler());
+        RenderingRegistry.registerEntityRenderingHandler(CollisionBox.class, nullRender);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityRollingStock.class, new RenderRollingStock());
         RenderingRegistry.registerEntityRenderingHandler(EntityZeppelinTwoBalloons.class, new RenderZeppelins());

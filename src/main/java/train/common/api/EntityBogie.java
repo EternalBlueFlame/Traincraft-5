@@ -66,14 +66,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		this.prevDpdz = 0F;
 		this.worldObj = world;
 
-		if (entityMainTrain != null) {
-
-			setSize(entityMainTrain.width, entityMainTrain.height);
-		}
-		else {
-
-			setSize(0.98F, 1.98F);
-		}
+		setSize(0.5f, 0.25f);
 
 		//this.boundingBox.offset(0, 0.5, 0);
 		setCollisionHandler(null);

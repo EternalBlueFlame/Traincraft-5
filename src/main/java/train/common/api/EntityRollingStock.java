@@ -24,6 +24,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.TraincraftEntityHelper;
+import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityCreeper;
@@ -40,9 +41,13 @@ import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
 import train.client.core.handlers.SoundUpdaterRollingStock;
 import train.common.Traincraft;
 import train.common.adminbook.ServerLogger;
@@ -53,6 +58,8 @@ import train.common.core.handlers.*;
 import train.common.core.network.PacketRollingStockRotation;
 import train.common.core.util.DepreciatedUtil;
 import train.common.core.util.TraincraftUtil;
+import train.common.entity.CollisionBox;
+import train.common.entity.EntityHitbox;
 import train.common.entity.rollingStockOld.EntityTracksBuilder;
 import train.common.items.*;
 import train.common.library.BlockIDs;
@@ -127,7 +134,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     @SideOnly(Side.CLIENT)
     private double rollingVelocityZ;
 
-    private CollisionHandler collisionhandler;
+    public EntityHitbox collisionHandler=null;
+
     private LinkHandler linkhandler;
     private TrainsOnClick trainsOnClick;
     public boolean isBraking;
@@ -166,7 +174,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     public double posYFromServer;
     private double derailSpeed = 0.46;
 
-    private int scrollPosition;
     public TileTCRail lastTrack=null;
     public Vec3f[] cachedVectors = new Vec3f[]{
             new Vec3f(0,0,0),new Vec3f(0,0,0),new Vec3f(0,0,0),new Vec3f(0,0,0)};
@@ -218,7 +225,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         consist = new ArrayList<AbstractTrains>();
         handleOverheating = new HandleOverheating(this);
 
-        collisionhandler = new CollisionHandler(world);
+        if(world!=null) {
+            collisionHandler = new EntityHitbox(getHitboxSize()[0],getHitboxSize()[1],getHitboxSize()[2], this);
+            collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
+        }
         linkhandler = new LinkHandler(world);
         trainsOnClick = new TrainsOnClick();
 
@@ -246,6 +256,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         //this.boundingBox.offset(0, 0.5, 0);
     }
 
+
+    public Entity[] getParts(){
+        return collisionHandler==null || collisionHandler.interactionBoxes==null?null:
+                collisionHandler.interactionBoxes.toArray(new Entity[]{});
+    }
 
     /**
      * this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared.
@@ -318,10 +333,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     protected void entityInit() {
-        dataWatcher.addObject(16, (byte) 0);
-        dataWatcher.addObject(17, 0);
-        dataWatcher.addObject(18, 1);
-        dataWatcher.addObject(19, 0.0F);
+        if(getWorld()!=null) {
+            dataWatcher.addObject(16, (byte) 0);
+            dataWatcher.addObject(17, 0);
+            dataWatcher.addObject(18, 1);
+            dataWatcher.addObject(19, 0.0F);
+        }
     }
 
     @Override
@@ -376,6 +393,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     protected int steamFuelLast(ItemStack it) {
         return FuelHandler.steamFuelLast(it);
+    }
+
+    @Override
+    public boolean attackEntityFromPart(EntityDragonPart part, DamageSource damagesource, float i) {
+        return attackEntityFrom(damagesource,i);
     }
 
     @Override
@@ -497,6 +519,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         for (EntitySeat seat : seats) {
             seat.setDead();
             seat.getWorld().removeEntity(seat);
+        }
+
+        for(CollisionBox box : collisionHandler.interactionBoxes){
+            if(box !=null){
+                box.setDead();
+                getWorld().removeEntity(box);
+            }
         }
     }
 
@@ -825,6 +854,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     }
                 }
             }
+
+            if(collisionHandler!=null){
+                collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
+                collisionHandler.updateCollidingEntities(this);
+                collisionHandler.manageCollision(this);
+            }
             return;
         }
         /**
@@ -917,6 +952,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         }
 
+        if(collisionHandler==null) {
+            collisionHandler = new EntityHitbox(getHitboxSize()[0],getHitboxSize()[1],getHitboxSize()[2], this);
+            collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
+        } else {
+            collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
+        }
         //double var49 = MathHelper.wrapAngleTo180_float(this.rotationYaw - this.prevRotationYaw);
 
         float anglePitch = 0;
@@ -984,30 +1025,15 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         //this.setRotation(this.rotationYaw, this.rotationPitch);
 
-        list = this.worldObj.getEntitiesWithinAABBExcludingEntity(this, getCollisionHandler() != null ?
-                getCollisionHandler().getMinecartCollisionBox(this) :
-                boundingBox.expand(0.2D, 0.0D, 0.2D));
-
-        if (list != null && !list.isEmpty()) {
-            Entity entity;
-            for (Object obj : list) {
-                if (obj == this.riddenByEntity) {
-                    continue;
-                }
-                entity = (Entity) obj;
-
-                if (entity.canBePushed() && entity instanceof EntityMinecart) {
-                    entity.applyEntityCollision(this);
-                } else if (entity.canBePushed() && !(entity instanceof EntityMinecart)) {
-                    this.applyEntityCollision(entity);
-                }
-            }
-        }
-
         handleTrain();
         handleOverheating.HandleHeatLevel(this);
-        linkhandler.handleStake(this, boundingBox);
-        collisionhandler.handleCollisions(this, boundingBox);
+        linkhandler.handleStake(this);
+        //update the collision handler's positions
+        if(collisionHandler!=null){
+            collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
+            collisionHandler.updateCollidingEntities(this);
+            collisionHandler.manageCollision(this);
+        }
         this.func_145775_I();
         MinecraftForge.EVENT_BUS.post(new MinecartUpdateEvent(this, floor_posX, floor_posY, floor_posZ));
         //setBoundingBoxSmall(posX, posY, posZ, 0.98F, 0.7F);
@@ -2218,7 +2244,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     @Override
     public float getLinkageDistance(EntityMinecart cart) {
-        return this.getOptimalDistance(cart) + 2.4F;
+        return this.getOptimalDistance(cart) + 1.4F;
     }
 
     /**
@@ -2418,9 +2444,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
     }
 
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-        return (!isDead && entityplayer.getDistanceSqToEntity(this) <= 300D);
-    }
+
 
     /**
      * Returns the carts max speed. Carts going faster than 1.1 cause issues
@@ -2549,7 +2573,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
     public float getYaw() {
-        return this.rotationYaw;
+        return getWorld().isRemote?rotationYawClientReal:this.rotationYaw+90;
     }
 
     public float getPitch() {
@@ -2763,5 +2787,4 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         //return !getBoolean(boolValues.LOCKED);
         return !this.getTrainLockedFromPacket();
     }
-    public World getWorld(){ return worldObj;}
 }
