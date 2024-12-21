@@ -75,7 +75,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	}
 
 	public ItemRollingStock(AbstractTrains train, String modid, CreativeTabs tab){
-		this(modid+":"+train.transportName(),tab);
+		this(modid+":trains/"+train.transportName().replace(' ','_'),tab);
 		setUnlocalizedName(train.transportName());
 		entity=train;
 	}

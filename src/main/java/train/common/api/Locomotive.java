@@ -827,8 +827,8 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         if (getState().equals("cold") && !canBePulled) {
             this.extinguish();
             if (getCurrentMaxSpeed() >= (getMaxSpeed() * 0.6)) {
-                motionX *= 0.0;
-                motionZ *= 0.0;
+                motionX *= 0.98;
+                motionZ *= 0.98;
             }
         }
         if (getState().equals("warm")) {

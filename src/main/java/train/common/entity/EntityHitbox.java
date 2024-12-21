@@ -106,19 +106,16 @@ public class EntityHitbox {
                     double[] motion = CommonUtil.rotatePoint(0.005, 0,
                             CommonUtil.atan2degreesf(e.posZ - host.posZ, e.posX - host.posX));
                     host.addVelocity(-motion[0], 0, -motion[2]);
-                    entityOne.addVelocity(motion[0], 0, motion[2]);
+                    if(entityOne instanceof Locomotive) {
+                        entityOne.addVelocity(motion[0]*0.2, 0, motion[2]*0.2);
+                    } else {
+                        entityOne.addVelocity(motion[0], 0, motion[2]);
+                    }
 
                 } else if (e instanceof EntityPlayer || e instanceof EntityLiving) {
-                    if (host.canBePushed()) {
-                        for (AbstractTrains t : host.consist) {
-                            if (t.accelerate != 0) {
-                                return;
-                            }
-                        }
-                        double[] motion = CommonUtil.rotatePoint(0.005, 0,
-                                CommonUtil.atan2degreesf(e.posZ - host.posZ, e.posX - host.posX));
-                        host.addVelocity(-motion[0], 0, -motion[2]);
-                    }
+                    double[] motion = CommonUtil.rotatePoint(0.005, 0,
+                            CommonUtil.atan2degreesf(e.posZ - host.posZ, e.posX - host.posX));
+                    host.addVelocity(-motion[0], 0, -motion[2]);
 
                     //hurt entity if going fast
                     if (Math.abs(host.motionX) + Math.abs(host.motionZ) > 0.25f) {
