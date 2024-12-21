@@ -1240,9 +1240,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         } else if (block == BlockIDs.tcRail.block) {
             limitSpeedOnTCRail();
-            if(lastTrack==null || !CommonUtil.getTiles(worldObj,floor_posX, floor_posY, floor_posZ).contains(lastTrack)){
-                lastTrack = (TileTCRail) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
-            }
+            lastTrack = (TileTCRail) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
             int meta = lastTrack.getBlockMetadata();
 
             if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
@@ -1288,9 +1286,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         } else if (block == BlockIDs.tcRailGag.block) {
             limitSpeedOnTCRail();
-            TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
 
             if(lastTrack==null || !CommonUtil.getTiles(worldObj,floor_posX, floor_posY, floor_posZ).contains(lastTrack)){
+                TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
                 lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
             }
             if (TCRailTypes.isTurnTrack(lastTrack)) {

@@ -446,9 +446,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		else if (l == BlockIDs.tcRail.block) {
 			limitSpeedOnTCRail();
 
-			if(lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack)){
-				lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
-			}
+			lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
 			int meta = lastTrack.getBlockMetadata();
 
 			if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
@@ -480,9 +478,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		}
 		else if (l == BlockIDs.tcRailGag.block) {
 			limitSpeedOnTCRail();
-			TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(i, j, k);
 
 			if(lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack)){
+				TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(i, j, k);
 				lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
 			}
 			if (TCRailTypes.isTurnTrack(lastTrack)) {

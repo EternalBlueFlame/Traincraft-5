@@ -198,7 +198,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			if(cartLinked1 instanceof Tender){
 				if(drain==null && fill(ForgeDirection.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
 					if (getFluid() == null || getFluid().getFluid() == FluidRegistry.WATER) {
-						drain = ((Tender) cartLinked1).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+						drain = cartLinked1.drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
 					}
 				}
 				for (int h = 0; h < ((Tender) cartLinked1).tenderItems.length; h++) {
@@ -206,7 +206,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 						if (getFuel() < maxFuel && ((getFuel() + FuelHandler.steamFuelLast(((Tender) cartLinked1).tenderItems[h])) <= maxFuel)) {
 							fuelTrain += FuelHandler.steamFuelLast(((Tender) cartLinked1).tenderItems[h]);
 							hasCoalInTender = true;
-							((Tender) cartLinked1).decrStackSize(h, 1);
+							cartLinked1.decrStackSize(h, 1);
 							break;
 						}
 					}
@@ -217,7 +217,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 
 				if(drain==null && fill(ForgeDirection.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
 					if (getFluid() == null || getFluid().getFluid() == FluidRegistry.WATER) {
-						drain = ((Tender) cartLinked2).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+						drain = cartLinked2.drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
 					}
 				}
 
@@ -227,7 +227,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 						if (getFuel() < maxFuel && ((getFuel() + FuelHandler.steamFuelLast(((Tender) cartLinked2).tenderItems[h])) <= maxFuel)) {
 							fuelTrain += FuelHandler.steamFuelLast(((Tender) cartLinked2).tenderItems[h]);
 							hasCoalInTender = true;
-							((Tender) cartLinked2).decrStackSize(h, 1);
+							cartLinked2.decrStackSize(h, 1);
 							break;
 						}
 					}
