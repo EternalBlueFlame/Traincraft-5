@@ -10,6 +10,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
 import ebf.tim.entities.EntitySeat;
+import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Vec3f;
 import io.netty.buffer.ByteBuf;
@@ -1239,12 +1240,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         } else if (block == BlockIDs.tcRail.block) {
             limitSpeedOnTCRail();
-            if(lastTrack==null || lastTrack.xCoord!=floor_posX ||lastTrack.zCoord!=floor_posZ){
-                if( worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ) instanceof TileTCRail) {
-                    lastTrack = (TileTCRail) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
-                } else {
-                    return;
-                }
+            if(lastTrack==null || !CommonUtil.getTiles(worldObj,floor_posX, floor_posY, floor_posZ).contains(lastTrack)){
+                lastTrack = (TileTCRail) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
             }
             int meta = lastTrack.getBlockMetadata();
 
@@ -1293,12 +1290,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             limitSpeedOnTCRail();
             TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
 
-            if(lastTrack==null || lastTrack.xCoord!=tileGag.originX ||lastTrack.zCoord!=tileGag.originZ){
-                if(worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ) instanceof TileTCRail) {
-                    lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
-                } else {
-                    return;
-                }
+            if(lastTrack==null || !CommonUtil.getTiles(worldObj,floor_posX, floor_posY, floor_posZ).contains(lastTrack)){
+                lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
             }
             if (TCRailTypes.isTurnTrack(lastTrack)) {
                 moveOnTC90TurnRail(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz);
@@ -1567,8 +1560,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 tile = (TileTCRail) worldObj.getTileEntity(floorX, floorY, floorZ);
             } else if (block instanceof BlockTCRailGag) {
                 TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(floorX, floorY, floorZ);
-                if (worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ) instanceof TileTCRail) {
-                    tile = (TileTCRail) worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
+                if (worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) instanceof TileTCRail) {
+                    tile = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
                 }
             }
             if (tile != null && tile.slopeAngle != 0) {
@@ -2628,16 +2621,16 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         } else if (l == BlockIDs.tcRail.block || l == BlockIDs.tcRailGag.block) {
             TileEntity tile = worldObj.getTileEntity(i, j, k);
-            if (tile != null && tile instanceof TileTCRail) {
+            if (tile instanceof TileTCRail) {
                 if (((TileTCRail) tile).getType() != null && !TCRailTypes.isSlopeTrack((TileTCRail) tile)) {
                     par3 = j;
                 }
-            } else if (tile != null && tile instanceof TileTCRailGag) {
-                int xOrigin = ((TileTCRailGag) tile).originX;
-                int yOrigin = ((TileTCRailGag) tile).originY;
-                int zOrigin = ((TileTCRailGag) tile).originZ;
+            } else if (tile instanceof TileTCRailGag) {
+                int xOrigin = ((TileTCRailGag) tile).originX.get(0);
+                int yOrigin = ((TileTCRailGag) tile).originY.get(0);
+                int zOrigin = ((TileTCRailGag) tile).originZ.get(0);
                 TileEntity tileOrigin = worldObj.getTileEntity(xOrigin, yOrigin, zOrigin);
-                if (tileOrigin != null && (tileOrigin instanceof TileTCRail) && ((TileTCRail) tileOrigin).getType() != null && !TCRailTypes.isSlopeTrack((TileTCRail) tileOrigin)) {
+                if (tileOrigin instanceof TileTCRail && ((TileTCRail) tileOrigin).getType() != null && !TCRailTypes.isSlopeTrack((TileTCRail) tileOrigin)) {
                     par3 = j;
                 }
             }

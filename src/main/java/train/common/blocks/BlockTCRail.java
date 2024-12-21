@@ -20,6 +20,7 @@ import train.common.library.Info;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
 
+import java.util.Arrays;
 import java.util.Random;
 
 public class BlockTCRail extends Block {
@@ -70,7 +71,7 @@ public class BlockTCRail extends Block {
 	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
 		TileEntity tileEntity = world.getTileEntity(x,y,z);
 		if (tileEntity instanceof TileTCRailGag) {
-			tileEntity = world.getTileEntity(((TileTCRailGag)tileEntity).originX, ((TileTCRailGag)tileEntity).originY, ((TileTCRailGag)tileEntity).originZ);
+			tileEntity = world.getTileEntity(((TileTCRailGag)tileEntity).originX.get(0), ((TileTCRailGag)tileEntity).originY.get(0), ((TileTCRailGag)tileEntity).originZ.get(0));
 		}
 		if(tileEntity instanceof TileTCRail){
 			((TileTCRail)tileEntity).lastPlayerToInteract = player;
@@ -97,8 +98,14 @@ public class BlockTCRail extends Block {
 			for(int z : matrixXZ){
 				for(int y : matrixY){
 					if (tileEntity != null && world.getBlock(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRailGag){
-						world.notifyBlockChange((x +  tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z  + tileEntity.zCoord), Blocks.air);
-						world.markBlockForUpdate((x + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z + tileEntity.zCoord));
+						if(((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originX.size()>1){
+							((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originX.removeAll(Arrays.asList(new int[]{tileEntity.xCoord}));
+							((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originY.removeAll(Arrays.asList(new int[]{tileEntity.yCoord}));
+							((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originY.removeAll(Arrays.asList(new int[]{tileEntity.zCoord}));
+						} else {
+							world.notifyBlockChange((x + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z + tileEntity.zCoord), Blocks.air);
+							world.markBlockForUpdate((x + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z + tileEntity.zCoord));
+						}
 					}
 					if (tileEntity != null && world.getBlock(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRail){
 						world.notifyBlockChange((x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z  + tileEntity.zCoord), Blocks.air);

@@ -5,6 +5,7 @@ import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.entities.EntitySeat;
+import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.carts.IRoutableCart;
 import net.minecraft.block.Block;
@@ -444,12 +445,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		}
 		else if (l == BlockIDs.tcRail.block) {
 			limitSpeedOnTCRail();
-			if(lastTrack==null || lastTrack.xCoord!=i ||lastTrack.zCoord!=k){
-				if( worldObj.getTileEntity(i, j, k) instanceof TileTCRail) {
-					lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
-				} else {
-					return;
-				}
+
+			if(lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack)){
+				lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
 			}
 			int meta = lastTrack.getBlockMetadata();
 
@@ -484,12 +482,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			limitSpeedOnTCRail();
 			TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(i, j, k);
 
-			if(lastTrack==null || lastTrack.xCoord!=tileGag.originX ||lastTrack.zCoord!=tileGag.originZ){
-				if(worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ) instanceof TileTCRail) {
-					lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
-				} else {
-					return;
-				}
+			if(lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack)){
+				lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
 			}
 			if (TCRailTypes.isTurnTrack(lastTrack)) {
 				moveOnTC90TurnRail(j, lastTrack.r, lastTrack.cx, lastTrack.cz);
