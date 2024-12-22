@@ -1242,10 +1242,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         } else if (block == BlockIDs.tcRail.block) {
             limitSpeedOnTCRail();
             lastTrack = (TileTCRail) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
-            meta = lastTrack.getBlockMetadata();
 
             if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
-                moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
+                moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
             } else if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState())) {
                 if (bogieFront != null && !bogieFront.isOnRail()) {
                     derailSpeed = 0;
@@ -1255,12 +1254,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
                 if (derailSpeed == 0) {
                     this.unLink();
-                    moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
+                    moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
                 } else {
 
-                    if (shouldIgnoreSwitch(lastTrack, floor_posX, floor_posY, floor_posZ, meta)) {
+                    if (shouldIgnoreSwitch(lastTrack, floor_posX, floor_posY, floor_posZ, lastTrack.getBlockMetadata())) {
 
-                        moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
+                        moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
                     } else {
                         if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState()))
                             moveOnTC90TurnRail(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz);
@@ -1270,15 +1269,15 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     // cz, tile.getType(), meta);
                 }
             } else if (TCRailTypes.isSlopeTrack(lastTrack)) {
-                moveOnTCSlope(floor_posY, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, meta);
+                moveOnTCSlope(floor_posY, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, lastTrack.getBlockMetadata());
             } else if (TCRailTypes.isCrossingTrack(lastTrack)) {
-                moveOnTCTwoWaysCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, meta);
+                moveOnTCTwoWaysCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
             } else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
-                moveOnTCDiamondCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, meta);
+                moveOnTCDiamondCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
             } else if (TCRailTypes.isDiagonalTrack(lastTrack)) {
                 moveOnTCDiagonal(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
             } else if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
-                moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, meta, 1, lastTrack.slopeAngle);
+                moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), 1, lastTrack.slopeAngle);
             }
 
         } else if (block == BlockIDs.tcRailGag.block) {
@@ -1288,9 +1287,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
                 lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
             }
-            meta = lastTrack.getBlockMetadata();
             if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
-                moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
+                moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
             } else if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState())) {
                 if (bogieFront != null && !bogieFront.isOnRail()) {
                     derailSpeed = 0;
@@ -1300,12 +1298,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
                 if (derailSpeed == 0) {
                     this.unLink();
-                    moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
+                    moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
                 } else {
 
-                    if (shouldIgnoreSwitch(lastTrack, floor_posX, floor_posY, floor_posZ, meta)) {
+                    if (shouldIgnoreSwitch(lastTrack, floor_posX, floor_posY, floor_posZ, lastTrack.getBlockMetadata())) {
 
-                        moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
+                        moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
                     } else {
                         if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState()))
                             moveOnTC90TurnRail(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz);
@@ -1315,15 +1313,15 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     // cz, tile.getType(), meta);
                 }
             } else if (TCRailTypes.isSlopeTrack(lastTrack)) {
-                moveOnTCSlope(floor_posY, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, meta);
+                moveOnTCSlope(floor_posY, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, lastTrack.getBlockMetadata());
             } else if (TCRailTypes.isCrossingTrack(lastTrack)) {
-                moveOnTCTwoWaysCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, meta);
+                moveOnTCTwoWaysCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
             } else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
-                moveOnTCDiamondCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, meta);
+                moveOnTCDiamondCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
             } else if (TCRailTypes.isDiagonalTrack(lastTrack)) {
                 moveOnTCDiagonal(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
             } else if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
-                moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, meta, 1, lastTrack.slopeAngle);
+                moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), 1, lastTrack.slopeAngle);
             }
         } else {
             lastTrack=null;
