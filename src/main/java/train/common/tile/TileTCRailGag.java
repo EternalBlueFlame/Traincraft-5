@@ -26,7 +26,9 @@ public class TileTCRailGag extends TileEntity {
 	public List<Integer> originZ = new ArrayList<>();
 	public String type = "";
 	public float bbHeight = 0.125f;
+	public boolean allowStockPlacement = false;
 	public boolean canPlaceRollingstock = false;
+
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
@@ -57,6 +59,10 @@ public class TileTCRailGag extends TileEntity {
 
 		super.readFromNBT(nbt);
 	}
+
+
+
+
 
 	public void setCanPlaceRollingStock(boolean canPlace){
 		TileTCRail tile = (TileTCRail) worldObj.getTileEntity(originX.get(0), originY.get(0), originZ.get(0));

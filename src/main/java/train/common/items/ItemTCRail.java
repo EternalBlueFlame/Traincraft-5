@@ -3145,16 +3145,14 @@ public class ItemTCRail extends ItemPart {
             return false;
         }
 
-        placeTrack(world, x, y + 1, z, BlockIDs.tcRail.block, l);
+        /**Main rail*/placeTrack(world, x, y + 1, z, BlockIDs.tcRail.block, l);
         TileTCRail tcRail = (TileTCRail) world.getTileEntity(x, y + 1, z);
-
+        /**Two gag rail added to the side for stability*/
         placeTrack(world, x, y + 1, z + dz, BlockIDs.tcRailGag.block, l);
         tileGag[0] = (TileTCRailGag) world.getTileEntity(x, y + 1, z + dz);
-        tileGag[0].setCanPlaceRollingStock(false);
-
-        placeTrack(world, x + dx , y + 1, z, BlockIDs.tcRailGag.block, l);
+        placeTrack(world, x + dx, y + 1, z, BlockIDs.tcRailGag.block, l);
         tileGag[1] = (TileTCRailGag) world.getTileEntity(x + dx, y + 1, z);
-        tileGag[1].setCanPlaceRollingStock(false);
+
         tcRail.setFacing(l);
         tcRail.setType(type.getLabel());
         tcRail.setRailLength(1D);
@@ -3169,7 +3167,7 @@ public class ItemTCRail extends ItemPart {
             tileTCRailGag.originY.add(y + 1);
             tileTCRailGag.originZ.add(z);
             tileTCRailGag.type = type.getLabel();
-            tileTCRailGag.setCanPlaceRollingStock(false);
+            tileTCRailGag.setCanPlaceRollingStock(tileTCRailGag.allowStockPlacement);
         }
         return true;
     }
@@ -3195,16 +3193,16 @@ public class ItemTCRail extends ItemPart {
         }
 
         for (int i = 0; i <= trackLength; i += 3){
-           if (!canPlaceRootTrack(player, world, x + (i * dx), y + 1, z + (i * dz))
-                   || !canPlaceTrack(player, world, x + (i * dx) + dx, y + 1, z + (i * dz) + dz)
-                   || !canPlaceTrack(player, world, x + (i * dx) + (2*dx), y + 1, z + (i * dz) + (2*dz)))
+            if (!canPlaceRootTrack(player, world, x + (i * dx), y + 1, z + (i * dz))
+                    || !canPlaceTrack(player, world, x + (i * dx) + dx, y + 1, z + (i * dz) + dz)
+                    || !canPlaceTrack(player, world, x + (i * dx) + (2*dx), y + 1, z + (i * dz) + (2*dz)))
                 return false;
 
             for(int j = 0; j < 3 ; j++){
 
                 if(!canPlaceTrack(player, world, x + (i * dx) + (j * dx ) + dx , y + 1, z + (i * dz) + (j * dz))
-                    || !canPlaceTrack(player, world, x + (i * dx) + (j * dx), y + 1 , z + (i * dz) + (j * dz) + dz))
-                   return false;
+                        || !canPlaceTrack(player, world, x + (i * dx) + (j * dx), y + 1 , z + (i * dz) + (j * dz) + dz))
+                    return false;
             }
 
 
@@ -3219,16 +3217,18 @@ public class ItemTCRail extends ItemPart {
             tcRail[0].idDrop = this.type.getItem().item;
             tcRail[i / 3].setRailLength(3D);
             if (i / 3 != 0){
-               tcRail[i / 3].isLinkedToRail = true;
-               tcRail[i / 3].linkedX = x + dx;
+                tcRail[i / 3].isLinkedToRail = true;
+                tcRail[i / 3].linkedX = x + dx;
                 tcRail[i / 3].linkedY = y + 1;
                 tcRail[i / 3].linkedZ = z + dz;
             }
 
             placeTrack(world, x + (i * dx) + dx, y + 1, z + (i * dz) + dz, BlockIDs.tcRailGag.block, l);
             tcRailGag[(3* i) - (i / 3)] = (TileTCRailGag) world.getTileEntity(x + (i * dx) + dx, y + 1, z + (i * dz) + dz);
+            tcRailGag[(3* i) - (i / 3)].allowStockPlacement = true;
             placeTrack(world,x + (i * dx) + (2 * dx), y + 1, z + (i * dz) + (2 * dz), BlockIDs.tcRailGag.block, l);
             tcRailGag[((3* i) - (i / 3)) + 1] = (TileTCRailGag) world.getTileEntity(x + (i * dx) +  (2 * dx), y + 1, z + (i * dz) + (2 * dz));
+            tcRailGag[((3* i) - (i / 3)) + 1].allowStockPlacement = true;
             for (int j = 0; j < 3; j++){
                 placeTrack(world, x + (i * dx) + (j * dx ) + dx , y + 1, z + (i * dz) + (j * dz), BlockIDs.tcRailGag.block, l);
                 tcRailGag[((3 * i) - (i / 3)) + ((2 * j) + 2)] = (TileTCRailGag) world.getTileEntity(x + (i * dx) + (j * dx) + dx, y + 1, z + (i * dz) + (j * dz) );
@@ -3247,7 +3247,7 @@ public class ItemTCRail extends ItemPart {
             tileTCRailGag.originY.add(y + 1);
             tileTCRailGag.originZ.add(z);
             tileTCRailGag.type = type.getLabel();
-            tileTCRailGag.setCanPlaceRollingStock(true);
+            tileTCRailGag.setCanPlaceRollingStock(tileTCRailGag.allowStockPlacement);
 
         }
 

@@ -319,13 +319,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		int zDir = directions[l][1];
 
 
-		player.addChatMessage(new ChatComponentText("start: " + (i - rollingstock.rotationPoints()[1])));
 		for (int check = 0; check <= trackLength ; check++){
-
-			player.addChatMessage(new ChatComponentText("L " + l));
-			player.addChatMessage(new ChatComponentText("X: " + (i - ((rollingstock.rotationPoints()[1] + check) * xDir))));
-			player.addChatMessage(new ChatComponentText("Z: " + (k - ((rollingstock.rotationPoints()[1] + check) * zDir))));
-
 
 
 			if (!(world.getBlock((int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ) == BlockIDs.tcRail.block
