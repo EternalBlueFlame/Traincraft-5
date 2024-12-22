@@ -1078,6 +1078,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     private void updateOnTrack(int floor_posX, int floor_posY, int floor_posZ, Block block) { //vanilla rails
         if (canUseRail() && BlockRailBase.func_150051_a(block)) {
+            lastTrack=null;
 
             Vec3 vec3d = TraincraftUtil.func_514_g(posX, posY, posZ);
             int blockMeta = ((BlockRailBase) block).getBasicRailMetadata(worldObj, this, floor_posX, floor_posY, floor_posZ);
@@ -1241,20 +1242,16 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         } else if (block == BlockIDs.tcRail.block) {
             limitSpeedOnTCRail();
             lastTrack = (TileTCRail) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
-            int meta = lastTrack.getBlockMetadata();
+            meta = lastTrack.getBlockMetadata();
 
             if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
                 moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
             } else if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState())) {
-                if (bogieFront != null) {
-                    if (!bogieFront.isOnRail()) {
-                        derailSpeed = 0;
-                    }
+                if (bogieFront != null && !bogieFront.isOnRail()) {
+                    derailSpeed = 0;
                 }
-                if (bogieBack != null) {
-                    if (!bogieBack.isOnRail()) {
-                        derailSpeed = 0;
-                    }
+                if (bogieBack != null && !bogieBack.isOnRail()) {
+                    derailSpeed = 0;
                 }
                 if (derailSpeed == 0) {
                     this.unLink();
@@ -1291,24 +1288,45 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
                 lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
             }
-            if (TCRailTypes.isTurnTrack(lastTrack)) {
-                moveOnTC90TurnRail(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz);
-            }
-            if (TCRailTypes.isStraightTrack(lastTrack)) {
-                moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
-            }
-            if (TCRailTypes.isSlopeTrack(lastTrack)) {
-                moveOnTCSlope(floor_posY, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, lastTrack.getBlockMetadata());
-            }
-            if (TCRailTypes.isDiagonalTrack(lastTrack)) {
-                moveOnTCDiagonal(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
+            meta = lastTrack.getBlockMetadata();
+            if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
+                moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
+            } else if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState())) {
+                if (bogieFront != null && !bogieFront.isOnRail()) {
+                    derailSpeed = 0;
+                }
+                if (bogieBack != null && !bogieBack.isOnRail()) {
+                    derailSpeed = 0;
+                }
+                if (derailSpeed == 0) {
+                    this.unLink();
+                    moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
+                } else {
+
+                    if (shouldIgnoreSwitch(lastTrack, floor_posX, floor_posY, floor_posZ, meta)) {
+
+                        moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, meta);
+                    } else {
+                        if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState()))
+                            moveOnTC90TurnRail(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz);
+                    }
+                    // shouldIgnoreSwitch(tile, i, j, k, meta);
+                    // if (ItemTCRail.isTCTurnTrack(tile)) moveOnTC90TurnRail(i, j, k, r, cx, cy,
+                    // cz, tile.getType(), meta);
+                }
+            } else if (TCRailTypes.isSlopeTrack(lastTrack)) {
+                moveOnTCSlope(floor_posY, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, meta);
+            } else if (TCRailTypes.isCrossingTrack(lastTrack)) {
+                moveOnTCTwoWaysCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, meta);
             } else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
                 moveOnTCDiamondCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, meta);
-            }
-            if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
-                moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.slopeHeight, lastTrack.slopeAngle);
+            } else if (TCRailTypes.isDiagonalTrack(lastTrack)) {
+                moveOnTCDiagonal(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
+            } else if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
+                moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, meta, 1, lastTrack.slopeAngle);
             }
         } else {
+            lastTrack=null;
 /*            Vec3f closest = null;  this is test/in-dev anti-derailment code.
             double dist = Double.MAX_VALUE;
             for(int a = -1; a<2;a++) {
