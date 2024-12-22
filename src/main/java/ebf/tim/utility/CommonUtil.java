@@ -20,6 +20,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import train.common.Traincraft;
 import train.common.api.AbstractTrains;
+import train.common.tile.TileTCRail;
+import train.common.tile.TileTCRailGag;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
@@ -70,6 +72,26 @@ public class CommonUtil {
         w.scheduleBlockUpdate(x, y, z, getBlockAt(w,x,y,z), getBlockAt(w,x,y,z).tickRate(w));
 
         w.func_147453_f(x, y, z, getBlockAt(w,x,y,z));
+    }
+
+    public static List<TileEntity> getTiles(World w, int x, int y, int z){
+        List<TileEntity> tiles = new ArrayList<>();
+        TileTCRailGag gag;
+        for (Object t : w.loadedTileEntityList){
+            if(((TileEntity)t).xCoord==x && ((TileEntity)t).yCoord==y && ((TileEntity)t).zCoord==z){
+                if(t instanceof TileTCRailGag){
+                    gag=(TileTCRailGag)t;
+                    for(int i=0;i<gag.originX.size();i++){
+                        tiles.add(w.getTileEntity(gag.originX.get(i),gag.originY.get(i),gag.originZ.get(i)));
+                    }
+                } else {
+                    tiles.add(((TileEntity) t));
+                }
+            }
+
+
+        }
+        return tiles;
     }
 
     public static void markBlockForUpdate(World w, int x, int y, int z){

@@ -11,9 +11,11 @@ import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.carts.IRoutableCart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -23,6 +25,11 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import train.client.render.Bogie;
 import train.client.render.TransportRenderCache;
 import train.common.Traincraft;
@@ -39,7 +46,7 @@ import train.common.overlaytexture.OverlayTextureManager;
 
 import java.util.*;
 
-public abstract class AbstractTrains extends EntityMinecart implements IMinecart, IRoutableCart, IEntityAdditionalSpawnData {
+public abstract class AbstractTrains extends EntityMinecart implements IMinecart, IRoutableCart, IEntityAdditionalSpawnData, IEntityMultiPart, IInventory, IFluidHandler {
 
     public boolean isAttached = false;
     public boolean isAttaching = false;
@@ -750,7 +757,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * example:
      * return new float[]{x,y,z};
      * may not return null*/
-    public float[] getHitboxSize(){return new float[]{getOptimalDistance(null)-((float)rotationPoints()[0]*0.5f),1.5f,0.21f};}
+    public float[] getHitboxSize(){return new float[]{Math.abs(rotationPoints()[0])+(getOptimalDistance(null)*2),2f,1f};}
 
     /**defines if the transport is immune to explosions*/
     public boolean isReinforced(){return false;}
@@ -876,4 +883,64 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
         return null;
     }
+
+    public World getWorld(){ return worldObj;}
+    @Override
+    public World func_82194_d() {
+        return getWorld();
+    }
+
+    @Override
+    public int getSizeInventory() {return 0;}
+
+    @Override
+    public ItemStack getStackInSlot(int p_70301_1_) {return null;}
+
+    @Override
+    public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {return null;}
+
+    @Override
+    public ItemStack getStackInSlotOnClosing(int p_70304_1_) {return null;}
+
+    @Override
+    public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {}
+
+    @Override
+    public String getInventoryName() {return null;}
+
+    @Override
+    public int getInventoryStackLimit() {return 0;}
+
+    @Override
+    public void markDirty() {}
+
+    public boolean isUseableByPlayer(EntityPlayer entityplayer) {return false;}
+
+    @Override
+    public void openInventory() {}
+
+    @Override
+    public void closeInventory() {}
+
+    @Override
+    public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {return false;}
+
+
+    @Override
+    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {return 0;}
+
+    @Override
+    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {return null;}
+
+    @Override
+    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {return null;}
+
+    @Override
+    public boolean canFill(ForgeDirection from, Fluid fluid) {return false;}
+
+    @Override
+    public boolean canDrain(ForgeDirection from, Fluid fluid) {return false;}
+
+    @Override
+    public FluidTankInfo[] getTankInfo(ForgeDirection from) {return new FluidTankInfo[0];}
 }

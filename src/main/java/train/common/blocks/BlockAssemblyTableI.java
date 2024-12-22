@@ -66,7 +66,7 @@ public class BlockAssemblyTableI extends BlockDynamic {
 		Random distilRand = new Random();
 		TileCrafterTierI tileentitytierI = (TileCrafterTierI) world.getTileEntity(i, j, k);
 		if (tileentitytierI != null) {
-			label0: for (int l = 0; l < tileentitytierI.getSizeInventory(); l++) {
+			label0: for (int l = 0; l < tileentitytierI.getSizeInventory()-8; l++) {
 				ItemStack itemstack = tileentitytierI.getStackInSlot(l);
 				if (itemstack == null) {
 					continue;

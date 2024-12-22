@@ -713,6 +713,12 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                         if (isLockedAndNotOwner()) {
                             return;
                         }
+                        if(this instanceof SteamTrain && (!getState().equals("hot") || !getState().equals("too hot"))){
+                            return;
+                        }
+                        if(this instanceof DieselTrain && (getState().equals("broken") || getState().equals("cold"))){
+                            return;
+                        }
                         int dir = MathHelper
                                 .floor_double((passenger.rotationYaw * 4F) / 360F + 0.5D) & 3;
                         if (dir == 2){
@@ -827,8 +833,8 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         if (getState().equals("cold") && !canBePulled) {
             this.extinguish();
             if (getCurrentMaxSpeed() >= (getMaxSpeed() * 0.6)) {
-                motionX *= 0.0;
-                motionZ *= 0.0;
+                motionX *= 0.98;
+                motionZ *= 0.98;
             }
         }
         if (getState().equals("warm")) {

@@ -75,7 +75,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	}
 
 	public ItemRollingStock(AbstractTrains train, String modid, CreativeTabs tab){
-		this(modid+":"+train.transportName(),tab);
+		this(modid+":trains/"+train.transportName().replace(' ','_'),tab);
 		setUnlocalizedName(train.transportName());
 		entity=train;
 	}
@@ -254,7 +254,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		else if(tileentity instanceof TileTCRailGag){
 
 			TileTCRailGag tileGag = (TileTCRailGag) tileentity;
-			TileTCRail tile = (TileTCRail) par3World.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
+			TileTCRail tile = (TileTCRail) par3World.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
 
 			if(tile!=null  && (tile.getType().equals(EnumTracks.MEDIUM_STRAIGHT.getLabel())
 					|| tile.getType().equals(EnumTracks.LONG_STRAIGHT.getLabel())

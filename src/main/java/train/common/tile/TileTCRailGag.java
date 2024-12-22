@@ -9,18 +9,21 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
+import scala.actors.threadpool.Arrays;
 import train.common.blocks.BlockTCRail;
 import train.common.items.TCRailTypes;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class TileTCRailGag extends TileEntity {
 
 	protected Random rand = new Random();
 	protected Side side;
-	public int originX;
-	public int originY;
-	public int originZ;
+	public List<Integer> originX = new ArrayList<>();
+	public List<Integer> originY = new ArrayList<>();
+	public List<Integer> originZ = new ArrayList<>();
 	public String type = "";
 	public float bbHeight = 0.125f;
 	public boolean canPlaceRollingstock = false;
@@ -28,9 +31,25 @@ public class TileTCRailGag extends TileEntity {
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 
-		originX = nbt.getInteger("originX");
-		originY = nbt.getInteger("originY");
-		originZ = nbt.getInteger("originZ");
+
+		if(nbt.hasKey("Xorigins")){
+			originX= new ArrayList<Integer>();
+			for (int i:nbt.getIntArray("Xorigins")){
+				originX.add(i);
+			}
+			originY= new ArrayList<Integer>();
+			for (int i:nbt.getIntArray("Yorigins")){
+				originY.add(i);
+			}
+			originZ= new ArrayList<Integer>();
+			for (int i:nbt.getIntArray("Zorigins")){
+				originZ.add(i);
+			}
+		} else {
+			originX.add(nbt.getInteger("originX"));
+			originY.add(nbt.getInteger("originY"));
+			originZ.add(nbt.getInteger("originZ"));
+		}
 		bbHeight = nbt.getFloat("bbHeight");
 		type = nbt.getString("type");
 		canPlaceRollingstock = nbt.getBoolean("canPlaceRollingstock");
@@ -40,7 +59,7 @@ public class TileTCRailGag extends TileEntity {
 	}
 
 	public void setCanPlaceRollingStock(boolean canPlace){
-		TileTCRail tile = (TileTCRail) worldObj.getTileEntity(originX, originY, originZ);
+		TileTCRail tile = (TileTCRail) worldObj.getTileEntity(originX.get(0), originY.get(0), originZ.get(0));
 		if (tile != null){
 			if (tile.getTrackFromName().getRailType() == TCRailTypes.RailTypes.STRAIGHT || tile.getTrackFromName().getRailType() == TCRailTypes.RailTypes.DIAGONAL){
 				canPlaceRollingstock = canPlace;
@@ -53,9 +72,23 @@ public class TileTCRailGag extends TileEntity {
 	@Override
 	public void writeToNBT(NBTTagCompound nbt) {
 
-		nbt.setInteger("originX", originX);
-		nbt.setInteger("originY", originY);
-		nbt.setInteger("originZ", originZ);
+		int[] xorg=new int[originX.size()];
+		for (int i=0; i<originX.size();i++){
+			xorg[i]=originX.get(i);
+		}
+		nbt.setIntArray("Xorigins", xorg);
+
+		int[] yorg=new int[originY.size()];
+		for (int i=0; i<originY.size();i++){
+			yorg[i]=originY.get(i);
+		}
+		nbt.setIntArray("Yorigins", xorg);
+
+		int[] zorg=new int[originZ.size()];
+		for (int i=0; i<originZ.size();i++){
+			zorg[i]=originZ.get(i);
+		}
+		nbt.setIntArray("Zorigins", zorg);
 		nbt.setFloat("bbHeight", bbHeight);
 		if (type.equals("")){
 			type = "null";

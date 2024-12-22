@@ -22,35 +22,7 @@ public class LinkHandler {
 	}
 
 	/* coupling cart stuff */
-	public void handleStake(EntityRollingStock entityOne, AxisAlignedBB customBoundingBox) {
-
-
-		if (entityOne.isAttaching) {
-			List lis = worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, customBoundingBox.expand(15, 5, 15));
-			if (entityOne.bogieFront != null) {
-				lis.addAll(worldObj.getEntitiesWithinAABBExcludingEntity(entityOne, entityOne.bogieFront.boundingBox.expand(7, 5, 7)));
-			}
-
-
-			if (lis != null && lis.size() > 0) {
-				for (Object ent : lis) {
-
-					/**
-					 * first testing if the link can be emptied
-					 */
-					//if (entityOne instanceof AbstractTrains && entity instanceof AbstractTrains && ((EntityRollingStock)entityOne).updateTicks%10==0) {
-					//doesLink1StillExist(entityOne, lis);
-					//doesLink2StillExist(entityOne, lis);
-					//}
-
-					if (ent instanceof EntityRollingStock && ((EntityRollingStock) ent).isAttaching) {
-						addStake((EntityRollingStock) ent, entityOne, true);
-					}
-
-				}
-
-			}
-		}
+	public void handleStake(EntityRollingStock entityOne) {
 
 			if ( entityOne.cartLinked1 != null) {
 				StakePhysic(entityOne.cartLinked1, entityOne, 1);
@@ -94,8 +66,8 @@ public class LinkHandler {
 	/**
 	 * Attaching to colliding carts
 	 */
-	public void addStake(EntityRollingStock cart1, EntityRollingStock cart2, boolean byPlayer) {
-		if (worldObj.isRemote) {
+	public static void addStake(EntityRollingStock cart1, EntityRollingStock cart2, boolean byPlayer) {
+		if (cart1.worldObj.isRemote) {
 			return;
 		}
 			if (cart2.isAttaching && cart1.isAttaching) {

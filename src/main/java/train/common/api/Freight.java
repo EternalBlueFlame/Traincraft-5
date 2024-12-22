@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.Constants;
 import train.common.adminbook.ServerLogger;
 import train.common.api.blocks.EnumCargoTypes;
 
-public abstract class Freight extends EntityRollingStock implements IInventory {
+public abstract class Freight extends EntityRollingStock {
     public ItemStack[] cargoItems;
     protected double itemInsideCount = 0;
     public int slotsFilled = 0;

@@ -1,0 +1,363 @@
+<!-- ## Это комментарий, не удаляйте и не изменяйте его! ## -->
+<!-- ## Изменяйте что-либо только справа от знака равенства ## -->
+<!-- ## Сохраните этот файл так же, но поменяйте "ru_RU" на название вашего языка ## -->
+
+<!-- ## Блоки ## -->
+tile.tc:oreTC.copperOre.name=Медная руда
+tile.tc:oreTC.oilSands.name=Нефтеносный песок	
+tile.tc:oreTC.petroleum.name=Нефтеносная порода
+tile.tc:oreTC.ballast.name=Балласт
+tile.tc:generatorDiesel.name=Дизельный генератор
+tile.tc:windMill.name=Ветрогенератор
+tile.tc:waterWheel.name=Гидрогенератор
+tile.lantern.name=Фонарь
+tile.openFurnaceActive.name=Мартеновская печь (работающая)
+tile.openFurnaceIdle.name=Мартеновская печь
+tile.tc:stopper.name=Тупик
+tile.trainWorkbench.name=Железнодорожный верстак
+tile.distilActive.name=Ректификационная колонна (работающая)
+tile.distilIdle.name=Ректификационная колонна
+tile.assemblyTableI.name=Сборочный стол I уровня
+tile.assemblyTableII.name=Сборочный стол II уровня
+tile.assemblyTableIII.name=Сборочный стол III уровня
+fluid.tc:fluid.diesel.name=Дизельное топливо
+fluid.tc:fluid.refinedfuel.name=Бензин
+
+<!-- ## Fluids ## -->
+fluid.diesel.name=Дизельное топливо
+fluid.refinedfuel.name=Бензин
+
+fluid.tile.water=вода
+fluid.tile.lava=лава
+
+<!-- ## Предметы ## -->
+item.tc:diesel.name=Канистра с дизельным топливом
+item.tc:stake.name=Ключ сцепщика
+item.tc:steeldust.name=Стальная пыль
+item.tc:coaldust.name=Угольная пыль
+item.tc:graphite.name=Графит
+item.tc:boiler.name=Стальной котёл
+item.tc:firebox.name=Стальная топка
+item.tc:bogie.name=Стальная колёсная пара
+item.tc:steelframe.name=Стальная рама
+item.tc:steelcab.name=Стальная кабина
+item.tc:steelchimney.name=Стальная труба
+item.tc:zeppelin.name=Цеппелин
+item.tc:balloon.name=Воздушный шар
+item.tc:propeller.name=Винт
+item.tc:steamengine.name=Паровая машина
+item.tc:dieselengine.name=Дизельный двигатель
+item.tc:piston.name=Поршень
+item.tc:camshaft.name=Коленчатый вал
+item.tc:cylinder.name=Цилиндр
+item.tc:electmotor.name=Электродвигатель
+item.tc:woodenFrame.name=Деревянная рама
+item.tc:woodenBogie.name=Деревянная колёсная пара
+item.tc:woodenCab.name=Деревянная кабина
+item.tc:ironChimney.name=Железная труба
+item.tc:ironFirebox.name=Железная топка
+item.tc:ironBoiler.name=Железный котёл
+item.tc:ironFrame.name=Железная рама
+item.tc:ironBogie.name=Железная колёсная пара
+item.tc:ironCab.name=Железная кабина
+item.tc:steel.name=Стальной слиток
+item.tc:refinedFuel.name=Канистра с бензином
+item.tc:seats.name=Сиденье
+item.tc:transformer.name=Трансформатор
+item.tc:controls.name=Элементы управления
+item.tc:transmition.name=Гидравлическая трансмиссия
+item.tc:generator.name=Генератор
+item.tc:overalls.name=Комбинезон кочегара
+item.tc:jacket.name=Защитный жилет
+item.tc:hat.name=Шляпа кочегара
+item.tc:rawPlastic.name=Пластик
+item.tc:ingotCopper.name=Медный слиток
+item.tc:copperWireFine.name=Тонкая медная проволока
+item.tc:electronicCircuit.name=Электросхема
+item.tc:chunkLoaderActivator.name=Активатор загрузки чанков
+item.tc:emptyCanister.name=Канистра
+item.tc:recipeBook.name=Руководство
+item.tc:minecartWork.name=Рабочий вагон
+item.tc:minecartTender.name=Малеьнкий тендер
+item.tc:minecartChest.name=Оранжевый крытый вагон
+item.tc:minecartPower.name=Паровоз
+item.tc:minecartLoco3.name=Маленький паровоз
+item.tc:minecartBuilder.name=Проходческий щит
+item.tc:minecartCaboose.name=Маленький кабуз
+item.tc:minecartGrain.name=Зерновой хоппер (СССР)
+item.tc:minecartWatertransp.name=Цистерна для лавы
+item.tc:minecartWood.name=Вагон-сцеп для леса
+item.tc:minecartPassenger2.name=Маленький пассажирский вагон
+item.tc:minecartBR_E69.name=BR E69
+item.tc:minecartShunter.name=Маневровый тепловоз
+item.tc:minecartVL10.name=ВЛ10
+item.tc:minecartTramWood.name=Трамвай
+item.tc:minecartChmE3.name=ЧМЭ3
+item.tc:minecartTenderHeavy.name=Тяжёлый тендер
+item.tc:minecartFlatCart.name=Маленькая платформа
+item.tc:minecartFreightCart2.name=Красный крытый вагон
+item.tc:minecartOpenWagon.name=Полувагон (СССР)
+item.tc:minecartTankWagon.name=Цистерна (СССР)
+item.tc:minecartJukeBoxCart.name=Вагон-проигрыватель
+item.tc:minecartStockCar.name=Вагон для животных
+item.tc:minecartCabooseWork.name=Рабочий кабуз
+item.tc:minecartPassenger5.name=Удлиннённый пассажирский вагон
+item.tc:minecartTankWagon2.name=Лёгкая цистерна
+item.tc:minecartPassengerBlue.name=Современный пассажирский вагон
+item.tc:minecartGP7Red.name=GP7 (США)
+item.tc:minecartGP40alaska.name=GP40 (США)
+item.tc:minecartFlatCartSU.name=Платформа (СССР)
+item.tc:minecartFlatCartUS.name=Платформа (США)
+item.tc:minecartBoxCartUS.name=Крытый вагон (США)
+item.tc:minecartFreightHopperUS.name=Хоппер (США)
+item.tc:minecartTankWagonUS.name=Цистерна (США)
+item.tc:minecartFlatCartWoodUS.name=Платформа для пиломатериалов (США)
+item.tc:minecartFreightCartUS.name=Тяжёлый полувагон (США)
+item.tc:minecartFreightCartSmall.name=Крытый вагон
+item.tc:minecartLocoCherepanov.name=Паровоз Черепановых
+item.tc:minecartMineTrain.name=Шахтная вагонетка
+item.tc:minecartLocoMineTrain.name=Шахтный электровоз
+item.tc:minecartSteamRedTender.name=Тендер
+item.tc:minecartFreightWood2.name=Лесовозная платформа
+item.tc:minecartCaboose3.name=Кабуз
+item.tc:minecartPassenger7.name=Пассажирский вагон
+item.tc:minecartFreightClosed.name=Закрытый товарный
+item.tc:minecartFreightOpen2.name=Тяжёлый полувагон
+item.tc:minecartLocomogulBlue.name=Mogul (США)
+item.tc:minecartLocoForneyRed.name=Forney (США)
+item.tc:minecartLocoBR01_DB.name=BR01 (DB)
+item.tc:minecartMailWagon_DB.name=Почтовый вагон (DB)
+item.tc:minecartFreightWagon_DB.name=Крытый вагон DB
+item.tc:minecartPassenger8_1class_DB.name=Пассажирский вагон 1 класса (DB)
+item.tc:minecartPassenger9_2class_DB.name=Пассажирский вагон 2 класса (DB)
+item.tc:minecartLocoBR80_DB.name=BR80 (DB)
+item.tc:minecartTenderBR01_DB.name=Тендер BR01 (DB)
+item.tc:minecartFlatCartRail_DB.name=Платформа с рельсами (DB)
+item.tc:minecartFlatCart_DB.name=Бортовая платформа (DB)
+item.tc:minecartFlatCartLogs_DB.name=Лесовозная платформа (DB)
+item.tc:minecartFreightGondola_DB.name=Полувагон (DB)
+item.tc:minecartTankWagon_DB.name=Цистерна (DB)
+item.tc:minecartLocoSD70.name=SD70M (США)
+item.tc:minecartLocoEr.name=Паровоз Э
+item.tc:minecartTenderEr.name=Тендер паровоза Э
+item.tc:minecartFreightCenterBeam_Empty.name=Вагон для пиломатериалов (пустой)
+item.tc:minecartFreightCenterBeam_Wood_1.name=Вагон для пиломатериалов (полузагруженный)
+item.tc:minecartFreightCenterBeam_Wood_2.name=Вагон для пиломатериалов (загруженный)
+item.tc:minecartFreightTrailer.name=Вагон-кенгуру
+item.tc:minecartFreightWellcar.name=Фитинговая платформа
+item.tc:minecartKof_DB.name=Kof (DB)
+item.tc:minecartV60_DB.name=V60 (DB)
+item.tc:hat_ticketMan_paintable.name=Фуражка контролёра (красится) 
+item.tc:pants_ticketMan_paintable.name=Брюки контролёра (красятся) 
+item.tc:jacket_ticketMan_paintable.name=Пиджак контролёра (красится) 
+item.tc:hat_driver_paintable.name=Фуражка машиниста (красится) 
+item.tc:pants_driver_paintable.name=Брюки машиниста (красятся) 
+item.tc:jacket_driver_paintable.name=Пиджак машиниста (красится) 
+item.tc:helmet_suit_paintable.name=Композитный шлем (красится) 
+item.tc:pants_suit_paintable.name=Композитные поножи (красятся) 
+item.tc:boots_suit_paintable.name=Композитные ботинки (красятся) 
+item.tc:jacket_suit_paintable.name=Композитный жилет (красится) 
+item.tc:reinforcedPlastic.name=Углепластик
+item.tc:reinforcedPlates.name=Композит
+item.tc:composite_wrench.name=Композитный ключ
+item.tc:minecartPassengerHighSpeedCarZeroED.name=Вагон высокоскоростного поезда
+item.tc:minecartNYTram.name=Моторный вагон метро
+item.tc:minecartLocoHighSpeedZeroED.name=Высокоскоростной поезд
+item.tc:minecartLocoC62Class.name=С62 (Япония)
+item.tc:minecartTenderC62Class.name=Тендер С62 (Япония)
+item.tc:minecartLocoSteamShay.name=Shay (США)
+item.tc:minecartCabooseLogging.name=Лесозаготовочный кабуз
+item.tc:minecartPassengerTramNY.name=Прицепной вагон метро
+item.tc:minecartLocoSD40.name=SD40-2 (США)
+
+item.tc:tcRailSmallStraight.name=Маленький Прямой Путь
+item.tc:tcRailMediumStraight.name=Средний Прямой Путь
+item.tc:tcRailLongStraight.name=Длинный Прямой Путь
+item.tc:tcRailVeryLongStraight.name=Сверхдлинный Прямой Путь
+
+item.tc:tcRailEmbeddedSmallStraight.name=Встроенный Маленький Прямой Путь
+item.tc:tcRailEmbeddedMediumStraight.name=Встроенный Средний Прямой Путь
+item.tc:tcRailEmbeddedLongStraight.name=Встроенный Длинный Прямой Путь
+item.tc:tcRailEmbeddedVeryLongStraight.name=Встроенный Сверхдлинный Прямой Путь
+
+item.tc:tcRailSmallDiagonalStraight.name=Маленький Диагональный Путь
+item.tc:tcRailMediumDiagonalStraight.name=Средний Диагональный Путь
+item.tc:tcRailLongDiagonalStraight.name=Длинный Диагональный Путь
+item.tc:tcRailVeryLongDiagonalStraight.name=Сверхдлинный Диагональный Путь
+
+item.tc:tcRailEmbeddedSmallDiagonalStraight.name=Встроенный Маленький Диагональный Путь
+item.tc:tcRailEmbeddedMediumDiagonalStraight.name=Встроенный Средний Диагональный Путь
+item.tc:tcRailEmbeddedLongDiagonalStraight.name=Встроенный Длинный Диагональный Путь
+item.tc:tcRailEmbeddedVeryLongDiagonalStraight.name=Встроенный Сверхдлинный Диагональный Путь
+
+item.tc:tcRailMediumTurn.name=Средний Поворот
+item.tc:tcRailLargeTurn.name=Большой Поворот
+item.tc:tcRailVeryLargeTurn.name=Очень Большой Поворот
+item.tc:tcRailSuperLargeTurn.name=Огромный Поворот
+
+item.tc:tcRailEmbeddedMediumTurn.name=Встроенный Средний Поворот
+item.tc:tcRailEmbeddedLargeTurn.name=Встроенный Большой Поворот
+item.tc:tcRailEmbeddedVeryLargeTurn.name=Встроенный Очень Большой Поворот
+item.tc:tcRailEmbeddedSuperLargeTurn.name=Встроенный Огромный Поворот
+
+item.tc:tcRailMedium45DegreeTurn.name=Средний Поворот (45 Градусов)
+item.tc:tcRailLarge45DegreeTurn.name=Большой Поворот  (45 Градусов)
+item.tc:tcRailVeryLarge45DegreeTurn.name=Очень Большой Поворот  (45 Градусов)
+item.tc:tcRailSuperLarge45DegreeTurn.name=Огромный Поворот  (45 Градусов)
+
+item.tc:tcRailEmbeddedMedium45DegreeTurn.name=Встроенный Средний Поворот (45 Градусов)
+item.tc:tcRailEmbeddedLarge45DegreeTurn.name=Встроенный Большой Поворот  (45 Градусов)
+item.tc:tcRailEmbeddedVeryLarge45DegreeTurn.name=Встроенный Очень Большой Поворот  (45 Градусов)
+item.tc:tcRailEmbeddedSuperLarge45DegreeTurn.name=Встроенный Огромный Поворот  (45 Градусов)
+
+item.tc:tcRailSmallParallelCurve.name=Маленькая Параллельная Кривая
+item.tc:tcRailMediumParallelCurve.name=Средняя Параллельная Кривая
+item.tc:tcRailLargeParallelCurve.name=Большая Параллельная Кривая
+item.tc:tcRailEmbeddedSmallParallelCurve.name=Встроенная Маленькая Параллельная Кривая
+item.tc:tcRailEmbeddedMediumParallelCurve.name=Встроенная Средняя Параллельная Кривая
+item.tc:tcRailEmbeddedLargeParallelCurve.name=Встроенная Большая Параллельная Кривая
+
+item.tc:tcRailTwoWaysCrossing.name=Двухпутное Пересечение
+item.tc:tcRailDiamondCrossing.name=Алмазное Пересечение
+item.tc:tcRailDoubleDiamondCrossing.name=Двойное Алмазное Пересечение
+item.tc:tcRailFourWaysCrossing.name=Четырехпутное Пересечение
+item.tc:tcRailDiagonalTwoWaysCrossing.name=Диагональное Двухпутное Пересечение
+
+item.tc:tcRailEmbeddedTwoWaysCrossing.name=Встроенное Двухпутное Пересечение
+item.tc:tcRailEmbeddedDiamondCrossing.name=Встроенное Алмазное Пересечение
+item.tc:tcRailEmbeddedDoubleDiamondCrossing.name=Встроенное Двойное Алмазное Пересечение
+item.tc:tcRailEmbeddedDiagonalTwoWaysCrossing.name=Встроенное Четырехпутное Пересечение
+item.tc:tcRailEmbeddedFourWaysCrossing.name=Встроенное Диагональное Двухпутное Пересечение
+
+item.tc:tcRailMediumSwitch.name=Средняя Стрелка (90 Градусов)
+item.tc:tcRailLargeSwitch.name=Большая Стрелка (90 Градусов)
+item.tc:tcRailMediumParallelSwitch.name=Параллельная Стрелка
+item.tc:tcRailMedium45DegreeSwitch.name=Средняя Стрелка (45 Градусов)
+
+item.tc:tcRailEmbeddedMediumSwitch.name=Встроенная Средняя Стрелка (90 Градусов)
+item.tc:tcRailEmbeddedLargeSwitch.name=Встроенная Большая Стрелка (90 Градусов)
+item.tc:tcRailEmbeddedMediumParallel=Встроенная Параллельная Стрелка
+item.tc:tcRailEmbeddedMedium45DegreeSwitch.name=Встроенная Средняя Стрелка (45 Градусов)
+
+item.tc:tcRailSlopeWood.name=Наклонный Путь (Древесина)
+item.tc:tcRailSlopeGravel.name=Наклонный Путь (Гравий)
+item.tc:tcRailSlopeBallast.name=Наклонный Путь (Балласт)
+item.tc:tcRailSlopeSnowGravel.name=Наклонный Путь (Заснеженный Гравий)
+item.tc:tcRailSlopeDynamic.name=Наклонный Путь (Динамический)
+
+item.tc:tcRailLargeSlopeWood.name=Большой Наклонный Путь (Древесина)
+item.tc:tcRailLargeSlopeGravel.name=Большой Наклонный Путь (Гравий)
+item.tc:tcRailLargeSlopeBallast.name=Большой Наклонный Путь (Балласт)
+item.tc:tcRailLargeSlopeSnowGravel.name=Большой Наклонный Путь (Заснеженный Гравий)
+item.tc:tcRailLargeSlopeDynamic.name=Большой Наклонный Путь (Динамический)
+
+item.tc:tcRailVeryLargeSlopeWood.name=Очень Большой Наклонный Путь (Древесина)
+item.tc:tcRailVeryLargeSlopeBallast.name=Очень Большой Наклонный Путь (Балласт)
+item.tc:tcRailVeryLargeSlopeSnowGravel.name=Очень Большой Наклонный Путь (Заснеженный Гравий)
+item.tc:tcRailVeryLargeSlopeDynamic.name=Очень Большой Наклонный Путь (Динамический)
+
+item.tc:tcRailEmbeddedSlopeDynamic.name=Встроенный Наклонный Путь (Динамический)
+item.tc:tcRailEmbeddedLargeSlopeDynamic.name=Встроенный Большой Наклонный Путь (Динамический)
+item.tc:tcRailEmbeddedVeryLargeSlopeDynamic.name=Встроенный Очень Большой Наклонный Путь (Динамический)
+
+item.tc:tcRailLargeCurvedSlopeDynamic.name=Большой Кривой Наклонный Путь (Динамический)
+item.tc:tcRailVeryLargeCurvedSlopeDynamic.name=Очень Большой Кривой Наклонный Путь (Динамический)
+item.tc:tcRailSuperLargeCurvedSlopeDynamic.name=Огромный Кривой Наклонный Путь (Динамический)
+
+item.tc:tcRailEmbeddedLargeCurvedSlopeDynamic.name=Встроенный Большой Кривой Наклонный Путь (Динамический)
+item.tc:tcRailEmbeddedVeryLargeCurvedSlopeDynamic.name=Встроенный Очень Большой Кривой Наклонный Путь (Динамический)
+item.tc:tcRailEmbeddedSuperLargeCurvedSlopeDynamic.name=Встроенный Огромный Кривой Наклонный Путь (Динамический)
+
+
+
+item.tc:tcRailSmallRoadCrossing.name=ЖД Переезд (Чёрный Асфальт)
+item.tc:tcRailSmallRoadCrossing1.name=ЖД Переезд (Чистый Асфальт)
+item.tc:tcRailSmallRoadCrossing2.name=ЖД Переезд (Светло-Серый Асфальт)
+
+<!-- ## Достижения ## -->
+achievement.tc:engineer=Одежда кочегара
+achievement.tc:engineer.desc=Настоящий путеец!
+achievement.tc:openHearth=Матерновская печь
+achievement.tc:openHearth.desc=Горячая штучка 2.0!
+achievement.tc:distilationTower=Ректификационная колонна
+achievement.tc:distilationTower.desc=Даёшь топливо!
+achievement.tc:trainWB=Железнодорожный верстак
+achievement.tc:trainWB.desc=Рабочий стол 2.0!
+achievement.tc:assemblyTable=Сборочный стол
+achievement.tc:assemblyTable.desc=Новые возможности!
+achievement.tc:plastic=Пластик
+achievement.tc:plastic.desc=Используй везде!
+achievement.tc:dieselFuel=Дизельное топливо
+achievement.tc:dieselFuel.desc=Дрова устарели!
+achievement.tc:steel=Сталь
+achievement.tc:steel.desc=Чего-нибудь попрочнее?
+achievement.tc:woodenParts=Деревянные детали
+achievement.tc:woodenParts.desc=Простые и лёгкие!
+achievement.tc:ironParts=Железные детали
+achievement.tc:ironParts.desc=Ещё прочнее!
+achievement.tc:steelParts=Стальные детали
+achievement.tc:steelParts.desc=Предел прочности!
+achievement.tc:passenger=Пассажирский вагон
+achievement.tc:passenger.desc=Люди прежде всего!
+achievement.tc:freight=Товарный вагон
+achievement.tc:freight.desc=Мнооого места!
+achievement.tc:fineCopperWire=Провода
+achievement.tc:fineCopperWire.desc=Опутали мир!
+achievement.tc:dieselEngine=Дизельный двигатель
+achievement.tc:dieselEngine.desc=Сильнее лошадей!
+achievement.tc:stake=Ключ сцепщика
+achievement.tc:stake.desc=Составь поезд!
+achievement.tc:firebox=Топка
+achievement.tc:firebox.desc=Жги дрова и уголь!
+achievement.tc:zeppelin=Цеппелин
+achievement.tc:zeppelin.desc=Полетели!
+achievement.tc:liquid=Цистерна
+achievement.tc:liquid.desc=Жидкости в движении!
+achievement.tc:tender=Тендер
+achievement.tc:tender.desc=На длинные дистанции!
+achievement.tc:electronicCircuit=Электросхема
+achievement.tc:electronicCircuit.desc=Силиконовая долина!
+achievement.tc:dieselLoco=Тепловоз
+achievement.tc:dieselLoco.desc=Огромная машина!
+achievement.tc:smallSteam=Маленький паровоз
+achievement.tc:smallSteam.desc=Мне поменьше!
+achievement.tc:normalSteam=Паровоз
+achievement.tc:normalSteam.desc=Эпоха пара!
+achievement.tc:workCart=Рабочий вагон
+achievement.tc:workCart.desc=Скоротай время в поездке!
+achievement.tc:builder=Проходческий щит
+achievement.tc:builder.desc=Копай сам!
+achievement.tc:generator=Генератор
+achievement.tc:generator.desc=Ай!Электричество!
+achievement.tc:electMotor=Электродвигатель
+achievement.tc:electMotor.desc=Электрореволюция!
+achievement.tc:tram=Трамвай
+achievement.tc:tram.desc=Трамвай идёт по улице!
+achievement.tc:fast=Скоростной поезд
+achievement.tc:fast.desc=Сверхбыстро!
+achievement.tc:jukebox=Проигрыватель
+achievement.tc:jukebox.desc=Музыка везде!
+achievement.tc:minetrain=Шахтный поезд
+achievement.tc:minetrain.desc=Пора в шахту 2.0!
+achievement.tc:cherepanov=Паровоз черепановых
+achievement.tc:cherepanov.desc=Первый в России!
+achievement.tc:mail=Почта
+achievement.tc:mail.desc=Доставка по рельсам!
+achievement.tc:stockcar=Вагон для животных
+achievement.tc:stockcar.desc=Переселение мобов!
+achievement.tc:flatCart=Платформа
+achievement.tc:flatCart.desc=Плоская как блин!
+achievement.tc:caboose=Кабуз
+achievement.tc:caboose.desc=Последний!
+
+<!-- ## GUI ## -->
+builder.follow.name=Следовать по рельсам
+builder.remove.name=Ломать рельсы
+builder.up.name=Вверх
+builder.down.name=Вниз
+builder.currElev.name=Текущая высота
+builder.reqElev.name=Необходимая высота
+
+train.owner.name=Это не ваш поезд!
+train.locked.name=Заблокирован
+train.unlocked.name=Разблокирован

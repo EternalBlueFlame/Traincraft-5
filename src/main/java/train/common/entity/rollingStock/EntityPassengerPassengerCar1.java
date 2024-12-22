@@ -51,41 +51,41 @@ public class EntityPassengerPassengerCar1 extends EntityRollingStock implements 
 
     @Override
     public void registerSkins() {
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Red", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Red.png", new String[]{},
                 "Red", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Blue", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Blue.png", new String[]{},
                 "Blue", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Green", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Green.png", new String[]{},
                 "Green", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_White", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_White.png", new String[]{},
                 "White", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Black", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Black.png", new String[]{},
                 "Black", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Cyan", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Cyan.png", new String[]{},
                 "Cyan", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Orange", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Orange.png", new String[]{},
                 "Orange", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Grey", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Grey.png", new String[]{},
                 "Grey", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_LightGrey", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_LightGrey.png", new String[]{},
                 "LightGrey", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Brown", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Brown.png", new String[]{},
                 "Brown", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Pink", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Pink.png", new String[]{},
                 "Pink", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Purple", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Purple.png", new String[]{},
                 "Purple", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Lime", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Lime.png", new String[]{},
                 "Lime", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Magenta", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Magenta.png", new String[]{},
                 "Magenta", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_LightBlue", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_LightBlue.png", new String[]{},
                 "LightBlue", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Yellow", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Yellow.png", new String[]{},
                 "Yellow", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Skin17", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Skin17.png", new String[]{},
                 "Skin", "");
-        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/stock/passenger_Skin19", new String[]{},
+        SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Skin19.png", new String[]{},
                 "Skin19", "");
 
 

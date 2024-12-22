@@ -18,7 +18,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import train.common.adminbook.ServerLogger;
 
-public abstract class AbstractWorkCart extends EntityRollingStock implements IInventory{
+public abstract class AbstractWorkCart extends EntityRollingStock{
 	protected ItemStack[] furnaceItemStacks;
 	public int furnaceBurnTime = 0;
 	public int currentItemBurnTime = 0;

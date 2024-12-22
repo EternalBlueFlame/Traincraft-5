@@ -15,6 +15,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import org.lwjgl.util.vector.Matrix2f;
 import org.lwjgl.util.vector.Vector2f;
+import train.common.blocks.BlockTCRail;
+import train.common.blocks.BlockTCRailGag;
 import train.common.blocks.TCBlocks;
 import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
@@ -59,6 +61,26 @@ public class ItemTCRail extends ItemPart {
         if (player != null && (!player.canPlayerEdit(x, y - 1, z, 0, player.getCurrentEquippedItem()) ||
                 !player.canPlayerEdit(x, y, z, 0, player.getCurrentEquippedItem()))
         ) {
+            return false;
+        }
+
+        if(world.getBlock(x,y,z) instanceof BlockTCRailGag){
+            return true;
+        }
+
+        return canBeReplaced(world, x, y, z) && (World.doesBlockHaveSolidTopSurface(world, x, y - 1, z) || l1 == TCBlocks.bridgePillar);
+    }
+
+    private boolean canPlaceRootTrack(EntityPlayer player, World world, int x, int y, int z) {
+        Block l1 = world.getBlock(x, y - 1, z);
+
+        if (player != null && (!player.canPlayerEdit(x, y - 1, z, 0, player.getCurrentEquippedItem()) ||
+                !player.canPlayerEdit(x, y, z, 0, player.getCurrentEquippedItem()))
+        ) {
+            return false;
+        }
+
+        if(world.getBlock(x,y,z) instanceof BlockTCRailGag){
             return false;
         }
 
@@ -138,7 +160,7 @@ public class ItemTCRail extends ItemPart {
             tileGag[gag - 1] = (TileTCRailGag) world.getTileEntity(posX[gag], y + 1, posZ[gag]);
         }
 
-        if (putDownExitTrack) {
+        if (putDownExitTrack && world.getTileEntity(posExitX, y + 1, posExitZ)==null) {
             /* Last rail is a 1 block straight */
             placeTrack(world, posExitX, y + 1, posExitZ, BlockIDs.tcRail.block, exitFacing);
             TileTCRail tcRailEnd = (TileTCRail) world.getTileEntity(posExitX, y + 1, posExitZ);
@@ -151,9 +173,9 @@ public class ItemTCRail extends ItemPart {
         }
 
         for (TileTCRailGag tileTCRailGag : tileGag) {
-            tileTCRailGag.originX = posX[0];
-            tileTCRailGag.originY = y + 1;
-            tileTCRailGag.originZ = posZ[0];
+            tileTCRailGag.originX.add(posX[0]);
+            tileTCRailGag.originY.add(y + 1);
+            tileTCRailGag.originZ.add(posZ[0]);
             tileTCRailGag.type = type;
         }
         return true;
@@ -201,9 +223,9 @@ public class ItemTCRail extends ItemPart {
 
         }
         for (TileTCRailGag tileTCRailGag : tileGag) {
-            tileTCRailGag.originX = posX[0];
-            tileTCRailGag.originY = y + 1;
-            tileTCRailGag.originZ = posZ[0];
+            tileTCRailGag.originX.add(posX[0]);
+            tileTCRailGag.originY.add(y + 1);
+            tileTCRailGag.originZ.add(posZ[0]);
             tileTCRailGag.type = type;
         }
 
@@ -1873,9 +1895,9 @@ public class ItemTCRail extends ItemPart {
                                     "There was a problem when placing the track. Possibly too many tracks around"));
                             return false;
                         }
-                        tileGag[i].originX = x;
-                        tileGag[i].originY = y + 1;
-                        tileGag[i].originZ = z;
+                        tileGag[i].originX.add(x);
+                        tileGag[i].originY.add(y + 1);
+                        tileGag[i].originZ.add(z);
                         tileGag[i].type = type.getLabel();
                     }
                     break;
@@ -2470,7 +2492,7 @@ public class ItemTCRail extends ItemPart {
      */
 
     private boolean smallStraight(EntityPlayer player, World world, int x, int y, int z, int l, EnumTracks type) {
-        if (!canPlaceTrack(player, world, x, y + 1, z)) {
+        if (!canPlaceRootTrack(player, world, x, y + 1, z)) {
             return false;
         }
         placeTrack(world, x, y + 1, z, BlockIDs.tcRail.block, l);
@@ -2519,7 +2541,7 @@ public class ItemTCRail extends ItemPart {
 
         for (int i = 0; i <= trackLength ; i += 3){
             if (
-                    !canPlaceTrack(player,world, x + (i * dx), y + 1, z + (i * dz))
+                    !canPlaceRootTrack(player,world, x + (i * dx), y + 1, z + (i * dz))
                     || !canPlaceTrack(player,world, x + (i * dx) + (dx), y + 1, z + (i * dz) + dz)
                     || !canPlaceTrack(player,world, x + (i * dx) + (dx * 2), y + 1, z + (i * dz) + (dz) * 2)){
                 return false;
@@ -2551,9 +2573,9 @@ public class ItemTCRail extends ItemPart {
                 player.addChatMessage(new ChatComponentText("There was a problem when placing the track. Possibly too many tracks around"));
                 return false;
             }
-            tileTCRailGag.originX = x;
-            tileTCRailGag.originY = y + 1;
-            tileTCRailGag.originZ = z;
+            tileTCRailGag.originX.add(x);
+            tileTCRailGag.originY.add(y + 1);
+            tileTCRailGag.originZ.add(z);
             tileTCRailGag.type = EnumTracks.MEDIUM_STRAIGHT.getLabel();
         }
 
@@ -3143,9 +3165,9 @@ public class ItemTCRail extends ItemPart {
                 player.addChatMessage(new ChatComponentText("There was a problem when placing the track. Possibly too many tracks around"));
                 return false;
             }
-            tileTCRailGag.originX = x;
-            tileTCRailGag.originY = y + 1;
-            tileTCRailGag.originZ = z;
+            tileTCRailGag.originX.add(x);
+            tileTCRailGag.originY.add(y + 1);
+            tileTCRailGag.originZ.add(z);
             tileTCRailGag.type = type.getLabel();
             tileTCRailGag.setCanPlaceRollingStock(false);
         }
@@ -3173,7 +3195,7 @@ public class ItemTCRail extends ItemPart {
         }
 
         for (int i = 0; i <= trackLength; i += 3){
-           if (!canPlaceTrack(player, world, x + (i * dx), y + 1, z + (i * dz))
+           if (!canPlaceRootTrack(player, world, x + (i * dx), y + 1, z + (i * dz))
                    || !canPlaceTrack(player, world, x + (i * dx) + dx, y + 1, z + (i * dz) + dz)
                    || !canPlaceTrack(player, world, x + (i * dx) + (2*dx), y + 1, z + (i * dz) + (2*dz)))
                 return false;
@@ -3205,17 +3227,13 @@ public class ItemTCRail extends ItemPart {
 
             placeTrack(world, x + (i * dx) + dx, y + 1, z + (i * dz) + dz, BlockIDs.tcRailGag.block, l);
             tcRailGag[(3* i) - (i / 3)] = (TileTCRailGag) world.getTileEntity(x + (i * dx) + dx, y + 1, z + (i * dz) + dz);
-            tcRailGag[(3* i) - (i / 3)].setCanPlaceRollingStock(true);
             placeTrack(world,x + (i * dx) + (2 * dx), y + 1, z + (i * dz) + (2 * dz), BlockIDs.tcRailGag.block, l);
             tcRailGag[((3* i) - (i / 3)) + 1] = (TileTCRailGag) world.getTileEntity(x + (i * dx) +  (2 * dx), y + 1, z + (i * dz) + (2 * dz));
-            tcRailGag[((3* i) - (i / 3)) + 1].setCanPlaceRollingStock(true);
             for (int j = 0; j < 3; j++){
                 placeTrack(world, x + (i * dx) + (j * dx ) + dx , y + 1, z + (i * dz) + (j * dz), BlockIDs.tcRailGag.block, l);
                 tcRailGag[((3 * i) - (i / 3)) + ((2 * j) + 2)] = (TileTCRailGag) world.getTileEntity(x + (i * dx) + (j * dx) + dx, y + 1, z + (i * dz) + (j * dz) );
-                tcRailGag[((3 * i) - (i / 3)) + ((2 * j) + 2)].setCanPlaceRollingStock(false);
                 placeTrack(world, x + (i * dx) + (j * dx), y + 1, z + (i * dz) + (j * dz) + dz, BlockIDs.tcRailGag.block, l);
                 tcRailGag[((3 * i) - (i / 3)) + ((2 * j) + 3)] = (TileTCRailGag) world.getTileEntity(x + (i * dx) + (j * dx), y + 1, z + (i * dz) + (j * dz) + dz);
-                tcRailGag[((3 * i) - (i / 3)) + ((2 * j) + 3)].setCanPlaceRollingStock(false);
             }
 
         }
@@ -3225,10 +3243,11 @@ public class ItemTCRail extends ItemPart {
                 player.addChatMessage(new ChatComponentText("There was a problem when placing the track. Possibly too many tracks around"));
                 return false;
             }
-            tileTCRailGag.originX = x;
-            tileTCRailGag.originY = y + 1;
-            tileTCRailGag.originZ = z;
+            tileTCRailGag.originX.add(x);
+            tileTCRailGag.originY.add(y + 1);
+            tileTCRailGag.originZ.add(z);
             tileTCRailGag.type = type.getLabel();
+            tileTCRailGag.setCanPlaceRollingStock(true);
 
         }
 
@@ -4975,10 +4994,14 @@ public class ItemTCRail extends ItemPart {
      */
     private void placeTrack(World world, int x, int y, int z, Block block, int metadata) {
         Block removed = world.getBlock(x, y, z);
-        if (removed != null) {
+        if (removed != null && !(removed instanceof BlockTCRailGag) && !(block instanceof BlockTCRail)) {
             removed.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
         }
-        world.setBlock(x, y, z, block, metadata, 3);
+        if(!(removed instanceof BlockTCRailGag)) {
+            world.setBlock(x, y, z, block, metadata, 3);
+        } else {
+            world.addTileEntity(new TileTCRailGag());
+        }
     }
 
     @SideOnly(Side.CLIENT)
