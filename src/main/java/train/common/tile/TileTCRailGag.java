@@ -34,15 +34,18 @@ public class TileTCRailGag extends TileEntity {
 
 		if(nbt.hasKey("Xorigins")){
 			originX= new ArrayList<Integer>();
-			for (int i:nbt.getIntArray("Xorigins")){
+			int[] org=nbt.getIntArray("Xorigins");
+			for (int i:org){
 				originX.add(i);
 			}
 			originY= new ArrayList<Integer>();
-			for (int i:nbt.getIntArray("Yorigins")){
+			org=nbt.getIntArray("Yorigins");
+			for (int i:org){
 				originY.add(i);
 			}
 			originZ= new ArrayList<Integer>();
-			for (int i:nbt.getIntArray("Zorigins")){
+			org=nbt.getIntArray("Zorigins");
+			for (int i:org){
 				originZ.add(i);
 			}
 		} else {
