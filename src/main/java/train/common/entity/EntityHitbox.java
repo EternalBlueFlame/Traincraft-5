@@ -142,6 +142,7 @@ public class EntityHitbox {
         collidingEntities = new ArrayList<>();
         collidingBlocks = new ArrayList<>();
         if(host==null){return;}
+        boolean stop=false;
 
         x = CommonUtil.floorDouble((-longest+host.posX - 16) / 16.0D);
         xMax = CommonUtil.floorDouble((longest+host.posX + 16) / 16.0D);
@@ -164,15 +165,26 @@ public class EntityHitbox {
                                     ((Entity) obj).ridingEntity!=null || obj instanceof CollisionBox) {
                                 continue;
                             }
-                            //if it's another collision box, be sure it's not the current entity or a linked one
-                            if(obj instanceof EntityRollingStock){
-                                if(host.worldObj.isRemote || obj==host){
-                                    continue;
+
+                            //prevent collision with the consist and entities mounted in the consist.
+                            for(AbstractTrains stock: host.consist) {
+                                if (obj == stock){
+                                    stop=true;
+                                    break;
                                 }
-                                //make sure not to interact with own consist.
-                                if(host.consist.contains(obj)){
-                                    continue;
+                                for (EntitySeat s : stock.seats) {
+                                    if (s.getPassenger() == obj) {
+                                        stop = true;
+                                        break;
+                                    }
                                 }
+                                if(stop){
+                                    break;
+                                }
+                            }
+                            if(stop){
+                                stop=false;
+                                continue;
                             }
 
                             if(containsEntity((Entity) obj)){

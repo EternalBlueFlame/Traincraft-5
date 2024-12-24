@@ -103,7 +103,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     public ItemStack item;
     public float rotation;
-    public List<EntitySeat> seats = new LinkedList<>();
 
     public int rail;
     public int meta;
@@ -1854,12 +1853,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (super.interactFirst(entityplayer)) {
             return true;
         }
-        if (entityplayer.ridingEntity == this) {
+        if (entityplayer.ridingEntity instanceof EntitySeat) {
             return false;
-        }
-
-        if (lockThisCart(entityplayer.inventory.getCurrentItem(), entityplayer)) {
-            return true;
         }
 
         playerEntity = entityplayer;
@@ -1882,77 +1877,76 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             return true;
         }
         if(itemstack != null) {
-            ItemStack crowbar = GameRegistry.findItemStack("railcraft","tool.crowbar",1);
-            ItemStack crowbar1 = GameRegistry.findItemStack("railcraft","tool.crowbar.reinforced",1);
+            ItemStack crowbar = GameRegistry.findItemStack("railcraft", "tool.crowbar", 1);
+            ItemStack crowbar1 = GameRegistry.findItemStack("railcraft", "tool.crowbar.reinforced", 1);
             if (itemstack == crowbar || itemstack == crowbar1) {
                 return false;
             }
-        }
-        if (itemstack != null && itemstack.hasTagCompound() && getTicketDestination(itemstack) != null && getTicketDestination(itemstack).length() > 0) {
-            this.setDestination(itemstack);
-            /**
-             * ticket are single use but golden ones are multiple uses
-             */
-            ItemStack ticket = GameRegistry.findItemStack("Railcraft", "railcraft.routing.ticket", 1);
-            if (ticket != null && ticket.getItem() != null && itemstack.getItem() == ticket.getItem()) {
-                if (--itemstack.stackSize == 0) {
-                    entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, null);
+            if (itemstack.hasTagCompound() && getTicketDestination(itemstack) != null && getTicketDestination(itemstack).length() > 0) {
+                this.setDestination(itemstack);
+                /**
+                 * ticket are single use but golden ones are multiple uses
+                 */
+                ItemStack ticket = GameRegistry.findItemStack("Railcraft", "railcraft.routing.ticket", 1);
+                if (ticket != null && ticket.getItem() != null && itemstack.getItem() == ticket.getItem()) {
+                    if (--itemstack.stackSize == 0) {
+                        entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, null);
+                    }
                 }
+                return true;
             }
-            return true;
-        }
-        /**
-         * If the color is valid for the cart, then change it and reduce
-         * itemstack size
-         */
-        if (itemstack != null && itemstack.getItem() instanceof ItemDye) {
-            if (SkinRegistry.get(this).size() > 0) {
-                for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
-                    if (itemstack.getItemDamage() == DepreciatedUtil.getColorFromString(SkinRegistry.get(this).get(i))) {
-                        this.setColor(SkinRegistry.get(this).get(i));
-                        itemstack.stackSize--;
+            /**
+             * If the color is valid for the cart, then change it and reduce
+             * itemstack size
+             */
+            if (itemstack.getItem() instanceof ItemDye) {
+                if (SkinRegistry.get(this).size() > 0) {
+                    for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
+                        if (itemstack.getItemDamage() == DepreciatedUtil.getColorFromString(SkinRegistry.get(this).get(i))) {
+                            this.setColor(SkinRegistry.get(this).get(i));
+                            itemstack.stackSize--;
 
-                        //if (!worldObj.isRemote)PacketHandler.sendPacketToClients(PacketHandler.sendStatsToServer(10,this.uniqueID,trainName ,trainType, this.trainOwner, this.getColorAsString(itemstack.getItemDamage()), (int)posX, (int)posY, (int)posZ),this.worldObj, (int)posX,(int)posY,(int)posZ, 12.0D);
+                            //if (!worldObj.isRemote)PacketHandler.sendPacketToClients(PacketHandler.sendStatsToServer(10,this.uniqueID,trainName ,trainType, this.trainOwner, this.getColorAsString(itemstack.getItemDamage()), (int)posX, (int)posY, (int)posZ),this.worldObj, (int)posX,(int)posY,(int)posZ, 12.0D);
 
+                            return true;
+                        }
+                    }
+                    if (worldObj.isRemote && ConfigHandler.SHOW_POSSIBLE_COLORS) {
+                        String concatColors = ": ";
+                        for (int t = 0; t < SkinRegistry.get(this).size(); t++) {
+                            concatColors = concatColors.concat(SkinRegistry.get(this).get(t) + ", ");
+                        }
+                        entityplayer.addChatMessage(new ChatComponentText("Possible colors" + concatColors));
+                        entityplayer.addChatMessage(new ChatComponentText("To paint, click me with the right dye"));
                         return true;
                     }
+                } else if (SkinRegistry.get(this) != null || SkinRegistry.get(this).size() == 0) {
+                    entityplayer.addChatMessage(new ChatComponentText("No other colors available"));
                 }
-                if (worldObj.isRemote && ConfigHandler.SHOW_POSSIBLE_COLORS) {
-                    String concatColors = ": ";
-                    for (int t = 0; t < SkinRegistry.get(this).size(); t++) {
-                        concatColors = concatColors.concat(SkinRegistry.get(this).get(t) + ", ");
-                    }
-                    entityplayer.addChatMessage(new ChatComponentText("Possible colors" + concatColors));
-                    entityplayer.addChatMessage(new ChatComponentText("To paint, click me with the right dye"));
-                    return true;
-                }
-            } else if (SkinRegistry.get(this) != null || SkinRegistry.get(this).size() == 0) {
-                entityplayer.addChatMessage(new ChatComponentText("No other colors available"));
             }
-        }
-        if ((trainsOnClick.onClickWithStake(this, itemstack, playerEntity, worldObj))) {
-            return true;
-        }
-
-        if (itemstack != null && itemstack.getItem() instanceof ItemPaintbrushThing && !entityplayer.isSneaking()) {
-            if (SkinRegistry.get(this).size() > 0) {
-                entityplayer.openGui(Traincraft.instance, GuiIDs.PAINTBRUSH, entityplayer.getEntityWorld(), this.getEntityId(), -1, (int) this.posZ);
+            if ((trainsOnClick.onClickWithStake(this, itemstack, playerEntity, worldObj))) {
+                return true;
             }
 
-            if (SkinRegistry.get(this).size() == 0) {
-                entityplayer.addChatMessage(new ChatComponentText("There are no other colors available."));
-            }
-            return true;
-        }
-        else if (itemstack != null && itemstack.getItem() instanceof ItemPaintbrushThing && entityplayer.isSneaking()){
-            for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
-                if (this.getColor().equals(SkinRegistry.get(this).get(i))) {
-                    if(SkinRegistry.get(this).size()>i+1){
-                        setColor(i+1);
-                    } else {
-                        setColor(0);
+            if (itemstack.getItem() instanceof ItemPaintbrushThing && !entityplayer.isSneaking()) {
+                if (SkinRegistry.get(this).size() > 0) {
+                    entityplayer.openGui(Traincraft.instance, GuiIDs.PAINTBRUSH, entityplayer.getEntityWorld(), this.getEntityId(), -1, (int) this.posZ);
+                }
+
+                if (SkinRegistry.get(this).size() == 0) {
+                    entityplayer.addChatMessage(new ChatComponentText("There are no other colors available."));
+                }
+                return true;
+            } else if (itemstack.getItem() instanceof ItemPaintbrushThing && entityplayer.isSneaking()) {
+                for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
+                    if (this.getColor().equals(SkinRegistry.get(this).get(i))) {
+                        if (SkinRegistry.get(this).size() > i + 1) {
+                            setColor(i + 1);
+                        } else {
+                            setColor(0);
+                        }
+                        return true;
                     }
-                    return true;
                 }
             }
         }
@@ -1970,9 +1964,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
             }
         }
+
         if (MinecraftForge.EVENT_BUS.post(new MinecartInteractEvent(this, entityplayer))) {
             return true;
         }
+
         return worldObj.isRemote;
     }
 
