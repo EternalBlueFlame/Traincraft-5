@@ -85,7 +85,7 @@ public class TileTCRailGag extends TileEntity {
 		for (int i=0; i<originY.size();i++){
 			yorg[i]=originY.get(i);
 		}
-		nbt.setIntArray("Yorigins", xorg);
+		nbt.setIntArray("Yorigins", yorg);
 
 		int[] zorg=new int[originZ.size()];
 		for (int i=0; i<originZ.size();i++){

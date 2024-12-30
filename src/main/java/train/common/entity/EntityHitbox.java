@@ -87,12 +87,13 @@ public class EntityHitbox {
     }
 
     public void manageCollision(EntityRollingStock host){
+        CollisionBox centerBox=host.collisionHandler.interactionBoxes.get(Math.max(1,(int)(host.collisionHandler.interactionBoxes.size()*0.5)));
         for(Entity e:collidingEntities) {
             //on client we need to push away players.
             if (host.worldObj.isRemote) {
                 if (e instanceof EntityPlayer || e instanceof EntityLiving) {
                     double[] motion = CommonUtil.rotatePoint(-0.05, 0,
-                            CommonUtil.atan2degreesf(host.posZ - e.posZ, host.posX - e.posX));
+                            CommonUtil.atan2degreesf(centerBox.posZ - e.posZ, centerBox.posX - e.posX));
                     e.addVelocity(motion[0], 0.05, motion[2]);
                 }
             } else {
@@ -104,7 +105,7 @@ public class EntityHitbox {
                         return;
                     }
                     double[] motion = CommonUtil.rotatePoint(0.005, 0,
-                            CommonUtil.atan2degreesf(e.posZ - host.posZ, e.posX - host.posX));
+                            CommonUtil.atan2degreesf(e.posZ - centerBox.posZ, e.posX - centerBox.posX));
                     host.addVelocity(-motion[0], 0, -motion[2]);
                     if(entityOne instanceof Locomotive) {
                         entityOne.addVelocity(motion[0]*0.2, 0, motion[2]*0.2);
@@ -114,8 +115,8 @@ public class EntityHitbox {
 
                 } else if (e instanceof EntityPlayer || e instanceof EntityLiving) {
                     double[] motion = CommonUtil.rotatePoint(0.005, 0,
-                            CommonUtil.atan2degreesf(e.posZ - host.posZ, e.posX - host.posX));
-                    host.addVelocity(-motion[0], 0, -motion[2]);
+                            CommonUtil.atan2degreesf( centerBox.posZ- e.posZ, centerBox.posX-e.posX));
+                    host.addVelocity(motion[0], 0, motion[2]);
 
                     //hurt entity if going fast
                     if (Math.abs(host.motionX) + Math.abs(host.motionZ) > 0.25f) {
@@ -162,7 +163,7 @@ public class EntityHitbox {
                             //EntityFX is client only, so we _shouldn't_ have to worry about it..?
                             //we dont collide with passenger entities, we collide with the thing they are on.
                             if(obj instanceof EntitySeat || obj instanceof EntityBogie ||
-                                    ((Entity) obj).ridingEntity!=null || obj instanceof CollisionBox) {
+                                    ((Entity) obj).ridingEntity!=null || obj instanceof CollisionBox || obj instanceof AbstractTrains) {
                                 continue;
                             }
 

@@ -42,7 +42,7 @@ public class BlockTCRailGag extends Block {
 	@Override
 	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
 		TileTCRailGag tileEntity = (TileTCRailGag) world.getTileEntity(i, j, k);
-		if (tileEntity != null) {
+		if (tileEntity != null && tileEntity.originX.size()>0) {
 			world.func_147480_a(tileEntity.originX.get(0), tileEntity.originY.get(0), tileEntity.originZ.get(0), false);
 			world.removeTileEntity(tileEntity.originX.get(0), tileEntity.originY.get(0), tileEntity.originZ.get(0));
 			// NOTE: func_147480_a = destroyBlock

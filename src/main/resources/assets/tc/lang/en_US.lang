@@ -282,6 +282,7 @@ item.tc:minecartGrain.name=Grain Hopper
 item.tc:minecartWatertransp.name=Lava Tank Car
 item.tc:minecartWood.name=Log Transport
 item.tc:minecartPassenger2.name=Passenger Car
+item.tc:Passenger Car 1.name=Passenger Car
 item.tc:minecartBR_E69.name=BR E69
 item.tc:minecartShunter.name=Class 08 Shunter (UK)
 item.tc:minecartVL10.name=VL10 (SU)

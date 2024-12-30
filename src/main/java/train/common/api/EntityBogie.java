@@ -481,7 +481,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 			if(lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack)){
 				TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(i, j, k);
-				lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
+				if(tileGag.originX.size()>0 && worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) != null) {
+					lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
+				}
 			}
 			if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
 				moveOnTCStraight(j, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());

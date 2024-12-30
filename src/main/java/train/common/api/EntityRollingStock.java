@@ -1284,7 +1284,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
             if(lastTrack==null || !CommonUtil.getTiles(worldObj,floor_posX, floor_posY, floor_posZ).contains(lastTrack)){
                 TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
-                lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
+                if(tileGag.originX.size()>0 && worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) != null) {
+                    lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
+                }
             }
             if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
                 moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
@@ -2202,6 +2204,24 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public void addVelocity(double p_70024_1_, double p_70024_3_, double p_70024_5_) {
+        this.motionX += p_70024_1_;
+        this.motionY += p_70024_3_;
+        this.motionZ += p_70024_5_;
+        this.isAirBorne = true;
+        if(bogieFront!=null){
+            bogieFront.motionX += p_70024_1_;
+            bogieFront.motionY += p_70024_3_;
+            bogieFront.motionZ += p_70024_5_;
+        }
+        if(bogieBack!=null){
+            bogieBack.motionX += p_70024_1_;
+            bogieBack.motionY += p_70024_3_;
+            bogieBack.motionZ += p_70024_5_;
         }
     }
 

@@ -4998,7 +4998,9 @@ public class ItemTCRail extends ItemPart {
         if (removed != null && !(removed instanceof BlockTCRailGag) && !(block instanceof BlockTCRail)) {
             removed.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
         }
-        world.setBlock(x, y, z, block, metadata, 3);
+        if(!ConfigHandler.TRACK_OVERLAP || !(removed  instanceof BlockTCRail || removed instanceof BlockTCRailGag)){
+            world.setBlock(x, y, z, block, metadata, 3);
+        }
     }
 
     @SideOnly(Side.CLIENT)
