@@ -113,9 +113,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      * appears to be the progress of the turn
      */
     private int rollingturnProgress;
-    private double rollingX;
-    private double rollingY;
-    private double rollingZ;
+    private double rollingX=0;
+    private double rollingY=0;
+    private double rollingZ=0;
     private float rollingServerPitch;
     public double rotationYawClient;
     public float rotationYawClientReal;
@@ -170,8 +170,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     private boolean needsBogieUpdate;
     private boolean firstLoad = true;
     private boolean hasSpawnedBogie = false;
-    private double mountedOffset = -0.5;
-    public double posYFromServer;
+    public double posYFromServer=0;
     private double derailSpeed = 0.46;
 
     public TileTCRail lastTrack=null;
@@ -219,9 +218,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         entityCollisionReduction = 0.8F;
 
-        boundingBoxSmall = AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 2.0D, 1.0D);
+        boundingBoxSmall = AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 1.0D);
         //setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 0.98F, 0.7F);
-        setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 2.0F, 1.5F);
+        setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 1.0F, 1.0F);
         consist = new ArrayList<AbstractTrains>();
         handleOverheating = new HandleOverheating(this);
 
@@ -320,15 +319,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     public double getMountedYOffset() {
-        return mountedOffset;
-    }
-
-    public void setMountedYOffset(double offset) {
-        mountedOffset = offset;
-    }
-
-    public void setYFromServer(double posYServer) {
-        this.posYFromServer = posYServer;
+        return 0;
     }
 
     @Override
@@ -631,7 +622,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
          * if the global train list is empty this is only used when the first @EntityRollingStock
          * is put down or when the world reloads
          */
-        if (ticksExisted % 40 != 0) return;
+        if (ticksExisted % 20 != 0) return;
         if (allTrains.isEmpty()) {
             if ((this.cartLinked1 != null || this.cartLinked2 != null)) {
                 train = new TrainHandler(this);
@@ -683,9 +674,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9) {
         this.rollingX = par1;
-        this.rollingY = par3;
+        this.rollingY = posYFromServer!=0?posYFromServer:par3;
         this.rollingZ = par5;
         this.rollingPitch = par8;
+        this.rotationYaw = par7;
         this.rollingturnProgress = par9 + 2;
         this.motionX = this.rollingVelocityX;
         this.motionY = this.rollingVelocityY;
@@ -704,7 +696,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 this.bogieShift = this.rotationPoints()[0];
                 this.bogieFront = new EntityBogie(worldObj,
                         (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.bogieShift),
-                        posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.bogieShift) + getMountedYOffset() - 0.1d),
+                        posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.bogieShift) - 0.1d),
                         (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.bogieShift), this, this.uniqueID, this.bogieShift);
 
 
@@ -712,7 +704,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
                 this.bogieBack = new EntityBogie(worldObj,
                         (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]),
-                        posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.rotationPoints()[1]) + getMountedYOffset() - 0.1d),
+                        posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.rotationPoints()[1]) - 0.1d),
                         (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]), this, this.uniqueID, this.rotationPoints()[1]);
 
 
@@ -767,21 +759,19 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
 
         isBraking = false;
-        if (this.ticksExisted > 60) { //add a delay to spawn the seats so you don't bug out; has an issue where when the seats haven't spawned you can still get in the main entity
-            if (getRiderOffsets() != null && getRiderOffsets().length > 0 && seats.size() < getRiderOffsets().length) {
-                for (int i = 0; i < getRiderOffsets().length; i++) {
-                    EntitySeat seat = new EntitySeat(getWorld(), posX, posY, posZ, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 2, getRiderOffsets()[i][2], this, i);
-                    seats.add(seat);
-                    if (i == 0) {
-                        seats.get(i).setControlSeat();
-                    }
-                    getWorld().spawnEntityInWorld(seats.get(i));
+
+        if (getRiderOffsets() != null && getRiderOffsets().length > 0 && seats.size() < getRiderOffsets().length) {
+            for (int i = 0; i < getRiderOffsets().length; i++) {
+                EntitySeat seat = new EntitySeat(getWorld(), posX, posY, posZ, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 2, getRiderOffsets()[i][2], this, i);
+                seats.add(seat);
+                if (i == 0) {
+                    seats.get(i).setControlSeat();
                 }
+                getWorld().spawnEntityInWorld(seats.get(i));
             }
-        }
-        if (seats.size() != 0 && worldObj.isRemote && Traincraft.proxy.getCurrentScreen() == null && seats.get(0).getPassenger() != null) {
-            EntityLivingBase entity = seats.get(0).getPassenger();
-            if (TraincraftEntityHelper.getIsJumping(entity)) isBraking = true;
+        } //dont check for jumping until at least a tick after seats spawned
+        else if (seats.size() != 0 && worldObj.isRemote && Traincraft.proxy.getCurrentScreen() == null && seats.get(0).getPassenger() != null) {
+            if (TraincraftEntityHelper.getIsJumping(seats.get(0).getPassenger())) isBraking = true;
         }
 
         int var2;
@@ -825,8 +815,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             this.worldObj.theProfiler.endSection();
         }
 
-        Side side = FMLCommonHandler.instance().getEffectiveSide();
-        if (side == Side.CLIENT) {
+        if (Traincraft.proxy.isClient()) {
             soundUpdater();
         }
 
@@ -836,9 +825,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 rotationYaw = (float) rotationYawClient;
                 this.rotationPitch = (float) (this.rotationPitch + (this.rollingPitch - this.rotationPitch) / this.rollingturnProgress);
 
-                this.setPosition(this.posX + (this.rollingX - this.posX) / this.rollingturnProgress,
-                        this.posY + (this.rollingY - this.posY) / this.rollingturnProgress,
-                        this.posZ + (this.rollingZ - this.posZ) / this.rollingturnProgress);
+                this.setPosition(this.posX + (this.rollingX - this.posX) / (double)this.rollingturnProgress,
+                        this.posY + (this.rollingY - this.posY) / (double)this.rollingturnProgress,
+                        this.posZ + (this.rollingZ - this.posZ) / (double)this.rollingturnProgress);
                 --this.rollingturnProgress;
                 this.setRotation(this.rotationYaw, this.rotationPitch);
 
@@ -1437,7 +1426,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         }
         this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
-        this.posY = this.boundingBox.minY + (double) this.yOffset - (double) this.ySize;
+        this.posY = this.boundingBox.minY + (double) this.yOffset;
         this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
 
     }
@@ -1530,7 +1519,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
             }
             this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
-            this.posY = this.boundingBox.minY + (double) this.yOffset - (double) this.ySize;
+            this.posY = this.boundingBox.minY + (double) this.yOffset;
             this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
 
         } else if (meta == 1 || meta == 3) {
@@ -1549,7 +1538,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
             }
             this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
-            this.posY = this.boundingBox.minY + (double) this.yOffset - (double) this.ySize;
+            this.posY = this.boundingBox.minY + (double) this.yOffset;
             this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
 
 
@@ -1622,7 +1611,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             return;
         }
         this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
-        this.posY = this.boundingBox.minY + (double) this.yOffset - (double) this.ySize;
+        this.posY = this.boundingBox.minY + (double) this.yOffset;
         this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
         normalizedSpeed = getSlopeAdjustedSpeed(normalizedSpeed, slopeAngle);
         if (meta == 2 || meta == 0) {
@@ -2592,7 +2581,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     private void setBoundingBoxSmall(double par1, double par3, double par5, float width, float height) {
         float var7 = width * 0.5F;
-        this.boundingBoxSmall.setBounds(par1 - var7, par3 - this.yOffset + this.ySize, par5 - var7, par1 + var7, par3 - this.yOffset + this.ySize + height, par5 + var7);
+        this.boundingBoxSmall.setBounds(par1 - var7, par3, par5 - var7, par1 + var7, par3 + height, par5 + var7);
     }
 
     public float getYaw() {
@@ -2619,129 +2608,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         return null;
     }
 
-    @SideOnly(Side.CLIENT)
-    public Vec3 renderY(double par1, double par3, double par5, double par7) {
-        int i = MathHelper.floor_double(par1);
-        int j = MathHelper.floor_double(par3);
-        int k = MathHelper.floor_double(par5);
-
-        if (worldObj.getBlock(i, j - 1, k) == BlockIDs.tcRail.block || worldObj.getBlock(i, j - 1, k) == BlockIDs.tcRailGag.block) {
-            --j;
-        } else if (worldObj.getBlock(i, j + 1, k) == BlockIDs.tcRail.block || worldObj.getBlock(i, j + 1, k) == BlockIDs.tcRailGag.block) {
-            j++;
-        }
-
-        Block l = this.worldObj.getBlock(i, j, k);
-        int i1;
-        if (l == BlockIDs.tcRail.block || l == BlockIDs.tcRailGag.block) {
-            i1 = worldObj.getBlockMetadata(i, j, k);
-            if (i1 == 2) {
-                i1 = 0;
-            } else if (i1 == 3) {
-                i1 = 1;
-            }
-        } else {
-            return null;
-        }
-        if (l != BlockIDs.tcRail.block && l != BlockIDs.tcRailGag.block) {
-            par3 = j;
-
-            if (i1 >= 2 && i1 <= 5) {
-                par3 = j + 1;
-            }
-        } else if (l == BlockIDs.tcRail.block || l == BlockIDs.tcRailGag.block) {
-            TileEntity tile = worldObj.getTileEntity(i, j, k);
-            if (tile instanceof TileTCRail) {
-                if (((TileTCRail) tile).getType() != null && !TCRailTypes.isSlopeTrack((TileTCRail) tile)) {
-                    par3 = j;
-                }
-            } else if (tile instanceof TileTCRailGag) {
-                int xOrigin = ((TileTCRailGag) tile).originX.get(0);
-                int yOrigin = ((TileTCRailGag) tile).originY.get(0);
-                int zOrigin = ((TileTCRailGag) tile).originZ.get(0);
-                TileEntity tileOrigin = worldObj.getTileEntity(xOrigin, yOrigin, zOrigin);
-                if (tileOrigin instanceof TileTCRail && ((TileTCRail) tileOrigin).getType() != null && !TCRailTypes.isSlopeTrack((TileTCRail) tileOrigin)) {
-                    par3 = j;
-                }
-            }
-        }
-        int[][] aint = matrix[i1];
-        double d4 = aint[1][0] - aint[0][0];
-        double d5 = aint[1][2] - aint[0][2];
-        double d6 = Math.sqrt(d4 * d4 + d5 * d5);
-        d4 /= d6;
-        d5 /= d6;
-        par1 += d4 * par7;
-        par5 += d5 * par7;
-
-        if (l != BlockIDs.tcRail.block && l != BlockIDs.tcRailGag.block) {
-            if (aint[0][1] != 0 && MathHelper.floor_double(par1) - i == aint[0][0] && MathHelper.floor_double(par5) - k == aint[0][2]) {
-                par3 += aint[0][1];
-            } else if (aint[1][1] != 0 && MathHelper.floor_double(par1) - i == aint[1][0] && MathHelper.floor_double(par5) - k == aint[1][2]) {
-                par3 += aint[1][1];
-            }
-        }
-        return this.func_70489_a(par1, par3, par5);
-    }
-
-    //this does weird math for putch on stuff without bogies, that shouldn't even be needed. but kinda is.
-    // replace this with a proper atan2 over time later
-    @Deprecated
-    public Vec3 yVector(double par1, double par3, double par5) {
-        if(rotationPoints()[0]!=0){
-            return null;
-        }
-        int i = MathHelper.floor_double(par1);
-        int j = MathHelper.floor_double(par3);
-        int k = MathHelper.floor_double(par5);
-        if (worldObj.getBlock(i, j - 1, k) == BlockIDs.tcRail.block || worldObj.getBlock(i, j - 1, k) == BlockIDs.tcRailGag.block) {
-            --j;
-        } else if (worldObj.getBlock(i, j + 1, k) == BlockIDs.tcRail.block || worldObj.getBlock(i, j + 1, k) == BlockIDs.tcRailGag.block) {
-            j++;
-        }
-
-        Block l = this.worldObj.getBlock(i, j, k);
-        int i1 = 0;
-
-        /*
-         * boolean shouldIgnoreYCoord = false; TileEntity tile =
-         * worldObj.getBlockTileEntity(i, j, k); if(tile!=null && tile
-         * instanceof TileTCRail){ if(((TileTCRail)tile).getType()!=null &&
-         * ((TileTCRail
-         * )tile).getType().equals(TrackTypes.MEDIUM_SLOPE.getLabel())){
-         * shouldIgnoreYCoord = true; } } if(tile!=null && tile instanceof
-         * TileTCRailGag){ int xOrigin = ((TileTCRailGag)tile).originX; int
-         * yOrigin = ((TileTCRailGag)tile).originY; int zOrigin =
-         * ((TileTCRailGag)tile).originZ; TileEntity tileOrigin =
-         * worldObj.getBlockTileEntity(xOrigin, yOrigin, zOrigin);
-         * if(tileOrigin!=null && (tileOrigin instanceof TileTCRail) &&
-         * ((TileTCRail)tileOrigin).getType()!=null &&
-         * ((TileTCRail)tileOrigin).getType
-         * ().equals(TrackTypes.MEDIUM_SLOPE.getLabel())){ shouldIgnoreYCoord =
-         * true; } }
-         */
-        if (l == BlockIDs.tcRail.block || l == BlockIDs.tcRailGag.block) {
-            //par3 = (double) j;
-            double d3 = 0.0D;
-            double d4 = i + 0.5D + matrix[i1][0][0] * 0.5D;
-            double d6 = k + 0.5D + matrix[i1][0][2] * 0.5D;
-            double d10 = (i + 0.5D + matrix[i1][1][0] * 0.5D) - d4;
-            double d12 = (k + 0.5D + matrix[i1][1][2] * 0.5D) - d6;
-
-            if (d10 == 0.0D) {
-                d3 = par5 - k;
-            } else if (d12 == 0.0D) {
-                d3 = par1 - i;
-            } else {
-                double d13 = par1 - d4;
-                double d14 = par5 - d6;
-                d3 = (d13 * d10 + d14 * d12) * 2.0D;
-            }
-            return Vec3.createVectorHelper(d4 + d10 * d3, par3, d6 + d12 * d3);
-        } else {
-            return null;
-        }
-    }
 
     public ItemStack[] getInventory() {
         return null;

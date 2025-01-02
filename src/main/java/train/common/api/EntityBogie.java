@@ -156,7 +156,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			this.isDerail = true;
 		}
 	}
-	
+
 	private boolean isDerail = false;
 	public boolean isOnRail(){
 		if(isDerail) {

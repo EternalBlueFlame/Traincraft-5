@@ -62,49 +62,9 @@ public class RenderRollingStock extends Render {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 
-        double var15 = cart.lastTickPosX + (cart.posX - cart.lastTickPosX) * time;
-        double var17 = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * time;
-        double var19 = cart.lastTickPosZ + (cart.posZ - cart.lastTickPosZ) * time;
-        Vec3 var23 = cart.worldObj==null?null:cart.func_70489_a(var15, var17, var19);
         float pitch = cart.prevRotationPitch + (cart.rotationPitch - cart.prevRotationPitch) * time;
-        Vec3 renderYVect = cart.worldObj==null?null:cart.yVector(var15, var17, var19);//only on TC rails
-        if (var23 != null) {
-            Vec3 var25 = cart.func_70495_a(var15, var17, var19, 0.30000001192092896D);
-            Vec3 var26 = cart.func_70495_a(var15, var17, var19, -0.30000001192092896D);
 
-            if (var25 == null) {
-                var25 = var23;
-            }
-
-            if (var26 == null) {
-                var26 = var23;
-            }
-
-            x += var23.xCoord - var15;
-            y += (var25.yCoord + var26.yCoord) / 2.0D - var17;
-            z += var23.zCoord - var19;
-            Vec3 var27 = var26.addVector(-var25.xCoord, -var25.yCoord, -var25.zCoord);
-
-            if (var27.lengthVector() != 0.0D) {
-                var27 = var27.normalize();
-                yaw = TraincraftUtil.atan2degreesf(var27.zCoord, var27.xCoord);
-                pitch = (float) (Math.atan(var27.yCoord) * 73.0D);
-            }
-
-        } else if (renderYVect != null) {//only on TC rails
-            Vec3 var25 = cart.renderY(var15, var17, var19, 0.30000001192092896D);
-            Vec3 var26 = cart.renderY(var15, var17, var19, -0.30000001192092896D);
-
-            if (var25 == null) {
-                var25 = renderYVect;
-            }
-
-            if (var26 == null) {
-                var26 = renderYVect;
-            }
-            y += (var25.yCoord + var26.yCoord) / 2.0D - var17;
-        }
-
+        y-=0.3f;
         yaw %= 360.0F;
         if (yaw < 0.0F) {
             yaw += 360.0F;
@@ -131,14 +91,6 @@ public class RenderRollingStock extends Render {
         int j = MathHelper.floor_double(cart.posY);
         int k = MathHelper.floor_double(cart.posZ);
 
-        // NOTE: func_150049_b_ = isRailBlockAt
-        if (cart.worldObj != null && (BlockRailBase.func_150049_b_(cart.worldObj, i, j, k)
-                || BlockRailBase.func_150049_b_(cart.worldObj, i, j - 1, k))) {
-            cart.setMountedYOffset(-0.55);
-        } else if (cart.posYFromServer != 0) {
-            cart.setMountedYOffset(-0.5);
-            GL11.glTranslatef(0f, -0.30f, 0f);
-        }
         if (cart.worldObj != null && cart.worldObj.getBlock(i, j, k).getClass().getName().equals("ebf.tim.blocks.rails.BlockRailCore")) {
             GL11.glTranslatef(0f, 0.15f, 0f);
         }
