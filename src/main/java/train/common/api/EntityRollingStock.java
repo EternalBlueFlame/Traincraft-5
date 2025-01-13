@@ -30,6 +30,7 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -539,20 +540,19 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      *
      * @param
      */
-    public boolean isLockedAndNotOwner() {
+    public boolean isLockedAndNotOwner(int player) {
+        Entity p = getWorld().getEntityByID(player);
+        if(!(p instanceof EntityPlayer)){
+            return false;
+        }
         if (this.getTrainLockedFromPacket()) {
-            if (this.riddenByEntity instanceof EntityPlayer && !((EntityPlayer) this.riddenByEntity).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
-                return true;
-            }
-            if (this.seats.size() > 0 && this.seats.get(0).getPassenger() instanceof EntityPlayer && !((EntityPlayer) this.seats.get(0).getPassenger()).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
-                return true;
-            }
+            return !((EntityPlayer) p).getDisplayName().equalsIgnoreCase(this.getTrainOwner());
         }
         return false;
     }
-    public void keyHandlerFromPacket(int i) {
+    public void keyHandlerFromPacket(int i, int player) {
         if (this.getTrainLockedFromPacket()) {
-            if (isLockedAndNotOwner()) {
+            if (isLockedAndNotOwner(player)) {
                 return;
             }
         }
@@ -837,7 +837,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
             }
             if (seats.size() != 0) {
-                for (int i = 0; i < seats.size(); i++) {
+                for (int i = 0; i < seats.size() && i<getRiderOffsets().length; i++) {
                     if (seats.get(i) != null) {
                         TraincraftUtil.updateRider(this, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 2, getRiderOffsets()[i][2], seats.get(i));
                     }

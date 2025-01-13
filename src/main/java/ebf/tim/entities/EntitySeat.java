@@ -100,20 +100,6 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
             }
 
         }
-        if (riddenByEntity != null && riddenByEntity instanceof EntityPlayer && worldObj.isRemote && this.isControlSeat()) {
-            if (TCKeyHandler.inventory.isPressed()) {
-                if (this.parent instanceof Locomotive) {
-                    Traincraft.keyChannel.sendToServer(new PacketKeyPress(7));
-                } else if (this.parent instanceof AbstractWorkCart) {
-                    Traincraft.keyChannel.sendToServer(new PacketKeyPress(7));
-                }
-            } else if (TCKeyHandler.furnace.isPressed() && this.parent instanceof AbstractWorkCart) {
-                Traincraft.keyChannel.sendToServer(new PacketKeyPress(9));
-            }
-        }
-        if (this.parent instanceof Locomotive && this.isControlSeat() && worldObj.isRemote) {
-            ((Locomotive)this.parent).keyHandling();
-        }
     }
 
     @Override

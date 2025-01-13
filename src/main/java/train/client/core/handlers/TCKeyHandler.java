@@ -5,17 +5,22 @@ import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.InputEvent;
+import ebf.tim.entities.EntitySeat;
+import ebf.tim.utility.DebugUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ChatComponentText;
 import org.lwjgl.input.Keyboard;
 import train.client.gui.GuiMTCInfo;
 import train.common.Traincraft;
+import train.common.api.AbstractTrains;
 import train.common.api.Locomotive;
 import train.common.api.SteamTrain;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.network.PacketKeyPress;
+import train.common.entity.zeppelin.AbstractZeppelin;
 
 public class TCKeyHandler {
     public static KeyBinding horn;
@@ -60,7 +65,15 @@ public class TCKeyHandler {
 
     @SubscribeEvent
     public void onKeyInput(InputEvent.KeyInputEvent event) {
-        if (!Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatOpen()) {
+        if(Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatOpen()){
+            return;
+        }
+
+        Entity riding =Minecraft.getMinecraft().thePlayer.ridingEntity;
+        if(riding instanceof EntitySeat){
+            riding=((EntitySeat) riding).parent;
+        }
+        if (riding instanceof AbstractTrains || riding instanceof AbstractZeppelin){
             if (up.getIsKeyPressed()) {
                 sendKeyControlsPacket(0);
             }
@@ -77,18 +90,57 @@ public class TCKeyHandler {
                 sendKeyControlsPacket(7);
             }
 
-            if (horn.getIsKeyPressed()) {
-                sendKeyControlsPacket(8);
-            }
-
             if (furnace.getIsKeyPressed()) {
                 sendKeyControlsPacket(9);
+            }
+
+            if (FMLClientHandler.instance().getClient().gameSettings.keyBindSneak.getIsKeyPressed() && Keyboard.isKeyDown(Keyboard.KEY_F3)) {
+                sendKeyControlsPacket(404);
+            }
+        }
+
+        if (riding instanceof Locomotive) {
+
+            if (horn.getIsKeyPressed()) {
+                sendKeyControlsPacket(8);
             }
 
             if (bell.getIsKeyPressed()) {
                 sendKeyControlsPacket(10);
             }
 
+
+
+            if (Keyboard.isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindForward.getKeyCode())
+                    && !((Locomotive) riding).forwardPressed) {
+                Traincraft.keyChannel.sendToServer(new PacketKeyPress(4));
+                ((Locomotive) riding).forwardPressed = true;
+            } else if (!Keyboard
+                    .isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindForward.getKeyCode())
+                    && ((Locomotive) riding).forwardPressed) {
+                Traincraft.keyChannel.sendToServer(new PacketKeyPress(13));
+                ((Locomotive) riding).forwardPressed = false;
+            }
+            if (Keyboard.isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindBack.getKeyCode())
+                    && !((Locomotive) riding).backwardPressed) {
+                Traincraft.keyChannel.sendToServer(new PacketKeyPress(5));
+                ((Locomotive) riding).backwardPressed = true;
+            } else if (!Keyboard
+                    .isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindBack.getKeyCode())
+                    && ((Locomotive) riding).backwardPressed) {
+                Traincraft.keyChannel.sendToServer(new PacketKeyPress(14));
+                ((Locomotive) riding).backwardPressed = false;
+            }
+            if (Keyboard.isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindJump.getKeyCode())
+                    && !((Locomotive) riding).brakePressed) {
+                Traincraft.keyChannel.sendToServer(new PacketKeyPress(12));
+                ((Locomotive) riding).brakePressed = true;
+            } else if (!Keyboard
+                    .isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindJump.getKeyCode())
+                    && ((Locomotive) riding).brakePressed) {
+                Traincraft.keyChannel.sendToServer(new PacketKeyPress(15));
+                ((Locomotive) riding).brakePressed = false;
+            }
             if (Traincraft.hasComputerCraft()) {
                 if (MTCScreen.getIsKeyPressed() && !FMLClientHandler.instance().isGUIOpen(GuiMTCInfo.class)) {
                     if (Minecraft.getMinecraft().thePlayer.ridingEntity != null) {
@@ -143,10 +195,6 @@ public class TCKeyHandler {
                 }
 
             }
-        }
-
-        if (FMLClientHandler.instance().getClient().gameSettings.keyBindSneak.getIsKeyPressed() && Keyboard.isKeyDown(Keyboard.KEY_F3)) {
-            sendKeyControlsPacket(404);
         }
     }
 

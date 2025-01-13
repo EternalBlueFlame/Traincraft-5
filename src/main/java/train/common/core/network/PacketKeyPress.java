@@ -4,6 +4,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import ebf.tim.entities.EntitySeat;
+import ebf.tim.utility.DebugUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import train.common.api.EntityRollingStock;
@@ -61,9 +62,9 @@ public class PacketKeyPress implements IMessage {
             /* "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks for when the value is null anyways. */
             if (ridingEntity != null) {
                 if (ridingEntity instanceof Locomotive) {
-                    ((Locomotive) ridingEntity).keyHandlerFromPacket(message.key);
+                    ((Locomotive) ridingEntity).keyHandlerFromPacket(message.key, context.getServerHandler().playerEntity.getEntityId());
                 } else if (ridingEntity instanceof EntityRollingStock) {
-                    ((EntityRollingStock) ridingEntity).keyHandlerFromPacket(message.key);
+                    ((EntityRollingStock) ridingEntity).keyHandlerFromPacket(message.key, context.getServerHandler().playerEntity.getEntityId());
                 } else if (ridingEntity instanceof AbstractZeppelin) {
                     ((AbstractZeppelin) ridingEntity).pressKey(message.key);
                 } else if (ridingEntity instanceof EntityRotativeDigger) {
