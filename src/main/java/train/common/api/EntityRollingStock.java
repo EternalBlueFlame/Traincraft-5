@@ -836,19 +836,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 setRotation(rotationYaw, rotationPitch);
 
             }
-            if (seats.size() != 0) {
-                for (int i = 0; i < seats.size() && i<getRiderOffsets().length; i++) {
-                    if (seats.get(i) != null) {
-                        TraincraftUtil.updateRider(this, getRiderOffsets()[i][0], getRiderOffsets()[i][1] + 2, getRiderOffsets()[i][2], seats.get(i));
-                    }
-                }
-            }
 
             if(collisionHandler!=null){
                 collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
                 collisionHandler.updateCollidingEntities(this);
                 collisionHandler.manageCollision(this);
             }
+            positionSeats();
             return;
         }
         /**
@@ -1040,6 +1034,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
         this.dataWatcher.updateObject(14, (int) (motionX * 100));
         this.dataWatcher.updateObject(21, (int) (motionZ * 100));
+        positionSeats();
+        if (ConfigHandler.ENABLE_LOGGING && !worldObj.isRemote && ticksExisted % 120 == 0) {
+            ServerLogger.writeWagonToFolder(this);
+        }
+    }
+
+    private void positionSeats(){
         //rider updating isn't called if there's no driver/conductor, so just in case of that, we reposition the seats here too.
         if (getRiderOffsets() != null) {
             for (int i1 = 0; i1 < seats.size(); i1++) {
@@ -1056,9 +1057,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 cachedVectors[0].addVector(posX,posY,posZ);
                 seats.get(i1).setPosition(cachedVectors[0].xCoord, cachedVectors[0].yCoord, cachedVectors[0].zCoord);
             }
-        }
-        if (ConfigHandler.ENABLE_LOGGING && !worldObj.isRemote && ticksExisted % 120 == 0) {
-            ServerLogger.writeWagonToFolder(this);
         }
     }
 

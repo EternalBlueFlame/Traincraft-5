@@ -170,7 +170,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     public void updateRiderPosition() {
         if (this.getPassenger() != null) {
-            this.getPassenger().setPosition(this.posX, this.posY+(getWorld().isRemote?(this.getPassenger()==Minecraft.getMinecraft().thePlayer?0.4:-1.3):-1.5), this.posZ);
+            this.getPassenger().setPosition(this.posX, this.posY+1+(getWorld().isRemote?(this.getPassenger()==Minecraft.getMinecraft().thePlayer?-0.4:-1.3):-1.5), this.posZ);
         }
     }
 
