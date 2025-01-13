@@ -97,8 +97,8 @@ public class EntityHitbox {
                     e.addVelocity(motion[0], 0.05, motion[2]);
                 }
             } else {
-                if (e instanceof EntityRollingStock) {
-                    EntityRollingStock entityOne = ((EntityRollingStock) e);
+                if (e instanceof CollisionBox) {
+                    EntityRollingStock entityOne = (((CollisionBox) e).host);
                     if (entityOne.isAttaching && host.isAttaching) {
                         LinkHandler.addStake(host, entityOne, true);
                         LinkHandler.addStake(entityOne, host, true);
@@ -163,7 +163,10 @@ public class EntityHitbox {
                             //EntityFX is client only, so we _shouldn't_ have to worry about it..?
                             //we dont collide with passenger entities, we collide with the thing they are on.
                             if(obj instanceof EntitySeat || obj instanceof EntityBogie ||
-                                    ((Entity) obj).ridingEntity!=null || obj instanceof CollisionBox || obj instanceof AbstractTrains) {
+                                    ((Entity) obj).ridingEntity!=null || obj instanceof AbstractTrains) {
+                                continue;
+                            }
+                            if(obj instanceof CollisionBox && ((CollisionBox) obj).host==host){
                                 continue;
                             }
 
@@ -215,6 +218,11 @@ public class EntityHitbox {
         for(CollisionBox box : interactionBoxes){
             //faster calculations for predictable entities
             if(e instanceof EntityPlayer){
+                if(Math.abs(e.posX-box.posX)<0.5 && Math.abs(e.posZ-box.posZ)<0.5 && Math.abs(e.posY-box.posY)<2){
+                    return true;
+                }
+            }
+            if(e instanceof CollisionBox){
                 if(Math.abs(e.posX-box.posX)<0.5 && Math.abs(e.posZ-box.posZ)<0.5 && Math.abs(e.posY-box.posY)<2){
                     return true;
                 }
