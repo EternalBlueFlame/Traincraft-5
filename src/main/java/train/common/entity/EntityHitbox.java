@@ -98,10 +98,21 @@ public class EntityHitbox {
                 }
             } else {
                 if (e instanceof CollisionBox) {
+                    if(((CollisionBox) e).host==null){
+                        return;
+                    }
                     EntityRollingStock entityOne = (((CollisionBox) e).host);
                     if (entityOne.isAttaching && host.isAttaching) {
-                        LinkHandler.addStake(host, entityOne, true);
-                        LinkHandler.addStake(entityOne, host, true);
+                        if(entityOne instanceof Locomotive && host instanceof Locomotive && (entityOne.canBeAdjusted(null) || host.canBeAdjusted(null))){
+                            LinkHandler.addStake(host, entityOne, true);
+                            LinkHandler.addStake(entityOne, host, true);
+                        } else {
+                            EntityPlayer p = host.getWorld().getClosestPlayerToEntity(host,32);
+                            if(p!=null){
+                                p.addChatComponentMessage(new ChatComponentText("One or more trains is not in towing mode."));
+                                p.addChatComponentMessage(new ChatComponentText("Use a Stake while sneaking to toggle towing mode."));
+                            }
+                        }
                         return;
                     }
                     double[] motion = CommonUtil.rotatePoint(0.005, 0,
@@ -225,14 +236,6 @@ public class EntityHitbox {
             if(e instanceof CollisionBox){
                 if(Math.abs(e.posX-box.posX)<0.5 && Math.abs(e.posZ-box.posZ)<0.5 && Math.abs(e.posY-box.posY)<2){
                     return true;
-                }
-            }
-            //for whatever reason the collision boxes dont seem to exist in the WORLD, but they do exist in their host.
-            if(e instanceof EntityRollingStock){
-                for(CollisionBox otherBox : ((EntityRollingStock) e).collisionHandler.interactionBoxes){
-                    if(Math.abs(otherBox.posX-box.posX)<0.5 && Math.abs(otherBox.posZ-box.posZ)<0.5 && Math.abs(otherBox.posY-box.posY)<2){
-                        return true;
-                    }
                 }
             }
             //check for X

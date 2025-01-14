@@ -7,10 +7,12 @@ import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.IMinecart;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.IEntityMultiPart;
 import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MovingObjectPosition;
@@ -28,9 +30,15 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     static String dragonBoxName ="b";
     public EntityRollingStock host;
 
-    //this isnt actually used, but if we remove it, compiler complains.
-    public CollisionBox(World w){
-        super(null,dragonBoxName,1,1);
+    //client side entity registration shenanagains. this lets us register the hitbox as a real entity
+    public CollisionBox(final World w){
+        super(new IEntityMultiPart() {
+            @Override
+            public World func_82194_d() {return w;}
+
+            @Override
+            public boolean attackEntityFromPart(EntityDragonPart p, DamageSource d, float i) {return false;}
+        },dragonBoxName,1,1);
     }
 
     public CollisionBox(EntityRollingStock transport) {
@@ -46,7 +54,7 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
 
     @Override
     public String getCommandSenderName() {
-        return host.getCommandSenderName();
+        return host==null?"collisionBox":host.getCommandSenderName();
     }
 
     @Override
@@ -68,7 +76,7 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
             }
         }
         if (ticksExisted % 100 == 0) {
-            if (!(worldObj.getEntityByID(host.getEntityId()) instanceof EntityRollingStock)) {
+            if (host ==null || !(worldObj.getEntityByID(host.getEntityId()) instanceof EntityRollingStock)) {
                 this.setDead();
                 worldObj.removeEntity(this);
             }
@@ -77,7 +85,7 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
 
     @Override
     public boolean attackEntityFrom(DamageSource damageSource, float p_70097_2_) {
-        return this.host.attackEntityFromPart(this, damageSource, p_70097_2_);
+        return host != null && this.host.attackEntityFromPart(this, damageSource, p_70097_2_);
     }
 
     @Override

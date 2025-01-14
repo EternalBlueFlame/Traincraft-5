@@ -16,6 +16,7 @@ import train.common.Traincraft;
 import train.common.api.EntityBogie;
 import train.common.api.TrainRecord;
 import train.common.core.EntityIds;
+import train.common.entity.CollisionBox;
 import train.common.entity.zeppelin.EntityZeppelinOneBalloon;
 import train.common.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.common.library.EnumTrains;
@@ -27,6 +28,7 @@ public class EntityHandler {
 		EntityRegistry.registerModEntity(EntityBogie.class, "Entity Front Bogie", EntityIds.LOCOMOTIVE_BOGIE, Traincraft.instance, 512, 1, true);//front bogie
 		EntityRegistry.registerModEntity(EntityZeppelinOneBalloon.class, "zeppelin big", EntityIds.ZEPPELIN_BIG, Traincraft.instance, 512, 1, true);//zepplin big
 		EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 16, Traincraft.instance,80,3,true);//seat
+		EntityRegistry.registerModEntity(CollisionBox.class, "collisionBox", 17, Traincraft.instance,80,3,false);//hitboxes
 		for(TrainRecord trains : EnumTrains.trains()){
 			TraincraftRegistry.registerTransport(trains);
 		}

@@ -14,6 +14,7 @@ import ebf.tim.utility.DebugUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -491,6 +492,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
 
     public void setCanBeAdjusted(boolean canBeAdj) {
         this.canBeAdjusted = canBeAdj;
+    }
+    @Override
+    public boolean canBeAdjusted(EntityMinecart cart) {
+        return canBeAdjusted;
     }
 
     /**

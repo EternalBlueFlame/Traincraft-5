@@ -191,8 +191,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     public EntityRollingStock(World world, double d, double d1, double d2) {
         super(world, d, d1, d2);
         if(world==null){return;}
-        initRollingStock(world);
         setPosition(d, d1 + yOffset, d2);
+        initRollingStock(world);
         motionX = 0.0D;
         motionY = 0.0D;
         motionZ = 0.0D;
@@ -1011,12 +1011,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         handleTrain();
         handleOverheating.HandleHeatLevel(this);
         linkhandler.handleStake(this);
-        //update the collision handler's positions
-        if(collisionHandler!=null){
-            collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
-            collisionHandler.updateCollidingEntities(this);
-            collisionHandler.manageCollision(this);
-        }
         this.func_145775_I();
         MinecraftForge.EVENT_BUS.post(new MinecartUpdateEvent(this, floor_posX, floor_posY, floor_posZ));
         //setBoundingBoxSmall(posX, posY, posZ, 0.98F, 0.7F);
@@ -1026,6 +1020,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
 
 
+        //update the collision handler's positions
+        if(collisionHandler!=null){
+            collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
+            collisionHandler.updateCollidingEntities(this);
+            collisionHandler.manageCollision(this);
+        }
         for (EntitySeat seat: seats) { //handle died in train
             if (seat.getPassenger() != null && (seat.getPassenger().isDead || seat != seat.getPassenger().ridingEntity)) {
                 seat.getPassenger().ridingEntity = null;
