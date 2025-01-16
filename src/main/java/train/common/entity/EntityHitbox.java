@@ -62,6 +62,7 @@ public class EntityHitbox {
                 c.boundingBox.setBounds(-width*0.5,0,-width*0.5,
                         width*0.5,height,width*0.5);
                 c.setPosition(entity.posX, entity.posY, entity.posZ);
+                c.host=entity;
                 c.forceSpawn=true;
                 interactionBoxes.add(c);
                 entity.getWorld().spawnEntityInWorld(c);
@@ -103,15 +104,20 @@ public class EntityHitbox {
                     }
                     EntityRollingStock entityOne = (((CollisionBox) e).host);
                     if (entityOne.isAttaching && host.isAttaching) {
-                        if(entityOne instanceof Locomotive && host instanceof Locomotive && (entityOne.canBeAdjusted(null) || host.canBeAdjusted(null))){
+                        if(entityOne instanceof Locomotive && host instanceof Locomotive){
+                            if(entityOne.canBeAdjusted(null) || host.canBeAdjusted(null)){
+                                LinkHandler.addStake(host, entityOne, true);
+                                LinkHandler.addStake(entityOne, host, true);
+                            } else {
+                                EntityPlayer p = host.getWorld().getClosestPlayerToEntity(host,32);
+                                if(p!=null){
+                                    p.addChatComponentMessage(new ChatComponentText("One or more trains is not in towing mode."));
+                                    p.addChatComponentMessage(new ChatComponentText("Use a Stake while sneaking to toggle towing mode."));
+                                }
+                            }
+                        } else {
                             LinkHandler.addStake(host, entityOne, true);
                             LinkHandler.addStake(entityOne, host, true);
-                        } else {
-                            EntityPlayer p = host.getWorld().getClosestPlayerToEntity(host,32);
-                            if(p!=null){
-                                p.addChatComponentMessage(new ChatComponentText("One or more trains is not in towing mode."));
-                                p.addChatComponentMessage(new ChatComponentText("Use a Stake while sneaking to toggle towing mode."));
-                            }
                         }
                         return;
                     }
@@ -154,7 +160,6 @@ public class EntityHitbox {
         collidingEntities = new ArrayList<>();
         collidingBlocks = new ArrayList<>();
         if(host==null){return;}
-        boolean stop=false;
 
         x = CommonUtil.floorDouble((-longest+host.posX - 16) / 16.0D);
         xMax = CommonUtil.floorDouble((longest+host.posX + 16) / 16.0D);
@@ -177,28 +182,15 @@ public class EntityHitbox {
                                     ((Entity) obj).ridingEntity!=null || obj instanceof AbstractTrains) {
                                 continue;
                             }
+                            if(interactionBoxes.contains(obj)){
+                                continue;
+                            }
                             if(obj instanceof CollisionBox && ((CollisionBox) obj).host==host){
                                 continue;
                             }
 
                             //prevent collision with the consist and entities mounted in the consist.
-                            for(AbstractTrains stock: host.consist) {
-                                if (obj == stock){
-                                    stop=true;
-                                    break;
-                                }
-                                for (EntitySeat s : stock.seats) {
-                                    if (s.getPassenger() == obj) {
-                                        stop = true;
-                                        break;
-                                    }
-                                }
-                                if(stop){
-                                    break;
-                                }
-                            }
-                            if(stop){
-                                stop=false;
+                            if(host.consist.contains(obj)){
                                 continue;
                             }
 
@@ -228,19 +220,13 @@ public class EntityHitbox {
     public boolean containsEntity(Entity e){
         for(CollisionBox box : interactionBoxes){
             //faster calculations for predictable entities
-            if(e instanceof EntityPlayer){
-                if(Math.abs(e.posX-box.posX)<0.5 && Math.abs(e.posZ-box.posZ)<0.5 && Math.abs(e.posY-box.posY)<2){
-                    return true;
-                }
-            }
-            if(e instanceof CollisionBox){
-                if(Math.abs(e.posX-box.posX)<0.5 && Math.abs(e.posZ-box.posZ)<0.5 && Math.abs(e.posY-box.posY)<2){
-                    return true;
-                }
+            if(e instanceof EntityPlayer || e instanceof CollisionBox) {
+                return Math.abs(e.posX - box.posX) < 0.75 && Math.abs(e.posZ - box.posZ) < 0.75 && Math.abs(e.posY - box.posY) < 2;
             }
             //check for X
-            if (e.boundingBox.intersectsWith(box.boundingBox.expand(0.4D, e instanceof EntityPlayer ?1.2D:0.4D, 0.4D)))
+            if (e.boundingBox.intersectsWith(box.boundingBox)) {
                 return true;
+            }
         }
         return false;
     }
