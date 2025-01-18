@@ -225,10 +225,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         consist = new ArrayList<AbstractTrains>();
         handleOverheating = new HandleOverheating(this);
 
-        if(world!=null) {
-            collisionHandler = new EntityHitbox(getHitboxSize()[0],getHitboxSize()[1],getHitboxSize()[2], this);
-            collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
-        }
+        collisionHandler=new EntityHitbox(this);
         linkhandler = new LinkHandler(world);
         trainsOnClick = new TrainsOnClick();
 
@@ -837,11 +834,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
             }
 
-            if(collisionHandler!=null){
-                collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
-                collisionHandler.updateCollidingEntities(this);
-                collisionHandler.manageCollision(this);
-            }
+            collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
+            collisionHandler.updateCollidingEntities(this);
+            collisionHandler.manageCollision();
             positionSeats();
             return;
         }
@@ -935,12 +930,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         }
 
-        if(collisionHandler==null) {
-            collisionHandler = new EntityHitbox(getHitboxSize()[0],getHitboxSize()[1],getHitboxSize()[2], this);
-            collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
-        } else {
-            collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
-        }
+
         //double var49 = MathHelper.wrapAngleTo180_float(this.rotationYaw - this.prevRotationYaw);
 
         float anglePitch = 0;
@@ -1021,11 +1011,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 
         //update the collision handler's positions
-        if(collisionHandler!=null){
-            collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
-            collisionHandler.updateCollidingEntities(this);
-            collisionHandler.manageCollision(this);
-        }
+        collisionHandler.position(posX, posY, posZ, rotationPitch, getYaw());
+        collisionHandler.updateCollidingEntities(this);
+        collisionHandler.manageCollision();
         for (EntitySeat seat: seats) { //handle died in train
             if (seat.getPassenger() != null && (seat.getPassenger().isDead || seat != seat.getPassenger().ridingEntity)) {
                 seat.getPassenger().ridingEntity = null;

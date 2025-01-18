@@ -9,6 +9,9 @@ package train.common.core.handlers;
 
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
+import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import cpw.mods.fml.relauncher.Side;
 import train.common.Traincraft;
 import train.common.adminbook.ItemAdminBook;
@@ -18,7 +21,14 @@ import train.common.mtc.packets.*;
 import train.common.mtc.packets.handlers.*;
 
 public class PacketHandler {
-
+	private static final IMessageHandler[] HANDLERS = new IMessageHandler[]{
+			new IMessageHandler<IMessage, IMessage>() {
+				@Override
+				public IMessage onMessage(IMessage message, MessageContext ctx) {
+					return null;
+				}
+			}
+	};
 	public static void init(){
 		Traincraft.tcLog.info("Initialize Packets");
 		Traincraft.modChannel = NetworkRegistry.INSTANCE.newSimpleChannel(Info.channel);
@@ -44,6 +54,8 @@ public class PacketHandler {
 
 		Traincraft.keyChannel.registerMessage(PacketKeyPress.Handler.class, PacketKeyPress.class, 1,
 				Side.SERVER);
+		Traincraft.keyChannel.registerMessage(HANDLERS[0], PacketRemove.class,
+				6, Side.SERVER);
 		Traincraft.rotationChannel.registerMessage(PacketRollingStockRotation.Handler.class,
 				PacketRollingStockRotation.class, 2, Side.CLIENT);
 		 Traincraft.modChannel.registerMessage(PacketSetJukeboxStreamingUrl.Handler.class,

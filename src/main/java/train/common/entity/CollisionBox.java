@@ -22,12 +22,14 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import train.common.Traincraft;
 import train.common.api.EntityRollingStock;
+import train.common.core.network.PacketRemove;
 
 
 public class CollisionBox extends EntityDragonPart implements IInventory, IFluidHandler, IMinecart, ILinkableCart, IFluidCart {
 
-    static String dragonBoxName ="b";
+    static String dragonBoxName ="trainbox";
     public EntityRollingStock host;
 
     //client side entity registration shenanagains. this lets us register the hitbox as a real entity
@@ -68,13 +70,6 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
         if(worldObj==null){
             return;
         }
-        if (worldObj.isRemote && ticksExisted % 10 == 0) {
-            if (Minecraft.getMinecraft().thePlayer.ridingEntity instanceof EntitySeat) {
-                this.boundingBox.maxY = 0;
-            } else {
-                this.boundingBox.maxY = this.boundingBox.minY + this.height;
-            }
-        }
         if (ticksExisted % 100 == 0) {
             if (host ==null || !(worldObj.getEntityByID(host.getEntityId()) instanceof EntityRollingStock)) {
                 this.setDead();
@@ -85,7 +80,10 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
 
     @Override
     public boolean attackEntityFrom(DamageSource damageSource, float p_70097_2_) {
-        return host != null && this.host.attackEntityFromPart(this, damageSource, p_70097_2_);
+        if(worldObj.isRemote){
+            Traincraft.keyChannel.sendToServer(new PacketRemove(host.getEntityId(), damageSource==null?-1:damageSource.getEntity().getEntityId()));
+        }
+        return host != null && host.attackEntityFromPart(this, damageSource, p_70097_2_);
     }
 
     @Override

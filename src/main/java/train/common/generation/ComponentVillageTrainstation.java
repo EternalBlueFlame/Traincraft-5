@@ -195,21 +195,21 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 
 		if (structureboundingbox.isVecInside(j2, k2, l2)) {
 			int rD = random.nextInt(8);
-			EntityRollingStock cart = new EntityFreightWood2(world);
+			EntityRollingStock cart = new EntityFreightWood2(world,j2 + 0.5D, k2, l2 + 0.5D);
 			if (rD == 0)
-				cart = new EntityCaboose(world);
+				cart = new EntityCaboose(world,j2 + 0.5D, k2, l2 + 0.5D);
 			if (rD == 1)
-				cart = new EntityCaboose3(world);
+				cart = new EntityCaboose3(world,j2 + 0.5D, k2, l2 + 0.5D);
 			if (rD == 2)
-				cart = new EntityFreightCart(world);
+				cart = new EntityFreightCart(world,j2 + 0.5D, k2, l2 + 0.5D);
 			if (rD == 3)
-				cart = new EntityPassenger2(world);
+				cart = new EntityPassenger2(world,j2 + 0.5D, k2, l2 + 0.5D);
 			if (rD == 4)
-				cart = new EntityStockCar(world);
+				cart = new EntityStockCar(world,j2 + 0.5D, k2, l2 + 0.5D);
 			if (rD == 5)
-				cart = new EntityBoxCartUS(world);
+				cart = new EntityBoxCartUS(world,j2 + 0.5D, k2, l2 + 0.5D);
 			if (rD == 6)
-				cart = new EntityFreightCartSmall(world);
+				cart = new EntityFreightCartSmall(world,j2 + 0.5D, k2, l2 + 0.5D);
 			cart.setLocationAndAngles(j2 + 0.5D, k2, l2 + 0.5D, 90.0F, 0.0F);
 			cart.setTrainOwner("VillagerJoe");
 			if (rD == 4) {
