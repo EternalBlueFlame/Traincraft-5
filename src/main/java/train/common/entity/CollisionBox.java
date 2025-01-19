@@ -24,6 +24,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import train.common.Traincraft;
 import train.common.api.EntityRollingStock;
+import train.common.core.network.PacketInteract;
 import train.common.core.network.PacketRemove;
 
 
@@ -61,6 +62,10 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
 
     @Override
     public boolean interactFirst(EntityPlayer p_130002_1_) {
+        if(worldObj.isRemote){
+            Traincraft.keyChannel.sendToServer(new PacketInteract(host.getEntityId()));
+            return true;
+        }
         return host != null && host.interactFirst(p_130002_1_);
     }
 
@@ -82,6 +87,7 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     public boolean attackEntityFrom(DamageSource damageSource, float p_70097_2_) {
         if(worldObj.isRemote){
             Traincraft.keyChannel.sendToServer(new PacketRemove(host.getEntityId(), damageSource==null?-1:damageSource.getEntity().getEntityId()));
+            return true;
         }
         return host != null && host.attackEntityFromPart(this, damageSource, p_70097_2_);
     }

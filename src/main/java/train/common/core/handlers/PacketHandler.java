@@ -27,6 +27,12 @@ public class PacketHandler {
 				public IMessage onMessage(IMessage message, MessageContext ctx) {
 					return null;
 				}
+			},
+			new IMessageHandler<IMessage, IMessage>() {
+				@Override
+				public IMessage onMessage(IMessage message, MessageContext ctx) {
+					return null;
+				}
 			}
 	};
 	public static void init(){
@@ -56,6 +62,8 @@ public class PacketHandler {
 				Side.SERVER);
 		Traincraft.keyChannel.registerMessage(HANDLERS[0], PacketRemove.class,
 				6, Side.SERVER);
+		Traincraft.keyChannel.registerMessage(HANDLERS[1], PacketInteract.class,
+				7, Side.SERVER);
 		Traincraft.rotationChannel.registerMessage(PacketRollingStockRotation.Handler.class,
 				PacketRollingStockRotation.class, 2, Side.CLIENT);
 		 Traincraft.modChannel.registerMessage(PacketSetJukeboxStreamingUrl.Handler.class,
