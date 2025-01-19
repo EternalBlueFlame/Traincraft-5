@@ -129,15 +129,15 @@ public class EntityHitbox {
                     }
 
                 } else if (e instanceof EntityPlayer || e instanceof EntityLiving) {
-                    double[] motion = CommonUtil.rotatePoint(0.05, 0,
-                            CommonUtil.atan2degreesf( host.posZ- e.posZ, host.posX-e.posX));
-                    host.addVelocity(motion[0], 0, motion[2]);
-
                     //hurt entity if going fast
                     if (Math.abs(host.motionX) + Math.abs(host.motionZ) > 0.25f) {
                         e.attackEntityFrom(new EntityDamageSource(
                                         host instanceof Locomotive ? "Locomotive" : "rollingstock", host),
                                 (float) (Math.abs(host.motionX) + Math.abs(host.motionZ)) * 0.5f);
+                    } else if (Math.abs(host.motionX) + Math.abs(host.motionZ) <0.01) {
+                        double[] motion = CommonUtil.rotatePoint(0.05, 0,
+                                CommonUtil.atan2degreesf( host.posZ- e.posZ, host.posX-e.posX));
+                        host.addVelocity(motion[0], 0, motion[2]);
                     }
                 }
             }
