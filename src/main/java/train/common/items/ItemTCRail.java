@@ -18,6 +18,7 @@ import org.lwjgl.util.vector.Vector2f;
 import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
 import train.common.blocks.TCBlocks;
+import train.common.core.handlers.ConfigHandler;
 import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
 import train.common.library.Info;
@@ -64,7 +65,7 @@ public class ItemTCRail extends ItemPart {
             return false;
         }
 
-        if(world.getBlock(x,y,z) instanceof BlockTCRailGag){
+        if(ConfigHandler.TRACK_OVERLAP && world.getBlock(x,y,z) instanceof BlockTCRailGag){
             return true;
         }
 
@@ -4997,10 +4998,8 @@ public class ItemTCRail extends ItemPart {
         if (removed != null && !(removed instanceof BlockTCRailGag) && !(block instanceof BlockTCRail)) {
             removed.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
         }
-        if(!(removed instanceof BlockTCRailGag)) {
+        if(!ConfigHandler.TRACK_OVERLAP || !(removed  instanceof BlockTCRail || removed instanceof BlockTCRailGag)){
             world.setBlock(x, y, z, block, metadata, 3);
-        } else {
-            world.addTileEntity(new TileTCRailGag());
         }
     }
 

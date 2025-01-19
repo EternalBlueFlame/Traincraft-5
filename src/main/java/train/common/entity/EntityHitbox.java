@@ -39,68 +39,84 @@ public class EntityHitbox {
 
     public List<CollisionBox> interactionBoxes = new ArrayList<>();
     public CollisionBox front,back;
+    public EntityRollingStock host;
 
-    public EntityHitbox(float depth, float height, float width, EntityRollingStock entity){
+    public EntityHitbox(EntityRollingStock entity){
         if (entity.getWorld()==null){
             return;
         }
-        depth *=0.5f;
-        width *=0.5f;
-        if(Math.abs(depth)>longest){
-            longest=Math.abs(depth);
-        }
-        if(Math.abs(width)>longest){
-            longest=Math.abs(width);
-        }
+        host=entity;
+    }
 
-        depth*=2;width*=2;
-        depth+=entity.getOptimalDistance(null);
-        if(height!=-1f) {
+
+    public void position(double x, double y, double z, float pitch, float yaw){
+        if(interactionBoxes.size()<1){
+            float depth =host.getHitboxSize()[0]*0.5f;
+            float width =host.getHitboxSize()[2]*0.5f;
+            longest=Math.abs(depth);
+
+            depth*=2;width*=2;
+            depth+=host.getOptimalDistance(null);
             interactionBoxes = new ArrayList<>();
             for (float f = 0; f < depth - (width * 0.25f); f += width) {
-                CollisionBox c = new CollisionBox((entity));
+                CollisionBox c = new CollisionBox((host));
                 c.boundingBox.setBounds(-width*0.5,0,-width*0.5,
-                        width*0.5,height,width*0.5);
-                c.setPosition(entity.posX, entity.posY, entity.posZ);
-                c.forceSpawn=true;
+                        width*0.5,host.getHitboxSize()[1],width*0.5);
+                c.setPosition(host.posX+f, host.posY, host.posZ);
+                c.host=host;
                 interactionBoxes.add(c);
-                entity.getWorld().spawnEntityInWorld(c);
+                host.getWorld().spawnEntityInWorld(c);
                 if(front==null){
                     front=c;
                 } else{
                     back=c;
                 }
             }
-            position(entity.posX,entity.posY,entity.posZ,entity.serverRealPitch,entity.getYaw());
         }
-    }
-
-
-    public void position(double x, double y, double z, float pitch, float yaw){
+        if(!host.worldObj.isRemote){
+            DebugUtil.println(x,y,z, yaw, pitch,interactionBoxes.size(),-0.25 + -host.getOptimalDistance(null) +
+                    ((host.getHitboxSize()[0] / interactionBoxes.size()) * (2 + 0.5f)));
+        }
         Vec3d part;
-        for(int i=0; i<interactionBoxes.size();i++){
-            part = CommonUtil.rotateDistance(-0.25+-interactionBoxes.get(0).host.getOptimalDistance(null)+
-                            ((interactionBoxes.get(0).host.getHitboxSize()[0]/interactionBoxes.size())*(i+0.5f)),
-                    -pitch, yaw+90).addVector(x,y,z);
-            interactionBoxes.get(i).setLocationAndAngles(part.xCoord,part.yCoord,part.zCoord,0,0);
+        for(int i=0; i<interactionBoxes.size();i++) {
+            part = CommonUtil.rotateDistance(-0.25 + -host.getOptimalDistance(null) +
+                            ((host.getHitboxSize()[0] / interactionBoxes.size()) * (i + 0.5f)),
+                    -pitch, yaw + 90).addVector(x, y, z);
+            interactionBoxes.get(i).setPosition(part.xCoord, part.yCoord, part.zCoord);
         }
     }
 
-    public void manageCollision(EntityRollingStock host){
+    public void manageCollision(){
         for(Entity e:collidingEntities) {
             //on client we need to push away players.
             if (host.worldObj.isRemote) {
                 if (e instanceof EntityPlayer || e instanceof EntityLiving) {
-                    double[] motion = CommonUtil.rotatePoint(-0.05, 0,
+                    double[] motion = CommonUtil.rotatePoint(-0.075, 0,
                             CommonUtil.atan2degreesf(host.posZ - e.posZ, host.posX - e.posX));
                     e.addVelocity(motion[0], 0.05, motion[2]);
                 }
             } else {
-                if (e instanceof EntityRollingStock) {
-                    EntityRollingStock entityOne = ((EntityRollingStock) e);
+                if (e instanceof CollisionBox) {
+                    if(((CollisionBox) e).host==null){
+                        return;
+                    }
+                    EntityRollingStock entityOne = (((CollisionBox) e).host);
                     if (entityOne.isAttaching && host.isAttaching) {
-                        LinkHandler.addStake(host, entityOne, true);
-                        LinkHandler.addStake(entityOne, host, true);
+                        if(entityOne instanceof Locomotive && host instanceof Locomotive){
+                            if(entityOne.canBeAdjusted(null) || host.canBeAdjusted(null)){
+                                LinkHandler.addStake(host, entityOne, true);
+                                LinkHandler.addStake(entityOne, host, true);
+                            } else {
+                                EntityPlayer p = host.getWorld().getClosestPlayerToEntity(host,32);
+                                if(p!=null){
+                                    p.addChatComponentMessage(new ChatComponentText("One or more trains is not in towing mode."));
+                                    p.addChatComponentMessage(new ChatComponentText("Use a Stake while sneaking to toggle towing mode."));
+                                }
+                            }
+                        } else {
+                            LinkHandler.addStake(host, entityOne, true);
+                            LinkHandler.addStake(entityOne, host, true);
+                        }
                         return;
                     }
                     double[] motion = CommonUtil.rotatePoint(0.005, 0,
@@ -113,9 +129,9 @@ public class EntityHitbox {
                     }
 
                 } else if (e instanceof EntityPlayer || e instanceof EntityLiving) {
-                    double[] motion = CommonUtil.rotatePoint(0.005, 0,
-                            CommonUtil.atan2degreesf(e.posZ - host.posZ, e.posX - host.posX));
-                    host.addVelocity(-motion[0], 0, -motion[2]);
+                    double[] motion = CommonUtil.rotatePoint(0.05, 0,
+                            CommonUtil.atan2degreesf( host.posZ- e.posZ, host.posX-e.posX));
+                    host.addVelocity(motion[0], 0, motion[2]);
 
                     //hurt entity if going fast
                     if (Math.abs(host.motionX) + Math.abs(host.motionZ) > 0.25f) {
@@ -161,18 +177,14 @@ public class EntityHitbox {
                             //EntityFX is client only, so we _shouldn't_ have to worry about it..?
                             //we dont collide with passenger entities, we collide with the thing they are on.
                             if(obj instanceof EntitySeat || obj instanceof EntityBogie ||
-                                    ((Entity) obj).ridingEntity!=null || obj instanceof CollisionBox) {
+                                    ((Entity) obj).ridingEntity!=null || obj instanceof AbstractTrains) {
                                 continue;
                             }
-                            //if it's another collision box, be sure it's not the current entity or a linked one
-                            if(obj instanceof EntityRollingStock){
-                                if(host.worldObj.isRemote || obj==host){
-                                    continue;
-                                }
-                                //make sure not to interact with own consist.
-                                if(host.consist.contains(obj)){
-                                    continue;
-                                }
+                            if(interactionBoxes.contains(obj)){
+                                continue;
+                            }
+                            if(obj instanceof CollisionBox && (((CollisionBox) obj).host==host || host.consist.contains(((CollisionBox) obj).host))){
+                                continue;
                             }
 
                             if(containsEntity((Entity) obj)){
@@ -200,22 +212,8 @@ public class EntityHitbox {
 
     public boolean containsEntity(Entity e){
         for(CollisionBox box : interactionBoxes){
-            //faster calculations for predictable entities
-            if(e instanceof EntityPlayer){
-                if(Math.abs(e.posX-box.posX)<0.5 && Math.abs(e.posZ-box.posZ)<0.5 && Math.abs(e.posY-box.posY)<2){
-                    return true;
-                }
-            }
-            //for whatever reason the collision boxes dont seem to exist in the WORLD, but they do exist in their host.
-            if(e instanceof EntityRollingStock){
-                for(CollisionBox otherBox : ((EntityRollingStock) e).collisionHandler.interactionBoxes){
-                    if(Math.abs(otherBox.posX-box.posX)<0.5 && Math.abs(otherBox.posZ-box.posZ)<0.5 && Math.abs(otherBox.posY-box.posY)<2){
-                        return true;
-                    }
-                }
-            }
             //check for X
-            if (e.boundingBox.intersectsWith(box.boundingBox.expand(0.4D, e instanceof EntityPlayer ?1.2D:0.4D, 0.4D)))
+            if (e.boundingBox.intersectsWith(box.boundingBox.expand(0.2D, e instanceof EntityPlayer?1.2D:0.2D, 0.2D)))
                 return true;
         }
         return false;

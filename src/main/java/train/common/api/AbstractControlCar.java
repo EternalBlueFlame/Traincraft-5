@@ -390,7 +390,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     }
 
     @Override
-    public void keyHandlerFromPacket(int i)
+    public void keyHandlerFromPacket(int i, int player)
     {
         if (this.getTrainLockedFromPacket())
         {

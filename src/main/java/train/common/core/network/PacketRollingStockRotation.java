@@ -66,7 +66,7 @@ public class PacketRollingStockRotation implements IMessage {
                     rollingStock.rotationYawClientReal = message.realRotation;
                     rollingStock.anglePitchClient = message.anglePitch;
                     rollingStock.isClientInReverse = message.isInReverse;
-                    rollingStock.setYFromServer(Float.intBitsToFloat(message.posY));
+                    rollingStock.posYFromServer= Float.intBitsToFloat(message.posY);
                 }
             }
 

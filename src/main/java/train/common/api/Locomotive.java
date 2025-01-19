@@ -10,9 +10,11 @@ import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.entities.EntitySeat;
+import ebf.tim.utility.DebugUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -491,6 +493,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     public void setCanBeAdjusted(boolean canBeAdj) {
         this.canBeAdjusted = canBeAdj;
     }
+    @Override
+    public boolean canBeAdjusted(EntityMinecart cart) {
+        return canBeAdjusted;
+    }
 
     /**
      * gets packet from server and distribute for GUI handles motion
@@ -498,9 +504,9 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
      * @param i
      */
     @Override
-    public void keyHandlerFromPacket(int i) {
+    public void keyHandlerFromPacket(int i, int player) {
         if (this.getTrainLockedFromPacket()) {
-            if (isLockedAndNotOwner()) {
+            if (isLockedAndNotOwner(player)) {
                 return;
             }
         }
@@ -647,40 +653,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         }
     }
 
-    @SideOnly(Side.CLIENT)
-    public void keyHandling() {
-        if (Keyboard.isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindForward.getKeyCode())
-                && !forwardPressed) {
-            Traincraft.keyChannel.sendToServer(new PacketKeyPress(4));
-            forwardPressed = true;
-        } else if (!Keyboard
-                .isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindForward.getKeyCode())
-                && forwardPressed) {
-            Traincraft.keyChannel.sendToServer(new PacketKeyPress(13));
-            forwardPressed = false;
-        }
-        if (Keyboard.isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindBack.getKeyCode())
-                && !backwardPressed) {
-            Traincraft.keyChannel.sendToServer(new PacketKeyPress(5));
-            backwardPressed = true;
-        } else if (!Keyboard
-                .isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindBack.getKeyCode())
-                && backwardPressed) {
-            Traincraft.keyChannel.sendToServer(new PacketKeyPress(14));
-            backwardPressed = false;
-        }
-        if (Keyboard.isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindJump.getKeyCode())
-                && !brakePressed) {
-            Traincraft.keyChannel.sendToServer(new PacketKeyPress(12));
-            brakePressed = true;
-        } else if (!Keyboard
-                .isKeyDown(FMLClientHandler.instance().getClient().gameSettings.keyBindJump.getKeyCode())
-                && brakePressed) {
-            Traincraft.keyChannel.sendToServer(new PacketKeyPress(15));
-            brakePressed = false;
-        }
-    }
-
     private void cycleBeaconIndex()
     {
         if (isBeaconEnabled && ticksExisted % 5 == 0)
@@ -697,60 +669,52 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     public void onUpdate()
     {
         cycleBeaconIndex();
-
-        if (worldObj.isRemote && ticksExisted %2 ==0)
-        {
-            keyHandling();
-        }
         if (!worldObj.isRemote) {
-            if (this.riddenByEntity instanceof EntityPlayer || (this.seats.size() > 0 && this.seats.get(0).getPassenger() != null)) {
-                EntityPlayer passenger = (EntityPlayer) this.riddenByEntity;
-                if (this.seats.size() != 0 && this.seats.get(0).getPassenger() != null) {
-                    passenger = (EntityPlayer) this.seats.get(0).getPassenger();
-                }
-                if (forwardPressed || backwardPressed) {
-                    if (getFuel() > 0 && this.isLocoTurnedOn() && rand.nextInt(4) == 0 && !worldObj.isRemote) {
-                        if (isLockedAndNotOwner()) {
-                            return;
-                        }
-                        if(this instanceof SteamTrain && (!getState().equals("hot") || !getState().equals("too hot"))){
-                            return;
-                        }
-                        if(this instanceof DieselTrain && (getState().equals("broken") || getState().equals("cold"))){
-                            return;
-                        }
-                        int dir = MathHelper
-                                .floor_double((passenger.rotationYaw * 4F) / 360F + 0.5D) & 3;
-                        if (dir == 2){
-                            if (forwardPressed) {
-                                motionZ -= 0.0075 * this.accelerate;
-                            } else {
-                                motionZ += 0.0075 * this.accelerate;
-                            }
-                        } else if (dir == 0){
-                            if (forwardPressed) {
-                                motionZ += 0.0075 * this.accelerate;
-                            } else {
-                                motionZ -= 0.0075 * this.accelerate;
-                            }
-                        } else if (dir == 1){
-                            if (forwardPressed) {
-                                motionX -= 0.0075 * this.accelerate;
-                            } else {
-                                motionX += 0.0075 * this.accelerate;
-                            }
-                        } else {
-                            if (forwardPressed) {
-                                motionX += 0.0075 * this.accelerate;
-                            } else {
-                                motionX -= 0.0075 * this.accelerate;
-                            }
+            if (forwardPressed || backwardPressed) {
+                if (getFuel() > 0 && this.isLocoTurnedOn() && rand.nextInt(4) == 0) {
+                    if(this instanceof SteamTrain && !getState().equals("hot") && !getState().equals("too hot")){
+                        return;
+                    }
+                    if(this instanceof DieselTrain && (getState().equals("broken") || getState().equals("cold"))){
+                        return;
+                    }
+                    float y=getYaw();
+                    for(EntitySeat s : seats){
+                        if(s!=null && s.isControlSeat() && s.getPassenger()!=null){
+                            y=s.getPassenger().rotationYaw;
                         }
                     }
-                } else if (brakePressed) {
-                    motionX *= brake;
-                    motionZ *= brake;
+                    int dir = MathHelper
+                            .floor_double((y * 4F) / 360F + 0.5D) & 3;
+                    if (dir == 2){
+                        if (forwardPressed) {
+                            motionZ -= 0.0075 * this.accelerate;
+                        } else {
+                            motionZ += 0.0075 * this.accelerate;
+                        }
+                    } else if (dir == 0){
+                        if (forwardPressed) {
+                            motionZ += 0.0075 * this.accelerate;
+                        } else {
+                            motionZ -= 0.0075 * this.accelerate;
+                        }
+                    } else if (dir == 1){
+                        if (forwardPressed) {
+                            motionX -= 0.0075 * this.accelerate;
+                        } else {
+                            motionX += 0.0075 * this.accelerate;
+                        }
+                    } else {
+                        if (forwardPressed) {
+                            motionX += 0.0075 * this.accelerate;
+                        } else {
+                            motionX -= 0.0075 * this.accelerate;
+                        }
+                    }
                 }
+            } else if (brakePressed) {
+                motionX *= brake;
+                motionZ *= brake;
             }
 
 

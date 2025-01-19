@@ -47,6 +47,7 @@ public class ConfigHandler {
 	public static int HOLIDAY_SKINS;
 
 	public static int TRACK_RENDER_DISTANCE;
+	public static boolean TRACK_OVERLAP;
 
 	public static boolean ENABLE_SLOPE_ACCELERATION;
 
@@ -81,6 +82,7 @@ public class ConfigHandler {
 					"setting this to true will split the creative tab in 2, one is used for trains, the other for materials and Tracks.");
 			ENABLE_TRACK_HOLOGRAM = cf.getBoolean("ENABLE_TRACK_HOLOGRAM", CATEGORY_GENERAL, true, "Disable this if you don't want tracks to render a hologram when placing down");
 			TRACK_RENDER_DISTANCE = cf.getInt("TRACK_RENDER_DISTANCE", CATEGORY_GENERAL, 64, 2, 256, "This sets the render distance for traincraft tracks, measured in blocks");
+			TRACK_OVERLAP = cf.getBoolean("TRACK_OVERLAP", CATEGORY_GENERAL, false,  "Experimental, allows overlapping track in some cases, can cause problems with placing and breaking track. Also takes away from that model train track feel.");
 
 			WINDMILL_CHECK_RADIUS = cf.getInt("WINDMILL_CHECK_RADIUS", CATEGORY_GENERAL, 1, -1, 10, "This sets the radius for the can-see-the-sky-check area around the windmill. 0=only location of windmill, 1=3x3, 2=5x5 etc. Use -1 to turn of this check completely. DEFAULT: 1");
 			FORCE_TEXTURE_BINDING = cf.get(CATEGORY_GENERAL, "Force_Texture_Binding", true, "Enable this if trains and rollingstock are using block/item textures").getBoolean(true);

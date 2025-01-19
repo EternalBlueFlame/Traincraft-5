@@ -145,6 +145,14 @@ public class LinkHandler {
 						cart2.cartLinked2 = cart1;
 					}
 
+					if(!cart1.consist.contains(cart2)){
+						cart1.consist.add(cart2);
+					}
+
+					if(!cart2.consist.contains(cart1)){
+						cart2.consist.add(cart1);
+					}
+
 					cart2.isAttached = true;
 
 					cart2.isAttaching = false;

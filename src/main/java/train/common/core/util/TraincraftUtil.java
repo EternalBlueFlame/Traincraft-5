@@ -78,44 +78,6 @@ public class TraincraftUtil {
             transport.riddenByEntity.setPosition(bogieX1, pitch, bogieZ1);
         }
     }
-    public static void updateRider(EntityRollingStock transport, double xOffset, double yOffset, double zOffset, Entity rider) {
-        if (rider == null) {
-            return;
-        }
-        double pitchRads = transport.anglePitchClient * radian;
-        float rotationCos1 = (float) Math.cos(Math.toRadians(transport.renderYaw + ((transport instanceof Locomotive) ? 90 : 180)));
-        float rotationSin1 = (float) Math.sin(Math.toRadians(transport.renderYaw + ((transport instanceof Locomotive) ? 90 : 180)));
-        float rotationCosLR1 = (float) Math.cos(Math.toRadians(transport.renderYaw));
-        float rotationSinLR1 = (float) Math.sin(Math.toRadians((transport.renderYaw)));
-        if(transport.side.isServer()){
-            rotationCos1 = (float) Math.cos(Math.toRadians(transport.serverRealRotation + 90));
-            rotationSin1 = (float) Math.sin(Math.toRadians((transport.serverRealRotation + 90)));
-            rotationCosLR1 = (float) Math.cos(Math.toRadians(transport.serverRealRotation));
-            rotationSinLR1 = (float) Math.sin(Math.toRadians((transport.serverRealRotation)));
-            transport.anglePitchClient = transport.serverRealPitch*60;
-        }
-        float pitch = (float) (transport.posY + ((Math.tan(pitchRads) * xOffset) + transport.getMountedYOffset())
-                + rider.getYOffset() + yOffset);
-        float pitch1 = (float) (transport.posY + transport.getMountedYOffset() + rider.getYOffset() + yOffset);
-        double bogieX1 = (transport.posX + (rotationCos1 * xOffset) + (rotationCosLR1 * zOffset));
-        double bogieZ1 = (transport.posZ + (rotationSin1* xOffset) + (rotationSinLR1 * zOffset));
-
-        //System.out.println(rotationCos1+" "+rotationSin1);
-        if (transport.anglePitchClient > 20 && rotationCos1 == 1) {
-            bogieX1 -= pitchRads * 2;
-            pitch -= (float) (pitchRads * 1.2);
-        }
-        if (transport.anglePitchClient > 20 && rotationSin1 == 1) {
-            bogieZ1 -= pitchRads * 2;
-            pitch -= (float) (pitchRads * 1.2);
-        }
-        if (pitchRads == 0.0) {
-            rider.setPosition(bogieX1, pitch1, bogieZ1);
-        }
-        if (pitchRads > -1.01 && pitchRads < 1.01) {
-            rider.setPosition(bogieX1, pitch, bogieZ1);
-        }
-    }
 
     public static float atan2f(double x, double z) {
         float pi = -3.141592653f;

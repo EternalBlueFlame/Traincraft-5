@@ -78,6 +78,9 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		this(modid+":trains/"+train.transportName().replace(' ','_'),tab);
 		setUnlocalizedName(train.transportName());
 		entity=train;
+		if(tab ==Traincraft.tcTab && ConfigHandler.SPLIT_CREATIVE) {
+			setCreativeTab(Traincraft.tcTrainTab);
+		}
 	}
 
 	@Deprecated
@@ -254,6 +257,9 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		else if(tileentity instanceof TileTCRailGag){
 
 			TileTCRailGag tileGag = (TileTCRailGag) tileentity;
+			if(((TileTCRailGag) tileentity).originX.size()<1 || par3World.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) ==null){
+				return false;
+			}
 			TileTCRail tile = (TileTCRail) par3World.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
 
 			if(tile!=null  && (tile.getType().equals(EnumTracks.MEDIUM_STRAIGHT.getLabel())
