@@ -2242,7 +2242,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     @Override
     public float getLinkageDistance(EntityMinecart cart) {
-        return this.getOptimalDistance(cart) + 1.4F;
+        return this.getOptimalDistance(cart);
     }
 
     /**
