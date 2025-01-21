@@ -73,10 +73,6 @@ public class EntityHitbox {
                 }
             }
         }
-        if(!host.worldObj.isRemote){
-            DebugUtil.println(x,y,z, yaw, pitch,interactionBoxes.size(),-0.25 + -host.getOptimalDistance(null) +
-                    ((host.getHitboxSize()[0] / interactionBoxes.size()) * (2 + 0.5f)));
-        }
         Vec3d part;
         for(int i=0; i<interactionBoxes.size();i++) {
             part = CommonUtil.rotateDistance(-0.25 + -host.getOptimalDistance(null) +
