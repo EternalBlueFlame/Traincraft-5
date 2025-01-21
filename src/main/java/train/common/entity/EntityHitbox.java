@@ -134,7 +134,7 @@ public class EntityHitbox {
                         e.attackEntityFrom(new EntityDamageSource(
                                         host instanceof Locomotive ? "Locomotive" : "rollingstock", host),
                                 (float) (Math.abs(host.motionX) + Math.abs(host.motionZ)) * 0.5f);
-                    } else if (Math.abs(host.motionX) + Math.abs(host.motionZ) <0.01) {
+                    } else if (Math.abs(host.motionX) + Math.abs(host.motionZ) <0.05) {
                         double[] motion = CommonUtil.rotatePoint(0.05, 0,
                                 CommonUtil.atan2degreesf( host.posZ- e.posZ, host.posX-e.posX));
                         host.addVelocity(motion[0], 0, motion[2]);
