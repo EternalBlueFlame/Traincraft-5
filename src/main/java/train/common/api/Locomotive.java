@@ -801,22 +801,22 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                 motionZ *= 0.98;
             }
         }
-        if (getState().equals("warm")) {
+        else if (getState().equals("warm")) {
             this.extinguish();
             if (getCurrentMaxSpeed() >= (getMaxSpeed() * 0.7)) {
                 motionX *= 0.94;
                 motionZ *= 0.94;
             }
         }
-        if (getState().equals("hot")) {
+        else if (getState().equals("hot")) {
             this.extinguish();
         }
-        if (getState().equals("too hot")) {
+        else if (getState().equals("too hot")) {
             motionX *= 0.95;
             motionZ *= 0.95;
             worldObj.spawnParticle("largesmoke", posX, posY + 0.3, posZ, 0.0D, 0.0D, 0.0D);
         }
-        if (getState().equals("broken")) {
+        else if (getState().equals("broken")) {
             setFire(8);
             this.setCustomSpeed(0);// set speed to normal
             this.setAccel(0.000001);// simulate a break down

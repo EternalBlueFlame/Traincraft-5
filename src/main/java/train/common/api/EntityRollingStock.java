@@ -2391,8 +2391,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             motionX *= 0.99D;
             motionZ *= 0.99D;
         } else {
-            motionX *= 1D;
-            motionZ *= 1D;
+            motionX *= 0.9D;
+            motionZ *= 0.9D;
         }
         if (motionX < -maxSpeed) {
             motionX = -maxSpeed;
