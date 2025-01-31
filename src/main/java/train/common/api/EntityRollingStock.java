@@ -1095,7 +1095,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             double motionNormalized = Math.sqrt(motionX * motionX + motionZ * motionZ);
             motionX = (motionNormalized * d9) / d11;
             motionZ = (motionNormalized * d10) / d11;
-            if (flag1 && !flag && shouldDoRailFunctions()) {
+            if (flag1 && !flag) {
                 if (Math.sqrt(motionX * motionX + motionZ * motionZ) < 0.029999999999999999D) {
                     motionX = 0.0D;
                     motionY = 0.0D;
@@ -1190,11 +1190,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 motionZ = d15 * (entity_floor_posZ - floor_posZ);
             }
 
-            if (shouldDoRailFunctions()) {
-                ((BlockRailBase) block).onMinecartPass(worldObj, this, floor_posX, floor_posY, floor_posZ);
-            }
+            ((BlockRailBase) block).onMinecartPass(worldObj, this, floor_posX, floor_posY, floor_posZ);
 
-            if (flag && shouldDoRailFunctions()) {
+
+            if (flag) {
                 double d31 = Math.sqrt(motionX * motionX + motionZ * motionZ);
                 if (d31 > 0.01D) {
                     motionX += (motionX / d31) * 0.059999999999999998D;
