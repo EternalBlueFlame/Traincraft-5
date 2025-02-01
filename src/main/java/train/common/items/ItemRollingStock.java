@@ -398,25 +398,23 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				canPlaceRollingStock(world, player, rollingStock, i, j, k, dir);
 
 
-
+				player.addChatMessage(new ChatComponentText("dir: " + dir));
 
 				if (dir == 0) {
-
-					//rollingStockOld.rotationYaw = 180; // BACK
 
 					rollingStock.serverRealRotation = (meta == 2 || meta == 0) ? 90 : 0;
 
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 
 						if (meta == 0 || meta == 2) {
-							rollingStock.rotationYaw = -90; // LEFT
+							//rollingStock.rotationYaw = -90; // LEFT
 							rollingStock.serverRealRotation = 90;
 						}
 						else if (meta == 6 || meta == 4) {
-							rollingStock.rotationYaw = -45; // LEFT;
+							rollingStock.serverRealRotation = 135; // LEFT;
 						}
 						else if (meta == 5 || meta == 7){
-							rollingStock.rotationYaw = -135;
+							rollingStock.serverRealRotation = 45;
 						}
 						else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
@@ -429,20 +427,15 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 1) {
-					rollingStock.rotationYaw = -135; // BACK
-					if (meta == 0) {
-						rollingStock.serverRealRotation = 90; // RIGHT
-					}
-					else {
-						rollingStock.serverRealRotation = 180; // FRONT
-					}
+					rollingStock.serverRealRotation = (meta == 2 || meta == 0) ? 90 : 0;
+
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 6 || meta == 4) {
-							rollingStock.rotationYaw = -45; // LEFT
+							rollingStock.serverRealRotation = 135; // LEFT
 						} else if (meta == 2 || meta == 0) {
-							rollingStock.rotationYaw = -90; // LEFT
+							rollingStock.serverRealRotation = 90; // LEFT
 						} else if (meta == 1 || meta == 3) {
-							rollingStock.rotationYaw = 0; // LEFT
+							rollingStock.serverRealRotation = 180; // LEFT
 						} else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
 							rollingStock.setDead();
@@ -453,21 +446,16 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 2) {
-					rollingStock.rotationYaw = -90; //BACK
-					if (meta == 1) {
-						rollingStock.serverRealRotation = 180; //RIGHT
-					} else {
-						rollingStock.serverRealRotation = 90; // FRONT
-					}
+					rollingStock.serverRealRotation = (meta == 1 || meta == 3) ? 180 : 90;
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 1 || meta == 3){
-							rollingStock.rotationYaw = 0; // LEFT
+							rollingStock.serverRealRotation = 180; // LEFT
 						}
 						else if(meta == 5 || meta == 7){
-							rollingStock.rotationYaw = 45;
+							rollingStock.serverRealRotation = -135;
 						}
 						else if (meta == 6 || meta == 4){
-							rollingStock.rotationYaw = -45;
+							rollingStock.serverRealRotation = 135;
 
 						}
 						else {
@@ -480,21 +468,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 3) {
-					rollingStock.rotationYaw = -45; // BACK
-					if (meta == 0) {
-						rollingStock.serverRealRotation = -90; // RIGHT
-					} else {
-						rollingStock.serverRealRotation = 180; // FRONT
-					}
+					rollingStock.serverRealRotation = (meta == 2 || meta == 0) ? -90 : 180;
+
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 5 || meta == 7) {
-							rollingStock.rotationYaw = 45; // LEFT
+							rollingStock.serverRealRotation = -135; // LEFT
 						}
 						else if (meta == 2 || meta == 0) {
-							rollingStock.rotationYaw = 90;
+							rollingStock.serverRealRotation = -90;
 						}
 						else if (meta == 1 || meta == 3){
-							rollingStock.rotationYaw = 0; // LEFT
+							rollingStock.serverRealRotation = 180; // LEFT
 						}
 						else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
@@ -506,22 +490,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 4) {
-					rollingStock.rotationYaw = 0; // BACK
-					if (meta == 0) {
-						rollingStock.serverRealRotation = -90; // RIGHT
-					} else {
-						rollingStock.serverRealRotation = 180; // FRONT
-					}
+					rollingStock.serverRealRotation = (meta == 2 || meta == 0) ? -90 : 180;
+
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 0 || meta == 2) {
-							rollingStock.rotationYaw = 0; // LEFT
 							rollingStock.serverRealRotation = -90; // RIGHT
 						}
 						else if (meta == 5 || meta == 7) {
-							rollingStock.rotationYaw = 45; // LEFT
+							rollingStock.serverRealRotation = -135; // LEFT
 						}
 						else if (meta == 6 || meta == 4){
-							rollingStock.rotationYaw = 135;
+							rollingStock.serverRealRotation = -45;
 						}
 
 						else {
@@ -536,21 +515,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 5) {
-					rollingStock.rotationYaw = 45; // BACK
-					if (meta == 0) {
-						rollingStock.serverRealRotation = -90; // RIGHT
-					} else {
-						rollingStock.serverRealRotation = 0; // FRONT
-					}
+					rollingStock.serverRealRotation = (meta == 2 || meta == 0) ? -90 : 0;
+
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 6 || meta == 4) {
-							rollingStock.rotationYaw = 135; // LEFT
+							rollingStock.serverRealRotation = -45; // LEFT
 						}
 						else if (meta == 0 || meta == 2) {
-							rollingStock.rotationYaw = 90; // LEFT
+							rollingStock.serverRealRotation = -90; // LEFT
 						}
 						else if (meta == 1 || meta == 3){
-							rollingStock.rotationYaw = 178.5f; // LEFT
+							rollingStock.serverRealRotation = 0; // LEFT
 						}
 						else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
@@ -562,22 +537,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 6) {
-					rollingStock.rotationYaw = 90; // BACK
-					if (meta == 1) {
-						rollingStock.serverRealRotation = 0; // RIGHT
-					} else {
-						rollingStock.serverRealRotation = -90; // FRONT
-					}
+					rollingStock.serverRealRotation = (meta == 0 || meta == 2) ? -90 : 0;
+				
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 1 || meta == 3) {
-							rollingStock.rotationYaw = -178.5f; // LEFT
 							rollingStock.serverRealRotation = 0;
 						}
 						else if (meta == 6 || meta == 4) {
-							rollingStock.rotationYaw = 135; // LEFT
+							rollingStock.serverRealRotation = -45; // LEFT
 						}
 						else if (meta == 5 || meta == 7) {
-							rollingStock.rotationYaw = -135; // LEFT
+							rollingStock.serverRealRotation = 45; // LEFT
 						}else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
 							rollingStock.setDead();
@@ -588,21 +558,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 7) {
-					rollingStock.rotationYaw = 135; // BACK
-					if (meta == 0) {
-						rollingStock.serverRealRotation = 90; // RIGHT
-					} else {
-						rollingStock.serverRealRotation = 0; // FRONT
-					}
+					rollingStock.serverRealRotation = (meta == 0 || meta == 2) ? 90 : 0;
+
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 5 || meta == 7) {
-							rollingStock.rotationYaw = -135; // LEFT
+							rollingStock.serverRealRotation = 45; // LEFT
 						}
 						else if (meta == 1 || meta == 3) {
-							rollingStock.rotationYaw = -178.5f; // LEFT
+							rollingStock.serverRealRotation = 0; // LEFT
 						}
 						else if (meta == 0 || meta == 2) {
-							rollingStock.rotationYaw = -90; // LEFT
+							rollingStock.serverRealRotation = 90; // LEFT
 						}
 						else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
