@@ -21,7 +21,7 @@ public class PluginRailcraft {
 
     private static void registerRecipes() {
         for (Tracks track : Tracks.values()) {
-            if (track.crafting != null) {
+            if (track.crafting != null && track.getOutput()!=null) {
                 GameRegistry.addRecipe(new ShapedOreRecipe(track.getOutput(), track.crafting));
             }
         }

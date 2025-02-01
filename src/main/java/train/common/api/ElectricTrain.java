@@ -107,10 +107,10 @@ public abstract class ElectricTrain extends Locomotive {
 	@Override
 	protected void updateFuelTrain(int amount) {
 		//reduceExplosionChance = 1000;
-		if (fuelTrain < 0) {
+		if (fuelTrain < 1 || !this.isLocoTurnedOn()) {
 			//hasUranium = false;
-			motionX *= 0.8;
-			motionZ *= 0.8;
+			motionX *= 0.55;
+			motionZ *= 0.55;
 		}
 		else {
 			if(this.isLocoTurnedOn()) {

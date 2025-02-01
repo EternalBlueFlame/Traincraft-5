@@ -6,6 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
+import ebf.tim.utility.DebugUtil;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.carts.IRoutableCart;
 import net.minecraft.block.Block;
@@ -272,7 +273,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	@Override
 	public boolean shouldDoRailFunctions() {
 
-		return false;
+		return true;
 	}
 
 	@Override
@@ -318,6 +319,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	private void updateOnTrack(int i, int j, int k, Block l) {
 
 		if (canUseRail() && BlockRailBase.func_150051_a(l)) {
+			DebugUtil.println("its track?");
 			super.onUpdate();
 			lastTrack=null;
 			int i1 = ((BlockRailBase) l).getBasicRailMetadata(worldObj, this, i, j, k);
@@ -358,7 +360,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			double d13 = Math.sqrt(motionX * motionX + motionZ * motionZ);
 			motionX = (d13 * d9) / d11;
 			motionZ = (d13 * d10) / d11;
-			if (flag1 && !flag && shouldDoRailFunctions()) {
+			if (flag1 && !flag) {
 				if (Math.sqrt(motionX * motionX + motionZ * motionZ) < 0.029999999999999999D) {
 					motionX = 0.0D;
 					motionY = 0.0D;
@@ -419,11 +421,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 				motionZ = d15 * (l1 - k);
 			}
 
-			if (shouldDoRailFunctions()) {
-				((BlockRailBase) l).onMinecartPass(worldObj, this, i, j, k);
-			}
+			((BlockRailBase) l).onMinecartPass(worldObj, this, i, j, k);
 
-			if (flag && shouldDoRailFunctions()) {
+			if (flag) {
 				double d31 = Math.sqrt(motionX * motionX + motionZ * motionZ);
 				if (d31 > 0.01D) {
 					motionX += (motionX / d31) * 0.059999999999999998D;

@@ -73,10 +73,6 @@ public class EntityHitbox {
                 }
             }
         }
-        if(!host.worldObj.isRemote){
-            DebugUtil.println(x,y,z, yaw, pitch,interactionBoxes.size(),-0.25 + -host.getOptimalDistance(null) +
-                    ((host.getHitboxSize()[0] / interactionBoxes.size()) * (2 + 0.5f)));
-        }
         Vec3d part;
         for(int i=0; i<interactionBoxes.size();i++) {
             part = CommonUtil.rotateDistance(-0.25 + -host.getOptimalDistance(null) +
@@ -98,34 +94,29 @@ public class EntityHitbox {
             } else {
                 if (e instanceof CollisionBox) {
                     if(((CollisionBox) e).host==null){
-                        return;
+                        continue;
                     }
                     EntityRollingStock entityOne = (((CollisionBox) e).host);
                     if (entityOne.isAttaching && host.isAttaching) {
-                        if(entityOne instanceof Locomotive && host instanceof Locomotive){
-                            if(entityOne.canBeAdjusted(null) || host.canBeAdjusted(null)){
-                                LinkHandler.addStake(host, entityOne, true);
-                                LinkHandler.addStake(entityOne, host, true);
-                            } else {
-                                EntityPlayer p = host.getWorld().getClosestPlayerToEntity(host,32);
-                                if(p!=null){
-                                    p.addChatComponentMessage(new ChatComponentText("One or more trains is not in towing mode."));
-                                    p.addChatComponentMessage(new ChatComponentText("Use a Stake while sneaking to toggle towing mode."));
-                                }
-                            }
-                        } else {
+                        if(entityOne.canBeAdjusted(host) || host.canBeAdjusted(entityOne)){
                             LinkHandler.addStake(host, entityOne, true);
                             LinkHandler.addStake(entityOne, host, true);
+                        } else {
+                            EntityPlayer p = host.getWorld().getClosestPlayerToEntity(host,32);
+                            if(p!=null){
+                                p.addChatComponentMessage(new ChatComponentText("One or more trains is not in towing mode."));
+                                p.addChatComponentMessage(new ChatComponentText("Use a Stake while sneaking to toggle towing mode."));
+                            }
                         }
-                        return;
-                    }
-                    double[] motion = CommonUtil.rotatePoint(0.005, 0,
-                            CommonUtil.atan2degreesf(e.posZ - host.posZ, e.posX - host.posX));
-                    host.addVelocity(-motion[0], 0, -motion[2]);
-                    if(entityOne instanceof Locomotive) {
-                        entityOne.addVelocity(motion[0]*0.2, 0, motion[2]*0.2);
                     } else {
-                        entityOne.addVelocity(motion[0], 0, motion[2]);
+                        double[] motion = CommonUtil.rotatePoint(0.005, 0,
+                                CommonUtil.atan2degreesf(e.posZ - host.posZ, e.posX - host.posX));
+                        host.addVelocity(-motion[0], 0, -motion[2]);
+                        if (entityOne instanceof Locomotive) {
+                            entityOne.addVelocity(motion[0] * 0.2, 0, motion[2] * 0.2);
+                        } else {
+                            entityOne.addVelocity(motion[0], 0, motion[2]);
+                        }
                     }
 
                 } else if (e instanceof EntityPlayer || e instanceof EntityLiving) {
