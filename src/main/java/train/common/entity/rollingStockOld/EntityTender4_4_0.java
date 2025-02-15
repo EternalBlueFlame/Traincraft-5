@@ -14,7 +14,7 @@ import train.common.api.LiquidManager;
 import train.common.api.Tender;
 import train.common.library.GuiIDs;
 
-public class EntityTender4_4_0 extends Tender implements IInventory {
+public class EntityTender4_4_0 extends Tender {
 	public int freightInventorySize;
 	public EntityTender4_4_0(World world) {
 		super(world, FluidRegistry.WATER, 0, LiquidManager.WATER_FILTER);

@@ -1404,12 +1404,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         motionZ = (directionZ / distanceNorm) * norm;
         this.boundingBox.offset(Math.copySign(motionX, this.motionX), 0, Math.copySign(motionZ, this.motionZ));
 
-        List boxes = worldObj.getCollidingBoundingBoxes(this, boundingBox);
-        for (Object b : boxes) {
-            if (!(b instanceof BlockRailBase) && !(b instanceof BlockTCRail) && !(b instanceof BlockTCRailGag) && !(b instanceof BlockAir)) {
-                return;
-            }
-        }
         this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
         this.posY = this.boundingBox.minY + (double) this.yOffset;
         this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
@@ -1498,11 +1492,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             this.boundingBox.offset(0, 0, Math.copySign(norm, this.motionZ));
 
             List boxes = worldObj.getCollidingBoundingBoxes(this, boundingBox);
-            for (Object b : boxes) {
-                if (!(b instanceof BlockRailBase) && !(b instanceof BlockTCRail) && !(b instanceof BlockTCRailGag) && !(b instanceof BlockAir)) {
-                    return;
-                }
-            }
             this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
             this.posY = this.boundingBox.minY + (double) this.yOffset;
             this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
@@ -1516,12 +1505,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             motionZ = 0;
             this.boundingBox.offset(motionX, 0, 0);
 
-            List boxes = worldObj.getCollidingBoundingBoxes(this, boundingBox);
-            for (Object b : boxes) {
-                if (!(b instanceof BlockRailBase) && !(b instanceof BlockTCRail) && !(b instanceof BlockTCRailGag) && !(b instanceof BlockAir)) {
-                    return;
-                }
-            }
             this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
             this.posY = this.boundingBox.minY + (double) this.yOffset;
             this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;

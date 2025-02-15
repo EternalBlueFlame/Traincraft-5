@@ -28,7 +28,7 @@ public class BlockTCRailGag extends Block {
 	public BlockTCRailGag() {
 		super(Material.iron);
 		setCreativeTab(Traincraft.tcTab);
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.025F, 1.0F);
+		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 1.0F);
 	}
 
 	/**
