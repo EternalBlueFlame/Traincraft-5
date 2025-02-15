@@ -1,5 +1,6 @@
 package train.client.render;
 
+import fexcraft.fvtm.BEOModelLoader;
 import fexcraft.tmt.slim.ModelBase;
 import train.client.render.models.*;
 import train.common.api.AbstractTrains;
@@ -270,7 +271,7 @@ public enum RenderEnum implements TrainRenderRecord {
     passengerC4FG(PassengerIC4_DSB_FG.class, new ModelLocoDieselIC4_DSB_FG(), "IC4_DSB_FG", false, new float[]{-0.8F, -0.44F, 0.0F}, null, null, "", 0, null, "", null, 0, false),
     passengerC4FH(PassengerIC4_DSB_FH.class, new ModelLocoDieselIC4_DSB_FH(), "IC4_DSB_FH", false, new float[]{-0.8F, -0.44F, 0.0F}, null, null, "", 0, null, "", null, 0, false),
     locoIC4MG(EntityLocoDieselIC4_DSB_MG.class, new ModelLocoDieselIC4_DSB_MG(), "IC4_DSB_MG_", true, new float[]{-0.8F, -0.44F, 0.0F}, null, null, "", 0, null, "", null, 0, false),
-    locoBR185(EntityLocoElectricBR185.class, new BR185_EngineModel(), "BR185_Engine_", true, new float[]{-2.0F, 0.1F, 0.0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
+    locoBR185(EntityLocoElectricBR185.class, BEOModelLoader.load("tc:models/engine/br185.bob"), "BR185_Engine_", true, new float[]{-2.0F, 0.1F, 0.0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
     locoClass85(EntityLocoElectricClass85.class, new ModelClass85(), "Class85_", true, new float[]{-3.0F, 0.65F, 0.0F}, new float[]{0F, 90F, 180F}, null, "", 0, null, "", null, 0, false),
     locoBP4(EntityLocoElectricBP4.class, new ModelBP4(), "bp4_", true, new float[]{-2.2F, 0.15F, 0.0F}, new float[]{0F, 180F, 180F}, null, "", 0, null, "", null, 0, false),
 
