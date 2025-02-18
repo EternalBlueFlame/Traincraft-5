@@ -20,6 +20,8 @@ import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import train.common.Traincraft;
 import train.common.api.AbstractTrains;
+import train.common.blocks.BlockTCRail;
+import train.common.blocks.BlockTCRailGag;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
 
@@ -51,6 +53,12 @@ public class CommonUtil {
      * @see #isRailBlockAt(World, int, int, int) */
     public static boolean isRailBlockAt(World world, double x, double y, double z) {
         return isRailBlockAt(world,floorDouble(x), floorDouble(y),floorDouble(z));
+    }
+
+    public static boolean isTrack(World world, double x, double y, double z) {
+        return world.getBlock(floorDouble(x), floorDouble(y),floorDouble(z)) instanceof BlockRailBase ||
+                world.getBlock(floorDouble(x), floorDouble(y),floorDouble(z)) instanceof BlockTCRail ||
+                world.getBlock(floorDouble(x), floorDouble(y),floorDouble(z)) instanceof BlockTCRailGag;
     }
 
     public static Block getBlockAt(World world, double x, double y, double z){

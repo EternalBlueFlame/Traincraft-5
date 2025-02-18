@@ -193,7 +193,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     public void initRollingStock(World world) {
         dataWatcher.addObject(20, 0);//heat
         dataWatcher.addObject(14, 0);
-        dataWatcher.addObject(29, 0);
         dataWatcher.addObject(21, 0);
 
         preventEntitySpawning = true;
@@ -317,6 +316,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             dataWatcher.addObject(17, 0);
             dataWatcher.addObject(18, 1);
             dataWatcher.addObject(19, 0.0F);
+            dataWatcher.addObject(29, 0.0F);
         }
     }
 
@@ -890,12 +890,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
             needsBogieUpdate = false;
         }
-        if (bogieFront != null) {
-            bogieFront.updateDistance();
-        }
-        if (bogieBack != null) {
-            bogieBack.updateDistance();
-        }
 
         if (worldObj.isAirBlock(floor_posX, floor_posY, floor_posZ)) {
             floor_posY--;
@@ -933,49 +927,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                             ((bogieFront.posZ - posZ) * (bogieFront.posZ - posZ))));//1.043749988079071
             serverRealPitch = anglePitch + (float)
                     ((bogieFront.posZ - posZ) * (bogieFront.posZ - posZ));//1.043749988079071
-        } else {
-            DebugUtil.println("obsolete me");
-            float rotation = rotationYaw;
-
-            float delta = MathHelper.wrapAngleTo180_float(this.rotationYaw - this.previousServerRealRotation);
-
-            if (delta < -179.0F || delta > 179.0F) { // if (delta > 170.0F || delta < 190.0F) {
-
-                this.rotationYaw += 180.0F;
-                this.isServerInReverse = !this.isServerInReverse;
-            }
-            previousServerRealRotation = rotation;
-            if (this.isServerInReverse) {
-                if (serverInReverseSignPositive) {
-                    rotation += 180.0f;
-                } else {
-                    rotation -= 180.0f;
-                }
-            }
-
-            serverRealRotation = rotation;
-
-            double zDist = posZ - prevPosZ;
-            double xDist = posX - prevPosX;
-            float tempPitch = rollingServerPitch;
-            float tempPitch2 = tempPitch;
-            if (Math.abs(zDist) > 0.02) {
-                tempPitch = (float) ((Math.atan((posY - prevPosY) / zDist)) * degrees);
-            } else if (Math.abs(xDist) > 0.02) {
-                tempPitch = (float) ((Math.atan((posY - prevPosY) / xDist)) * degrees);
-            }
-
-            if (tempPitch2 < tempPitch && Math.abs(tempPitch2 - tempPitch) > 3) {
-                tempPitch2 += 3;
-            } else if (tempPitch2 > tempPitch && Math.abs(tempPitch2 - tempPitch) > 3) {
-                tempPitch2 -= 3;
-            } else if (tempPitch2 < tempPitch && Math.abs(tempPitch2 - tempPitch) > 0.5) {
-                tempPitch2 += 0.5;
-            } else if (tempPitch2 > tempPitch && Math.abs(tempPitch2 - tempPitch) > 0.5) {
-                tempPitch2 -= 0.5;
-            }
-            anglePitch = -tempPitch2;
-            rollingServerPitch = 0;
         }
 
 
@@ -1063,7 +1014,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             } else {
                 //set the derail state based on whether or not there's a valid rail block below.
                 //later this will add more inherent support for 3rd party mods like ZnD, right now it's just vanilla/RC/TiM
-                derail= !CommonUtil.isRailBlockAt(getWorld(),posX,posY,posZ);
+                derail= !CommonUtil.isTrack(getWorld(),posX,posY,posZ);
             }
 
 
@@ -1139,7 +1090,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      * if X or Z is null, the bogie's existing motion velocity will be used
      */
     public void finalMove(){
-        cachedVectors[1] = new Vec3f(-rotationPoints()[0], 0, 0).rotatePoint(0, rotationYaw, 0)
+        cachedVectors[1] = new Vec3f(rotationPoints()[1], 0, 0).rotatePoint(0, rotationYaw, 0)
                 .addVector(bogieBack.posX,bogieBack.posY,bogieBack.posZ);
         setPosition(cachedVectors[1].xCoord, cachedVectors[1].yCoord,cachedVectors[1].zCoord);
 
@@ -1469,7 +1420,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                         if (Math.abs(Vec3.createVectorHelper(par1Entity.posX - this.posX, 0.0D, par1Entity.posZ - this.posZ).normalize().dotProduct(vec31)) < 0.800000011920929D) {
                             return;
                         }
-                       // TODO: set velocity through the set/add/multiply velocity methods.
+
                         double d9 = par1Entity.motionX + this.motionX;
                         double d8 = par1Entity.motionZ + this.motionZ;
 
@@ -1482,19 +1433,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                             }
 
                         } else if ((!(par1Entity instanceof Locomotive) && isPoweredCart()) || (!((EntityMinecart) par1Entity).isPoweredCart() && isPoweredCart())) {
-                           // TODO: dont collide with bogies!
-                            if (par1Entity instanceof EntityBogie && ((EntityBogie) par1Entity).entityMainTrain != null) {
-                                multiplyVelocity(0.2);
-                                this.addVelocity(this.motionX + d0 * 3, 0.0D, this.motionZ + d1 * 3);
-                                if (this instanceof Locomotive && ((EntityBogie) par1Entity).entityMainTrain instanceof Locomotive) {
-                                    multiplyVelocity(0);
-                                    ((EntityBogie) par1Entity).entityMainTrain.multiplyVelocity(0);
-                                }
-                            } else {
-                                par1Entity.motionX *= 0.20000000298023224D;
-                                par1Entity.motionZ *= 0.20000000298023224D;
-                                par1Entity.addVelocity(this.motionX + d0, 0.0D, this.motionZ + d1);
-                            }
+                            par1Entity.motionX *= 0.20000000298023224D;
+                            par1Entity.motionZ *= 0.20000000298023224D;
+                            par1Entity.addVelocity(this.motionX + d0, 0.0D, this.motionZ + d1);
+
                             if (!(this instanceof Locomotive)) {
                                 multiplyVelocity(0.949999988079071D);
                             }
@@ -1503,7 +1445,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                             d9 *= 0.4D;
                             d8 *= 0.4D;
 
-                            if (par1Entity instanceof EntityBogie || par1Entity instanceof Locomotive) {
+                            if (par1Entity instanceof Locomotive) {
                                 d9 *= -1;//-3
                                 d8 *= -1;//-3
                             }
@@ -1525,8 +1467,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
                         if (!(par1Entity instanceof EntityItem) && !(par1Entity instanceof EntityPlayer && this instanceof Locomotive) && !(par1Entity instanceof EntityLiving) && !(par1Entity instanceof EntityBogie)) {
                             this.addVelocity(-d0 * 2, 0.0D, -d1 * 2);
-                        } else if ((par1Entity instanceof EntityBogie)) {
-                            this.addVelocity(-d0, 0.0D, -d1);
                         }/*
                          * else if(par1Entity instanceof EntityBogie){
                          * par1Entity.addVelocity(-d0, 0.0D, -d1);
@@ -1612,6 +1552,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     public void addVelocity(double p_70024_1_, double p_70024_3_, double p_70024_5_) {
+        DebugUtil.println(p_70024_1_,p_70024_5_);
         this.motionX += p_70024_1_;
         this.motionY += p_70024_3_;
         this.motionZ += p_70024_5_;

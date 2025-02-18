@@ -126,81 +126,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		}
 	}
 
-	public void updateDistance() {
-		float dx = (float) (this.posX - entityMainTrain.posX);
-		float dz = (float) (this.posZ - entityMainTrain.posZ);
-		float angle = (float) Math.toDegrees(Math.atan2(dz, dx)) - 90F;
-		angle = MathHelper.wrapAngleTo180_float(angle);
-		float serverRealRotation = angle;
-
-		//
-		//		double rads = serverRealRotation * Math.PI / 180.0D;
-		//		double pitchRads = entityMainTrain.serverRealPitch * Math.PI / 180.0D;
-		//		double cos = Math.cos(rads);
-		//		double sin = Math.sin(rads);
-		//this.setPosition((entityMainTrain.posX - Math.cos(rads) * this.bogieShift), entityMainTrain.posY + ((Math.tan(pitchRads) * -this.bogieShift)+ entityMainTrain.getMountedYOffset()), (entityMainTrain.posZ - Math.sin(rads) * this.bogieShift));
-		//this.bogieLoco[i] = new EntityBogie(worldObj, (posX - Math.cos(rads) * this.bogieShift), posY + ((Math.tan(pitchRads) * -this.bogieShift) + getMountedYOffset()), (posZ - Math.sin(rads) * this.bogieShift), this, this.ID, i, this.bogieShift[i]);
-
-		//if (cos==-1)cos=0;
-
-		float rotationCos1 = (float) Math.cos(Math.toRadians(serverRealRotation + 90));
-		float rotationSin1 = (float) Math.sin(Math.toRadians((serverRealRotation + 90)));
-		//float anglePitchClient = serverRealPitch*60;
-		double bogieX1 = (entityMainTrain.posX + (rotationCos1 * Math.abs(this.bogieShift)));
-		double bogieZ1 = (entityMainTrain.posZ + (rotationSin1 * Math.abs(this.bogieShift)));
-
-		this.motionX = (bogieX1 - this.posX);
-		this.motionZ = (bogieZ1 - this.posZ);
-		//this.setPosition(bogieX1, this.posY, bogieZ1);
-
-		if(!this.isOnRail() && (this.entityMainTrain.motionX != 0 || this.entityMainTrain.motionZ != 0)){
-			//this.setPosition(prevX, this.posY, prevZ);
-			this.isDerail = true;
-		}
-	}
-
 	private boolean isDerail = false;
-	public boolean isOnRail(){
-		if(isDerail) {
-			return false;
-		}
-		int i = MathHelper.floor_double(this.posX);
-		int j = MathHelper.floor_double(this.posY);
-		int k = MathHelper.floor_double(this.posZ);
-
-		if (isRailBlockAt(worldObj, i, j - 1, k) || worldObj.getBlock(i, j - 1, k) == BlockIDs.tcRail.block || worldObj.getBlock(i, j - 1, k) == BlockIDs.tcRailGag.block) {
-			j--;
-		} else if (isRailBlockAt(worldObj, i, j + 1, k) || worldObj.getBlock(i, j + 1, k) == BlockIDs.tcRail.block || worldObj.getBlock(i, j + 1, k) == BlockIDs.tcRailGag.block) {
-			j++;
-		}
-		Block block = this.worldObj.getBlock(i, j, k);
-		if (BlockRailBase.func_150051_a(block) || block == BlockIDs.tcRail.block || block == BlockIDs.tcRailGag.block) {
-			return true;
-		}/* this is test/in-dev anti-derailment code.
-		Vec3f closest = null;
-		double dist = Double.MAX_VALUE;
-		for(int a = -1; a<2;a++) {
-			for(int c = -1;c<2;c++) {
-				if (isRailBlockAt(worldObj, i+a, j, k+c) || worldObj.getBlock(i+a, j, k+c) == BlockIDs.tcRail.block || worldObj.getBlock(i+a, j, k+c) == BlockIDs.tcRailGag.block) {
-					if (closest == null) {
-						closest = new Vec3f(i+a,j,k+c);
-						dist = Math.sqrt(Math.pow(closest.xCoord-posX,2)+Math.pow(closest.zCoord-posZ,2));
-					} else {
-						double tdist = Math.sqrt(Math.pow((i+a)-posX,2)+Math.pow((k+c)-posZ,2));
-						if (tdist < dist) {
-							dist = tdist;
-						}
-					}
-				}
-			}
-		}
-		if (closest != null) {
-			this.setPosition( closest.xCoord, closest.yCoord, closest.zCoord);
-			return true;
-		}*/
-		return false;
-	}
-
 	@Override
 	@SideOnly(Side.CLIENT)
 	public float getShadowSize() {
@@ -1043,6 +969,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 		velocity[0]+=speed*velocity[4];
 		velocity[1]+=speed*velocity[5];
+		motionX+=speed*velocity[4];
+		motionZ+=speed*velocity[5];
 	}
 
 	public void addLinking(AbstractTrains host, double speed){

@@ -178,7 +178,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         if(world==null){return;}
         renderDistanceWeight = 2.0D;
         entity_data.putString("color", SkinRegistry.get(this).size()>0 ? SkinRegistry.get(this).get(0) : "");
-        dataWatcher.addObject(12, entity_data.toXMLString());
+        dataWatcher.addObject(30, entity_data.toXMLString());
         dataWatcher.addObject(7, trainOwner);
         dataWatcher.addObject(8, trainDestroyer);
         dataWatcher.addObject(9, trainName);
@@ -339,7 +339,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
             }
             entity_data.putString("color", trainRecord.getLiveries().get(color));
         }
-        dataWatcher.updateObject(12, entity_data.toXMLString());
+        dataWatcher.updateObject(30, entity_data.toXMLString());
         this.getEntityData().setString("xml", entity_data.toXMLString());
     }
 
@@ -351,7 +351,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
 
         entity_data.putString("color", color);
-        dataWatcher.updateObject(12, entity_data.toXMLString());
+        dataWatcher.updateObject(30, entity_data.toXMLString());
         this.getEntityData().setString("xml", entity_data.toXMLString());
     }
 
@@ -365,7 +365,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     public String getColor() {
         if (worldObj != null) {
-            entity_data.updateData(dataWatcher.getWatchableObjectString(12));
+            entity_data.updateData(dataWatcher.getWatchableObjectString(30));
             if (entity_data.hasString("color")) {
                 return entity_data.getString("color");
             }
@@ -789,7 +789,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * may not return null*/
     public float[] rotationPoints(){
         if(getSpec()==null || getSpec().getBogieLocoPosition()==0){
-            return new float[]{0.5f,-0.5f};
+            return new float[]{0.75f,-0.75f};
         }
         return new float[]{(float)getSpec().getBogieLocoPosition(),0};}
 
