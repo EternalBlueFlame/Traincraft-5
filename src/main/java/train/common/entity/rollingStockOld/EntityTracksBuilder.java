@@ -189,11 +189,11 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	private void fillLinkedInventory() {
 		if (getInventory() != null){
 			Freight link;
-			if(cartLinked1 instanceof Freight && ((Freight)cartLinked1).getInventory() !=null) {
-				link = (Freight) cartLinked1;
+			if(frontLink instanceof Freight && ((Freight) frontLink).getInventory() !=null) {
+				link = (Freight) frontLink;
 
-			} else if (cartLinked2 instanceof Freight && ((Freight)cartLinked2).getInventory() !=null) {
-				link = (Freight) cartLinked2;
+			} else if (backLink instanceof Freight && ((Freight) backLink).getInventory() !=null) {
+				link = (Freight) backLink;
 			} else {
 				return;
 			}

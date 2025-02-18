@@ -56,8 +56,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public double Link1;
     public double Link2;
     protected boolean linked = false;
-    public AbstractTrains cartLinked1;
-    public AbstractTrains cartLinked2;
+    public AbstractTrains frontLink;
+    public AbstractTrains backLink;
     //private Set chunks;
     protected Ticket chunkTicket;
     public float renderYaw;

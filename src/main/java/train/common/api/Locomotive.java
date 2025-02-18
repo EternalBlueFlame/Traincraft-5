@@ -290,40 +290,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         return getSpec()==null?200:getSpec().getHeatingTime();
     }
 
-    @Override
-    public void limitSpeedOnTCRail() {
-        maxSpeed = SpeedHandler.handleSpeed(getMaxSpeed(), maxSpeed, this);
-        //System.out.println(maxSpeed);
-        if (this.speedLimiter != 0 && speedWasSet) {
-            //maxSpeed *= this.speedLimiter;
-            adjustSpeed(maxSpeed, speedLimiter);
-        }
-
-        if (motionX < -maxSpeed) {
-            motionX = -maxSpeed;
-        }
-
-        if (motionX > maxSpeed) {
-            motionX = maxSpeed;
-        }
-
-        if (motionZ < -maxSpeed) {
-            motionZ = -maxSpeed;
-        }
-
-        if (motionZ > maxSpeed) {
-            motionZ = maxSpeed;
-        }
-
-        double speedNorm = Math.sqrt(motionX * motionX + motionZ * motionZ);
-
-        if (speedNorm > maxSpeed){
-            motionX *= 0.99;
-            motionZ *= 0.99;
-        }
-
-    }
-
     /**
      * set the fuel consumption rate for each loco if i is 0 then default
      * consumption is used

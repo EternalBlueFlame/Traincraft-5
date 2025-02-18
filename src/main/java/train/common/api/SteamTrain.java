@@ -195,39 +195,39 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 				}
 			}
 
-			if(cartLinked1 instanceof Tender){
+			if(frontLink instanceof Tender){
 				if(drain==null && fill(ForgeDirection.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
 					if (getFluid() == null || getFluid().getFluid() == FluidRegistry.WATER) {
-						drain = cartLinked1.drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+						drain = frontLink.drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
 					}
 				}
-				for (int h = 0; h < ((Tender) cartLinked1).tenderItems.length; h++) {
-					if (((Tender) cartLinked1).tenderItems[h] != null && FuelHandler.steamFuelLast(((Tender) cartLinked1).tenderItems[h]) != 0) {
-						if (getFuel() < maxFuel && ((getFuel() + FuelHandler.steamFuelLast(((Tender) cartLinked1).tenderItems[h])) <= maxFuel)) {
-							fuelTrain += FuelHandler.steamFuelLast(((Tender) cartLinked1).tenderItems[h]);
+				for (int h = 0; h < ((Tender) frontLink).tenderItems.length; h++) {
+					if (((Tender) frontLink).tenderItems[h] != null && FuelHandler.steamFuelLast(((Tender) frontLink).tenderItems[h]) != 0) {
+						if (getFuel() < maxFuel && ((getFuel() + FuelHandler.steamFuelLast(((Tender) frontLink).tenderItems[h])) <= maxFuel)) {
+							fuelTrain += FuelHandler.steamFuelLast(((Tender) frontLink).tenderItems[h]);
 							hasCoalInTender = true;
-							cartLinked1.decrStackSize(h, 1);
+							frontLink.decrStackSize(h, 1);
 							break;
 						}
 					}
 				}
 
 
-			} else if (cartLinked2 instanceof Tender){
+			} else if (backLink instanceof Tender){
 
 				if(drain==null && fill(ForgeDirection.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
 					if (getFluid() == null || getFluid().getFluid() == FluidRegistry.WATER) {
-						drain = cartLinked2.drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+						drain = backLink.drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
 					}
 				}
 
 
-				for (int h = 0; h < ((Tender) cartLinked2).tenderItems.length; h++) {
-					if (((Tender) cartLinked2).tenderItems[h] != null && FuelHandler.steamFuelLast(((Tender) cartLinked2).tenderItems[h]) != 0) {
-						if (getFuel() < maxFuel && ((getFuel() + FuelHandler.steamFuelLast(((Tender) cartLinked2).tenderItems[h])) <= maxFuel)) {
-							fuelTrain += FuelHandler.steamFuelLast(((Tender) cartLinked2).tenderItems[h]);
+				for (int h = 0; h < ((Tender) backLink).tenderItems.length; h++) {
+					if (((Tender) backLink).tenderItems[h] != null && FuelHandler.steamFuelLast(((Tender) backLink).tenderItems[h]) != 0) {
+						if (getFuel() < maxFuel && ((getFuel() + FuelHandler.steamFuelLast(((Tender) backLink).tenderItems[h])) <= maxFuel)) {
+							fuelTrain += FuelHandler.steamFuelLast(((Tender) backLink).tenderItems[h]);
 							hasCoalInTender = true;
-							cartLinked2.decrStackSize(h, 1);
+							backLink.decrStackSize(h, 1);
 							break;
 						}
 					}

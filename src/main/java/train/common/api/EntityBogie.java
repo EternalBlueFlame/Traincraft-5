@@ -7,6 +7,7 @@ import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
+import fexcraft.tmt.slim.Vec3f;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.carts.IRoutableCart;
 import net.minecraft.block.Block;
@@ -45,7 +46,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	protected Side side;
 	public TileTCRail lastTrack=null;
 
-
+	double[] velocity = new double[]{0,0,0,0,0,0};
 
 
 
@@ -553,7 +554,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	 */
 	Block l;
 	@Override
-	public void onUpdate(){
+	public void onUpdate(){}
+
+	public void moveBogie(){
 
 		this.setCurrentCartSpeedCapOnRail(1.8F);
 		this.setMaxSpeedAirLateral(1.8F);
@@ -657,29 +660,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		else {
 			this.moveEntity(Math.copySign(norm, this.motionX), 0.0D, Math.copySign(norm, this.motionZ));
 		}
-/*
-
-		int l = MathHelper.floor_double(rotationYaw * 8.0F / 360.0F + 0.5) & 7;
-
-
-		if (l == 0 || l == 4) {
-			moveEntity(motionX, 0.0D, 0.0D);
-		}
-		else if (l == 2 || l == 6) {
-			moveEntity(0.0D, 0.0D, motionZ);
-		}
-		else if (l == 1) {
-			moveOnTCDiagonal(i, j, k, cx, cz, 5, 1);
-		}
-		else if (l == 3){
-			moveOnTCDiagonal(i, j, k, cx, cz, 6, 1);
-		}
-		else if (l == 5) {
-			moveOnTCDiagonal(i, j, k, cx, cz, 7, 1);
-		}
-		else if (l == 7) {
-			moveOnTCDiagonal(i, j, k, cx, cz, 4, 1);
-		}*/
 	}
 
 	private void moveOnTCDiagonal(int i, int j, int k, double cx, double cz, int meta, double length) {
@@ -959,11 +939,11 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 	}
 	private boolean shouldIgnoreSwitch(TileTCRail tile, int i, int j, int k, int meta) {
-		if (tile != null && TCRailTypes.isTurnTrack(tile) && tile.canTypeBeModifiedBySwitch) {
+		if (TCRailTypes.isTurnTrack(tile) && tile.canTypeBeModifiedBySwitch) {
 			if (meta == 2) {
 				if (motionZ > 0 && Math.abs(motionX) < 0.01) {
 					TileEntity tile2 = worldObj.getTileEntity(i, j, k + 1);
-					if (tile2 != null && tile2 instanceof TileTCRail) {
+					if (tile2 instanceof TileTCRail) {
 						((TileTCRail) tile2).setSwitchState(false, true);
 					}
 					return true;
@@ -972,7 +952,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			if (meta == 0) {
 				if (motionZ < 0 && Math.abs(motionX) < 0.01) {
 					TileEntity tile2 = worldObj.getTileEntity(i, j, k - 1);
-					if (tile2 != null && tile2 instanceof TileTCRail) {
+					if (tile2 instanceof TileTCRail) {
 						((TileTCRail) tile2).setSwitchState(false, true);
 					}
 					return true;
@@ -981,7 +961,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			if (meta == 1) {
 				if (Math.abs(motionZ) < 0.002 && motionX > 0) { //allow a little more off-axis motion
 					TileEntity tile2 = worldObj.getTileEntity(i + 1, j, k);
-					if (tile2 != null && tile2 instanceof TileTCRail) {
+					if (tile2 instanceof TileTCRail) {
 						((TileTCRail) tile2).setSwitchState(false, true);
 					}
 					return true;
@@ -990,7 +970,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			if (meta == 3) {
 				if (Math.abs(motionZ) < 0.01 && motionX < 0) {
 					TileEntity tile2 = worldObj.getTileEntity(i - 1, j, k);
-					if (tile2 != null && tile2 instanceof TileTCRail) {
+					if (tile2 instanceof TileTCRail) {
 						((TileTCRail) tile2).setSwitchState(false, true);
 					}
 					return true;
@@ -1051,5 +1031,29 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		this.minecartYaw = p_70056_7_;
 		this.minecartPitch = p_70056_8_;
 		this.turnProgress = p_70056_9_ + 2;
+	}
+
+	public void addVelocity(AbstractTrains host, double speed){
+		//cache rotation so it only has to be processed once per tick
+		if(velocity[4]==0 && velocity[5]==0){
+			Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,host.rotationYaw,0);
+			velocity[4]=vec.xCoord;
+			velocity[5]=vec.zCoord;
+		}
+
+		velocity[0]+=speed*velocity[4];
+		velocity[1]+=speed*velocity[5];
+	}
+
+	public void addLinking(AbstractTrains host, double speed){
+		//cache rotation so it only has to be processed once per tick
+		if(velocity[4]==0 && velocity[5]==0){
+			Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,host.rotationYaw,0);
+			velocity[4]=vec.xCoord;
+			velocity[5]=vec.zCoord;
+		}
+
+		velocity[2]+=speed*velocity[4];
+		velocity[3]+=speed*velocity[5];
 	}
 }

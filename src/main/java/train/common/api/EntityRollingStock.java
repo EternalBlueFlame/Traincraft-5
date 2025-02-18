@@ -18,19 +18,16 @@ import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.tracks.RailTools;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.TraincraftEntityHelper;
 import net.minecraft.entity.boss.EntityDragonPart;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -38,23 +35,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTankInfo;
 import train.client.core.handlers.SoundUpdaterRollingStock;
 import train.common.Traincraft;
 import train.common.adminbook.ServerLogger;
-import train.common.blocks.BlockTCRail;
-import train.common.blocks.BlockTCRailGag;
 import train.common.core.HandleOverheating;
 import train.common.core.handlers.*;
 import train.common.core.network.PacketRollingStockRotation;
@@ -67,10 +57,8 @@ import train.common.items.*;
 import train.common.library.BlockIDs;
 import train.common.library.GuiIDs;
 import train.common.tile.TileTCRail;
-import train.common.tile.TileTCRailGag;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import static train.common.core.util.TraincraftUtil.degrees;
@@ -172,9 +160,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     private boolean firstLoad = true;
     private boolean hasSpawnedBogie = false;
     public double posYFromServer=0;
-    private double derailSpeed = 0.46;
+    private boolean derail = false;
 
-    public TileTCRail lastTrack=null;
+    private int ticksSinceLastVelocityChange=0;
+
     public Vec3f[] cachedVectors = new Vec3f[]{
             new Vec3f(0,0,0),new Vec3f(0,0,0),new Vec3f(0,0,0),new Vec3f(0,0,0)};
 
@@ -204,6 +193,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     public void initRollingStock(World world) {
         dataWatcher.addObject(20, 0);//heat
         dataWatcher.addObject(14, 0);
+        dataWatcher.addObject(29, 0);
         dataWatcher.addObject(21, 0);
 
         preventEntitySpawning = true;
@@ -436,34 +426,34 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     public void unLink() {
         if (this.isAttached) {
-            if (this.cartLinked1 != null) {
-                if (cartLinked1.Link1 == this.uniqueID) {
-                    cartLinked1.Link1 = 0;
-                    cartLinked1.cartLinked1 = null;
-                    if (cartLinked1.consist != null) cartLinked1.consist.clear();
+            if (this.frontLink != null) {
+                if (frontLink.Link1 == this.uniqueID) {
+                    frontLink.Link1 = 0;
+                    frontLink.frontLink = null;
+                    if (frontLink.consist != null) frontLink.consist.clear();
 
-                } else if (cartLinked1.Link2 == this.uniqueID) {
-                    cartLinked1.Link2 = 0;
-                    cartLinked1.cartLinked2 = null;
-                    if (cartLinked1.consist != null) cartLinked1.consist.clear();
-
-                }
-            }
-            if (this.cartLinked2 != null) {
-                if (cartLinked2.Link1 == this.uniqueID) {
-                    cartLinked2.Link1 = 0;
-                    cartLinked2.cartLinked1 = null;
-                    if (cartLinked2.consist != null) cartLinked2.consist.clear();
-
-                } else if (cartLinked2.Link2 == this.uniqueID) {
-                    cartLinked2.Link2 = 0;
-                    cartLinked2.cartLinked2 = null;
-                    if (cartLinked2.consist != null) cartLinked2.consist.clear();
+                } else if (frontLink.Link2 == this.uniqueID) {
+                    frontLink.Link2 = 0;
+                    frontLink.backLink = null;
+                    if (frontLink.consist != null) frontLink.consist.clear();
 
                 }
             }
-            this.cartLinked1 = null;
-            this.cartLinked2 = null;
+            if (this.backLink != null) {
+                if (backLink.Link1 == this.uniqueID) {
+                    backLink.Link1 = 0;
+                    backLink.frontLink = null;
+                    if (backLink.consist != null) backLink.consist.clear();
+
+                } else if (backLink.Link2 == this.uniqueID) {
+                    backLink.Link2 = 0;
+                    backLink.backLink = null;
+                    if (backLink.consist != null) backLink.consist.clear();
+
+                }
+            }
+            this.frontLink = null;
+            this.backLink = null;
             this.isAttached = false;
         }
     }
@@ -476,9 +466,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             if (train.getTrains() != null) {
                 for (int i2 = 0; i2 < train.getTrains().size(); i2++) {
                     if ((train.getTrains().get(i2)) instanceof Locomotive) {
-                        train.getTrains().get(i2).cartLinked1 = null;
+                        train.getTrains().get(i2).frontLink = null;
                         train.getTrains().get(i2).Link1 = 0;
-                        train.getTrains().get(i2).cartLinked2 = null;
+                        train.getTrains().get(i2).backLink = null;
                         train.getTrains().get(i2).Link2 = 0;
                     }
                     if ((train.getTrains().get(i2)) != this) {
@@ -621,7 +611,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
          */
         if (ticksExisted % 20 != 0) return;
         if (allTrains.isEmpty()) {
-            if ((this.cartLinked1 != null || this.cartLinked2 != null)) {
+            if ((this.frontLink != null || this.backLink != null)) {
                 train = new TrainHandler(this);
             }
             /**
@@ -629,13 +619,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
              * isn't part of a train yet
              */
         } else if (train == null || train.getTrains().isEmpty()) {
-            if ((this.cartLinked1 != null || this.cartLinked2 != null)) {
-                if (this.cartLinked1 != null && cartLinked1.train != null && cartLinked1.train.getTrains() != null && !cartLinked1.train.getTrains().isEmpty()) {
-                    train = cartLinked1.train;
+            if ((this.frontLink != null || this.backLink != null)) {
+                if (this.frontLink != null && frontLink.train != null && frontLink.train.getTrains() != null && !frontLink.train.getTrains().isEmpty()) {
+                    train = frontLink.train;
                     return;
                 }
-                if (this.cartLinked2 != null && cartLinked2.train != null && cartLinked2.train.getTrains() != null && !cartLinked2.train.getTrains().isEmpty()) {
-                    train = cartLinked2.train;
+                if (this.backLink != null && backLink.train != null && backLink.train.getTrains() != null && !backLink.train.getTrains().isEmpty()) {
+                    train = backLink.train;
                     return;
                 }
 
@@ -844,19 +834,19 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
          * As entities can't be registered in nbttagcompound I had to setup this
          * system... When world loads, only the (double) Link1 and Link2 are
          * known. This method search for the entity with the ID corresponding to
-         * Link1 or Link2 When it finds it, (EntityRollingStock)cartLinked1 and
-         * cartLinked2 will be updated accordingly
+         * Link1 or Link2 When it finds it, (EntityRollingStock)frontLink and
+         * backLink will be updated accordingly
          */
-        if (addedToChunk && ((this.cartLinked1 == null && this.Link1 != 0) || (this.cartLinked2 == null && this.Link2 != 0))) {
+        if (addedToChunk && ((this.frontLink == null && this.Link1 != 0) || (this.backLink == null && this.Link2 != 0))) {
             list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(15, 15, 15));
 
             if (list != null && list.size() > 0) {
                 for (Object entity : list) {
                     if (entity instanceof EntityRollingStock) {
                         if (((EntityRollingStock) entity).uniqueID == this.Link1) {
-                            this.cartLinked1 = (EntityRollingStock) entity;
+                            this.frontLink = (EntityRollingStock) entity;
                         } else if (((EntityRollingStock) entity).uniqueID == this.Link2) {
-                            this.cartLinked2 = (EntityRollingStock) entity;
+                            this.backLink = (EntityRollingStock) entity;
                         }
                     }
                 }
@@ -915,7 +905,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         l = worldObj.getBlock(floor_posX, floor_posY, floor_posZ);
 
-        updateOnTrack(floor_posX, floor_posY, floor_posZ, l);
+        updatePosition();
 
         d6 = prevPosX - posX;
         d7 = prevPosZ - posZ;
@@ -1026,6 +1016,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (ConfigHandler.ENABLE_LOGGING && !worldObj.isRemote && ticksExisted % 120 == 0) {
             ServerLogger.writeWagonToFolder(this);
         }
+        if(!getWorld().isRemote) {
+            dataWatcher.updateObject(29, getVelocity());
+        }
     }
 
     private void positionSeats(){
@@ -1048,729 +1041,153 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
     }
 
-    boolean flag, flag1;
+    public void updatePosition(){
 
-    private void updateOnTrack(int floor_posX, int floor_posY, int floor_posZ, Block block) { //vanilla rails
-        if (canUseRail() && BlockRailBase.func_150051_a(block)) {
-            lastTrack=null;
+        //reposition bogies to be sure they are the right distance
+        if(!getWorld().isRemote) {
 
-            Vec3 vec3d = TraincraftUtil.func_514_g(posX, posY, posZ);
-            int blockMeta = ((BlockRailBase) block).getBasicRailMetadata(worldObj, this, floor_posX, floor_posY, floor_posZ);
-            meta = blockMeta;
-            posY = floor_posY;
-            flag = false;
-            flag1 = block == Blocks.golden_rail;
-            if (flag1) {
-                flag = worldObj.getBlockMetadata(floor_posX, floor_posY, floor_posZ) > 2;
-                if (blockMeta == 8) {
-                    blockMeta = 0;
-                } else if (blockMeta == 9) {
-                    blockMeta = 1;
+            //do scaled rail boosting but keep it capped to the max velocity of the rail
+            Block b = CommonUtil.getBlockAt(getWorld(),posX,posY,posZ);
+            if (b instanceof BlockRailBase){
+                derail= false;
+
+
+                if (b == Blocks.golden_rail) {
+                    if ((((BlockRailBase) b).isPowered()) &&
+                            //this part keeps it capped
+                            getVelocity() < maxBoost(b)) {
+                        float boost = CommonUtil.getMaxRailSpeed(getWorld(), (BlockRailBase) b, this, posX, posY, posZ) * 0.005f;
+                        appendMovement(Math.copySign(cachedVectors[2].yCoord,boost));
+                    }
                 }
-            }
-
-            if (block == Blocks.detector_rail) {
-                worldObj.setBlockMetadataWithNotify(floor_posX, floor_posY, floor_posZ, meta | 8, 3);
-                worldObj.notifyBlocksOfNeighborChange(floor_posX, floor_posY, floor_posZ, block);
-                worldObj.notifyBlocksOfNeighborChange(floor_posX, floor_posY - 1, floor_posZ, block);
-                worldObj.markBlockRangeForRenderUpdate(floor_posX, floor_posY, floor_posZ, floor_posX, floor_posY, floor_posZ);
-                worldObj.scheduleBlockUpdate(floor_posX, floor_posY, floor_posZ, block, block.tickRate(worldObj));
-            }
-
-            if (blockMeta >= 2 && blockMeta <= 5) {
-                posY = (floor_posY + 1);
-            }
-
-            adjustSlopeVelocities(blockMeta);
-
-
-            int[][] metaMatrix = matrix[blockMeta];
-            double d9 = metaMatrix[1][0] - metaMatrix[0][0];
-            double d10 = metaMatrix[1][2] - metaMatrix[0][2];
-            double d11 = Math.sqrt(d9 * d9 + d10 * d10); //something normalized
-            if (motionX * d9 + motionZ * d10 < 0.0D) {
-                d9 = -d9;
-                d10 = -d10;
-            }
-            double motionNormalized = Math.sqrt(motionX * motionX + motionZ * motionZ);
-            motionX = (motionNormalized * d9) / d11;
-            motionZ = (motionNormalized * d10) / d11;
-            if (flag1 && !flag) {
-                if (Math.sqrt(motionX * motionX + motionZ * motionZ) < 0.029999999999999999D) {
-                    motionX = 0.0D;
-                    motionY = 0.0D;
-                    motionZ = 0.0D;
-                } else {
-                    motionX *= 0.5D;
-                    motionY *= 0.0D;
-                    motionZ *= 0.5D;
-                }
-            }
-            double d17;
-            double d18 = floor_posX + 0.5D + metaMatrix[0][0] * 0.5D;
-            double d19 = floor_posZ + 0.5D + metaMatrix[0][2] * 0.5D;
-            double d20 = floor_posX + 0.5D + metaMatrix[1][0] * 0.5D;
-            double d21 = floor_posZ + 0.5D + metaMatrix[1][2] * 0.5D;
-            d9 = d20 - d18;
-            d10 = d21 - d19;
-            if (d9 == 0.0D) {
-                posX = floor_posX + 0.5D;
-                d17 = posZ - floor_posZ;
-            } else if (d10 == 0.0D) {
-                posZ = floor_posZ + 0.5D;
-                d17 = posX - floor_posX;
             } else {
-                double d22 = posX - d18;
-                double d24 = posZ - d19;
-                d17 = (d22 * d9 + d24 * d10) * 2D;
-                //double derailSpeed = 0;//0.46;
+                //set the derail state based on whether or not there's a valid rail block below.
+                //later this will add more inherent support for 3rd party mods like ZnD, right now it's just vanilla/RC/TiM
+                derail= !CommonUtil.isRailBlockAt(getWorld(),posX,posY,posZ);
             }
-            if (bogieFront != null) {
-                if (!bogieFront.isOnRail()) {
-                    derailSpeed = 0;
-                    this.unLink();
-                }
-            }
-            /**
-             * Handles derail
-             */
-            if ((this instanceof Locomotive || this instanceof ISecondBogie) && motionNormalized > derailSpeed && blockMeta >= 6) {
-                if (d9 > 0 && d10 < 0) {
-                    d10 = 0;
-                    d9 += 2;
-                } else if (d9 < 0 && d10 > 0) {
-                    d9 = 0;
-                    d10 += 2;
-                } else if (d10 < 0 && d9 < 0) {
-                    d10 -= 2;
-                    d9 = 0;
-                } else if (d9 > 0 && d10 > 0) {
-                    d10 += 2;
-                    d9 = 0;
-                }
-                if (FMLCommonHandler.instance().getMinecraftServerInstance() != null &&
-                        this.seats != null && this.seats.size()>0 && this.seats.get(0).getPassenger() != null && this.seats.get(0).getPassenger() instanceof EntityPlayer) {
-                    FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new
-                            ChatComponentText(((EntityPlayer) this.seats.get(0).getPassenger()).getDisplayName() + "derailed"
-                            + this.trainOwner + "'s locomotive"));
+
+
+            //handle yaw changes for derail
+            if(derail) {
+                if(frontLink!=null && backLink!=null &&
+                        frontLink instanceof EntityRollingStock &&
+                        backLink instanceof EntityRollingStock){
+                    rotationYaw=CommonUtil.atan2degreesf(
+                            frontLink.posZ - backLink.posZ,
+                            frontLink.posX - backLink.posX);
+                } else if (frontLink!=null && frontLink instanceof EntityRollingStock){
+                    rotationYaw=CommonUtil.atan2degreesf(
+                            frontLink.posZ - posZ,
+                            frontLink.posX - posX);
+                } else if (backLink!=null && backLink instanceof EntityRollingStock){
+                    rotationYaw=CommonUtil.atan2degreesf(
+                            posZ - backLink.posZ,
+                            posX - backLink.posX);
                 }
             }
 
 
-            posX = d18 + d9 * d17;
-            posZ = d19 + d10 * d17;
-            setPosition(posX, posY + yOffset + 0.35, posZ);
+            //actually move
+            finalMove();
+            //only update velocity if we've moved to any significance.
+            if(Math.abs(posX-prevPosX)>0.0625 || Math.abs(posZ-prevPosZ)>0.0625) {
+                motionX = (posX - prevPosX)/ticksSinceLastVelocityChange;
+                motionZ = (posZ - prevPosZ)/ticksSinceLastVelocityChange;
+                prevPosX = posX;
+                prevPosZ = posZ;
 
-            moveMinecartOnRail(floor_posX, floor_posY, floor_posZ, 0.0D);
-
-            if (metaMatrix[0][1] != 0 && MathHelper.floor_double(posX) - floor_posX == metaMatrix[0][0] &&
-                    MathHelper.floor_double(posZ) - floor_posZ == metaMatrix[0][2]) {
-                setPosition(posX, posY + metaMatrix[0][1], posZ);
-            } else if (metaMatrix[1][1] != 0 && MathHelper.floor_double(posX) - floor_posX == metaMatrix[1][0] &&
-                    MathHelper.floor_double(posZ) - floor_posZ == metaMatrix[1][2]) {
-                setPosition(posX, posY + metaMatrix[1][1], posZ);
+                ticksSinceLastVelocityChange=1;
+            } else {
+                motionX = (posX - prevPosX)/ticksSinceLastVelocityChange;
+                motionZ = (posZ - prevPosZ)/ticksSinceLastVelocityChange;
+                ticksSinceLastVelocityChange++;
             }
-
-            applyDragAndPushForces();
-
-            Vec3 vec3d1 = TraincraftUtil.func_514_g(posX, posY, posZ);
-            double d28 = (vec3d.yCoord - vec3d1.yCoord) * 0.050000000000000003D;
-            if (this instanceof Locomotive) d28 = 0;
-            double d14 = Math.sqrt(motionX * motionX + motionZ * motionZ);
-            if (d14 > 0.0D) {
-                motionX = (motionX / d14) * (d14 + d28);
-                motionZ = (motionZ / d14) * (d14 + d28);
-            }
-            setPosition(posX, posY + yOffset - 0.8d, posZ);
-            int entity_floor_posX = MathHelper.floor_double(posX);
-            int entity_floor_posZ = MathHelper.floor_double(posZ);
-            if (entity_floor_posX != floor_posX || entity_floor_posZ != floor_posZ) {
-                double d15 = Math.sqrt(motionX * motionX + motionZ * motionZ);
-                motionX = d15 * (entity_floor_posX - floor_posX);
-                motionZ = d15 * (entity_floor_posZ - floor_posZ);
-            }
-
-            ((BlockRailBase) block).onMinecartPass(worldObj, this, floor_posX, floor_posY, floor_posZ);
-
-
-            if (flag) {
-                double d31 = Math.sqrt(motionX * motionX + motionZ * motionZ);
-                if (d31 > 0.01D) {
-                    motionX += (motionX / d31) * 0.059999999999999998D;
-                    motionZ += (motionZ / d31) * 0.059999999999999998D;
-                } else if (blockMeta == 1) {
-                    if (worldObj.isBlockNormalCubeDefault(floor_posX - 1, floor_posY, floor_posZ, false)) {
-                        motionX = 0.02D;
-                    } else if (worldObj.isBlockNormalCubeDefault(floor_posX + 1, floor_posY, floor_posZ, false)) {
-                        motionX = -0.02D;
-                    }
-                } else if (blockMeta == 0) {
-                    if (worldObj.isBlockNormalCubeDefault(floor_posX, floor_posY, floor_posZ - 1, false)) {
-                        motionZ = 0.02D;
-                    } else if (worldObj.isBlockNormalCubeDefault(floor_posX, floor_posY, floor_posZ + 1, false)) {
-                        motionZ = -0.02D;
-                    }
-                }
-            }
-        } else if (block == BlockIDs.tcRail.block) {
-            limitSpeedOnTCRail();
-            lastTrack = (TileTCRail) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
-
-            if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
-                moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
-            } else if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState())) {
-                if (bogieFront != null && !bogieFront.isOnRail()) {
-                    derailSpeed = 0;
-                }
-                if (bogieBack != null && !bogieBack.isOnRail()) {
-                    derailSpeed = 0;
-                }
-                if (derailSpeed == 0) {
-                    this.unLink();
-                    moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
-                } else {
-
-                    if (shouldIgnoreSwitch(lastTrack, floor_posX, floor_posY, floor_posZ, lastTrack.getBlockMetadata())) {
-
-                        moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
-                    } else {
-                        if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState()))
-                            moveOnTC90TurnRail(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz);
-                    }
-                    // shouldIgnoreSwitch(tile, i, j, k, meta);
-                    // if (ItemTCRail.isTCTurnTrack(tile)) moveOnTC90TurnRail(i, j, k, r, cx, cy,
-                    // cz, tile.getType(), meta);
-                }
-            } else if (TCRailTypes.isSlopeTrack(lastTrack)) {
-                moveOnTCSlope(floor_posY, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, lastTrack.getBlockMetadata());
-            } else if (TCRailTypes.isCrossingTrack(lastTrack)) {
-                moveOnTCTwoWaysCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
-            } else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
-                moveOnTCDiamondCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
-            } else if (TCRailTypes.isDiagonalTrack(lastTrack)) {
-                moveOnTCDiagonal(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
-            } else if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
-                moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), 1, lastTrack.slopeAngle);
-            }
-
-        } else if (block == BlockIDs.tcRailGag.block) {
-            limitSpeedOnTCRail();
-
-            if(lastTrack==null || !CommonUtil.getTiles(worldObj,floor_posX, floor_posY, floor_posZ).contains(lastTrack)){
-                TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(floor_posX, floor_posY, floor_posZ);
-                if(tileGag.originX.size()>0 && worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) != null) {
-                    lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
-                }
-            }
-            if (TCRailTypes.isStraightTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && !lastTrack.getSwitchState())) {
-                moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
-            } else if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState())) {
-                if (bogieFront != null && !bogieFront.isOnRail()) {
-                    derailSpeed = 0;
-                }
-                if (bogieBack != null && !bogieBack.isOnRail()) {
-                    derailSpeed = 0;
-                }
-                if (derailSpeed == 0) {
-                    this.unLink();
-                    moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
-                } else {
-
-                    if (shouldIgnoreSwitch(lastTrack, floor_posX, floor_posY, floor_posZ, lastTrack.getBlockMetadata())) {
-
-                        moveOnTCStraight(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
-                    } else {
-                        if (TCRailTypes.isTurnTrack(lastTrack) || (TCRailTypes.isSwitchTrack(lastTrack) && lastTrack.getSwitchState()))
-                            moveOnTC90TurnRail(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz);
-                    }
-                    // shouldIgnoreSwitch(tile, i, j, k, meta);
-                    // if (ItemTCRail.isTCTurnTrack(tile)) moveOnTC90TurnRail(i, j, k, r, cx, cy,
-                    // cz, tile.getType(), meta);
-                }
-            } else if (TCRailTypes.isSlopeTrack(lastTrack)) {
-                moveOnTCSlope(floor_posY, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, lastTrack.getBlockMetadata());
-            } else if (TCRailTypes.isCrossingTrack(lastTrack)) {
-                moveOnTCTwoWaysCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
-            } else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
-                moveOnTCDiamondCrossing(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.yCoord, lastTrack.zCoord, lastTrack.getBlockMetadata());
-            } else if (TCRailTypes.isDiagonalTrack(lastTrack)) {
-                moveOnTCDiagonal(floor_posX, floor_posY, floor_posZ, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
-            } else if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
-                moveOnTCCurvedSlope(floor_posX, floor_posY, floor_posZ, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), 1, lastTrack.slopeAngle);
-            }
-        } else {
-            lastTrack=null;
-/*            Vec3f closest = null;  this is test/in-dev anti-derailment code.
-            double dist = Double.MAX_VALUE;
-            for(int a = -1; a<2;a++) {
-                for(int c = -1;c<2;c++) {
-                    if (isRailBlockAt(worldObj, floor_posX+a, floor_posY + 1, floor_posZ+c) || worldObj.getBlock(floor_posX+a, floor_posY + 1, floor_posZ+c) == BlockIDs.tcRail.block || worldObj.getBlock(floor_posX+a, floor_posY + 1, floor_posZ+c) == BlockIDs.tcRailGag.block) {
-                        if (closest == null) {
-                            closest = new Vec3f(floor_posX+a,floor_posY+1,floor_posZ+c);
-                            dist = Math.sqrt(Math.pow(closest.xCoord-posX,2)+Math.pow(closest.zCoord-posZ,2));
-                        } else {
-                            double tdist = Math.sqrt(Math.pow((floor_posX+a)-posX,2)+Math.pow((floor_posZ+c)-posZ,2));
-                            if (tdist < dist) {
-                                dist = tdist;
-                            }
-                        }
-                    }
-                }
-            }
-            if (closest != null) {
-                this.setPosition( closest.xCoord, closest.yCoord, closest.zCoord);
-            } else {*/
-            moveMinecartOffRail(floor_posX, floor_posY, floor_posZ);
-            //}
-            super.onUpdate();
-        }
-
-    }
-
-    private boolean shouldIgnoreSwitch(TileTCRail tile, int i, int j, int k, int meta) {
-        if (tile != null && TCRailTypes.isTurnTrack(tile) && tile.canTypeBeModifiedBySwitch) {
-
-            /* Handles reverse straight movement of a cart on a switch that happened to be turned on*/
-            if (meta == 2) {
-                if (motionZ > 0 && Math.abs(motionX) < 0.01) {
-                    TileEntity tile2 = worldObj.getTileEntity(i, j, k + 1);
-                    if (tile2 instanceof TileTCRail) {
-                        ((TileTCRail) tile2).setSwitchState(false, true);}
-                    return true;
-                }
-            } else if (meta == 0) {
-                if (motionZ < 0 && Math.abs(motionX) < 0.01) {
-                    TileEntity tile2 = worldObj.getTileEntity(i, j, k - 1);
-                    if (tile2 instanceof TileTCRail) {
-                        ((TileTCRail) tile2).setSwitchState(false, true);
-                    }
-                    return true;
-                }
-            } else if (meta == 1) {
-                if (Math.abs(motionZ) < 0.01 && motionX > 0) {
-                    TileEntity tile2 = worldObj.getTileEntity(i + 1, j, k);
-                    if (tile2 instanceof TileTCRail) {
-                        ((TileTCRail) tile2).setSwitchState(false, true);
-                    }
-                    return true;
-                }
-            } else if (meta == 3) {
-                if (Math.abs(motionZ) < 0.01 && motionX < 0) {
-                    TileEntity tile2 = worldObj.getTileEntity(i - 1, j, k);
-                    if (tile2 instanceof TileTCRail) {
-                        ((TileTCRail) tile2).setSwitchState(false, true);
-                    }
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    private void moveOnTCDiagonal(int i, int j, int k, double cx, double cz, int meta, double length) {
-
-        double Y_OFFSET = 0.2;
-        double X_OFFSET = 0.5;
-        double Z_OFFSET = 1.5;
-        posY = j + Y_OFFSET;
-        if (length == 0) {
-            length = 1;
-        }
-        double exitX = 0;
-        double exitZ = 0;
-        double directionX;
-        double directionZ;
-        double norm = Math.sqrt(motionX * motionX + motionZ * motionZ);
-        double distanceNorm;
-
-        if (meta == 6) {
-            exitX = (motionX > 0) ? cx + length + X_OFFSET : cx - X_OFFSET;
-            exitZ = (motionX > 0) ? cz - length + X_OFFSET : cz + Z_OFFSET;
-        } else if (meta == 4) {
-            exitX = (motionX > 0) ? cx + Z_OFFSET : cx - (length - X_OFFSET);
-            exitZ = (motionX > 0) ? cz - X_OFFSET : cz + (length + X_OFFSET);
-        } else if (meta == 5) {
-            exitX = (motionX > 0) ? cx + Z_OFFSET : cx - (length + X_OFFSET);
-            exitZ = (motionX > 0) ? cz + Z_OFFSET : cz - (length + X_OFFSET);
-        } else if (meta == 7) {
-            exitX = (motionX > 0) ? cx + (length + X_OFFSET) : cx - X_OFFSET;
-            exitZ = (motionX > 0) ? cz + (length + X_OFFSET) : cz - X_OFFSET;
-        }
-
-        directionX = exitX - posX;
-        directionZ = exitZ - posZ;
-        distanceNorm = Math.sqrt(directionX * directionX + directionZ * directionZ);
-        motionX = (directionX / distanceNorm) * norm;
-        motionZ = (directionZ / distanceNorm) * norm;
-        this.boundingBox.offset(Math.copySign(motionX, this.motionX), 0, Math.copySign(motionZ, this.motionZ));
-
-        this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
-        this.posY = this.boundingBox.minY + (double) this.yOffset;
-        this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
-
-    }
-
-
-    private void moveOnTCCurvedSlope(int floor_X, int floor_Y, int floor_Z, double tileRadius, double circleX, double circleZ, int tileX, int tileZ, int meta, double slopeHeight, double slopeAngle) {
-        double newTileX = tileX;
-        double newTileZ = tileZ;
-        if (meta == 2) {
-            newTileZ += 1;
-            newTileX += 0.5;
-        }
-        if (meta == 0) {
-            newTileX += 0.5;
-        }
-        if (meta == 1) {
-            newTileX += 1;
-            newTileZ += 0.5;
-        }
-        if (meta == 3) {
-            newTileZ += 0.5;
-        }
-        double circlePosX = posX - circleX;
-        double circlePosZ = posZ - circleZ;
-
-        double tilePositionNormalized = Math.sqrt(Math.pow((newTileX - posX),2) + Math.pow((newTileZ - posZ),2));
-
-        double circlePositionNormalized = Math.sqrt(circlePosX * circlePosX + circlePosZ * circlePosZ);
-        double velocityNormalized = Math.sqrt(motionX * motionX + motionZ * motionZ);
-
-        double normCirclePosX = circlePosX / circlePositionNormalized; //u
-        double normCirclePosZ = circlePosZ / circlePositionNormalized; //v
-
-        double negVelNormX = -normCirclePosZ * velocityNormalized;//-v
-        double velNormZ = normCirclePosX * velocityNormalized;//u
-
-        double positionX = posX + motionX;
-        double positionZ = posZ + motionZ;
-
-        double positionXOffsetByCircle = positionX - circleX;
-        double positionZOffsetByCircle = positionZ - circleZ;
-
-        double offsetPositionNormalized = Math.sqrt((positionXOffsetByCircle * positionXOffsetByCircle) + (positionZOffsetByCircle * positionZOffsetByCircle));
-
-        double offsetPositionNormX = positionXOffsetByCircle / offsetPositionNormalized;
-        double offsetPositionNormZ = positionZOffsetByCircle / offsetPositionNormalized;
-
-        double posX3 = circleX + (offsetPositionNormX * tileRadius);
-        double posZ3 = circleZ + (offsetPositionNormZ * tileRadius);
-
-        double signX = posX3 - posX;
-        double signZ = posZ3 - posZ;
-
-        negVelNormX = Math.copySign(negVelNormX, signX);
-        velNormZ = Math.copySign(velNormZ, signZ);
-
-        double correctedPosX = circleX + ((circlePosX / circlePositionNormalized) * tileRadius);
-        double correctedPosZ = circleZ + ((circlePosZ / circlePositionNormalized) * tileRadius);
-        double newYPos = Math.abs(floor_Y + Math.min(1, (slopeAngle * Math.abs(tilePositionNormalized))) + yOffset + 0.34f);
-        setPosition(correctedPosX, newYPos, correctedPosZ);
-
-        /* slope speed-up. it works* but not in a desired fashion. will come back to it.
-        double normalizedSlopeVelocity = Math.sqrt((negVelNormX*negVelNormX)+(velNormZ*velNormZ));
-        normalizedSlopeVelocity = getSlopeAdjustedSpeed(normalizedSlopeVelocity, slopeAngle);
-        double slopeVelopcityX = negVelNormX / normalizedSlopeVelocity;
-        double slopeVelopcityZ = velNormZ / normalizedSlopeVelocity;
-        motionX = Math.copySign(slopeVelopcityX, motionX);
-        motionZ = Math.copySign(slopeVelopcityZ, motionZ);
-        System.out.println(slopeAngle);
-        */
-
-        moveEntity(negVelNormX, 0, velNormZ);
-    }
-
-    private void moveOnTCStraight(int i, int j, int k, double cx, double cz, int meta) {
-        posY = j + 0.2;
-        if (meta == 2 || meta == 0) {
-            double norm = Math.sqrt(motionX * motionX + motionZ * motionZ);
-
-            setPosition(cx + 0.5, posY + yOffset, posZ);
-
-            motionX = 0;
-            motionZ = Math.copySign(norm, motionZ);
-            this.boundingBox.offset(0, 0, Math.copySign(norm, this.motionZ));
-
-            List boxes = worldObj.getCollidingBoundingBoxes(this, boundingBox);
-            this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
-            this.posY = this.boundingBox.minY + (double) this.yOffset;
-            this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
-
-        } else if (meta == 1 || meta == 3) {
-
-            setPosition(posX, posY + yOffset, cz + 0.5);
-            //setPosition(posX, posY + yOffset, posZ);
-
-            motionX = Math.copySign(Math.sqrt(motionX * motionX + motionZ * motionZ), motionX);
-            motionZ = 0;
-            this.boundingBox.offset(motionX, 0, 0);
-
-            this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
-            this.posY = this.boundingBox.minY + (double) this.yOffset;
-            this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
-
-
         }
     }
 
-    private int numCarsOnSlope() {
-        int count = 0;
-        if (train == null) {
-            return 1;
-        }
-        for(AbstractTrains entity: train.getTrains()) {
-            int floorX = (int) Math.floor(entity.posX);
-            int floorY = (int) Math.floor(entity.posY);
-            int floorZ = (int) Math.floor(entity.posZ);
-            Block block = worldObj.getBlock(floorX, floorY, floorZ);
-            TileTCRail tile = null;
-            if (block instanceof BlockAir) {
-                floorY--;
-                block = worldObj.getBlock(floorX, floorY, floorZ);
-            }
-            if (block instanceof BlockTCRail) {
-                tile = (TileTCRail) worldObj.getTileEntity(floorX, floorY, floorZ);
-            } else if (block instanceof BlockTCRailGag) {
-                TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(floorX, floorY, floorZ);
-                if (worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) instanceof TileTCRail) {
-                    tile = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
-                }
-            }
-            if (tile != null && tile.slopeAngle != 0) {
-                count++;
-            }
-        }
-        return count;
-    }
+    public void appendMovement(double velocity){
 
-    private int numCarsTotal() {
-        if (train == null) { //train is null when there is nothing coupled to the stock
-            return 2;
-        }
-        return train.getTrains().size();
-    }
-
-    private boolean hasLocomotive() {
-        if (train == null) { //train is null when there is nothing coupled to the stock
-            return false;
-        }
-        return (train.getTrainPower() != 0);
-    }
-
-    private void moveOnTCSlope(int posY, double posX, double posZ, double slopeAngle, double slopeHeight, int meta) {
-        //posY = j + 2.5;
-
-        if (meta == 2) {
-            posZ ++;
-        }
-        if (meta == 1) {
-            posX ++;
-        }
-        double normalizedSpeed = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
-
-        if (meta == 2 || meta == 0) {
-            this.setPosition(posX + 0.5D, Math.abs(posY + (Math.tan(slopeAngle * Math.abs(posZ - this.posZ))) + this.yOffset + 0.3), this.posZ);
-            this.boundingBox.offset(0, 0, Math.copySign(normalizedSpeed, this.motionZ));
-        }
-        else if (meta == 1 || meta == 3) {
-            this.setPosition(this.posX, (posY + (Math.tan(slopeAngle * Math.abs(posX - this.posX))) + this.yOffset + 0.3), posZ + 0.5D);
-            this.boundingBox.offset(Math.copySign(normalizedSpeed, this.motionX), 0, 0);
-        } else {
+        //the logic gets stupid if it's not sorted from one end or another.
+        //todo: this is a trash fix, it would be better for the list to be reliably sorted
+        if(frontLink!=null && backLink!=null){
             return;
         }
-        this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
-        this.posY = this.boundingBox.minY + (double) this.yOffset;
-        this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
-        normalizedSpeed = getSlopeAdjustedSpeed(normalizedSpeed, slopeAngle);
-        if (meta == 2 || meta == 0) {
-            this.motionX = 0.0D;
-            this.motionY = 0.0D;
-            this.motionZ = Math.copySign(normalizedSpeed, this.motionZ);
+        EntityRollingStock last = this;
+        for(AbstractTrains t:consist) {
+            if(t.backLink!=null && last.backLink!=null
+                    && last==t.backLink
+                    && t==last.backLink){
+                t.bogieBack.addVelocity(t, -velocity);
+                t.bogieFront.addVelocity(t, -velocity);
+            } else if(t.frontLink!=null && last.frontLink!=null
+                    && last==t.frontLink
+                    && t==last.frontLink){
+                t.bogieBack.addVelocity(t, -velocity);
+                t.bogieFront.addVelocity(t, -velocity);
+            } else {
+                t.bogieBack.addVelocity(t, velocity);
+                t.bogieFront.addVelocity(t, velocity);
+            }
+        }
+    }
+    public void addLinkingMove(double velocity){
+        bogieBack.addLinking(this, velocity);
+        bogieFront.addLinking(this, velocity);
+    }
+
+    /**
+     * if X or Z is null, the bogie's existing motion velocity will be used
+     */
+    public void finalMove(){
+        cachedVectors[1] = new Vec3f(-rotationPoints()[0], 0, 0).rotatePoint(0, rotationYaw, 0)
+                .addVector(bogieBack.posX,bogieBack.posY,bogieBack.posZ);
+        setPosition(cachedVectors[1].xCoord, cachedVectors[1].yCoord,cachedVectors[1].zCoord);
+
+        bogieFront.moveBogie();
+        bogieBack.moveBogie();
+        //reset the y coord so they will re-calculate the yaw
+        if(hasDrag()) {
+            applyDrag();
+        }
+        cachedVectors[2].yCoord=0;
+        //update rotation
+        setRotation((CommonUtil.atan2degreesf(
+                bogieBack.posZ - bogieFront.posZ,
+                bogieBack.posX - bogieFront.posX)),
+                CommonUtil.calculatePitch(bogieFront.posY + bogieFront.yOffset, bogieBack.posY + bogieBack.yOffset, Math.abs(rotationPoints()[0]) + Math.abs(rotationPoints()[1])));
+
+        //reset the vector when we're done so it wont break trains.
+        cachedVectors[1]= new Vec3f(0,0,0);
+        //update the collision handler's positions
+        if(collisionHandler==null) {
+            collisionHandler = new EntityHitbox(this);
+            collisionHandler.position(posX, posY, posZ, rotationPitch, rotationYaw);
         } else {
-            this.motionX = Math.copySign(normalizedSpeed, this.motionX);
-            this.motionY = 0.0D;
-            this.motionZ = 0.0D;
+            collisionHandler.position(posX, posY, posZ, rotationPitch, rotationYaw);
         }
     }
 
-    public double getSlopeAdjustedSpeed(double normalizedSpeed, double slopeAngle) {
-        if (ConfigHandler.ENABLE_SLOPE_ACCELERATION) {
-            if (this instanceof Locomotive && !((Locomotive) this).canBePulled) { //make this speedup only happen twice a second
-                if (this.ticksExisted % 10 == 0) {
-                    int carsPulled = numCarsTotal();
-                    carsPulled--; //locomotive counting as two entities?
-                    int carsOnSlope = numCarsOnSlope();
-                    if ((this.posY - this.prevPosY < 0)) {
-                        normalizedSpeed *= (((double) carsOnSlope / carsPulled) * (slopeAngle)) + getDragAir();
-                    } else if ((this.posY - this.prevPosY) > 0.013) {//0.013 to account for the jank that happens when over slopes back to back.
-                        normalizedSpeed *= 1 - (((double) carsOnSlope / carsPulled) * slopeAngle);
-                        if (normalizedSpeed - 0.001 <= 0) {
-                            normalizedSpeed = -0.001;
-                        }
-                    }
-                }
-            } else if (!hasLocomotive()) { //traincars. is a bit jumpy but doesn't seem to derail
-                if ((this.posY - this.prevPosY) < 0) {
-                    if (slopeAngle < 0.05) {
-                        normalizedSpeed *= getDragAir() + (slopeAngle * 2.7);
 
-                    } else {
-                        normalizedSpeed *= getDragAir() + (slopeAngle * 2);
-                    }
-                } else if ((this.posY - this.prevPosY) > 0.013) {
-                    normalizedSpeed *= (0.98 - (slopeAngle));
-                }
+    public boolean hasDrag(){
+        for(AbstractTrains t:consist){
+            if(t instanceof Locomotive && ((Locomotive) t).backwardPressed || ((Locomotive) t).forwardPressed){
+                return false;
             }
         }
-        return normalizedSpeed;
+        return true;
     }
 
-    protected void moveOnTC90TurnRail(int i, int j, int k, double r, double cx, double cz) {
-        posY = j + 0.2;
-        double cpx = posX - cx;
-        double cpz = posZ - cz;
-
-        double cp_norm = Math.sqrt(cpx * cpx + cpz * cpz);
-        double vnorm = Math.sqrt(motionX * motionX + motionZ * motionZ);
-
-        double norm_cpx = cpx / cp_norm; //u
-        double norm_cpz = cpz / cp_norm; //v
-
-        double vx2 = -norm_cpz * vnorm;//-v
-        double vz2 = norm_cpx * vnorm;//u
-
-        double px2 = posX + motionX;
-        double pz2 = posZ + motionZ;
-
-        double px2_cx = px2 - cx;
-        double pz2_cz = pz2 - cz;
-
-        double p2_c_norm = Math.sqrt((px2_cx * px2_cx) + (pz2_cz * pz2_cz));
-
-        double px2_cx_norm = px2_cx / p2_c_norm;
-        double pz2_cz_norm = pz2_cz / p2_c_norm;
-
-        double px3 = cx + (px2_cx_norm * r);
-        double pz3 = cz + (pz2_cz_norm * r);
-
-        double signX = px3 - posX;
-        double signZ = pz3 - posZ;
-
-        vx2 = Math.copySign(vx2, signX);
-        vz2 = Math.copySign(vz2, signZ);
-
-        double p_corr_x = cx + ((cpx / cp_norm) * r);
-        double p_corr_z = cz + ((cpz / cp_norm) * r);
-
-        setPosition(p_corr_x, posY + yOffset, p_corr_z);
-        moveEntity(vx2, 0.0D, vz2);
-
-        motionX = vx2;
-        motionZ = vz2;
-
+    public float getVelocity(){
+        return getWorld().isRemote?dataWatcher.getWatchableObjectFloat(29):
+                (float)(Math.abs(motionX)+Math.abs(motionZ));
     }
-
-    protected void moveOnTCTwoWaysCrossing(int i, int j, int k, double cx, double cy, double cz, int meta) {
-        posY = j + 0.2;
-        if (!(this instanceof Locomotive)) {
-            int l = MathHelper.floor_double(serverRealRotation * 4.0F / 360.0F + 0.5D) & 3;
-            if (l == 2 || l == 0) {
-                moveEntity(motionX, 0.0D, 0.0D);
-            } else if (l == 1 || l == 3) {
-                moveEntity(0.0D, 0.0D, motionZ);
-            }
-        } else {
-            int l = MathHelper.floor_double(rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-            if (l == 2 || l == 0) {
-                moveEntity(motionX, 0.0D, 0.0D);
-            } else if (l == 1 || l == 3) {
-                moveEntity(0.0D, 0.0D, motionZ);
-            }
-            //moveEntity(motionX, 0.0D, motionZ);
+    double maxBoost(Block booster){
+        if(this.transportTopSpeed()>0){
+            return Math.min(transportTopSpeed(),
+                    CommonUtil.getMaxRailSpeed(getWorld(), (BlockRailBase) booster,this, posX,posY,posZ));
         }
+        return CommonUtil.getMaxRailSpeed(getWorld(), (BlockRailBase) booster,this, posX,posY,posZ);
     }
-
-    protected void moveOnTCDiamondCrossing(int i, int j, int k, double cx, double cy, double cz, int meta) {
-
-        int l;
-        if ((this.bogieFront == null)) {
-            l = MathHelper.floor_double(serverRealRotation * 8.0F / 360.0F + 0.5) & 7;
-        } else {
-            l = MathHelper.floor_double(rotationYaw * 8.0F / 360.0F + 0.5) & 7;
-
-        }
-        if (l == 0 || l == 4) {
-            moveEntity(motionX, 0.0D, 0.0D);
-        } else if (l == 2 || l == 6) {
-            moveEntity(0.0D, 0.0D, motionZ);
-        } else if (l == 1) {
-            moveOnTCDiagonal(i, j, k, cx, cz, 5, 1);
-        } else if (l == 3) {
-            moveOnTCDiagonal(i, j, k, cx, cz, 6, 1);
-        } else if (l == 5) {
-            moveOnTCDiagonal(i, j, k, cx, cz, 7, 1);
-        } else if (l == 7) {
-            moveOnTCDiagonal(i, j, k, cx, cz, 4, 1);
-        }
-    }
-    public void limitSpeedOnTCRail() {
-        railMaxSpeed = 3;
-        maxSpeed = Math.min(railMaxSpeed, getMaxCartSpeedOnRail());
-        maxSpeed = SpeedHandler.handleSpeed(railMaxSpeed, maxSpeed, this);
-
-        if (this.speedLimiter != 0 && speedWasSet) {
-            //maxSpeed *= this.speedLimiter;
-            adjustSpeed(maxSpeed, speedLimiter);
-        }
-        motionX *= 0.9D;
-        motionZ *= 0.9D;
-
-        if (motionX < -maxSpeed) {
-            motionX = -maxSpeed;
-        }
-        if (motionX > maxSpeed) {
-            motionX = maxSpeed;
-        }
-        if (motionZ < -maxSpeed) {
-            motionZ = -maxSpeed;
-        }
-        if (motionZ > maxSpeed) {
-            motionZ = maxSpeed;
-        }
-    }
-
-    protected void moveMinecartOffRail(int i, int j, int k) {
-        motionY -= 0.039999999105930328D;
-        double d2 = getMaxCartSpeedOnRail();
-        if (!onGround) {
-            d2 = getMaxSpeedAirLateral();
-        }
-        if (motionX < -d2) motionX = -d2;
-        if (motionX > d2) motionX = d2;
-        if (motionZ < -d2) motionZ = -d2;
-        if (motionZ > d2) motionZ = d2;
-        double moveY = motionY;
-        if (getMaxSpeedAirVertical() > 0 && motionY > getMaxSpeedAirVertical()) {
-            moveY = getMaxSpeedAirVertical();
-            if (Math.abs(motionX) < 0.3f && Math.abs(motionZ) < 0.3f) {
-                moveY = 0.15f;
-                motionY = moveY;
-            }
-        }
-        if (onGround) {
-            motionX *= 0.5D;
-            motionY *= 0.5D;
-            motionZ *= 0.5D;
-        }
-        moveEntity(motionX, moveY, motionZ);
-        if (!onGround) {
-            motionX *= getDragAir();
-            motionY *= getDragAir();
-            motionZ *= getDragAir();
-        }
-    }
-
-
     @Override
     protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
         super.writeEntityToNBT(nbttagcompound);
@@ -1957,18 +1374,18 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
         if (par1Entity instanceof EntityBogie) {
             if (((EntityBogie) par1Entity).entityMainTrainID == this.uniqueID) return;
-            if(cartLinked1!=null) {
-                if (((EntityBogie) par1Entity).entityMainTrainID == cartLinked1.uniqueID) return;
+            if(frontLink !=null) {
+                if (((EntityBogie) par1Entity).entityMainTrainID == frontLink.uniqueID) return;
             }
-            if(cartLinked2!=null) {
-                if (((EntityBogie) par1Entity).entityMainTrainID == cartLinked2.uniqueID) return;
+            if(backLink !=null) {
+                if (((EntityBogie) par1Entity).entityMainTrainID == backLink.uniqueID) return;
             }
         }
         if (par1Entity == bogieFront || par1Entity == bogieBack) {
             return;
         }
         if (par1Entity instanceof EntityRollingStock) {
-            if (par1Entity == cartLinked1 || par1Entity == cartLinked2) return;
+            if (par1Entity == frontLink || par1Entity == backLink) return;
         }
 
         MinecraftForge.EVENT_BUS.post(new MinecartCollisionEvent(this, par1Entity));
@@ -2052,29 +1469,26 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                         if (Math.abs(Vec3.createVectorHelper(par1Entity.posX - this.posX, 0.0D, par1Entity.posZ - this.posZ).normalize().dotProduct(vec31)) < 0.800000011920929D) {
                             return;
                         }
-
+                       // TODO: set velocity through the set/add/multiply velocity methods.
                         double d9 = par1Entity.motionX + this.motionX;
                         double d8 = par1Entity.motionZ + this.motionZ;
 
                         if ((par1Entity instanceof Locomotive && !isPoweredCart()) || (((EntityMinecart) par1Entity).isPoweredCart()) && !isPoweredCart()) {
 
-                            this.motionX *= 0.20000000298023224D;
-                            this.motionZ *= 0.20000000298023224D;
+                            multiplyVelocity(0.20000000298023224D);
                             this.addVelocity(par1Entity.motionX - d0, 0.0D, par1Entity.motionZ - d1);
                             if (!(par1Entity instanceof Locomotive)) {
-                                par1Entity.motionX *= 0.949999988079071D;
-                                par1Entity.motionZ *= 0.949999988079071D;
+                                ((Locomotive)par1Entity).multiplyVelocity(0.949999988079071D);
                             }
+
                         } else if ((!(par1Entity instanceof Locomotive) && isPoweredCart()) || (!((EntityMinecart) par1Entity).isPoweredCart() && isPoweredCart())) {
+                           // TODO: dont collide with bogies!
                             if (par1Entity instanceof EntityBogie && ((EntityBogie) par1Entity).entityMainTrain != null) {
-                                this.motionX *= 0.2;
-                                this.motionZ *= 0.2;
+                                multiplyVelocity(0.2);
                                 this.addVelocity(this.motionX + d0 * 3, 0.0D, this.motionZ + d1 * 3);
                                 if (this instanceof Locomotive && ((EntityBogie) par1Entity).entityMainTrain instanceof Locomotive) {
-                                    this.motionX *= 0;
-                                    this.motionZ *= 0;
-                                    ((EntityBogie) par1Entity).entityMainTrain.motionX *= 0;
-                                    ((EntityBogie) par1Entity).entityMainTrain.motionZ *= 0;
+                                    multiplyVelocity(0);
+                                    ((EntityBogie) par1Entity).entityMainTrain.multiplyVelocity(0);
                                 }
                             } else {
                                 par1Entity.motionX *= 0.20000000298023224D;
@@ -2082,8 +1496,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                                 par1Entity.addVelocity(this.motionX + d0, 0.0D, this.motionZ + d1);
                             }
                             if (!(this instanceof Locomotive)) {
-                                this.motionX *= 0.949999988079071D;
-                                this.motionZ *= 0.949999988079071D;
+                                multiplyVelocity(0.949999988079071D);
                             }
 
                         } else {
@@ -2095,8 +1508,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                                 d8 *= -1;//-3
                             }
 
-                            this.motionX *= 0.20000000298023224D;
-                            this.motionZ *= 0.20000000298023224D;
+                            multiplyVelocity(0.20000000298023224D);
                             this.addVelocity(d9 - d0, 0.0D, d8 - d1);
                             if (par1Entity instanceof EntityBogie) {
                                 //d7/=3;
@@ -2105,8 +1517,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                                 d8 *= 0.333333333333;
                             }
 
-                            par1Entity.motionX *= 0.20000000298023224D;
-                            par1Entity.motionZ *= 0.20000000298023224D;
+                            ((EntityRollingStock)par1Entity).multiplyVelocity(0.20000000298023224D);
                             par1Entity.addVelocity(d9 + d0, 0.0D, d8 + d1);
 
                         }
@@ -2161,6 +1572,41 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     }
                 }
             }
+        }
+    }
+
+    public void multiplyVelocity(double vel){
+        this.motionX *= vel;
+        this.motionY *= vel;
+        this.motionZ *= vel;
+        this.isAirBorne = true;
+        if(bogieFront!=null){
+            bogieFront.motionX *= vel;
+            bogieFront.motionY *= vel;
+            bogieFront.motionZ *= vel;
+        }
+        if(bogieBack!=null){
+            bogieBack.motionX *= vel;
+            bogieBack.motionY *= vel;
+            bogieBack.motionZ *= vel;
+        }
+    }
+
+    @Override
+    public void setVelocity(double p_70024_1_, double p_70024_3_, double p_70024_5_) {
+        this.motionX = p_70024_1_;
+        this.motionY = p_70024_3_;
+        this.motionZ = p_70024_5_;
+        this.isAirBorne = true;
+        if(bogieFront!=null){
+            bogieFront.motionX = p_70024_1_;
+            bogieFront.motionY = p_70024_3_;
+            bogieFront.motionZ = p_70024_5_;
+        }
+        if(bogieBack!=null){
+            bogieBack.motionX = p_70024_1_;
+            bogieBack.motionY = p_70024_3_;
+            bogieBack.motionZ = p_70024_5_;
         }
     }
 

@@ -4,14 +4,11 @@ import mods.railcraft.api.tracks.RailTools;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
-
-import java.util.List;
 
 public class LinkHandler {
 
@@ -24,11 +21,11 @@ public class LinkHandler {
 	/* coupling cart stuff */
 	public void handleStake(EntityRollingStock entityOne) {
 
-			if ( entityOne.cartLinked1 != null) {
-				StakePhysic(entityOne.cartLinked1, entityOne, 1);
+			if ( entityOne.frontLink != null) {
+				StakePhysic(entityOne.frontLink, entityOne, 1);
 			}
-			if (entityOne.cartLinked2 != null) {
-				StakePhysic(entityOne.cartLinked2, entityOne, 2);
+			if (entityOne.backLink != null) {
+				StakePhysic(entityOne.backLink, entityOne, 2);
 			}
 	}
 
@@ -41,7 +38,7 @@ public class LinkHandler {
 	private void freeLink1(Entity entity) {
 		if (entity instanceof EntityRollingStock) {
 			((AbstractTrains) entity).Link1 = 0;
-			((AbstractTrains) entity).cartLinked1 = null;
+			((AbstractTrains) entity).frontLink = null;
 			((EntityRollingStock) entity).consist.clear();
 			// System.out.println("free link1 "+entity);
 		}
@@ -56,7 +53,7 @@ public class LinkHandler {
 	private void freeLink2(Entity entity) {
 		if (entity instanceof EntityRollingStock) {
 			((AbstractTrains) entity).Link2 = 0;
-			((AbstractTrains) entity).cartLinked2 = null;
+			((AbstractTrains) entity).backLink = null;
 			((EntityRollingStock) entity).consist.clear();
 			// System.out.println("free link2 "+entity);
 		}
@@ -124,11 +121,11 @@ public class LinkHandler {
 						cart1.Link2 = cart2.getUniqueTrainID();
 						//System.out.println(cart1.Link2+" 2 "+cart2.getUniqueTrainID());
 					}
-					if (cart1.cartLinked1 == null) {
-						cart1.cartLinked1 = cart2;
+					if (cart1.frontLink == null) {
+						cart1.frontLink = cart2;
 					}
-					else if (cart1.cartLinked2 == null) {
-						cart1.cartLinked2 = cart2;
+					else if (cart1.backLink == null) {
+						cart1.backLink = cart2;
 					}
 
 					if (cart2.Link1 == 0 || cart2.Link1 == -1) {
@@ -138,11 +135,11 @@ public class LinkHandler {
 						cart2.Link2 = cart1.getUniqueTrainID();
 					}
 
-					if (cart2.cartLinked1 == null) {
-						cart2.cartLinked1 = cart1;
+					if (cart2.frontLink == null) {
+						cart2.frontLink = cart1;
 					}
-					else if (cart2.cartLinked2 == null) {
-						cart2.cartLinked2 = cart1;
+					else if (cart2.backLink == null) {
+						cart2.backLink = cart1;
 					}
 
 					if(!cart1.consist.contains(cart2)){
@@ -162,14 +159,14 @@ public class LinkHandler {
 
 					cart1.isAttached = true;
 
-					if (cart2.cartLinked1.train != null) {
-						EntityRollingStock.allTrains.remove(cart2.cartLinked1.train);
-						cart2.cartLinked1.train.getTrains().clear();
+					if (cart2.frontLink.train != null) {
+						EntityRollingStock.allTrains.remove(cart2.frontLink.train);
+						cart2.frontLink.train.getTrains().clear();
 						//System.out.println("clearing linked 1");
 					}
-					if (cart2.cartLinked2 != null && cart2.cartLinked2.train != null) {
-						EntityRollingStock.allTrains.remove(cart2.cartLinked2.train);
-						cart2.cartLinked2.train.getTrains().clear();
+					if (cart2.backLink != null && cart2.backLink.train != null) {
+						EntityRollingStock.allTrains.remove(cart2.backLink.train);
+						cart2.backLink.train.getTrains().clear();
 						//System.out.println("clearing linked 2");
 					}
 
