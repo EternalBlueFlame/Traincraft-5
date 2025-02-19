@@ -480,7 +480,13 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	 */
 	Block l;
 	@Override
-	public void onUpdate(){}
+	public void onUpdate(){
+		if(ticksExisted%100==1){
+			if(entityMainTrain==null){
+				setDead();
+			}
+		}
+	}
 
 	public void moveBogie(){
 

@@ -866,8 +866,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     rotationCos1 = (float) Math.cos((this.serverRealRotation + 90) * TraincraftUtil.radian);
                     rotationSin1 = (float) Math.sin((this.serverRealRotation + 90) * TraincraftUtil.radian);
                 }
-                double bogieX1 = (this.posX + (rotationCos1 * (-bogieShift)));
-                double bogieZ1 = (this.posZ + (rotationSin1 *(-bogieShift)));
+                double bogieX1 = (this.posX + (rotationCos1 * (rotationPoints()[0])));
+                double bogieZ1 = (this.posZ + (rotationSin1 *(rotationPoints()[0])));
                 this.bogieFront.setPosition(bogieX1, bogieFront.posY, bogieZ1);
 
             }
@@ -878,8 +878,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     rotationCos1 = (float) Math.cos((this.serverRealRotation + 90) * TraincraftUtil.radian);
                     rotationSin1 = (float) Math.sin((this.serverRealRotation + 90) * TraincraftUtil.radian);
                 }
-                double bogieX1 = (this.posX + (rotationCos1 * Math.abs(rotationPoints()[1])));
-                double bogieZ1 = (this.posZ + (rotationSin1 * Math.abs(rotationPoints()[1])));
+                double bogieX1 = (this.posX + (rotationCos1 * rotationPoints()[1]));
+                double bogieZ1 = (this.posZ + (rotationSin1 * rotationPoints()[1]));
                 this.bogieBack.setPosition(bogieX1, bogieBack.posY, bogieZ1);
 
             }
@@ -1107,7 +1107,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             addLinkingMove(springDist);
         }
     }
-    
+
     public void addLinkingMove(double velocity){
         bogieBack.addLinking(this, velocity);
         bogieFront.addLinking(this, velocity);
