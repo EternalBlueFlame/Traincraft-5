@@ -1118,6 +1118,15 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
     }
 
+    @Override
+    public void applyDrag() {
+        if (this.riddenByEntity != null) {
+            multiplyVelocity(0.996999979019165D);
+        } else {
+            multiplyVelocity(0.9599999785423279D);
+        }
+    }
+
 
     public boolean hasDrag(){
         for(AbstractTrains t:consist){
@@ -1301,12 +1310,14 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @SideOnly(Side.CLIENT)
     private void soundUpdater() {
-        if (FMLClientHandler.instance().getClient() != null) {
-            this.theSoundManager = FMLClientHandler.instance().getClient().getSoundHandler();
-        }
-        if (FMLClientHandler.instance().getClient() != null && this.theSoundManager != null && FMLClientHandler.instance().getClient().thePlayer != null) {
-            if (sndUpdater != null) {
-                sndUpdater.update(FMLClientHandler.instance().getClient().getSoundHandler(), this, FMLClientHandler.instance().getClient().thePlayer);
+        if(ticksExisted>0) {
+            if (FMLClientHandler.instance().getClient() != null) {
+                this.theSoundManager = FMLClientHandler.instance().getClient().getSoundHandler();
+            }
+            if (FMLClientHandler.instance().getClient() != null && this.theSoundManager != null && FMLClientHandler.instance().getClient().thePlayer != null) {
+                if (sndUpdater != null) {
+                    sndUpdater.update(FMLClientHandler.instance().getClient().getSoundHandler(), this, FMLClientHandler.instance().getClient().thePlayer);
+                }
             }
         }
     }
@@ -1316,218 +1327,18 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      * other. Args: entity
      */
     @Override
-    public void applyEntityCollision(Entity par1Entity) {
-        //if(par1Entity instanceof EntityPlayer)return;
-        if (this.bogieFront == null) return;
-
-        if (par1Entity == this) {
-            return;
-        }
-        if (par1Entity instanceof EntityBogie) {
-            if (((EntityBogie) par1Entity).entityMainTrainID == this.uniqueID) return;
-            if(frontLink !=null) {
-                if (((EntityBogie) par1Entity).entityMainTrainID == frontLink.uniqueID) return;
-            }
-            if(backLink !=null) {
-                if (((EntityBogie) par1Entity).entityMainTrainID == backLink.uniqueID) return;
-            }
-        }
-        if (par1Entity == bogieFront || par1Entity == bogieBack) {
-            return;
-        }
-        if (par1Entity instanceof EntityRollingStock) {
-            if (par1Entity == frontLink || par1Entity == backLink) return;
-        }
-
-        MinecraftForge.EVENT_BUS.post(new MinecartCollisionEvent(this, par1Entity));
-        if (getCollisionHandler() != null) {
-            getCollisionHandler().onEntityCollision(this, par1Entity);
-            return;
-        }
-        if (!this.worldObj.isRemote) {
-            if (par1Entity != this.riddenByEntity) { //so we don't collide with current entity TODO: convert for seats or remove?
-                double d0 = par1Entity.posX - this.posX;
-                double d1 = par1Entity.posZ - this.posZ;
-                double distancesX[] = new double[4];
-                double distancesZ[] = new double[4];
-                double euclidian[] = new double[4];
-                if (par1Entity instanceof EntityRollingStock) {
-                    EntityRollingStock entity = (EntityRollingStock) par1Entity;
-                    if (((EntityRollingStock) par1Entity).bogieFront != null && this.bogieFront != null) {
-
-
-                        distancesX[0] = entity.posX - this.posX;
-                        distancesZ[0] = entity.posZ - this.posZ;
-                        euclidian[0] = MathHelper.sqrt_double((distancesX[0] * distancesX[0]) + (distancesZ[0] * distancesZ[0]));
-                        distancesX[1] = entity.bogieFront.posX - this.posX;
-                        distancesZ[1] = entity.bogieFront.posZ - this.posZ;
-                        euclidian[1] = MathHelper.sqrt_double((distancesX[1] * distancesX[1]) + (distancesZ[1] * distancesZ[1]));
-                        distancesX[2] = entity.posX - this.bogieFront.posX;
-                        distancesZ[2] = entity.posZ - this.bogieFront.posZ;
-                        euclidian[2] = MathHelper.sqrt_double((distancesX[2] * distancesX[2]) + (distancesZ[2] * distancesZ[2]));
-                        distancesX[3] = entity.bogieFront.posX - this.bogieFront.posX;
-                        distancesZ[3] = entity.bogieFront.posZ - this.bogieFront.posZ;
-                        euclidian[3] = MathHelper.sqrt_double((distancesX[3] * distancesX[3]) + (distancesZ[3] * distancesZ[3]));
-
-                        double min = euclidian[0];
-                        int minIndex = 0;
-                        for (int k = 0; k < euclidian.length; k++) {
-                            if (Math.abs(euclidian[k]) < Math.abs(min)) {
-                                min = euclidian[k];
-                                minIndex = k;
-                            }
-                        }
-                        d0 = distancesX[minIndex];
-                        d1 = distancesZ[minIndex];
-                    }
-                }
-                double d2 = d0 * d0 + d1 * d1;
-
-                if ((par1Entity instanceof AbstractTrains && d2 <= ((AbstractTrains) par1Entity).getLinkageDistance((EntityMinecart) par1Entity) * 0.7 && d2 >= 9.999999747378752E-5D) || (par1Entity instanceof EntityBogie && ((EntityBogie) par1Entity).entityMainTrain != null && d2 <= ((EntityBogie) par1Entity).entityMainTrain.getLinkageDistance((EntityMinecart) par1Entity) * 0.7 && d2 >= 9.999999747378752E-5D) || (!(par1Entity instanceof AbstractTrains) && d2 >= 9.999999747378752E-5D))// >= 9.999999747378752E-5D)
-                {
-                    d2 = MathHelper.sqrt_double(d2);
-                    double d2Clone = d2;
-                    if (d0 != 0) {
-                        d0 /= d2;
-                    } else {
-                        d2=0;
-                    }
-                    if (d1 != 0) {
-                        d1 /= d2Clone;
-                    } else {
-                        d2Clone = 0;
-                    }
-                    if (d2 != d2Clone && d2 != 0) {
-                        d2 = d2Clone;
-                    }
-                    if (d2 > 1.0D) {
-                        d2 = 1.0D;
-                    }
-
-                    d0 *= d2;
-                    d1 *= d2;
-                    d0 *= 0.10000000149011612D;
-                    d1 *= 0.10000000149011612D;
-                    d0 *= 1.0F - this.entityCollisionReduction;
-                    d1 *= 1.0F - this.entityCollisionReduction;
-                    d0 *= 0.5D;
-                    d1 *= 0.5D;
-
-                    if ((par1Entity instanceof EntityMinecart) && !this.isAttached) {
-
-                        Vec3 vec31 = Vec3.createVectorHelper(MathHelper.cos(this.rotationYaw * (float) Math.PI / 180.0F), 0.0D, MathHelper.sin(this.rotationYaw * (float) Math.PI / 180.0F)).normalize();
-
-                        if (Math.abs(Vec3.createVectorHelper(par1Entity.posX - this.posX, 0.0D, par1Entity.posZ - this.posZ).normalize().dotProduct(vec31)) < 0.800000011920929D) {
-                            return;
-                        }
-
-                        double d9 = par1Entity.motionX + this.motionX;
-                        double d8 = par1Entity.motionZ + this.motionZ;
-
-                        if ((par1Entity instanceof Locomotive && !isPoweredCart()) || (((EntityMinecart) par1Entity).isPoweredCart()) && !isPoweredCart()) {
-
-                            multiplyVelocity(0.20000000298023224D);
-                            this.addVelocity(par1Entity.motionX - d0, 0.0D, par1Entity.motionZ - d1);
-                            if (!(par1Entity instanceof Locomotive)) {
-                                ((Locomotive)par1Entity).multiplyVelocity(0.949999988079071D);
-                            }
-
-                        } else if ((!(par1Entity instanceof Locomotive) && isPoweredCart()) || (!((EntityMinecart) par1Entity).isPoweredCart() && isPoweredCart())) {
-                            par1Entity.motionX *= 0.20000000298023224D;
-                            par1Entity.motionZ *= 0.20000000298023224D;
-                            par1Entity.addVelocity(this.motionX + d0, 0.0D, this.motionZ + d1);
-
-                            if (!(this instanceof Locomotive)) {
-                                multiplyVelocity(0.949999988079071D);
-                            }
-
-                        } else {
-                            d9 *= 0.4D;
-                            d8 *= 0.4D;
-
-                            if (par1Entity instanceof Locomotive) {
-                                d9 *= -1;//-3
-                                d8 *= -1;//-3
-                            }
-
-                            multiplyVelocity(0.20000000298023224D);
-                            this.addVelocity(d9 - d0, 0.0D, d8 - d1);
-                            if (par1Entity instanceof EntityBogie) {
-                                //d7/=3;
-                                //d8/=3;
-                                d9 *= 0.333333333333;
-                                d8 *= 0.333333333333;
-                            }
-
-                            ((EntityRollingStock)par1Entity).multiplyVelocity(0.20000000298023224D);
-                            par1Entity.addVelocity(d9 + d0, 0.0D, d8 + d1);
-
-                        }
-                    } else {
-
-                        if (!(par1Entity instanceof EntityItem) && !(par1Entity instanceof EntityPlayer && this instanceof Locomotive) && !(par1Entity instanceof EntityLiving) && !(par1Entity instanceof EntityBogie)) {
-                            this.addVelocity(-d0 * 2, 0.0D, -d1 * 2);
-                        }/*
-                         * else if(par1Entity instanceof EntityBogie){
-                         * par1Entity.addVelocity(-d0, 0.0D, -d1);
-                         *
-                         * }
-                         */
-                        //if(!(par1Entity instanceof EntityPlayer))par1Entity.addVelocity(d0 / 4.0D, 0.0D, d1 / 4.0D);
-                        //par1Entity.setVelocity(0, 0.0D, 0);
-                        par1Entity.addVelocity(d0 * 2, 0.0D, d1 * 2);
-                        /*
-                         * if(this.bogieUtility[0]!=null &&
-                         * this.bogieUtility[1]!=null){
-                         * this.bogieUtility[0].addVelocity(-d0*2, 0.0D, -d1*2);
-                         * this.bogieUtility[1].addVelocity(-d0*2, 0.0D, -d1*2);
-                         * }
-                         */
-
-                        if (par1Entity instanceof EntityPlayer) {
-
-                            MovingObjectPosition movingobjectposition = new MovingObjectPosition(par1Entity);
-                            if (movingobjectposition.entityHit != null) {
-                                // float f1 = MathHelper.sqrt_double(this.motionX * this.motionX +
-                                // this.motionY * this.motionY + this.motionZ * this.motionZ);
-                                // float f7 = MathHelper.sqrt_double(this.motionX * this.motionX +
-                                // this.motionZ * this.motionZ);
-                                //movingobjectposition.entityHit.setVelocity(-par1Entity.motionX, 0, -par1Entity.motionZ);
-                                //movingobjectposition.entityHit.addVelocity(-((par1Entity.motionX * (double) (Math.abs(this.motionX+0.01)) * 2.60000002384185791D)) / (double) f7, 0.00000000000000001D, -(((par1Entity.motionZ * (double) (Math.abs(this.motionZ+0.01)) * 2.60000002384185791D)) / (double) f7));
-                                //movingobjectposition.entityHit.addVelocity(-((Math.abs(this.motionX) * (double) 1 * 0.0260000002384185791D)) / (double) f7, 0.00000000000000001D, -(((Math.abs(this.motionZ) * (double) 1 * 0.0260000002384185791D)) / (double) f7));
-                                par1Entity.velocityChanged = true;
-                            }
-                        }
-
-                        if (par1Entity instanceof EntityLiving) {
-                            float f1 = MathHelper.sqrt_double(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ) * 60;
-                            //f1 *= 6;//ratio
-                            //f1 *= 10;//to get speed in "pseudo m/s"
-                            if ((f1 * 3.6) < 35) {//if speed is smaller than 35km/h then don't do any damage but push entities
-                                return;
-                            }
-                            int j1 = (int) Math.ceil((f1) * ((par1Entity instanceof EntityCreeper) ? 100 : 1));
-                            par1Entity.attackEntityFrom(TrainsDamageSource.ranOver, j1);
-                        }
-                    }
-                }
-            }
-        }
-    }
+    public void applyEntityCollision(Entity par1Entity) {}
 
     public void multiplyVelocity(double vel){
         this.motionX *= vel;
-        this.motionY *= vel;
         this.motionZ *= vel;
         this.isAirBorne = true;
         if(bogieFront!=null){
             bogieFront.motionX *= vel;
-            bogieFront.motionY *= vel;
             bogieFront.motionZ *= vel;
         }
         if(bogieBack!=null){
             bogieBack.motionX *= vel;
-            bogieBack.motionY *= vel;
             bogieBack.motionZ *= vel;
         }
     }
