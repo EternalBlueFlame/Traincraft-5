@@ -981,7 +981,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			velocity[5]=vec.zCoord;
 		}
 
-		velocity[2]+=speed*velocity[4];
-		velocity[3]+=speed*velocity[5];
+		motionX+=speed*velocity[4];
+		motionZ+=speed*velocity[5];
 	}
 }

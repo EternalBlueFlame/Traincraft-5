@@ -579,8 +579,6 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					
 				}
 
-
-
 				rollingStock.trainName = (itemstack.getItem()).getItemStackDisplayName(itemstack);
 				if (player != null) {
 					rollingStock.trainOwner = player.getDisplayName();

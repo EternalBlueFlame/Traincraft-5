@@ -210,6 +210,12 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
     }
 
+    @Override
+    @SideOnly(Side.CLIENT)
+    public float getShadowSize() {
+        return 0.0F;
+    }
+
     public String getTrainType(){
         return TraincraftRegistry.findTrainType(this);
     }
