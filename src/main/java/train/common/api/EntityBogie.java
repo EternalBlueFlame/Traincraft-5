@@ -974,16 +974,4 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		motionX+=speed*velocity[4];
 		motionZ+=speed*velocity[5];
 	}
-
-	public void addLinking(AbstractTrains host, double speed){
-		//cache rotation so it only has to be processed once per tick
-		if(velocity[4]==0 && velocity[5]==0){
-			Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,host.rotationYaw,0);
-			motionX=vec.xCoord;
-			motionZ=vec.zCoord;
-		}
-
-		motionX+=speed*motionX;
-		motionZ+=speed*motionZ;
-	}
 }

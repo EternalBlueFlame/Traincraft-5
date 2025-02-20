@@ -1108,33 +1108,18 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             springDist*=0.3;
         }*/
 
+       double[] rotated = CommonUtil.rotatePoint((getHitboxSize()[0]*0.5) + (other.getHitboxSize()[0]*0.5),0,backLink!=null && other.getEntityId()==backLink.getEntityId()?serverRealRotation-90:serverRealRotation+90);
 
-       double[] move = moveCloser(posX,posZ,other.posX,other.posZ, getHitboxSize()[0]*0.5);
-       addVelocity(move[0]*0.1,0,move[1]*0.1);
-
-
-       //springDist=moveCloser(posX,posZ,other.posX,other.posZ,getHitboxSize()[0]*0.5)*0.03;
-        if(backLink!=null && other.getEntityId() == backLink.getEntityId()) {
-            //springDist *= -1;
+       DebugUtil.println(rotated[0],rotated[1], other.posX-posX, other.posZ-posZ);
+        double dx = (other.posX + rotated[0]) - posX;
+        double dz = (other.posZ + rotated[2]) - posZ;
+        double dist = Math.sqrt(dx * dx + dz * dz);
+        double dxNorm = dx / dist;
+        double dzNorm = dz / dist;
+        if(Math.abs(dxNorm)+Math.abs(dzNorm)>0.3) {
+            addVelocity(dxNorm*0.35,0,dzNorm*0.35);
         }
 
-        if(Math.abs(springDist)>0.001) {
-           // addLinkingMove(springDist);
-        }
-        LinkHandler handler = new LinkHandler(getWorld());
-        //handler.handleStake(this);
-    }
-
-    double[] moveCloser(double X1,double Z1,double X2,double Z2,double offset) {
-        // Calculate the difference in X and Z positions
-        double diffX = X2 - X1;
-        double diffZ = Z2 - Z1;
-        return new double[]{diffX,diffZ};
-    }
-
-    public void addLinkingMove(double velocity){
-        bogieBack.addLinking(this, velocity);
-        bogieFront.addLinking(this, velocity);
     }
 
     /**
