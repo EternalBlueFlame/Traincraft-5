@@ -235,7 +235,7 @@ public class LinkHandler {
 		if (worldObj.isRemote || cart1.bogieFront==null || cart2.bogieFront==null) {
 			return;
 		}
-		if (cart2.isAttached && cart1.isAttached && areLinked(cart2, cart1)) {
+		if (true) {
 
 
 			boolean adj1 = canCartBeAdjustedBy(cart1, cart2);
@@ -312,12 +312,10 @@ public class LinkHandler {
 
 
 			if (adj1) {
-				cart1.motionX += springX;
-				cart1.motionZ += springZ;
+				cart1.addVelocity(springX,0,springZ);
 			}
 			if (adj2) {
-				cart2.motionX -= springX;
-				cart2.motionZ -= springZ;
+				cart2.addVelocity(-springX,0,-springZ);
 			}
 
 			double dot = (cart1.motionX - cart2.motionX) * unitX + (cart1.motionZ - cart2.motionZ) * unitZ;
@@ -326,12 +324,10 @@ public class LinkHandler {
 			double dampZ = limitForce(0.4D * dot * unitZ * -1);
 
 			if (adj1) {
-				cart1.motionX += dampX;
-				cart1.motionZ += dampZ;
+				cart1.addVelocity(dampX,0,dampZ);
 			}
 			if (adj2) {
-				cart2.motionX -= dampX;
-				cart2.motionZ -= dampZ;
+				cart2.addVelocity(-dampX,0,-dampZ);
 			}
 		}
 	}

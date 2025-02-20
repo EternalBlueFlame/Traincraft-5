@@ -4,6 +4,7 @@ import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Vec3d;
+import fexcraft.tmt.slim.Vec3f;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.IMinecart;
 import net.minecraft.block.BlockAir;
@@ -99,8 +100,49 @@ public class EntityHitbox {
                     EntityRollingStock entityOne = (((CollisionBox) e).host);
                     if (entityOne.isAttaching && host.isAttaching) {
                         if(entityOne.canBeAdjusted(host) || host.canBeAdjusted(entityOne)){
-                            LinkHandler.addStake(host, entityOne, true);
-                            LinkHandler.addStake(entityOne, host, true);
+
+
+                            if(new Vec3f(front.posX,front.posY,front.posZ).subtract(new Vec3f(entityOne.posX,entityOne.posY,entityOne.posZ)).length()
+                                    <
+                                    new Vec3f(back.posX,back.posY,back.posZ).subtract(new Vec3f(entityOne.posX,entityOne.posY,entityOne.posZ)).length()
+                            ){
+                                if(host.frontLink==null){
+                                    host.frontLink=entityOne;
+                                }
+                            } else {
+                                if(host.backLink==null){
+                                    host.backLink=entityOne;
+                                }
+                            }
+
+                            if(new Vec3f(entityOne.collisionHandler.front.posX,entityOne.collisionHandler.front.posY,entityOne.collisionHandler.front.posZ).subtract(new Vec3f(host.posX,host.posY,host.posZ)).length()
+                                    <
+                                    new Vec3f(entityOne.collisionHandler.back.posX,entityOne.collisionHandler.back.posY,entityOne.collisionHandler.back.posZ).subtract(new Vec3f(host.posX,host.posY,host.posZ)).length()
+                            ){
+                                if(entityOne.frontLink==null){
+                                    entityOne.frontLink=host;
+                                }
+                            } else {
+                                if(entityOne.backLink==null){
+                                    entityOne.backLink=host;
+                                }
+                            }
+                            entityOne.isAttaching = false;
+                            host.isAttaching = false;
+
+                            if(!host.consist.contains(host)){
+                                host.consist.add(host);
+                            }
+                            if(!entityOne.consist.contains(entityOne)){
+                                entityOne.consist.add(entityOne);
+                            }
+
+
+                            EntityPlayer entityplayer = host.worldObj.getClosestPlayerToEntity(host, 20);//
+                            if (entityplayer != null) {
+                                entityplayer.addChatMessage(new ChatComponentText("attached!"));
+                            }
+
                         } else {
                             EntityPlayer p = host.getWorld().getClosestPlayerToEntity(host,32);
                             if(p!=null){
@@ -111,11 +153,11 @@ public class EntityHitbox {
                     } else {
                         double[] motion = CommonUtil.rotatePoint(0.005, 0,
                                 CommonUtil.atan2degreesf(e.posZ - host.posZ, e.posX - host.posX));
-                        host.addVelocity(-motion[0], 0, -motion[2]);
+                        //host.addVelocity(-motion[0], 0, -motion[2]);
                         if (entityOne instanceof Locomotive) {
-                            entityOne.addVelocity(motion[0] * 0.2, 0, motion[2] * 0.2);
+                          //  entityOne.addVelocity(motion[0] * 0.2, 0, motion[2] * 0.2);
                         } else {
-                            entityOne.addVelocity(motion[0], 0, motion[2]);
+                         //   entityOne.addVelocity(motion[0], 0, motion[2]);
                         }
                     }
 

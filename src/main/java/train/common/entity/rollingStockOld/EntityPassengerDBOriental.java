@@ -80,4 +80,8 @@ public class EntityPassengerDBOriental extends EntityRollingStock implements IPa
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 2.25F;
 	}
+
+	public float[] rotationPoints() {
+		return new float[]{1f, 0f};
+	}
 }

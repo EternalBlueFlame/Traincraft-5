@@ -42,7 +42,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	public int meta;
 	public EntityRollingStock entityMainTrain;
 	public int entityMainTrainID;
-	public double bogieShift;
 	protected Side side;
 	public TileTCRail lastTrack=null;
 
@@ -79,7 +78,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		isImmuneToFire = true;
 	}
 
-	public EntityBogie(World world, double d, double d1, double d2, EntityRollingStock mainTrain, int id, double bogieShift) {
+	public EntityBogie(World world, double d, double d1, double d2, EntityRollingStock mainTrain, int id) {
 
 		this(world);
 
@@ -91,7 +90,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		this.prevPosY = d1;
 		this.prevPosZ = d2;
 		this.entityMainTrainID = id;
-		this.bogieShift = bogieShift;
 		this.setPosition(d, d1 + this.yOffset, d2);
 		isImmuneToFire = true;
 	}
@@ -149,7 +147,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
 
 		this.entityMainTrainID = nbttagcompound.getInteger("trainID");
-		this.bogieShift = nbttagcompound.getDouble("bogieShift");
 
 		super.readEntityFromNBT(nbttagcompound);
 	}
@@ -158,7 +155,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 
 		nbttagcompound.setInteger("trainID", entityMainTrainID);
-		nbttagcompound.setDouble("bogieShift", bogieShift);
 
 		super.writeEntityToNBT(nbttagcompound);
 	}
@@ -983,11 +979,11 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		//cache rotation so it only has to be processed once per tick
 		if(velocity[4]==0 && velocity[5]==0){
 			Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,host.rotationYaw,0);
-			velocity[4]=vec.xCoord;
-			velocity[5]=vec.zCoord;
+			motionX=vec.xCoord;
+			motionZ=vec.zCoord;
 		}
 
-		motionX+=speed*velocity[4];
-		motionZ+=speed*velocity[5];
+		motionX+=speed*motionX;
+		motionZ+=speed*motionZ;
 	}
 }

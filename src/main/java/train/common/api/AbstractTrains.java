@@ -795,7 +795,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * may not return null*/
     public float[] rotationPoints(){
         if(getSpec()==null || getSpec().getBogieLocoPosition()==0){
-            return new float[]{0.75f,-0.75f};
+            return new float[]{getHitboxSize()[0]-0.5f,0f};
         }
         return new float[]{(float)getSpec().getBogieLocoPosition(),0};}
 

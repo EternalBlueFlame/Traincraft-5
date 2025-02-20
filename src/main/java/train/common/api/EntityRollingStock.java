@@ -155,7 +155,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     /**
      * New physics integration
      */
-    private double bogieShift = 0;
     private boolean needsBogieUpdate;
     private boolean firstLoad = true;
     private boolean hasSpawnedBogie = false;
@@ -680,22 +679,25 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (addedToChunk && !this.hasSpawnedBogie) {
 
             if (bogieFront == null) {
-                this.bogieShift = this.rotationPoints()[1];
                 this.bogieFront = new EntityBogie(worldObj,
-                        (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.bogieShift),
-                        posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.bogieShift) - 0.1d),
-                        (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.bogieShift), this, this.uniqueID, this.bogieShift);
-
-
-                if (!worldObj.isRemote) worldObj.spawnEntityInWorld(bogieFront);
-
-                this.bogieBack = new EntityBogie(worldObj,
                         (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[0]),
                         posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.rotationPoints()[0]) - 0.1d),
-                        (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[0]), this, this.uniqueID, this.rotationPoints()[0]);
+                        (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[0]), this, this.uniqueID);
 
 
-                if (!worldObj.isRemote) worldObj.spawnEntityInWorld(bogieBack);
+                if (!worldObj.isRemote){
+                    worldObj.spawnEntityInWorld(bogieFront);
+                }
+
+                this.bogieBack = new EntityBogie(worldObj,
+                        (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]),
+                        posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.rotationPoints()[1]) - 0.1d),
+                        (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]), this, this.uniqueID);
+
+
+                if (!worldObj.isRemote){
+                    worldObj.spawnEntityInWorld(bogieBack);
+                }
                 this.needsBogieUpdate = true;
             }
             this.hasSpawnedBogie = true;
@@ -938,7 +940,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         handleTrain();
         handleOverheating.HandleHeatLevel(this);
-        linkhandler.handleStake(this);
+        //linkhandler.handleStake(this);
         this.func_145775_I();
         MinecraftForge.EVENT_BUS.post(new MinecartUpdateEvent(this, floor_posX, floor_posY, floor_posZ));
         //setBoundingBoxSmall(posX, posY, posZ, 0.98F, 0.7F);
@@ -1088,24 +1090,46 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         double vecZ = other.posZ - posZ;
 
 
-        double springDist = MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ)
-                -(getLinkageDistance(other)+other.getLinkageDistance(this));
-        springDist*=0.1;
+        double springDist = Math.abs(CommonUtil.floorDouble(vecX))+Math.abs(CommonUtil.floorDouble(vecZ))
+                -((getHitboxSize()[0]*0.5)-(other.getHitboxSize()[0]*0.5));
+        springDist*=0.5;
 
-        if(getVelocity()>0.03) {
-            springDist *= 0.045;
-        } else if (getVelocity()<0.01){
-            springDist*=0.01;
+        if(Math.abs(springDist)>1){
+            springDist=-0.001;
         } else {
-            springDist*=0.03;
-        }
-        if(backLink!=null && other.getEntityId() == backLink.getEntityId()) {
-            springDist *= -1;
+            springDist=0;
         }
 
-        if(Math.abs(springDist)>0.01) {
-            addLinkingMove(springDist);
+       /* if(getVelocity()>0.03) {
+            springDist *= 0.45;
+        } else if (getVelocity()<0.03){
+            springDist *= 0.45;
+        } else {
+            springDist*=0.3;
+        }*/
+
+
+       double[] move = moveCloser(posX,posZ,other.posX,other.posZ, getHitboxSize()[0]*0.5);
+       addVelocity(move[0]*0.1,0,move[1]*0.1);
+
+
+       //springDist=moveCloser(posX,posZ,other.posX,other.posZ,getHitboxSize()[0]*0.5)*0.03;
+        if(backLink!=null && other.getEntityId() == backLink.getEntityId()) {
+            //springDist *= -1;
         }
+
+        if(Math.abs(springDist)>0.001) {
+           // addLinkingMove(springDist);
+        }
+        LinkHandler handler = new LinkHandler(getWorld());
+        //handler.handleStake(this);
+    }
+
+    double[] moveCloser(double X1,double Z1,double X2,double Z2,double offset) {
+        // Calculate the difference in X and Z positions
+        double diffX = X2 - X1;
+        double diffZ = Z2 - Z1;
+        return new double[]{diffX,diffZ};
     }
 
     public void addLinkingMove(double velocity){
@@ -1127,13 +1151,25 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if(hasDrag()) {
             applyDrag();
         }
+        double resX1=bogieFront.motionX;
+        double resZ1=bogieFront.motionZ;
+        double resZ2=bogieBack.motionZ;
+        double resX2=bogieBack.motionX;
+        bogieBack.setVelocity(0,0,0);
+        bogieFront.setVelocity(0,0,0);
         //update positions related to linking, this NEEDS to come after drag
-        if(frontLink!=null){
+        if(frontLink!=null) {
             manageLink(frontLink);
         }
         if(backLink!=null){
             manageLink(backLink);
         }
+
+        bogieFront.moveBogie();
+        bogieBack.moveBogie();
+
+        bogieFront.setVelocity(resX1,0,resZ1);
+        bogieBack.setVelocity(resX2,0,resZ2);
         cachedVectors[2].yCoord=0;
         //update rotation
         setRotation((CommonUtil.atan2degreesf(
