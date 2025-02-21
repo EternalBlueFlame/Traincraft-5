@@ -214,7 +214,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         handleOverheating = new HandleOverheating(this);
 
         collisionHandler=new EntityHitbox(this);
-        linkhandler = new LinkHandler(world);
         trainsOnClick = new TrainsOnClick();
 
         /* Railcraft's stuff */
@@ -1086,28 +1085,33 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             return;
         }
 
-        double[] rotated = CommonUtil.rotatePoint((getHitboxSize()[0]*0.5) + (other.getHitboxSize()[0]*0.5),0,backLink!=null && other.getEntityId()==backLink.getEntityId()?serverRealRotation-90:serverRealRotation+90);
+        double vecX = other.posX - posX;
+        double vecZ = other.posZ - posZ;
 
-        double dxNorm = (other.posX + rotated[0]) - posX;
-        double dzNorm = (other.posZ + rotated[2]) - posZ;
-        double dist = Math.sqrt(dxNorm * dxNorm + dzNorm * dzNorm);
-        dxNorm/= dist;
-        dzNorm/= dist;
+        double springDist = MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ)
+                -((getHitboxSize()[0]*0.5)+(other.getHitboxSize()[0]*0.5));
 
-        if(!other.isAccelerating()){
-            if(Math.abs(dxNorm)+Math.abs(dzNorm)<1) {
-                dxNorm *= 0.35;
-                dzNorm *= 0.35;
-            } else {
-                dxNorm *= 0.45;
-                dzNorm *= 0.45;
-            }
+        if(getVelocity()>0.3) {
+            springDist *= 0.45;
+        } else if (getVelocity()<0.1){
+            springDist*=0.1;
+        } else {
+            springDist*=0.3;
+        }
+        if(frontLink!=null && other.getEntityId() == frontLink.getEntityId()) {
+            springDist *= -1;
         }
 
-        if(Math.abs(dxNorm)+Math.abs(dzNorm)>0.3) {
-            addVelocity(dxNorm,0,dzNorm);
+        double[] rotated=CommonUtil.rotatePoint(springDist,0,serverRealRotation+90);
+        double dxNorm=rotated[0];
+        double dzNorm=rotated[2];
+
+        //sanity check for if we should continue, because manhattan distance on turns gets wonky.
+        if(Math.abs(dxNorm)+Math.abs(dzNorm)<0.2){
+            return;
         }
 
+        addVelocity(dxNorm,0,dzNorm);
     }
 
     /**
@@ -1118,10 +1122,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 .addVector(bogieBack.posX,bogieBack.posY,bogieBack.posZ);
         setPosition(cachedVectors[1].xCoord, cachedVectors[1].yCoord,cachedVectors[1].zCoord);
 
-        bogieFront.moveBogie();
-        bogieBack.moveBogie();
-        //reset the y coord so they will re-calculate the yaw
-        applyDrag();
         double resX1=bogieFront.motionX;
         double resZ1=bogieFront.motionZ;
         double resZ2=bogieBack.motionZ;
@@ -1141,6 +1141,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         bogieFront.setVelocity(resX1,0,resZ1);
         bogieBack.setVelocity(resX2,0,resZ2);
+        bogieFront.moveBogie();
+        bogieBack.moveBogie();
+        //reset the y coord so they will re-calculate the yaw
+        applyDrag();
         cachedVectors[2].yCoord=0;
         //update rotation
         setRotation((CommonUtil.atan2degreesf(
