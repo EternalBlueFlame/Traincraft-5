@@ -664,6 +664,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
     }
 
+    public boolean isAccelerating(){return false;}
+
     /**
      * @author 02skaplan
      * <p>Called to setup the overlay texture manager for the given AbstractTrain. It is recommended

@@ -1082,42 +1082,30 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
     public void manageLink(AbstractTrains other) {
-        if(other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
+        if(isAccelerating() || other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
             return;
         }
 
-        double vecX = other.posX - posX;
-        double vecZ = other.posZ - posZ;
+        double[] rotated = CommonUtil.rotatePoint((getHitboxSize()[0]*0.5) + (other.getHitboxSize()[0]*0.5),0,backLink!=null && other.getEntityId()==backLink.getEntityId()?serverRealRotation-90:serverRealRotation+90);
 
+        double dxNorm = (other.posX + rotated[0]) - posX;
+        double dzNorm = (other.posZ + rotated[2]) - posZ;
+        double dist = Math.sqrt(dxNorm * dxNorm + dzNorm * dzNorm);
+        dxNorm/= dist;
+        dzNorm/= dist;
 
-        double springDist = Math.abs(CommonUtil.floorDouble(vecX))+Math.abs(CommonUtil.floorDouble(vecZ))
-                -((getHitboxSize()[0]*0.5)-(other.getHitboxSize()[0]*0.5));
-        springDist*=0.5;
-
-        if(Math.abs(springDist)>1){
-            springDist=-0.001;
-        } else {
-            springDist=0;
+        if(!other.isAccelerating()){
+            if(Math.abs(dxNorm)+Math.abs(dzNorm)<1) {
+                dxNorm *= 0.35;
+                dzNorm *= 0.35;
+            } else {
+                dxNorm *= 0.45;
+                dzNorm *= 0.45;
+            }
         }
 
-       /* if(getVelocity()>0.03) {
-            springDist *= 0.45;
-        } else if (getVelocity()<0.03){
-            springDist *= 0.45;
-        } else {
-            springDist*=0.3;
-        }*/
-
-       double[] rotated = CommonUtil.rotatePoint((getHitboxSize()[0]*0.5) + (other.getHitboxSize()[0]*0.5),0,backLink!=null && other.getEntityId()==backLink.getEntityId()?serverRealRotation-90:serverRealRotation+90);
-
-       DebugUtil.println(rotated[0],rotated[1], other.posX-posX, other.posZ-posZ);
-        double dx = (other.posX + rotated[0]) - posX;
-        double dz = (other.posZ + rotated[2]) - posZ;
-        double dist = Math.sqrt(dx * dx + dz * dz);
-        double dxNorm = dx / dist;
-        double dzNorm = dz / dist;
         if(Math.abs(dxNorm)+Math.abs(dzNorm)>0.3) {
-            addVelocity(dxNorm*0.35,0,dzNorm*0.35);
+            addVelocity(dxNorm,0,dzNorm);
         }
 
     }
@@ -1133,9 +1121,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         bogieFront.moveBogie();
         bogieBack.moveBogie();
         //reset the y coord so they will re-calculate the yaw
-        if(hasDrag()) {
-            applyDrag();
-        }
+        applyDrag();
         double resX1=bogieFront.motionX;
         double resZ1=bogieFront.motionZ;
         double resZ2=bogieBack.motionZ;
@@ -1175,24 +1161,17 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     public void applyDrag() {
+        for(AbstractTrains t:consist){
+            if(t.isAccelerating()) {
+                return;
+            }
+        }
         //this may need tweaking, it's essentially just a copy of what the minecart does.
         if (this.riddenByEntity != null) {
             multiplyVelocity(0.996999979019165D);
         } else {
             multiplyVelocity(0.9599999785423279D);
         }
-    }
-
-
-    public boolean hasDrag(){
-        for(AbstractTrains t:consist){
-            if(t instanceof Locomotive){
-                if(((Locomotive) t).backwardPressed || ((Locomotive) t).forwardPressed) {
-                    return false;
-                }
-            }
-        }
-        return true;
     }
 
     public float getVelocity(){
