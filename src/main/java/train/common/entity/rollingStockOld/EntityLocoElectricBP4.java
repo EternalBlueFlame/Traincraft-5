@@ -67,14 +67,14 @@ public class EntityLocoElectricBP4 extends ElectricTrain {
 	public float getOptimalDistance(EntityMinecart cart) {
 		return (0.7F);
 	}
-	@Override
+	/*@Override
 	public boolean canBeAdjusted(EntityMinecart cart) {
 		return canBeAdjusted;
 	}
 	@Override
 	public float[] getHitboxSize(){return new float[]{4,2,1};}
 	@Override
-	public float[] rotationPoints(){return new float[]{4,0};}
+	public float[] rotationPoints(){return new float[]{4,0};}*/
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {

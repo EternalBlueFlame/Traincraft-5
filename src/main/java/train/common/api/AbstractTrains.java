@@ -768,7 +768,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * example:
      * return new float[]{x,y,z};
      * may not return null*/
-    public float[] getHitboxSize(){return new float[]{(getOptimalDistance(null)*2),2f,1f};}
+    public float[] getHitboxSize(){return new float[]{Math.abs(rotationPoints()[0])+(getOptimalDistance(null)*2)-0.75f,2f,1f};}
 
     /**
      * LEGACY METHOD, still supported, but really, use getHitboxSize instead.
@@ -816,7 +816,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         if(getSpec()==null || getSpec().getBogieLocoPosition()==0){
             return new float[]{getHitboxSize()[0]-0.5f,0f};
         }
-        return new float[]{(float)getSpec().getBogieLocoPosition(),0};}
+        return new float[]{(float)-getSpec().getBogieLocoPosition(),0};}
 
     /**defines the scale to render the model at. Default is 0.0625*/
     public float[][] getRenderScale(){return new float[][]{getRender().getScale()};}
