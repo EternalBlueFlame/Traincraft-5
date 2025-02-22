@@ -266,8 +266,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     public abstract boolean canBeAdjusted(EntityMinecart cart2);
 
-    public abstract float getOptimalDistance(EntityMinecart cart2);
-
     public abstract List<ItemStack> getItemsDropped();
 
     public int getUniqueTrainID() {
@@ -763,11 +761,30 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public float[][] getRiderOffsets(){return new float[][]{{0,0,0}};}
 
 
-    /**returns the size of the hitbox in blocks.
+    /**
+     * NOTE: either this or getOptimalDistance MUST be overidden.
+     *   bad things will happen if you don't use at least one.
+     * returns the size of the hitbox in blocks.
      * example:
      * return new float[]{x,y,z};
      * may not return null*/
-    public float[] getHitboxSize(){return new float[]{Math.abs(rotationPoints()[0])+(getOptimalDistance(null)*2),2f,1f};}
+    public float[] getHitboxSize(){return new float[]{(getOptimalDistance(null)*2),2f,1f};}
+
+    /**
+     * LEGACY METHOD, still supported, but really, use getHitboxSize instead.
+     * Gets the optimal distance between linked carts. This is called on both
+     * carts and added together to determine the optimal rest distance between
+     * linked carts. The LinkageManager will attempt to maintain this distance
+     * between linked carts at all times. Default =
+     * LinkageManager.OPTIMAL_DISTANCE
+     * ETERNAL's NOTE: because this is forcing the value of EntityMinecart, it's actually a call to the super but using this instance. Not actually an infinate look like compiler thinks.
+     *
+     * @param cart The cart that you are linked with.
+     * @return The optimal rest distance
+     */
+    public float getOptimalDistance(EntityMinecart cart) {
+        return getHitboxSize()[0]*0.5f;
+    }
 
     /**defines if the transport is immune to explosions*/
     public boolean isReinforced(){return false;}

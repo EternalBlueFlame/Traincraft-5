@@ -678,20 +678,17 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (addedToChunk && !this.hasSpawnedBogie) {
 
             if (bogieFront == null) {
-                this.bogieFront = new EntityBogie(worldObj,
-                        (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[0]),
-                        posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.rotationPoints()[0]) - 0.1d),
-                        (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[0]), this, this.uniqueID);
+                double[] offset=CommonUtil.rotatePoint(this.rotationPoints()[0], 0,serverRealRotation);
+                this.bogieFront = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ
+                        , this, this.uniqueID);
 
 
                 if (!worldObj.isRemote){
                     worldObj.spawnEntityInWorld(bogieFront);
                 }
-
-                this.bogieBack = new EntityBogie(worldObj,
-                        (posX - Math.cos(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]),
-                        posY + ((Math.tan(this.renderPitch * TraincraftUtil.radian) * -this.rotationPoints()[1]) - 0.1d),
-                        (posZ - Math.sin(this.serverRealRotation * TraincraftUtil.radian) * this.rotationPoints()[1]), this, this.uniqueID);
+                offset=CommonUtil.rotatePoint(this.rotationPoints()[1], 0,serverRealRotation);
+                this.bogieBack = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ
+                        , this, this.uniqueID);
 
 
                 if (!worldObj.isRemote){
@@ -1454,21 +1451,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         return this.getOptimalDistance(cart);
     }
 
-    /**
-     * Gets the optimal distance between linked carts. This is called on both
-     * carts and added together to determine the optimal rest distance between
-     * linked carts. The LinkageManager will attempt to maintain this distance
-     * between linked carts at all times. Default =
-     * LinkageManager.OPTIMAL_DISTANCE
-     * ETERNAL's NOTE: because this is forcing the value of EntityMinecart, it's actually a call to the super but using this instance. Not actually an infinate look like compiler thinks.
-     *
-     * @param cart The cart that you are linked with.
-     * @return The optimal rest distance
-     */
-    @Override
-    public float getOptimalDistance(EntityMinecart cart) {
-        return getHitboxSize()[0];
-    }
 
     /**
      * Return false if linked carts have no effect on the velocity of this cart.
