@@ -95,6 +95,20 @@ dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
 
+repositories {
+    maven {
+        name "ChickenBones"
+        url "http://chickenbones.net/maven/"
+    }
+    maven {
+        url = "http://maven.cil.li/"
+    }
+}
+dependencies
+{
+    compile "codechicken:ForgeMultipart:1.7.10-1.2.0.345:dev"
+}
+
 idea
 {
 	module
