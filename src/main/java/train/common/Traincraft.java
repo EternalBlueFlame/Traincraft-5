@@ -169,6 +169,13 @@ public class Traincraft {
     public void init(FMLInitializationEvent event) {
         tcLog.info("Start Initialization");
         TCBlocks.init();
+
+        if (Loader.isModLoaded("ForgeMultipart"))
+        {
+            tcLog.info("ForgeMultipart detected. Registering Traincraft Blocks");
+            train.common.core.plugins.ForgeMultiPart.registerBlocks();
+        }
+
         TCItems.init();
         if (Traincraft.hasTCCEAddon()) {
             TCItems.registerTCCERollingStock();
