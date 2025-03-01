@@ -55,7 +55,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public EntityPlayer playerEntity;
     public double Link1;
     public double Link2;
-    protected boolean linked = false;
     public AbstractTrains frontLink;
     public AbstractTrains backLink;
     //private Set chunks;
@@ -394,7 +393,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
         nbttagcompound.setInteger("numberOfTrains", AbstractTrains.numberOfTrains);
         nbttagcompound.setBoolean("isAttached", this.isAttached);
-        nbttagcompound.setBoolean("linked", this.linked);
         //nbttagcompound.setDouble("motionX", motionX);
         //nbttagcompound.setDouble("motionZ", motionZ);
         nbttagcompound.setTag("Motion", this.newDoubleNBTList(this.motionX, this.motionY, this.motionZ));
@@ -432,7 +430,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
         numberOfTrains = nbttagcompound.getInteger("numberOfTrains");
         isAttached = nbttagcompound.getBoolean("isAttached");
-        linked = nbttagcompound.getBoolean("linked");
         //motionX = nbttagcompound.getDouble("motionX");
         //motionZ = nbttagcompound.getDouble("motionZ");
         NBTTagList nbttaglist1 = nbttagcompound.getTagList("Motion", 6);            this.motionX = nbttaglist1.func_150309_d(0);

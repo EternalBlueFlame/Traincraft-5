@@ -108,8 +108,6 @@ public class BlockLocomotiveSpeedControllerTrack extends TrackBaseTraincraft imp
 				((Locomotive) cart).speedLimiter = 0.9;
 			if (this.mode == 15)
 				((Locomotive) cart).speedLimiter = 1;
-			
-			((Locomotive) cart).speedWasSet = true;
 		}
 	}
 

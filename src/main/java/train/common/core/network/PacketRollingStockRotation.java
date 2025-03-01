@@ -31,7 +31,6 @@ public class PacketRollingStockRotation implements IMessage {
         this.realRotation = (int) entity.serverRealRotation;
         this.anglePitch = anglePitch;
         this.posY = Float.floatToIntBits((float) entity.posY); // improved accuracy with no usage increase
-        this.isInReverse = entity.isServerInReverse;
     }
 
     @Override
@@ -65,7 +64,6 @@ public class PacketRollingStockRotation implements IMessage {
                     rollingStock.rotationYawClient = message.rotationYawServer;
                     rollingStock.rotationYawClientReal = message.realRotation;
                     rollingStock.anglePitchClient = message.anglePitch;
-                    rollingStock.isClientInReverse = message.isInReverse;
                     rollingStock.posYFromServer= Float.intBitsToFloat(message.posY);
                 }
             }

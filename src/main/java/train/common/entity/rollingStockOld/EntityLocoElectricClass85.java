@@ -32,7 +32,7 @@ public class EntityLocoElectricClass85 extends ElectricTrain {
 		double yOffset = 0.25;
 		float rotationCos1 = (float) Math.cos(Math.toRadians(this.renderYaw + 90));
 		float rotationSin1 = (float) Math.sin(Math.toRadians((this.renderYaw + 90)));
-		if (side.isServer()) {
+		if (!Traincraft.proxy.isClient()) {
 			rotationCos1 = (float) Math.cos(Math.toRadians(this.serverRealRotation + 90));
 			rotationSin1 = (float) Math.sin(Math.toRadians((this.serverRealRotation + 90)));
 			anglePitchClient = serverRealPitch * 60;

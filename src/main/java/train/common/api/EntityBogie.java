@@ -446,7 +446,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		float railMaxSpeed = ((BlockRailBase) id).getRailMaxSpeed(worldObj, this, i, j, k);
 		float maxSpeed = Math.max(railMaxSpeed, getMaxCartSpeedOnRail());
 		maxSpeed = SpeedHandler.handleSpeed(railMaxSpeed, maxSpeed, this);
-		if (entityMainTrain!=null && entityMainTrain.speedLimiter != 0 && entityMainTrain.speedWasSet) {
+		if (entityMainTrain!=null && entityMainTrain.speedLimiter != 0) {
 			float targetSpeed = (float) (maxSpeed * entityMainTrain.speedLimiter);
 			float targetSpeedX = (float) Math.copySign(targetSpeed, motionX);
 			float targetSpeedZ = (float) Math.copySign(targetSpeed, motionZ);

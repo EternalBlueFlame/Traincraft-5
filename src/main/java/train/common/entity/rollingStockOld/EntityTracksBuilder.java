@@ -388,14 +388,6 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		motionZ *= getDragAir();
 	}
 
-	@Override
-	protected void adjustSlopeVelocities(int metadata) {
-		if (metadata == 2 || metadata == 3 || metadata == 4 || metadata == 5) {
-			motionX *= 0.5;
-			motionZ *= 0.5;
-		}
-	}
-
 	protected void updatePushForces() {
 		double push = MathHelper.sqrt_double(pushX * pushX + pushZ * pushZ);
 		if (push > 0.01D && motionX * motionX + motionZ * motionZ > 0.001D) {
