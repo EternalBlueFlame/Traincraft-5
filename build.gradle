@@ -80,6 +80,10 @@ repositories {
 		name "BuildCraft"
 		artifactPattern "http://www.mod-buildcraft.com/releases/BuildCraft/[revision]/[module]-[revision]-[classifier].[ext]"
 	}
+    maven {
+        name "ChickenBones"
+        url "http://chickenbones.net/maven/"
+    }
 }
 
 dependencies {
@@ -90,25 +94,11 @@ dependencies {
 	compile "codechicken:CodeChickenLib:1.7.10-1.1.3.136:dev"
 	compile "codechicken:CodeChickenCore:1.7.10-1.0.4.35:dev"
 	compile "codechicken:NotEnoughItems:1.7.10-1.0.4.90:dev"
+    compile "codechicken:ForgeMultipart:1.7.10-1.2.0.345:dev"
 
     // quality of life line to simplify importing jars for experimental testing
     compile fileTree(dir: 'libs', include: ['*.jar'])
 }
-
-repositories {
-    maven {
-        name "ChickenBones"
-        url "http://chickenbones.net/maven/"
-    }
-    maven {
-        url = "http://maven.cil.li/"
-    }
-}
-dependencies
-{
-    compile "codechicken:ForgeMultipart:1.7.10-1.2.0.345:dev"
-}
-
 idea
 {
 	module

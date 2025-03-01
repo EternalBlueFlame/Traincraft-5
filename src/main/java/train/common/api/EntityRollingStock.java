@@ -211,6 +211,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         //setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 0.98F, 0.7F);
         setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 1.0F, 1.0F);
         consist = new ArrayList<AbstractTrains>();
+        consist.add(this);
         handleOverheating = new HandleOverheating(this);
 
         collisionHandler=new EntityHitbox(this);
@@ -943,6 +944,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         numLaps++;
         if ((this instanceof Locomotive) && (this.Link1 == 0) && (this.Link2 == 0) && numLaps > 700) {
             this.consist.clear();
+            consist.add(this);
         }
 
 
@@ -1162,6 +1164,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     public void applyDrag() {
+        //sometimes an entity isn't in it's own consist for it's copy of the variable.
+        if(isAccelerating()){
+            return;
+        }
         for(AbstractTrains t:consist){
             if(t.isAccelerating()) {
                 return;
@@ -1562,7 +1568,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     @Override
     public double getDragAir() {
-        return 0.9998D;
+        return isAccelerating()?1D:0.9998D;
     }
 
     @Override

@@ -652,7 +652,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                         }
                     }
 
-                    double[] move=CommonUtil.rotatePoint(0.0075*(forwardPressed?accelerate:-accelerate),0,
+                    double[] move=CommonUtil.rotatePoint(0.0075*(forwardPressed?-accelerate:accelerate),0,
                             y==0?0:CommonUtil.floorDouble(y/90)*90);
                     addVelocity(move[0],0,move[2]);
                 }
@@ -963,16 +963,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     @Override
     protected void applyDragAndPushForces() {
         multiplyVelocity(getDragAir());
-    }
-
-    /**
-     * Carts should return their drag factor here
-     *
-     * @return The drag rate.
-     */
-    @Override
-    public double getDragAir() {
-        return 1D;
     }
 
     /**
