@@ -1,2 +1,0 @@
-name: class 416 tail
-mass: 10

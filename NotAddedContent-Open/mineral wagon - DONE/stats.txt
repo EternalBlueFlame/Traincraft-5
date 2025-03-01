@@ -1,4 +1,0 @@
-name: mineral wagon
-type: freight
-mass: 5
-cargo: ore, items, gravel

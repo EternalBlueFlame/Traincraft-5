@@ -1,8 +1,0 @@
-yellow
-blue
-grey
-magenta
-pink
-purple
-white
-these are the textures share between the class 144 coach and the 143

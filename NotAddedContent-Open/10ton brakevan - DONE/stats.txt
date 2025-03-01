@@ -1,3 +1,0 @@
-name: 10ton brakevan
-type: work
-mass: 10

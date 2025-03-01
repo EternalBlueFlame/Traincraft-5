@@ -1,4 +1,0 @@
-name: sentinel Y3
-type: steam
-mhp: 275mhp
-water capacity: 3000	

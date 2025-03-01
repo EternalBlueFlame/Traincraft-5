@@ -1,6 +1,0 @@
-name: RW type 5 loco
-type: steam
-mhp: 1200mhp
-max speed: 140
-inventory slots: 9
-water capacity: 8000mb

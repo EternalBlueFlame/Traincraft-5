@@ -1,3 +1,0 @@
-cargo capacity: 40 slots
-water capacity: 18000mb
-weight: 4

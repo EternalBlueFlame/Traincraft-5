@@ -1,2 +1,0 @@
-name: class 205 tail
-mass: 12

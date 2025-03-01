@@ -1,3 +1,0 @@
-name: cattle van
-type: stock car
-mass: 7.5

@@ -1,4 +1,0 @@
-name: Ventilated_van
-type: cargo
-mass: 7.5
-cargo: anything excluding blocks

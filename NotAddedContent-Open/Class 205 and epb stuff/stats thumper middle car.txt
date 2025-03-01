@@ -1,2 +1,0 @@
-name: Class 205 trailer
-mass: 10

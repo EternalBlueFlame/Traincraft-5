@@ -1,0 +1,178 @@
+<html>
+<head>
+    <link rel="stylesheet" href="style.css"> 
+    <style type="text/css">
+        input{
+            color: #000;
+        }
+        a{
+            color:#ccc;
+        }
+        html{
+            text-align:left;
+        }     
+    </style>
+</head>
+
+
+<body>
+    <header>
+        <div><img src="images/Logo_top.png" alt="Traincraft logo"/></div>
+        <div>
+            <a href="index.html">Home</a>
+            <a href="download.html">Download</a>
+            <a href="creation.html">Create</a>
+            <a href="https://github.com/EternalBlueFlame/Traincraft-5/wiki">Wiki</a>
+        </div>
+    </header>
+</div>
+<div id="description">
+<br />Warning, this page is intended for people who wish to contribute content to the mod or make add-ons for it.<br />
+            It's intentionally bland because it doesn't need to be pretty.<br /><br />
+            <div class="toc">
+            <b><u>Table Of Contents:</u></b>
+            <br /><a href="#tools">- Necessary Tools</a>
+            <br /><a href="#bugs">- Bugs</a>
+            <br /><a href="#tricks">- Pro tricks</a>
+            <br /><a href="#upcoming">- Upcoming changes</a>
+            <br /><a href="#style">- Official style rules</a>
+            <br /><a href="#party">- 3rd Party add-ons</a><br />
+            <br /><a href="#scale">- Scaling tool</a><br />
+            </div>
+            <hr />
+ 
+            <b id="tools"><u>Necessary tools:</u></b>
+            <br />Modeling program:
+            <br /> - SMP Toolbox: <a href="https://chiel.games/SMPToolbox.zip">https://chiel.games/SMPToolbox.zip</a> (Note: the dev of Toolbox took down the download link so Chiel, one of our admins, is hosting this mirror).
+            <br /> - FMT: a new multiplatform modeling tool made by Fexcraft, with all the features and then some of SMP Toolbox, it's suggested you use this instead:<br />
+            <a href="https://github.com/Fexcraft/FMT-Standalone/releases">https://github.com/Fexcraft/FMT-Standalone/releases</a><br />
+            <br />If you are making your own content pack there is partial support for .obj and .json formats, but these will <b>not</b> be accepted for
+            official releases.
+            <br /><br />External image editor (pick one, listed in order or recommendation from most to least):
+            <br />- Paint.net: <a href="https://www.getpaint.net/">https://www.getpaint.net/</a>
+            <br />- Gimp:<a href="https://www.gimp.org/downloads/">https://www.gimp.org/downloads/</a>
+            <br />- Krita: <a href="https://krita.org/en/">https://krita.org/en/</a>
+            <br />- Piskel (incapable of texture noise, but doesn't require downloading): <a href="https://www.piskelapp.com/">https://www.piskelapp.com/</a>
+            <br />- Other opacity/alpha layering supported image editors.<br />
+            <hr />
+            <br /><b id="bugs"><u>Bugs</u></b>
+            <br />- The in-game render does face culling, which means the back-faces of geometry, aka the texture on the inside of the cube, is fully invisible. 
+            SMP Toolbox however does not use any form of culling. This can be disabled on a per-part basis with the animation system.
+            <br /> --- You can read more on how exactly face culling works here: <a href="https://www.khronos.org/opengl/wiki/Face_Culling">https://www.khronos.org/opengl/wiki/Face_Culling</a>
+            <br />- Parts intended to animate, such as wheels and pistons, will have their "offset" defaulted to the center unless otherwise defined.
+            <br />-- defining the offset will let you control where the animation centers.
+            <br />- If you make the texture resolution larger than what's mapped in SMP Toolbox you can't go back to editing the texture with the paint tools in toolbox.
+            <br /> --- Also if you do that be sure to check "Allow HD Texture" in the editor under Model -&gt; Model Settings.
+            <br />- We can't load the config files for seats, hitboxes, collision points, gun points, etc, it has to be done manually in the entity file.
+            <br />- If you are attempting to implement the model yourself:
+            <br /> --- SMP Toolbox does not automatically set the part names of geometry, these have to be written manually in the exported java file, but write them anyway so you know which part is which, CTRL-F is your friend.
+            <br /> --- The default package and imports are incorrect in the output java file, they will have to be fixed to match the content pack you are implementing them into.
+            <br /> --- With SMP Toolbox we only support the "As Flans Java Model Large Model Fix" export.
+            <br /> --- For FMT we have our own dedicated Trains-in-Motion (TiM)/Traincraft export option. (Thanks Ferdinand!)
+            <br />- Sometimes textures will show z-fighting or stippling, like in the following image, the bottom two cases are fixed
+            automatically by the game render, however the top one is not fixed by the render because neither cube is flat.
+            <br /><img src="https://i.imgur.com/1YR0dPH.png" /><br />
+            <hr />
+            <br /><b id="tricks"><u>Pro tricks</u></b>
+            <br />- The face culling mentioned before can be used for things like having windows on different positions to better suit outside look vs inside view, or different kinds of layering.
+            <br />-- Try making cubes inside-out to really cheat interior part counts!
+            <br />- Use alpha layering (Opacity) in an external image editor to make certain pixels invisible. It must be <i>full</i> alpha, so it's best to use a selection tool and press delete 
+            on the parts you want invisible. Partial alpha support is in the works, but the game render is jank.
+            <br />- Shapeboxes allow you to edit each corner's exact position with great detail and it's no extra overhead versus a standard box, however this can distort textures.
+            <br />- You can copy and paste parts between SMP Toolbox instances using the options under the edit menu.
+            <br />- If you want your texture to be more detailed, multiply the base resolution using an external editor.
+            <br /> ---NOTE: Technically you can also do this by making the box bigger and stretching it down with shapeboxes, but this makes texture noise VERY
+            difficult, and would break the automated texture noise when we get it working (and MoW stuff if we ever do it).
+            <br />- Holding right click and pressing W, S, A ,or D will allow you to pan the camera in SMP Toolbox.<br />
+            <hr />
+            <br /><b id="upcoming"><u>Upcoming features!</u></b>
+            <br />- Parts will support animations and perform other graphical features using tags in the geometry name.
+            <br /> -- all animations are followed by a number, which can be manipulated in the entity file to modify the animation.
+            <br /> Here's a list of planned tags:
+            <br /> 1. "lamp" for lights that will render in a cone.
+            <br /> 2. "lantern #" for lights that glow in a sphere.
+            <br /> 3. "glow" for parts that glow without actually emitting light (a vat of lava for example).
+            <br /> 4. "smoke" for train exhaust such as a chimney, these cubes are not rendered, only used as a spawn point of sorts.
+            <br /> 5. "steam" for steam exhaust such as a piston valve, these cubes are not rendered, only used as a spawn point of sorts.
+            <br /> 6. "door swing" doors that would swing left or right.
+            <br /> 7. "door slide" for doors that slide open and closed like on a modern tram or underground rail.
+            <br /> 8. "scaleinventory" will scale the height of the cube based on how full the inventory is.
+            <br /> 8.1. "scaleblockinventory" is the same except it will use the texture of the first block in the inventory.
+            <br /> 9. "rendercrate #" is used to render a cube based on the percentage of inventory filled, this percentage is defined by how many different groups there are. 
+            <br/>  -- The # defines it's group number this allows multiple parts to represent the same value.
+            <br /> 10.1. "renderblock" the same as above but using the texture of the block. Each group will use a different block in the inventory, so the first group will use the first block,
+            second uses the second, and so on.
+            <br /> 11. "liveryimg #" is used to display a custom livery image such as a company logo, entries with the same number will display the same logo that is defined in the GUI.
+            <br /> 12. "nocull" will disable the face culling for that part.<br />
+            <hr />
+            <b><u id="style">Official content rules</u></b>
+            <br />- Models must be made with a supported modeling program (listed above)
+            <br />- Textures should not be shaded, let the render handle that.
+            <br />- The RGB values of the colors should be between 30 and 225 before noise.
+            <br/> --otherwise noise and lighting can make things blindingly bright, or void dark.
+            <br />- Texture mapping need be an optimized resolution. 
+            <br />-- If the mapping has a lot of empty space try and reduce the mapped texture size under model settings.
+            <br />- Flat cubes must be textured on both sides or use the nocull tag.
+            <br />- The player is 9 microblocks wide and 21 microblocks tall (65% of normal size), 5 microblocks for legs, however width for transports is still
+            required to be around 20 to 24 range in most cases for consistency sake.
+            <br />- The wheels should be 11 or 12 microblocks apart to line up with rails.
+            <br />- Seats should be able to fit the player.
+            <br />-- This often means making the seats wider than they should be and reducing the rows/columns of seating.
+            <br />-- For cars with individual passenger rooms it's common practice to only have one row of rooms for this reason.
+            <br />- nameplates and numberplates must be on their own separate geometry.
+            <br />- All pantographs should be modeled in the 'up' position, and angled parts should have their angle from rotation.
+            <br />-- This will allow the animator to raise and lower them realistically once support is added.
+            <br />- Texture noise must maintain a 1 pixel per microblock ratio, even if the rest of the texture does not.
+            <br />- Larger cylinders such as boilers or large chimneys must be done as octagons.
+            <br />- Octagons should be done using cubes and triangle shaped cubes.
+            <br />-- With FMT you can make octagons using the clinder tool, it's much easier and more efficient to render.
+            <br />- Details in the cabin and on the exterior are to be done using mainly textures and alpha layering instead of actual geometry.
+            <br />- It is advised to keep trains and rollingstock around 200 parts.
+            <br />-- This design is not only focused on keeping the old feel of TC but also keeping in mind users with weak computers.
+            <br /><br />
+            <hr />
+            <br /><b id="party"><u>3rd party content packs</u></b>
+            <br />- Your pack your rules, just consider this guide as "experienced advice."
+            <br />- If you would like to be featured, please contact us on discord.
+            <br /> ---NOTE: being featured will require the add-on being hosted on a reliable source such as curseforge.
+            <br /> ---ADITIONALLY: Eternal will need to double over the mod to be sure it doesn't contain anything malicious or inapproporate, Traincraft is a kid-friendly community!
+            <br /> ---IMPORTANT: don't forget if you list TC as a dependency on curseforge, it will automatically show on our dependants page.
+            <hr />
+            <br />
+            <script>
+                function outputstuff(){
+                var targetWidth = document.getElementById("twidth").value;
+                var width = document.getElementById("width").value;
+                var height = document.getElementById("height").value;
+                var length = document.getElementById("length").value;
+                var factor = ((targetWidth)/width);
+                
+                document.getElementById("output").innerHTML=(
+                "width = "+ 
+                Math.round((width*factor) * (16/1))+"mm : " + Math.round(width*factor) +
+                " microblocks<br/><hr/>height = " + 
+                Math.round((height*factor)* (16/1))+"mm : " + Math.round(height*factor) +
+                " microblocks<br/><hr/>modern length = " + 
+                Math.round((length*factor)* (16/1))+"mm : " + Math.round(length*factor) +
+                " microblocks<br/><hr/>classic length = " + 
+                Math.round(((length*factor)* (16/1) )*0.675)+"mm : " + Math.round((length*factor)*0.675) +
+                " microblocks"
+                );
+                }
+                </script>
+            <form id="scale">
+				This calculator works by taking your desired in-game width, and dividing that by the actual width, to create the proper scales for everything else.
+                <br />Model train scales can be used alongside actual train scales.
+                <br />If the dimensions you have are not in milimeters, google has an inbuilt calculator for that.
+                <br />In-game width in microblocks: <input id="twidth" onchange="outputstuff()" placeholder="22" text="" type="text" />
+                <br />Real width in milimeters: <input id="width" onchange="outputstuff()" placeholder="1200" text="" type="text" />
+                <br />Real length in milimeters: <input id="length" onchange="outputstuff()" placeholder="4000" text="" type="text" />
+                <br />Real height in milimeters: <input id="height" onchange="outputstuff()" placeholder="1700" text="" type="text" />
+                </form>
+<br />
+            <hr />
+            <div id="output">
+ </div>
+</div>
+</body>
+</html>

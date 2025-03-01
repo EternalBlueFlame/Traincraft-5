@@ -1,0 +1,171 @@
+html{
+	background-color:#313338;
+	margin-left:0px;
+	padding:25px;
+    text-align:center;
+    color:#99b1b5;
+    text-shadow: 1px 1px 2px #000;
+}
+
+
+/*          */
+/*  Header  */
+/*          */
+header {
+    background-color: #181818;
+    margin-top:5px;
+    margin-left: 2%;
+    margin-right: 2%;
+    border-radius: 38px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: left;
+    justify-content: flex-start;
+    border: 1px solid #333;
+}
+header div{
+    display: flex;
+    margin: 0;
+    align-items: center;
+    position: relative;
+    font-size: 17px;
+    font-weight: 300;
+    letter-spacing: -0.1px;
+    line-height: 1.4;
+    height:70px;
+}
+header img{
+    margin-right: 30px;
+}
+
+header div a{
+    display:flex;
+    align-items: center;
+    text-decoration: none;
+    color:black;
+    padding:7px;
+    margin:10px;
+    background: linear-gradient(0deg, #3ab0e5, #32b3ed);
+    text-shadow: 1px 1px 2px #3a3a3a;
+    border-radius: 5px;
+
+}
+header div a:hover{
+    text-decoration: underline;
+}
+
+/*          */
+/*   Body   */
+/*          */
+
+h1{
+    color: #ebebeb;
+    text-shadow: 2px 2px 0 #333;
+    margin-left:10%;
+    width:80%;
+    min-height:60px;
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+h3{
+    text-decoration: underline;
+    color: #eee;
+    text-shadow: 4px 4px 2 #333;
+}
+
+.toc{
+    display: block;
+    color: #ebebeb;
+    text-decoration: underline;
+    text-align:left;
+    text-shadow: 2px 2px 0 #333;
+    border-radius: 5px;
+    border: 1px solid #eee;
+}
+.toc a{
+    color:#ebebeb;
+}
+
+.about-banner{
+    background-image:url("images/bg_1.jpg");
+}
+.team-banner{
+    background-image:url("images/bg_2.jpg");
+}
+.gallery-banner{
+    background-image:url("images/bg_3.jpg");
+}
+
+.flex-container{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    margin-left:10%;
+    width:80%;
+}
+.flex-container div{
+    width: auto;
+    display:flex;
+    align-items: center;
+    margin:30px;
+    flex-direction: column;
+    position: relative;
+    text-decoration: underline;
+}
+
+
+
+.modal-checkbox {
+    display: none; /* Hide the checkboxes */
+}
+.modal-trigger {
+    position:absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    max-height: 90%;
+    max-width: 70%;
+    overflow-y: auto;
+    transform: translate(-50%, -50%);
+    background-color:#313338;
+    padding: 20px;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: none;
+}
+.modal img{
+    max-width: 90%;
+    max-height: 300px;
+}
+.modal a{
+    color: #fff;
+}
+.modal-close {
+    text-align: end;
+    position: sticky;
+    top: 10px;
+    margin-left: 98%;
+    padding-left: 5px;
+    padding-right: 5px;
+    cursor: pointer;
+    border: 2px solid #ccc;
+}
+.modal-checkbox:checked + .modal {
+    display: block;
+}
+.team img{
+    width:70px;
+    height:70px;
+}
