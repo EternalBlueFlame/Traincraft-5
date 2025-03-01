@@ -2,16 +2,15 @@ package train.client.render;
 
 import fexcraft.fvtm.BEOModelLoader;
 import fexcraft.tmt.slim.ModelBase;
+import net.minecraft.util.ResourceLocation;
 import train.client.render.models.*;
 import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
+import train.common.api.TrainRenderRecord;
 import train.common.entity.rollingStockOld.*;
+import train.common.library.Info;
 
 import java.util.ArrayList;
-
-import train.common.api.TrainRenderRecord;
-import train.common.library.Info;
-import net.minecraft.util.ResourceLocation;
 
 public enum RenderEnum implements TrainRenderRecord {
 

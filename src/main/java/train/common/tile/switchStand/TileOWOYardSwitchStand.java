@@ -10,7 +10,6 @@ import net.minecraft.util.AxisAlignedBB;
 import train.common.api.blocks.TileSwitch;
 import train.common.blocks.TCBlocks;
 import train.common.blocks.switchStand.BlockOWOYardSwitchStand;
-import train.common.library.BlockIDs;
 
 import java.util.Random;
 

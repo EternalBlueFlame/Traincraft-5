@@ -1,11 +1,7 @@
 package train.client.render.models;
 
-import fexcraft.tmt.slim.ModelConverter;
-import fexcraft.tmt.slim.ModelRendererTurbo;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.Entity;
 import fexcraft.tmt.slim.ModelBase;
-import org.lwjgl.opengl.GL11;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 
 public class ModelSD40 extends ModelBase {
 

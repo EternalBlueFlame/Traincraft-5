@@ -2,7 +2,6 @@ package train.common.api.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import train.common.Traincraft;
 import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.block.Block;
@@ -20,6 +19,7 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
+import train.common.Traincraft;
 import train.common.containers.ContainerTier;
 
 import java.util.List;

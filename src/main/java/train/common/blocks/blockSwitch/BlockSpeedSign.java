@@ -1,7 +1,6 @@
 package train.common.blocks.blockSwitch;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -13,7 +12,6 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import train.common.Traincraft;
 import train.common.api.blocks.BlockDynamic;
 import train.common.tile.switchStand.TileSpeedSign;
 

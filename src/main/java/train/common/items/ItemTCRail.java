@@ -10,7 +10,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import org.lwjgl.util.vector.Matrix2f;
@@ -27,10 +26,9 @@ import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
 
 import javax.annotation.Nullable;
-import javax.sound.midi.Track;
 import java.util.List;
 
-import static train.common.items.TCRailTypes.*;
+import static train.common.items.TCRailTypes.RailTypes;
 
 public class ItemTCRail extends ItemPart {
 

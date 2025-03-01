@@ -15,7 +15,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import train.common.api.blocks.TileTraincraft;
 import train.common.blocks.BlockOpenHearthFurnace;
 import train.common.blocks.TCBlocks;

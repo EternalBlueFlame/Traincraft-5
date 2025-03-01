@@ -14,8 +14,6 @@ import train.common.items.ItemRollingStock;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
 
-import static ebf.tim.utility.CommonUtil.DefineStack;
-
 /**
  * <h1>Pullman's Palace entity</h1>
  * For more information on the overrides and functions:

@@ -1,8 +1,8 @@
 package train.client.render.models;
 
+import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
-import fexcraft.tmt.slim.ModelBase;
 import train.client.core.ClientProxy;
 import train.client.render.CustomModelRenderer;
 import train.common.api.Freight;

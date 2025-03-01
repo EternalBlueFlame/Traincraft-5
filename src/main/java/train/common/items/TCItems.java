@@ -9,10 +9,12 @@ package train.common.items;
 
 
 import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.item.Item;
 import train.common.Traincraft;
 import train.common.adminbook.ItemAdminBook;
-import train.common.library.*;
+import train.common.library.EnumTracks;
+import train.common.library.Info;
+import train.common.library.ItemIDs;
+import train.common.library.TCCEItemIDs;
 
 public class TCItems {
 

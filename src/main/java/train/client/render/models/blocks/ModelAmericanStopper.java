@@ -7,11 +7,11 @@
 
 package train.client.render.models.blocks;
 
+import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
-import fexcraft.tmt.slim.ModelBase;
 import train.common.library.Info;
 
 public class ModelAmericanStopper extends ModelBase {

@@ -5,7 +5,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import train.common.Traincraft;
-import train.common.library.Info;
 
 /**
  * @author canitzp

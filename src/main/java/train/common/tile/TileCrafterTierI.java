@@ -2,8 +2,6 @@ package train.common.tile;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
-import ebf.tim.utility.CommonUtil;
-import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -15,7 +13,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.api.blocks.TileRenderFacing;
-import train.common.blocks.TCBlocks;
 import train.common.core.interfaces.ITier;
 import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
@@ -23,7 +20,6 @@ import train.common.library.Info;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class TileCrafterTierI extends TileRenderFacing implements IInventory, ITier {
 	private ItemStack[] crafterInventory;

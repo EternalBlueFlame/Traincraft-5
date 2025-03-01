@@ -7,7 +7,6 @@ import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import ebf.tim.utility.DebugUtil;
 import train.common.Traincraft;
 import train.common.api.Locomotive;
-import train.common.core.util.TraincraftUtil;
 import train.common.mtc.packets.PacketGetSomethingFromServer;
 import train.common.mtc.packets.PacketThingFromServer;
 

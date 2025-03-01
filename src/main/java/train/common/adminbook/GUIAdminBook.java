@@ -1,5 +1,6 @@
 package train.common.adminbook;
 
+import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
@@ -7,7 +8,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.ItemStack;
 import org.lwjgl.opengl.GL11;
-import fexcraft.tmt.slim.Tessellator;
 import train.common.Traincraft;
 
 import java.util.ArrayList;

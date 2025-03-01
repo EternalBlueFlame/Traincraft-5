@@ -10,7 +10,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import train.common.api.Locomotive;
 import train.common.api.WirelessTransmitter;
-import train.common.core.util.TraincraftUtil;
 
 import java.util.*;
 

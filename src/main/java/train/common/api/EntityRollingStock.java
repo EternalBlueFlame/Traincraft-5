@@ -11,7 +11,6 @@ import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
-import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Vec3f;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.CartTools;
@@ -21,12 +20,9 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.TraincraftEntityHelper;
 import net.minecraft.entity.boss.EntityDragonPart;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
-import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemDye;
@@ -35,33 +31,37 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.*;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.minecart.MinecartCollisionEvent;
 import net.minecraftforge.event.entity.minecart.MinecartInteractEvent;
 import net.minecraftforge.event.entity.minecart.MinecartUpdateEvent;
 import train.client.core.handlers.SoundUpdaterRollingStock;
 import train.common.Traincraft;
 import train.common.adminbook.ServerLogger;
 import train.common.core.HandleOverheating;
-import train.common.core.handlers.*;
+import train.common.core.handlers.ConfigHandler;
+import train.common.core.handlers.FuelHandler;
+import train.common.core.handlers.TrainHandler;
 import train.common.core.network.PacketRollingStockRotation;
 import train.common.core.util.DepreciatedUtil;
 import train.common.core.util.TraincraftUtil;
 import train.common.entity.CollisionBox;
 import train.common.entity.EntityHitbox;
 import train.common.entity.rollingStockOld.EntityTracksBuilder;
-import train.common.items.*;
+import train.common.items.ItemPaintbrushThing;
+import train.common.items.ItemRollingStock;
+import train.common.items.ItemWrench;
 import train.common.library.BlockIDs;
 import train.common.library.GuiIDs;
-import train.common.tile.TileTCRail;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static train.common.core.util.TraincraftUtil.degrees;
 import static train.common.core.util.TraincraftUtil.isRailBlockAt;
 
 public class EntityRollingStock extends AbstractTrains implements ILinkableCart {
@@ -1511,21 +1511,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     public void moveMinecartOnRail(int i, int j, int k, double d) {}
-
-    public void adjustSpeed(float maxSpeed, double limiter) {
-        float targetSpeedX = (float) Math.copySign((maxSpeed * limiter), motionX);
-        float targetSpeedZ = (float) Math.copySign((maxSpeed * limiter), motionZ);
-        if (motionX > targetSpeedX && motionX != 0) motionX -= 0.01;
-        if (motionZ > targetSpeedZ && motionZ != 0) motionZ -= 0.01;
-        if (motionX < targetSpeedX && motionX != 0) motionX += 0.01;
-        if (motionZ < targetSpeedZ && motionZ != 0) motionZ += 0.01;
-        if ((Math.abs(motionX) < Math.abs(targetSpeedX) + 0.01) && (Math.abs(motionX) > Math.abs(targetSpeedX) - 0.01)) {
-            speedLimiter=0;
-        }
-        else if ((Math.abs(motionZ) < Math.abs(targetSpeedZ) + 0.01) && (Math.abs(motionZ) > Math.abs(targetSpeedZ) - 0.01)) {
-            speedLimiter=0;
-        }
-    }
 
 
 

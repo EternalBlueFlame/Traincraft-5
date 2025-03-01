@@ -1,11 +1,11 @@
 package train.common.library;
 
-import java.util.ArrayList;
-
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
+import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
 import ebf.tim.render.CustomItemModel;
@@ -20,13 +20,13 @@ import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
-import net.minecraft.world.World;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
@@ -34,16 +34,9 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import train.client.core.ClientProxy;
+import train.client.render.RenderEnum;
 import train.common.Traincraft;
 import train.common.api.*;
-
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.relauncher.Side;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import net.minecraft.item.Item;
-import train.client.render.RenderEnum;
 import train.common.api.blocks.BlockDynamic;
 import train.common.api.blocks.TileRenderFacing;
 import train.common.blocks.BlockTraincraftFluid;
@@ -51,6 +44,10 @@ import train.common.core.managers.TierRecipeManager;
 import train.common.items.ItemRollingStock;
 
 import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TraincraftRegistry {
 

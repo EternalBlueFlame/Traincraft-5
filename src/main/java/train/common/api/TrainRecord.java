@@ -1,13 +1,8 @@
 package train.common.api;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
 import ebf.tim.api.SkinRegistry;
-import ebf.tim.utility.DebugUtil;
-import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
-import train.common.Traincraft;
-import train.common.core.managers.TierRecipeManager;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
