@@ -960,11 +960,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         return false;
     }
 
-    @Override
-    protected void applyDragAndPushForces() {
-        multiplyVelocity(getDragAir());
-    }
-
     /**
      * Added for SMP
      *
