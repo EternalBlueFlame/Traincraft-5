@@ -1266,7 +1266,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 
         //be sure the player has permission to enter the transport, and that the transport has the main seat open.
-        if (getRiderOffsets() != null && getPermissions(playerEntity, false, true) && !entityplayer.isSneaking()) {
+        if (getRiderOffsets() != null && getPermissions(playerEntity, false) && !entityplayer.isSneaking()) {
             for (EntitySeat seat : seats) {
                 //1.12 is stupid, sometimes when the passenger is null, it returns the player
                 if (!getWorld().isRemote && (seat.getPassenger() == null
@@ -1510,39 +1510,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
     @Override
-    public void moveMinecartOnRail(int i, int j, int k, double d) {
-        Block id = worldObj.getBlock(i, j, k);
-        if (!BlockRailBase.func_150051_a(id)) {
-            return;
-        }
-        railMaxSpeed = ((BlockRailBase) id).getRailMaxSpeed(worldObj, this, i, j, k);
-        maxSpeed = Math.max(railMaxSpeed, getMaxCartSpeedOnRail());
-        maxSpeed = SpeedHandler.handleSpeed(railMaxSpeed, maxSpeed, this);
-        if (this.speedLimiter != 0) {
-            //maxSpeed *= this.speedLimiter;
-            adjustSpeed(maxSpeed, speedLimiter);
-        }
-        if ((!isLocomotive())) {
-            motionX *= 0.99D;
-            motionZ *= 0.99D;
-        } else {
-            motionX *= 0.9D;
-            motionZ *= 0.9D;
-        }
-        if (motionX < -maxSpeed) {
-            motionX = -maxSpeed;
-        }
-        if (motionX > maxSpeed) {
-            motionX = maxSpeed;
-        }
-        if (motionZ < -maxSpeed) {
-            motionZ = -maxSpeed;
-        }
-        if (motionZ > maxSpeed) {
-            motionZ = maxSpeed;
-        }
-        moveEntity(motionX, 0.0D, motionZ);
-    }
+    public void moveMinecartOnRail(int i, int j, int k, double d) {}
 
     public void adjustSpeed(float maxSpeed, double limiter) {
         float targetSpeedX = (float) Math.copySign((maxSpeed * limiter), motionX);
@@ -1654,29 +1622,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         return (this.dataWatcher.getWatchableObjectInt(21));
     }
 
-    @Override
-    protected void func_145775_I() {
-        int var1 = MathHelper.floor_double(this.boundingBoxSmall.minX + 0.001D);
-        int var2 = MathHelper.floor_double(this.boundingBoxSmall.minY + 0.001D);
-        int var3 = MathHelper.floor_double(this.boundingBoxSmall.minZ + 0.001D);
-        int var4 = MathHelper.floor_double(this.boundingBoxSmall.maxX - 0.001D);
-        int var5 = MathHelper.floor_double(this.boundingBoxSmall.maxY - 0.001D);
-        int var6 = MathHelper.floor_double(this.boundingBoxSmall.maxZ - 0.001D);
-
-        if (this.worldObj.checkChunksExist(var1, var2, var3, var4, var5, var6)) {
-            for (int var7 = var1; var7 <= var4; ++var7) {
-                for (int var8 = var2; var8 <= var5; ++var8) {
-                    for (int var9 = var3; var9 <= var6; ++var9) {
-                        Block var10 = this.worldObj.getBlock(var7, var8, var9);
-
-                        if (var10 != null) {
-                            var10.onEntityCollidedWithBlock(this.worldObj, var7, var8, var9, this);
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     private void setBoundingBoxSmall(double par1, double par3, double par5, float width, float height) {
         float var7 = width * 0.5F;
@@ -1685,10 +1630,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     public float getYaw() {
         return getWorld().isRemote?rotationYawClientReal:this.rotationYaw+90;
-    }
-
-    public float getPitch() {
-        return this.rotationPitch;
     }
 
     @Override
@@ -1737,7 +1678,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      * @param driverOnly can this action only be done by the driver/conductor?
      * @return if the player has permission to continue
      */
-    public boolean getPermissions(EntityPlayer player, boolean driverOnly, boolean decreaseTicketStack) {
+    public boolean getPermissions(EntityPlayer player, boolean driverOnly) {
         //make sure the player is not null, and be sure that driver only rules are applied.
         if (player ==null){
             return false;
@@ -1751,28 +1692,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             return true;
         }
 
-        /*//if a ticket is needed, like for passenger cars
-        if(getBoolean(boolValues.LOCKED) && getRiderOffsets().length>1){
-            for(ItemStack stack : player.inventory.mainInventory){
-                if(stack.getItem() instanceof ItemKey){
-                    for(UUID id : ItemKey.getHostList(stack)){
-                        if (id == this.entityUniqueID){
-                            if(stack.getItem() instanceof ItemTicket &&decreaseTicketStack) {
-                                stack.stackSize--;
-                                if (stack.stackSize<=0){
-                                    stack=null;
-                                }
-                            }
-                            return true;
-                        }
-                    }
-                }
-            }
-            return false;
-        }*/
-
-        //all else fails, just return if this is locked.
-        //return !getBoolean(boolValues.LOCKED);
         return !this.getTrainLockedFromPacket();
     }
 }

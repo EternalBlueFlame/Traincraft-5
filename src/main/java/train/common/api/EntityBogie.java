@@ -318,7 +318,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			posZ = d19 + d10 * d17;
 			setPosition(posX, posY + yOffset + 0.35, posZ);
 
-			moveMinecartOnRail(i, j, k, 0.0D);
+			moveMinecart(i, j, k);
 
 			if (ai[0][1] != 0 && MathHelper.floor_double(posX) - i == ai[0][0] &&
 					MathHelper.floor_double(posZ) - k == ai[0][2]) {
@@ -439,8 +439,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		}
 	}
 
-	@Override
-	public void moveMinecartOnRail(int i, int j, int k, double d) {
+
+	public void moveMinecart(int i, int j, int k) {
 		Block id = worldObj.getBlock(i, j, k);
 		if (!BlockRailBase.func_150051_a(id)) { return; }
 		float railMaxSpeed = ((BlockRailBase) id).getRailMaxSpeed(worldObj, this, i, j, k);

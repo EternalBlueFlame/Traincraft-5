@@ -102,7 +102,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 				bogieFront.posZ - bogieBack.posZ,
 				bogieFront.posX - bogieBack.posX));
 
-		point1 = rotateVec3(blockpos[0], getPitch(), rotation);
+		point1 = rotateVec3(blockpos[0], this.rotationPitch, rotation);
 		point1[0] += posX;point1[1] += posY;point1[2] += posZ;
 		mineSnow(worldObj, point1, cargoItems, fakePlayer);
 		point1[1]++;
@@ -111,7 +111,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 		mineSnow(worldObj, point1, cargoItems, fakePlayer);
 
 
-		point1 = rotateVec3(blockpos[1], getPitch(), rotation);
+		point1 = rotateVec3(blockpos[1], this.rotationPitch, rotation);
 		point1[0] += posX;point1[1] += posY;point1[2] += posZ;
 		mineSnow(worldObj, point1, cargoItems, fakePlayer);
 		point1[1]++;
@@ -120,7 +120,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 		mineSnow(worldObj, point1, cargoItems, fakePlayer);
 
 
-		point1 = rotateVec3(blockpos[2], getPitch(), rotation);
+		point1 = rotateVec3(blockpos[2], this.rotationPitch, rotation);
 		point1[0] += posX;point1[1] += posY+1;point1[2] += posZ;
 		mineSnow(worldObj, point1, cargoItems, fakePlayer);
 		point1[1]++;
