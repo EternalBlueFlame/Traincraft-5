@@ -38,13 +38,7 @@ public class EntityFlatCartWoodUS extends Freight implements IInventory{
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity!=null) {
-			riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.4, posZ);
-		}
-	}
-	@Override
+		@Override
 	public boolean interactFirst(EntityPlayer entityplayer) {
 		playerEntity = entityplayer;
 		if ((super.interactFirst(entityplayer))) {
@@ -116,4 +110,7 @@ public class EntityFlatCartWoodUS extends Freight implements IInventory{
 			}
 		}
 	}
+	@Override
+	public float[][] getRiderOffsets(){return null;}
+    
 }

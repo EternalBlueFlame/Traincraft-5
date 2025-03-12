@@ -24,32 +24,7 @@ public class EntityLocoSteamBR80_DB extends SteamTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		double distance = -0.1;
-		double pitchRads = this.anglePitchClient * 3.141592653589793D / 180.0D;
-		float rotationCos1 = (float) Math.cos(Math.toRadians(this.renderYaw + 90));
-		float rotationSin1 = (float) Math.sin(Math.toRadians((this.renderYaw + 90)));
-		float pitch = (float) (posY + ((Math.tan(pitchRads) * distance) + getMountedYOffset())
-				+ riddenByEntity.getYOffset() + 0.35);
-		double bogieX1 = (this.posX + (rotationCos1 * distance));
-		double bogieZ1 = (this.posZ + (rotationSin1* distance));
-		
-		if(anglePitchClient>20 && rotationCos1 == 1){
-			bogieX1-=pitchRads*0.9;
-			pitch-=pitchRads*0.3;
-		}
-		if(anglePitchClient>20 && rotationSin1 == 1){
-			bogieZ1-=pitchRads*0.9;
-			pitch-=pitchRads*0.3;
-		}
-		riddenByEntity.setPosition(bogieX1, pitch, bogieZ1);
-		
-		//riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.45, posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -96,4 +71,7 @@ public class EntityLocoSteamBR80_DB extends SteamTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0.8f,1.5f, 0.45f}};}
+    
 }

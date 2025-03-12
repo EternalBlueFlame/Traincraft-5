@@ -24,14 +24,7 @@ public class PassengerIC4_DSB_FG extends EntityRollingStock implements IPassenge
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity!=null) {
-			riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ);
-		}
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -74,4 +67,7 @@ public class PassengerIC4_DSB_FG extends EntityRollingStock implements IPassenge
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 3.65F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    
 }

@@ -25,12 +25,7 @@ public class EntityLocoElectricBP4 extends ElectricTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		TraincraftUtil.updateRider(this, 3.9, 0.2);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -80,4 +75,7 @@ public class EntityLocoElectricBP4 extends ElectricTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{-1.7f,1.35f, 0.25f}};}
+    
 }

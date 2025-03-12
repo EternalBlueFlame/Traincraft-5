@@ -23,13 +23,7 @@ public class EntityStockCarDRWG extends EntityRollingStock implements IPassenger
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.2F, posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -77,4 +71,7 @@ public class EntityStockCarDRWG extends EntityRollingStock implements IPassenger
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 1.65F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return null;}
+    
 }

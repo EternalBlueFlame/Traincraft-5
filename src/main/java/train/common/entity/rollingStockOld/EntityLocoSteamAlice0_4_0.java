@@ -25,12 +25,7 @@ public class EntityLocoSteamAlice0_4_0 extends SteamTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.65, posZ);// default
-	}
-	@Override
+		@Override
 	public boolean shouldRiderSit(){return false;}
 
 	@Override
@@ -79,4 +74,7 @@ public class EntityLocoSteamAlice0_4_0 extends SteamTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{1.3f,1.35f, -0.3f}};}
+    
 }

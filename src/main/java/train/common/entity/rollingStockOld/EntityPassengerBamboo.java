@@ -24,13 +24,7 @@ public class EntityPassengerBamboo extends EntityRollingStock implements IPassen
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset(), posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -73,4 +67,7 @@ public class EntityPassengerBamboo extends EntityRollingStock implements IPassen
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 1.55F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{-0.5f,0.9f, 0f},{0.5f,0.9f, 0f}};}
+    
 }

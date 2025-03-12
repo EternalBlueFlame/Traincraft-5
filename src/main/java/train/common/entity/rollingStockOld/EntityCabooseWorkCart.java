@@ -34,13 +34,7 @@ public class EntityCabooseWorkCart extends AbstractWorkCart implements IInventor
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.15F, posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -114,4 +108,7 @@ public class EntityCabooseWorkCart extends AbstractWorkCart implements IInventor
 	}
 
 	public void markDirty(){}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    
 }

@@ -696,7 +696,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if (!worldObj.isRemote) {
 			if(d7 == 0. && d6 == 0.) {
 				if(lastFace == -1) {
-					//lastFace = ((int) Math.round(this.serverRealRotation/90) + 5)%4;
+					//lastFace = ((int) Math.round(rotationYaw/90) + 5)%4;
 				}
 				return lastFace;
 			}

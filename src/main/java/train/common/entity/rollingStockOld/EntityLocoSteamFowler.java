@@ -27,12 +27,7 @@ public class EntityLocoSteamFowler extends SteamTrain {
 	}
 
 
-	@Override
-	public void updateRiderPosition() {
-		TraincraftUtil.updateRider(this, -0.25, 0.25);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -75,4 +70,7 @@ public class EntityLocoSteamFowler extends SteamTrain {
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) { return true; }
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{2,1.4f, 0.3f}};}
+    
 }

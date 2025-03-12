@@ -30,13 +30,7 @@ public class EntityPassengerDBOriental extends EntityRollingStock implements IPa
 		prevPosY = d1;
 		prevPosZ = d2;
 	}
-	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.2, posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -84,4 +78,7 @@ public class EntityPassengerDBOriental extends EntityRollingStock implements IPa
 	public float[] rotationPoints() {
 		return new float[]{1f, 0f};
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f},{-1,1.2f, 0f},{1,1.2f, 0f}};}
+    
 }

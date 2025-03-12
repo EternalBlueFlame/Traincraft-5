@@ -27,14 +27,7 @@ public class EntityLocoDieselIC4_DSB_MG extends DieselTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-
-		TraincraftUtil.updateRider(this, 7.2, -0.15);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -79,4 +72,7 @@ public class EntityLocoDieselIC4_DSB_MG extends DieselTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{-3.0f,1.2f, 0f},{2f,1.2f, -0.25f},{-0.4f,1.2f, -0.25f},{-1.2f,1.2f, 0.25f}};}
+    
 }

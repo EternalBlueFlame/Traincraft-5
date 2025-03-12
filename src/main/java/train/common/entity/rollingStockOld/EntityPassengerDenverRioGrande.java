@@ -23,26 +23,7 @@ public class EntityPassengerDenverRioGrande extends EntityRollingStock implement
 		prevPosY = d1;
 		prevPosZ = d2;
 	}
-	@Override
-	public void updateRiderPosition() {
-		//if(this.bogie[0]!=null){
-			/*double dX = this.posX - this.bogie[0].posX;
-			double dZ = this.posZ - this.bogie[0].posZ;
-			dX/=2;
-			dZ/=2;*/
-			//System.out.println(worldObj.isRemote+ " "+(posX - dX) +" " + (posZ - dZ));
-			//riddenByEntity.setPosition(posX - dX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.2, posZ-dZ);	
-		//}
-		/*double rads = this.rotationYawClientReal-90 * 3.141592653589793D / 180.0D;
-		double pitchRads = this.anglePitchClient * 3.141592653589793D / 180.0D;
-		double distance = 1.3;
-		riddenByEntity.setPosition(posX - Math.cos(rads)*distance, posY + (Math.tan(pitchRads)*-distance)+( getMountedYOffset() + riddenByEntity.getYOffset() + 0.2F), posZ - Math.sin(rads)*distance);
-		*/
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.2, posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -86,4 +67,7 @@ public class EntityPassengerDenverRioGrande extends EntityRollingStock implement
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 3.15F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0.2f,1.5f, 0f},{-2.2f,1.5f, 0f},{-1f,1.5f, 0f},{1.2f,1.5f, 0f}};}
+    
 }

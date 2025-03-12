@@ -34,11 +34,7 @@ public class EntityGWRBrakeVan extends AbstractWorkCart implements IInventory {
 		currentItemBurnTime = 0;
 		furnaceCookTime = 0;
 	}
-	@Override
-	public void updateRiderPosition() {
-		TraincraftUtil.updateRider(this, -1, 0.2);
-	}
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -117,4 +113,7 @@ public class EntityGWRBrakeVan extends AbstractWorkCart implements IInventory {
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 3.4F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0,1.6f, -0.2f}};}
+    
 }

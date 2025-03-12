@@ -24,13 +24,7 @@ public class EntityPassengerTramNY extends EntityRollingStock implements IPassen
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset()+0.1F, posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -74,4 +68,7 @@ public class EntityPassengerTramNY extends EntityRollingStock implements IPassen
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 2.2F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0.9f,1.2f, 0.3f},{-0.7f,1.2f, -0.3f}};}
+    
 }

@@ -24,12 +24,7 @@ public class EntityPassengerMILW extends EntityRollingStock implements IPassenge
 		prevPosY = d1;
 		prevPosZ = d2;
 	}
-	@Override
-	public void updateRiderPosition() {
-		TraincraftUtil.updateRider(this, 0.7, 0);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -73,4 +68,7 @@ public class EntityPassengerMILW extends EntityRollingStock implements IPassenge
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 2.7F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    
 }

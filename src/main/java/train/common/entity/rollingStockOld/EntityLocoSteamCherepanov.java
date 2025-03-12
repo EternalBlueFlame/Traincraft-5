@@ -25,13 +25,7 @@ public class EntityLocoSteamCherepanov extends SteamTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updateRiderPosition() {
-		if(riddenByEntity==null){return;}
-		riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.154, posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -76,5 +70,7 @@ public class EntityLocoSteamCherepanov extends SteamTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
-
+  @Override
+ public float[][] getRiderOffsets(){return new float[][]{{0.85f,1.35f, 0.1f}};}
+    
 }
