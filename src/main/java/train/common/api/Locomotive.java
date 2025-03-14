@@ -640,7 +640,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                     if(this instanceof DieselTrain && (getState().equals("broken") || getState().equals("cold"))){
                         return;
                     }
-                    float y=getYaw();
+                    float y=rotationYaw;
                     for(EntitySeat s : seats){
                         if(s!=null && s.isControlSeat() && s.getPassenger()!=null){
                             y=s.getPassenger().rotationYaw;
@@ -1225,7 +1225,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         if (this.worldObj != null) {
             if (this.getSpeed() != desiredSpeed) {
                 if ((int) this.getSpeed() <= this.speedLimit) {
-                    double rotation = this.riddenByEntity == null?this.serverRealRotation:riddenByEntity.rotationYaw;
+                    double rotation = this.riddenByEntity == null?rotationYaw:riddenByEntity.rotationYaw;
                     double[] motion = CommonUtil.rotatePoint(0.002,0,rotation==0?0:CommonUtil.floorDouble(rotation/90d)*90);
                     addVelocity(motion[0],0,motion[2]);
                 }

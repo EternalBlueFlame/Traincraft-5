@@ -6,6 +6,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
+import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Vec3f;
 import mods.railcraft.api.carts.IMinecart;
 import mods.railcraft.api.carts.IRoutableCart;
@@ -14,9 +15,11 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.play.server.S18PacketEntityTeleport;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
@@ -42,7 +45,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	public int meta;
 	public EntityRollingStock entityMainTrain;
 	public int entityMainTrainID;
-	protected Side side;
 	public TileTCRail lastTrack=null;
 
 	double[] velocity = new double[]{0,0,0,0,0,0};
@@ -68,13 +70,12 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		this.prevDpdz = 0F;
 		this.worldObj = world;
 
-		setSize(0.5f, 0.25f);
+		setSize(0.5f, 1.25f);
 
 		//this.boundingBox.offset(0, 0.5, 0);
 		setCollisionHandler(null);
 		this.yOffset = 0.65f;
 		//this.setSize(0.1F, 1.98F);
-		this.side = FMLCommonHandler.instance().getEffectiveSide();
 		isImmuneToFire = true;
 	}
 
@@ -92,6 +93,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		this.entityMainTrainID = id;
 		this.setPosition(d, d1 + this.yOffset, d2);
 		isImmuneToFire = true;
+		setSize(0.5f, 1.25f);
 	}
 
 	@Override

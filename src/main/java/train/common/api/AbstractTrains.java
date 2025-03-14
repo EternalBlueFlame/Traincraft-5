@@ -62,9 +62,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public AbstractTrains backLink;
     //private Set chunks;
     protected Ticket chunkTicket;
-    public float renderYaw;
-    protected float renderPitch;
-    public float serverRealRotation;
     public TrainHandler train;
     public List<ChunkCoordIntPair> loadedChunks = new ArrayList<>();
     public boolean shouldChunkLoad = true;
@@ -359,14 +356,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         entity_data.putString("color", color);
         dataWatcher.updateObject(30, entity_data.toXMLString());
         this.getEntityData().setString("xml", entity_data.toXMLString());
-    }
-
-    public void setRenderYaw(float yaw) {
-        this.renderYaw = yaw;
-    }
-
-    public void setRenderPitch(float pitch) {
-        this.renderPitch = pitch;
     }
 
     public String getColor() {
@@ -771,7 +760,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public float[] getHitboxSize(){
 
         if(getSpec()!=null && getSpec().getBogieLocoPosition()!=0){
-            return new float[]{(float)Math.abs(getSpec().getBogieLocoPosition())+Math.abs(getOptimalDistance(null)*2f),2f,1f};
+            return new float[]{(float)Math.abs(getSpec().getBogieLocoPosition())+(Math.abs(getOptimalDistance(null)*2f)),2f,1f};
         }
 
         return new float[]{Math.abs((getOptimalDistance(null)*2)),2f,1f};}
@@ -820,9 +809,9 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * may not return null*/
     public float[] rotationPoints(){
         if(getSpec()==null || getSpec().getBogieLocoPosition()==0){
-            return new float[]{getHitboxSize()[0]-0.5f,0f};
+            return new float[]{getHitboxSize()[0]*0.5f,-getHitboxSize()[0]*0.5f};
         }
-        return new float[]{(float)-getSpec().getBogieLocoPosition(),0};}
+        return new float[]{0,-(float)Math.abs(getSpec().getBogieLocoPosition())};}
 
     /**defines the scale to render the model at. Default is 0.0625*/
     public float[][] getRenderScale(){return new float[][]{getRender().getScale()};}

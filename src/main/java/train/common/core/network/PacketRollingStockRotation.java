@@ -3,6 +3,7 @@ package train.common.core.network;
 import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import ebf.tim.utility.DebugUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -16,41 +17,51 @@ import train.common.api.EntityRollingStock;
 public class PacketRollingStockRotation implements IMessage {
 
     int entityID;
-    int rotationYawServer;
-    int realRotation;
+    float rotationYawServer;
     int anglePitch;
     int posY;
-    boolean isInReverse;
+    double frontx,frontz,backx,backz;
 
     public PacketRollingStockRotation() {
     }
 
     public PacketRollingStockRotation(EntityRollingStock entity, int anglePitch) {
         this.entityID = entity.getEntityId();
-        this.rotationYawServer = (int) entity.rotationYaw; // Don't even ASK ME why we do this. Probably an attempt to reduce Packet size, but at what cost of precision..?
-        this.realRotation = (int) entity.serverRealRotation;
+        this.rotationYawServer = entity.rotationYaw; // Don't even ASK ME why we do this. Probably an attempt to reduce Packet size, but at what cost of precision..?
         this.anglePitch = anglePitch;
         this.posY = Float.floatToIntBits((float) entity.posY); // improved accuracy with no usage increase
+        this.frontx=entity.bogieFront.posX;
+        this.frontz=entity.bogieFront.posZ;
+        this.backx=entity.bogieBack.posX;
+        this.backz=entity.bogieBack.posZ;
     }
 
     @Override
     public void fromBytes(ByteBuf bbuf) {
         this.entityID = bbuf.readInt();
-        this.rotationYawServer = bbuf.readInt();
-        this.realRotation = bbuf.readInt();
+        this.rotationYawServer = bbuf.readFloat();
         this.anglePitch = bbuf.readInt();
         this.posY = bbuf.readInt();
-        this.isInReverse = bbuf.readBoolean();
+        if(DebugUtil.dev) {
+            this.frontx = bbuf.readDouble();
+            this.frontz = bbuf.readDouble();
+            this.backx = bbuf.readDouble();
+            this.backz = bbuf.readDouble();
+        }
     }
 
     @Override
     public void toBytes(ByteBuf bbuf) {
         bbuf.writeInt(this.entityID);
-        bbuf.writeInt(this.rotationYawServer);
-        bbuf.writeInt(this.realRotation);
+        bbuf.writeFloat(this.rotationYawServer);
         bbuf.writeInt(this.anglePitch);
         bbuf.writeInt(this.posY);
-        bbuf.writeBoolean(this.isInReverse);
+        if(DebugUtil.dev) {
+            bbuf.writeDouble(frontx);
+            bbuf.writeDouble(frontz);
+            bbuf.writeDouble(backx);
+            bbuf.writeDouble(backz);
+        }
     }
 
     public static class Handler implements IMessageHandler<PacketRollingStockRotation, IMessage> {
@@ -61,10 +72,13 @@ public class PacketRollingStockRotation implements IMessage {
                 Entity entity = mc.theWorld.getEntityByID(message.entityID);
                 if (entity instanceof EntityRollingStock) {
                     EntityRollingStock rollingStock = (EntityRollingStock) entity;
-                    rollingStock.rotationYawClient = message.rotationYawServer;
-                    rollingStock.rotationYawClientReal = message.realRotation;
-                    rollingStock.anglePitchClient = message.anglePitch;
+                    rollingStock.rotationYaw = message.rotationYawServer;
+                    rollingStock.rotationPitch = message.anglePitch;
                     rollingStock.posYFromServer= Float.intBitsToFloat(message.posY);
+                    if(DebugUtil.dev && rollingStock.bogieFront!=null && rollingStock.bogieBack!=null) {
+                        rollingStock.bogieFront.setPosition(message.frontx, rollingStock.bogieFront.posY, message.frontz);
+                        rollingStock.bogieBack.setPosition(message.backx, rollingStock.bogieBack.posY, message.backz);
+                    }
                 }
             }
 
