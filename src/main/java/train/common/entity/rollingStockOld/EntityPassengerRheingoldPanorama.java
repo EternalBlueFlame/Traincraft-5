@@ -35,12 +35,7 @@ public class EntityPassengerRheingoldPanorama extends EntityRollingStock impleme
 		return new float[][]{
 				{1.0f,0.4f,0f},{-1.0f,0.4f,0f},{-3.05f,-0.25f,0f},{3.05f,-0.25f,0f}};
 	}
-	@Override
-	public void updatePassenger(Entity passenger) {
-		TraincraftUtil.updateRider(this,-0.5, 0.4);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;

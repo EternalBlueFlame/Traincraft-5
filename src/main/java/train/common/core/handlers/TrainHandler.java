@@ -33,12 +33,12 @@ public class TrainHandler {
 		train.add(rolling);
 		(rolling).train = this;
 		//System.out.println("added "+rolling);
-		if (rolling.cartLinked1 != null) {
-			addRollingStock(rolling.cartLinked1);
+		if (rolling.frontLink != null) {
+			addRollingStock(rolling.frontLink);
 		}
 
-		if (rolling.cartLinked2 != null) {
-			addRollingStock(rolling.cartLinked2);
+		if (rolling.backLink != null) {
+			addRollingStock(rolling.backLink);
 		}
 	}
 

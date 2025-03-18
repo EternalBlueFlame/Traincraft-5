@@ -24,12 +24,7 @@ public class EntityPassengerRheingold extends EntityRollingStock implements IPas
 		prevPosY = d1;
 		prevPosZ = d2;
 	}
-	@Override
-	public void updatePassenger(Entity passenger) {
-		TraincraftUtil.updateRider(this, -0.3, 0);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -73,4 +68,9 @@ public class EntityPassengerRheingold extends EntityRollingStock implements IPas
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 3.94F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{
+            {-2.2f,1.2f, -0.1f},{-1.0f,1.2f, -0.1f},{-0.3f,1.2f, -0.1f},{0.9f,1.2f, -0.1f},{2.1f,1.2f, -0.1f}
+    };}
+    
 }

@@ -26,13 +26,7 @@ public class EntityLocoDieselChME3 extends DieselTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(!(passenger instanceof Entity)){return;}
-		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.35F, posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -79,4 +73,7 @@ public class EntityLocoDieselChME3 extends DieselTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0.65f,1.42f, 0.35f}};}
+    
 }

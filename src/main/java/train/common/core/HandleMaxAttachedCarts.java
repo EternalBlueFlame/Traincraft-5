@@ -1,7 +1,6 @@
 package train.common.core;
 
 import train.common.api.AbstractTrains;
-import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 
 /**

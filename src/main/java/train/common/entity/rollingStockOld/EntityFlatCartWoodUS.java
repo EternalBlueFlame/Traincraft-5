@@ -38,13 +38,7 @@ public class EntityFlatCartWoodUS extends Freight{
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(getPassengers().get(0)!=null) {
-			getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.4, posZ);
-		}
-	}
-	@Override
+		@Override
 	public boolean interactFirst(EntityPlayer entityplayer) {
 		playerEntity = entityplayer;
 		if ((super.interactFirst(entityplayer))) {
@@ -116,4 +110,7 @@ public class EntityFlatCartWoodUS extends Freight{
 			}
 		}
 	}
+	@Override
+	public float[][] getRiderOffsets(){return null;}
+    
 }

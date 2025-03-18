@@ -35,13 +35,7 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(!(passenger instanceof Entity)){return;}
-		TraincraftUtil.updateRider(this,0.5,0.4);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -127,4 +121,7 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 	public float transportMetricHorsePower() {
 		return super.transportMetricHorsePower()*(getPassengers().get(0) instanceof EntityPlayerMP &&(((EntityPlayerMP) getPassengers().get(0)).getDisplayName().equals("EternalBlueFlame") || ((EntityPlayerMP) getPassengers().get(0)).getDisplayName().equals("minecarftmano9"))?3:1);
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0.4f,1.6f, 0f}};}
+    
 }

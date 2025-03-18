@@ -15,7 +15,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraft.util.EnumFacing;
 import train.common.api.blocks.TileRenderFacing;
-import train.common.blocks.TCBlocks;
 import train.common.core.interfaces.ITier;
 import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
@@ -23,7 +22,6 @@ import train.common.library.Info;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class TileCrafterTierI extends TileRenderFacing implements IInventory, ITier {
 	private ItemStack[] crafterInventory;

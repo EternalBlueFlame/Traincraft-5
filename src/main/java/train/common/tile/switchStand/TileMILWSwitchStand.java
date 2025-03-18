@@ -7,11 +7,9 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.AxisAlignedBB;
-import train.common.api.blocks.BlockSwitch;
 import train.common.api.blocks.TileSwitch;
 import train.common.blocks.TCBlocks;
 import train.common.blocks.switchStand.BlockMILWSwitchStand;
-import train.common.library.BlockIDs;
 
 import java.util.Random;
 

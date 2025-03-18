@@ -210,31 +210,21 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 
 		if (structureboundingbox.isVecInside(new Vec3i(j2, k2, l2))) {
 			int rD = random.nextInt(8);
-			AbstractTrains cart;
-			if (rD == 0) {
-				cart = new EntityCaboose(world);
-			}
-			else if (rD == 1) {
-				cart = new EntityCaboose3(world);
-			}
-			else if (rD == 2) {
-				cart = new EntityFreightCart(world);
-			}
-			else if (rD == 3) {
-				cart = new EntityPassenger2(world);
-			}
-			else if (rD == 4) {
-				cart = new EntityStockCar(world);
-			}
-			else if (rD == 5) {
-				cart = new EntityBoxCartUS(world);
-			}
-			else if (rD == 6) {
-				cart = new EntityFreightCartSmall(world);
-			}
-			else {
-				cart = new EntityFreightWood2(world);
-			}
+			EntityRollingStock cart = new EntityFreightWood2(world,j2 + 0.5D, k2, l2 + 0.5D);
+			if (rD == 0)
+				cart = new EntityCaboose(world,j2 + 0.5D, k2, l2 + 0.5D);
+			if (rD == 1)
+				cart = new EntityCaboose3(world,j2 + 0.5D, k2, l2 + 0.5D);
+			if (rD == 2)
+				cart = new EntityFreightCart(world,j2 + 0.5D, k2, l2 + 0.5D);
+			if (rD == 3)
+				cart = new EntityPassenger2(world,j2 + 0.5D, k2, l2 + 0.5D);
+			if (rD == 4)
+				cart = new EntityStockCar(world,j2 + 0.5D, k2, l2 + 0.5D);
+			if (rD == 5)
+				cart = new EntityBoxCartUS(world,j2 + 0.5D, k2, l2 + 0.5D);
+			if (rD == 6)
+				cart = new EntityFreightCartSmall(world,j2 + 0.5D, k2, l2 + 0.5D);
 			cart.setLocationAndAngles(j2 + 0.5D, k2, l2 + 0.5D, 90.0F, 0.0F);
 			if (rD == 4) {
 				cart.setSkin("Blue");

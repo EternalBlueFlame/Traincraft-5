@@ -28,8 +28,8 @@ import train.common.api.*;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.util.TraincraftUtil;
 import train.common.entity.rollingStockOld.EntityTracksBuilder;
-import train.common.library.EnumTracks;
 import train.common.library.BlockIDs;
+import train.common.library.EnumTracks;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
 
@@ -75,9 +75,12 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	}
 
 	public ItemRollingStock(AbstractTrains train, String modid, CreativeTabs tab){
-		this(modid+":"+train.transportName(),tab);
+		this(modid+":trains/"+train.transportName().replace(' ','_'),tab);
 		setUnlocalizedName(train.transportName());
 		entity=train;
+		if(tab ==Traincraft.tcTab && ConfigHandler.SPLIT_CREATIVE) {
+			setCreativeTab(Traincraft.tcTrainTab);
+		}
 	}
 
 	@Deprecated
@@ -254,7 +257,10 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		else if(tileentity instanceof TileTCRailGag){
 
 			TileTCRailGag tileGag = (TileTCRailGag) tileentity;
-			TileTCRail tile = (TileTCRail) par3World.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
+			if(((TileTCRailGag) tileentity).originX.size()<1 || par3World.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) ==null){
+				return false;
+			}
+			TileTCRail tile = (TileTCRail) par3World.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
 
 			if(tile!=null  && (tile.getType().equals(EnumTracks.MEDIUM_STRAIGHT.getLabel())
 					|| tile.getType().equals(EnumTracks.LONG_STRAIGHT.getLabel())
@@ -319,13 +325,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		int zDir = directions[l][1];
 
 
-		player.addChatMessage(new ChatComponentText("start: " + (i - rollingstock.rotationPoints()[1])));
 		for (int check = 0; check <= trackLength ; check++){
-
-			player.addChatMessage(new ChatComponentText("L " + l));
-			player.addChatMessage(new ChatComponentText("X: " + (i - ((rollingstock.rotationPoints()[1] + check) * xDir))));
-			player.addChatMessage(new ChatComponentText("Z: " + (k - ((rollingstock.rotationPoints()[1] + check) * zDir))));
-
 
 
 			if (!(world.getBlock((int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ) == BlockIDs.tcRail.block
@@ -398,25 +398,23 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				canPlaceRollingStock(world, player, rollingStock, i, j, k, dir);
 
 
-
+				player.addChatMessage(new ChatComponentText("dir: " + dir));
 
 				if (dir == 0) {
 
-					//rollingStockOld.rotationYaw = 180; // BACK
-
-					rollingStock.serverRealRotation = (meta == 2 || meta == 0) ? 90 : 0;
+					rollingStock.rotationYaw = (meta == 2 || meta == 0) ? 90 : 0;
 
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 
 						if (meta == 0 || meta == 2) {
-							rollingStock.rotationYaw = -90; // LEFT
-							rollingStock.serverRealRotation = 90;
+							//rollingStock.rotationYaw = -90; // LEFT
+							rollingStock.rotationYaw = 90;
 						}
 						else if (meta == 6 || meta == 4) {
-							rollingStock.rotationYaw = -45; // LEFT;
+							rollingStock.rotationYaw = 135; // LEFT;
 						}
 						else if (meta == 5 || meta == 7){
-							rollingStock.rotationYaw = -135;
+							rollingStock.rotationYaw = 45;
 						}
 						else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
@@ -429,20 +427,15 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 1) {
-					rollingStock.rotationYaw = -135; // BACK
-					if (meta == 0) {
-						rollingStock.serverRealRotation = 90; // RIGHT
-					}
-					else {
-						rollingStock.serverRealRotation = 180; // FRONT
-					}
+					rollingStock.rotationYaw = (meta == 2 || meta == 0) ? 90 : 0;
+
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 6 || meta == 4) {
-							rollingStock.rotationYaw = -45; // LEFT
+							rollingStock.rotationYaw = 135; // LEFT
 						} else if (meta == 2 || meta == 0) {
-							rollingStock.rotationYaw = -90; // LEFT
+							rollingStock.rotationYaw = 90; // LEFT
 						} else if (meta == 1 || meta == 3) {
-							rollingStock.rotationYaw = 0; // LEFT
+							rollingStock.rotationYaw = 180; // LEFT
 						} else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
 							rollingStock.setDead();
@@ -453,21 +446,16 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 2) {
-					rollingStock.rotationYaw = -90; //BACK
-					if (meta == 1) {
-						rollingStock.serverRealRotation = 180; //RIGHT
-					} else {
-						rollingStock.serverRealRotation = 90; // FRONT
-					}
+					rollingStock.rotationYaw = (meta == 1 || meta == 3) ? 180 : 90;
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 1 || meta == 3){
-							rollingStock.rotationYaw = 0; // LEFT
+							rollingStock.rotationYaw = 180; // LEFT
 						}
 						else if(meta == 5 || meta == 7){
-							rollingStock.rotationYaw = 45;
+							rollingStock.rotationYaw = -135;
 						}
 						else if (meta == 6 || meta == 4){
-							rollingStock.rotationYaw = -45;
+							rollingStock.rotationYaw = 135;
 
 						}
 						else {
@@ -480,21 +468,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 3) {
-					rollingStock.rotationYaw = -45; // BACK
-					if (meta == 0) {
-						rollingStock.serverRealRotation = -90; // RIGHT
-					} else {
-						rollingStock.serverRealRotation = 180; // FRONT
-					}
+					rollingStock.rotationYaw = (meta == 2 || meta == 0) ? -90 : 180;
+
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 5 || meta == 7) {
-							rollingStock.rotationYaw = 45; // LEFT
+							rollingStock.rotationYaw = -135; // LEFT
 						}
 						else if (meta == 2 || meta == 0) {
-							rollingStock.rotationYaw = 90;
+							rollingStock.rotationYaw = -90;
 						}
 						else if (meta == 1 || meta == 3){
-							rollingStock.rotationYaw = 0; // LEFT
+							rollingStock.rotationYaw = 180; // LEFT
 						}
 						else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
@@ -506,22 +490,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 4) {
-					rollingStock.rotationYaw = 0; // BACK
-					if (meta == 0) {
-						rollingStock.serverRealRotation = -90; // RIGHT
-					} else {
-						rollingStock.serverRealRotation = 180; // FRONT
-					}
+					rollingStock.rotationYaw = (meta == 2 || meta == 0) ? -90 : 180;
+
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 0 || meta == 2) {
-							rollingStock.rotationYaw = 0; // LEFT
-							rollingStock.serverRealRotation = -90; // RIGHT
+							rollingStock.rotationYaw = -90; // RIGHT
 						}
 						else if (meta == 5 || meta == 7) {
-							rollingStock.rotationYaw = 45; // LEFT
+							rollingStock.rotationYaw = -135; // LEFT
 						}
 						else if (meta == 6 || meta == 4){
-							rollingStock.rotationYaw = 135;
+							rollingStock.rotationYaw = -45;
 						}
 
 						else {
@@ -536,21 +515,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 5) {
-					rollingStock.rotationYaw = 45; // BACK
-					if (meta == 0) {
-						rollingStock.serverRealRotation = -90; // RIGHT
-					} else {
-						rollingStock.serverRealRotation = 0; // FRONT
-					}
+					rollingStock.rotationYaw = (meta == 2 || meta == 0) ? -90 : 0;
+
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 6 || meta == 4) {
-							rollingStock.rotationYaw = 135; // LEFT
+							rollingStock.rotationYaw = -45; // LEFT
 						}
 						else if (meta == 0 || meta == 2) {
-							rollingStock.rotationYaw = 90; // LEFT
+							rollingStock.rotationYaw = -90; // LEFT
 						}
 						else if (meta == 1 || meta == 3){
-							rollingStock.rotationYaw = 178.5f; // LEFT
+							rollingStock.rotationYaw = 0; // LEFT
 						}
 						else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
@@ -562,22 +537,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 6) {
-					rollingStock.rotationYaw = 90; // BACK
-					if (meta == 1) {
-						rollingStock.serverRealRotation = 0; // RIGHT
-					} else {
-						rollingStock.serverRealRotation = -90; // FRONT
-					}
+					rollingStock.rotationYaw = (meta == 0 || meta == 2) ? -90 : 0;
+				
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 1 || meta == 3) {
-							rollingStock.rotationYaw = -178.5f; // LEFT
-							rollingStock.serverRealRotation = 0;
+							rollingStock.rotationYaw = 0;
 						}
 						else if (meta == 6 || meta == 4) {
-							rollingStock.rotationYaw = 135; // LEFT
+							rollingStock.rotationYaw = -45; // LEFT
 						}
 						else if (meta == 5 || meta == 7) {
-							rollingStock.rotationYaw = -135; // LEFT
+							rollingStock.rotationYaw = 45; // LEFT
 						}else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
 							rollingStock.setDead();
@@ -588,21 +558,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				}
 
 				if (dir == 7) {
-					rollingStock.rotationYaw = 135; // BACK
-					if (meta == 0) {
-						rollingStock.serverRealRotation = 90; // RIGHT
-					} else {
-						rollingStock.serverRealRotation = 0; // FRONT
-					}
+					rollingStock.rotationYaw = (meta == 0 || meta == 2) ? 90 : 0;
+
 					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 5 || meta == 7) {
-							rollingStock.rotationYaw = -135; // LEFT
+							rollingStock.rotationYaw = 45; // LEFT
 						}
 						else if (meta == 1 || meta == 3) {
-							rollingStock.rotationYaw = -178.5f; // LEFT
+							rollingStock.rotationYaw = 0; // LEFT
 						}
 						else if (meta == 0 || meta == 2) {
-							rollingStock.rotationYaw = -90; // LEFT
+							rollingStock.rotationYaw = 90; // LEFT
 						}
 						else {
 							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
@@ -612,8 +578,6 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					}
 					
 				}
-
-
 
 				rollingStock.trainName = (itemstack.getItem()).getItemStackDisplayName(itemstack);
 				if (player != null) {

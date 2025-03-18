@@ -62,7 +62,7 @@ public class TileLantern extends TileEntity {
 
 	@Override
 	public void updateEntity(){
-		if (oldColor != randomColor){
+		if (oldColor != randomColor && xCoord!=0 && yCoord!=0 && zCoord!=0){
 			oldColor = randomColor;
 			this.markDirty();
 			this.syncTileEntity();

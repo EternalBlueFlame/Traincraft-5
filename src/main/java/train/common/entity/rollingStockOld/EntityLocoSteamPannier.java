@@ -28,14 +28,7 @@ public class EntityLocoSteamPannier extends SteamTrain {
 
 	@Override
 	public boolean shouldRiderSit(){return false;}
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(!(passenger instanceof Entity)){return;}
-
-		TraincraftUtil.updateRider(this, 0, 0.5);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -82,4 +75,7 @@ public class EntityLocoSteamPannier extends SteamTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{2.1f,1.7f, 0.3f}};}
+    
 }

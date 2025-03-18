@@ -12,13 +12,13 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStoppedEvent;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.simpleimpl.SimpleNetworkWrapper;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.networking.PacketSeatUpdate;
 import ebf.tim.utility.DebugUtil;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -28,19 +28,23 @@ import net.minecraftforge.common.util.EnumHelper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import train.common.api.AbstractTrains;
+import train.common.api.EntityBogie;
 import train.common.api.LiquidManager;
+import train.common.api.TrainRecord;
 import train.common.blocks.TCBlocks;
 import train.common.core.CommonProxy;
 import train.common.core.CreativeTabTraincraft;
+import train.common.core.EntityIds;
 import train.common.core.TrainModCore;
 import train.common.core.handlers.*;
-import train.common.core.util.TraincraftUtil;
 import train.common.entity.rollingStock.EntityPassengerPassengerCar1;
+import train.common.entity.zeppelin.EntityZeppelinOneBalloon;
+import train.common.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.common.generation.ComponentVillageTrainstation;
 import train.common.generation.WorldGenWorld;
 import train.common.items.TCItems;
+import train.common.library.EnumTrains;
 import train.common.library.Info;
-import train.common.library.ItemIDs;
 import train.common.library.TraincraftRegistry;
 import train.common.recipes.AssemblyTableRecipes;
 
@@ -161,6 +165,13 @@ public class Traincraft {
     public void init(FMLInitializationEvent event) {
         tcLog.info("Start Initialization");
         TCBlocks.init();
+
+        if (Loader.isModLoaded("ForgeMultipart"))
+        {
+            tcLog.info("ForgeMultipart detected. Registering Traincraft Blocks");
+            train.common.core.plugins.ForgeMultiPart.registerBlocks();
+        }
+
         TCItems.init();
         if (Traincraft.hasTCCEAddon()) {
             TCItems.registerTCCERollingStock();
@@ -205,8 +216,13 @@ public class Traincraft {
         RecipeHandler.initSmeltingRecipes();
         AssemblyTableRecipes.recipes();
 
-        /* Register the liquids */
-        EntityHandler.init();
+        EntityRegistry.registerModEntity(EntityZeppelinTwoBalloons.class, "zeppelin", EntityIds.ZEPPELIN, Traincraft.instance, 512, 1, true);//zepplin
+        EntityRegistry.registerModEntity(EntityBogie.class, "Entity Front Bogie", EntityIds.LOCOMOTIVE_BOGIE, Traincraft.instance, 512, 3, true);//front bogie
+        EntityRegistry.registerModEntity(EntityZeppelinOneBalloon.class, "zeppelin big", EntityIds.ZEPPELIN_BIG, Traincraft.instance, 512, 1, true);//zepplin big
+        EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 16, Traincraft.instance,512,3,true);//seat
+        for(TrainRecord trains : EnumTrains.trains()){
+            TraincraftRegistry.registerTransport(trains);
+        }
 
 
         TraincraftRegistry.registerTransports("", listSteamTrains());

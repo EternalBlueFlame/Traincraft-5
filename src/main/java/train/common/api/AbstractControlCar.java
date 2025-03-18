@@ -157,13 +157,13 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         if (worldObj.isRemote == false)
         {
             //Server side stuff.
-            if (cartLinked1 != null)
+            if (frontLink != null)
             {
-                if ((cartLinked1).train != null && (cartLinked1).train.getTrains().size() != 0)
+                if ((frontLink).train != null && (frontLink).train.getTrains().size() != 0)
                 {
-                    for (int j1 = 0; j1 < (cartLinked1).train.getTrains().size(); j1++)
+                    for (int j1 = 0; j1 < (frontLink).train.getTrains().size(); j1++)
                     {
-                        AbstractTrains daRollingStock = (cartLinked1).train.getTrains().get(j1);
+                        AbstractTrains daRollingStock = (frontLink).train.getTrains().get(j1);
                         if (daRollingStock instanceof Locomotive)
                         {
                             connectedLocomotive = (Locomotive) daRollingStock;
@@ -390,7 +390,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     }
 
     @Override
-    public void keyHandlerFromPacket(int i)
+    public void keyHandlerFromPacket(int i, int player)
     {
         if (this.getTrainLockedFromPacket())
         {

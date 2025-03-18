@@ -25,7 +25,6 @@ import net.minecraft.util.EnumFacing;
 import train.common.api.ElectricTrain;
 import train.common.api.EntityRollingStock;
 import train.common.core.handlers.ConfigHandler;
-import train.common.core.util.TraincraftUtil;
 import train.common.library.Tracks;
 
 import java.io.DataInputStream;

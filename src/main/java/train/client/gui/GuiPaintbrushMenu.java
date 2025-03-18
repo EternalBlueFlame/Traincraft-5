@@ -18,7 +18,6 @@ import train.client.render.RenderRollingStock;
 import train.common.Traincraft;
 import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
-import train.common.api.TrainRecord;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.network.PacketPaintbrushColor;
 import train.common.core.network.PacketTextureOverlayConfig;

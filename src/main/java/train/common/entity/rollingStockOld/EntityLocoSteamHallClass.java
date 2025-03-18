@@ -25,18 +25,7 @@ public class EntityLocoSteamHallClass extends SteamTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		
-		/*double rads = this.renderYaw * 3.141592653589793D / 180.0D;
-		double pitchRads = this.renderPitch * 3.141592653589793D / 180.0D;
-		getPassengers().get(0).setPosition(posX - Math.cos(rads)*3, posY + (Math.tan(pitchRads)*-3F)+( getMountedYOffset() + passenger.getYOffset() + 0.55F), posZ - Math.sin(rads)*3);
-		*/
-		if(passenger==null){return;}
-		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.3F, posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -79,4 +68,7 @@ public class EntityLocoSteamHallClass extends SteamTrain {
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) { return true; }
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{2.8f,1.5f, 0.3f}};}
+    
 }

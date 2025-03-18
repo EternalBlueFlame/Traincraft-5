@@ -3,9 +3,7 @@ package train.common.blocks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,9 +17,7 @@ import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
 import train.common.api.blocks.BlockDynamic;
 import train.common.library.GuiIDs;
-import train.common.library.Info;
 import train.common.tile.TileCrafterTierI;
-import train.common.tile.TileHelper;
 
 import java.util.Random;
 
@@ -66,7 +62,7 @@ public class BlockAssemblyTableI extends BlockDynamic {
 		Random distilRand = new Random();
 		TileCrafterTierI tileentitytierI = (TileCrafterTierI) world.getTileEntity(i, j, k);
 		if (tileentitytierI != null) {
-			label0: for (int l = 0; l < tileentitytierI.getSizeInventory(); l++) {
+			label0: for (int l = 0; l < tileentitytierI.getSizeInventory()-8; l++) {
 				ItemStack itemstack = tileentitytierI.getStackInSlot(l);
 				if (itemstack == null) {
 					continue;

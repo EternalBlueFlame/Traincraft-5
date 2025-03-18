@@ -25,13 +25,7 @@ public class EntityLocoSteamLSSP7 extends SteamTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(!(passenger instanceof Entity)){return;}
-		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset()+0.25f, posZ);// default
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -76,4 +70,7 @@ public class EntityLocoSteamLSSP7 extends SteamTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0.65f,1.25f, 0.3f}};}
+    
 }

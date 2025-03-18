@@ -8,8 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import train.common.library.BlockIDs;
 import train.common.api.blocks.TileTraincraft;
+import train.common.library.BlockIDs;
 
 import java.util.Random;
 

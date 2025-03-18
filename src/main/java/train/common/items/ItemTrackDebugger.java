@@ -8,18 +8,14 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.World;
-import train.common.Traincraft;
 import train.common.library.BlockIDs;
 import train.common.library.Info;
-import train.common.library.ItemIDs;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
-import mods.railcraft.api.tracks.*;
 
 import java.util.List;
 

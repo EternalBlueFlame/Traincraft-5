@@ -15,7 +15,6 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import train.common.Traincraft;
-import train.common.library.BlockIDs;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
@@ -28,7 +27,7 @@ public class BlockTCRailGag extends Block {
 	public BlockTCRailGag() {
 		super(Material.iron);
 		setCreativeTab(Traincraft.tcTab);
-		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.125F, 1.0F);
+		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 1.0F);
 	}
 
 	/**
@@ -42,9 +41,9 @@ public class BlockTCRailGag extends Block {
 	@Override
 	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
 		TileTCRailGag tileEntity = (TileTCRailGag) world.getTileEntity(i, j, k);
-		if (tileEntity != null) {
-			world.func_147480_a(tileEntity.originX, tileEntity.originY, tileEntity.originZ, false);
-			world.removeTileEntity(tileEntity.originX, tileEntity.originY, tileEntity.originZ);
+		if (tileEntity != null && tileEntity.originX.size()>0) {
+			world.func_147480_a(tileEntity.originX.get(0), tileEntity.originY.get(0), tileEntity.originZ.get(0), false);
+			world.removeTileEntity(tileEntity.originX.get(0), tileEntity.originY.get(0), tileEntity.originZ.get(0));
 			// NOTE: func_147480_a = destroyBlock
 			for(int x : matrixXZ){
 				for(int z : matrixXZ){
@@ -77,7 +76,7 @@ public class BlockTCRailGag extends Block {
 	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
 
 		TileTCRailGag gagRail = (TileTCRailGag) world.getTileEntity(x,y,z);
-		TileTCRail tileEntity = (TileTCRail) world.getTileEntity(gagRail.originX, gagRail.originY, gagRail.originZ);
+		TileTCRail tileEntity = (TileTCRail) world.getTileEntity(gagRail.originX.get(0), gagRail.originY.get(0), gagRail.originZ.get(0));
 
 		if (tileEntity == null) {
 			return;
@@ -88,7 +87,7 @@ public class BlockTCRailGag extends Block {
 	@Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
 		TileTCRailGag tileGag = (TileTCRailGag) world.getTileEntity(x, y, z);
-		TileTCRail tile = (TileTCRail) world.getTileEntity(tileGag.originX, tileGag.originY, tileGag.originZ);
+		TileTCRail tile = (TileTCRail) world.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
 		if (tile != null && tile.idDrop != null){
 			return new ItemStack(tile.idDrop);
 
@@ -102,7 +101,7 @@ public class BlockTCRailGag extends Block {
 	public void onNeighborBlockChange(World world, int i, int j, int k, Block par5) {
 		TileEntity tileEntity = world.getTileEntity(i, j, k);
 		if (tileEntity instanceof TileTCRailGag) {
-			if (world.isAirBlock(((TileTCRailGag)tileEntity).originX, ((TileTCRailGag)tileEntity).originY, ((TileTCRailGag)tileEntity).originZ)) {
+			if (((TileTCRailGag)tileEntity).originX.size()>0 && world.isAirBlock(((TileTCRailGag)tileEntity).originX.get(0), ((TileTCRailGag)tileEntity).originY.get(0), ((TileTCRailGag)tileEntity).originZ.get(0))) {
 				// NOTE: func_147480_a = destroyBlock
 				world.func_147480_a(i, j, k, false);
 				world.removeTileEntity(i, j, k);

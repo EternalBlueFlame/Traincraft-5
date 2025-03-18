@@ -25,12 +25,7 @@ public class EntityLocoElectricE103 extends ElectricTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		TraincraftUtil.updateRider(this,  3.625, 0.1);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -75,4 +70,7 @@ public class EntityLocoElectricE103 extends ElectricTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{2.2f,1.2f, 0.2f},{-2.2f,1.2f, -0.2f}};}
+    
 }

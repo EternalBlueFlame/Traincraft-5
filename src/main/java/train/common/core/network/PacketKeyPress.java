@@ -59,12 +59,12 @@ public class PacketKeyPress implements IMessage {
                 getRidingEntity()= ((EntitySeat) ridingEntity).parent;
             }
             /* "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks for when the value is null anyways. */
-            if (getRidingEntity()!= null) {
-                if (getRidingEntity()instanceof Locomotive) {
-                    ((Locomotive) ridingEntity).keyHandlerFromPacket(message.key);
-                } else if (getRidingEntity()instanceof EntityRollingStock) {
-                    ((EntityRollingStock) ridingEntity).keyHandlerFromPacket(message.key);
-                } else if (getRidingEntity()instanceof AbstractZeppelin) {
+            if (ridingEntity != null) {
+                if (ridingEntity instanceof Locomotive) {
+                    ((Locomotive) ridingEntity).keyHandlerFromPacket(message.key, context.getServerHandler().playerEntity.getEntityId());
+                } else if (ridingEntity instanceof EntityRollingStock) {
+                    ((EntityRollingStock) ridingEntity).keyHandlerFromPacket(message.key, context.getServerHandler().playerEntity.getEntityId());
+                } else if (ridingEntity instanceof AbstractZeppelin) {
                     ((AbstractZeppelin) ridingEntity).pressKey(message.key);
                 } else if (getRidingEntity()instanceof EntityRotativeDigger) {
                     ((EntityRotativeDigger) ridingEntity).pressKey(message.key);

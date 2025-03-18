@@ -42,6 +42,7 @@ import train.common.blocks.TCBlocks;
 import train.common.core.CommonProxy;
 import train.common.core.Traincraft_EventSounds;
 import train.common.core.handlers.ConfigHandler;
+import train.common.entity.CollisionBox;
 import train.common.entity.digger.EntityRotativeDigger;
 import train.common.entity.digger.EntityRotativeWheel;
 import train.common.entity.rollingStockOld.EntityJukeBoxCart;
@@ -158,6 +159,7 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerRenderInformation() {
         FMLCommonHandler.instance().bus().register(new ClientTickHandler());
+        RenderingRegistry.registerEntityRenderingHandler(CollisionBox.class, nullRender);
 
         RenderingRegistry.registerEntityRenderingHandler(EntityRollingStock.class, new RenderRollingStock());
         RenderingRegistry.registerEntityRenderingHandler(EntityZeppelinTwoBalloons.class, new RenderZeppelins());
@@ -326,10 +328,8 @@ public class ClientProxy extends CommonProxy {
             case GuiIDs.TRAIN_WORKBENCH:
                 return te instanceof TileTrainWbench ? new GuiTrainCraftingBlock(player.inventory, player.getWorld(), (TileTrainWbench) te) : null;
             case (GuiIDs.LOCO):
-                if (getPassengers().get(0) != null && getPassengers().get(0).getRidingEntity()instanceof EntityRollingStock) {
-                    return new GuiLoco2(getPassengers().get(0).inventory, entity);
-                } else if (getPassengers().get(0) != null && getPassengers().get(0).getRidingEntity()instanceof EntitySeat) {
-                    return new GuiLoco2(getPassengers().get(0).inventory, world.getEntityByID(((EntitySeat) entity).parentId));
+                if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntitySeat) {
+                    return new GuiLoco2(riddenByEntity.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
                 } else {
                     return null;
                 }

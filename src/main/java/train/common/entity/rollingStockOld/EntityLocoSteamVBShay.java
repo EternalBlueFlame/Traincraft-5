@@ -25,12 +25,7 @@ public class EntityLocoSteamVBShay extends SteamTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(!(passenger instanceof Entity)){return;}
-		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.65, posZ);// default
-	}
-	@Override
+		@Override
 	public boolean shouldRiderSit(){return false;}
 
 	@Override
@@ -79,4 +74,7 @@ public class EntityLocoSteamVBShay extends SteamTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0.5f,1.5f, 0f}};}
+    
 }

@@ -1,10 +1,10 @@
 package train.client.render.models;
 
+import fexcraft.tmt.slim.ModelConverter;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
-import fexcraft.tmt.slim.ModelConverter;
-import fexcraft.tmt.slim.ModelRendererTurbo;
 
 public class ModelGP7 extends ModelConverter //Same as Filename
 {

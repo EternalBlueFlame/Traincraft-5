@@ -24,12 +24,6 @@ public class EntityFlatCartSU extends EntityRollingStock implements IPassenger {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(!(passenger instanceof Entity)){return;}
-		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.4, posZ);
-	}
-
 	/*@Override
 	public void onUpdate(){
 		super.onUpdate();
@@ -83,4 +77,7 @@ public class EntityFlatCartSU extends EntityRollingStock implements IPassenger {
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 1.7F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return null;}
+    
 }

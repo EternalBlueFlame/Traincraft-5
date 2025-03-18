@@ -7,8 +7,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.*;
+import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidTankInfo;
+import net.minecraftforge.fluids.IFluidHandler;
 import train.common.Traincraft;
 import train.common.api.LiquidManager;
 import train.common.api.LiquidTank;
@@ -38,51 +41,7 @@ public class EntityBUnitEMDF3 extends LiquidTank implements IFluidHandler {
     }
 
 
-    @Override
-    public void updatePassenger(Entity passenger) {
-        if (getPassengers().get(0) == null) {
-            return;
-        }
-
-        double pitchRads = this.anglePitchClient * Math.PI / 180.0D;
-        double distance = 2.3;
-        double yOffset = 0.65;
-        float rotationCos1 = (float) Math.cos(Math.toRadians(this.renderYaw + 90));
-        float rotationSin1 = (float) Math.sin(Math.toRadians((this.renderYaw + 90)));
-
-        if (side.isServer()) {
-            rotationCos1 = (float) Math.cos(Math.toRadians(this.serverRealRotation + 90));
-            rotationSin1 = (float) Math.sin(Math.toRadians((this.serverRealRotation + 90)));
-            anglePitchClient = serverRealPitch * 60;
-        }
-
-        float pitch = (float) (posY + ((Math.tan(pitchRads) * distance) + getMountedYOffset())
-                + passenger.getYOffset() + yOffset);
-        float pitch1 = (float) (posY + getMountedYOffset() + passenger.getYOffset() + yOffset);
-        double bogieX1 = (this.posX + (rotationCos1 * distance));
-        double bogieZ1 = (this.posZ + (rotationSin1 * distance));
-
-        // System.out.println(rotationCos1+" "+rotationSin1);
-        if (anglePitchClient > 20 && rotationCos1 == 1) {
-            bogieX1 -= pitchRads * 2;
-            pitch -= (float) (pitchRads * 1.2);
-        }
-
-        if (anglePitchClient > 20 && rotationSin1 == 1) {
-            bogieZ1 -= pitchRads * 2;
-            pitch -= (float) (pitchRads * 1.2);
-        }
-
-        if (pitchRads == 0.0) {
-            getPassengers().get(0).setPosition(bogieX1, pitch1, bogieZ1);
-        }
-
-        if (pitchRads > -1.01 && pitchRads < 1.01) {
-            getPassengers().get(0).setPosition(bogieX1, pitch, bogieZ1);
-        }
-    }
-
-    @Override
+     @Override
     public void setDead() {
         super.setDead();
         isDead = true;
@@ -291,4 +250,7 @@ public class EntityBUnitEMDF3 extends LiquidTank implements IFluidHandler {
     public String getLiquidName() {
         return FluidRegistry.getFluid(this.dataWatcher.getWatchableObjectInt(4)) != null ? FluidRegistry.getFluid(this.dataWatcher.getWatchableObjectInt(4)).getName() : null;
     }
+	@Override
+	public float[][] getRiderOffsets(){return null;}
+    
 }

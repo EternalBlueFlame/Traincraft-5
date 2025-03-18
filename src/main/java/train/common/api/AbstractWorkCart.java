@@ -8,7 +8,6 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.IInventory;
 import net.minecraft.item.*;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +17,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import train.common.adminbook.ServerLogger;
 
-public abstract class AbstractWorkCart extends EntityRollingStock implements IInventory{
+public abstract class AbstractWorkCart extends EntityRollingStock{
 	protected ItemStack[] furnaceItemStacks;
 	public int furnaceBurnTime = 0;
 	public int currentItemBurnTime = 0;

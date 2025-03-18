@@ -30,19 +30,7 @@ public class EntityPassengerAdler extends EntityRollingStock implements IPasseng
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(getPassengers().get(0)!=null) {
-			getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2, posZ);
-		}
-	}
-
-	public void setDead() {
-		super.setDead();
-		isDead = true;
-	}
-
-	@Override
+		@Override
 	public boolean interactFirst(EntityPlayer entityplayer) {
 		playerEntity = entityplayer;
 		if ((super.interactFirst(entityplayer))) {
@@ -79,4 +67,7 @@ public class EntityPassengerAdler extends EntityRollingStock implements IPasseng
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 1.05F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0.1f,0.9f, 0f}};}
+    
 }

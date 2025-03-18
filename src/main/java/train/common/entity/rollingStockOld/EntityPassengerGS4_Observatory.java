@@ -24,12 +24,7 @@ public class EntityPassengerGS4_Observatory extends EntityRollingStock implement
 		prevPosY = d1;
 		prevPosZ = d2;
 	}
-	@Override
-	public void updatePassenger(Entity passenger) {
-		TraincraftUtil.updateRider(this,  -0.05, 0.15);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -73,4 +68,7 @@ public class EntityPassengerGS4_Observatory extends EntityRollingStock implement
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 3.1F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{-0.2f,1.2f, -0.15f},{-2.7f,1.2f, -0.3f},{2.3f,1.2f, -0.3f}};}
+    
 }

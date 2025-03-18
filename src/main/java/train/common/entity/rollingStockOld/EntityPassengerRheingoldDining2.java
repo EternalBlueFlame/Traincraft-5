@@ -34,12 +34,7 @@ public class EntityPassengerRheingoldDining2  extends AbstractWorkCart implement
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		TraincraftUtil.updateRider(this, -0.1, 0);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -115,4 +110,7 @@ public class EntityPassengerRheingoldDining2  extends AbstractWorkCart implement
 	}
 
 	public void markDirty(){}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    
 }

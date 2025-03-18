@@ -5,20 +5,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelConverter;
 import fexcraft.tmt.slim.Tessellator;
-import net.minecraft.block.BlockRailBase;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.Vec3;
 import org.lwjgl.opengl.GL11;
 import train.common.Traincraft;
 import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 import train.common.api.TrainRenderRecord;
-import train.common.core.util.TraincraftUtil;
 import train.common.entity.rollingStockOld.EntityTracksBuilder;
 import train.common.overlaytexture.OverlayTextureManager;
 
@@ -64,49 +61,9 @@ public class RenderRollingStock extends Render {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 
-        double var15 = cart.lastTickPosX + (cart.posX - cart.lastTickPosX) * time;
-        double var17 = cart.lastTickPosY + (cart.posY - cart.lastTickPosY) * time;
-        double var19 = cart.lastTickPosZ + (cart.posZ - cart.lastTickPosZ) * time;
-        Vec3 var23 = cart.worldObj==null?null:cart.func_70489_a(var15, var17, var19);
         float pitch = cart.prevRotationPitch + (cart.rotationPitch - cart.prevRotationPitch) * time;
-        Vec3 renderYVect = cart.worldObj==null?null:cart.yVector(var15, var17, var19);//only on TC rails
-        if (var23 != null) {
-            Vec3 var25 = cart.func_70495_a(var15, var17, var19, 0.30000001192092896D);
-            Vec3 var26 = cart.func_70495_a(var15, var17, var19, -0.30000001192092896D);
 
-            if (var25 == null) {
-                var25 = var23;
-            }
-
-            if (var26 == null) {
-                var26 = var23;
-            }
-
-            x += var23.xCoord - var15;
-            y += (var25.yCoord + var26.yCoord) / 2.0D - var17;
-            z += var23.zCoord - var19;
-            Vec3 var27 = var26.addVector(-var25.xCoord, -var25.yCoord, -var25.zCoord);
-
-            if (var27.lengthVector() != 0.0D) {
-                var27 = var27.normalize();
-                yaw = TraincraftUtil.atan2degreesf(var27.zCoord, var27.xCoord);
-                pitch = (float) (Math.atan(var27.yCoord) * 73.0D);
-            }
-
-        } else if (renderYVect != null) {//only on TC rails
-            Vec3 var25 = cart.renderY(var15, var17, var19, 0.30000001192092896D);
-            Vec3 var26 = cart.renderY(var15, var17, var19, -0.30000001192092896D);
-
-            if (var25 == null) {
-                var25 = renderYVect;
-            }
-
-            if (var26 == null) {
-                var26 = renderYVect;
-            }
-            y += (var25.yCoord + var26.yCoord) / 2.0D - var17;
-        }
-
+        y-=0.3f;
         yaw %= 360.0F;
         if (yaw < 0.0F) {
             yaw += 360.0F;
@@ -133,47 +90,14 @@ public class RenderRollingStock extends Render {
         int j = MathHelper.floor(cart.posY);
         int k = MathHelper.floor(cart.posZ);
 
-        // NOTE: func_150049_b_ = isRailBlockAt
-        if (cart.getWorld() != null && (BlockRailBase.func_150049_b_(cart.getWorld(), i, j, k)
-                || BlockRailBase.func_150049_b_(cart.getWorld(), i, j - 1, k))) {
-            cart.setMountedYOffset(-0.55);
-        } else if (cart.posYFromServer != 0) {
-            cart.setMountedYOffset(-0.5);
-            GL11.glTranslatef(0f, -0.30f, 0f);
-        }
-        if (cart.getWorld() != null && cart.getWorld().getBlock(i, j, k).getClass().getName().equals("ebf.tim.blocks.rails.BlockRailCore")) {
+        if (cart.worldObj != null && cart.worldObj.getBlock(i, j, k).getClass().getName().equals("ebf.tim.blocks.rails.BlockRailCore")) {
             GL11.glTranslatef(0f, 0.15f, 0f);
         }
         if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
-            //GL11.glRotatef((float)(90-cart.rotationYawClientReal), 0.0F, 1.0F, 0.0F);
-            if (cart.oldClientYaw == 0) cart.oldClientYaw = cart.rotationYawClientReal;
-
-            float tempYaw = (cart.rotationYawClientReal - cart.oldClientYaw);
-            float newYaw = 0;
-            //System.out.println("rotationYawBogie "+rotationYawBogie+" oldYaw "+cart.oldClientYaw+" tempYaw "+(Math.abs(tempYaw)/10));
-            //System.out.println(Math.abs(cart.oldClientYaw-rotationYawBogie));
-            if (Math.abs(cart.oldClientYaw - cart.rotationYawClientReal) > 170) {
-                cart.oldClientYaw = cart.rotationYawClientReal;
-            }
-            if (cart.oldClientYaw != cart.rotationYawClientReal && Math.abs(cart.oldClientYaw - cart.rotationYawClientReal) > (Math.abs(tempYaw) / 10)) {
-                newYaw = cart.oldClientYaw + Math.copySign((Math.abs(tempYaw) / 10), tempYaw);
-                cart.oldClientYaw += Math.copySign((Math.abs(tempYaw) / 10), tempYaw);
-            } else {
-                newYaw = cart.rotationYawClientReal;
-                cart.oldClientYaw = cart.rotationYawClientReal;
-            }
-            //System.out.println("newYaw "+newYaw);
-            //System.out.println(90 - cart.rotationYawClientReal);
-            GL11.glRotatef((90.0f - newYaw), 0.0F, 1.0F, 0.0F);
-            cart.setRenderYaw(newYaw);
-            cart.setRenderPitch(pitch);
-        }
-
-        //if(cart.bogie!=null)cart.getWorld().spawnParticle("reddust", cart.bogie.posX, cart.bogie.posY, cart.bogie.posZ, 0.1, 0.4, 0.1);
-
-        //GL11.glRotatef(180.0F - yaw, 0.0F, 1.0F, 0.0F);
-        if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
-            GL11.glRotatef(-cart.anglePitchClient, 0.0F, 0.0F, 1.0F);
+            GL11.glRotatef(180-cart.rotationYaw, 0.0F, 1.0F, 0.0F);
+            //cart.rotationYaw=newYaw;
+            cart.rotationPitch=pitch;
+            GL11.glRotatef(cart.rotationPitch, 0.0F, 0.0F, 1.0F);
         }
         float var28 = cart.getRollingAmplitude() - time;
 
@@ -246,12 +170,12 @@ public class RenderRollingStock extends Render {
             }
 
             if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
-                renderSmokeFX(cart, 90 + cart.rotationYawClientReal, cart.anglePitchClient, render.getSmokeType(), cart.render_cache.smokePosition, render.getSmokeIterations(), time, render.hasSmokeOnSlopes());
+                renderSmokeFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, render.getSmokeType(), cart.render_cache.smokePosition, render.getSmokeIterations(), time, render.hasSmokeOnSlopes());
             }
         }
         if (render.hasExplosion()) {
             if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
-                renderExplosionFX(cart, 90 + cart.rotationYawClientReal, cart.anglePitchClient, render.getExplosionType(), render.getExplosionFX(), render.getExplosionFXIterations(), render.hasSmokeOnSlopes());
+                renderExplosionFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, render.getExplosionType(), render.getExplosionFX(), render.getExplosionFXIterations(), render.hasSmokeOnSlopes());
             }
         }
 

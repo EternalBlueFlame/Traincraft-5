@@ -20,7 +20,6 @@ import train.common.library.Info;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 public class TileCrafterTierIII extends TileRenderFacing implements IInventory, ITier {
 	private ItemStack[] crafterInventory;

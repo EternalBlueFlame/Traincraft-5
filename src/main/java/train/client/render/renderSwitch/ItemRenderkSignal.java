@@ -10,7 +10,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
-import fexcraft.tmt.slim.Tessellator;
 import train.client.render.renderSwitch.models.ModelkSignal;
 import train.common.library.BlockIDs;
 import train.common.library.Info;

@@ -6,15 +6,10 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraftforge.common.util.ForgeDirection;
 import train.common.api.blocks.TileSwitch;
-import train.common.api.blocks.TileTraincraft;
 import train.common.blocks.TCBlocks;
 import train.common.blocks.switchStand.BlockSwitchStand;
-import train.common.library.BlockIDs;
-import train.common.tile.switchStand.TileCircleSwitchStand;
 
 import java.util.Random;
 

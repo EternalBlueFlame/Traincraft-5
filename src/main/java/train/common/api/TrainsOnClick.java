@@ -34,40 +34,40 @@ public class TrainsOnClick {
                 playerEntity.addChatMessage(new ChatComponentText("Reset, click again to couple new cart to this one"));
                 train.Link1 = -1;
                 train.Link2 = -1;
-                if (train.cartLinked1 != null && train.cartLinked1.Link1 == train.getUniqueTrainID()) {
-					train.cartLinked1.Link1 = -1;
+                if (train.frontLink != null && train.frontLink.Link1 == train.getUniqueTrainID()) {
+					train.frontLink.Link1 = -1;
 				}
 
-                if (train.cartLinked1 != null && train.cartLinked1.Link2 == train.getUniqueTrainID()) {
-					train.cartLinked1.Link2 = -1;
+                if (train.frontLink != null && train.frontLink.Link2 == train.getUniqueTrainID()) {
+					train.frontLink.Link2 = -1;
 				}
 
-                if (train.cartLinked2 != null && train.cartLinked2.Link1 == train.getUniqueTrainID()) {
-					train.cartLinked2.Link1 = -1;
+                if (train.backLink != null && train.backLink.Link1 == train.getUniqueTrainID()) {
+					train.backLink.Link1 = -1;
 				}
 
-                if (train.cartLinked2 != null && train.cartLinked2.Link2 == train.getUniqueTrainID()) {
-					train.cartLinked2.Link2 = -1;
+                if (train.backLink != null && train.backLink.Link2 == train.getUniqueTrainID()) {
+					train.backLink.Link2 = -1;
 				}
 
-                if (train.cartLinked1 != null && train.cartLinked1.cartLinked1 != null && train.cartLinked1.cartLinked1.equals(train)) {
-					train.cartLinked1.cartLinked1 = null;
+                if (train.frontLink != null && train.frontLink.frontLink != null && train.frontLink.frontLink.equals(train)) {
+					train.frontLink.frontLink = null;
 				}
 
-                if (train.cartLinked1 != null && train.cartLinked1.cartLinked2 != null && train.cartLinked1.cartLinked2.equals(train)) {
-					train.cartLinked1.cartLinked2 = null;
+                if (train.frontLink != null && train.frontLink.backLink != null && train.frontLink.backLink.equals(train)) {
+					train.frontLink.backLink = null;
 				}
 
-                if (train.cartLinked2 != null && train.cartLinked2.cartLinked2 != null && train.cartLinked2.cartLinked2.equals(train)) {
-					train.cartLinked2.cartLinked2 = null;
+                if (train.backLink != null && train.backLink.backLink != null && train.backLink.backLink.equals(train)) {
+					train.backLink.backLink = null;
 				}
 
-                if (train.cartLinked2 != null && train.cartLinked2.cartLinked1 != null && train.cartLinked2.cartLinked1.equals(train)) {
-					train.cartLinked2.cartLinked1 = null;
+                if (train.backLink != null && train.backLink.frontLink != null && train.backLink.frontLink.equals(train)) {
+					train.backLink.frontLink = null;
 				}
 
-                train.cartLinked1 = null;
-                train.cartLinked2 = null;
+                train.frontLink = null;
+                train.backLink = null;
                 train.isAttaching = false;
                 train.isAttached = false;
 

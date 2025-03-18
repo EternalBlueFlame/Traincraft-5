@@ -25,13 +25,7 @@ public class EntityLocoSteam4_4_0 extends SteamTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(!(passenger instanceof Entity)){return;}
-		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.45, posZ);// default
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -77,4 +71,11 @@ public class EntityLocoSteam4_4_0 extends SteamTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{1.0f,1.55f, 0.2f}};}
+
+    /**
+     * defines the size of the hitbox for processing, in order of length, height, and width.
+     */
+    
 }

@@ -190,19 +190,19 @@ public abstract class Tender extends Freight implements IFluidHandler {
                     }
                 }
             }
-            if (drain == null && cartLinked1 instanceof LiquidTank
-                    && !(cartLinked1 instanceof EntityBUnitEMDF7) && !(cartLinked1 instanceof EntityBUnitEMDF3) && !(cartLinked1 instanceof EntityBUnitDD35)) {
+            if (drain == null && frontLink instanceof LiquidTank
+                    && !(frontLink instanceof EntityBUnitEMDF7) && !(frontLink instanceof EntityBUnitEMDF3) && !(frontLink instanceof EntityBUnitDD35)) {
                 if (getFluid() == null) {
-                    drain = ((LiquidTank) cartLinked1).drain(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) frontLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
                 } else if (getFluid().getFluid() == FluidRegistry.WATER) {
-                    drain = ((LiquidTank) cartLinked1).drain(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) frontLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
                 }
-            } else if (drain == null && cartLinked2 instanceof LiquidTank
-                    && !(cartLinked1 instanceof EntityBUnitEMDF7) && !(cartLinked1 instanceof EntityBUnitEMDF3) && !(cartLinked1 instanceof EntityBUnitDD35)) {
+            } else if (drain == null && backLink instanceof LiquidTank
+                    && !(frontLink instanceof EntityBUnitEMDF7) && !(frontLink instanceof EntityBUnitEMDF3) && !(frontLink instanceof EntityBUnitDD35)) {
                 if (getFluid() == null) {
-                    drain = ((LiquidTank) cartLinked2).drain(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) backLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
                 } else if (getFluid().getFluid() == FluidRegistry.WATER) {
-                    drain = ((LiquidTank) cartLinked2).drain(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) backLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
                 }
             }
             if (drain != null) {

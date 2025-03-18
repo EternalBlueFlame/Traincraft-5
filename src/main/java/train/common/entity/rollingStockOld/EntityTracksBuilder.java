@@ -189,11 +189,11 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	private void fillLinkedInventory() {
 		if (getInventory() != null){
 			Freight link;
-			if(cartLinked1 instanceof Freight && ((Freight)cartLinked1).getInventory() !=null) {
-				link = (Freight) cartLinked1;
+			if(frontLink instanceof Freight && ((Freight) frontLink).getInventory() !=null) {
+				link = (Freight) frontLink;
 
-			} else if (cartLinked2 instanceof Freight && ((Freight)cartLinked2).getInventory() !=null) {
-				link = (Freight) cartLinked2;
+			} else if (backLink instanceof Freight && ((Freight) backLink).getInventory() !=null) {
+				link = (Freight) backLink;
 			} else {
 				return;
 			}
@@ -386,14 +386,6 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		motionX *= getDragAir();
 		motionY *= 0.0D;
 		motionZ *= getDragAir();
-	}
-
-	@Override
-	protected void adjustSlopeVelocities(int metadata) {
-		if (metadata == 2 || metadata == 3 || metadata == 4 || metadata == 5) {
-			motionX *= 0.5;
-			motionZ *= 0.5;
-		}
 	}
 
 	protected void updatePushForces() {
@@ -704,7 +696,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if (!getWorld().isRemote) {
 			if(d7 == 0. && d6 == 0.) {
 				if(lastFace == -1) {
-					//lastFace = ((int) Math.round(this.serverRealRotation/90) + 5)%4;
+					//lastFace = ((int) Math.round(rotationYaw/90) + 5)%4;
 				}
 				return lastFace;
 			}

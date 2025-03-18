@@ -34,7 +34,7 @@ public class EntityPassengerMILWDiner extends EntityRollingStock implements IPas
 			//getPassengers().get(0).setPosition(posX - dX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2, posZ-dZ);
 		//}
 		/*double rads = this.rotationYawClientReal-90 * 3.141592653589793D / 180.0D;
-		double pitchRads = this.anglePitchClient * 3.141592653589793D / 180.0D;
+		double pitchRads = rotationPitch * 3.141592653589793D / 180.0D;
 		double distance = 1.3;
 		getPassengers().get(0).setPosition(posX - Math.cos(rads)*distance, posY + (Math.tan(pitchRads)*-distance)+( getMountedYOffset() + passenger.getYOffset() + 0.2F), posZ - Math.sin(rads)*distance);
 		*/

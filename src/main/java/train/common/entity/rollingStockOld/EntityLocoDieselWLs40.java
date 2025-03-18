@@ -27,12 +27,7 @@ public class EntityLocoDieselWLs40 extends DieselTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		TraincraftUtil.updateRider(this, 0, 0.5f);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -78,4 +73,7 @@ public class EntityLocoDieselWLs40 extends DieselTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{1.4f,1.4f, 0.3f}};}
+    
 }

@@ -5,7 +5,6 @@ import cofh.api.energy.IEnergyHandler;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -107,10 +106,10 @@ public abstract class ElectricTrain extends Locomotive {
 	@Override
 	protected void updateFuelTrain(int amount) {
 		//reduceExplosionChance = 1000;
-		if (fuelTrain < 0) {
+		if (fuelTrain < 1 || !this.isLocoTurnedOn()) {
 			//hasUranium = false;
-			motionX *= 0.8;
-			motionZ *= 0.8;
+			motionX *= 0.55;
+			motionZ *= 0.55;
 		}
 		else {
 			if(this.isLocoTurnedOn()) {

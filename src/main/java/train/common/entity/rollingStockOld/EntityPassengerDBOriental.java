@@ -30,13 +30,7 @@ public class EntityPassengerDBOriental extends EntityRollingStock implements IPa
 		prevPosY = d1;
 		prevPosZ = d2;
 	}
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(!(passenger instanceof Entity)){return;}
-		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2, posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -80,4 +74,11 @@ public class EntityPassengerDBOriental extends EntityRollingStock implements IPa
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 2.25F;
 	}
+
+	public float[] rotationPoints() {
+		return new float[]{1f, 0f};
+	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f},{-1,1.2f, 0f},{1,1.2f, 0f}};}
+    
 }

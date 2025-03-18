@@ -1,27 +1,17 @@
 package train.common;
 
-import cpw.mods.fml.common.registry.GameRegistry;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import train.client.core.handlers.RecipeBookHandler;
 import train.client.render.RenderEnum;
 import train.common.api.*;
-import train.common.api.crafting.ITierCraftingManager;
 import train.common.api.crafting.ITierRecipe;
 import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
-import train.common.core.util.TraincraftUtil;
-import train.common.entity.rollingStock.EntityPassengerPassengerCar1;
-import train.common.inventory.TrainCraftingManager;
-import train.common.items.ItemRollingStock;
-import train.common.items.TCItems;
 import train.common.library.EnumTrains;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
-import train.common.recipes.AssemblyTableRecipes;
 
 import java.io.File;
 import java.io.FileOutputStream;

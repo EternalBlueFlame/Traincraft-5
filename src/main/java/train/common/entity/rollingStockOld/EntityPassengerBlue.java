@@ -25,32 +25,7 @@ public class EntityPassengerBlue extends EntityRollingStock implements IPassenge
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		/*double pitchRads = this.anglePitchClient * 3.141592653589793D / 180.0D;
-		
-		double distance = 2;
-		double yOffset = 0.01;
-		float rotationCos1 = (float) Math.cos(Math.toRadians(this.rotationYawClientReal + 90));
-		float rotationSin1 = (float) Math.sin(Math.toRadians((this.rotationYawClientReal + 90)));
-		float pitch = (float) (posY + ((Math.tan(pitchRads)*distance)+getMountedYOffset()) + passenger.getYOffset() + yOffset);
-		double bogieX1 = (this.posX + (rotationCos1 * distance));
-		double bogieZ1 = (this.posZ + (rotationSin1* distance));
-		//System.out.println(rotationCos1+" "+ rotationSin1);
-		if(anglePitchClient>20 && rotationCos1 == -1){
-			bogieX1-=pitchRads*2;
-			pitch-=pitchRads*1.2;
-		}
-		if(anglePitchClient>20 && rotationSin1 == -1){
-			bogieZ1+=pitchRads*2;
-			pitch-=pitchRads*1.2;
-		}
-		getPassengers().get(0).setPosition(bogieX1, pitch, bogieZ1);*/
-		if(passenger==null){return;}
-		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset(), posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -94,4 +69,7 @@ public class EntityPassengerBlue extends EntityRollingStock implements IPassenge
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 2.2F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    
 }

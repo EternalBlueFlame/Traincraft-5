@@ -26,12 +26,7 @@ public class EntityLocoSteamBerk1225 extends SteamTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		TraincraftUtil.updateRider(this, -1.125, 0.2);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -74,4 +69,7 @@ public class EntityLocoSteamBerk1225 extends SteamTrain {
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) { return true; }
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{3.4f,1.5f, 0.35f},{3.4f,1.5f, -0.35f}};}
+    
 }

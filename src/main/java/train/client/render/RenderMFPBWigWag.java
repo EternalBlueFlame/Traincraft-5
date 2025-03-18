@@ -1,11 +1,11 @@
 package train.client.render;
 
+import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
-import fexcraft.tmt.slim.Tessellator;
 import train.client.render.models.blocks.ModelMFPBWigWag;
 import train.common.library.Info;
 import train.common.tile.TileMFPBWigWag;

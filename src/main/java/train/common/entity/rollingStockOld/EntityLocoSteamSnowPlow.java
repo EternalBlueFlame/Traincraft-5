@@ -35,42 +35,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 		prevPosZ = d2;
 	}
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(!(passenger instanceof Entity)){return;}
-		double pitchRads = this.anglePitchClient * Math.PI / 180.0D;
-		double distance = 0.7;
-		double yOffset = 0.3;
-		float rotationCos1 = (float) Math.cos(Math.toRadians(this.renderYaw + 90));
-		float rotationSin1 = (float) Math.sin(Math.toRadians((this.renderYaw + 90)));
-		if(side.isServer()){
-			rotationCos1 = (float) Math.cos(Math.toRadians(this.serverRealRotation + 90));
-			rotationSin1 = (float) Math.sin(Math.toRadians((this.serverRealRotation + 90)));
-			anglePitchClient = serverRealPitch*60;
-		}
-		float pitch = (float) (posY + ((Math.tan(pitchRads) * distance) + getMountedYOffset())
-				+ passenger.getYOffset() + yOffset);
-		float pitch1 = (float) (posY + getMountedYOffset() + passenger.getYOffset() + yOffset);
-		double bogieX1 = (this.posX + (rotationCos1 * distance));
-		double bogieZ1 = (this.posZ + (rotationSin1* distance));
-		// System.out.println(rotationCos1+" "+rotationSin1);
-		if (anglePitchClient > 20 && rotationCos1 == 1) {
-			bogieX1-=pitchRads*2;
-			pitch -= pitchRads * 1.2;
-		}
-		if (anglePitchClient > 20 && rotationSin1 == 1) {
-			bogieZ1-=pitchRads*2;
-			pitch -= pitchRads * 1.2;
-		}
-		if (pitchRads == 0.0) {
-			getPassengers().get(0).setPosition(bogieX1, pitch1, bogieZ1);
-		}
-		if (pitchRads > -1.01 && pitchRads < 1.01) {
-			getPassengers().get(0).setPosition(bogieX1, pitch, bogieZ1);
-		}
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -103,7 +68,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 				bogieFront.posZ - bogieBack.posZ,
 				bogieFront.posX - bogieBack.posX));
 
-		point1 = rotateVec3(blockpos[0], getPitch(), rotation);
+		point1 = rotateVec3(blockpos[0], this.rotationPitch, rotation);
 		point1[0] += posX;point1[1] += posY;point1[2] += posZ;
 		mineSnow(getWorld(), point1, locoInvent, fakePlayer);
 		point1[1]++;
@@ -112,7 +77,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 		mineSnow(getWorld(), point1, locoInvent, fakePlayer);
 
 
-		point1 = rotateVec3(blockpos[1], getPitch(), rotation);
+		point1 = rotateVec3(blockpos[1], this.rotationPitch, rotation);
 		point1[0] += posX;point1[1] += posY;point1[2] += posZ;
 		mineSnow(getWorld(), point1, locoInvent, fakePlayer);
 		point1[1]++;
@@ -121,7 +86,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 		mineSnow(getWorld(), point1, locoInvent, fakePlayer);
 
 
-		point1 = rotateVec3(blockpos[2], getPitch(), rotation);
+		point1 = rotateVec3(blockpos[2], this.rotationPitch, rotation);
 		point1[0] += posX;point1[1] += posY+1;point1[2] += posZ;
 		mineSnow(getWorld(), point1, locoInvent, fakePlayer);
 		point1[1]++;
@@ -214,4 +179,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    
 }

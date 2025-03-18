@@ -4,8 +4,6 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -15,14 +13,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
-import train.common.api.blocks.BlockDynamic;
 import train.common.api.blocks.BlockSignal;
-import train.common.library.Info;
 import train.common.tile.TileMFPBWigWag;
-import train.common.tile.switchStand.TileSwitchStand;
-
-import java.util.List;
-import java.util.Random;
 
 public class BlockMFPBWigWag extends BlockSignal {
 

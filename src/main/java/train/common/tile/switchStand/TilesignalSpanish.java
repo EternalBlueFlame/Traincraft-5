@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
 import train.common.api.blocks.TileSwitch;
-import train.common.blocks.TCBlocks;
 import train.common.library.BlockIDs;
 
 import java.util.Random;

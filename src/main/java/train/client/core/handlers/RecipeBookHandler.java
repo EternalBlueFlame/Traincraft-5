@@ -4,7 +4,6 @@ import net.minecraft.item.Item;
 import train.common.blocks.TCBlocks;
 import train.common.core.interfaces.ITCRecipe;
 import train.common.core.managers.TierRecipe;
-import train.common.library.BlockIDs;
 import train.common.library.ItemIDs;
 import train.common.recipes.ShapedTrainRecipes;
 import train.common.recipes.ShapelessTrainRecipe;

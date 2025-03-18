@@ -25,6 +25,8 @@ public class RollingStockModel extends ModelBase {
 
     public List<TurboList> groups = new ArrayList<>();
     public int textureX, textureY;
+    public String name;
+
     public RollingStockModel(){}
 
     @Override

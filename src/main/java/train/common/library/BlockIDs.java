@@ -24,13 +24,13 @@ public enum BlockIDs {
 	americanstopper(false, null),
 
 
-	oreTC(true, ItemBlockOreTC.class),
-	dirtyBallast(false,null),
-	dirtierBallast(false,null),
-	highSpeedBallast(false, null),
-	poweredGravel(false,null),
-	snowGravel(false,null),
-	asphalt(false, null),
+	oreTC(true, ItemBlockOreTC.class, 3),
+	dirtyBallast(false,null, 0),
+	dirtierBallast(false,null, 0),
+	highSpeedBallast(false, null, 0),
+	poweredGravel(false,null, 0),
+	snowGravel(false,null, 0),
+	asphalt(false, null, 0),
 
 	ballastSlab(true, ItemBallastSlab.class),
 	ballastDoubleSlab(true, ItemBallastSlab.class),
@@ -80,9 +80,33 @@ public enum BlockIDs {
 	public Block block;
 	public boolean hasItemBlock;
 	public Class itemBlockClass;
+	/** MaxMetaData for Multipart
+	 * -1 Disables the use of Multipart on the block
+	 * 0 Enabled the use of multipart on the block and will allow for only the base block to use Multipart
+	 */
+	public final byte MaxMetadata;
 
-	BlockIDs(boolean hasItemBlock, Class<? extends ItemBlock> itemBlockClass) {
+	/**
+	 * Construct a BlockID that has multiPart Support
+	 * @param hasItemBlock
+	 * @param itemBlockClass
+	 */
+	BlockIDs(boolean hasItemBlock, Class<? extends ItemBlock> itemBlockClass, int maxMetadata)
+	{
 		this.hasItemBlock = hasItemBlock;
 		this.itemBlockClass = itemBlockClass;
+		this.MaxMetadata = (byte)maxMetadata;
+	}
+
+	/**
+	 * Construct a BlockID that does not have multiPart support
+	 * @param hasItemBlock
+	 * @param itemBlockClass
+	 */
+	BlockIDs(boolean hasItemBlock, Class<? extends ItemBlock> itemBlockClass)
+	{
+		this.hasItemBlock = hasItemBlock;
+		this.itemBlockClass = itemBlockClass;
+		this.MaxMetadata = -1;
 	}
 }

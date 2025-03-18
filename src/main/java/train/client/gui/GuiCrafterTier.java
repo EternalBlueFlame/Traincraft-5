@@ -10,15 +10,15 @@ import org.lwjgl.opengl.GL11;
 import train.client.gui.sideTabs.SideTabInfo;
 import train.client.gui.sideTabs.SideTabRecipes;
 import train.client.gui.sideTabs.SideTabSlots;
+import train.common.Traincraft;
 import train.common.api.AbstractTrains;
+import train.common.api.TrainRecord;
 import train.common.containers.ContainerTier;
 import train.common.core.interfaces.ITier;
 import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
-import train.common.Traincraft;
-import train.common.api.TrainRecord;
 
 import java.util.List;
 

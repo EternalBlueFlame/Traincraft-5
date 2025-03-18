@@ -30,13 +30,7 @@ public class EntityFlatCar_DB extends EntityRollingStock implements IPassenger {
 		boundingBox.maxY-=1;
 	}*/
 
-	@Override
-	public void updatePassenger(Entity passenger) {
-		if(!(passenger instanceof Entity)){return;}
-		getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 0.4, posZ);
-	}
-
-	@Override
+		@Override
 	public void setDead() {
 		super.setDead();
 		isDead = true;
@@ -83,4 +77,7 @@ public class EntityFlatCar_DB extends EntityRollingStock implements IPassenger {
 	public float getOptimalDistance(EntityMinecart cart) {
 		return 1.84F;
 	}
+	@Override
+	public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    
 }
