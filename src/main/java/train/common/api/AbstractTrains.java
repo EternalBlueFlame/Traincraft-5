@@ -1,6 +1,8 @@
 package train.common.api;
 
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import net.minecraftforge.fml.relauncher.Side;
@@ -940,35 +942,55 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     @Override
     public void markDirty() {}
 
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {return false;}
+    @Override
+    public boolean isUsableByPlayer(EntityPlayer entityplayer) {return false;}
 
     @Override
-    public void openInventory() {}
+    public void openInventory(EntityPlayer p) {}
 
     @Override
-    public void closeInventory() {}
+    public int getField(int slot){return 0;}
+
+    @Override
+    public void setField(int slot, int value){}
+
+    @Override
+    public int getFieldCount(){return 0;}
+
+    @Override
+    public void clear(){}
+
+
+    @Override
+    public boolean isEmpty(){return true;}
+
+    @Override
+    public ItemStack removeStackFromSlot(int slot){return ItemStack.EMPTY;}
+
+    @Override
+    public void closeInventory(EntityPlayer p) {}
 
     @Override
     public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {return false;}
 
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {return 0;}
+    public int fill(FluidStack resource, boolean doFill) {return 0;}
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {return null;}
+    public FluidStack drain(FluidStack resource, boolean doDrain) {return null;}
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {return null;}
+    public FluidStack drain(int maxDrain, boolean doDrain) {return null;}
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {return false;}
+    public boolean canFill(Fluid fluid) {return false;}
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {return false;}
+    public boolean canDrain(Fluid fluid) {return false;}
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {return new FluidTankInfo[0];}
+    public IFluidTankProperties[] getTankProperties() {return new IFluidTankProperties[0];}
 
     @Override
     public Type getType() {

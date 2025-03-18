@@ -26,11 +26,12 @@ public class TileLantern extends TileEntity {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 
 		super.writeToNBT(nbt);
 
 		nbt.setInteger("randomColor", randomColor);
+		return nbt;
 	}
 
 	@Override

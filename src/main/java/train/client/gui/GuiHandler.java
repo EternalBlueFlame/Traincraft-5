@@ -3,6 +3,7 @@ package train.client.gui;
 
 
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.IGuiHandler;
 
@@ -18,6 +19,6 @@ public class GuiHandler implements IGuiHandler {
             return null;
         }
 
-        return ID == 1 ? new GuiMTCInfo(player.ridingEntity) : new GuiSpeedTransmitter(world.getTileEntity(x, y, z));
+        return ID == 1 ? new GuiMTCInfo(player.getPassengers().get(0)) : new GuiSpeedTransmitter(world.getTileEntity(new BlockPos(x, y, z)));
     }
 }

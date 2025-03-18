@@ -14,6 +14,7 @@ import net.minecraft.world.gen.structure.StructureVillagePieces;
 import train.common.api.AbstractTrains;
 import train.common.blocks.TCBlocks;
 import train.common.entity.rollingStock.*;
+import train.common.entity.rollingStockOld.*;
 
 import java.util.List;
 import java.util.Random;

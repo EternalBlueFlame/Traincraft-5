@@ -3,6 +3,7 @@ package train.common.api;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.FMLClientHandler;
 import fexcraft.tmt.slim.Vec3d;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -338,7 +339,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
     @Override
-    public boolean attackEntityFromPart(EntityDragonPart part, DamageSource damagesource, float i) {
+    public boolean attackEntityFromPart(MultiPartEntityPart part, DamageSource damagesource, float i) {
         return attackEntityFrom(damagesource,i);
     }
 
