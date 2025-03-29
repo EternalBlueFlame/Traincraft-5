@@ -913,23 +913,22 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             } else {
                 //set the derail state based on whether or not there's a valid rail block below.
                 //later this will add more inherent support for 3rd party mods like ZnD, right now it's just vanilla/RC/TiM
-                derail= !CommonUtil.isTrack(getWorld(),posX,posY,posZ);
+                //derail= !CommonUtil.isTrack(getWorld(),posX,posY,posZ);
             }
 
 
             //handle yaw changes for derail
             if(derail) {
-                if(frontLink!=null && backLink!=null &&
-                        frontLink instanceof EntityRollingStock &&
+                if(frontLink instanceof EntityRollingStock &&
                         backLink instanceof EntityRollingStock){
                     rotationYaw=CommonUtil.atan2degreesf(
                             backLink.posZ - frontLink.posZ,
                             backLink.posX - frontLink.posX);
-                } else if (frontLink!=null && frontLink instanceof EntityRollingStock){
+                } else if (backLink instanceof EntityRollingStock){
                     rotationYaw=CommonUtil.atan2degreesf(
                             backLink.posZ - posZ,
                             backLink.posX - posX);
-                } else if (backLink!=null && backLink instanceof EntityRollingStock){
+                } else if (frontLink instanceof EntityRollingStock){
                     rotationYaw=CommonUtil.atan2degreesf(
                             posZ - frontLink.posZ,
                             posX - frontLink.posX);
@@ -950,7 +949,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             } else {
                 motionX = (posX - prevPosX)/ticksSinceLastVelocityChange;
                 motionZ = (posZ - prevPosZ)/ticksSinceLastVelocityChange;
-                ticksSinceLastVelocityChange++;
+                if(ticksSinceLastVelocityChange<200){
+                    ticksSinceLastVelocityChange++;
+                }
             }
         }
     }
@@ -986,28 +987,30 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             return;
         }
 
-        double vecX = other.posX - posX;
-        double vecZ = other.posZ - posZ;
+        double[] offset = CommonUtil.rotatePoint(
+                (other.getHitboxSize()[0]*0.5),0,other.frontLink!=null && other.frontLink==this?-other.rotationYaw:other.rotationYaw);
 
-        double springDist = MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ)
-                -((getHitboxSize()[0]*0.5)+(other.getHitboxSize()[0]*0.5));
+        double[] offset2=CommonUtil.rotatePoint(
+                (getHitboxSize()[0]*0.5),0,frontLink!=null && frontLink==other?-rotationYaw:rotationYaw);
+
+        double vecX = (other.posX+offset[0]) - (posX+offset2[0]);
+        double vecZ = (other.posZ+offset[2]) - (posZ+offset2[2]);
+
 
         if(getVelocity()>0.3) {
-            springDist *= 0.45;
+            vecX*=0.45;
+            vecZ*=0.45;
         } else if (getVelocity()<0.1){
-            springDist*=0.1;
+            vecX*=0.1;
+            vecZ*=0.1;
         } else {
-            springDist*=0.3;
+            vecX*=0.3;
+            vecZ*=0.3;
         }
-        if(frontLink!=null && other.getEntityId() == frontLink.getEntityId()) {
-            springDist *= -1;
-        }
-
-        double[] rotated=CommonUtil.rotatePoint(springDist,0,rotationYaw);
 
         //sanity check for if we should continue, because manhattan distance on turns gets wonky.
-        if(Math.abs(rotated[0])+Math.abs(rotated[2])>0.2){
-            addVelocity(rotated[0],0,rotated[2]);
+        if(Math.abs(vecX)+Math.abs(vecZ)>0.2){
+            addVelocity(vecX,0,vecZ);
         }
 
 
@@ -1042,6 +1045,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         bogieBack.setVelocity(resX2,0,resZ2);
         bogieFront.moveBogie();
         bogieBack.moveBogie();
+        motionX=(resX1+resX2)*0.5;
+        motionZ=(resZ1+resZ2)*0.5;
         //reset the y coord so they will re-calculate the yaw
         applyDrag();
         cachedVectors[2].yCoord=0;
