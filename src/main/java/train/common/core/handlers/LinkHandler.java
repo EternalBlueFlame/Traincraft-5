@@ -97,10 +97,12 @@ public class LinkHandler {
 
 					if(!cart1.consist.contains(cart2)){
 						cart1.consist.add(cart2);
+						cart1.updateLinks();
 					}
 
 					if(!cart2.consist.contains(cart1)){
 						cart2.consist.add(cart1);
+						cart2.updateLinks();
 					}
 
 					cart2.isAttached = true;

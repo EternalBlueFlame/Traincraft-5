@@ -63,6 +63,7 @@ import train.common.library.GuiIDs;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ebf.tim.utility.CommonUtil.radianF;
 import static train.common.core.util.TraincraftUtil.isRailBlockAt;
 
 public class EntityRollingStock extends AbstractTrains implements ILinkableCart {
@@ -106,7 +107,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     private TrainsOnClick trainsOnClick;
     public boolean isBraking;
-    public boolean isClimbing;
     public int overheatLevel;
     public int linkageNumber;
 
@@ -163,6 +163,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         prevPosX = d;
         prevPosY = d1;
         prevPosZ = d2;
+        consist = new ArrayList<AbstractTrains>();
+        consist.add(this);
     }
 
     public void initRollingStock(World world) {
@@ -188,6 +190,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 1.0F, 1.0F);
         consist = new ArrayList<AbstractTrains>();
         consist.add(this);
+        updateLinks();
         handleOverheating = new HandleOverheating(this);
 
         collisionHandler=new EntityHitbox(this);
@@ -389,12 +392,20 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 if (frontLink.Link1 == this.uniqueID) {
                     frontLink.Link1 = 0;
                     frontLink.frontLink = null;
-                    if (frontLink.consist != null) frontLink.consist.clear();
+                    if (frontLink.consist != null){
+                        frontLink.consist.clear();
+                        frontLink.consist.add(frontLink);
+                        frontLink.updateLinks();
+                    }
 
                 } else if (frontLink.Link2 == this.uniqueID) {
                     frontLink.Link2 = 0;
                     frontLink.backLink = null;
-                    if (frontLink.consist != null) frontLink.consist.clear();
+                    if (frontLink.consist != null){
+                        frontLink.consist.clear();
+                        frontLink.consist.add(frontLink);
+                        frontLink.updateLinks();
+                    }
 
                 }
             }
@@ -402,18 +413,27 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 if (backLink.Link1 == this.uniqueID) {
                     backLink.Link1 = 0;
                     backLink.frontLink = null;
-                    if (backLink.consist != null) backLink.consist.clear();
+                    if (backLink.consist != null){
+                        backLink.consist.clear();
+                        backLink.consist.add(backLink);
+                        frontLink.updateLinks();
+                    }
 
                 } else if (backLink.Link2 == this.uniqueID) {
                     backLink.Link2 = 0;
                     backLink.backLink = null;
-                    if (backLink.consist != null) backLink.consist.clear();
+                    if (backLink.consist != null){
+                        backLink.consist.clear();
+                        backLink.consist.add(backLink);
+                        frontLink.updateLinks();
+                    }
 
                 }
             }
             this.frontLink = null;
             this.backLink = null;
             this.isAttached = false;
+            updateLinks();
         }
     }
 
@@ -847,6 +867,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if ((this instanceof Locomotive) && (this.Link1 == 0) && (this.Link2 == 0) && numLaps > 700) {
             this.consist.clear();
             consist.add(this);
+            updateLinks();
         }
 
 
@@ -959,10 +980,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     public void appendMovement(double velocity){
 
         //the logic gets stupid if it's not sorted from one end or another.
-        //todo: this is a trash fix, it would be better for the list to be reliably sorted
-        if(frontLink!=null && backLink!=null){
-            return;
-        }
         EntityRollingStock last = this;
         for(AbstractTrains t:consist) {
             if(t.backLink!=null && last.backLink!=null
@@ -981,12 +998,38 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         }
     }
-
+    public void addLinkingMove(double velocity){
+        bogieBack.addLinking(this, velocity);
+        bogieFront.addLinking(this, velocity);
+    }
     public void manageLink(AbstractTrains other) {
         if(isAccelerating() || other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
             return;
         }
 
+        double vecX = other.posX - posX;
+        double vecZ = other.posZ - posZ;
+
+
+        double springDist = MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ)
+                -(getOptimalDistance(other)+other.getOptimalDistance(this));
+
+        if(getVelocity()>0.3) {
+            springDist *= 0.45;
+        } else if (getVelocity()<0.1){
+            springDist*=0.1;
+        } else {
+            springDist*=0.3;
+        }
+        if(frontLink!=null && other == frontLink) {
+            springDist *= -1;
+        }
+
+        if(Math.abs(springDist)>0.01) {
+            addLinkingMove(springDist);
+        }
+
+        /*
         double[] offset = CommonUtil.rotatePoint(
                 (other.getHitboxSize()[0]*0.5),0,other.frontLink!=null && other.frontLink==this?-other.rotationYaw:other.rotationYaw);
 
@@ -996,6 +1039,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         double vecX = (other.posX+offset[0]) - (posX+offset2[0]);
         double vecZ = (other.posZ+offset[2]) - (posZ+offset2[2]);
 
+        vecX*=0.7;
+        vecZ*=0.7;
 
         if(getVelocity()>0.3) {
             vecX*=0.45;
@@ -1010,8 +1055,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         //sanity check for if we should continue, because manhattan distance on turns gets wonky.
         if(Math.abs(vecX)+Math.abs(vecZ)>0.2){
-            addVelocity(vecX,0,vecZ);
-        }
+            bogieFront.setVelocity(vecX,0,vecZ);
+            bogieBack.setVelocity(vecX,0,vecZ);
+        }*/
 
 
     }
@@ -1028,6 +1074,18 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         double resZ1=bogieFront.motionZ;
         double resZ2=bogieBack.motionZ;
         double resX2=bogieBack.motionX;
+
+        if(frontLink!=null) {
+            manageLink(frontLink);
+        }
+        if(backLink!=null){
+            manageLink(backLink);
+        }
+
+        bogieFront.minecartMove(this);
+        bogieBack.minecartMove(this);
+
+        /*
         bogieBack.setVelocity(0,0,0);
         bogieFront.setVelocity(0,0,0);
         //update positions related to linking, this NEEDS to come after drag
@@ -1041,10 +1099,23 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         bogieFront.moveBogie();
         bogieBack.moveBogie();
 
+        if(ticksExisted%10==1){
+            double[] offset=CommonUtil.rotatePoint(this.rotationPoints()[0], 0,-rotationYaw);
+            bogieFront.setVelocity((offset[0]+posX)-bogieFront.posX,0,(offset[2]+posZ)-bogieFront.posZ);
+            //bogieFront.setPosition(offset[0]+posX,posY,offset[2]+posZ);
+
+            offset=CommonUtil.rotatePoint(this.rotationPoints()[1], 0,-rotationYaw);
+            //bogieBack.setPosition(offset[0]+posX,posY,offset[2]+posZ);
+            bogieBack.setVelocity((offset[0]+posX)-bogieBack.posX,0,(offset[2]+posZ)-bogieBack.posZ);
+            bogieFront.moveBogie();
+            bogieBack.moveBogie();
+        }
+
+
         bogieFront.setVelocity(resX1,0,resZ1);
         bogieBack.setVelocity(resX2,0,resZ2);
         bogieFront.moveBogie();
-        bogieBack.moveBogie();
+        bogieBack.moveBogie();*/
         motionX=(resX1+resX2)*0.5;
         motionZ=(resZ1+resZ2)*0.5;
         //reset the y coord so they will re-calculate the yaw
@@ -1069,22 +1140,61 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     public void applyDrag() {
-        //sometimes an entity isn't in it's own consist for it's copy of the variable.
-        if(isAccelerating()){
-            return;
-        }
-        for(AbstractTrains t:consist){
-            if(t.isAccelerating()) {
-                return;
+        boolean canSlope=true;
+        float drag = 0.9998f, brakeBuff = 0, slope = 0;
+        //check if lope things can be done at all
+        for(AbstractTrains stock : consist) {
+            if(stock!=this && getAccelerator()!=0){
+                canSlope=false;
+                break;
             }
         }
-        //this may need tweaking, it's essentially just a copy of what the minecart does.
-        if (this.riddenByEntity != null) {
-            multiplyVelocity(0.996999979019165D);
-        } else {
-            multiplyVelocity(0.9599999785423279D);
+        if(canSlope) {
+            if (isBraking) {
+                //realistically would be more like 2.4, but 5 makes gameplay more dramatic
+                brakeBuff += weightKg() * 5.0f;
+            }
+            if (rotationPitch != 0) {
+                //vanilla uses 0.0078125 per tick for slope speed.
+                //0.00017361 would be that divided by 45 since vanilla slopes are 45 degree angles.
+                //scale by entity pitch
+                //pitch goes from -90 to 90, so it's inherently directional, stop that.
+                slope += (0.00017361f) * Math.abs(rotationPitch);
+            }
+            appendMovement(slope * MathHelper.sin((rotationYaw-90)*radianF));
+        }
+
+        //now do drag stuff
+
+        //scale drag for derail, or air lateral friction. if you do both at the same time then it's way too much.
+        if(derail){
+            drag*=CommonUtil.getBlockAt(getWorld(),posX,posY,posZ).slipperiness;
+        } else if (cachedVectors[2].yCoord > 0) {
+            drag -= ((getFriction() * cachedVectors[2].yCoord * 4.448f));
+        }
+
+        //add in the drag from combined weight, plus brakes.
+        if(pullingWeight!=0) {//in theory this should never be 0, but we know forge is dumb
+            drag -= ((getAccelerator()==0?getFriction()*0.75:getFriction()*2.5) * (pullingWeight + brakeBuff)) / 44480;
+        }
+        //cap the drag to prevent weird behavior.
+        // if it goes to 1 or higher then we speed up, which is bad, if it's below 0 we reverse, which is also bad
+        if (drag > 0.9999f) {
+            drag = 0.9999f;
+        } else if (drag < 0f) {
+            drag = 0f;
+        }
+
+        for(AbstractTrains t : consist){
+            t.bogieFront.drag(t,drag);
+            t.bogieBack.drag(t,drag);
         }
     }
+
+    public float getFriction(){return 0.0015f;}
+
+    public double getAccelerator(){return accelerate;}
+
 
     public float getVelocity(){
         return getWorld().isRemote?dataWatcher.getWatchableObjectFloat(29):

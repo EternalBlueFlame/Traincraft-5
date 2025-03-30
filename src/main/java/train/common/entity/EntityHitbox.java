@@ -2,6 +2,7 @@ package train.common.entity;
 
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
+import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Vec3d;
 import fexcraft.tmt.slim.Vec3f;
 import net.minecraft.entity.Entity;
@@ -115,9 +116,11 @@ public class EntityHitbox {
 
                             if(!host.consist.contains(host)){
                                 host.consist.add(host);
+                                host.updateLinks();
                             }
                             if(!entityOne.consist.contains(entityOne)){
                                 entityOne.consist.add(entityOne);
+                                entityOne.updateLinks();
                             }
 
 
@@ -151,9 +154,15 @@ public class EntityHitbox {
                                         host instanceof Locomotive ? "Locomotive" : "rollingstock", host),
                                 (float) (Math.abs(host.motionX) + Math.abs(host.motionZ)) * 0.5f);
                     } else if (Math.abs(host.motionX) + Math.abs(host.motionZ) <0.05) {
-                        double[] motion = CommonUtil.rotatePoint(0.05, 0,
-                                CommonUtil.atan2degreesf( host.posZ- e.posZ, host.posX-e.posX));
-                        host.addVelocity(motion[0], 0, motion[2]);
+                        double distanceFront = Math.sqrt((e.posX - front.posX) * (e.posX - front.posX)
+                                + (e.posZ - front.posZ) * (e.posZ - front.posZ));
+                        double distanceBack = Math.sqrt((e.posX - back.posX) * (e.posX - back.posX)
+                                + (e.posZ - back.posZ) * (e.posZ - back.posZ));
+                        if (distanceFront<distanceBack) {
+                            host.appendMovement(0.005);
+                        } else {
+                            host.appendMovement(-0.005);
+                        }
                     }
                 }
             }

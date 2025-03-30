@@ -75,6 +75,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public List<EntitySeat> seats = new LinkedList<>();
 
     public ArrayList<AbstractTrains> consist;
+    public double pullingWeight=0;
+    public Integer consistLeadID=null;
     /**
      * A reference to EnumTrains containing all spec for this specific train
      */
@@ -652,6 +654,34 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public boolean isAccelerating(){return false;}
+
+
+    /**
+     * called on linking changes and when a train changes running states
+     * @param consist the list of entities in the consist
+     */
+    public void setValuesOnLinkUpdate(ArrayList<AbstractTrains> consist){
+        pullingWeight=0;
+        this.consist=consist;
+        for(AbstractTrains t : consist) {
+            pullingWeight +=t.weightKg();
+        }
+    }
+
+    public void updateLinks(){
+        Integer running=null;
+        for (AbstractTrains t : consist) {
+            t.consistLeadID=null;
+            if(t.accelerate!=0){
+                running=t.getEntityId();
+            }
+        }
+        //now tell everything in the list, including this, that there's a new list, and provide said list.
+        for (AbstractTrains t : consist) {
+            t.setValuesOnLinkUpdate(consist);
+            t.consistLeadID=running;
+        }
+    }
 
     /**
      * @author 02skaplan
