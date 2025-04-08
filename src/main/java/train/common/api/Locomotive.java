@@ -322,6 +322,11 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         if (rate != 0) {
             return accelerate = rate;
         } else {
+            for(AbstractTrains t: consist){
+                if(t.consistLeadID!=this.getEntityId()){
+                    updateLinks();
+                }
+            }
             return accelerate = setAccel();
         }
     }

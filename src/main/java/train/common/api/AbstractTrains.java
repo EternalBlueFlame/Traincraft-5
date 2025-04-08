@@ -669,17 +669,61 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public void updateLinks(){
-        Integer running=null;
-        for (AbstractTrains t : consist) {
-            t.consistLeadID=null;
-            if(t.accelerate!=0){
-                running=t.getEntityId();
+
+        ArrayList<AbstractTrains> transports = new ArrayList<>();
+        List<AbstractTrains> IDs = new ArrayList<>();
+        Integer lead=null;
+        AbstractTrains link=this;
+        transports.add(link);
+        IDs.add(this);
+        if(accelerate!=0){
+            lead=getEntityId();
+        }
+        if(frontLink!=null){
+            link =frontLink;
+        }
+        while (link!=null){
+            if(!transports.contains(link)) {
+                if(link.accelerate!=0){
+                    lead=link.getEntityId();
+                }
+                transports.add(link);
+                IDs.add(link);
+                if (link.frontLink != null && !IDs.contains(link.frontLink)) {
+                    link = link.frontLink;
+                } else if (link.backLink != null && !IDs.contains(link.backLink)) {
+                    link = link.backLink;
+                }
+            } else {
+                link = null;
             }
         }
+        //repeat for back link
+        if(backLink!=null){
+            link =backLink;
+        }
+        while (link!=null){
+            if(!transports.contains(link)) {
+                if(link.accelerate!=0){
+                    lead=link.getEntityId();
+                }
+                transports.add(link);
+                IDs.add(link);
+                if (link.frontLink != null && !IDs.contains(link.frontLink)) {
+                    link = link.frontLink;
+                } else if (link.backLink != null && !IDs.contains(link.backLink)) {
+                    link = link.backLink;
+                }
+            } else {
+                link = null;
+            }
+        }
+
         //now tell everything in the list, including this, that there's a new list, and provide said list.
-        for (AbstractTrains t : consist) {
+        for(AbstractTrains t:transports){
+            t.consist=transports;
+            t.consistLeadID=lead;
             t.setValuesOnLinkUpdate(consist);
-            t.consistLeadID=running;
         }
     }
 

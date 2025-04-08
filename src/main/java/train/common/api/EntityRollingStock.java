@@ -644,11 +644,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (addedToChunk && !this.hasSpawnedBogie) {
 
             if (bogieFront == null) {
-                double[] offset=CommonUtil.rotatePoint(this.rotationPoints()[0], 0,-rotationYaw);
+                double[] offset=CommonUtil.rotatePoint(this.rotationPoints()[0], 0,180+rotationYaw);
                 this.bogieFront = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ
                         , this, this.uniqueID);
 
-                offset=CommonUtil.rotatePoint(this.rotationPoints()[1], 0,-rotationYaw);
+                offset=CommonUtil.rotatePoint(this.rotationPoints()[1], 0,180+rotationYaw);
                 this.bogieBack = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ
                         , this, this.uniqueID);
 
@@ -1021,7 +1021,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         } else {
             springDist*=0.3;
         }
-        if(frontLink!=null && other == frontLink) {
+        if(backLink!=null && other == backLink) {
             springDist *= -1;
         }
 
@@ -1029,98 +1029,37 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             addLinkingMove(springDist);
         }
 
-        /*
-        double[] offset = CommonUtil.rotatePoint(
-                (other.getHitboxSize()[0]*0.5),0,other.frontLink!=null && other.frontLink==this?-other.rotationYaw:other.rotationYaw);
-
-        double[] offset2=CommonUtil.rotatePoint(
-                (getHitboxSize()[0]*0.5),0,frontLink!=null && frontLink==other?-rotationYaw:rotationYaw);
-
-        double vecX = (other.posX+offset[0]) - (posX+offset2[0]);
-        double vecZ = (other.posZ+offset[2]) - (posZ+offset2[2]);
-
-        vecX*=0.7;
-        vecZ*=0.7;
-
-        if(getVelocity()>0.3) {
-            vecX*=0.45;
-            vecZ*=0.45;
-        } else if (getVelocity()<0.1){
-            vecX*=0.1;
-            vecZ*=0.1;
-        } else {
-            vecX*=0.3;
-            vecZ*=0.3;
-        }
-
-        //sanity check for if we should continue, because manhattan distance on turns gets wonky.
-        if(Math.abs(vecX)+Math.abs(vecZ)>0.2){
-            bogieFront.setVelocity(vecX,0,vecZ);
-            bogieBack.setVelocity(vecX,0,vecZ);
-        }*/
-
-
     }
 
     /**
      * if X or Z is null, the bogie's existing motion velocity will be used
      */
     public void finalMove(){
+
+        applyDrag();
+        if(frontLink!=null) {
+            manageLink(frontLink);
+        }
+        if(backLink!=null){
+            manageLink(backLink);
+        }
+
+        applyDrag();
+
+        cachedVectors[1]=new Vec3f(rotationPoints()[0],0,0).rotatePoint(0,180+rotationYaw,0)
+                .addVector(posX,0,posZ).subtract((float)bogieFront.posX,0,(float)bogieFront.posZ);
+        bogieFront.velocity[2]+=cachedVectors[1].xCoord;
+        bogieFront.velocity[3]+=cachedVectors[1].zCoord;
+        //we don't center back bogie because position centers between front and back meaning the entity itself is
+        //  pulled towards back and front is pulled towards the entity.
+
         cachedVectors[1] = new Vec3f(rotationPoints()[1], 0, 0).rotatePoint(0, rotationYaw, 0)
                 .addVector(bogieBack.posX,bogieBack.posY,bogieBack.posZ);
         setPosition(cachedVectors[1].xCoord, cachedVectors[1].yCoord,cachedVectors[1].zCoord);
 
-        double resX1=bogieFront.motionX;
-        double resZ1=bogieFront.motionZ;
-        double resZ2=bogieBack.motionZ;
-        double resX2=bogieBack.motionX;
-
-        if(frontLink!=null) {
-            manageLink(frontLink);
-        }
-        if(backLink!=null){
-            manageLink(backLink);
-        }
-
         bogieFront.minecartMove(this);
         bogieBack.minecartMove(this);
 
-        /*
-        bogieBack.setVelocity(0,0,0);
-        bogieFront.setVelocity(0,0,0);
-        //update positions related to linking, this NEEDS to come after drag
-        if(frontLink!=null) {
-            manageLink(frontLink);
-        }
-        if(backLink!=null){
-            manageLink(backLink);
-        }
-
-        bogieFront.moveBogie();
-        bogieBack.moveBogie();
-
-        if(ticksExisted%10==1){
-            double[] offset=CommonUtil.rotatePoint(this.rotationPoints()[0], 0,-rotationYaw);
-            bogieFront.setVelocity((offset[0]+posX)-bogieFront.posX,0,(offset[2]+posZ)-bogieFront.posZ);
-            //bogieFront.setPosition(offset[0]+posX,posY,offset[2]+posZ);
-
-            offset=CommonUtil.rotatePoint(this.rotationPoints()[1], 0,-rotationYaw);
-            //bogieBack.setPosition(offset[0]+posX,posY,offset[2]+posZ);
-            bogieBack.setVelocity((offset[0]+posX)-bogieBack.posX,0,(offset[2]+posZ)-bogieBack.posZ);
-            bogieFront.moveBogie();
-            bogieBack.moveBogie();
-        }
-
-
-        bogieFront.setVelocity(resX1,0,resZ1);
-        bogieBack.setVelocity(resX2,0,resZ2);
-        bogieFront.moveBogie();
-        bogieBack.moveBogie();*/
-        motionX=(resX1+resX2)*0.5;
-        motionZ=(resZ1+resZ2)*0.5;
-        //reset the y coord so they will re-calculate the yaw
-        applyDrag();
-        cachedVectors[2].yCoord=0;
         //update rotation
         setRotation((CommonUtil.atan2degreesf(
                 bogieBack.posZ - bogieFront.posZ,

@@ -19,6 +19,7 @@ import cpw.mods.fml.relauncher.Side;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.networking.PacketSeatUpdate;
 import ebf.tim.utility.DebugUtil;
+import fexcraft.tmt.slim.TextureManager;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -273,6 +274,7 @@ public class Traincraft {
 
         if(proxy.isClient()) {
             trainConverter.write();
+            TextureManager.collectIngotColors();
         }
 
         tcLog.info("Finished PostInitialization");
