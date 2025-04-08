@@ -114,14 +114,7 @@ public class EntityHitbox {
                             entityOne.isAttaching = false;
                             host.isAttaching = false;
 
-                            if(!host.consist.contains(host)){
-                                host.consist.add(host);
-                                host.updateLinks();
-                            }
-                            if(!entityOne.consist.contains(entityOne)){
-                                entityOne.consist.add(entityOne);
-                                entityOne.updateLinks();
-                            }
+                            host.updateLinks();
 
 
                             EntityPlayer entityplayer = host.worldObj.getClosestPlayerToEntity(host, 20);//
@@ -159,9 +152,9 @@ public class EntityHitbox {
                         double distanceBack = Math.sqrt((e.posX - back.posX) * (e.posX - back.posX)
                                 + (e.posZ - back.posZ) * (e.posZ - back.posZ));
                         if (distanceFront<distanceBack) {
-                            host.appendMovement(0.005);
-                        } else {
                             host.appendMovement(-0.005);
+                        } else {
+                            host.appendMovement(0.005);
                         }
                     }
                 }

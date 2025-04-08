@@ -62,6 +62,8 @@ import java.util.Calendar;
 
 public class ClientProxy extends CommonProxy {
 
+    public static int railSkin=3;
+
     public static final net.minecraft.client.renderer.entity.RenderPlayer playerRender = new net.minecraft.client.renderer.entity.RenderPlayer(){
         EntityRollingStock stock;
         @Override
