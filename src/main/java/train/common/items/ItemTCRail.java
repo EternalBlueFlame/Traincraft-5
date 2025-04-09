@@ -2935,6 +2935,19 @@ public class ItemTCRail extends ItemPart {
             return false;
         }
 
+        if (!canPlaceTrack(player, world, x + xDisplace + xSideDisplace+1, y + 1, z + zDisplace + zSideDisplace)) {
+            return false;
+        }
+        if (!canPlaceTrack(player, world, x - xDisplace - (xSideDisplace), y + 1, z - zDisplace - zSideDisplace+1)) {
+            return false;
+        }
+        if (!canPlaceTrack(player, world, x + xDisplace - xSideDisplace-1, y + 1, z + zDisplace - zSideDisplace)) {
+            return false;
+        }
+        if (!canPlaceTrack(player, world, x - xDisplace + (xSideDisplace), y + 1, z - zDisplace + zSideDisplace-1)) {
+            return false;
+        }
+
 
         //Main
         placeTrack(world, x, y + 1, z, BlockIDs.tcRail.block, l);
@@ -2975,6 +2988,32 @@ public class ItemTCRail extends ItemPart {
                 x - xDisplace + (xSideDisplace), y + 1, z - zDisplace + (zSideDisplace), 0,
                 typeVariantDiagonal, false, x, y + 1, z,
                 false, false);
+
+
+        putDownSingleRail(world, x +1, y + 1, z, sideFacing2,
+                x +1, y + 1, z , 0,
+                typeVariantDiagonal, false, x, y + 1, z,
+                false, false);
+
+        putDownSingleRail(world, x -1, y + 1, z, sideFacing2,
+                x -1, y + 1, z , 0,
+                typeVariantDiagonal, false, x, y + 1, z,
+                false, false);
+
+
+        putDownSingleRail(world, x, y + 1, z+1, sideFacing2,
+                x, y + 1, z+1, 0,
+                typeVariantDiagonal, false, x, y + 1, z,
+                false, false);
+
+
+        putDownSingleRail(world, x, y + 1, z-1, sideFacing2,
+                x, y + 1, z-1, 0,
+                typeVariantDiagonal, false, x, y + 1, z,
+                false, false);
+
+
+
 
 
         return true;

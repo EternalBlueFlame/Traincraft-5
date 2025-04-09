@@ -215,7 +215,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 		if(l instanceof BlockTCRail) {
 			lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
-		} else if(lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack)){
+		} else if(l instanceof BlockTCRailGag && (lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack))){
 			TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(i, j, k);
 			if(tileGag.originX.size()>0 && worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) != null) {
 				lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
@@ -236,14 +236,10 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			moveOnTCTwoWaysCrossing();
 		} else if (TCRailTypes.isSlopeTrack(lastTrack)) {
 			moveOnTCSlope(j, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.slopeHeight, lastTrack.getBlockMetadata());
-		} else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
-			moveOnTCDiamondCrossing();
-		} else if (TCRailTypes.isDiagonalCrossingTrack(lastTrack)) {
-			moveOnTCDiagonal(j, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
 		} else if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
 			moveOnTCCurvedSlope(j, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), 1, lastTrack.slopeAngle);
-		} else if (TCRailTypes.isDiagonalTrack(lastTrack)) {
-			moveOnTCDiagonal(j, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.getRailLength());
+		} else if (TCRailTypes.isDiagonalTrack(lastTrack) || TCRailTypes.isDiagonalCrossingTrack(lastTrack)){
+			moveOnTCDiagonal(j);
 		}
 
 	}
@@ -260,58 +256,24 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		}
 	}
 
-	protected void moveOnTCDiamondCrossing() {
-		double norm = Math.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+	private void moveOnTCDiagonal(int j) {
 
-		if (Math.abs(motionZ) > Math.abs(motionX * 2)) {
-			this.moveEntity(0.0D, 0.0D, Math.copySign(norm, this.motionZ));
-		}
-		else if (Math.abs(motionZ * 2) < Math.abs(motionX)) {
-			this.moveEntity(Math.copySign(norm, this.motionX), 0.0D, 0.0D);
-		}
-		else {
-			this.moveEntity(Math.copySign(norm, this.motionX), 0.0D, Math.copySign(norm, this.motionZ));
-		}
-	}
+		railPathX=Math.copySign(0.5,velocity[0]+velocity[2]);
+		railPathZ=Math.copySign(0.5,velocity[1]+velocity[3]);
+		motionSqrt = Math.abs(velocity[0])+Math.abs(velocity[1]);
+		velocity[0] = motionSqrt * railPathX;
+		velocity[1] = motionSqrt * railPathZ;
 
-	private void moveOnTCDiagonal(int j, double cx, double cz, int meta, double length) {
-
-		double Y_OFFSET = 0.2;
-		double X_OFFSET = 0.5;
-		double Z_OFFSET = 1.5;
-		posY = j + Y_OFFSET;
-
-		double exitX = 0;
-		double exitZ = 0;
-		double directionX;
-		double directionZ;
-		double norm = Math.sqrt(motionX * motionX + motionZ * motionZ);
-		double distanceNorm;
-
-		if (meta == 6) {
-			exitX = (motionX > 0) ? cx + length + X_OFFSET : cx - X_OFFSET;
-			exitZ = (motionX > 0) ? cz - length + X_OFFSET : cz + Z_OFFSET;
-		} else if (meta == 4) {
-			exitX = (motionX > 0) ? cx + Z_OFFSET : cx - (length - X_OFFSET);
-			exitZ = (motionX > 0) ? cz - X_OFFSET : cz + (length + X_OFFSET);
-		} else if (meta == 5) {
-			exitX = (motionX > 0) ? cx + Z_OFFSET : cx - (length + X_OFFSET);
-			exitZ = (motionX > 0) ? cz + Z_OFFSET : cz - (length + X_OFFSET);
-		} else if (meta == 7) {
-			exitX = (motionX > 0) ? cx + (length + X_OFFSET) : cx - X_OFFSET;
-			exitZ = (motionX > 0) ? cz + (length + X_OFFSET) : cz - X_OFFSET;
+		if(velocity[2]!=0 || velocity[3]!=0) {
+			motionSqrt = Math.abs(velocity[2]) + Math.abs(velocity[3]);
+			velocity[2] = motionSqrt * railPathX;
+			velocity[3] = motionSqrt * railPathZ;
 		}
 
-		directionX = exitX - posX;
-		directionZ = exitZ - posZ;
-		distanceNorm = Math.sqrt(directionX * directionX + directionZ * directionZ);
-		motionX = (directionX / distanceNorm) * norm;
-		motionZ = (directionZ / distanceNorm) * norm;
-		this.boundingBox.offset(Math.copySign(motionX, this.motionX), 0 , Math.copySign(motionZ, this.motionZ));
+		motionSqrt = Math.abs(velocity[0])+Math.abs(velocity[1])+Math.abs(velocity[2])+Math.abs(velocity[3]);
+		posY = j + 0.2+ yOffset;
+		setPositionRelative(railPathX*motionSqrt,0,railPathZ*motionSqrt);
 
-		this.posX = (this.boundingBox.minX + this.boundingBox.maxX) / 2.0D;
-		this.posY = this.boundingBox.minY + (double)this.yOffset - (double)this.ySize;
-		this.posZ = (this.boundingBox.minZ + this.boundingBox.maxZ) / 2.0D;
 	}
 
 	private void moveOnTCStraight(int j, int meta) {
@@ -323,13 +285,13 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			railPathZ=0;
 		}
 		motionSqrt = Math.abs(velocity[0])+Math.abs(velocity[1]);
-		velocity[0] = (float)(motionSqrt * railPathX);
-		velocity[1] = (float)(motionSqrt * railPathZ);
+		velocity[0] = motionSqrt * railPathX;
+		velocity[1] = motionSqrt * railPathZ;
 
 		if(velocity[2]!=0 || velocity[3]!=0) {
 			motionSqrt = Math.abs(velocity[2]) + Math.abs(velocity[3]);
-			velocity[2] = (float) (motionSqrt * railPathX);
-			velocity[3] = (float) (motionSqrt * railPathZ);
+			velocity[2] = motionSqrt * railPathX;
+			velocity[3] = motionSqrt * railPathZ;
 		}
 
 		motionSqrt = Math.abs(velocity[0])+Math.abs(velocity[1])+Math.abs(velocity[2])+Math.abs(velocity[3]);
@@ -654,7 +616,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			if (l instanceof BlockRailBase) {
 				this.yOffset=0.3425f;
 				loopVanilla(host, Math.abs(velocity[0])+Math.abs(velocity[1])+Math.abs(velocity[2])+Math.abs(velocity[3]), (BlockRailBase) l);
-			} else if(l instanceof BlockTCRail || l instanceof BlockTCRailGag) {
+			} else if (l instanceof BlockTCRail || l instanceof BlockTCRailGag){
 				this.yOffset=0.425f;
 				moveOnTCRail(xFloor, yFloor, zFloor, l);
 			}
