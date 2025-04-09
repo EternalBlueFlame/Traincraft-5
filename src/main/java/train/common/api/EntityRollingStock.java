@@ -645,12 +645,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
             if (bogieFront == null) {
                 double[] offset=CommonUtil.rotatePoint(this.rotationPoints()[0], 0,180+rotationYaw);
-                this.bogieFront = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ
-                        , this, this.uniqueID);
+                this.bogieFront = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ, this);
 
                 offset=CommonUtil.rotatePoint(this.rotationPoints()[1], 0,180+rotationYaw);
-                this.bogieBack = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ
-                        , this, this.uniqueID);
+                this.bogieBack = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ, this);
 
                 //this is a debug thing, there's no real reason to do it outside an IDE
                 if(DebugUtil.dev || !worldObj.isRemote) {
