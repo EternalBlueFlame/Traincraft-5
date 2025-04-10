@@ -32,10 +32,10 @@ import train.common.tile.TileTCRailGag;
 public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableCart {
 
 	public boolean isOnRail;
-	public int meta;
+	public int meta,oldBlockX,oldBlockZ;
 	public EntityRollingStock entityMainTrain;
 	public TileTCRail lastTrack=null;
-	public Block l;
+	public Block l,oldL;
 
 
 	private int railMetadata, xFloor=0,yFloor=0,zFloor=0;
@@ -270,19 +270,36 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			velocity[3] = motionSqrt * railPathZ;
 		}
 
+		centerDiagonal(posX-xFloor,posZ-zFloor);
+
 		motionSqrt = Math.abs(velocity[0])+Math.abs(velocity[1])+Math.abs(velocity[2])+Math.abs(velocity[3]);
 		posY = j + 0.2+ yOffset;
 		setPositionRelative(railPathX*motionSqrt,0,railPathZ*motionSqrt);
+	}
 
+	public void centerDiagonal(double x, double z) {
+		// Calculate the vector from the center to the given point
+		railPathX2 = x - 0.5;
+		railPathZ2 = z - 0.5;
+		// get the nearest 45 degree angle from the block center to the current position
+		double nearestAngleRadians = (Math.round(CommonUtil.atan2degreesf(railPathZ2, railPathX2) / 45.0) * 45.0)*
+				CommonUtil.radianF;
+		// Calculate the distance from the center to the given point
+		double distance = Math.sqrt(railPathX2 * railPathX2 + railPathZ2 * railPathZ2);
+		//offset the secondary movement vector (because it gets nuked at the start of every tick)
+		velocity[2]+= x-(0.5 + distance * Math.cos(nearestAngleRadians));
+		velocity[3]+= z-(0.5 + distance * Math.sin(nearestAngleRadians));
 	}
 
 	private void moveOnTCStraight(int j, int meta) {
 		if(meta==2 || meta==0){
 			railPathX=0;
 			railPathZ=Math.copySign(1,velocity[1]+velocity[3]);
+			posX=xFloor+0.5;
 		} else {
 			railPathX=Math.copySign(1,velocity[0]+velocity[2]);
 			railPathZ=0;
+			posZ=zFloor+0.5;
 		}
 		motionSqrt = Math.abs(velocity[0])+Math.abs(velocity[1]);
 		velocity[0] = motionSqrt * railPathX;
@@ -598,6 +615,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			this.prevPosY = this.posY;
 			this.prevPosZ = this.posZ;
 
+			oldL=l;
+
 			l = CommonUtil.getBlockAt(getWorld(), xFloor, yFloor, zFloor);
 			//detect slopes
 			if(!(l instanceof BlockRailBase || l instanceof BlockTCRail || l instanceof BlockTCRailGag)){
@@ -610,7 +629,19 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 					yFloor++;
 				}
 				l = CommonUtil.getBlockAt(getWorld(), xFloor, yFloor, zFloor);
+
+				//if it wasn't a slope, fall back to the last block, only do this for a single full block distance.
+				if(!(l instanceof BlockAir || l instanceof BlockRailBase ||
+						l instanceof BlockTCRail || l instanceof BlockTCRailGag) &&
+						(Math.abs(xFloor)-Math.abs(oldBlockZ))+(Math.abs(zFloor)+Math.abs(oldBlockZ))<=2){
+					l=oldL;
+				}
+			} else {
+				oldBlockX=xFloor;
+				oldBlockZ=zFloor;
 			}
+
+
 
 			//move on rails
 			if (l instanceof BlockRailBase) {
