@@ -1044,13 +1044,14 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         applyDrag();
 
-        cachedVectors[1]=new Vec3f(rotationPoints()[0],0,0).rotatePoint(0,180+rotationYaw,0)
-                .addVector(posX,0,posZ).subtract((float)bogieFront.posX,0,(float)bogieFront.posZ);
-        //bogieFront.velocity[2]+=cachedVectors[1].xCoord;
-        //bogieFront.velocity[3]+=cachedVectors[1].zCoord;
-        //we don't center back bogie because position centers between front and back meaning the entity itself is
-        //  pulled towards back and front is pulled towards the entity.
-
+        if(ticksExisted%2==0) {
+            cachedVectors[1] = new Vec3f(rotationPoints()[0], 0, 0).rotatePoint(0, 180 + rotationYaw, 0)
+                    .addVector(posX, 0, posZ).subtract((float) bogieFront.posX, 0, (float) bogieFront.posZ);
+            bogieFront.velocity[2] += cachedVectors[1].xCoord;
+            bogieFront.velocity[3] += cachedVectors[1].zCoord;
+            //we don't center back bogie because position centers between front and back meaning the entity itself is
+            //  pulled towards back and front is pulled towards the entity.
+        }
         cachedVectors[1] = new Vec3f(rotationPoints()[1], 0, 0).rotatePoint(0, rotationYaw, 0)
                 .addVector(bogieBack.posX,bogieBack.posY,bogieBack.posZ);
         setPosition(cachedVectors[1].xCoord, cachedVectors[1].yCoord,cachedVectors[1].zCoord);

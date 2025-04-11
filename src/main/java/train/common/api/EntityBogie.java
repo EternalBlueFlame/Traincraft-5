@@ -317,67 +317,38 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 	}
 
-	private void moveOnTCCurvedSlope(int j,double r, double cx, double cz, int tilex, int tilez, int meta, double slopeHeight, double slopeAngle) {
-		double newTilex = tilex;
-		double newTilez = tilez;
+	private void moveOnTCCurvedSlope(int j,double radius, double startX, double startZ, int tilex, int tilez, int meta, double slopeHeight, double slopeAngle) {
+
+		railPathX2 = posX - startX;
+		railPathZ2 = posZ - startZ;
+		motionSqrt = Math.sqrt(railPathX2 * railPathX2 + railPathZ2 * railPathZ2);
+
+		railPathX = startX + ((railPathX2 / motionSqrt) * radius);
+		railPathZ = startZ + ((railPathZ2 / motionSqrt) * radius);
+
+		setPosition(railPathX, j + 0.2 + yOffset, railPathZ);
+
+		double[] vel1 = turnOffsetXZ(startX,startZ,velocity[0],velocity[1],radius,motionSqrt);
+		double[] vel2 = turnOffsetXZ(startX,startZ,velocity[2],velocity[3],radius,motionSqrt);
+
+		railPathX = tilex - posX;
+		railPathZ = tilez - posZ;
 		if (meta == 2 ) {
-			newTilez += 1;
-			newTilex += 0.5;
+			railPathZ += 1;
+			railPathX += 0.5;
+		} else if (meta == 0) {
+			railPathX += 0.5;
+		} else if (meta == 1 ) {
+			railPathX += 1;
+			railPathZ += 0.5;
+		} else if (meta == 3) {
+			railPathZ += 0.5;
 		}
-		if (meta == 0) {
-			newTilex += 0.5;
-		}
-		if (meta == 1 ) {
-			newTilex += 1;
-			newTilez += 0.5;
-		}
-		if (meta == 3) {
-			newTilez += 0.5;
-		}
-		double cpx = posX - cx;
-		double cpz = posZ - cz;
-		double tpx = newTilex - posX;
-		double tpz = newTilez - posZ;
+		double newYPos = Math.abs(j+ Math.min(1, (slopeAngle * Math.abs(Math.sqrt(railPathX * railPathX + railPathZ * railPathZ)))) + yOffset + 0.34f);
 
-		double tpnorm = Math.sqrt(tpx * tpx + tpz * tpz);
-
-		double cp_norm = Math.sqrt(cpx * cpx + cpz * cpz);
-		double vnorm = Math.sqrt(motionX * motionX + motionZ * motionZ);
-
-		double norm_cpx = cpx / cp_norm; //u
-		double norm_cpz = cpz / cp_norm; //v
-
-		double vx2 = -norm_cpz * vnorm;//-v
-		double vz2 = norm_cpx * vnorm;//u
-
-		double px2 = posX + motionX;
-		double pz2 = posZ + motionZ;
-
-		double px2_cx = px2 - cx;
-		double pz2_cz = pz2 - cz;
-
-		double p2_c_norm = Math.sqrt((px2_cx * px2_cx) + (pz2_cz * pz2_cz));
-
-		double px2_cx_norm = px2_cx / p2_c_norm;
-		double pz2_cz_norm = pz2_cz / p2_c_norm;
-
-		double px3 = cx + (px2_cx_norm * r);
-		double pz3 = cz + (pz2_cz_norm * r);
-
-		double signX = px3 - posX;
-		double signZ = pz3 - posZ;
-
-		vx2 = Math.copySign(vx2, signX);
-		vz2 = Math.copySign(vz2, signZ);
-
-		double p_corr_x = cx + ((cpx / cp_norm) * r);
-		double p_corr_z = cz + ((cpz / cp_norm) * r);
-		motionX = vx2;
-		motionZ = vz2;
-
-		double newYPos = Math.abs(j+ Math.min(1, (slopeAngle * Math.abs(tpnorm))) + yOffset + 0.34f);
-		setPosition(p_corr_x, newYPos, p_corr_z);
-		moveEntity(vx2,  0, vz2);
+		setPositionRelative(vel1[0]+vel2[0], newYPos-posY, vel1[1]+vel2[1]);
+		velocity[0] = vel1[0];
+		velocity[1] = vel1[1];
 
 	}
 
@@ -459,15 +430,15 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 		railPathX2 = posX - startX;
 		railPathZ2 = posZ - startZ;
-		double norm = Math.sqrt(railPathX2 * railPathX2 + railPathZ2 * railPathZ2);
+		motionSqrt = Math.sqrt(railPathX2 * railPathX2 + railPathZ2 * railPathZ2);
 
-		railPathX = startX + ((railPathX2 / norm) * radius);
-		railPathZ = startZ + ((railPathZ2 / norm) * radius);
+		railPathX = startX + ((railPathX2 / motionSqrt) * radius);
+		railPathZ = startZ + ((railPathZ2 / motionSqrt) * radius);
 
 		setPosition(railPathX, j + 0.2 + yOffset, railPathZ);
 
-		double[] vel1 = turnOffsetXZ(startX,startZ,velocity[0],velocity[1],radius,norm);
-		double[] vel2 = turnOffsetXZ(startX,startZ,velocity[2],velocity[3],radius,norm);
+		double[] vel1 = turnOffsetXZ(startX,startZ,velocity[0],velocity[1],radius,motionSqrt);
+		double[] vel2 = turnOffsetXZ(startX,startZ,velocity[2],velocity[3],radius,motionSqrt);
 
 		setPositionRelative(vel1[0]+vel2[0], 0, vel1[1]+vel2[1]);
 		velocity[0] = vel1[0];
