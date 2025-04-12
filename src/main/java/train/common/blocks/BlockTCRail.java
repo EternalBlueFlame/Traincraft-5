@@ -139,9 +139,8 @@ public class BlockTCRail extends Block {
 		}
 		if (tileEntity != null && !world.isRemote) {
 			boolean flag = world.isBlockIndirectlyGettingPowered(i, j, k);
-			if (tileEntity.previousRedstoneState != flag) {
+			if (tileEntity.getSwitchState() != flag) {
 				tileEntity.changeSwitchState(world, tileEntity, i, j, k);
-				tileEntity.previousRedstoneState = flag;
 			}
 		}
 	}
@@ -176,7 +175,6 @@ public class BlockTCRail extends Block {
 				if (l > 3)
 					l = 0;
 				world.setBlockMetadataWithNotify(i, j, k, l, 2);
-				((TileTCRail) te).hasRotated = true;
 				return true;
 			}
 			//((TileTCRail)te).printInfo();
