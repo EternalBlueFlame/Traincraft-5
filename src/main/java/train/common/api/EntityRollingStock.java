@@ -1246,7 +1246,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 return true;
             }
 
-            if (itemstack.getItem() instanceof ItemPaintbrushThing && !entityplayer.isSneaking()) {
+            if (itemstack.getItem() instanceof ItemPaintbrushThing && entityplayer.isSneaking()) {
                 if (SkinRegistry.get(this).size() > 0) {
                     entityplayer.openGui(Traincraft.instance, GuiIDs.PAINTBRUSH, entityplayer.getEntityWorld(), this.getEntityId(), -1, (int) this.posZ);
                 }
@@ -1255,13 +1255,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     entityplayer.addChatMessage(new ChatComponentText("There are no other colors available."));
                 }
                 return true;
-            } else if (itemstack.getItem() instanceof ItemPaintbrushThing && entityplayer.isSneaking()) {
+            } else if (itemstack.getItem() instanceof ItemPaintbrushThing) {
                 for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
                     if (this.getColor().equals(SkinRegistry.get(this).get(i))) {
-                        if (SkinRegistry.get(this).size() > i + 1) {
-                            setColor(i + 1);
+                        if (SkinRegistry.get(this).size() >= i) {
+                            setColor(SkinRegistry.get(this).get(i+1));
                         } else {
-                            setColor(0);
+                            setColor(SkinRegistry.get(this).get(0));
                         }
                         return true;
                     }

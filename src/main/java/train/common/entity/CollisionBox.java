@@ -60,7 +60,6 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     public boolean interactFirst(EntityPlayer p_130002_1_) {
         if(worldObj.isRemote){
             Traincraft.keyChannel.sendToServer(new PacketInteract(host.getEntityId()));
-            return true;
         }
         return host != null && host.interactFirst(p_130002_1_);
     }
