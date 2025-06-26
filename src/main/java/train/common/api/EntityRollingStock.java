@@ -684,7 +684,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         }
         if(ticksExisted % 18 == 0) { //just so we aren't doing it *every* tick, but still frequent enough to not let the player actually take damage
-            if (seats.size() != 0) {
+            if (!seats.isEmpty()) {
                 for (EntitySeat seat : seats) {
                     if (seat.getPassenger() != null) {
                         seat.getPassenger().addPotionEffect(new PotionEffect(Potion.resistance.id, 20, 5, true));
@@ -711,7 +711,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 getWorld().spawnEntityInWorld(seats.get(i));
             }
         } //dont check for jumping until at least a tick after seats spawned
-        else if (seats.size() != 0 && worldObj.isRemote && Traincraft.proxy.getCurrentScreen() == null && seats.get(0).getPassenger() != null) {
+        else if (!seats.isEmpty() && worldObj.isRemote && Traincraft.proxy.getCurrentScreen() == null && seats.get(0).getPassenger() != null) {
             if (TraincraftEntityHelper.getIsJumping(seats.get(0).getPassenger())) isBraking = true;
         }
 
@@ -1078,7 +1078,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     public void applyDrag() {
-        boolean canSlope=true;
+        boolean canSlope=ConfigHandler.ENABLE_SLOPE_ACCELERATION;
         float drag = 0.9998f, brakeBuff = 0, slope = 0;
         //check if lope things can be done at all
         for(AbstractTrains stock : consist) {
@@ -1092,7 +1092,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 //realistically would be more like 2.4, but 5 makes gameplay more dramatic
                 brakeBuff += weightKg() * 5.0f;
             }
-            if (rotationPitch != 0) {
+            if (Math.abs(rotationPitch) - 1 > 0) { //cap the pitch that we actually consider to be on a slope
                 //vanilla uses 0.0078125 per tick for slope speed.
                 //0.00017361 would be that divided by 45 since vanilla slopes are 45 degree angles.
                 //scale by entity pitch
@@ -1113,7 +1113,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         //add in the drag from combined weight, plus brakes.
         if(pullingWeight!=0) {//in theory this should never be 0, but we know forge is dumb
-            drag -= ((getAccelerator()==0?getFriction()*0.75:getFriction()*2.5) * (pullingWeight + brakeBuff)) / 44480;
+            drag -= ((getAccelerator()==0?getFriction()*0.75:getFriction()*2.5) * (pullingWeight + brakeBuff)) / 444.8;
         }
         //cap the drag to prevent weird behavior.
         // if it goes to 1 or higher then we speed up, which is bad, if it's below 0 we reverse, which is also bad
@@ -1129,7 +1129,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
     }
 
-    public float getFriction(){return 0.0015f;}
+    public float getFriction(){return 0.15f;}
 
     public double getAccelerator(){return accelerate;}
 
@@ -1271,7 +1271,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 
         //be sure the player has permission to enter the transport, and that the transport has the main seat open.
-        if (getRiderOffsets() != null && getPermissions(playerEntity, false) && !entityplayer.isSneaking()) {
+        if (getRiderOffsets() != null && getPermissions(playerEntity, false) && !entityplayer.isSneaking() && ticksExisted > 60) {
             for (EntitySeat seat : seats) {
                 //1.12 is stupid, sometimes when the passenger is null, it returns the player
                 if (!getWorld().isRemote && (seat.getPassenger() == null
@@ -1462,7 +1462,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     @Override
     public boolean canBeRidden() {
-        return seats!=null && seats.size()>0;
+        return seats!=null && !seats.isEmpty();
     }
 
     /**

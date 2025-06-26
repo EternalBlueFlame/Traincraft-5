@@ -17,22 +17,22 @@ import train.common.library.ItemIDs;
 /**
  * <h1>Pullman's Palace entity</h1>
  * For more information on the overrides and functions:
- * @see EntityPassengerPassengerCar1
+ * @see EntityPassengerCar1
  * @author Eternal Blue Flame
  */
-public class EntityPassengerPassengerCar1 extends EntityRollingStock implements IPassenger {
+public class EntityPassengerCar1 extends EntityRollingStock implements IPassenger {
     /*private static final String[] itemDescription = new String[]{
             "\u00A77" + StatCollector.translateToLocal("menu.item.weight") +": 2 " + StatCollector.translateToLocal("menu.item.tons"),
             "\u00A77" + StatCollector.translateToLocal("menu.item.seats") +": 4 " + StatCollector.translateToLocal("menu.item.players")};*/
 
 
-    public static final Item thisItem = new ItemRollingStock(new EntityPassengerPassengerCar1(null), Info.modID, Traincraft.tcTab);
+    public static final Item thisItem = new ItemRollingStock(new EntityPassengerCar1(null), Info.modID, Traincraft.tcTab);
 
 
-    public EntityPassengerPassengerCar1(World world, double d, double d1, double d2) {
+    public EntityPassengerCar1(World world, double d, double d1, double d2) {
         super(world, d, d1, d2);
     }
-    public EntityPassengerPassengerCar1(World world){
+    public EntityPassengerCar1(World world){
         super(world);
     }
 
@@ -176,11 +176,11 @@ public class EntityPassengerPassengerCar1 extends EntityRollingStock implements 
      * <h2>Rider offsets</h2>
      */
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{2f,0.5f, 0.2f},};}
+    public float[][] getRiderOffsets(){return new float[][]{{1f,0.5f, 0.2f}};}
 
     @Override
     public float[] getHitboxSize() {
-        return new float[]{6.25f,2,1.5f};
+        return new float[]{3.9375f,1.875f,1.375f};
     }
 
     @Override

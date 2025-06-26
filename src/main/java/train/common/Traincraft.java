@@ -38,7 +38,7 @@ import train.common.core.CreativeTabTraincraft;
 import train.common.core.EntityIds;
 import train.common.core.TrainModCore;
 import train.common.core.handlers.*;
-import train.common.entity.rollingStock.EntityPassengerPassengerCar1;
+import train.common.entity.rollingStock.EntityPassengerCar1;
 import train.common.entity.zeppelin.EntityZeppelinOneBalloon;
 import train.common.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.common.generation.ComponentVillageTrainstation;
@@ -312,7 +312,7 @@ public class Traincraft {
         return new AbstractTrains[]{};
     }
     public static AbstractTrains[] listPassenger() {
-        return new AbstractTrains[]{new EntityPassengerPassengerCar1(null)};
+        return new AbstractTrains[]{new EntityPassengerCar1(null)};
     }
     public static AbstractTrains[] listFreight() {
         return new AbstractTrains[]{};
