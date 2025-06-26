@@ -826,7 +826,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * example:
      * return new float[][]{{x1,y1,z1},{x2,y2,z2}, etc...};
      * may return null*/
-    public float[][] getRiderOffsets(){return new float[][]{{0,0,0}};}
+    public float[][] getRiderOffsets(){return null;}
 
 
     /**

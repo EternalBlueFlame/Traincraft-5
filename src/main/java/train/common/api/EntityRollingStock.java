@@ -1258,7 +1258,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             } else if (itemstack.getItem() instanceof ItemPaintbrushThing) {
                 for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
                     if (this.getColor().equals(SkinRegistry.get(this).get(i))) {
-                        if (SkinRegistry.get(this).size() >= i) {
+                        if (SkinRegistry.get(this).size() > i+1) {
                             setColor(SkinRegistry.get(this).get(i+1));
                         } else {
                             setColor(SkinRegistry.get(this).get(0));
