@@ -527,6 +527,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         locked = set;
     }
 
+    @Override
+    public boolean canBePushed() {
+        return false;
+    }
+
 
     /**
      * Locking for passengers, flat, caboose, jukebox,workcart

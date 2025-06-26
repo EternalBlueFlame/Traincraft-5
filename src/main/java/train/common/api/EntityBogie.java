@@ -102,6 +102,11 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		return false;
 	}
 
+	@Override
+	public boolean canBeRidden() {
+		return false;
+	}
+
 	/**
 	 * Returns a boundingBox used to collide the entity with other entities and blocks. This enables the entity to be pushable on contact, like boats or minecarts.
 	 */

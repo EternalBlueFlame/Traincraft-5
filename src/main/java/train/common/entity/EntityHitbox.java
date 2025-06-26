@@ -191,16 +191,24 @@ public class EntityHitbox {
                             if(!(obj instanceof Entity)){
                                 continue;
                             }
-                            //generally we only want to collide with mobs/players/other collision boxes
-                            //EntityFX is client only, so we _shouldn't_ have to worry about it..?
-                            //we dont collide with passenger entities, we collide with the thing they are on.
-                            if(obj instanceof EntitySeat || obj instanceof EntityBogie ||
-                                    ((Entity) obj).ridingEntity!=null || obj instanceof AbstractTrains) {
+
+                            //No matter what, we don't want to push a locomotive.
+                            //If the config is disabled, we don't want to push ANYTHING
+                            if (!ConfigHandler.PUSHABLE_ROLLINGSTOCK || host instanceof Locomotive) {
+                                //still need to push the player back though
+                                if (containsEntity((Entity)obj)) {
+                                    ((Entity)obj).applyEntityCollision(host);
+                                }
                                 continue;
                             }
-                            if(interactionBoxes.contains(obj)){
+
+                            //we don't want to collide with bogies, data(EntityRollingStock, ElectricTrain, ect...), or seat entities.
+                            //Since those are mounted on a train itself, we can ignore them.
+                            if (obj instanceof EntityBogie || obj instanceof EntitySeat || obj instanceof AbstractTrains) {
                                 continue;
                             }
+
+                            //we don't want to collide with our own CollisionBoxes, or the CollisionBoxes of our own consist either
                             if(obj instanceof CollisionBox && (((CollisionBox) obj).host==host || host.consist.contains(((CollisionBox) obj).host))){
                                 continue;
                             }
