@@ -8,7 +8,15 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import train.common.api.EntityRollingStock;
 import train.common.blocks.TCBlocks;
-import train.common.entity.rollingStockOld.*;
+import train.common.entity.rollingStockOld.caboose.EntityCaboose;
+import train.common.entity.rollingStockOld.caboose.EntityCaboose3;
+import train.common.entity.rollingStockOld.caboose.EntityCabooseLogging;
+import train.common.entity.rollingStockOld.freight.EntityBoxCartUS;
+import train.common.entity.rollingStockOld.freight.EntityFreightCart;
+import train.common.entity.rollingStockOld.freight.EntityFreightCartSmall;
+import train.common.entity.rollingStockOld.freight.EntityFreightWood2;
+import train.common.entity.rollingStockOld.passenger.EntityPassenger2;
+import train.common.entity.rollingStockOld.special.EntityStockCar;
 
 import java.util.List;
 import java.util.Random;

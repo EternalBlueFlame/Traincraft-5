@@ -1,7 +1,9 @@
 package train.common.library;
 
 import train.common.api.TrainSoundRecord;
-import train.common.entity.rollingStockOld.*;
+import train.common.entity.rollingStockOld.diesel.*;
+import train.common.entity.rollingStockOld.electric.*;
+import train.common.entity.rollingStockOld.steam.*;
 
 public enum EnumSounds implements TrainSoundRecord {
 

@@ -210,6 +210,11 @@ public class EntityHitbox {
                                 continue;
                             }
 
+                            //we don't want to collide with any passenger that is in a seat. Can just blanket skip everything that is riding something else.
+                            if (((Entity) obj).ridingEntity != null) {
+                                continue;
+                            }
+
                             //we don't want to collide with our own CollisionBoxes, or the CollisionBoxes of our own consist either
                             if(obj instanceof CollisionBox && (((CollisionBox) obj).host==host || host.consist.contains(((CollisionBox) obj).host))){
                                 continue;

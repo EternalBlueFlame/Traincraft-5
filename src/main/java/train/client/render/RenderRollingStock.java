@@ -14,7 +14,7 @@ import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 import train.common.api.TrainRenderRecord;
-import train.common.entity.rollingStockOld.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
 import train.common.overlaytexture.OverlayTextureManager;
 
 import java.util.ArrayList;

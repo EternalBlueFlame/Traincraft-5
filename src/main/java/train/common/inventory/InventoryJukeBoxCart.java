@@ -4,7 +4,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import train.common.api.EntityRollingStock;
-import train.common.entity.rollingStockOld.EntityJukeBoxCart;
+import train.common.entity.rollingStockOld.special.EntityJukeBoxCart;
 
 public class InventoryJukeBoxCart extends Container {
 
