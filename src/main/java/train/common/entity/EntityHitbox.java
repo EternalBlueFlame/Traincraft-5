@@ -131,13 +131,14 @@ public class EntityHitbox {
                             }
                         }
                     } else {
-                        double[] motion = CommonUtil.rotatePoint(0.005, 0,
-                                CommonUtil.atan2degreesf(e.posZ - host.posZ, e.posX - host.posX));
-                        //host.addVelocity(-motion[0], 0, -motion[2]);
-                        if (entityOne instanceof Locomotive) {
-                          //  entityOne.addVelocity(motion[0] * 0.2, 0, motion[2] * 0.2);
+                        double distanceFront = Math.sqrt((e.posX - front.posX) * (e.posX - front.posX)
+                                + (e.posZ - front.posZ) * (e.posZ - front.posZ));
+                        double distanceBack = Math.sqrt((e.posX - back.posX) * (e.posX - back.posX)
+                                + (e.posZ - back.posZ) * (e.posZ - back.posZ));
+                        if (distanceFront<distanceBack) {
+                            host.appendMovement(-0.005);
                         } else {
-                         //   entityOne.addVelocity(motion[0], 0, motion[2]);
+                            host.appendMovement(0.005);
                         }
                     }
 

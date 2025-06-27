@@ -1108,12 +1108,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if(derail){
             drag*=CommonUtil.getBlockAt(getWorld(),posX,posY,posZ).slipperiness;
         } else if (cachedVectors[2].yCoord > 0) {
-            drag -= ((getFriction() * cachedVectors[2].yCoord * 4.448f));
+            drag -= ((getFriction() * cachedVectors[2].yCoord * 4.448f)); //we don't know what 4.448 does
         }
 
         //add in the drag from combined weight, plus brakes.
         if(pullingWeight!=0) {//in theory this should never be 0, but we know forge is dumb
-            drag -= ((getAccelerator()==0?getFriction()*0.75:getFriction()*2.5) * (pullingWeight + brakeBuff)) / 444.8;
+            drag -= ((getAccelerator()==0?getFriction()*0.75:getFriction()*2.5) * (pullingWeight + brakeBuff)) / 1000; //was 4448, no idea. Just adjusted until something felt nice
         }
         //cap the drag to prevent weird behavior.
         // if it goes to 1 or higher then we speed up, which is bad, if it's below 0 we reverse, which is also bad
