@@ -25,6 +25,7 @@ public class EntityPassengerCar1 extends EntityRollingStock implements IPassenge
             "\u00A77" + StatCollector.translateToLocal("menu.item.weight") +": 2 " + StatCollector.translateToLocal("menu.item.tons"),
             "\u00A77" + StatCollector.translateToLocal("menu.item.seats") +": 4 " + StatCollector.translateToLocal("menu.item.players")};*/
 
+    public ModelPassenger6 model = new ModelPassenger6();
 
     public static final Item thisItem = new ItemRollingStock(new EntityPassengerCar1(null), Info.modID, Traincraft.tcTab);
 
@@ -184,7 +185,7 @@ public class EntityPassengerCar1 extends EntityRollingStock implements IPassenge
     }
 
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new ModelPassenger6()};}
+    public ModelBase[] getModel(){return new ModelBase[]{model};}
     @Override
     public float[][] modelRotations() {
         return new float[][] {{0.0f,180.0f,0.0f}};

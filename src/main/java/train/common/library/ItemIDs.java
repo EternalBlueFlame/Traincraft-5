@@ -199,8 +199,8 @@ public enum ItemIDs implements IItemIDs {
 	tcRailEmbeddedMediumSwitch("ItemTCRail", "item_rail_embedded_switch_medium", 5),
 	tcRailEmbeddedLargeSwitch("ItemTCRail", "item_rail_embedded_switch_large", 5),
 	tcRailEmbeddedVeryLargeSwitch("ItemTCRail", "item_rail_embedded_switch_large", 5),
-	tcRailEmbeddedMediumParallelSwitch("ItemTCRail", "item_rail_embedded_switch_parallel", 5),
-	tcRailEmbeddedLargeParallelSwitch("ItemTCRail", "item_rail_embedded_switch_parallel", 5),
+	tcRailEmbeddedMediumParallelSwitch("ItemTCRail", "item_rail_embedded_switch_parallel_4x11", 5),
+	tcRailEmbeddedLargeParallelSwitch("ItemTCRail", "item_rail_embedded_switch_parallel_4x17", 5),
 	tcRailEmbeddedMedium45DegreeSwitch("ItemTCRail", "item_rail_embedded_switch_45degree_medium", 5),
 	tcRailEmbeddedLarge45DegreeSwitch("ItemTCRail", "item_rail_embedded_switch_45degree_large", 5),
 
