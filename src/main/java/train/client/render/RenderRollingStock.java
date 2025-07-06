@@ -130,13 +130,13 @@ public class RenderRollingStock extends Render {
         for(int m=0; m<cart.render_cache.models.length;m++) {
             GL11.glPushMatrix();
 
-            if(cart.getModel()[m].getTrans()!=null){
-                GL11.glTranslatef(cart.render_cache.models[m].getTrans()[0],cart.getModel()[m].getTrans()[1],cart.getModel()[m].getTrans()[2]);
+            if(cart.render_cache.models[m].getTrans()!=null){
+                GL11.glTranslatef(cart.render_cache.models[m].getTrans()[0],cart.render_cache.models[m].getTrans()[1],cart.render_cache.models[m].getTrans()[2]);
             }
             else if(cart.modelOffsets()!=null &&cart.modelOffsets()[m]!=null) {
                 GL11.glTranslatef(cart.modelOffsets()[m][0], cart.modelOffsets()[m][1], cart.modelOffsets()[m][2]);
             }
-            if(cart.getModel()[m].getRotate()!=null){
+            if(cart.render_cache.models[m].getRotate()!=null){
                 GL11.glRotatef(cart.render_cache.models[m].getRotate()[0], 1,0,0);
                 GL11.glRotatef(cart.render_cache.models[m].getRotate()[1], 0,1,0);
                 GL11.glRotatef(cart.render_cache.models[m].getRotate()[2], 0,0,1);
@@ -146,8 +146,8 @@ public class RenderRollingStock extends Render {
                 GL11.glRotatef(cart.modelRotations()[m][1], 0,1,0);
                 GL11.glRotatef(cart.modelRotations()[m][2], 0,0,1);
             }
-            if(cart.getModel()[m].getScale()!=null){
-                GL11.glScalef(cart.getModel()[m].getScale()[0],cart.getModel()[m].getScale()[1],cart.getModel()[m].getScale()[2]);
+            if(cart.render_cache.models[m].getScale()!=null){
+                GL11.glScalef(cart.render_cache.models[m].getScale()[0],cart.render_cache.models[m].getScale()[1],cart.render_cache.models[m].getScale()[2]);
             }
             else if(cart.getRenderScale()[m]!=null) {
                 GL11.glScalef(cart.getRenderScale()[m][0], cart.getRenderScale()[m][1], cart.getRenderScale()[m][2]);
