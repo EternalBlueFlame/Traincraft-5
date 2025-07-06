@@ -35,6 +35,13 @@ public class RenderRollingStock extends Render {
      * Renders the Minecart.
      */
     public static void renderTheMinecart(EntityRollingStock cart, double x, double y, double z, float yaw, float time) {
+
+        if(cart.render_cache.needs_model_update){
+            cart.render_cache.models=cart.getModel();
+            cart.render_cache.bogies=cart.bogies();
+            cart.render_cache.needs_model_update=false;
+        }
+
         if (!cart.acceptsOverlayTextures() || cart.getOverlayTextureContainer().getType() == OverlayTextureManager.Type.NONE) {
 			Tessellator.bindTexture(getTexture(cart));
 		} else {
@@ -120,33 +127,68 @@ public class RenderRollingStock extends Render {
         }
         //loadTexture(getTextureFile(renders.getTexture(), renders.getIsMultiTextured(), cart));
 
-        for(int m=0; m<cart.getModel().length;m++) {
+        for(int m=0; m<cart.render_cache.models.length;m++) {
             GL11.glPushMatrix();
 
-            if(cart.getModel()[m].getTrans()!=null){
-                GL11.glTranslatef(cart.getModel()[m].getTrans()[0],cart.getModel()[m].getTrans()[1],cart.getModel()[m].getTrans()[2]);
+            if(cart.render_cache.models[m].getTrans()!=null){
+                GL11.glTranslatef(cart.render_cache.models[m].getTrans()[0],cart.render_cache.models[m].getTrans()[1],cart.render_cache.models[m].getTrans()[2]);
             }
             else if(cart.modelOffsets()!=null &&cart.modelOffsets()[m]!=null) {
                 GL11.glTranslatef(cart.modelOffsets()[m][0], cart.modelOffsets()[m][1], cart.modelOffsets()[m][2]);
             }
-            if(cart.getModel()[m].getRotate()!=null){
-                GL11.glRotatef(cart.getModel()[m].getRotate()[0], 1,0,0);
-                GL11.glRotatef(cart.getModel()[m].getRotate()[1], 0,1,0);
-                GL11.glRotatef(cart.getModel()[m].getRotate()[2], 0,0,1);
+            if(cart.render_cache.models[m].getRotate()!=null){
+                GL11.glRotatef(cart.render_cache.models[m].getRotate()[0], 1,0,0);
+                GL11.glRotatef(cart.render_cache.models[m].getRotate()[1], 0,1,0);
+                GL11.glRotatef(cart.render_cache.models[m].getRotate()[2], 0,0,1);
             }
             else if(cart.modelRotations()[m]!=null) {
                 GL11.glRotatef(cart.modelRotations()[m][0], 1,0,0);
                 GL11.glRotatef(cart.modelRotations()[m][1], 0,1,0);
                 GL11.glRotatef(cart.modelRotations()[m][2], 0,0,1);
             }
-            if(cart.getModel()[m].getScale()!=null){
-                GL11.glScalef(cart.getModel()[m].getScale()[0],cart.getModel()[m].getScale()[1],cart.getModel()[m].getScale()[2]);
+            if(cart.render_cache.models[m].getScale()!=null){
+                GL11.glScalef(cart.render_cache.models[m].getScale()[0],cart.render_cache.models[m].getScale()[1],cart.render_cache.models[m].getScale()[2]);
             }
             else if(cart.getRenderScale()[m]!=null) {
                 GL11.glScalef(cart.getRenderScale()[m][0], cart.getRenderScale()[m][1], cart.getRenderScale()[m][2]);
             }
-            cart.getModel()[m].render(cart, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+            cart.render_cache.models[m].render(cart, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+
             GL11.glPopMatrix();
+        }
+
+        if(cart.render_cache.bogies!=null){
+            for (Bogie b : cart.render_cache.bogies){
+                GL11.glPushMatrix();
+
+                GL11.glTranslatef(b.offset[0],b.offset[1],b.offset[2]);
+
+                GL11.glRotatef(b.rotation[0],1,0,0);
+                GL11.glRotatef(b.rotation[1],0,1,0);
+                GL11.glRotatef(b.rotation[2],0,0,1);
+
+                GL11.glRotatef(b.rotationYaw,0,1,0);
+
+                b.bogieModel.render(cart,0,0,0,0,0,0);
+
+                for(Bogie sb : b.subBogies){
+                    GL11.glPushMatrix();
+
+                    GL11.glTranslatef(sb.offset[0],sb.offset[1],sb.offset[2]);
+
+                    GL11.glRotatef(sb.rotation[0],1,0,0);
+                    GL11.glRotatef(sb.rotation[1],0,1,0);
+                    GL11.glRotatef(sb.rotation[2],0,0,1);
+
+                    GL11.glRotatef(sb.rotationYaw,0,1,0);
+
+                    sb.bogieModel.render(cart,0,0,0,0,0,0);
+
+                    GL11.glPopMatrix();
+                }
+
+                GL11.glPopMatrix();
+            }
         }
 
 
