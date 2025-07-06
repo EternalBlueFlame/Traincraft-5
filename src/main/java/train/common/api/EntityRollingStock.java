@@ -777,8 +777,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
             if(render_cache!=null && render_cache.bogies!=null){
                 for (train.client.render.Bogie b : render_cache.bogies) {
-                    b.updatePosition(this, null);
-                    b.updateRotation(this);
+                    if (b != null) {
+                        b.updatePosition(this, null);
+                        b.updateRotation(this);
+                    }
                 }
             }
 

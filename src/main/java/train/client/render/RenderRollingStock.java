@@ -158,36 +158,10 @@ public class RenderRollingStock extends Render {
         }
 
         if(cart.render_cache.bogies!=null){
-            for (Bogie b : cart.render_cache.bogies){
-                GL11.glPushMatrix();
-
-                GL11.glTranslatef(b.offset[0],b.offset[1],b.offset[2]);
-
-                GL11.glRotatef(b.rotation[0],1,0,0);
-                GL11.glRotatef(b.rotation[1],0,1,0);
-                GL11.glRotatef(b.rotation[2],0,0,1);
-
-                GL11.glRotatef(b.rotationYaw,0,1,0);
-
-                b.bogieModel.render(cart,0,0,0,0,0,0);
-
-                for(Bogie sb : b.subBogies){
-                    GL11.glPushMatrix();
-
-                    GL11.glTranslatef(sb.offset[0],sb.offset[1],sb.offset[2]);
-
-                    GL11.glRotatef(sb.rotation[0],1,0,0);
-                    GL11.glRotatef(sb.rotation[1],0,1,0);
-                    GL11.glRotatef(sb.rotation[2],0,0,1);
-
-                    GL11.glRotatef(sb.rotationYaw,0,1,0);
-
-                    sb.bogieModel.render(cart,0,0,0,0,0,0);
-
-                    GL11.glPopMatrix();
+            for (Bogie b : cart.render_cache.bogies) {
+                if (b != null) {
+                    renderBogie(b, cart);
                 }
-
-                GL11.glPopMatrix();
             }
         }
 
@@ -220,6 +194,28 @@ public class RenderRollingStock extends Render {
         }
 
         GL11.glPopMatrix();
+    }
+
+    private static void renderBogie(Bogie bogie, EntityRollingStock cart) {
+        GL11.glPushMatrix();
+
+        if (bogie.offset != null) {
+            GL11.glTranslatef(bogie.offset[0], bogie.offset[1], bogie.offset[2]);
+        }
+        if (bogie.rotation != null) {
+            GL11.glRotatef(bogie.rotation[0], 1, 0, 0);
+            GL11.glRotatef(bogie.rotation[1], 0, 1, 0);
+            GL11.glRotatef(bogie.rotation[2], 0, 0, 1);
+        }
+        GL11.glRotatef(bogie.rotationYaw,0,1,0);
+
+        bogie.bogieModel.render(cart,0,0,0,0,0,0);
+
+        GL11.glPopMatrix();
+
+        for (Bogie b : bogie.subBogies) {
+            renderBogie(b, cart);
+        }
     }
 
     private static void renderSmokeFX(EntityRollingStock cart, float yaw, float pitch, String smokeType, ArrayList<double[]> smokeFX, int smokeIterations, float time, boolean hasSmokeOnSlopes) {
