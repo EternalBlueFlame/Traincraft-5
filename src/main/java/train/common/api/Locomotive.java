@@ -651,10 +651,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                             y=s.getPassenger().rotationYaw;
                         }
                     }
-
-                    double[] move=CommonUtil.rotatePoint(0.0075*(forwardPressed?-accelerate:accelerate),0,
-                            y==0?0:CommonUtil.floorDouble(y/90)*90);
-                    addVelocity(move[0],0,move[2]);
+                    appendMovement(0.0075*(forwardPressed?-accelerate:accelerate));
                 }
             } else if (brakePressed) {
                 multiplyVelocity(brake);

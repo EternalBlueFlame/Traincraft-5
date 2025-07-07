@@ -396,7 +396,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 
 				canPlaceRollingStock(world, player, rollingStock, i, j, k, dir);
-				
+
 
 				if (dir == 0) {
 
