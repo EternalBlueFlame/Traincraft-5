@@ -4,6 +4,7 @@ import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.Vec3f;
 import train.common.api.AbstractTrains;
+import train.common.api.EntityRollingStock;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -111,4 +112,38 @@ public class Bogie {
             b.updatePosition(entity,prevOffset);
         }
     }
+
+    public void render(EntityRollingStock cart){
+        org.lwjgl.opengl.GL11.glPushMatrix();
+
+        org.lwjgl.opengl.GL11.glTranslatef(offset[0],offset[1],offset[2]);
+
+        org.lwjgl.opengl.GL11.glRotatef(rotation[0],1,0,0);
+        org.lwjgl.opengl.GL11.glRotatef(rotation[1],0,1,0);
+        org.lwjgl.opengl.GL11.glRotatef(rotation[2],0,0,1);
+
+        org.lwjgl.opengl.GL11.glRotatef(rotationYaw,0,1,0);
+
+        bogieModel.render(cart,0,0,0,0,0,0);
+
+        int m2=0;
+        for(Bogie sb : subBogies){
+            org.lwjgl.opengl.GL11.glPushMatrix();
+
+            org.lwjgl.opengl.GL11.glTranslatef(sb.offset[0],sb.offset[1],sb.offset[2]);
+
+            org.lwjgl.opengl.GL11.glRotatef(sb.rotation[0],1,0,0);
+            org.lwjgl.opengl.GL11.glRotatef(sb.rotation[1],0,1,0);
+            org.lwjgl.opengl.GL11.glRotatef(sb.rotation[2],0,0,1);
+
+            org.lwjgl.opengl.GL11.glRotatef(sb.rotationYaw,0,1,0);
+
+            sb.bogieModel.render(cart,0,0,0,0,0,0);
+
+            org.lwjgl.opengl.GL11.glPopMatrix();
+        }
+
+        org.lwjgl.opengl.GL11.glPopMatrix();
+    }
+
 }

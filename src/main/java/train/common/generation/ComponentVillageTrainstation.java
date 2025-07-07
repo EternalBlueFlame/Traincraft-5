@@ -1,6 +1,7 @@
 package train.common.generation;
 
 import ebf.tim.api.SkinRegistry;
+import ebf.tim.api.TransportSkin;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -190,9 +191,9 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 			cart.setLocationAndAngles(j1 + 0.5D, k1, l1 + 0.5D, 90.0F, 0.0F);
 			cart.setTrainOwner("VillagerJoe");
 			cart.shouldChunkLoad=false;
-			List<String> skins = SkinRegistry.get(cart);
+			List<TransportSkin> skins = (List<TransportSkin>) SkinRegistry.get(cart).values();
 			if (skins != null && !skins.isEmpty()) {
-				cart.setColor(skins.get(new Random().nextInt((skins.size() -1))));
+				cart.setColor(skins.get(new Random().nextInt((skins.size() -1))).addr);
 			}
 			world.spawnEntityInWorld(cart);
 			cart.setInformation("VillagerJoe", "VillagerJoe", cart.getCartItem().getItem().getItemStackDisplayName(cart.getCartItem()), -1);

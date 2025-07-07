@@ -607,10 +607,9 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 				if (ConfigHandler.SHOW_POSSIBLE_COLORS && SkinRegistry.get(rollingStock).size()>0) {
 					String concatColors = ": ";
-					for (int t = 0; t < SkinRegistry.get(rollingStock).size(); t++) {
-						if (!SkinRegistry.get(rollingStock).get(t).equals("Empty")
-								&& !SkinRegistry.get(rollingStock).get(t).equals("Full"))
-							concatColors+=SkinRegistry.get(rollingStock).get(t)+", ";
+					for (String cols : SkinRegistry.get(rollingStock).keySet()) {
+						if (!cols.equals("Empty") && !cols.equals("Full"))
+							concatColors+=cols+", ";
 					}
 					if (concatColors.length() > 4) {
 						if (player != null) {

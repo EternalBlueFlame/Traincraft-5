@@ -1228,8 +1228,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             if (itemstack.getItem() instanceof ItemDye) {
                 if (SkinRegistry.get(this).size() > 0) {
                     for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
-                        if (itemstack.getItemDamage() == DepreciatedUtil.getColorFromString(SkinRegistry.get(this).get(i))) {
-                            this.setColor(SkinRegistry.get(this).get(i));
+                        if (itemstack.getItemDamage() == DepreciatedUtil.getColorFromString(SkinRegistry.get(this).get(i).addr)) {
+                            this.setColor(SkinRegistry.get(this).get(i).addr);
                             itemstack.stackSize--;
 
                             //if (!worldObj.isRemote)PacketHandler.sendPacketToClients(PacketHandler.sendStatsToServer(10,this.uniqueID,trainName ,trainType, this.trainOwner, this.getColorAsString(itemstack.getItemDamage()), (int)posX, (int)posY, (int)posZ),this.worldObj, (int)posX,(int)posY,(int)posZ, 12.0D);
@@ -1267,9 +1267,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
                     if (this.getColor().equals(SkinRegistry.get(this).get(i))) {
                         if (SkinRegistry.get(this).size() > i+1) {
-                            setColor(SkinRegistry.get(this).get(i+1));
+                            setColor(SkinRegistry.get(this).get(i+1).addr);
                         } else {
-                            setColor(SkinRegistry.get(this).get(0));
+                            setColor(SkinRegistry.get(this).get(0).addr);
                         }
                         return true;
                     }

@@ -141,7 +141,7 @@ public class GuiCrafterTier extends GuiTraincraft {
                     }
 
                     if (renderEntity != null) {
-                        renderEntity.setColor(train.getLiveries().get(color));
+                        renderEntity.setColor(train.getLiveries().get(color).addr);
                     }
                 }
                 float scale = renderEntity.getHitboxSize()[0];

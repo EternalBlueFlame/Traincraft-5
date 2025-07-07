@@ -9,58 +9,76 @@ import java.util.*;
 
 public class SkinRegistry {
 
-    public static Map<Class<? extends AbstractTrains>, List<String>> liveryMap = new HashMap<Class<? extends AbstractTrains>, List<String>>();
+    public static HashMap<Class<? extends AbstractTrains>, HashMap<String,TransportSkin>> liveryMap = new HashMap<Class<? extends AbstractTrains>, HashMap<String,TransportSkin>>();
 
-    public static List<String> get(AbstractTrains t){
+    public static Map<String,TransportSkin> get(AbstractTrains t){
         if(liveryMap.containsKey(t.getClass())) {
             return liveryMap.get(t.getClass());
         } else {
-            return new ArrayList<String>();
+            return new HashMap<String,TransportSkin>();
         }
     }
-
-    public static void addSkin(Class<? extends AbstractTrains> train, TransportSkin str){
-        if(!liveryMap.containsKey(train)) {
-            liveryMap.put(train, Collections.singletonList(str.addr));
+    public static Map<String,TransportSkin> get(Class<? extends AbstractTrains> t){
+        if(liveryMap.containsKey(t)) {
+            return liveryMap.get(t);
         } else {
-            List<String> temp = new ArrayList<>();
-            temp.addAll(liveryMap.get(train));
-            temp.add(str.addr);
-            liveryMap.put(train,temp);
+            return new HashMap<String,TransportSkin>();
         }
     }
 
+    public static void addSkin(Class<? extends AbstractTrains> train, TransportSkin str, String color){
+        if(!liveryMap.containsKey(train)) {
+            HashMap<String,TransportSkin> m = new HashMap<String, TransportSkin>();
+            m.put(color,str);
+            liveryMap.put(train, m);
+        } else {
+            liveryMap.get(train).put(color,str);
+        }
+    }
+
+    public static void addSkin(Class<? extends AbstractTrains> train, String str, String color){
+        if(!liveryMap.containsKey(train)) {
+            HashMap<String,TransportSkin> m = new HashMap<String, TransportSkin>();
+            m.put(color,new TransportSkin(str));
+            liveryMap.put(train, m);
+        } else {
+            liveryMap.get(train).put(color,new TransportSkin(str));
+        }
+    }
+
+    @Deprecated
     public static void addSkin(Class<? extends AbstractTrains> train, String str){
         if(!liveryMap.containsKey(train)) {
-            liveryMap.put(train, Collections.singletonList(str));
+            HashMap<String,TransportSkin> m = new HashMap<String, TransportSkin>();
+            m.put(str,new TransportSkin(str));
+            liveryMap.put(train, m);
         } else {
-            List<String> temp = new ArrayList<>();
-            temp.addAll(liveryMap.get(train));
-            temp.add(str);
-            liveryMap.put(train,temp);
+            liveryMap.get(train).put(str,new TransportSkin(str));
         }
     }
 
-    public static void addSkin(Class<? extends AbstractTrains> train, String modid,String addr,String[] bogieSkins,String name, String description){
+    public static void addSkin(Class<? extends AbstractTrains> train, String modid,String addr, String[] bogieSkins,String name, String description){
         if(!liveryMap.containsKey(train)) {
-            liveryMap.put(train, Collections.singletonList(modid+":"+addr));
+            HashMap<String,TransportSkin> m = new HashMap<String, TransportSkin>();
+            m.put(name,new TransportSkin(modid,addr));
+            liveryMap.put(train, m);
         } else {
-            List<String> temp = new ArrayList<>();
-            temp.addAll(liveryMap.get(train));
-            temp.add(modid+":"+addr);
-            liveryMap.put(train,temp);
+            liveryMap.get(train).put(name,new TransportSkin(modid,addr));
         }
+
+        liveryMap.get(train).get(name).bogieSkins=Arrays.asList(bogieSkins);
     }
 
-    public static void addSkin(Class<? extends AbstractTrains> train, String modid,String addr,String bogieSkin,String name, String description){
+    public static void addSkin(Class<? extends AbstractTrains> train, String modid,String addr, String bogieSkin,String name, String description){
         if(!liveryMap.containsKey(train)) {
-            liveryMap.put(train, Collections.singletonList(modid+":"+addr));
+            HashMap<String,TransportSkin> m = new HashMap<String, TransportSkin>();
+            m.put(name,new TransportSkin(modid,addr));
+            liveryMap.put(train, m);
         } else {
-            List<String> temp = new ArrayList<>();
-            temp.addAll(liveryMap.get(train));
-            temp.add(modid+":"+addr);
-            liveryMap.put(train,temp);
+            liveryMap.get(train).put(name,new TransportSkin(modid,addr));
         }
+
+        liveryMap.get(train).get(name).bogieSkins= Collections.singletonList(bogieSkin);
     }
 
 }

@@ -2,6 +2,8 @@ package train.client.render;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.api.SkinRegistry;
+import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
@@ -20,6 +22,7 @@ import train.common.overlaytexture.OverlayTextureManager;
 import java.util.ArrayList;
 import java.util.Random;
 
+import static buildcraft.BuildCraftCore.render;
 import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
@@ -126,8 +129,8 @@ public class RenderRollingStock extends Render {
                     240f);
         }
         //loadTexture(getTextureFile(renders.getTexture(), renders.getIsMultiTextured(), cart));
-
-        for(int m=0; m<cart.render_cache.models.length;m++) {
+        int m=0;
+        for(;m<cart.render_cache.models.length;m++) {
             GL11.glPushMatrix();
 
             if(cart.render_cache.models[m].getTrans()!=null){
@@ -157,11 +160,13 @@ public class RenderRollingStock extends Render {
             GL11.glPopMatrix();
         }
 
-        if(cart.render_cache.bogies!=null){
-            for (Bogie b : cart.render_cache.bogies) {
-                if (b != null) {
-                    renderBogie(b, cart);
+        if(cart.render_cache.bogies!=null && cart.render_cache.bogies.length>0){
+            DebugUtil.println(cart.render_cache.bogies.length);
+            for (m=0;m<cart.render_cache.bogies.length;m++){
+                if(cart.render_cache.skin.bogieSkins.size()>m) {
+                    Tessellator.bindTexture(new ResourceLocation(cart.render_cache.skin.bogieSkins.get(m)));
                 }
+                cart.render_cache.bogies[m].render(cart);
             }
         }
 
@@ -194,28 +199,6 @@ public class RenderRollingStock extends Render {
         }
 
         GL11.glPopMatrix();
-    }
-
-    private static void renderBogie(Bogie bogie, EntityRollingStock cart) {
-        GL11.glPushMatrix();
-
-        if (bogie.offset != null) {
-            GL11.glTranslatef(bogie.offset[0], bogie.offset[1], bogie.offset[2]);
-        }
-        if (bogie.rotation != null) {
-            GL11.glRotatef(bogie.rotation[0], 1, 0, 0);
-            GL11.glRotatef(bogie.rotation[1], 0, 1, 0);
-            GL11.glRotatef(bogie.rotation[2], 0, 0, 1);
-        }
-        GL11.glRotatef(bogie.rotationYaw,0,1,0);
-
-        bogie.bogieModel.render(cart,0,0,0,0,0,0);
-
-        GL11.glPopMatrix();
-
-        for (Bogie b : bogie.subBogies) {
-            renderBogie(b, cart);
-        }
     }
 
     private static void renderSmokeFX(EntityRollingStock cart, float yaw, float pitch, String smokeType, ArrayList<double[]> smokeFX, int smokeIterations, float time, boolean hasSmokeOnSlopes) {
@@ -311,17 +294,25 @@ public class RenderRollingStock extends Render {
 
     //@Override
     protected ResourceLocation getEntityTexture(Entity entity) {
-        return getTexture(entity);
+        if(entity instanceof EntityRollingStock) {
+            return getTexture((EntityRollingStock) entity);
+        }
+        else {
+            return new ResourceLocation("");
+        }
     }
 
-    public static ResourceLocation getTexture(Entity entity) {
-        if(entity instanceof AbstractTrains) {
-            TrainRenderRecord render = Traincraft.instance.traincraftRegistry.getTrainRenderRecord(entity.getClass());
-            if (render != null) {
-                return render.getTextureFile(((AbstractTrains) entity).getColor());
-            }
+    public static ResourceLocation getTexture(AbstractTrains entity) {
+        if(!entity.render_cache.color.equals(entity.getColor())){
+            entity.render_cache.color=entity.getColor();
+            entity.render_cache.rend=Traincraft.instance.traincraftRegistry.getTrainRenderRecord(entity.getClass());
+            entity.render_cache.skin=SkinRegistry.get(entity).get(entity.render_cache.color);
         }
-        return null;
+
+        if (render != null) {
+            return entity.render_cache.rend.getTextureFile(entity.render_cache.color);
+        }
+        return new ResourceLocation("");
     }
 
 	/**
