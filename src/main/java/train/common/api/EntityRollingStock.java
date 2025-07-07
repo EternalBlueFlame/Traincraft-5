@@ -1279,7 +1279,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 
         //be sure the player has permission to enter the transport, and that the transport has the main seat open.
-        if (getRiderOffsets() != null && getPermissions(playerEntity, false) && !entityplayer.isSneaking() && ticksExisted > 60) {
+        if (getRiderOffsets() != null && getPermissions(playerEntity, false) && !entityplayer.isSneaking()) {
             for (EntitySeat seat : seats) {
                 //1.12 is stupid, sometimes when the passenger is null, it returns the player
                 if (!getWorld().isRemote && (seat.getPassenger() == null

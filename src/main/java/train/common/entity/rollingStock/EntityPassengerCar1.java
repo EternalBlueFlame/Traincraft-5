@@ -89,7 +89,7 @@ public class EntityPassengerCar1 extends EntityRollingStock implements IPassenge
 
     @Override
     public String getDefaultSkin(){
-        return Info.modID+":textures/trains/passenger_Red.png";
+        return "Red";
     }
     @Override
     public boolean isReinforced() {
