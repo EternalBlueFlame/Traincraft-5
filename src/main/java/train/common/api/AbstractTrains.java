@@ -939,7 +939,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         if(getSpec().getColors()!=null && getSpec().getColors().size()>0){
             return SkinRegistry.get(this).get(getSpec().getColors().get(0)).addr;
         }
-        return SkinRegistry.get(this).get("default").addr;
+        return getSpec().getColors().size()>0?getSpec().getColors().get(0):"";
     }
 
     /**returns a list of models to be used for the transport

@@ -17,6 +17,7 @@ import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 import train.common.api.TrainRenderRecord;
 import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
+import train.common.library.Info;
 import train.common.overlaytexture.OverlayTextureManager;
 
 import java.util.ArrayList;
@@ -297,21 +298,21 @@ public class RenderRollingStock extends Render {
             return getTexture((EntityRollingStock) entity);
         }
         else {
-            return new ResourceLocation("");
+            return null;
         }
     }
 
     public static ResourceLocation getTexture(AbstractTrains entity) {
         if(!entity.render_cache.color.equals(entity.getColor())){
             entity.render_cache.color=entity.getColor();
-            entity.render_cache.rend=Traincraft.instance.traincraftRegistry.getTrainRenderRecord(entity.getClass());
+            entity.render_cache.rend=entity.getRender();
             entity.render_cache.skin=SkinRegistry.get(entity).get(entity.render_cache.color);
         }
 
         if (entity.render_cache.rend != null) {
             return entity.render_cache.rend.getTextureFile(entity.render_cache.color);
         }
-        return new ResourceLocation("");
+        return entity.getRender().getTextureFile("");
     }
 
 	/**
