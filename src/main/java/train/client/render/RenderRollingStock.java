@@ -22,7 +22,6 @@ import train.common.overlaytexture.OverlayTextureManager;
 import java.util.ArrayList;
 import java.util.Random;
 
-import static buildcraft.BuildCraftCore.render;
 import static org.lwjgl.opengl.GL11.*;
 
 @SideOnly(Side.CLIENT)
@@ -309,7 +308,7 @@ public class RenderRollingStock extends Render {
             entity.render_cache.skin=SkinRegistry.get(entity).get(entity.render_cache.color);
         }
 
-        if (render != null) {
+        if (entity.render_cache.rend != null) {
             return entity.render_cache.rend.getTextureFile(entity.render_cache.color);
         }
         return new ResourceLocation("");
