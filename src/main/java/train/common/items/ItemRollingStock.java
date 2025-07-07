@@ -396,9 +396,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 
 				canPlaceRollingStock(world, player, rollingStock, i, j, k, dir);
-
-
-				player.addChatMessage(new ChatComponentText("dir: " + dir));
+				
 
 				if (dir == 0) {
 
