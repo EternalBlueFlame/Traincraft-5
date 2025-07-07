@@ -377,23 +377,15 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	private void moveOnTCSlope(int j, double cx, double cz, double slopeAngle, int meta) {
 
 		//slopes use the opposite axis of straights for some reason, so we gotta invert it.
-		moveOnTCStraight(j,meta==2||meta==0?1:0);
+		moveOnTCStraight(j,meta);
 
 		double newPosY;
 		if (meta == 2 || meta == 0) {
-			newPosY= Math.abs(j + (Math.tan(slopeAngle * Math.abs(cz - this.posZ))) + this.yOffset + 0.3);
+			newPosY= Math.abs(j+(Math.tan(slopeAngle * Math.abs(cz - this.posZ))) + this.yOffset + 0.3);
 		} else{
-			newPosY= Math.abs(j + (Math.tan(slopeAngle * Math.abs(cx - this.posX))) + this.yOffset + 0.3);
+			newPosY= Math.abs(j+(Math.tan(slopeAngle * Math.abs(cx - this.posX))) + this.yOffset + 0.3);
 		}
-		Block b=CommonUtil.getBlockAt(getWorld(),xFloor,newPosY,zFloor);
-		if(!(b instanceof BlockTCRail) && !(b instanceof BlockTCRailGag)){
-			newPosY--;
-		}
-		b=CommonUtil.getBlockAt(getWorld(),xFloor,newPosY,zFloor);
-		if(!(b instanceof BlockTCRail) && !(b instanceof BlockTCRailGag)){
-			newPosY--;
-		}
-		setPositionRelative(0,newPosY,0);
+		setPosition(posX,newPosY,posZ);
 
 	}
 
