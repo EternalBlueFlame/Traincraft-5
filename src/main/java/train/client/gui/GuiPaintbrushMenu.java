@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
+import ebf.tim.utility.DebugUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -101,7 +102,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
     private int topVisSkin;
     private int lastNonSkins;
 
-    private List<TransportSkin> skins=new ArrayList<>();
+    private List<String> skins=new ArrayList<>();
 
     public GuiPaintbrushMenu(EntityPlayer editingPlayer, EntityRollingStock rollingStock) {
         this.editingPlayer = editingPlayer;
@@ -113,13 +114,13 @@ public class GuiPaintbrushMenu extends GuiScreen {
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
-        for (TransportSkin s : SkinRegistry.get(rollingStock).values()){
+        for (String s : SkinRegistry.get(rollingStock).keySet()){
             skins.add(s);
         }
         totalOptions = skins.size();
 
         for (int i = 0; i < totalOptions; i++) { // Set page to the page with the currently selected texture.
-            if (skins.get(i).addr.equals(rollingStock.getColor())) {
+            if (skins.get(i).equals(rollingStock.getColor())) {
                 currentDisplayTexture = i;
                 break;
             }
@@ -319,12 +320,13 @@ public class GuiPaintbrushMenu extends GuiScreen {
             int endIndex = hasNextTexture ? 1 : 0;
             for (int i = startIndex; i <= endIndex; i++) {
                 if (i + currentDisplayTexture != -1 && i + currentDisplayTexture != totalOptions) {
-                    loopRenderColor = skins.get(i + currentDisplayTexture).addr;
+                    loopRenderColor = skins.get(i + currentDisplayTexture);
                 } else if (i + currentDisplayTexture == -1) {
-                    loopRenderColor = skins.get(totalOptions - 1).addr;
+                    loopRenderColor = skins.get(totalOptions - 1);
                 } else {
-                    loopRenderColor = skins.get(0).addr;
+                    loopRenderColor = skins.get(0);
                 }
+                //DebugUtil.println(loopRenderColor);
                 renderEntity.setColor(loopRenderColor);
                 GL11.glColor4f(1, 1, 1, 1);
                 GL11.glPushMatrix();
@@ -361,7 +363,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
             int yOffset = 22;
             for (int i=0;i<MAX_LISTED_SKINS;i++) {
                 if(i+topVisSkin<skins.size()) {
-                    String t = skins.get(i + topVisSkin).addr;
+                    String t = skins.get(i + topVisSkin);
                     fontRendererObj.drawString(t, GUI_ANCHOR_MID_X - ((int) (fontRendererObj.getStringWidth(t) * 0.5)), GUI_ANCHOR_Y + 10 + yOffset, 0);
                     yOffset += 16;
                 }
@@ -640,7 +642,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
 
     private void updateSelectedTextureProperties() {
         descriptionScrollerIndex = 0;
-        currentDisplayTextureString = skins.get(currentDisplayTexture).addr;
+        currentDisplayTextureString = skins.get(currentDisplayTexture);
         String currentDisplayTextureDescriptionString;
         if (rollingStock.textureDescriptionMap.containsKey(currentDisplayTextureString)) {
             if (rollingStock.textureDescriptionMap.get(currentDisplayTextureString).title != null) {

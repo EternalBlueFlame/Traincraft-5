@@ -1,12 +1,13 @@
 package train.common.entity.rollingStock;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
-import train.client.render.models.ModelPassenger6;
 import train.common.Traincraft;
 import train.common.api.EntityRollingStock;
 import train.common.api.IPassenger;
@@ -24,8 +25,6 @@ public class EntityPassengerCar1 extends EntityRollingStock implements IPassenge
     /*private static final String[] itemDescription = new String[]{
             "\u00A77" + StatCollector.translateToLocal("menu.item.weight") +": 2 " + StatCollector.translateToLocal("menu.item.tons"),
             "\u00A77" + StatCollector.translateToLocal("menu.item.seats") +": 4 " + StatCollector.translateToLocal("menu.item.players")};*/
-
-    public ModelBase[] models = new ModelBase[]{new ModelPassenger6()};
 
     public static final Item thisItem = new ItemRollingStock(new EntityPassengerCar1(null), Info.modID, Traincraft.tcTab);
 
@@ -86,10 +85,12 @@ public class EntityPassengerCar1 extends EntityRollingStock implements IPassenge
                 "Skin", "");
         SkinRegistry.addSkin(this.getClass(), Info.modID, "textures/trains/passenger_Skin19.png", new String[]{},
                 "Skin19", "");
-
-
     }
 
+    @Override
+    public String getDefaultSkin(){
+        return Info.modID+":textures/trains/passenger_Red.png";
+    }
     @Override
     public boolean isReinforced() {
         return false;
@@ -185,7 +186,7 @@ public class EntityPassengerCar1 extends EntityRollingStock implements IPassenge
     }
 
     @Override
-    public ModelBase[] getModel(){return models;}
+    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelPassenger6()};}
     @Override
     public float[][] modelRotations() {
         return new float[][] {{0.0f,180.0f,0.0f}};

@@ -7,6 +7,7 @@ import ebf.XmlBuilder;
 import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.EntitySeat;
+import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.ModelBase;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.IMinecart;
@@ -22,10 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -360,7 +358,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
             }
         }
 
-        entity_data.putString("color", color);
+        entity_data.putString("color", SkinRegistry.get(this).get(color).addr);
         dataWatcher.updateObject(30, entity_data.toXMLString());
         this.getEntityData().setString("xml", entity_data.toXMLString());
     }
@@ -929,12 +927,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * additionally the addSkin function may be called from any other class at any time.
      * the registerSkins method is only for organization and convenience.*/
     public void registerSkins(){
-        if(getSpec().getColors().size()>0) {
-            for (String col : getSpec().getColors()) {
-                SkinRegistry.addSkin(this.getClass(), trainConverter.getRender(this).getTextureFile(col).toString(), col);
-            }
-        } else {
-            SkinRegistry.addSkin(this.getClass(), trainConverter.getRender(this).getTextureFile("").toString(), "default");
+        for (String col : getSpec().getColors()) {
+            SkinRegistry.addSkin(this.getClass(), Info.resourceLocation+":"+ col + ".png", col);
         }
     }
 
@@ -942,7 +936,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * return the name for the default TransportSkin of the transport.
      */
     public String getDefaultSkin(){
-        if(getSpec().getColors().size()>0){
+        if(getSpec().getColors()!=null && getSpec().getColors().size()>0){
             return SkinRegistry.get(this).get(getSpec().getColors().get(0)).addr;
         }
         return SkinRegistry.get(this).get("default").addr;
