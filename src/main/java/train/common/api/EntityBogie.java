@@ -219,7 +219,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		limitSpeedOnTCRail();
 
 		if(l instanceof BlockTCRail) {
-			lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
+			if(!TCRailTypes.isCrossingTrack((TileTCRail) worldObj.getTileEntity(i, j, k))) {
+				lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
+			}
 		} else if(l instanceof BlockTCRailGag && (lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack))){
 			TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(i, j, k);
 			if(tileGag.originX.size()>0 && worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) != null) {
@@ -366,7 +368,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	private void moveOnTCTwoWaysCrossing() {
 		double norm = Math.abs(velocity[0])+Math.abs(velocity[1])+Math.abs(velocity[2])+Math.abs(velocity[3]);
 
-		if (Math.abs(velocity[1])+ Math.abs(velocity[3])> Math.abs(velocity[0])+Math.abs(velocity[2])) {
+		if (lastTrack.blockMetadata==0||lastTrack.blockMetadata==2) {
 			setPositionRelative(0.0D, 0.0D, Math.copySign(norm, Math.abs(velocity[1])+ Math.abs(velocity[3])));
 		}
 		else {
