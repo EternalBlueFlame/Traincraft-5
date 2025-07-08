@@ -98,7 +98,7 @@ public class RenderRollingStock extends Render {
         int j = MathHelper.floor_double(cart.posY);
         int k = MathHelper.floor_double(cart.posZ);
 
-        if (cart.worldObj != null && cart.worldObj.getBlock(i, j, k).getClass().getName().equals("ebf.tim.blocks.rails.BlockRailCore")) {
+        if (cart.worldObj != null && (cart.worldObj.getBlock(i, j, k).getClass().getName().equals("train.common.blocks.BlockTCRail") || cart.worldObj.getBlock(i, j, k).getClass().getName().equals("train.common.blocks.BlockTCRailGag"))) {
             GL11.glTranslatef(0f, 0.15f, 0f);
         }
         if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
