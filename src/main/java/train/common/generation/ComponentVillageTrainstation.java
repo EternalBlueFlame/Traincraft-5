@@ -19,6 +19,7 @@ import train.common.entity.rollingStockOld.freight.EntityFreightWood2;
 import train.common.entity.rollingStockOld.passenger.EntityPassenger2;
 import train.common.entity.rollingStockOld.special.EntityStockCar;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -190,10 +191,10 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 
 			cart.setLocationAndAngles(j1 + 0.5D, k1, l1 + 0.5D, 90.0F, 0.0F);
 			cart.setTrainOwner("VillagerJoe");
-			cart.shouldChunkLoad=false;
-			List<TransportSkin> skins = (List<TransportSkin>) SkinRegistry.get(cart).values();
+			cart.shouldChunkLoad = false;
+			List<TransportSkin> skins = new LinkedList<>(SkinRegistry.get(cart).values());
 			if (skins != null && !skins.isEmpty()) {
-				cart.setColor(skins.get(new Random().nextInt((skins.size() -1))).addr);
+				cart.setColor(skins.get(new Random().nextInt((skins.size() - 1))).addr);
 			}
 			world.spawnEntityInWorld(cart);
 			cart.setInformation("VillagerJoe", "VillagerJoe", cart.getCartItem().getItem().getItemStackDisplayName(cart.getCartItem()), -1);
