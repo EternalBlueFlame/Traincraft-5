@@ -682,7 +682,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 setNewUniqueID(this.getEntityId());
             }
         }
-        if(ticksExisted % 18 == 0) { //just so we aren't doing it *every* tick, but still frequent enough to not let the player actually take damage
+        //just so we aren't doing it *every* tick, but still frequent enough to not let the player actually take damage
+        if(ticksExisted % 18 == 0) {
             if (!seats.isEmpty()) {
                 for (EntitySeat seat : seats) {
                     if (seat.getPassenger() != null) {
@@ -709,7 +710,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
                 getWorld().spawnEntityInWorld(seats.get(i));
             }
-        } //dont check for jumping until at least a tick after seats spawned
+        }
+        //dont check for jumping until at least a tick after seats spawned
         else if (!seats.isEmpty() && worldObj.isRemote && Traincraft.proxy.getCurrentScreen() == null && seats.get(0).getPassenger() != null) {
             if (TraincraftEntityHelper.getIsJumping(seats.get(0).getPassenger())) isBraking = true;
         }
@@ -903,7 +905,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (getRiderOffsets() != null) {
             for (int i1 = 0; i1 < seats.size(); i1++) {
                 //sometimes seats die when players log out. make new ones.
-                if(seats.get(i1) ==null){
+                if(seats.get(i1) == null){
                     seats.set(i1, new EntitySeat(getWorld(), posX, posY,posZ,0,0,0, this,i1));
                     if(i1==0){
                         seats.get(i1).setControlSeat();

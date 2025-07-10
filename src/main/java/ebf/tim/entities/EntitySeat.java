@@ -76,29 +76,26 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     /**actually useless for this entity*/
     @Override
     public void entityInit(){}
-    /**actually useless for this entity*/
+
     @Override
     public void onUpdate() {
-        if(ticksExisted%40==0) {
-            if (parent==null) {
-                if (getWorld().getEntityByID(parentId) instanceof EntityRollingStock) {
-                    if (getWorld().isRemote) {
-                        if (parent == null) {
-                            parent = (EntityRollingStock) getWorld().getEntityByID(parentId);
-                        }
-                        parent.setSeats(this, seatNumber);
+        if (parent==null) {
+            if (getWorld().getEntityByID(parentId) instanceof EntityRollingStock) {
+                if (getWorld().isRemote) {
+                    if (parent == null) {
+                        parent = (EntityRollingStock) getWorld().getEntityByID(parentId);
                     }
-                } else {
-                    getWorld().removeEntity(this);
-                    this.setDead();
+                    parent.setSeats(this, seatNumber);
                 }
+            } else {
+                getWorld().removeEntity(this);
+                this.setDead();
             }
-            if (worldObj.isRemote) {
-                if (this.parent.seats.size() >= seatNumber+1 && (this.pos != this.parent.seats.get(seatNumber).pos || this.getPassenger() != this.parent.seats.get(seatNumber).getPassenger())) {
-                    this.setDead();
-                }
+        }
+        if (worldObj.isRemote) {
+            if (this.parent.seats.size() >= seatNumber+1 && (this.pos != this.parent.seats.get(seatNumber).pos || this.getPassenger() != this.parent.seats.get(seatNumber).getPassenger())) {
+                this.setDead();
             }
-
         }
     }
 
