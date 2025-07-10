@@ -219,7 +219,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		limitSpeedOnTCRail();
 
 		if(l instanceof BlockTCRail) {
-			if(!TCRailTypes.isCrossingTrack((TileTCRail) worldObj.getTileEntity(i, j, k))) {
+			if(!TCRailTypes.isCrossingTrack((TileTCRail) worldObj.getTileEntity(i, j, k)) && !TCRailTypes.isDiagonalCrossingTrack((TileTCRail) worldObj.getTileEntity(i,j,k))) {
 				lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
 			}
 		} else if(l instanceof BlockTCRailGag && (lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack))){
