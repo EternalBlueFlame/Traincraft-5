@@ -1652,7 +1652,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @SideOnly(Side.CLIENT)
     public void setSeats(EntitySeat seat, int seatNumber){
-        if (seats.size() <= seatNumber) {
+        if (seats.size() < seatNumber) {
             seats.add(seat);
         } else {
             seats.set(seatNumber, seat);
