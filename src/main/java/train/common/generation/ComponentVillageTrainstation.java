@@ -1,6 +1,7 @@
 package train.common.generation;
 
 import ebf.tim.api.SkinRegistry;
+import ebf.tim.api.TransportSkin;
 import net.minecraft.init.Blocks;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.structure.StructureBoundingBox;
@@ -8,8 +9,17 @@ import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import train.common.api.EntityRollingStock;
 import train.common.blocks.TCBlocks;
-import train.common.entity.rollingStockOld.*;
+import train.common.entity.rollingStockOld.caboose.EntityCaboose;
+import train.common.entity.rollingStockOld.caboose.EntityCaboose3;
+import train.common.entity.rollingStockOld.caboose.EntityCabooseLogging;
+import train.common.entity.rollingStockOld.freight.EntityBoxCartUS;
+import train.common.entity.rollingStockOld.freight.EntityFreightCart;
+import train.common.entity.rollingStockOld.freight.EntityFreightCartSmall;
+import train.common.entity.rollingStockOld.freight.EntityFreightWood2;
+import train.common.entity.rollingStockOld.passenger.EntityPassenger2;
+import train.common.entity.rollingStockOld.special.EntityStockCar;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -181,10 +191,10 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 
 			cart.setLocationAndAngles(j1 + 0.5D, k1, l1 + 0.5D, 90.0F, 0.0F);
 			cart.setTrainOwner("VillagerJoe");
-			cart.shouldChunkLoad=false;
-			List<String> skins = SkinRegistry.get(cart);
+			cart.shouldChunkLoad = false;
+			List<TransportSkin> skins = new LinkedList<>(SkinRegistry.get(cart).values());
 			if (skins != null && !skins.isEmpty()) {
-				cart.setColor(skins.get(new Random().nextInt((skins.size() -1))));
+				cart.setColor(skins.get(new Random().nextInt((skins.size() - 1))).addr);
 			}
 			world.spawnEntityInWorld(cart);
 			cart.setInformation("VillagerJoe", "VillagerJoe", cart.getCartItem().getItem().getItemStackDisplayName(cart.getCartItem()), -1);

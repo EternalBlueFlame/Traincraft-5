@@ -50,10 +50,9 @@ import train.common.core.handlers.FuelHandler;
 import train.common.core.handlers.TrainHandler;
 import train.common.core.network.PacketRollingStockRotation;
 import train.common.core.util.DepreciatedUtil;
-import train.common.core.util.TraincraftUtil;
 import train.common.entity.CollisionBox;
 import train.common.entity.EntityHitbox;
-import train.common.entity.rollingStockOld.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
 import train.common.items.ItemPadlock;
 import train.common.items.ItemPaintbrushThing;
 import train.common.items.ItemRollingStock;
@@ -684,8 +683,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 setNewUniqueID(this.getEntityId());
             }
         }
-        if(ticksExisted % 18 == 0) { //just so we aren't doing it *every* tick, but still frequent enough to not let the player actually take damage
-            if (seats.size() != 0) {
+        //just so we aren't doing it *every* tick, but still frequent enough to not let the player actually take damage
+        if(ticksExisted % 18 == 0) {
+            if (!seats.isEmpty()) {
                 for (EntitySeat seat : seats) {
                     if (seat.getPassenger() != null) {
                         seat.getPassenger().addPotionEffect(new PotionEffect(Potion.resistance.id, 20, 5, true));
@@ -711,8 +711,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
                 getWorld().spawnEntityInWorld(seats.get(i));
             }
-        } //dont check for jumping until at least a tick after seats spawned
-        else if (seats.size() != 0 && worldObj.isRemote && Traincraft.proxy.getCurrentScreen() == null && seats.get(0).getPassenger() != null) {
+        }
+        //dont check for jumping until at least a tick after seats spawned
+        else if (!seats.isEmpty() && worldObj.isRemote && Traincraft.proxy.getCurrentScreen() == null && seats.get(0).getPassenger() != null) {
             if (TraincraftEntityHelper.getIsJumping(seats.get(0).getPassenger())) isBraking = true;
         }
 
@@ -775,6 +776,15 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 setPosition(posX, posY, posZ);
                 setRotation(rotationYaw, rotationPitch);
 
+            }
+
+            if(render_cache!=null && render_cache.bogies!=null){
+                for (train.client.render.Bogie b : render_cache.bogies) {
+                    if (b != null) {
+                        b.updatePosition(this, null);
+                        b.updateRotation(this);
+                    }
+                }
             }
 
             collisionHandler.position(posX, posY, posZ, rotationPitch, rotationYaw);
@@ -896,7 +906,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (getRiderOffsets() != null) {
             for (int i1 = 0; i1 < seats.size(); i1++) {
                 //sometimes seats die when players log out. make new ones.
-                if(seats.get(i1) ==null){
+                if(seats.get(i1) == null){
                     seats.set(i1, new EntitySeat(getWorld(), posX, posY,posZ,0,0,0, this,i1));
                     if(i1==0){
                         seats.get(i1).setControlSeat();
@@ -1079,7 +1089,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     public void applyDrag() {
-        boolean canSlope=true;
+        boolean canSlope=ConfigHandler.ENABLE_SLOPE_ACCELERATION;
         float drag = 0.9998f, brakeBuff = 0, slope = 0;
         //check if lope things can be done at all
         for(AbstractTrains stock : consist) {
@@ -1093,7 +1103,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 //realistically would be more like 2.4, but 5 makes gameplay more dramatic
                 brakeBuff += weightKg() * 5.0f;
             }
-            if (rotationPitch != 0) {
+            if (Math.abs(rotationPitch) - 1 > 0) { //cap the pitch that we actually consider to be on a slope
                 //vanilla uses 0.0078125 per tick for slope speed.
                 //0.00017361 would be that divided by 45 since vanilla slopes are 45 degree angles.
                 //scale by entity pitch
@@ -1109,12 +1119,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if(derail){
             drag*=CommonUtil.getBlockAt(getWorld(),posX,posY,posZ).slipperiness;
         } else if (cachedVectors[2].yCoord > 0) {
-            drag -= ((getFriction() * cachedVectors[2].yCoord * 4.448f));
+            drag -= ((getFriction() * cachedVectors[2].yCoord * 4.448f)); //we don't know what 4.448 does
         }
 
         //add in the drag from combined weight, plus brakes.
         if(pullingWeight!=0) {//in theory this should never be 0, but we know forge is dumb
-            drag -= ((getAccelerator()==0?getFriction()*0.75:getFriction()*2.5) * (pullingWeight + brakeBuff)) / 44480;
+            drag -= ((getAccelerator()==0?getFriction()*0.75:getFriction()*2.5) * (pullingWeight + brakeBuff)) / 1000; //was 4448, no idea. Just adjusted until something felt nice
         }
         //cap the drag to prevent weird behavior.
         // if it goes to 1 or higher then we speed up, which is bad, if it's below 0 we reverse, which is also bad
@@ -1130,7 +1140,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
     }
 
-    public float getFriction(){return 0.0015f;}
+    public float getFriction(){return 0.15f;}
 
     public double getAccelerator(){return accelerate;}
 
@@ -1221,8 +1231,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             if (itemstack.getItem() instanceof ItemDye) {
                 if (SkinRegistry.get(this).size() > 0) {
                     for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
-                        if (itemstack.getItemDamage() == DepreciatedUtil.getColorFromString(SkinRegistry.get(this).get(i))) {
-                            this.setColor(SkinRegistry.get(this).get(i));
+                        if (itemstack.getItemDamage() == DepreciatedUtil.getColorFromString(SkinRegistry.get(this).get(i).addr)) {
+                            this.setColor(SkinRegistry.get(this).get(i).addr);
                             itemstack.stackSize--;
 
                             //if (!worldObj.isRemote)PacketHandler.sendPacketToClients(PacketHandler.sendStatsToServer(10,this.uniqueID,trainName ,trainType, this.trainOwner, this.getColorAsString(itemstack.getItemDamage()), (int)posX, (int)posY, (int)posZ),this.worldObj, (int)posX,(int)posY,(int)posZ, 12.0D);
@@ -1259,10 +1269,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             } else if (itemstack.getItem() instanceof ItemPaintbrushThing) {
                 for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
                     if (this.getColor().equals(SkinRegistry.get(this).get(i))) {
-                        if (SkinRegistry.get(this).size() >= i) {
-                            setColor(SkinRegistry.get(this).get(i+1));
+                        if (SkinRegistry.get(this).size() > i+1) {
+                            setColor(SkinRegistry.get(this).get(i+1).addr);
                         } else {
-                            setColor(SkinRegistry.get(this).get(0));
+                            setColor(SkinRegistry.get(this).get(0).addr);
                         }
                         return true;
                     }
@@ -1466,7 +1476,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     @Override
     public boolean canBeRidden() {
-        return seats!=null && seats.size()>0;
+        return seats!=null && !seats.isEmpty();
     }
 
     /**
@@ -1646,7 +1656,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @SideOnly(Side.CLIENT)
     public void setSeats(EntitySeat seat, int seatNumber){
-        if (seats.size() <= seatNumber) {
+        if (seats.size() < seatNumber) {
             seats.add(seat);
         } else {
             seats.set(seatNumber, seat);

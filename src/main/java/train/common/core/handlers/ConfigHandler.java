@@ -45,6 +45,7 @@ public class ConfigHandler {
 	public static boolean ENABLE_TRACK_HOLOGRAM;
 	public static boolean PAINTBRUSH_DEFAULT_LOW_PERFORMANCE_MODE;
 	public static int HOLIDAY_SKINS;
+	public static boolean PUSHABLE_ROLLINGSTOCK;
 
 	public static int TRACK_RENDER_DISTANCE;
 	public static boolean TRACK_OVERLAP;
@@ -105,6 +106,8 @@ public class ConfigHandler {
 			PAINTBRUSH_DEFAULT_LOW_PERFORMANCE_MODE = cf.get(CATEGORY_GENERAL, "PAINTBRUSH_DEFAULT_LOW_PERFORMANCE_MODE", false, "Defaults to low performance mode in paintbrush menu.").getBoolean(false);
 			ENABLE_SLOPE_ACCELERATION = cf.get(CATEGORY_GENERAL,"ENABLE_SLOPE_ACCELERATION",true,"Defaults to true").getBoolean(true);
 			MAX_TRUSTEES_ON_PADLOCK = cf.get(CATEGORY_GENERAL, "MAX_TRUSTEES_ON_PADLOCK", false, "Maximum number of trustees allowed in the padlock menu.").getInt(30);
+			PUSHABLE_ROLLINGSTOCK = cf.get(CATEGORY_GENERAL, "ENABLE_PUSHING_ROLLINGSTOCK", true, "Defaults to true").getBoolean(true);
+
 		} catch (Exception e) {
 			Traincraft.tcLog.fatal("Traincraft had a problem loading its configuration\n" + e);
 		} finally {

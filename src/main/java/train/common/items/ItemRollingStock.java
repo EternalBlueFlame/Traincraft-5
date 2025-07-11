@@ -27,7 +27,7 @@ import train.common.Traincraft;
 import train.common.api.*;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.util.TraincraftUtil;
-import train.common.entity.rollingStockOld.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
 import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
 import train.common.tile.TileTCRail;
@@ -398,8 +398,6 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				canPlaceRollingStock(world, player, rollingStock, i, j, k, dir);
 
 
-				player.addChatMessage(new ChatComponentText("dir: " + dir));
-
 				if (dir == 0) {
 
 					rollingStock.rotationYaw = (meta == 2 || meta == 0) ? 90 : 0;
@@ -608,10 +606,9 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 				if (ConfigHandler.SHOW_POSSIBLE_COLORS && SkinRegistry.get(rollingStock).size()>0) {
 					String concatColors = ": ";
-					for (int t = 0; t < SkinRegistry.get(rollingStock).size(); t++) {
-						if (!SkinRegistry.get(rollingStock).get(t).equals("Empty")
-								&& !SkinRegistry.get(rollingStock).get(t).equals("Full"))
-							concatColors+=SkinRegistry.get(rollingStock).get(t)+", ";
+					for (String cols : SkinRegistry.get(rollingStock).keySet()) {
+						if (!cols.equals("Empty") && !cols.equals("Full"))
+							concatColors+=cols+", ";
 					}
 					if (concatColors.length() > 4) {
 						if (player != null) {

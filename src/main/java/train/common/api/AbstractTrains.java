@@ -5,7 +5,9 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.XmlBuilder;
 import ebf.tim.api.SkinRegistry;
+import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.EntitySeat;
+import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.ModelBase;
 import io.netty.buffer.ByteBuf;
 import mods.railcraft.api.carts.IMinecart;
@@ -21,10 +23,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.*;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -36,6 +35,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import train.client.render.Bogie;
+import train.client.render.RenderEnum;
 import train.client.render.TransportRenderCache;
 import train.common.Traincraft;
 import train.common.adminbook.ItemAdminBook;
@@ -49,6 +49,7 @@ import train.common.items.ItemWrench;
 import train.common.library.Info;
 import train.common.library.TraincraftRegistry;
 import train.common.overlaytexture.OverlayTextureManager;
+import train.common.trainConverter;
 
 import java.util.*;
 
@@ -184,7 +185,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         super(world);
         if(world==null){return;}
         renderDistanceWeight = 2.0D;
-        entity_data.putString("color", SkinRegistry.get(this).size()>0 ? SkinRegistry.get(this).get(0) : "");
+        entity_data.putString("color", getDefaultSkin());
         dataWatcher.addObject(30, entity_data.toXMLString());
         dataWatcher.addObject(7, trainOwner);
         dataWatcher.addObject(8, trainDestroyer);
@@ -348,7 +349,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
             if (color == -1 || !trainRecord.getLiveries().contains(DepreciatedUtil.getColorAsString(color))) {
                 color = color+1>trainRecord.getLiveries().size()-1?0:color+1;
             }
-            entity_data.putString("color", trainRecord.getLiveries().get(color));
+            entity_data.putString("color", trainRecord.getLiveries().get(color).addr);
         }
         dataWatcher.updateObject(30, entity_data.toXMLString());
         this.getEntityData().setString("xml", entity_data.toXMLString());
@@ -356,12 +357,14 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     public void setColor(String color) {
         if (SkinRegistry.get(this) != null && SkinRegistry.get(this).size()>0) {
-            if (color.equals("-1") || !SkinRegistry.get(this).contains(color)) {
-                color = (SkinRegistry.get(this).get(SkinRegistry.get(this).indexOf(color)+1>SkinRegistry.get(this).size()-1?0:SkinRegistry.get(this).indexOf(color)+1));
+            if (color.equals("-1") || !SkinRegistry.get(this).containsKey(color)) {
+                List<TransportSkin> skins = new ArrayList<>();
+                skins.addAll(SkinRegistry.get(this).values());
+                color = (skins.get(skins.indexOf(color)+1>skins.size()-1?0:skins.indexOf(color)+1).addr);
             }
         }
 
-        entity_data.putString("color", color);
+        entity_data.putString("color", SkinRegistry.get(this).get(color).addr);
         dataWatcher.updateObject(30, entity_data.toXMLString());
         this.getEntityData().setString("xml", entity_data.toXMLString());
     }
@@ -373,7 +376,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                 return entity_data.getString("color");
             }
         }
-        return SkinRegistry.get(this).get(0);
+        return SkinRegistry.get(this).get(0).addr;
     }
 
     @Override
@@ -533,6 +536,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public void setTrainLockedFromPacket(boolean set) {
         // System.out.println(worldObj.isRemote + " " + set);
         locked = set;
+    }
+
+    @Override
+    public boolean canBePushed() {
+        return false;
     }
 
 
@@ -903,7 +911,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * example:
      * return new float[][]{{x1,y1,z1},{x2,y2,z2}, etc...};
      * may return null*/
-    public float[][] getRiderOffsets(){return new float[][]{{0,0,0}};}
+    public float[][] getRiderOffsets(){return null;}
 
 
     /**
@@ -953,7 +961,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * return new Bogie[]{new Bogie(new MyModel1(), offset), new Bogie(new MyModel2(), offset2), etc...};
      * may return null. */
     public Bogie[] bogies(){
-        return new Bogie[]{null};
+        return null;
     }
 
     /**defines the points that the entity uses for path-finding and rotation, with 0 being the entity center.
@@ -1000,13 +1008,20 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * the first TransportSkin added to the registry for a transport class will be the default
      * additionally the addSkin function may be called from any other class at any time.
      * the registerSkins method is only for organization and convenience.*/
-    public void registerSkins(){}
+    public void registerSkins(){
+        for (String col : getSpec().getColors()) {
+            SkinRegistry.addSkin(this.getClass(), Info.resourceLocation+":"+ col + ".png", col);
+        }
+    }
 
     /**
      * return the name for the default TransportSkin of the transport.
      */
     public String getDefaultSkin(){
-        return SkinRegistry.get(this).get(0);
+        if(getSpec().getColors()!=null && getSpec().getColors().size()>0){
+            return SkinRegistry.get(this).get(getSpec().getColors().get(0)).addr;
+        }
+        return getSpec().getColors().size()>0?getSpec().getColors().get(0):"";
     }
 
     /**returns a list of models to be used for the transport

@@ -29,7 +29,7 @@ public class trainConverter {
         return null;
     }
 
-    public static RenderEnum getRender(EntityRollingStock train) {
+    public static RenderEnum getRender(AbstractTrains train) {
         for (RenderEnum trn : RenderEnum.values()) {
             if (trn.getEntityClass() == train.getClass()) {
                 return trn;

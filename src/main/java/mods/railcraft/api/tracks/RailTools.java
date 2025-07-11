@@ -16,7 +16,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import train.common.entity.rollingStockOld.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
 import train.common.items.ItemTCRail;
 
 import java.util.HashSet;

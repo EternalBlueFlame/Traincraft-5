@@ -5,7 +5,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import train.common.entity.rollingStockOld.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
 
 public class PacketTrackBuilderFollow implements IMessage {
 

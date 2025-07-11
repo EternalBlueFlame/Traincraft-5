@@ -102,6 +102,11 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		return false;
 	}
 
+	@Override
+	public boolean canBeRidden() {
+		return false;
+	}
+
 	/**
 	 * Returns a boundingBox used to collide the entity with other entities and blocks. This enables the entity to be pushable on contact, like boats or minecarts.
 	 */
@@ -214,7 +219,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		limitSpeedOnTCRail();
 
 		if(l instanceof BlockTCRail) {
-			lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
+			if(!TCRailTypes.isCrossingTrack((TileTCRail) worldObj.getTileEntity(i, j, k)) && !TCRailTypes.isDiagonalCrossingTrack((TileTCRail) worldObj.getTileEntity(i,j,k))) {
+				lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
+			}
 		} else if(l instanceof BlockTCRailGag && (lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack))){
 			TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(i, j, k);
 			if(tileGag.originX.size()>0 && worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) != null) {
@@ -361,7 +368,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	private void moveOnTCTwoWaysCrossing() {
 		double norm = Math.abs(velocity[0])+Math.abs(velocity[1])+Math.abs(velocity[2])+Math.abs(velocity[3]);
 
-		if (Math.abs(velocity[1])+ Math.abs(velocity[3])> Math.abs(velocity[0])+Math.abs(velocity[2])) {
+		if (lastTrack.blockMetadata==0||lastTrack.blockMetadata==2) {
 			setPositionRelative(0.0D, 0.0D, Math.copySign(norm, Math.abs(velocity[1])+ Math.abs(velocity[3])));
 		}
 		else {
@@ -372,23 +379,15 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	private void moveOnTCSlope(int j, double cx, double cz, double slopeAngle, int meta) {
 
 		//slopes use the opposite axis of straights for some reason, so we gotta invert it.
-		moveOnTCStraight(j,meta==2||meta==0?1:0);
+		moveOnTCStraight(j,meta);
 
 		double newPosY;
 		if (meta == 2 || meta == 0) {
-			newPosY= Math.abs(j + (Math.tan(slopeAngle * Math.abs(cz - this.posZ))) + this.yOffset + 0.3);
+			newPosY= Math.abs(j+(Math.tan(slopeAngle * Math.abs(cz - this.posZ))) + this.yOffset + 0.3);
 		} else{
-			newPosY= Math.abs(j + (Math.tan(slopeAngle * Math.abs(cx - this.posX))) + this.yOffset + 0.3);
+			newPosY= Math.abs(j+(Math.tan(slopeAngle * Math.abs(cx - this.posX))) + this.yOffset + 0.3);
 		}
-		Block b=CommonUtil.getBlockAt(getWorld(),xFloor,newPosY,zFloor);
-		if(!(b instanceof BlockTCRail) && !(b instanceof BlockTCRailGag)){
-			newPosY--;
-		}
-		b=CommonUtil.getBlockAt(getWorld(),xFloor,newPosY,zFloor);
-		if(!(b instanceof BlockTCRail) && !(b instanceof BlockTCRailGag)){
-			newPosY--;
-		}
-		setPositionRelative(0,newPosY,0);
+		setPosition(posX,newPosY,posZ);
 
 	}
 

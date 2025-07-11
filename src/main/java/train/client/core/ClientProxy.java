@@ -45,7 +45,7 @@ import train.common.core.handlers.ConfigHandler;
 import train.common.entity.CollisionBox;
 import train.common.entity.digger.EntityRotativeDigger;
 import train.common.entity.digger.EntityRotativeWheel;
-import train.common.entity.rollingStockOld.EntityJukeBoxCart;
+import train.common.entity.rollingStockOld.special.EntityJukeBoxCart;
 import train.common.entity.zeppelin.EntityZeppelinOneBalloon;
 import train.common.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.common.library.BlockIDs;

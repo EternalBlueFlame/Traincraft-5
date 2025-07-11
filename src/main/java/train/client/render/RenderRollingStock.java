@@ -2,6 +2,8 @@ package train.client.render;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.api.SkinRegistry;
+import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.entity.Render;
@@ -14,7 +16,8 @@ import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 import train.common.api.TrainRenderRecord;
-import train.common.entity.rollingStockOld.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
+import train.common.library.Info;
 import train.common.overlaytexture.OverlayTextureManager;
 
 import java.util.ArrayList;
@@ -35,6 +38,13 @@ public class RenderRollingStock extends Render {
      * Renders the Minecart.
      */
     public static void renderTheMinecart(EntityRollingStock cart, double x, double y, double z, float yaw, float time) {
+
+        if(cart.render_cache.needs_model_update){
+            cart.render_cache.models=cart.getModel();
+            cart.render_cache.bogies=cart.bogies();
+            cart.render_cache.needs_model_update=false;
+        }
+
         if (!cart.acceptsOverlayTextures() || cart.getOverlayTextureContainer().getType() == OverlayTextureManager.Type.NONE) {
 			Tessellator.bindTexture(getTexture(cart));
 		} else {
@@ -88,7 +98,7 @@ public class RenderRollingStock extends Render {
         int j = MathHelper.floor_double(cart.posY);
         int k = MathHelper.floor_double(cart.posZ);
 
-        if (cart.worldObj != null && cart.worldObj.getBlock(i, j, k).getClass().getName().equals("ebf.tim.blocks.rails.BlockRailCore")) {
+        if (cart.worldObj != null && (cart.worldObj.getBlock(i, j, k).getClass().getName().equals("train.common.blocks.BlockTCRail") || cart.worldObj.getBlock(i, j, k).getClass().getName().equals("train.common.blocks.BlockTCRailGag"))) {
             GL11.glTranslatef(0f, 0.15f, 0f);
         }
         if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
@@ -119,34 +129,45 @@ public class RenderRollingStock extends Render {
                     240f);
         }
         //loadTexture(getTextureFile(renders.getTexture(), renders.getIsMultiTextured(), cart));
-
-        for(int m=0; m<cart.getModel().length;m++) {
+        int m=0;
+        for(;m<cart.render_cache.models.length;m++) {
             GL11.glPushMatrix();
 
-            if(cart.getModel()[m].getTrans()!=null){
-                GL11.glTranslatef(cart.getModel()[m].getTrans()[0],cart.getModel()[m].getTrans()[1],cart.getModel()[m].getTrans()[2]);
+            if(cart.render_cache.models[m].getTrans()!=null){
+                GL11.glTranslatef(cart.render_cache.models[m].getTrans()[0],cart.render_cache.models[m].getTrans()[1],cart.render_cache.models[m].getTrans()[2]);
             }
             else if(cart.modelOffsets()!=null &&cart.modelOffsets()[m]!=null) {
                 GL11.glTranslatef(cart.modelOffsets()[m][0], cart.modelOffsets()[m][1], cart.modelOffsets()[m][2]);
             }
-            if(cart.getModel()[m].getRotate()!=null){
-                GL11.glRotatef(cart.getModel()[m].getRotate()[0], 1,0,0);
-                GL11.glRotatef(cart.getModel()[m].getRotate()[1], 0,1,0);
-                GL11.glRotatef(cart.getModel()[m].getRotate()[2], 0,0,1);
+            if(cart.render_cache.models[m].getRotate()!=null){
+                GL11.glRotatef(cart.render_cache.models[m].getRotate()[0], 1,0,0);
+                GL11.glRotatef(cart.render_cache.models[m].getRotate()[1], 0,1,0);
+                GL11.glRotatef(cart.render_cache.models[m].getRotate()[2], 0,0,1);
             }
             else if(cart.modelRotations()[m]!=null) {
                 GL11.glRotatef(cart.modelRotations()[m][0], 1,0,0);
                 GL11.glRotatef(cart.modelRotations()[m][1], 0,1,0);
                 GL11.glRotatef(cart.modelRotations()[m][2], 0,0,1);
             }
-            if(cart.getModel()[m].getScale()!=null){
-                GL11.glScalef(cart.getModel()[m].getScale()[0],cart.getModel()[m].getScale()[1],cart.getModel()[m].getScale()[2]);
+            if(cart.render_cache.models[m].getScale()!=null){
+                GL11.glScalef(cart.render_cache.models[m].getScale()[0],cart.render_cache.models[m].getScale()[1],cart.render_cache.models[m].getScale()[2]);
             }
             else if(cart.getRenderScale()[m]!=null) {
                 GL11.glScalef(cart.getRenderScale()[m][0], cart.getRenderScale()[m][1], cart.getRenderScale()[m][2]);
             }
-            cart.getModel()[m].render(cart, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+            cart.render_cache.models[m].render(cart, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
+
             GL11.glPopMatrix();
+        }
+
+        if(cart.render_cache.bogies!=null && cart.render_cache.bogies.length>0){
+            DebugUtil.println(cart.render_cache.bogies.length);
+            for (m=0;m<cart.render_cache.bogies.length;m++){
+                if(cart.render_cache.skin.bogieSkins.size()>m) {
+                    Tessellator.bindTexture(new ResourceLocation(cart.render_cache.skin.bogieSkins.get(m)));
+                }
+                cart.render_cache.bogies[m].render(cart);
+            }
         }
 
 
@@ -273,17 +294,25 @@ public class RenderRollingStock extends Render {
 
     //@Override
     protected ResourceLocation getEntityTexture(Entity entity) {
-        return getTexture(entity);
+        if(entity instanceof EntityRollingStock) {
+            return getTexture((EntityRollingStock) entity);
+        }
+        else {
+            return null;
+        }
     }
 
-    public static ResourceLocation getTexture(Entity entity) {
-        if(entity instanceof AbstractTrains) {
-            TrainRenderRecord render = Traincraft.instance.traincraftRegistry.getTrainRenderRecord(entity.getClass());
-            if (render != null) {
-                return render.getTextureFile(((AbstractTrains) entity).getColor());
-            }
+    public static ResourceLocation getTexture(AbstractTrains entity) {
+        if(!entity.render_cache.color.equals(entity.getColor())){
+            entity.render_cache.color=entity.getColor();
+            entity.render_cache.rend=entity.getRender();
+            entity.render_cache.skin=SkinRegistry.get(entity).get(entity.render_cache.color);
         }
-        return null;
+
+        if (entity.render_cache.rend != null) {
+            return entity.render_cache.rend.getTextureFile(entity.render_cache.color);
+        }
+        return entity.getRender().getTextureFile("");
     }
 
 	/**
