@@ -16,7 +16,7 @@ public class ItemPart extends Item{
 
     protected String modID = "";
 
-    public ItemPart(String iconName, String modID){
+    public ItemPart(String iconName){
         this.iconName = iconName;
         this.setMaxStackSize(64);
         this.setCreativeTab(Traincraft.tcTab);

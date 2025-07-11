@@ -54,6 +54,7 @@ import train.common.core.util.TraincraftUtil;
 import train.common.entity.CollisionBox;
 import train.common.entity.EntityHitbox;
 import train.common.entity.rollingStockOld.EntityTracksBuilder;
+import train.common.items.ItemPadlock;
 import train.common.items.ItemPaintbrushThing;
 import train.common.items.ItemRollingStock;
 import train.common.items.ItemWrench;
@@ -512,7 +513,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             return false;
         }
         if (this.getTrainLockedFromPacket()) {
-            return !((EntityPlayer) p).getDisplayName().equalsIgnoreCase(this.getTrainOwner());
+            return !((EntityPlayer) p).getDisplayName().equalsIgnoreCase(this.getTrainOwner()) && !isPlayerTrusted(((EntityPlayer) p).getDisplayName());
         }
         return false;
     }
@@ -1177,7 +1178,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 
         if (this.getTrainLockedFromPacket() && !worldObj.isRemote &&
-                !playerEntity.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
+                !playerEntity.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase()) && !isPlayerTrusted(playerEntity.getDisplayName())) {
             if (!canBeRiddenWhileLocked(this)) {
                 entityplayer.addChatMessage(new ChatComponentText("Train is locked"));
                 return true;
@@ -1266,6 +1267,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                         return true;
                     }
                 }
+            }  else if (entityplayer.isSneaking() && itemstack.getItem() instanceof ItemPadlock && getTrainOwner().equalsIgnoreCase(entityplayer.getDisplayName())) {
+                entityplayer.openGui(Traincraft.instance, GuiIDs.LOCK_MENU, entityplayer.getEntityWorld(), this.getEntityId(), -1, (int) this.posZ);
+                return true;
             }
         }
 

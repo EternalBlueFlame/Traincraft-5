@@ -44,11 +44,10 @@ public class InventoryFreight extends Container {
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
 		ItemStack itemstack = null;
 		Slot slot = (Slot) inventorySlots.get(i);
-		SlotFreight slot2 = (SlotFreight) this.getSlot(0);
 		if (slot != null && slot.getHasStack()) {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
-			if(slot2 != null && slot2.isItemValid(itemstack)) {
+			if (this.getSlot(0) instanceof SlotFreight && this.getSlot(0) != null && this.getSlot(0).isItemValid(itemstack)) {
     			if (i < height * 9) {
     				if (!mergeItemStack(itemstack1, height * 9, inventorySlots.size(), true)) {
     					return null;

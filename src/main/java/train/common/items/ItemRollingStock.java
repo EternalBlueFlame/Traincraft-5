@@ -599,6 +599,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					rollingStock.trainCreator = trainCreator;
 					if (var5.hasKey("overlayTextureConfigTag")) // Import overlay configuration from NBT and apply it to the entity.
 						rollingStock.getOverlayTextureContainer().importFromConfigTag(var5.getCompoundTag("overlayTextureConfigTag"));
+					rollingStock.importTrustedListFromNBT(var5);
 				}
 				if (player != null)
 					rollingStock.setInformation(player.getDisplayName(), trainCreator, (itemstack.getItem()).getItemStackDisplayName(itemstack), uniID);

@@ -70,6 +70,7 @@ public enum ItemIDs implements IItemIDs {
 	wirelessTransmitter("ItemWirelessTransmitter", "wireless_transmitter", 3),
 	paintbrushThing("ItemPaintbrushThing", "paintbrushThing", 1),
 	whistle("ItemWhistle", "whistle", 1),
+	padlock("ItemPadlock", "padlock", 1),
 	bolt("ItemBolt", "bolt", 1),
 	hat_ticketMan_paintable("ItemTCArmor", "armor_ticket_man_hat", 1),
 	pants_ticketMan_paintable("ItemTCArmor", "armor_ticket_man_pants", 1),

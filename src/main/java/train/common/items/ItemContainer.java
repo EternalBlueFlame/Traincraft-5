@@ -10,13 +10,12 @@ package train.common.items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import train.common.Traincraft;
-import train.common.library.Info;
 import train.common.library.ItemIDs;
 
 public class ItemContainer extends ItemPart {
 
 	public ItemContainer(String itemName){
-		super(itemName, Info.modID);
+		super(itemName);
 		this.setMaxStackSize(64);
 		this.setCreativeTab(Traincraft.tcTab);
 	}

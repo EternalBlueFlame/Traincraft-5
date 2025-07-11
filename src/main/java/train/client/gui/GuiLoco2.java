@@ -85,7 +85,14 @@ public class GuiLoco2 extends GuiContainer {
         if (!loco.getTrainLockedFromPacket()) {
             this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 108, buttonPosY - 10, 67, 10, "Unlocked"));
         } else {
-            this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 108, buttonPosY - 10, 67, 10, "Locked"));
+            EntityPlayer engineer = ((EntityPlayer) loco.seats.get(0).getPassenger());
+            if (loco.getTrainOwner().equalsIgnoreCase(engineer.getDisplayName()))
+                this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 108, buttonPosY - 10, 67, 10, "Locked"));
+            else if (loco.isPlayerTrusted(engineer.getDisplayName()))
+                if (loco.isPlayerTrustedToBreak(engineer.getDisplayName()))
+                    this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 104, buttonPosY - 10, 71, 10, "Trusted+"));
+                else
+                    this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 106, buttonPosY - 10, 69, 10, "Trusted"));
         }
 
         if (!(loco instanceof SteamTrain)) {
