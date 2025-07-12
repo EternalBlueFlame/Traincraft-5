@@ -2,7 +2,6 @@ package train.common.entity;
 
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
-import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Vec3d;
 import fexcraft.tmt.slim.Vec3f;
 import net.minecraft.entity.Entity;
@@ -77,7 +76,8 @@ public class EntityHitbox {
                             CommonUtil.atan2degreesf(host.posZ - e.posZ, host.posX - e.posX));
                     e.addVelocity(motion[0], 0.05, motion[2]);
                 }
-            } else {
+            }
+            else {
                 if (e instanceof CollisionBox) {
                     if(((CollisionBox) e).host==null){
                         continue;
@@ -142,13 +142,15 @@ public class EntityHitbox {
                         }
                     }
 
-                } else if (e instanceof EntityPlayer || e instanceof EntityLiving) {
+                }
+                else if (e instanceof EntityPlayer || e instanceof EntityLiving) {
                     //hurt entity if going fast
                     if (Math.abs(host.motionX) + Math.abs(host.motionZ) > 0.25f) {
                         e.attackEntityFrom(new EntityDamageSource(
                                         host instanceof Locomotive ? "Locomotive" : "rollingstock", host),
                                 (float) (Math.abs(host.motionX) + Math.abs(host.motionZ)) * 0.5f);
-                    } else if (Math.abs(host.motionX) + Math.abs(host.motionZ) <0.05) {
+                    }
+                    else if (Math.abs(host.motionX) + Math.abs(host.motionZ) <0.05) {
                         double distanceFront = Math.sqrt((e.posX - front.posX) * (e.posX - front.posX)
                                 + (e.posZ - front.posZ) * (e.posZ - front.posZ));
                         double distanceBack = Math.sqrt((e.posX - back.posX) * (e.posX - back.posX)
@@ -195,8 +197,9 @@ public class EntityHitbox {
                             }
 
                             //No matter what, we don't want to push a locomotive.
-                            //If the config is disabled, we don't want to push ANYTHING
-                            if (!ConfigHandler.PUSHABLE_ROLLINGSTOCK || host instanceof Locomotive) {
+                            //If the config is disabled, we don't want to push ANYTHING.
+                            //If the cart is in a consist containing a locomotive, we do not want to push it.
+                            if (!ConfigHandler.PUSHABLE_ROLLINGSTOCK || host instanceof Locomotive || (host.consistLeadID != null && host.worldObj.getEntityByID(host.consistLeadID) instanceof Locomotive)) {
                                 //still need to push the player back though
                                 if (containsEntity((Entity)obj)) {
                                     ((Entity)obj).applyEntityCollision(host);
@@ -216,7 +219,7 @@ public class EntityHitbox {
                             }
 
                             //we don't want to collide with our own CollisionBoxes, or the CollisionBoxes of our own consist either
-                            if(obj instanceof CollisionBox && (((CollisionBox) obj).host==host || host.consist.contains(((CollisionBox) obj).host))){
+                            if(obj instanceof CollisionBox && (((CollisionBox) obj).host == host || host.consist.contains(((CollisionBox) obj).host))){
                                 continue;
                             }
 

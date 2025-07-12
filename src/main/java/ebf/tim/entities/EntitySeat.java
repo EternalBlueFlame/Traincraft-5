@@ -79,22 +79,24 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
 
     @Override
     public void onUpdate() {
-        if (parent==null) {
-            if (getWorld().getEntityByID(parentId) instanceof EntityRollingStock) {
-                if (getWorld().isRemote) {
-                    if (parent == null) {
-                        parent = (EntityRollingStock) getWorld().getEntityByID(parentId);
+        if (ticksExisted % 10 == 0) { //no reason to do all this every tick. Every half a second should still feel responsive enough without causing issues.
+            if (parent == null) {
+                if (getWorld().getEntityByID(parentId) instanceof EntityRollingStock) {
+                    if (getWorld().isRemote) {
+                        if (parent == null) {
+                            parent = (EntityRollingStock) getWorld().getEntityByID(parentId);
+                        }
+                        parent.setSeats(this, seatNumber);
                     }
-                    parent.setSeats(this, seatNumber);
+                } else {
+                    getWorld().removeEntity(this);
+                    this.setDead();
                 }
-            } else {
-                getWorld().removeEntity(this);
-                this.setDead();
             }
-        }
-        if (worldObj.isRemote) {
-            if (this.parent.seats.size() >= seatNumber+1 && (this.pos != this.parent.seats.get(seatNumber).pos || this.getPassenger() != this.parent.seats.get(seatNumber).getPassenger())) {
-                this.setDead();
+            if (worldObj.isRemote) {
+                if (this.parent.seats.size() >= seatNumber + 1 && (this.pos != this.parent.seats.get(seatNumber).pos || this.getPassenger() != this.parent.seats.get(seatNumber).getPassenger())) {
+                    this.setDead();
+                }
             }
         }
     }
