@@ -394,11 +394,7 @@ public class ClientProxy extends CommonProxy {
             case (GuiIDs.DYNAMIC_OVERLAY):
                 return entity1 != null ? new GuiDynamicOverlay(player, (EntityRollingStock) entity1) : null;
             case (GuiIDs.LOCK_MENU):
-                if (entity != null) { // If player is riding the entity (locomotives).
-                    return new GuiLockMenu(player, (EntityRollingStock) entity);
-                } else { // If player is not riding the entity (freight).
-                    return entity1 != null ? new GuiLockMenu(player, ((EntityRollingStock) entity1)) : null;
-                }
+                return entity1 != null ? new GuiLockMenu(player, ((EntityRollingStock) entity1)) : null;
             case (GuiIDs.SEAT_GUI):
                 return entity1 != null ? new GUISeatManager(player, (EntityRollingStock) entity1) : null;
             default:

@@ -17,6 +17,7 @@ import train.common.Traincraft;
 import train.common.api.*;
 import train.common.core.network.*;
 import train.common.inventory.InventoryLoco;
+import train.common.library.GuiIDs;
 import train.common.library.Info;
 
 import java.util.Collections;
@@ -179,15 +180,22 @@ public class GuiLoco2 extends GuiContainer {
         if (guibutton.id == 3) {
             if (!loco.isNotOwner()) {
                 if ((!loco.getTrainLockedFromPacket())) {
-                    Traincraft.lockChannel.sendToServer(new PacketSetTrainLockedToClient(true, loco.getEntityId()));
-                    loco.locked = true;
-                    guibutton.displayString = "Locked";
-                    this.initGui();
-                } else {
-                    Traincraft.lockChannel.sendToServer(new PacketSetTrainLockedToClient(false, loco.getEntityId()));
-                    loco.locked = false;
-                    guibutton.displayString = "UnLocked";
-                    this.initGui();
+                    if (!isShiftKeyDown()) {
+                        Traincraft.lockChannel.sendToServer(new PacketSetTrainLockedToClient(true, loco.getTrustedList(), loco.getEntityId(), false));
+                        loco.locked = true;
+                        guibutton.displayString = "Locked";
+                        this.initGui();
+                    } else
+                        ((EntityPlayer) loco.seats.get(0).riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCK_MENU, ((EntityPlayer) loco.seats.get(0).riddenByEntity).getEntityWorld(), loco.getEntityId(), -1, (int) loco.seats.get(0).riddenByEntity.posZ);
+                }
+                else {
+                    if (!isShiftKeyDown()) {
+                        Traincraft.lockChannel.sendToServer(new PacketSetTrainLockedToClient(false, loco.getTrustedList(), loco.getEntityId(), false));
+                        loco.locked = false;
+                        guibutton.displayString = "Unlocked";
+                        this.initGui();
+                    } else
+                        ((EntityPlayer) loco.seats.get(0).riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCK_MENU, ((EntityPlayer) loco.seats.get(0).riddenByEntity).getEntityWorld(), loco.getEntityId(), -1, (int) loco.seats.get(0).riddenByEntity.posZ);
                 }
             } else {
                 getEntityPlayer().addChatMessage(new ChatComponentText("You are not the owner"));

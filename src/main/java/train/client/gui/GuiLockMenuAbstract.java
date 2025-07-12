@@ -184,6 +184,7 @@ public abstract class GuiLockMenuAbstract extends GuiScreen {
             switch (clickedButton.id) {
                 case 0:  // Main Lock Button
                     setLocked(!getLocked());
+                    exportTrustedPlayers();
                     updateButtons();
                     break;
                 case 1:  // Save and Close Button
