@@ -43,20 +43,7 @@ public class EntityLocoSteamEr_Ussr extends SteamTrain {
 		return "USSR 0-5-0";
 	}
 
-	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
-		playerEntity = entityplayer;
-		if ((super.interactFirst(entityplayer))) {
-			return false;
-		}
-		if (!worldObj.isRemote) {
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
-				return true;
-			}
-			entityplayer.mountEntity(this);
-		}
-		return true;
-	}
+
 
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {

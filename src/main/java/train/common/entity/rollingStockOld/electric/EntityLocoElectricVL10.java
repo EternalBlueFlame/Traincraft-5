@@ -38,25 +38,6 @@ public class EntityLocoElectricVL10 extends ElectricTrain {
 	public String getInventoryName() {
 		return "VL10";
 	}
-	@Override
-	/* The player clicks on the cart */
-	public boolean interactFirst(EntityPlayer entityplayer) {
-
-		playerEntity = entityplayer;
-
-		if ((super.interactFirst(entityplayer))) {
-			return false;
-		}
-
-		if (!worldObj.isRemote) {
-
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
-				return true;
-			}
-			entityplayer.mountEntity(this);
-		}
-		return true;
-	}
 
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {

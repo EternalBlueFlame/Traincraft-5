@@ -462,17 +462,28 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		return  this.entityMainTrain.getOwner();
 	}
 
-	public void addVelocity(AbstractTrains host, double speed){
+	public void addVelocity(AbstractTrains host, double speed) {
 		//cache rotation so it only has to be processed once per tick
-		if(velocity[4]==0 && velocity[5]==0){
-			Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+host.rotationYaw,0);
-			velocity[4]=vec.xCoord;
-			velocity[5]=vec.zCoord;
+		if(velocity[4] == 0 && velocity[5] == 0) {
+			Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180 + host.rotationYaw,0);
+			velocity[4] = vec.xCoord;
+			velocity[5] = vec.zCoord;
 		}
 
-		velocity[0]+=speed*velocity[4];
-		velocity[1]+=speed*velocity[5];
+		velocity[0] += speed * velocity[4];
+		velocity[1] += speed * velocity[5];
 	}
+
+	public void multiplyVelocity(AbstractTrains host, double mult) {
+		if (velocity[4] == 0 & velocity[5] == 0) {
+			Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180 + host.rotationYaw,0);
+			velocity[4] = vec.xCoord;
+			velocity[5] = vec.zCoord;
+		}
+		velocity[0] *= (mult * velocity[4]);
+		velocity[1] *= (mult * velocity[5]);
+	}
+
 	public void addLinking(AbstractTrains host, double speed){
 		//cache rotation so it only has to be processed once per tick
 		if(velocity[4]==0 && velocity[5]==0){

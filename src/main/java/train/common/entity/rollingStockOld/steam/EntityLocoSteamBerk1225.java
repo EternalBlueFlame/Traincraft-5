@@ -42,20 +42,7 @@ public class EntityLocoSteamBerk1225 extends SteamTrain {
 		return "Berkshire 1225";
 	}
 
-	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
-		playerEntity = entityplayer;
-		if ((super.interactFirst(entityplayer))) {
-			return false;
-		}
-		if (!worldObj.isRemote) {
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
-				return true;
-			}
-			entityplayer.mountEntity(this);
-		}
-		return true;
-	}
+
 
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {
