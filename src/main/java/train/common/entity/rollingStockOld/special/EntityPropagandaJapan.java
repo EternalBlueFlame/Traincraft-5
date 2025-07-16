@@ -56,22 +56,6 @@ public class EntityPropagandaJapan extends EntityRollingStock {
 		isDead = true;
 	}
 
-
-	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
-		//ItemStack var2 = entityplayer.inventory.getCurrentItem();
-		playerEntity = entityplayer;
-		if ((super.interactFirst(entityplayer))) {
-			return false;
-		}
-		if (locked && !entityplayer.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
-			if (!worldObj.isRemote)
-				entityplayer.addChatMessage(new ChatComponentText("this train is locked"));
-			return true;
-		}
-		return true;
-	}
-
 	@Override
 	public boolean isStorageCart() {
 		return false;

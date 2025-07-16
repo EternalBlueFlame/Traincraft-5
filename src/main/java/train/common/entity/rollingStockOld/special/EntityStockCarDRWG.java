@@ -30,24 +30,6 @@ public class EntityStockCarDRWG extends EntityRollingStock implements IPassenger
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
-		playerEntity = entityplayer;
-		if ((super.interactFirst(entityplayer))) {
-			return false;
-		}
-		if (!worldObj.isRemote) {
-			ItemStack itemstack = entityplayer.inventory.getCurrentItem();
-			if(lockThisCart(itemstack, entityplayer))return true;
-		}
-		if (!worldObj.isRemote) {
-			if (riddenByEntity != null) {
-				riddenByEntity.mountEntity(this);
-				return true;
-			}
-		}
-		return true;
-	}
-	@Override
 	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
 		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
 	}

@@ -43,20 +43,7 @@ public class EntityLocoSteamHeavy extends SteamTrain {
 		return "Heavy Steam Locomotive";
 	}
 
-	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
-		playerEntity = entityplayer;
-		if ((super.interactFirst(entityplayer))) {
-			return false;
-		}
-		if (!worldObj.isRemote) {
-			if (riddenByEntity != null && (riddenByEntity instanceof EntityPlayer) && riddenByEntity != entityplayer) {
-				return true;
-			}
-			entityplayer.mountEntity(this);
-		}
-		return true;
-	}
+
 
 	@Override
 	public float getOptimalDistance(EntityMinecart cart) {

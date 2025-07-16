@@ -140,7 +140,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         dataWatcher.addObject(15, (float) Math.round((getCustomSpeed() * 3.6f)));
         dataWatcher.addObject(23, locoState);
         dataWatcher.addObject(24, fuelTrain);
-        dataWatcher.addObject(25, (int) convertSpeed(Math.sqrt(Math.abs(motionX * motionX) + Math.abs(motionZ * motionZ))));//convertSpeed((Math.abs(this.motionX) + Math.abs(this.motionZ))
+        dataWatcher.addObject(25, 0); //we update this every tick, no reason to do any math on init.
         dataWatcher.addObject(26, guiDetailsJSON());
         dataWatcher.addObject(28, lightingDetailsJSONString());
 
@@ -496,13 +496,14 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         }
 
         if (i == 7) {
-            if (seats != null && seats.size() != 0) {
+            if (seats != null && !seats.isEmpty()) {
                 for(EntitySeat seat: seats) {
-                    if(seat.isControlSeat() && seat.getPassenger() != null && playerEntity == seat.getPassenger()) {
+                    if(seat.isControlSeat() && seat.getPassenger() != null && playerEntity == seat.getPassenger() && playerEntity.ridingEntity == seat) {
                         ((EntityPlayer) seat.getPassenger()).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
                         break;
                     } else if (seat.getPassenger() != null && seat.getPassenger() instanceof EntityPlayer) {
                         Traincraft.proxy.seatGUI((EntityPlayer) seat.getPassenger(),this);
+                        break;
                     }
                 }
             }
@@ -576,7 +577,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     public float transportTopSpeed(){return getSpec().getMaxSpeed();}
 
     private double convertSpeed(double speed) {
-        //System.out.println("X "+motionX +" Z "+motionZ);
         if (ConfigHandler.REAL_TRAIN_SPEED) {
             speed *= 2;// applying ratio
         } else {
@@ -902,7 +902,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
 
         super.onUpdate();
         if (!worldObj.isRemote) {
-            dataWatcher.updateObject(25, (int) convertSpeed(Math.sqrt(motionX * motionX + motionZ * motionZ)));
+            dataWatcher.updateObject(25, (int)Math.round(convertSpeed(Math.sqrt(bogieBack.velocity[0] * bogieBack.velocity[0] + bogieBack.velocity[1] * bogieBack.velocity[1]))));
             dataWatcher.updateObject(24, fuelTrain);
             dataWatcher.updateObject(20, overheatLevel);
             dataWatcher.updateObject(23, locoState);

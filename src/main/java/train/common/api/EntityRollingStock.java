@@ -987,7 +987,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
     public void appendMovement(double velocity){
-
         //the logic gets stupid if it's not sorted from one end or another.
         EntityRollingStock last = this;
         for(AbstractTrains t:consist) {
@@ -1007,6 +1006,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         }
     }
+
     public void addLinkingMove(double velocity){
         bogieBack.addLinking(this, velocity);
         bogieFront.addLinking(this, velocity);
@@ -1180,8 +1180,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (super.interactFirst(entityplayer)) {
             return true;
         }
+        //if we are mounted on a seat, ignore this interaction
         if (entityplayer.ridingEntity instanceof EntitySeat) {
-            return false;
+            return true;
         }
 
         playerEntity = entityplayer;
@@ -1325,17 +1326,24 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     @Override
     public void applyEntityCollision(Entity par1Entity) {}
 
-    public void multiplyVelocity(double vel){
-        this.motionX *= vel;
-        this.motionZ *= vel;
-        this.isAirBorne = true;
-        if(bogieFront!=null){
-            bogieFront.motionX *= vel;
-            bogieFront.motionZ *= vel;
-        }
-        if(bogieBack!=null){
-            bogieBack.motionX *= vel;
-            bogieBack.motionZ *= vel;
+    public void multiplyVelocity(double vel) {
+        EntityRollingStock last = this;
+        for(AbstractTrains train : consist) {
+            if (train == null || train.bogieBack == null || train.bogieFront == null) { continue; } //This method can fire before the stock fully initializes, so we need to make sure bogies exist.
+            if (train.backLink != null && last.backLink != null
+                    && last == train.backLink
+                    && train == last.backLink) {
+                train.bogieBack.multiplyVelocity(train, -vel);
+                train.bogieFront.multiplyVelocity(train, -vel);
+            } else if (train.frontLink != null && last.frontLink != null
+                    && last == train.frontLink
+                    && train == last.frontLink) {
+                train.bogieBack.multiplyVelocity(train, -vel);
+                train.bogieFront.multiplyVelocity(train, -vel);
+            } else {
+                train.bogieBack.multiplyVelocity(train, vel);
+                train.bogieFront.multiplyVelocity(train, vel);
+            }
         }
     }
 
@@ -1656,7 +1664,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @SideOnly(Side.CLIENT)
     public void setSeats(EntitySeat seat, int seatNumber){
-        if (seats.size() < seatNumber) {
+        if (seats.size() < seatNumber || seats.isEmpty()) { //there is a case where seatNumber == 0 so seats.size() was always ==.
             seats.add(seat);
         } else {
             seats.set(seatNumber, seat);
