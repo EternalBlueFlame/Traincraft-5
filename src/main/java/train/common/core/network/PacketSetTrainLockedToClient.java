@@ -143,38 +143,6 @@ public class PacketSetTrainLockedToClient implements IMessage {
                             new NetworkRegistry.TargetPoint(car.dimension, car.posX, car.posY, car.posZ, 256D));
                 }
             }
-
-            // TODO eliminate old code
-            // Start with the main piece of rolling stock, then go in one direction until you reach the end of the consist.
-            // When the end of the consist is reached, go back to the main piece and go in the other direction.
-//            EntityRollingStock loopRollingStock = rollingStock;
-//            HashSet<Integer> completedList = new HashSet<>();
-//            completedList.add(rollingStock.getEntityId());
-//            boolean flipDirection = false;
-//            while (true) {
-//                if (loopRollingStock.cartLinked1 != null && !completedList.contains(loopRollingStock.cartLinked1.getEntityId()))
-//                    loopRollingStock = loopRollingStock.cartLinked1;
-//                else if (loopRollingStock.cartLinked2 != null && !completedList.contains(loopRollingStock.cartLinked2.getEntityId()))
-//                    loopRollingStock = loopRollingStock.cartLinked2;
-//                else {
-//                    if (!flipDirection) {
-//                        flipDirection = true;
-//                        loopRollingStock = rollingStock;
-//                        continue;
-//                    } else
-//                        break;
-//                }
-//                if (loopRollingStock != rollingStock && loopRollingStock.getTrainOwner().equalsIgnoreCase(rollingStock.getTrainOwner())) {
-//                    loopRollingStock.setTrainLockedFromPacket(locked);
-//                    loopRollingStock.setTrustedList(trustedPlayerList);
-//                    Traincraft.lockChannel.sendToAllAround(new PacketSetTrainLockedToClient(locked, trustedPlayerList, loopRollingStock.getEntityId(), false),
-//                            new NetworkRegistry.TargetPoint(loopRollingStock.dimension, loopRollingStock.posX, loopRollingStock.posY, loopRollingStock.posZ, 256D));
-//                    completedList.add(loopRollingStock.getEntityId());
-//                } else if (!loopRollingStock.getTrainOwner().equalsIgnoreCase(rollingStock.getTrainOwner())) {
-//                    completedList.add(loopRollingStock.getEntityId());
-//                }
-//            }
-
         }
     }
 }

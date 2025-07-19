@@ -646,11 +646,11 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					tag.setString("theOwner", player);
 				}
 				tag.setString("train_Color",color);
+				train.exportTrustedListToNBT(tag);
 			} else {
 				tag.setString("trainCreator", creator!=null && creator.length()>1?creator:"Creative");
 			}
 			tag.setInteger("uniqueID", trainID==null?AbstractTrains.uniqueIDs++:trainID);
-
 
 			stack.setTagCompound(tag);
 		} else {

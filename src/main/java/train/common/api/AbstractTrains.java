@@ -229,13 +229,22 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     /**
-     * this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared.
+     * <p>This method is called on the client side when an entity is being loaded in. The additionalData buffer is sent from the server
+     * and is populated by the server using the writeSpawnData method.</p>
+     * <br></br><p>"this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared."</p>
+     * @param additionalData The packet data stream
      */
     @Override
     public void readSpawnData(ByteBuf additionalData) {
         locked = additionalData.readBoolean();
     }
 
+    /**
+     * <p>This method is called on the server side when a connected client is loading the entity. Data written
+     * to the ByteBuffer will be synced with the client and available to the client through the readSpawnData method.</p>
+     * <br></br><p>"this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared."</p>
+     * @param buffer The packet data stream
+     */
     @Override
     public void writeSpawnData(ByteBuf buffer) {
         buffer.writeBoolean(locked);
@@ -390,6 +399,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         nbttagcompound.setString("theOwner", trainOwner);
         nbttagcompound.setBoolean("locked", locked);
         nbttagcompound.setString("theCreator", trainCreator);
+        exportTrustedListToNBT(nbttagcompound);
         nbttagcompound.setString("theName", trainName);
         nbttagcompound.setInteger("uniqueID", uniqueID);
         //nbttagcompound.setInteger("uniqueIDs",uniqueIDs);
@@ -503,6 +513,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
         if (this.uniqueID != -1) stack.getTagCompound().setInteger("uniqueID", this.uniqueID);
         if (this.trainCreator != null && !this.trainCreator.isEmpty()) stack.getTagCompound().setString("trainCreator", this.trainCreator);
+        exportTrustedListToNBT(stack.getTagCompound());
         stack.getTagCompound().setString("trainColor", this.getColor());
         // Only save the overlay configuration to NBT if it exists. No need to store an empty configuration in NBT as it will be initialized as the default when the entity spawns in.
         if (this.acceptsOverlayTextures && this.getOverlayTextureContainer().getType() != OverlayTextureManager.Type.NONE) {
@@ -582,9 +593,10 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                         ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem() != null &&
                         ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem().getItem() instanceof ItemWrench) {
 
-                    ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("Removing the train using OP permission"));
+                    ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("Removing the train using OP permission."));
                     return false;
-                } else if (!((EntityPlayer) damagesource.getEntity()).getDisplayName().equalsIgnoreCase(this.trainOwner) && !(this.isPlayerTrustedToBreak(((EntityPlayerMP) damagesource.getEntity()).getDisplayName()))) {
+                }
+                else if (!((EntityPlayer) damagesource.getEntity()).getDisplayName().equalsIgnoreCase(this.trainOwner) && !(this.isPlayerTrustedToBreak(((EntityPlayerMP) damagesource.getEntity()).getDisplayName()))) {
                     ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("You are not the owner!"));
                     return true;
                 }
