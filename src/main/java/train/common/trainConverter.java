@@ -72,26 +72,16 @@ public class trainConverter {
 
         builder.append(
                 "\n" +
-                        "import ebf.tim.TrainsInMotion;\n" +
-                        "import ebf.tim.api.SkinRegistry;\n" +
-                        "import ebf.tim.api.TransportSkin;\n" +
-                        "import ebf.tim.entities.EntityTrainCore;\n" +
-                        "import ebf.tim.entities.GenericRailTransport;\n" +
-                        "import ebf.tim.items.ItemTransport;\n" +
-                        "import ebf.tim.utility.ItemStackSlot;\n" +
-                        "import fexcraft.tmt.slim.ModelBase;\n" +
-                        "import net.minecraft.init.Items;\n" +
-                        "import net.minecraft.item.Item;\n" +
-                        "import net.minecraft.item.ItemStack;\n" +
-                        "import net.minecraft.init.Blocks;\n" +
-                        "import net.minecraft.world.World;\n" +
-                        "import train.client.render.models.*;\n" +
-                        "import train.Traincraft;\n" +
-                        "import train.library.Info;\n" +
-                        "import train.library.ItemIDs;\n" +
-                        "\n" +
-                        "import java.util.List;\n" +
-                        "import java.util.UUID;\n" +
+                        "import fexcraft.tmt.slim.ModelBase;\n"+
+                        "import net.minecraft.init.Items;\n"+
+                        "import net.minecraft.item.Item;\n"+
+                        "import net.minecraft.item.ItemStack;\n"+
+                        "import net.minecraft.world.World;\n"+
+                        "import train.common.Traincraft;\n"+
+                        "import train.common.api.SteamTrain;\n"+
+                        "import train.common.items.ItemRollingStock;\n"+
+                        "import train.common.library.Info;\n"+
+                        "import train.common.library.ItemIDs;\n"+
                         "\n");
 
         builder.append("public class ");
@@ -136,7 +126,7 @@ public class trainConverter {
             }
         }
 
-        builder.append("    public static final Item thisItem = new ItemRollingStock(\"" + itemName + "\", Info.modID, Traincraft.tcTab); \n");
+        builder.append("    public static final Item thisItem = new ItemRollingStock(\"Info.modID+\":\"+" + itemName + "\", Traincraft.tcTab); \n");
 
 
         builder.append("    public ");
@@ -318,7 +308,7 @@ public class trainConverter {
                     builder.append(getItem(recipe.getInput().get(8)));
                     builder.append(", ");
                     builder.append(recipe.getInput().get(8).stackSize);
-                    builder.append(")\n");
+                    builder.append("),\n");
                 }
 
                 builder.append("new ItemStack(");
@@ -347,7 +337,7 @@ public class trainConverter {
         builder.append("\n    //Model stuff\n");
         builder.append("    @Override\n");
         builder.append("    public ModelBase[] getModel(){return new ModelBase[]{new ");
-        builder.append(getRender(trn).getModel().getClass().getName().replace(".client",""));
+        builder.append(getRender(trn).getModel().getClass().getName());
         builder.append("()};}\n");
 
         if(getRender(trn).getTrans()!=null) {
@@ -419,11 +409,11 @@ public class trainConverter {
                 builder.append("    @Override\n");
                 builder.append("    public int[] getTankCapacity(){return new int[]{");
                 builder.append(getTrain(trn).getTankCapacity());
-                builder.append("};}\n}");
+                builder.append("};}");
             }
         }
 
-        builder.append("\n\n\n    //these only change in very specific use cases.\n");
+        builder.append("\n}\n\n\n    //these only change in very specific use cases.\n");
 
         System.out.print("Attempting to write files for train classes");
 
