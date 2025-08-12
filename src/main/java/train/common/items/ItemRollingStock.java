@@ -360,7 +360,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 
 		if (rollingStock != null) {
-			rollingStock.setPosition( i + 0.5D , j+ 0.18D, k + 0.5D);
+			rollingStock.setPosition( i + 0.5D , j+ 0.3D, k + 0.5D);
 			if (SkinRegistry.get(rollingStock).size()>0) {
 				rollingStock.setColor(rollingStock.getDefaultSkin());
 			}
@@ -391,11 +391,6 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				// -135 = 5 = NORTH-EAST
 				// -90  = 6 = EAST
 				// -45  = 7 = SOUTH-EAST
-
-
-
-
-				canPlaceRollingStock(world, player, rollingStock, i, j, k, dir);
 
 
 				if (dir == 0) {

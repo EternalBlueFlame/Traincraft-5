@@ -83,11 +83,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     protected EntityPlayer playerEntity;
 
-    /**
-     * Axis aligned bounding box. this needs to be it's own thing because collisions
-     */
-    private AxisAlignedBB boundingBoxSmall;
-
     public float maxSpeed;
     public double speedLimiter = 1;
 
@@ -135,7 +130,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     private boolean firstLoad = true;
     private boolean hasSpawnedBogie = false;
-    public double posYFromServer=0;
     private boolean derail = false;
 
     private int ticksSinceLastVelocityChange=0;
@@ -156,7 +150,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     public EntityRollingStock(World world, double d, double d1, double d2) {
         super(world, d, d1, d2);
         if(world==null){return;}
-        setPosition(d, d1 + yOffset, d2);
+        setPosition(d, d1, d2);
         initRollingStock(world);
         motionX = 0.0D;
         motionY = 0.0D;
@@ -175,20 +169,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         preventEntitySpawning = true;
         isImmuneToFire = true;
-        //field_70499_f = false;
-
-        setSize(0.98F, 1.98F);
-        //yOffset = 0;
-        //ySize = 0.98F;
-        yOffset = 0.65f;
+        setSize(0.25f,0.25f);
+        yOffset = 0;
 
         linkageNumber = 0;
 
         entityCollisionReduction = 0.8F;
 
-        boundingBoxSmall = AxisAlignedBB.getBoundingBox(0.0D, 0.0D, 0.0D, 0.0D, 1.0D, 1.0D);
-        //setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 0.98F, 0.7F);
-        setBoundingBoxSmall(0.0D, 0.0D, 0.0D, 1.0F, 1.0F);
         consist = new ArrayList<AbstractTrains>();
         consist.add(this);
         updateLinks();
@@ -650,7 +637,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9) {
         this.rollingX = par1;
-        this.rollingY = posYFromServer!=0?posYFromServer:par3;
+        this.rollingY = par3;
         this.rollingZ = par5;
         this.rollingturnProgress = par9 + 2;
         this.rollingPitch=par8;
@@ -671,11 +658,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 offset=CommonUtil.rotatePoint(this.rotationPoints()[1], 0,180+rotationYaw);
                 this.bogieBack = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ, this);
 
-                //this is a debug thing, there's no real reason to do it outside an IDE
-                if(DebugUtil.dev || !worldObj.isRemote) {
-                    worldObj.spawnEntityInWorld(bogieBack);
-                    worldObj.spawnEntityInWorld(bogieFront);
-                }
+                worldObj.spawnEntityInWorld(bogieBack);
+                worldObj.spawnEntityInWorld(bogieFront);
             }
             this.hasSpawnedBogie = true;
         }
@@ -785,14 +769,17 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         if (worldObj.isRemote) {
             if (rollingturnProgress > 0) {
-               // this.rotationPitch = (float) (this.rotationPitch + (this.rollingPitch - this.rotationPitch) / this.rollingturnProgress);
-
                 this.setPosition(this.posX + (this.rollingX - this.posX) / (double)this.rollingturnProgress,
                         this.posY + (this.rollingY - this.posY) / (double)this.rollingturnProgress,
                         this.posZ + (this.rollingZ - this.posZ) / (double)this.rollingturnProgress);
-                this.rotationPitch = (float)((double)this.rotationPitch + (this.rollingPitch - (double)this.rotationPitch) / (double)this.rollingturnProgress);
                 --this.rollingturnProgress;
 
+                if(bogieFront!=null && bogieBack !=null){
+                    posY=(bogieFront.posY+bogieBack.posY)*0.5;
+                    d6 = bogieBack.posX - bogieFront.posX;
+                    d7 = bogieBack.posZ - bogieFront.posZ;
+                    rotationPitch = CommonUtil.atan2degreesf(bogieFront.posY - bogieBack.posY, Math.sqrt(d6 * d6 + d7 * d7));
+                }
             } else {
                 setPosition(posX, posY, posZ);
 
@@ -1061,18 +1048,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
 
         applyDrag();
-
-        if(ticksExisted%2==0) {
-            cachedVectors[1] = new Vec3f(rotationPoints()[0], 0, 0).rotatePoint(0, 180 + rotationYaw, 0)
-                    .addVector(posX, 0, posZ).subtract((float) bogieFront.posX, 0, (float) bogieFront.posZ);
-          //  bogieFront.velocity[2] += cachedVectors[1].xCoord;
-           // bogieFront.velocity[3] += cachedVectors[1].zCoord;
-            //we don't center back bogie because position centers between front and back meaning the entity itself is
-            //  pulled towards back and front is pulled towards the entity.
-        }
         cachedVectors[1] = new Vec3f(rotationPoints()[1], 0, 0).rotatePoint(0, rotationYaw, 0)
-                .addVector(bogieBack.posX,bogieBack.posY,bogieBack.posZ);
-        setPosition(cachedVectors[1].xCoord, cachedVectors[1].yCoord,cachedVectors[1].zCoord);
+                .addVector(bogieBack.posX,0,bogieBack.posZ);
+        setPosition(cachedVectors[1].xCoord, (bogieBack.posY+bogieFront.posY)*0.5,cachedVectors[1].zCoord);
 
         bogieFront.minecartMove(this);
         bogieBack.minecartMove(this);
@@ -1643,13 +1621,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     public int getMotionZClient() {
         return (this.dataWatcher.getWatchableObjectInt(21));
     }
-
-
-    private void setBoundingBoxSmall(double par1, double par3, double par5, float width, float height) {
-        float var7 = width * 0.5F;
-        this.boundingBoxSmall.setBounds(par1 - var7, par3, par5 - var7, par1 + var7, par3 + height, par5 + var7);
-    }
-
 
     @Override
     public int getMinecartType() {

@@ -3,6 +3,7 @@ package train.client.render;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
+import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -16,6 +17,8 @@ import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
 import train.common.api.TrainRenderRecord;
+import train.common.blocks.BlockTCRail;
+import train.common.blocks.BlockTCRailGag;
 import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
 import train.common.library.Info;
 import train.common.overlaytexture.OverlayTextureManager;
@@ -75,7 +78,7 @@ public class RenderRollingStock extends Render {
         int j = MathHelper.floor_double(cart.posY);
         int k = MathHelper.floor_double(cart.posZ);
 
-        if (cart.worldObj != null && (cart.worldObj.getBlock(i, j, k).getClass().getName().equals("train.common.blocks.BlockTCRail") || cart.worldObj.getBlock(i, j, k).getClass().getName().equals("train.common.blocks.BlockTCRailGag"))) {
+        if (cart.worldObj != null && (CommonUtil.getBlockAt(cart.worldObj,i,j,k) instanceof BlockTCRail || CommonUtil.getBlockAt(cart.worldObj,i,j,k) instanceof BlockTCRailGag)) {
             GL11.glTranslatef(0f, 0.15f, 0f);
         }
 

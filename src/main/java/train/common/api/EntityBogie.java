@@ -69,7 +69,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		this.isOnRail = false;
 		this.worldObj = world;
 
-		setSize(0.5f, 1.25f);
+		setSize(0.5f, 0.25f);
 
 		//this.boundingBox.offset(0, 0.5, 0);
 		setCollisionHandler(null);

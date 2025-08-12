@@ -18,8 +18,6 @@ public class PacketRollingStockRotation implements IMessage {
 
     int entityID;
     float rotationYawServer;
-    int anglePitch;
-    int posY;
     double frontx=0,fronty=0,frontz=0,backx=0,backy=0,backz=0;
 
     public PacketRollingStockRotation() {
@@ -28,8 +26,6 @@ public class PacketRollingStockRotation implements IMessage {
     public PacketRollingStockRotation(EntityRollingStock entity) {
         this.entityID = entity.getEntityId();
         this.rotationYawServer = entity.rotationYaw; // Don't even ASK ME why we do this. Probably an attempt to reduce Packet size, but at what cost of precision..?
-        this.anglePitch = (int)entity.rotationPitch;
-        this.posY= Float.floatToIntBits((float)entity.posY);
         if(entity.bogieFront!=null && entity.bogieBack!=null) {
             this.frontx = entity.bogieFront.posX;
             this.fronty = entity.bogieFront.posY;
@@ -44,8 +40,6 @@ public class PacketRollingStockRotation implements IMessage {
     public void fromBytes(ByteBuf bbuf) {
         this.entityID = bbuf.readInt();
         this.rotationYawServer = bbuf.readFloat();
-        this.anglePitch = bbuf.readInt();
-        this.posY = bbuf.readInt();
         this.frontx = bbuf.readDouble();
         this.fronty = bbuf.readDouble();
         this.frontz = bbuf.readDouble();
@@ -58,8 +52,6 @@ public class PacketRollingStockRotation implements IMessage {
     public void toBytes(ByteBuf bbuf) {
         bbuf.writeInt(this.entityID);
         bbuf.writeFloat(this.rotationYawServer);
-        bbuf.writeInt(this.anglePitch);
-        bbuf.writeInt(this.posY);
         bbuf.writeDouble(frontx);
         bbuf.writeDouble(fronty);
         bbuf.writeDouble(frontz);
@@ -77,8 +69,6 @@ public class PacketRollingStockRotation implements IMessage {
                 if (entity instanceof EntityRollingStock) {
                     EntityRollingStock rollingStock = (EntityRollingStock) entity;
                     rollingStock.rotationYaw = message.rotationYawServer;
-                    rollingStock.rotationPitch = message.anglePitch;
-                    rollingStock.posYFromServer= Float.intBitsToFloat(message.posY);
                     if(rollingStock.bogieFront!=null && rollingStock.bogieBack!=null && message.frontx!=0 && message.fronty!=0 && message.frontz!=0) {
                         rollingStock.bogieFront.setPosition(message.frontx, message.fronty, message.frontz);
                         rollingStock.bogieBack.setPosition(message.backx, message.backy, message.backz);
