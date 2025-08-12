@@ -52,7 +52,9 @@ import train.common.core.network.PacketRollingStockRotation;
 import train.common.core.util.DepreciatedUtil;
 import train.common.entity.CollisionBox;
 import train.common.entity.EntityHitbox;
+import train.common.entity.TrustedPlayer;
 import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
+import train.common.items.ItemPadlock;
 import train.common.items.ItemPaintbrushThing;
 import train.common.items.ItemRollingStock;
 import train.common.items.ItemWrench;
@@ -223,20 +225,39 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
     /**
-     * this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared.
+     * <p>This method is called on the client side when an entity is being loaded in. The additionalData buffer is sent from the server
+     * and is populated by the server using the writeSpawnData method.</p>
+     * <br></br><p>"this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared."</p>
+     * @param additionalData The packet data stream
      */
     @Override
     public void readSpawnData(ByteBuf additionalData) {
         isBraking = additionalData.readBoolean();
         setTrainLockedFromPacket(additionalData.readBoolean());
+        int numOfTrustedPlayers = additionalData.readInt();
+        for (int i = 0; i < numOfTrustedPlayers; i++) {
+            getTrustedList().add(new TrustedPlayer(ByteBufUtils.readUTF8String(additionalData), additionalData.readBoolean()));
+        }
         if (additionalData.readBoolean()) { // If accepts overlay textures...
             getOverlayTextureContainer().importFromConfigTag(ByteBufUtils.readTag(additionalData));
         }
     }
+
+    /**
+     * <p>This method is called on the server side when a connected client is loading the entity. Data written
+     * to the ByteBuffer will be synced with the client and available to the client through the readSpawnData method.</p>
+     * <br></br><p>"this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared."</p>
+     * @param buffer The packet data stream
+     */
     @Override
     public void writeSpawnData(ByteBuf buffer) {
         buffer.writeBoolean(isBraking);
         buffer.writeBoolean(getTrainLockedFromPacket());
+        buffer.writeInt(getTrustedList().size());
+        for (TrustedPlayer player : getTrustedList()) {
+            ByteBufUtils.writeUTF8String(buffer, player.getDisplayName());
+            buffer.writeBoolean(player.hasBreakAccess());
+        }
         buffer.writeBoolean(acceptsOverlayTextures());
         if (acceptsOverlayTextures()) {
             ByteBufUtils.writeTag(buffer, getOverlayTextureContainer().getOverlayConfigTag());
@@ -511,7 +532,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             return false;
         }
         if (this.getTrainLockedFromPacket()) {
-            return !((EntityPlayer) p).getDisplayName().equalsIgnoreCase(this.getTrainOwner());
+            return !((EntityPlayer) p).getDisplayName().equalsIgnoreCase(this.getTrainOwner()) && !isPlayerTrusted(((EntityPlayer) p).getDisplayName());
         }
         return false;
     }
@@ -1187,16 +1208,16 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         playerEntity = entityplayer;
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 
-        if (this.getTrainLockedFromPacket() && !worldObj.isRemote &&
-                !playerEntity.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
-            if (!canBeRiddenWhileLocked(this)) {
-                entityplayer.addChatMessage(new ChatComponentText("Train is locked"));
-                return true;
-            } else if (entityplayer.inventory.getCurrentItem() != null && entityplayer.inventory.getCurrentItem().getItem() instanceof ItemDye && (this instanceof Locomotive)) {
-                entityplayer.addChatMessage(new ChatComponentText("Train is locked"));
+        if (this.getTrainLockedFromPacket() && !worldObj.isRemote) {
+            boolean isTrustedPlayer = isPlayerTrusted(playerEntity.getDisplayName());
+            if (!playerEntity.getDisplayName().equalsIgnoreCase(this.getTrainOwner()) && !canBeRiddenWhileLocked(this) && !isTrustedPlayer) {
+                if (!worldObj.isRemote) entityplayer.addChatMessage(new ChatComponentText("Train is locked by " + this.getTrainOwner() + "."));
                 return true;
             }
-
+            else if (!playerEntity.getDisplayName().equalsIgnoreCase(this.getTrainOwner()) && entityplayer.inventory.getCurrentItem() != null && entityplayer.inventory.getCurrentItem().getItem() instanceof ItemDye && (this instanceof Locomotive) && !isTrustedPlayer) {
+                if (!worldObj.isRemote) entityplayer.addChatMessage(new ChatComponentText("Train is locked by " + this.getTrainOwner() + "."));
+                return true;
+            }
         }
 
 
@@ -1276,6 +1297,14 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                         }
                         return true;
                     }
+                }
+            }  else if (entityplayer.isSneaking() && itemstack.getItem() instanceof ItemPadlock) {
+                if (getTrainOwner().equalsIgnoreCase(entityplayer.getDisplayName())) {
+                    entityplayer.openGui(Traincraft.instance, GuiIDs.LOCK_MENU, entityplayer.getEntityWorld(), this.getEntityId(), -1, (int) this.posZ);
+                    return true;
+                } else {
+                    if (!worldObj.isRemote) entityplayer.addChatMessage(new ChatComponentText("Train is locked by " + this.getTrainOwner() + "."));
+                    return false;
                 }
             }
         }
@@ -1685,7 +1714,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     public boolean getPermissions(EntityPlayer player, boolean driverOnly) {
         //make sure the player is not null, and be sure that driver only rules are applied.
-        if (player ==null){
+        if (player ==null) {
             return false;
         } else if (driverOnly && (!(player.ridingEntity instanceof EntitySeat) || ! ((EntitySeat) player.ridingEntity).isControlSeat())){
             return false;
@@ -1693,7 +1722,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         //be sure operators and owners can do whatever
         if ((player.capabilities.isCreativeMode && player.canCommandSenderUseCommand(2, ""))
-                || (this.getOwner()!=null && this.getOwner() == player.getGameProfile())) {
+                || (this.getOwner()!=null && this.getOwner() == player.getGameProfile())
+                || isPlayerTrusted(player.getDisplayName())
+                || canBeRiddenWhileLocked(this)) {
             return true;
         }
 

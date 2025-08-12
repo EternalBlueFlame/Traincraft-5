@@ -88,6 +88,8 @@ public class PacketHandler {
 				PacketTextureOverlayConfig.class, 11, Side.SERVER);
 		Traincraft.overlayTextureChannel.registerMessage(PacketTextureOverlayConfig.Handler.class,
 				PacketTextureOverlayConfig.class, 12, Side.CLIENT);
+		Traincraft.lockChannel.registerMessage(PacketSetTrainLockedToClient.Handler.class,
+				PacketSetTrainLockedToClient.class, 13, Side.CLIENT);
 
 		Traincraft.rollingStockLightsChannel.registerMessage(PacketRollingStockLights.Handler.class, PacketRollingStockLights.class,
 				19, Side.SERVER);

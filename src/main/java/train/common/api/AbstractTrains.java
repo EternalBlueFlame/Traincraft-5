@@ -28,6 +28,7 @@ import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -41,6 +42,7 @@ import train.common.adminbook.ItemAdminBook;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.handlers.TrainHandler;
 import train.common.core.util.DepreciatedUtil;
+import train.common.entity.TrustedPlayer;
 import train.common.items.ItemChunkLoaderActivator;
 import train.common.items.ItemRollingStock;
 import train.common.items.ItemWrench;
@@ -129,6 +131,10 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * Whether this train is locked and can only be used by the Owner
      */
     public boolean locked = false;
+    /**
+     * <p>List of players trusted to use the train</p>
+     */
+    private List<TrustedPlayer> trustedList = new ArrayList<>();
     /**
      * The owner of the train: The user who spawned it
      */
@@ -223,13 +229,22 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     /**
-     * this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared.
+     * <p>This method is called on the client side when an entity is being loaded in. The additionalData buffer is sent from the server
+     * and is populated by the server using the writeSpawnData method.</p>
+     * <br></br><p>"this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared."</p>
+     * @param additionalData The packet data stream
      */
     @Override
     public void readSpawnData(ByteBuf additionalData) {
         locked = additionalData.readBoolean();
     }
 
+    /**
+     * <p>This method is called on the server side when a connected client is loading the entity. Data written
+     * to the ByteBuffer will be synced with the client and available to the client through the readSpawnData method.</p>
+     * <br></br><p>"this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared."</p>
+     * @param buffer The packet data stream
+     */
     @Override
     public void writeSpawnData(ByteBuf buffer) {
         buffer.writeBoolean(locked);
@@ -384,6 +399,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         nbttagcompound.setString("theOwner", trainOwner);
         nbttagcompound.setBoolean("locked", locked);
         nbttagcompound.setString("theCreator", trainCreator);
+        exportTrustedListToNBT(nbttagcompound);
         nbttagcompound.setString("theName", trainName);
         nbttagcompound.setInteger("uniqueID", uniqueID);
         //nbttagcompound.setInteger("uniqueIDs",uniqueIDs);
@@ -404,6 +420,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         if (acceptsOverlayTextures) {
             nbttagcompound.setTag("overlayTextureConfigTag", overlayTextureContainer.getOverlayConfigTag());
         }
+        exportTrustedListToNBT(nbttagcompound);
     }
 
     @Override
@@ -420,6 +437,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         this.locked = nbttagcompound.getBoolean("locked");
         setFlag(8, locked);
         trainCreator = nbttagcompound.getString("theCreator");
+        importTrustedListFromNBT(nbttagcompound);
         trainName = nbttagcompound.getString("theName");
         uniqueID = nbttagcompound.getInteger("uniqueID");
         //uniqueIDs = nbttagcompound.getInteger("uniqueIDs");
@@ -495,6 +513,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
         if (this.uniqueID != -1) stack.getTagCompound().setInteger("uniqueID", this.uniqueID);
         if (this.trainCreator != null && !this.trainCreator.isEmpty()) stack.getTagCompound().setString("trainCreator", this.trainCreator);
+        exportTrustedListToNBT(stack.getTagCompound());
         stack.getTagCompound().setString("trainColor", this.getColor());
         // Only save the overlay configuration to NBT if it exists. No need to store an empty configuration in NBT as it will be initialized as the default when the entity spawns in.
         if (this.acceptsOverlayTextures && this.getOverlayTextureContainer().getType() != OverlayTextureManager.Type.NONE) {
@@ -574,9 +593,10 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                         ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem() != null &&
                         ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem().getItem() instanceof ItemWrench) {
 
-                    ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("Removing the train using OP permission"));
+                    ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("Removing the train using OP permission."));
                     return false;
-                } else if (!((EntityPlayer) damagesource.getEntity()).getDisplayName().equalsIgnoreCase(this.trainOwner)) {
+                }
+                else if (!((EntityPlayer) damagesource.getEntity()).getDisplayName().equalsIgnoreCase(this.trainOwner) && !(this.isPlayerTrustedToBreak(((EntityPlayerMP) damagesource.getEntity()).getDisplayName()))) {
                     ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("You are not the owner!"));
                     return true;
                 }
@@ -732,6 +752,80 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
             t.consist=transports;
             t.consistLeadID=lead;
             t.setValuesOnLinkUpdate(consist);
+        }
+    }
+
+    /**
+     * @return Returns String ArrayList of trusted players' usernames.
+     */
+    public List<TrustedPlayer> getTrustedList() {
+        return trustedList;
+    }
+    public void setTrustedList(List<TrustedPlayer> trustedList) { this.trustedList = trustedList; }
+
+    /**
+     * <p>Returns whether a player is trusted to a piece of rolling stock.</p>
+     * @param displayName Case-insensitive display name of player.
+     * @return True if the player is trusted, false if the player is not trusted.
+     */
+    public boolean isPlayerTrusted(String displayName) {
+        for (TrustedPlayer trustedPlayer : this.getTrustedList()) {
+            if (trustedPlayer.getDisplayName().equalsIgnoreCase(displayName)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>Returns whether a player is trusted to break a piece of rolling stock.</p>
+     * @param displayName Case-insensitive display name of player.
+     * @return True if player has break access, false if player does not have break access.
+     */
+    public boolean isPlayerTrustedToBreak(String displayName) {
+        for (TrustedPlayer trustedPlayer : this.getTrustedList()) {
+            if (trustedPlayer.getDisplayName().equalsIgnoreCase(displayName)) {
+                return trustedPlayer.hasBreakAccess();
+            }
+        }
+        return false;
+    }
+
+    /**
+     * <p>Export trusted players to NBT tag for data saving.</p>
+     * @param nbttagcompound NBT tag into which to write trusted list.
+     */
+    public void exportTrustedListToNBT(NBTTagCompound nbttagcompound) {
+        if (!trustedList.isEmpty()) {
+            NBTTagList trustedList = new NBTTagList();
+            for (TrustedPlayer trustedPlayer : this.trustedList) {
+                NBTTagCompound trustedPlayerTag = new NBTTagCompound();
+                trustedPlayerTag.setString("playerName", trustedPlayer.getDisplayName());
+                trustedPlayerTag.setBoolean("breakAccess", trustedPlayer.hasBreakAccess());
+                trustedList.appendTag(trustedPlayerTag);
+            }
+            nbttagcompound.setTag("trustedList", trustedList);
+            nbttagcompound.setString("trustedListPreviousOwner", getTrainOwner());
+        }
+    }
+
+    /**
+     * <p>Import a trusted player list from a given NBT tag.</p>
+     * @param nbttagcompound NBT tag from which to import trusted list.
+     */
+    public void importTrustedListFromNBT(NBTTagCompound nbttagcompound) {
+        if (nbttagcompound.hasKey("trustedList")) {
+            NBTTagList trustedList = nbttagcompound.getTagList("trustedList", Constants.NBT.TAG_COMPOUND);
+            this.trustedList.clear();
+            for (int i = 0; i < trustedList.tagCount(); i++) {
+                if (!trustedList.getCompoundTagAt(i).getString("playerName").equalsIgnoreCase(trainOwner)) // Check to ensure we're not adding the current owner to the trusted list...
+                    this.trustedList.add(new TrustedPlayer(trustedList.getCompoundTagAt(i).getString("playerName"), trustedList.getCompoundTagAt(i).getBoolean("breakAccess")));
+            }
+            if (nbttagcompound.hasKey("trustedListPreviousOwner")) { // If the previous owner is not the one who placed down the piece of rolling stock...
+                if (!nbttagcompound.getString("trustedListPreviousOwner").equalsIgnoreCase(trainOwner)) {
+                    getTrustedList().add(new TrustedPlayer(nbttagcompound.getString("trustedListPreviousOwner"), true));
+                }
+            }
         }
     }
 

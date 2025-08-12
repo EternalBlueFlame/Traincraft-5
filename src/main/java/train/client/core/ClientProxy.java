@@ -393,6 +393,8 @@ public class ClientProxy extends CommonProxy {
                 return entity1 != null ? new GuiFixedOverlay(player, (EntityRollingStock) entity1) : null;
             case (GuiIDs.DYNAMIC_OVERLAY):
                 return entity1 != null ? new GuiDynamicOverlay(player, (EntityRollingStock) entity1) : null;
+            case (GuiIDs.LOCK_MENU):
+                return entity1 != null ? new GuiLockMenu(player, ((EntityRollingStock) entity1)) : null;
             case (GuiIDs.SEAT_GUI):
                 return entity1 != null ? new GUISeatManager(player, (EntityRollingStock) entity1) : null;
             default:

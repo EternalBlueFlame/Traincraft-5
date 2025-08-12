@@ -20,7 +20,6 @@ import train.common.blocks.TCBlocks;
 import train.common.core.handlers.ConfigHandler;
 import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
-import train.common.library.Info;
 import train.common.library.ItemIDs;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
@@ -49,7 +48,7 @@ public class ItemTCRail extends ItemPart {
 
 
     public ItemTCRail(EnumTracks t) {
-        super(t.getItem().iconName, Info.modID);
+        super(t.getItem().iconName);
         this.overridePath("tracks");
         this.type = t;
     }

@@ -457,6 +457,7 @@ item.tc:minecartASTFAutorack.name=ASTF ft-41 Auto Rack
 
 item.tc:paintbrushThing.name=Paintbrush
 item.tc:whistle.name=Whistle
+item.tc:padlock.name=Padlock
 
 item.tc:minecart4000GallonTender.name=4000 Gallon Tender
 item.tc:minecartLocoHallClass.name=Hall Class
@@ -958,6 +959,11 @@ dynamicoverlaymenu.Background Color.name=Background Color
 dynamicoverlaymenu.Foreground Color.name=Foreground Color
 dynamicoverlaymenu.Submit.name=Submit
 dynamicoverlaymenu.Back.name=Back
+lockmenu.Unlock.name=Unlock
+lockmenu.Lock.name=Lock
+lockmenu.Title_Trusted_Players.name=Trusted Players
+lockmenu.Save and Close.name=Save and Close
+lockmenu.Save To All Cars in Consist.name=Save To All Cars in Consist
 
 <!-- ## ENTITY ## -->
 entity.tc.Entity Front Bogie.name=Bogie

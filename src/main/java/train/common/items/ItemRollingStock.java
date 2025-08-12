@@ -597,6 +597,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					rollingStock.trainCreator = trainCreator;
 					if (var5.hasKey("overlayTextureConfigTag")) // Import overlay configuration from NBT and apply it to the entity.
 						rollingStock.getOverlayTextureContainer().importFromConfigTag(var5.getCompoundTag("overlayTextureConfigTag"));
+					rollingStock.importTrustedListFromNBT(var5);
 				}
 				if (player != null)
 					rollingStock.setInformation(player.getDisplayName(), trainCreator, (itemstack.getItem()).getItemStackDisplayName(itemstack), uniID);
@@ -645,11 +646,11 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					tag.setString("theOwner", player);
 				}
 				tag.setString("train_Color",color);
+				train.exportTrustedListToNBT(tag);
 			} else {
 				tag.setString("trainCreator", creator!=null && creator.length()>1?creator:"Creative");
 			}
 			tag.setInteger("uniqueID", trainID==null?AbstractTrains.uniqueIDs++:trainID);
-
 
 			stack.setTagCompound(tag);
 		} else {
