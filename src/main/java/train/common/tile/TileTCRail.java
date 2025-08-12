@@ -2,6 +2,8 @@ package train.common.tile;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
+import ebf.tim.utility.DebugUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,6 +18,8 @@ import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import train.common.Traincraft;
 import train.common.api.TrackRecord;
+import train.common.blocks.BlockTCRail;
+import train.common.blocks.BlockTCRailGag;
 import train.common.core.handlers.ConfigHandler;
 import train.common.items.TCRailTypes;
 import train.common.library.BlockIDs;
@@ -51,7 +55,6 @@ public class TileTCRail extends TileEntity {
 	public EntityPlayer lastPlayerToInteract = null;
 	private int updateTicks;
 	public Item		idDrop;
-	private int isLeftFlag = -5;
 
 	public TileTCRail() {
 		if(this.worldObj != null)
@@ -79,6 +82,11 @@ public class TileTCRail extends TileEntity {
 	public void setType(String type) {
 		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
 		this.type = type;
+		for (EnumTracks rail : EnumTracks.values()) {
+			if (rail.getLabel().equals(type)) {
+				track = rail;
+			}
+		}
 	}
 
 	public String getType() {
@@ -125,9 +133,11 @@ public class TileTCRail extends TileEntity {
 
 	@Deprecated
 	public EnumTracks getTrack(){
-		for(EnumTracks rail : EnumTracks.values()){
-			if(rail.getLabel().equals(getType())){
-				track = rail;
+		if(track==null) {
+			for (EnumTracks rail : EnumTracks.values()) {
+				if (rail.getLabel().equals(getType())) {
+					track = rail;
+				}
 			}
 		}
 		return track;
@@ -163,6 +173,7 @@ public class TileTCRail extends TileEntity {
 		System.out.println(TCRailTypes.isStraightTrack(this));
 	}
 
+	private byte checkBlockXZ=0;
 	@Override
 	public void updateEntity() {
 		if (worldObj.isRemote || !TCRailTypes.isSwitchTrack(this)) {
@@ -171,57 +182,84 @@ public class TileTCRail extends TileEntity {
 		}
 
 		if (updateTicks % 11 == 0 || updateTicks==1) {
-			TileEntity tile1 = null;
+			boolean flag = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
 
-			switch (worldObj.getBlockMetadata(xCoord, yCoord, zCoord)) {
-
-				case 0: {
-					tile1 = worldObj.getTileEntity(xCoord, yCoord, zCoord - 1);
-					break;
-				}
-				case 1: {
-					tile1 = worldObj.getTileEntity(xCoord + 1, yCoord, zCoord);
-					break;
-				}
-				case 2: {
-					tile1 = worldObj.getTileEntity(xCoord, yCoord, zCoord + 1);
-					break;
-				}
-				case 3: {
-					tile1 = worldObj.getTileEntity(xCoord - 1, yCoord, zCoord);
-					break;
+			if(checkBlockXZ==0){
+				if(CommonUtil.getBlockAt(worldObj,xCoord,yCoord,zCoord+1) instanceof BlockTCRail){
+					checkBlockXZ=1;
+				} else {
+					checkBlockXZ=2;
 				}
 			}
-			if (tile1 instanceof TileTCRail && TCRailTypes.isSwitchTrack((TileTCRail) tile1)) {
-
-				TileTCRail tileSwitch = (TileTCRail) tile1;
-				if (tileSwitch.switchActive != worldObj.isBlockIndirectlyGettingPowered(tileSwitch.xCoord, tileSwitch.yCoord, tileSwitch.zCoord)) {
-					tileSwitch.changeSwitchState(worldObj, tileSwitch, tile1.xCoord, tile1.yCoord, tile1.zCoord);
+			if(!flag){
+				if(checkBlockXZ==1){
+					flag = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord+1);
+					if(!flag){
+						flag = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord-1);
+					}
+				} else if(checkBlockXZ==2){
+					flag = worldObj.isBlockIndirectlyGettingPowered(xCoord+1, yCoord, zCoord);
+					if(!flag){
+						flag = worldObj.isBlockIndirectlyGettingPowered(xCoord-1, yCoord, zCoord);
+					}
 				}
+			}
+			if (getSwitchState() != flag) {
+				setSwitchState(flag);
 			}
 		}
 
 		updateTicks++;
-
-		if (!getSwitchState() && updateTicks % 10 ==0) {
-
-			/* Right-handed switch types create a value of 1, left-handed switch types a value of type -1. If neither cases match, value is set to 0. */
-			if (isLeftFlag == -5) {
-				if (type.contains("SWITCH") && type.contains("RIGHT")) {
-					isLeftFlag = 1;
-				} else if (type.contains("SWITCH") && type.contains("LEFT")) {
-					isLeftFlag = -1;
-				} else {
-					isLeftFlag = 0;
-				}
-			}
-		}
 	}
 
 
 
 	public void setSwitchState(boolean state) {
 		this.switchActive = state;
+		TileEntity te1;
+		int a = 0;
+		int b = 0;
+		int c = 0;
+		switch (getBlockMetadata()) {
+			case 0:
+				c = 1;
+				break;
+			case 1:
+				a = -1;
+				break;
+			case 2:
+				c = -1;
+				break;
+			case 3:
+				a = 1;
+				break;
+			default:
+				Traincraft.tcLog.log(Level.WARN, "Unsupported block meta for switch state.");
+				return;
+		}
+		int offsetX = a;
+		int offsetY = b;
+		int offsetZ = c;
+		while (Math.abs(offsetX) < getTrack().getSwitchSize() && Math.abs(offsetY) < getTrack().getSwitchSize() && Math.abs(offsetZ) < getTrack().getSwitchSize()) {
+			te1 = worldObj.getTileEntity(xCoord + offsetX, yCoord + offsetY, zCoord + offsetZ);
+			if (te1 instanceof TileTCRail) {
+				if (getSwitchState()) {
+					if (getType().contains("SWITCH") && getType().contains("LEFT")) {
+						((TileTCRail) te1).setType(EnumTracks.MEDIUM_LEFT_TURN.getLabel());
+						((TileTCRail) te1).switchActive=true;
+					} else if (getType().contains("SWITCH") && getType().contains("RIGHT")) {
+						((TileTCRail) te1).setType(EnumTracks.MEDIUM_RIGHT_TURN.getLabel());
+						((TileTCRail) te1).switchActive=true;
+					}
+				} else {
+					((TileTCRail) te1).setType(EnumTracks.SMALL_STRAIGHT.getLabel());
+					((TileTCRail) te1).switchActive=false;
+				}
+			}
+			offsetX += a;
+			offsetY += b;
+			offsetZ += c;
+		}
 
 		this.markDirty();
 		this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
@@ -336,7 +374,6 @@ public class TileTCRail extends TileEntity {
 
 	public void changeSwitchState(World world, TileTCRail tileEntity, int i, int j, int k) {
 		if (tileEntity.getType() != null && (tileEntity.getType().contains("SWITCH"))) {
-			tileEntity.setSwitchState(!tileEntity.getSwitchState());
 			TileEntity te1;
 			int a = 0;
 			int b = 0;
