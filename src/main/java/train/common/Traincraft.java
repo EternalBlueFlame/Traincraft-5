@@ -273,7 +273,7 @@ public class Traincraft {
         TrainModCore.ModsLoaded();
 
         if(proxy.isClient()) {
-            trainConverter.write();
+            trainConverter.write(EnumTrains.trains());
             TextureManager.collectIngotColors();
         }
 

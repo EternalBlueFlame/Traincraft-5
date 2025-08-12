@@ -38,9 +38,9 @@ public class trainConverter {
         return null;
     }
 
-    public static void write() {
+    public static void write(TrainRecord[] trains) {
         System.out.println("enumlength " + EnumTrains.trains().length);
-        for (TrainRecord t : EnumTrains.trains()) {
+        for (TrainRecord t : trains) {
             EntityRollingStock rollingStock = null;
 
             rollingStock = (EntityRollingStock) t.getEntity((World) null, 0, 0, 0);
@@ -85,7 +85,7 @@ public class trainConverter {
                         "import net.minecraft.item.ItemStack;\n" +
                         "import net.minecraft.init.Blocks;\n" +
                         "import net.minecraft.world.World;\n" +
-                        "import train.render.models.*;\n" +
+                        "import train.client.render.models.*;\n" +
                         "import train.Traincraft;\n" +
                         "import train.library.Info;\n" +
                         "import train.library.ItemIDs;\n" +
@@ -127,17 +127,16 @@ public class trainConverter {
 
         /**Item*/
         // builder.append("    public static final Item thisItem = new ItemRollingStock(new ");
-        String iconName = "";
         String itemName = trn.getItem().getUnlocalizedName().replace("item.tc:", "");
         for (ItemIDs items : ItemIDs.values()) {
             if (items.className.equals("ItemRollingStock")) {
                 if (itemName.equals(items.name().toString())) {
-                    iconName = items.iconName;
+                    itemName = items.iconName;
                 }
             }
         }
 
-        builder.append("    public static final Item thisItem = new ItemRollingStock(" + itemName + ", " + iconName + "," + Info.modID + "); \n");
+        builder.append("    public static final Item thisItem = new ItemRollingStock(\"" + itemName + "\", Info.modID, Traincraft.tcTab); \n");
 
 
         builder.append("    public ");
@@ -182,7 +181,7 @@ public class trainConverter {
 
         for (int color = 0; color < colours.size(); color++) {
             transportSkin = getRender(trn).getTextureFile(colours.get(color)).toString();
-            builder.append("        SkinRegistry.addSkin(this.getClass(), Info.modid,\"" + transportSkin.replace("tc:", "") + "\" , new String[]{} ,\"" + colours.get(color) + "\", \"\");\n");
+            builder.append("        SkinRegistry.addSkin(this.getClass(), Info.modID,\"" + transportSkin.replace("tc:", "") + "\" , new String[]{} ,\"" + colours.get(color) + "\", \"\");\n");
 
         }
         builder.append("    }\n\n");
@@ -199,7 +198,7 @@ public class trainConverter {
 
         builder.append("	@Override\n");
         builder.append("	public float getPlayerScale(){ ");
-        builder.append("	return 0.45f;");
+        builder.append("	return 0.65f;");
         builder.append("}\n\n");
 
         builder.append("	@Override\n");
@@ -210,15 +209,15 @@ public class trainConverter {
         builder.append("	@Override\n");
         builder.append("	public String[] additionalItemText() { return new String[] {\"");
         builder.append(getTrain(trn).getAdditionnalTooltip());
-        builder.append("\"}}\n\n");
+        builder.append("\";}}\n\n");
 
         builder.append("	@Override\n");
         builder.append("	public float weightKg(){ return ");
         builder.append(getTrain(trn).getMass());
-        builder.append(";}\n\n");
+        builder.append("f;}\n\n");
 
         builder.append("    @Override\n");
-        builder.append("    public ItemStack[] getRecipie() {\n");
+        builder.append("    public ItemStack[] getRecipe() {\n");
         builder.append("        return new ItemStack[]{\n");
 
 
@@ -313,7 +312,7 @@ public class trainConverter {
                 }
 
                 if(getItem(recipe.getInput().get(8))==null){
-                    builder.append("null\n");
+                    builder.append("null,\n");
                 } else {
                     builder.append("new ItemStack(");
                     builder.append(getItem(recipe.getInput().get(8)));
@@ -403,11 +402,6 @@ public class trainConverter {
             builder.append(getTrain(trn).getTrainType());
             builder.append("\";}\n");
 
-            builder.append("    @Override\n");
-            builder.append("    public ItemStackSlot fuelSlot(){\n");
-            builder.append("        return super.fuelSlot().setOverlay(Items.coal);\n");
-            builder.append("    }\n");
-
             if(getTrain(trn).getTankCapacity()>0){
                 builder.append("    @Override\n");
                 builder.append("    public int[] getTankCapacity(){return new int[]{");
@@ -425,7 +419,7 @@ public class trainConverter {
                 builder.append("    @Override\n");
                 builder.append("    public int[] getTankCapacity(){return new int[]{");
                 builder.append(getTrain(trn).getTankCapacity());
-                builder.append("};}\n");
+                builder.append("};}\n}");
             }
         }
 
@@ -457,7 +451,7 @@ public class trainConverter {
                     new File(sb.toString()).mkdir();
                 }
             }
-            sb.append(trn.getClass().getName().replace("train.common.entity.rollingStockOld.", ""));
+            sb.append(trn.getClass().getName().replace("train.common.entity.rollingStockOld.", "").replace("diesel.","").replace("steam.","").replace("electric.","").replace("caboose.","").replace("freight.","").replace("passenger.","").replace("special.","").replace("tender.",""));
             sb.append(".java");
 
 
