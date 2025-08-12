@@ -641,7 +641,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
     }
 
-    private double rollingX=0,rollingY=0,rollingZ=0;
+    private double rollingX=0,rollingY=0,rollingZ=0, rollingPitch=0;
     @Override
     @SideOnly(Side.CLIENT)
     /**
@@ -653,6 +653,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         this.rollingY = posYFromServer!=0?posYFromServer:par3;
         this.rollingZ = par5;
         this.rollingturnProgress = par9 + 2;
+        this.rollingPitch=par8;
     }
 
     List list = null;
@@ -789,12 +790,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 this.setPosition(this.posX + (this.rollingX - this.posX) / (double)this.rollingturnProgress,
                         this.posY + (this.rollingY - this.posY) / (double)this.rollingturnProgress,
                         this.posZ + (this.rollingZ - this.posZ) / (double)this.rollingturnProgress);
+                this.rotationPitch = (float)((double)this.rotationPitch + (this.rollingPitch - (double)this.rotationPitch) / (double)this.rollingturnProgress);
                 --this.rollingturnProgress;
-                this.setRotation(this.rotationYaw, this.rotationPitch);
 
             } else {
                 setPosition(posX, posY, posZ);
-                setRotation(rotationYaw, rotationPitch);
 
             }
 
@@ -859,7 +859,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         //double var49 = MathHelper.wrapAngleTo180_float(this.rotationYaw - this.prevRotationYaw);
 
-        float anglePitch = 0;
         if (bogieFront != null && bogieBack!=null) {
 
             d6 = bogieBack.posX - bogieFront.posX;
@@ -867,25 +866,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             prevRotationYaw = rotationYaw;
 
             this.rotationYaw = CommonUtil.atan2degreesf(d7, d6);
-
-            //rotationYaw = MathHelper.wrapAngleTo180_float((float) Math.toDegrees(Math.atan2((float) (bogieBack.posZ - bogieFront.posZ), (float) (bogieBack.posX - bogieFront.posX))));
-
-            anglePitch = (float) Math.atan(((bogieFront.posY - posY)) /
-                    MathHelper.sqrt_double(((bogieFront.posX - bogieBack.posX) * (bogieFront.posX - bogieBack.posX)) +
-                            ((bogieFront.posZ - bogieBack.posZ) * (bogieFront.posZ - bogieBack.posZ))));//1.043749988079071
-            rotationPitch = anglePitch + (float)
-                    ((bogieFront.posZ - bogieBack.posZ) * (bogieFront.posZ - bogieBack.posZ));//1.043749988079071
+            rotationPitch = CommonUtil.atan2degreesf(bogieFront.posY - bogieBack.posY, Math.sqrt(d6 * d6 + d7 * d7));
         }
 
 
-        if (ticksExisted % 2 == 0) {
-            Traincraft.rotationChannel.sendToAllAround(new PacketRollingStockRotation(this, (int) (anglePitch * 60)), new TargetPoint(worldObj.provider.dimensionId, posX, posY, posZ, 300.0D));
+        if (!worldObj.isRemote && ticksExisted % 2 == 0) {
+            Traincraft.rotationChannel.sendToAllAround(new PacketRollingStockRotation(this), new TargetPoint(worldObj.provider.dimensionId, posX, posY, posZ, 300.0D));
         }
-        if (!worldObj.isRemote) {
-            rotationPitch = (anglePitch * 60);
-        }
-
-        this.setRotation(this.rotationYaw, this.rotationPitch);
 
         handleTrain();
         handleOverheating.HandleHeatLevel(this);
@@ -1094,7 +1081,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         setRotation((CommonUtil.atan2degreesf(
                 bogieBack.posZ - bogieFront.posZ,
                 bogieBack.posX - bogieFront.posX)),
-                CommonUtil.calculatePitch(bogieFront.posY + bogieFront.yOffset, bogieBack.posY + bogieBack.yOffset, Math.abs(rotationPoints()[0]) + Math.abs(rotationPoints()[1])));
+                CommonUtil.calculatePitch(bogieFront.posY, bogieBack.posY , Math.abs(rotationPoints()[0]) + Math.abs(rotationPoints()[1])));
 
         //reset the vector when we're done so it wont break trains.
         cachedVectors[1]= new Vec3f(0,0,0);
@@ -1110,7 +1097,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     @Override
     public void applyDrag() {
         boolean canSlope=ConfigHandler.ENABLE_SLOPE_ACCELERATION;
-        float drag = 0.9998f, brakeBuff = 0, slope = 0;
+        float drag = 0.9998f, brakeBuff = 0;
         //check if lope things can be done at all
         for(AbstractTrains stock : consist) {
             if(stock!=this && getAccelerator()!=0){
@@ -1118,19 +1105,17 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 break;
             }
         }
+        if (isBraking) {
+            //realistically would be more like 2.4, but 5 makes gameplay more dramatic
+            brakeBuff += weightKg() * 5.0f;
+        }
         if(canSlope) {
-            if (isBraking) {
-                //realistically would be more like 2.4, but 5 makes gameplay more dramatic
-                brakeBuff += weightKg() * 5.0f;
-            }
             if (Math.abs(rotationPitch) - 1 > 0) { //cap the pitch that we actually consider to be on a slope
                 //vanilla uses 0.0078125 per tick for slope speed.
                 //0.00017361 would be that divided by 45 since vanilla slopes are 45 degree angles.
-                //scale by entity pitch
-                //pitch goes from -90 to 90, so it's inherently directional, stop that.
-                slope += (0.00017361f) * Math.abs(rotationPitch);
+                //scale by entity pitch, it's backwards here for some reason, idk.
+                appendMovement((0.00017361) * -rotationPitch);
             }
-            appendMovement(slope * MathHelper.sin((rotationYaw-90)*radianF));
         }
 
         //now do drag stuff

@@ -211,7 +211,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 	@Override
 	protected void func_145821_a(int x, int y, int z, double maxSpeed, double slopeAdjustment, Block block, int railMeta) {
-		//super.func_145821_a(x, y, z, maxSpeed, slopeAdjustment, block, railMeta);
 		super.func_145821_a(x, y, z, this.getMaxCartSpeedOnRail(), slopeAdjustment, block, railMeta);
 	}
 
@@ -267,7 +266,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		} else if (TCRailTypes.isSlopeTrack(lastTrack)) {
 			moveOnTCSlope(j, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.getBlockMetadata());
 		} else if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
-			moveOnTCCurvedSlope(j, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), 1, lastTrack.slopeAngle);
+			moveOnTCCurvedSlope(j, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.slopeAngle);
 		} else if (TCRailTypes.isDiagonalTrack(lastTrack) || TCRailTypes.isDiagonalCrossingTrack(lastTrack)){
 			moveOnTCDiagonal(j);
 		}
@@ -347,7 +346,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 	}
 
-	private void moveOnTCCurvedSlope(int j,double radius, double startX, double startZ, int tilex, int tilez, int meta, double slopeHeight, double slopeAngle) {
+	private void moveOnTCCurvedSlope(int j,double radius, double startX, double startZ, int tilex, int tilez, int meta, double slopeAngle) {
 
 		railPathX2 = posX - startX;
 		railPathZ2 = posZ - startZ;
@@ -374,9 +373,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		} else if (meta == 3) {
 			railPathZ += 0.5;
 		}
-		double newYPos = Math.abs(j+ Math.min(1, (slopeAngle * Math.abs(Math.sqrt(railPathX * railPathX + railPathZ * railPathZ)))) + yOffset + 0.34f);
+		posY = Math.abs(j+ Math.min(1, (slopeAngle * Math.abs(Math.sqrt(railPathX * railPathX + railPathZ * railPathZ)))) +0.2+ yOffset -ySize);
 
-		setPositionRelative(vel1[0]+vel2[0], newYPos-posY, vel1[1]+vel2[1]);
+		setPositionRelative(vel1[0]+vel2[0], 0, vel1[1]+vel2[1]);
 		velocity[0] = vel1[0];
 		velocity[1] = vel1[1];
 
@@ -695,5 +694,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			posY += ((int) (y * 10000)) * 0.0001;
 		}
 		posZ+=((int)(z*10000))*0.0001;
+		float f = this.width / 2.0F;
+		this.boundingBox.setBounds(x - (double)f, y - (double)this.yOffset + (double)this.ySize, z - (double)f, x + (double)f, y - (double)this.yOffset + (double)this.ySize + (double)this.height, z + (double)f);
+
 	}
 }

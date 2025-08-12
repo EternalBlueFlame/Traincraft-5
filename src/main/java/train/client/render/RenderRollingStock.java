@@ -68,30 +68,7 @@ public class RenderRollingStock extends Render {
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL_REPEAT);
         GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL_REPEAT);
 
-
-        float pitch = cart.prevRotationPitch + (cart.rotationPitch - cart.prevRotationPitch) * time;
-
         y-=0.3f;
-        yaw %= 360.0F;
-        if (yaw < 0.0F) {
-            yaw += 360.0F;
-        }
-        yaw += 360.0F;
-
-        float serverYaw = (cart.rotationYaw + 180) % 360;
-        if (serverYaw < 0.0F) {
-            serverYaw += 360.0F;
-        }
-        serverYaw += 360.0F;
-        if (Math.abs(yaw - serverYaw) > 90.0F) {
-            yaw += 180.0F;
-            pitch = -pitch;
-        }
-		/*if (var23 == null && Math.abs(yaw - serverYaw) < 90.0D) {
-			pitch = -pitch;
-		}*/
-        //System.out.println(Math.abs(yaw - serverYaw));
-        //System.out.println("yaw after "+yaw+" server yaw after "+serverYaw);
 
         GL11.glTranslatef((float) x, (float) y, (float) z);
         int i = MathHelper.floor_double(cart.posX);
@@ -101,12 +78,10 @@ public class RenderRollingStock extends Render {
         if (cart.worldObj != null && (cart.worldObj.getBlock(i, j, k).getClass().getName().equals("train.common.blocks.BlockTCRail") || cart.worldObj.getBlock(i, j, k).getClass().getName().equals("train.common.blocks.BlockTCRailGag"))) {
             GL11.glTranslatef(0f, 0.15f, 0f);
         }
-        if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
-            GL11.glRotatef(180-cart.rotationYaw, 0.0F, 1.0F, 0.0F);
-            //cart.rotationYaw=newYaw;
-            cart.rotationPitch=pitch;
-            GL11.glRotatef(cart.rotationPitch, 0.0F, 0.0F, 1.0F);
-        }
+
+        GL11.glRotatef(180-cart.rotationYaw, 0.0F, 1.0F, 0.0F);
+        GL11.glRotatef(cart.rotationPitch, 0.0F, 0.0F, 1.0F);
+
         float var28 = cart.getRollingAmplitude() - time;
 
         if (var28 > 0.0F) {
