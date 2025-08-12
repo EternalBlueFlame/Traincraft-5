@@ -229,19 +229,36 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			}
 		}
 
-		if(TCRailTypes.isSwitchTrack(lastTrack) || lastTrack.getSwitchState()){
-			//prevent turn clipping
-			if (
-					(lastTrack.getBlockMetadata() == 1 && velocity[0] + velocity[2] > 0)||
-					(lastTrack.getBlockMetadata() == 3 && velocity[0] + velocity[2] < 0)||
-					(lastTrack.getBlockMetadata() == 0 && velocity[1] + velocity[3] > 0)||
-					(lastTrack.getBlockMetadata() == 2 && velocity[1] + velocity[3] < 0)
-			) {
-				moveOnTCStraight(j, lastTrack.getBlockMetadata());
-			}else {
+		// --- Switch track logic fix ---
+		if (TCRailTypes.isSwitchTrack(lastTrack)) {
+			// Determine direction of travel
+			double vx = velocity[0] + velocity[2];
+			double vz = velocity[1] + velocity[3];
+			boolean goStraight = false;
+
+			// For each meta, determine if the bogie is going "against" the curve (should ignore switch)
+			switch (lastTrack.getBlockMetadata()) {
+				case 0: // North-South (Z axis)
+					goStraight = (vz > 0 && !lastTrack.getSwitchState()) || (vz < 0 && lastTrack.getSwitchState());
+					break;
+				case 2: // South-North (Z axis)
+					goStraight = (vz < 0 && !lastTrack.getSwitchState()) || (vz > 0 && lastTrack.getSwitchState());
+					break;
+				case 1: // West-East (X axis)
+					goStraight = (vx > 0 && !lastTrack.getSwitchState()) || (vx < 0 && lastTrack.getSwitchState());
+					break;
+				case 3: // East-West (X axis)
+					goStraight = (vx < 0 && !lastTrack.getSwitchState()) || (vx > 0 && lastTrack.getSwitchState());
+					break;
+			}
+
+			if (goStraight) {
+				moveOnTCStraight(j, meta);
+			} else {
 				moveOnTC90TurnRail(j, lastTrack.r, lastTrack.cx, lastTrack.cz);
 			}
-		} else if (TCRailTypes.isStraightTrack(lastTrack)) {
+		}
+		else if (TCRailTypes.isStraightTrack(lastTrack)) {
 			moveOnTCStraight(j, lastTrack.getBlockMetadata());
 		} else if(TCRailTypes.isTurnTrack(lastTrack)){
 			moveOnTC90TurnRail(j, lastTrack.r, lastTrack.cx, lastTrack.cz);
