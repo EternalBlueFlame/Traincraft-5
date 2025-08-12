@@ -29,6 +29,7 @@ public class PacketRollingStockRotation implements IMessage {
         this.entityID = entity.getEntityId();
         this.rotationYawServer = entity.rotationYaw; // Don't even ASK ME why we do this. Probably an attempt to reduce Packet size, but at what cost of precision..?
         this.anglePitch = (int)entity.rotationPitch;
+        this.posY= Float.floatToIntBits((float)entity.posY);
         if(entity.bogieFront!=null && entity.bogieBack!=null) {
             this.frontx = entity.bogieFront.posX;
             this.fronty = entity.bogieFront.posY;
