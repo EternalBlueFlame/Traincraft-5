@@ -376,19 +376,25 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		}
 
 	}
-	private void moveOnTCSlope(int j, double cx, double cz, double slopeAngle, int meta) {
 
+	private void moveOnTCSlope(int j, double tilex, double tilez, double slopeAngle, int meta) {
 		//slopes use the opposite axis of straights for some reason, so we gotta invert it.
-		moveOnTCStraight(j,meta);
-
-		double newPosY;
-		if (meta == 2 || meta == 0) {
-			newPosY= Math.abs(j+(Math.tan(slopeAngle * Math.abs(cz - this.posZ))) + this.yOffset + 0.3);
-		} else{
-			newPosY= Math.abs(j+(Math.tan(slopeAngle * Math.abs(cx - this.posX))) + this.yOffset + 0.3);
+		moveOnTCStraight(j, meta);
+		railPathX = tilex - posX;
+		railPathZ = tilez - posZ;
+		if (meta == 2 ) {
+			railPathZ += 1;
+			railPathX += 0.5;
+		} else if (meta == 0) {
+			railPathX += 0.5;
+		} else if (meta == 1 ) {
+			railPathX += 1;
+			railPathZ += 0.5;
+		} else if (meta == 3) {
+			railPathZ += 0.5;
 		}
-		setPosition(posX,newPosY,posZ);
-
+		double newYPos = Math.abs(j+ Math.min(1, (slopeAngle * Math.abs(Math.sqrt(railPathX * railPathX + railPathZ * railPathZ)))) + yOffset + 0.34f);
+		setPositionRelative(0, newYPos-(j + 0.2 + yOffset), 0);
 	}
 
 	private void moveOnTC90TurnRail(int j,double radius, double startX, double startZ){
