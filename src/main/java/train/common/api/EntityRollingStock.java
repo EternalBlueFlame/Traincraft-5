@@ -1007,7 +1007,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         bogieFront.addLinking(this, velocity);
     }
     public void manageLink(AbstractTrains other) {
-        if(other.isAccelerating() || other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
+        if(isAccelerating() || other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
             return;
         }
 
@@ -1079,14 +1079,16 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         float drag = 0.9998f, brakeBuff = 0;
         //check if lope things can be done at all
         for(AbstractTrains stock : consist) {
-            if(stock!=this && getAccelerator()!=0){
+            if(stock!=this && stock.isAccelerating()){
                 canSlope=false;
+                break;
+            } else if(stock==this){
                 break;
             }
         }
         if (isBraking) {
             //realistically would be more like 2.4, but 5 makes gameplay more dramatic
-            brakeBuff += weightKg() * 5.0f;
+            brakeBuff += weightKg() * 3.0f;
         }
         if(canSlope) {
             if (Math.abs(rotationPitch) - 1 > 0) { //cap the pitch that we actually consider to be on a slope
@@ -1119,6 +1121,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
 
         for(AbstractTrains t : consist){
+            if(!isAccelerating() && !t.isAccelerating())
             t.bogieFront.drag(t,drag);
             t.bogieBack.drag(t,drag);
         }
