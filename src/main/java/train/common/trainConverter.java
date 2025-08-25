@@ -85,32 +85,47 @@ public class trainConverter {
                         "\n");
 
         builder.append("public class ");
-        builder.append(trn.getClass().getName().replace("train.common.entity.rollingStockOld.", ""));
+        String classname = trn.getClass().getName().replace("train.common.entity.rollingStockOld.", "");
+        classname=classname.replace("diesel.","").replace("electric.","").replace("steam.","")
+        .replace("caboose.","").replace("freight.","").replace("passenger.","").replace("special.","").replace("tender.","");
+        builder.append(classname);
+        String outfolder="";
         if (trn instanceof Locomotive) {
             if (trn instanceof ElectricTrain) {
+                outfolder+="electric/";
                 builder.append(" extends ElectricTrain {\n\n");
             }
             if (trn instanceof DieselTrain) {
+                outfolder+="diesel/";
                 builder.append(" extends DieselTrain {\n\n");
             }
             if (trn instanceof SteamTrain) {
+                outfolder+="steam/";
                 builder.append(" extends SteamTrain {\n\n");
             }
         }
         else if (trn instanceof IPassenger) {
+            outfolder+="passenger/";
             builder.append(" extends EntityRollingStock implements IPassenger {\n\n");
         }
         else if (trn instanceof Freight){
+            outfolder+="freight/";
             builder.append(" extends Freight {\n\n");
         }
         else if (trn instanceof Tender){
+            outfolder+="tender/";
             builder.append(" extends Tender {\n\n");
         }
         else if (trn instanceof LiquidTank){
+            outfolder+="tanker/";
             builder.append(" extends LiquidTank {\n\n");
         }
         else if (trn instanceof AbstractWorkCart){
+            outfolder+="work/";
             builder.append(" extends AbstractWorkCart {\n\n");
+        } else {
+            outfolder+="special/";
+            builder.append(" extends EntityRollingStock {\n\n");
         }
 
 
@@ -130,7 +145,7 @@ public class trainConverter {
 
 
         builder.append("    public ");
-        builder.append(trn.getClass().getName().replace("train.common.entity.rollingStockOld.", ""));
+        builder.append(classname);
         builder.append("(World world, double x, double y, double z,) {\n");
         builder.append("    super(world, x, y, z); }\n");
 
@@ -441,7 +456,13 @@ public class trainConverter {
                     new File(sb.toString()).mkdir();
                 }
             }
-            sb.append(trn.getClass().getName().replace("train.common.entity.rollingStockOld.", "").replace("diesel.","").replace("steam.","").replace("electric.","").replace("caboose.","").replace("freight.","").replace("passenger.","").replace("special.","").replace("tender.",""));
+
+            sb.append(outfolder);
+            if (!new File(sb.toString()).exists()) {
+                new File(sb.toString()).mkdir();
+            }
+
+            sb.append(classname);
             sb.append(".java");
 
 
