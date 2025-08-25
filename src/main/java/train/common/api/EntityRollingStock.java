@@ -971,6 +971,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 prevPosZ = posZ;
 
                 ticksSinceLastVelocityChange=1;
+
+                cachedVectors[1]= new Vec3f(rotationPoints()[0], 0, 0).rotatePoint(0, rotationYaw, 0)
+                        .addVector(posX,0,posZ);
+                bogieFront.setPosition(cachedVectors[1].xCoord, bogieFront.posY,cachedVectors[1].zCoord);
             } else {
                 motionX = (posX - prevPosX)/ticksSinceLastVelocityChange;
                 motionZ = (posZ - prevPosZ)/ticksSinceLastVelocityChange;
@@ -1061,10 +1065,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 bogieBack.posZ - bogieFront.posZ,
                 bogieBack.posX - bogieFront.posX)),
                 CommonUtil.calculatePitch(bogieFront.posY, bogieBack.posY , Math.abs(rotationPoints()[0]) + Math.abs(rotationPoints()[1])));
-
-        cachedVectors[1]= new Vec3f(rotationPoints()[0], 0, 0).rotatePoint(0, rotationYaw, 0)
-                .addVector(posX,0,posZ);
-        bogieFront.setPosition(cachedVectors[1].xCoord, bogieFront.posY,cachedVectors[1].zCoord);
 
         //reset the vector when we're done so it wont break trains.
         cachedVectors[1]= new Vec3f(0,0,0);
