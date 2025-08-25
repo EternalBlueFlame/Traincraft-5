@@ -9,6 +9,7 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
+import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
@@ -1214,9 +1215,9 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
              */
             if (itemstack.getItem() instanceof ItemDye) {
                 if (SkinRegistry.get(this).size() > 0) {
-                    for (int i = 0; i < SkinRegistry.get(this).size(); i++) {
-                        if (itemstack.getItemDamage() == DepreciatedUtil.getColorFromString(SkinRegistry.get(this).get(i).addr)) {
-                            this.setColor(SkinRegistry.get(this).get(i).addr);
+                    for (TransportSkin s : SkinRegistry.get(this).values()) {
+                        if (itemstack.getItemDamage() == DepreciatedUtil.getColorFromString(s.addr)) {
+                            this.setColor(s.addr);
                             itemstack.stackSize--;
 
                             //if (!worldObj.isRemote)PacketHandler.sendPacketToClients(PacketHandler.sendStatsToServer(10,this.uniqueID,trainName ,trainType, this.trainOwner, this.getColorAsString(itemstack.getItemDamage()), (int)posX, (int)posY, (int)posZ),this.worldObj, (int)posX,(int)posY,(int)posZ, 12.0D);
