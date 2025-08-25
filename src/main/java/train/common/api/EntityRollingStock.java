@@ -1007,7 +1007,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         bogieFront.addLinking(this, velocity);
     }
     public void manageLink(AbstractTrains other) {
-        if(isAccelerating() || other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
+        if(other.isAccelerating() || other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
             return;
         }
 

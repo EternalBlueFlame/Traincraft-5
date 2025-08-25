@@ -104,7 +104,7 @@ public class GuiLoco2 extends GuiContainer {
             }
         }
         if (loco.seats.size() > 1) {
-            this.buttonList.add(this.buttonSeatManager = new GUIButton(buttonPosX + 108, buttonPosY - 20, 67,10, "Seats") {
+            this.buttonList.add(this.buttonSeatManager = new GUIButton(buttonPosX + 41, buttonPosY - 22, 67,10, "Seats") {
                 @Override
                 public String getHoverText() {
                     return "gui.seats";
