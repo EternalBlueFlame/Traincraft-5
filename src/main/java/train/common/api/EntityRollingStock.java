@@ -909,7 +909,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     getWorld().spawnEntityInWorld(seats.get(i1));
                 }
                 cachedVectors[0] = new Vec3f(getRiderOffsets()[i1][0], getRiderOffsets()[i1][1], getRiderOffsets()[i1][2])
-                        .rotatePoint(rotationPitch, rotationYaw, 0f);
+                        .rotatePoint(rotationPitch, 180+rotationYaw, 0f);
                 cachedVectors[0].addVector(posX,posY,posZ);
                 seats.get(i1).setPosition(cachedVectors[0].xCoord, cachedVectors[0].yCoord, cachedVectors[0].zCoord);
             }
@@ -1007,7 +1007,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         bogieFront.addLinking(this, velocity);
     }
     public void manageLink(AbstractTrains other) {
-        if(isAccelerating() || other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
+        if(isLocoTurnedOn || other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
             return;
         }
 
@@ -1062,6 +1062,10 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 bogieBack.posX - bogieFront.posX)),
                 CommonUtil.calculatePitch(bogieFront.posY, bogieBack.posY , Math.abs(rotationPoints()[0]) + Math.abs(rotationPoints()[1])));
 
+        cachedVectors[1]= new Vec3f(rotationPoints()[0], 0, 0).rotatePoint(0, rotationYaw, 0)
+                .addVector(posX,0,posZ);
+        bogieFront.setPosition(cachedVectors[1].xCoord, bogieFront.posY,cachedVectors[1].zCoord);
+
         //reset the vector when we're done so it wont break trains.
         cachedVectors[1]= new Vec3f(0,0,0);
         //update the collision handler's positions
@@ -1075,22 +1079,20 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     public void applyDrag() {
-        boolean canSlope=ConfigHandler.ENABLE_SLOPE_ACCELERATION;
         float drag = 0.9998f, brakeBuff = 0;
         //check if lope things can be done at all
         for(AbstractTrains stock : consist) {
-            if(stock!=this && stock.isAccelerating()){
-                canSlope=false;
-                break;
-            } else if(stock==this){
-                break;
+            if(stock!=this && stock.isLocoTurnedOn){
+                return;
+            } else if(stock ==this && isAccelerating()){
+                return;
             }
         }
         if (isBraking) {
             //realistically would be more like 2.4, but 5 makes gameplay more dramatic
             brakeBuff += weightKg() * 3.0f;
         }
-        if(canSlope) {
+        if(ConfigHandler.ENABLE_SLOPE_ACCELERATION) {
             if (Math.abs(rotationPitch) - 1 > 0) { //cap the pitch that we actually consider to be on a slope
                 //vanilla uses 0.0078125 per tick for slope speed.
                 //0.00017361 would be that divided by 45 since vanilla slopes are 45 degree angles.

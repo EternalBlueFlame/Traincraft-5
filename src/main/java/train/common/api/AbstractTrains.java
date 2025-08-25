@@ -170,6 +170,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public static int uniqueIDs = 1;
 
 
+    public boolean isLocoTurnedOn = false;
+
     /**
      * The distance this train has traveled
      */

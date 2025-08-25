@@ -48,7 +48,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     private Entity lastEntityRider;
     private boolean hasDrowned = false;
     protected boolean canCheckInvent = true;
-    public boolean isLocoTurnedOn = false;
     public boolean forwardPressed = false;
     public boolean backwardPressed = false;
     public boolean brakePressed = false;
@@ -1227,7 +1226,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         if (this.worldObj != null) {
             if (this.getSpeed() != desiredSpeed) {
                 if ((int) this.getSpeed() <= this.speedLimit) {
-                    double rotation = this.riddenByEntity == null?rotationYaw:riddenByEntity.rotationYaw;
+                    double rotation = this.seats.get(0).getPassenger() == null?rotationYaw:seats.get(0).getPassenger().rotationYaw;
                     double[] motion = CommonUtil.rotatePoint(0.002,0,rotation==0?0:CommonUtil.floorDouble(rotation/90d)*90);
                     addVelocity(motion[0],0,motion[2]);
                 }
