@@ -218,9 +218,21 @@ public class EntityHitbox {
                                 continue;
                             }
 
+
                             //we don't want to collide with our own CollisionBoxes, or the CollisionBoxes of our own consist either
-                            if(obj instanceof CollisionBox && (((CollisionBox) obj).host == host || host.consist.contains(((CollisionBox) obj).host))){
-                                continue;
+                            if(obj instanceof CollisionBox){
+                                if((host.frontLink!=null && ((CollisionBox) obj).host.getEntityId()==host.frontLink.getEntityId()) || (host.backLink!=null && ((CollisionBox) obj).host.getEntityId()==host.backLink.getEntityId())){
+                                    continue;
+                                }
+                                boolean skip=false;
+                                for(AbstractTrains t: host.consist) {
+                                    if(t.getEntityId()==host.getEntityId()){
+                                        skip=true;
+                                    }
+                                }
+                                if(skip) {
+                                    continue;
+                                }
                             }
 
                             if(containsEntity((Entity) obj)){
