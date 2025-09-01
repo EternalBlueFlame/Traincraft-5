@@ -931,14 +931,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     }
 
     @Override
-    public void manageLink(AbstractTrains other){
-        if(forwardPressed || backwardPressed){
-            return;
-        }
-        super.manageLink(other);
-    }
-
-    @Override
     public boolean isAccelerating(){return forwardPressed || backwardPressed;}
 
     @Override

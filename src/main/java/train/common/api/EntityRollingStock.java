@@ -971,10 +971,6 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 prevPosZ = posZ;
 
                 ticksSinceLastVelocityChange=1;
-
-                cachedVectors[1]= new Vec3f(rotationPoints()[0], 0, 0).rotatePoint(0, rotationYaw, 0)
-                        .addVector(posX,0,posZ);
-                bogieFront.setPosition(cachedVectors[1].xCoord, bogieFront.posY,cachedVectors[1].zCoord);
             } else {
                 motionX = (posX - prevPosX)/ticksSinceLastVelocityChange;
                 motionZ = (posZ - prevPosZ)/ticksSinceLastVelocityChange;
@@ -1010,7 +1006,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         bogieBack.addLinking(this, velocity);
         bogieFront.addLinking(this, velocity);
     }
-    public void manageLink(AbstractTrains other) {
+    public void manageLink(EntityRollingStock other) {
         if(isLocoTurnedOn || other.bogieBack ==null || other.bogieFront ==null || bogieBack ==null || bogieFront ==null) {
             return;
         }
@@ -1021,6 +1017,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         double springDist = MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ)
                 -(getOptimalDistance(other)+other.getOptimalDistance(this));
+        springDist*=0.0625;
 
         if(getVelocity()>0.3) {
             springDist *= 0.45;
@@ -1029,14 +1026,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         } else {
             springDist*=0.3;
         }
-        if(backLink!=null && other == backLink) {
+        if(backLink!=null && other.getEntityId() == backLink.getEntityId()) {
             springDist *= -1;
         }
 
         if(Math.abs(springDist)>0.01) {
             addLinkingMove(springDist);
         }
-
     }
 
     /**
@@ -1045,11 +1041,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     public void finalMove(){
 
         applyDrag();
-        if(frontLink!=null) {
-            manageLink(frontLink);
+        if(frontLink instanceof EntityRollingStock) {
+            manageLink((EntityRollingStock) frontLink);
         }
-        if(backLink!=null){
-            manageLink(backLink);
+        if(backLink instanceof EntityRollingStock){
+            manageLink((EntityRollingStock) backLink);
         }
 
         applyDrag();

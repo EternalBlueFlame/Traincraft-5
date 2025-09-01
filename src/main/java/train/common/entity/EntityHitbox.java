@@ -2,6 +2,7 @@ package train.common.entity;
 
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
+import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Vec3d;
 import fexcraft.tmt.slim.Vec3f;
 import net.minecraft.entity.Entity;
@@ -192,7 +193,7 @@ public class EntityHitbox {
                     for (List olist: entities) {
                         for(Object obj : olist) {
                             //this shouldn't be possible, but it's forge, sooooo....
-                            if(!(obj instanceof Entity)){
+                            if(!(obj instanceof Entity) || interactionBoxes.contains(obj)){
                                 continue;
                             }
 
@@ -201,7 +202,7 @@ public class EntityHitbox {
                             //If the cart is in a consist containing a locomotive, we do not want to push it.
                             if (!ConfigHandler.PUSHABLE_ROLLINGSTOCK || host instanceof Locomotive || (host.consistLeadID != null && host.worldObj.getEntityByID(host.consistLeadID) instanceof Locomotive)) {
                                 //still need to push the player back though
-                                if (containsEntity((Entity)obj)) {
+                                if (obj instanceof EntityLiving && containsEntity((Entity)obj)) {
                                     ((Entity)obj).applyEntityCollision(host);
                                 }
                                 continue;
@@ -226,7 +227,7 @@ public class EntityHitbox {
                                 }
                                 boolean skip=false;
                                 for(AbstractTrains t: host.consist) {
-                                    if(t.getEntityId()==host.getEntityId()){
+                                    if(t.getEntityId()==((CollisionBox) obj).host.getEntityId()){
                                         skip=true;
                                     }
                                 }

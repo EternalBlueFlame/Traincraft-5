@@ -270,6 +270,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		} else if (TCRailTypes.isDiagonalTrack(lastTrack) || TCRailTypes.isDiagonalCrossingTrack(lastTrack)){
 			moveOnTCDiagonal(j);
 		}
+		velocity[2]=0;
+		velocity[3]=0;
 
 	}
 
@@ -516,6 +518,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 		velocity[2]+=speed*velocity[4];
 		velocity[3]+=speed*velocity[5];
+		velocity[4]=0;
+		velocity[5]=0;
 	}
 
 	public void drag(AbstractTrains host, double drag){
