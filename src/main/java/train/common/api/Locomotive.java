@@ -17,10 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.adminbook.ServerLogger;
@@ -637,6 +634,9 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         cycleBeaconIndex();
         if (!worldObj.isRemote) {
             if (forwardPressed || backwardPressed) {
+                if(consistLeadID!=this.getEntityId()){
+                    updateLinks();
+                }
                 if (getFuel() > 0 && this.isLocoTurnedOn() && rand.nextInt(4) == 0) {
                     if(this instanceof SteamTrain && !getState().equals("hot") && !getState().equals("too hot")){
                         return;
@@ -1220,7 +1220,8 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                 if ((int) this.getSpeed() <= this.speedLimit) {
                     double rotation = this.seats.get(0).getPassenger() == null?rotationYaw:seats.get(0).getPassenger().rotationYaw;
                     double[] motion = CommonUtil.rotatePoint(0.002,0,rotation==0?0:CommonUtil.floorDouble(rotation/90d)*90);
-                    addVelocity(motion[0],0,motion[2]);
+                    motion[1]= MathHelper.sqrt_double(motion[0]*motion[0]+motion[2]*motion[2]);
+                    appendMovement(motion[1]);
                 }
             }
         }

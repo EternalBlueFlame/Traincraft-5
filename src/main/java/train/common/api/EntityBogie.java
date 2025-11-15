@@ -359,8 +359,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 		setPosition(railPathX, j + 0.2 + yOffset, railPathZ);
 
-		double[] vel1 = turnOffsetXZ(startX,startZ,velocity[0],velocity[1],radius,motionSqrt);
-		double[] vel2 = turnOffsetXZ(startX,startZ,velocity[2],velocity[3],radius,motionSqrt);
+		double[] vel0 = turnOffsetXZ(startX,startZ,velocity[0],velocity[1],radius,motionSqrt);
+		double[] vel1 = turnOffsetXZ(startX,startZ,velocity[0]+velocity[2],velocity[1]+velocity[3],radius,motionSqrt);
 
 		railPathX = tilex - posX;
 		railPathZ = tilez - posZ;
@@ -377,9 +377,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		}
 		posY = Math.abs(j+ Math.min(1, (slopeAngle * Math.abs(Math.sqrt(railPathX * railPathX + railPathZ * railPathZ)))) +0.2+ yOffset -ySize);
 
-		setPositionRelative(vel1[0]+vel2[0], 0, vel1[1]+vel2[1]);
-		velocity[0] = vel1[0];
-		velocity[1] = vel1[1];
+		setPositionRelative(vel1[0], 0, vel1[1]);
+		velocity[0] = vel0[0];
+		velocity[1] = vel0[1];
 
 	}
 
@@ -426,12 +426,12 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 		setPosition(railPathX, j + 0.2 + yOffset, railPathZ);
 
-		double[] vel1 = turnOffsetXZ(startX,startZ,velocity[0],velocity[1],radius,motionSqrt);
-		double[] vel2 = turnOffsetXZ(startX,startZ,velocity[2],velocity[3],radius,motionSqrt);
+		double[] vel0 = turnOffsetXZ(startX,startZ,velocity[0],velocity[1],radius,motionSqrt);
+		double[] vel1 = turnOffsetXZ(startX,startZ,velocity[0]+velocity[2],velocity[1]+velocity[3],radius,motionSqrt);
 
-		setPositionRelative(vel1[0]+vel2[0], 0, vel1[1]+vel2[1]);
-		velocity[0] = vel1[0];
-		velocity[1] = vel1[1];
+		setPositionRelative(vel1[0], 0, vel1[1]);
+		velocity[0] = vel0[0];
+		velocity[1] = vel0[1];
 	}
 
 
@@ -488,38 +488,22 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 	public void addVelocity(AbstractTrains host, double speed) {
 		//cache rotation so it only has to be processed once per tick
-		if(velocity[4] == 0 && velocity[5] == 0) {
-			Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180 + host.rotationYaw,0);
-			velocity[4] = vec.xCoord;
-			velocity[5] = vec.zCoord;
-		}
-
-		velocity[0] += speed * velocity[4];
-		velocity[1] += speed * velocity[5];
+		Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180 + host.rotationYaw,0);
+		velocity[0] += speed * vec.xCoord;
+		velocity[1] += speed * vec.zCoord;
 	}
 
 	public void multiplyVelocity(AbstractTrains host, double mult) {
-		if (velocity[4] == 0 & velocity[5] == 0) {
-			Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180 + host.rotationYaw,0);
-			velocity[4] = vec.xCoord;
-			velocity[5] = vec.zCoord;
-		}
-		velocity[0] *= (mult * velocity[4]);
-		velocity[1] *= (mult * velocity[5]);
+		Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180 + host.rotationYaw,0);
+		velocity[0] *= (mult * vec.xCoord);
+		velocity[1] *= (mult * vec.zCoord);
 	}
 
 	public void addLinking(AbstractTrains host, double speed){
 		//cache rotation so it only has to be processed once per tick
-		if(velocity[4]==0 && velocity[5]==0){
-			Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+host.rotationYaw,0);
-			velocity[4]=vec.xCoord;
-			velocity[5]=vec.zCoord;
-		}
-
-		velocity[2]+=speed*velocity[4];
-		velocity[3]+=speed*velocity[5];
-		velocity[4]=0;
-		velocity[5]=0;
+		Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+host.rotationYaw,0);
+		velocity[2]+=speed*vec.xCoord;
+		velocity[3]+=speed*vec.zCoord;
 	}
 
 	public void drag(AbstractTrains host, double drag){
@@ -538,7 +522,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			zFloor = CommonUtil.floorDouble(this.posZ);
 			//prevent moving without velocity
 			if (Math.abs(velocity[0]) + Math.abs(velocity[1] + Math.abs(velocity[2]) + Math.abs(velocity[3])) < 0.0000001) {
-				//return;
+				return;
 			}
 
 			//reset rotation

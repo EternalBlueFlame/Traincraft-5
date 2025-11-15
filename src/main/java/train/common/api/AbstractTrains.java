@@ -182,6 +182,9 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     private OverlayTextureManager overlayTextureContainer;
     private boolean acceptsOverlayTextures = false;
 
+    //needs to be package private (no discriminator)
+    boolean hasMoved=false;
+
 
     public AbstractTrains(World world) {
         super(world);
@@ -699,62 +702,60 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public void updateLinks(){
-
         ArrayList<AbstractTrains> transports = new ArrayList<>();
-        List<AbstractTrains> IDs = new ArrayList<>();
-        Integer lead=null;
-        AbstractTrains link=this;
-        transports.add(link);
-        IDs.add(this);
-        if(accelerate!=0){
-            lead=getEntityId();
+
+        traverseConsist(this, transports);
+        if(transports.size()<2){
+            consist = transports;
+            consistLeadID = getEntityId();
+            return;
         }
-        if(frontLink!=null){
-            link =frontLink;
+
+        AbstractTrains frontTrain = findFront(transports);
+        transports = new ArrayList<>();
+        traverseConsist(frontTrain, transports);
+        
+        for (AbstractTrains t : transports) {
+            t.consist = transports;
+            t.consistLeadID = frontTrain.getEntityId();
+            t.setValuesOnLinkUpdate(transports);
         }
-        while (link!=null){
-            if(!transports.contains(link)) {
-                if(link.accelerate!=0){
-                    lead=link.getEntityId();
-                }
-                transports.add(link);
-                IDs.add(link);
-                if (link.frontLink != null && !IDs.contains(link.frontLink)) {
-                    link = link.frontLink;
-                } else if (link.backLink != null && !IDs.contains(link.backLink)) {
-                    link = link.backLink;
-                }
-            } else {
-                link = null;
-            }
+    }
+    
+    private void traverseConsist(AbstractTrains current, ArrayList<AbstractTrains> visited) {
+        if (current == null || visited.contains(current)) {
+            return;
         }
-        //repeat for back link
-        if(backLink!=null){
-            link =backLink;
+        
+        visited.add(current);
+        if (current.frontLink != null) {
+            traverseConsist(current.frontLink, visited);
         }
-        while (link!=null){
-            if(!transports.contains(link)) {
-                if(link.accelerate!=0){
-                    lead=link.getEntityId();
-                }
-                transports.add(link);
-                IDs.add(link);
-                if (link.frontLink != null && !IDs.contains(link.frontLink)) {
-                    link = link.frontLink;
-                } else if (link.backLink != null && !IDs.contains(link.backLink)) {
-                    link = link.backLink;
-                }
-            } else {
-                link = null;
+        if (current.backLink != null) {
+            traverseConsist(current.backLink, visited);
+        }
+    }
+    
+    private AbstractTrains findFront(ArrayList<AbstractTrains> transports) {
+        for (AbstractTrains train : transports) {
+            if (train.accelerate != 0) {
+                return train;
             }
         }
 
-        //now tell everything in the list, including this, that there's a new list, and provide said list.
-        for(AbstractTrains t:transports){
-            t.consist=transports;
-            t.consistLeadID=lead;
-            t.setValuesOnLinkUpdate(consist);
+        for (AbstractTrains train : transports) {
+            if (train instanceof Locomotive && ((Locomotive)train).canBePulled) {
+                return train;
+            }
         }
+
+        for (AbstractTrains train : transports) {
+            if (train.frontLink == null || train.backLink == null) {
+                return train;
+            }
+        }
+        
+        return transports.get(0);
     }
 
     /**

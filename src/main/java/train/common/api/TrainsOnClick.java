@@ -23,6 +23,10 @@ public class TrainsOnClick {
                     ((Locomotive) train).setCanBeAdjusted(false);
                     ((Locomotive) train).canBePulled = false;
                 }
+
+                if(train.consistLeadID!=train.getEntityId()){
+                    train.updateLinks();
+                }
                 return true;
             }
 
