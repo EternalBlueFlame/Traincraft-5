@@ -983,22 +983,20 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     public void appendMovement(double velocity){
         //the logic gets stupid if it's not sorted from one end or another.
-        EntityRollingStock last = this;
+        AbstractTrains last = consist.get(0);
         for(AbstractTrains t:consist) {
-            if(t.backLink!=null && last.backLink!=null
-                    && last==t.backLink
-                    && t==last.backLink){
-                t.bogieBack.addVelocity(t, -velocity);
-                t.bogieFront.addVelocity(t, -velocity);
-            } else if(t.frontLink!=null && last.frontLink!=null
-                    && last==t.frontLink
-                    && t==last.frontLink){
-                t.bogieBack.addVelocity(t, -velocity);
-                t.bogieFront.addVelocity(t, -velocity);
-            } else {
+            if(t==last){
                 t.bogieBack.addVelocity(t, velocity);
                 t.bogieFront.addVelocity(t, velocity);
             }
+            else if(t.backLink!=null &&last==t.backLink){
+                t.bogieBack.addVelocity(t, velocity);
+                t.bogieFront.addVelocity(t, velocity);
+            } else {
+                t.bogieBack.addVelocity(t, -velocity);
+                t.bogieFront.addVelocity(t, -velocity);
+            }
+            last=t;
         }
     }
 
@@ -1120,7 +1118,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         for(AbstractTrains t : consist){
             if(!isAccelerating() && !t.isAccelerating())
-            t.bogieFront.drag(t,drag);
+                t.bogieFront.drag(t,drag);
             t.bogieBack.drag(t,drag);
         }
     }
