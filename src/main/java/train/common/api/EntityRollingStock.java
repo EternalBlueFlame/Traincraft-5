@@ -1030,10 +1030,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      */
     public void finalMove(EntityRollingStock stock){
 
-        if(stock.frontLink instanceof EntityRollingStock) {
+        //todo: test based on doing it whether or nt it's moved, in theory, we should skip if the other !has_moved
+        if(stock.frontLink instanceof EntityRollingStock &&stock.frontLink.hasMoved) {
             stock.manageLink((EntityRollingStock) stock.frontLink);
         }
-        if(stock.backLink instanceof EntityRollingStock){
+        if(stock.backLink instanceof EntityRollingStock && stock.backLink.hasMoved){
             stock.manageLink((EntityRollingStock) stock.backLink);
         }
 
