@@ -84,6 +84,9 @@ public class EntityHitbox {
                         continue;
                     }
                     EntityRollingStock entityOne = (((CollisionBox) e).host);
+                    if(host.frontLink==entityOne || host.backLink==entityOne){
+                        continue;
+                    }
                     if (entityOne.isAttaching && host.isAttaching) {
                         if(entityOne.canBeAdjusted(host) || host.canBeAdjusted(entityOne)){
 

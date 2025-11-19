@@ -962,7 +962,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 
             //actually move
-            finalMove();
+            for(AbstractTrains stock:consist) {
+                if(!stock.hasMoved && stock instanceof EntityRollingStock){
+                    finalMove((EntityRollingStock) stock);
+                    stock.hasMoved=true;
+
+                }
+            }
             //only update velocity if we've moved to any significance.
             if(Math.abs(posX-prevPosX)>0.0625 || Math.abs(posZ-prevPosZ)>0.0625) {
                 motionX = (posX - prevPosX)/ticksSinceLastVelocityChange;
@@ -978,26 +984,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     ticksSinceLastVelocityChange++;
                 }
             }
+            hasMoved=false;
         }
     }
 
     public void appendMovement(double velocity){
-        //the logic gets stupid if it's not sorted from one end or another.
-        AbstractTrains last = consist.get(0);
-        for(AbstractTrains t:consist) {
-            if(t==last){
-                t.bogieBack.addVelocity(t, velocity);
-                t.bogieFront.addVelocity(t, velocity);
-            }
-            else if(t.backLink!=null &&last==t.backLink){
-                t.bogieBack.addVelocity(t, velocity);
-                t.bogieFront.addVelocity(t, velocity);
-            } else {
-                t.bogieBack.addVelocity(t, -velocity);
-                t.bogieFront.addVelocity(t, -velocity);
-            }
-            last=t;
-        }
+        bogieBack.addVelocity(this, velocity);
+        bogieFront.addVelocity(this, velocity);
     }
 
     public void addLinkingMove(double velocity){
@@ -1015,14 +1008,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         double springDist = MathHelper.sqrt_double(vecX * vecX + vecZ * vecZ)
                 -(getOptimalDistance(other)+other.getOptimalDistance(this));
-        springDist*=0.0625;
 
-        if(getVelocity()>0.3) {
-            springDist *= 0.45;
-        } else if (getVelocity()<0.1){
+        if (springDist<0.1){
             springDist*=0.1;
-        } else {
+        } else if(springDist<0.5) {
             springDist*=0.3;
+        } else {
+            springDist*=0.49;
         }
         if(backLink!=null && other.getEntityId() == backLink.getEntityId()) {
             springDist *= -1;
@@ -1036,38 +1028,37 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     /**
      * if X or Z is null, the bogie's existing motion velocity will be used
      */
-    public void finalMove(){
+    public void finalMove(EntityRollingStock stock){
 
-        applyDrag();
-        if(frontLink instanceof EntityRollingStock) {
-            manageLink((EntityRollingStock) frontLink);
+        if(stock.frontLink instanceof EntityRollingStock) {
+            stock.manageLink((EntityRollingStock) stock.frontLink);
         }
-        if(backLink instanceof EntityRollingStock){
-            manageLink((EntityRollingStock) backLink);
+        if(stock.backLink instanceof EntityRollingStock){
+            stock.manageLink((EntityRollingStock) stock.backLink);
         }
 
-        applyDrag();
-        cachedVectors[1] = new Vec3f(rotationPoints()[1], 0, 0).rotatePoint(0, rotationYaw, 0)
-                .addVector(bogieBack.posX,0,bogieBack.posZ);
-        setPosition(cachedVectors[1].xCoord, (bogieBack.posY+bogieFront.posY)*0.5,cachedVectors[1].zCoord);
+        stock.applyDrag();
+        stock.cachedVectors[1] = new Vec3f(stock.rotationPoints()[1], 0, 0).rotatePoint(0, stock.rotationYaw, 0)
+                .addVector(stock.bogieBack.posX,0,stock.bogieBack.posZ);
+        stock.setPosition(stock.cachedVectors[1].xCoord, (stock.bogieBack.posY+stock.bogieFront.posY)*0.5,stock.cachedVectors[1].zCoord);
 
-        bogieFront.minecartMove(this);
-        bogieBack.minecartMove(this);
+        stock.bogieFront.minecartMove(stock);
+        stock.bogieBack.minecartMove(stock);
 
         //update rotation
-        setRotation((CommonUtil.atan2degreesf(
-                bogieBack.posZ - bogieFront.posZ,
-                bogieBack.posX - bogieFront.posX)),
-                CommonUtil.calculatePitch(bogieFront.posY, bogieBack.posY , Math.abs(rotationPoints()[0]) + Math.abs(rotationPoints()[1])));
+        stock.setRotation((CommonUtil.atan2degreesf(
+                stock.bogieBack.posZ - stock.bogieFront.posZ,
+                stock.bogieBack.posX - stock.bogieFront.posX)),
+                CommonUtil.calculatePitch(stock.bogieFront.posY, stock.bogieBack.posY , Math.abs(stock.rotationPoints()[0]) + Math.abs(stock.rotationPoints()[1])));
 
         //reset the vector when we're done so it wont break trains.
-        cachedVectors[1]= new Vec3f(0,0,0);
+        stock.cachedVectors[1]= new Vec3f(0,0,0);
         //update the collision handler's positions
-        if(collisionHandler==null) {
-            collisionHandler = new EntityHitbox(this);
-            collisionHandler.position(posX, posY, posZ, rotationPitch, rotationYaw);
+        if(stock.collisionHandler==null) {
+            stock.collisionHandler = new EntityHitbox(stock);
+            stock.collisionHandler.position(stock.posX, stock.posY, stock.posZ, stock.rotationPitch, stock.rotationYaw);
         } else {
-            collisionHandler.position(posX, posY, posZ, rotationPitch, rotationYaw);
+            stock.collisionHandler.position(stock.posX, stock.posY, stock.posZ, stock.rotationPitch, stock.rotationYaw);
         }
     }
 
@@ -1116,11 +1107,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             drag = 0f;
         }
 
-        for(AbstractTrains t : consist){
-            if(!isAccelerating() && !t.isAccelerating())
-                t.bogieFront.drag(t,drag);
-            t.bogieBack.drag(t,drag);
+
+        if(!isAccelerating() && !isAccelerating()) {
+            bogieFront.drag(this, drag);
+            bogieBack.drag(this, drag);
         }
+
     }
 
     public float getFriction(){return 0.15f;}
