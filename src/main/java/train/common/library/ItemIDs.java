@@ -70,6 +70,7 @@ public enum ItemIDs implements IItemIDs {
 	wirelessTransmitter("ItemWirelessTransmitter", "wireless_transmitter", 3),
 	paintbrushThing("ItemPaintbrushThing", "paintbrushThing", 1),
 	whistle("ItemWhistle", "whistle", 1),
+	padlock("ItemPadlock", "padlock", 1),
 	bolt("ItemBolt", "bolt", 1),
 	hat_ticketMan_paintable("ItemTCArmor", "armor_ticket_man_hat", 1),
 	pants_ticketMan_paintable("ItemTCArmor", "armor_ticket_man_pants", 1),
@@ -199,8 +200,8 @@ public enum ItemIDs implements IItemIDs {
 	tcRailEmbeddedMediumSwitch("ItemTCRail", "item_rail_embedded_switch_medium", 5),
 	tcRailEmbeddedLargeSwitch("ItemTCRail", "item_rail_embedded_switch_large", 5),
 	tcRailEmbeddedVeryLargeSwitch("ItemTCRail", "item_rail_embedded_switch_large", 5),
-	tcRailEmbeddedMediumParallelSwitch("ItemTCRail", "item_rail_embedded_switch_parallel", 5),
-	tcRailEmbeddedLargeParallelSwitch("ItemTCRail", "item_rail_embedded_switch_parallel", 5),
+	tcRailEmbeddedMediumParallelSwitch("ItemTCRail", "item_rail_embedded_switch_parallel_4x11", 5),
+	tcRailEmbeddedLargeParallelSwitch("ItemTCRail", "item_rail_embedded_switch_parallel_4x17", 5),
 	tcRailEmbeddedMedium45DegreeSwitch("ItemTCRail", "item_rail_embedded_switch_45degree_medium", 5),
 	tcRailEmbeddedLarge45DegreeSwitch("ItemTCRail", "item_rail_embedded_switch_45degree_large", 5),
 

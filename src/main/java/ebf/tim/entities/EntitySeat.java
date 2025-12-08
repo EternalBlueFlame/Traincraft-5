@@ -76,11 +76,11 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     /**actually useless for this entity*/
     @Override
     public void entityInit(){}
-    /**actually useless for this entity*/
+
     @Override
     public void onUpdate() {
-        if(ticksExisted%40==0) {
-            if (parent==null) {
+        if (ticksExisted % 10 == 0) { //no reason to do all this every tick. Every half a second should still feel responsive enough without causing issues.
+            if (parent == null) {
                 if (getWorld().getEntityByID(parentId) instanceof EntityRollingStock) {
                     if (getWorld().isRemote) {
                         if (parent == null) {
@@ -94,11 +94,10 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
                 }
             }
             if (getWorld().isRemote) {
-                if (this.parent.seats.size() >= seatNumber+1 && (this.pos != this.parent.seats.get(seatNumber).pos || this.getPassenger() != this.parent.seats.get(seatNumber).getPassenger())) {
+                if (this.parent.seats.size() >= seatNumber + 1 && (this.pos != this.parent.seats.get(seatNumber).pos || this.getPassenger() != this.parent.seats.get(seatNumber).getPassenger())) {
                     this.setDead();
                 }
             }
-
         }
         if (getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer && getWorld().isRemote && this.isControlSeat()) {
             if (TCKeyHandler.inventory.isPressed()) {

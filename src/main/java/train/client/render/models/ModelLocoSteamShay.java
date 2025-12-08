@@ -5,7 +5,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import org.lwjgl.opengl.GL11;
 import train.client.render.CustomModelRenderer;
-import train.common.entity.rollingStockOld.EntityLocoSteamShay;
+import train.common.entity.rollingStockOld.steam.EntityLocoSteamShay;
 
 public class ModelLocoSteamShay extends ModelBase {
 

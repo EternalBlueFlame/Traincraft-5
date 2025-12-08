@@ -45,11 +45,13 @@ public class ConfigHandler {
 	public static boolean ENABLE_TRACK_HOLOGRAM;
 	public static boolean PAINTBRUSH_DEFAULT_LOW_PERFORMANCE_MODE;
 	public static int HOLIDAY_SKINS;
+	public static boolean PUSHABLE_ROLLINGSTOCK;
 
 	public static int TRACK_RENDER_DISTANCE;
 	public static boolean TRACK_OVERLAP;
 
 	public static boolean ENABLE_SLOPE_ACCELERATION;
+	public static int MAX_TRUSTEES_ON_PADLOCK;
 
 
 	public static void init(File configFile) {
@@ -103,6 +105,9 @@ public class ConfigHandler {
 			ALLOW_ATO_ON_STEAMERS = cf.get(CATEGORY_GENERAL, "ALLOW_ATO_ON_STEAMERS", false, "Allows Minecraft Train Control's ATO system to be used on steam trains").getBoolean(true);
 			PAINTBRUSH_DEFAULT_LOW_PERFORMANCE_MODE = cf.get(CATEGORY_GENERAL, "PAINTBRUSH_DEFAULT_LOW_PERFORMANCE_MODE", false, "Defaults to low performance mode in paintbrush menu.").getBoolean(false);
 			ENABLE_SLOPE_ACCELERATION = cf.get(CATEGORY_GENERAL,"ENABLE_SLOPE_ACCELERATION",true,"Defaults to true").getBoolean(true);
+			MAX_TRUSTEES_ON_PADLOCK = cf.get(CATEGORY_GENERAL, "MAX_TRUSTEES_ON_PADLOCK", false, "Maximum number of trustees allowed in the padlock menu.").getInt(30);
+			PUSHABLE_ROLLINGSTOCK = cf.get(CATEGORY_GENERAL, "ENABLE_PUSHING_ROLLINGSTOCK", true, "Defaults to true").getBoolean(true);
+
 		} catch (Exception e) {
 			Traincraft.tcLog.fatal("Traincraft had a problem loading its configuration\n" + e);
 		} finally {

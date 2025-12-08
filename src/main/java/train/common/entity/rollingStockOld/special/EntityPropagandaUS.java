@@ -1,0 +1,73 @@
+package train.common.entity.rollingStockOld.special;
+
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.DamageSource;
+import net.minecraft.world.World;
+import train.common.adminbook.ServerLogger;
+import train.common.api.EntityRollingStock;
+
+public class EntityPropagandaUS extends EntityRollingStock {
+
+
+	public EntityPropagandaUS(World world) {
+		super(world);
+	}
+
+	public EntityPropagandaUS(World world, double d, double d1, double d2) {
+		this(world);
+		setPosition(d, d1 + yOffset, d2);
+		motionX = 0.0D;
+		motionY = 0.0D;
+		motionZ = 0.0D;
+		prevPosX = d;
+		prevPosY = d1;
+		prevPosZ = d2;
+	}
+
+	@Override
+	public boolean attackEntityFrom(DamageSource damagesource, float i) {
+		if (getWorld().isRemote) {
+			return true;
+		}
+		if(canBeDestroyedByPlayer(damagesource))return true;
+		super.attackEntityFrom(damagesource, i);
+		setRollingDirection(-getRollingDirection());
+		setRollingAmplitude(10);
+		setBeenAttacked();
+		setDamage(getDamage() + i * 10);
+		if (getDamage() > 40) {
+			if (getPassengers().get(0) != null) {
+				getPassengers().get(0).mountEntity(this);
+			}
+			this.setDead();
+			ServerLogger.deleteWagon(this);
+			if(damagesource.getEntity() instanceof EntityPlayer) {
+				dropCartAsItem(((EntityPlayer)damagesource.getEntity()).capabilities.isCreativeMode);
+			}
+		}
+		return true;
+	}
+	
+	@Override
+	public void setDead() {
+		super.setDead();
+		isDead = true;
+	}
+
+	@Override
+	public boolean isStorageCart() {
+		return false;
+	}
+
+	@Override
+	public boolean isPoweredCart() {
+		return false;
+	}
+
+	@Override
+	public float getOptimalDistance(EntityMinecart cart) {
+		return 3.7F;
+	}
+}

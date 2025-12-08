@@ -361,6 +361,9 @@ item.tc:minecartTenderC41.name=C41 Tender (EE.UU.)
 item.tc:minecartTankWagonThreeDome.name=Vagón cisterna de tres tomas
 item.tc:minecartGWRBrakeVan.name=Furgón de frenado GWR Toad (R.U.)
 item.tc:minecartLocoSteamPannier.name=GWR 0-6-0 Pannier (R.U.)
+item.tc:paintbrushThing.name=Pincel de Tren
+item.tc:whistle.name=Pito
+item.tc:padlock.name=Candado
 <!-- ## Achievements ## --> 
 achievement.tc:engineer=Prendas de ingeniero 
 achievement.tc:engineer.desc=¡Un verdadero ferroviario! 
@@ -463,6 +466,11 @@ dynamicoverlaymenu.Background Color.name=Color de Fondo
 dynamicoverlaymenu.Foreground Color.name=Color de Primer Plano
 dynamicoverlaymenu.Submit.name=Entregar
 dynamicoverlaymenu.Back.name=Página Anterior
+lockmenu.Unlock.name=Abrir
+lockmenu.Lock.name=Cerrar
+lockmenu.Title_Trusted_Players.name=Jugadores de Confianza
+lockmenu.Save and Close.name=Entregar y Salir
+lockmenu.Save To All Cars in Consist.name=Entregar a Todos Los Coches en el Tren
 
 <!-- ## ENTITY ## --> 
 entity.tc.Entity Front Bogie.name=Bogie 

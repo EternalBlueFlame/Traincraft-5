@@ -34,28 +34,26 @@ public class HandleOverheating {
             /**
              * speed is low, overheat goes down to normal
              */
-            if ((locoActualSpeed <= 0 + 0.05) && !entity.isBraking && entity.overheatLevel > entity.getAverageOverheat() && (entity.getWorld().rand.nextInt(10) == 0) && !((Locomotive) entity).getState().equals("broken")) {
-                entity.overheatLevel--;
-            }
-            /**
-             * speed is low, overheat goes down to normal
-             */
-            if ((locoActualSpeed <= 0 + 0.10) && !entity.isBraking && entity.overheatLevel > entity.getAverageOverheat() && (entity.getWorld().rand.nextInt(10) == 0) && !((Locomotive) entity).getState().equals("broken")) {
-                entity.overheatLevel--;
+            if(!((Locomotive) entity).getState().equals("broken")) {
+                if ((locoActualSpeed <= 0 + 0.10) && !entity.isBraking && entity.overheatLevel > entity.getAverageOverheat() && (entity.worldObj.rand.nextInt(10) == 0)) {
+                    entity.overheatLevel--;
+                    if (locoActualSpeed <= 0 + 0.05) {
+                        entity.overheatLevel--;
+                    }
+                }
+                /**
+                 * fuel is empty, heat level goes down
+                 */
+                if (entity.fuelTrain < 1 && entity.overheatLevel > 0 && (entity.worldObj.rand.nextInt(10) == 0)) {
+                    entity.overheatLevel--;
 
-            }
-            /**
-             * fuel is empty, heat level goes down
-             */
-            if (entity.fuelTrain < 1 && entity.overheatLevel > 0 && (entity.getWorld().rand.nextInt(10) == 0) && !((Locomotive) entity).getState().equals("broken")) {
-                entity.overheatLevel--;
-
-            }
-            /**
-             * Heat goes down with time
-             */
-            if ((entity.overheatLevel > (entity.getOverheatTime() + 30) / 2) && (entity.getWorld().rand.nextInt(30) == 0) && !((Locomotive) entity).getState().equals("broken")) {
-                entity.overheatLevel--;
+                }
+                /**
+                 * Heat goes down with time
+                 */
+                if ((entity.overheatLevel > (entity.getOverheatTime() + 30) / 2) && (entity.worldObj.rand.nextInt(30) == 0)) {
+                    entity.overheatLevel--;
+                }
             }
             /**
              * train is fueled => heat level goes up to normal
@@ -69,6 +67,8 @@ public class HandleOverheating {
              */
             if (entity.isBraking) {
                 breakDelay++;
+            } else {
+                breakDelay=0;
             }
 
             /**
@@ -78,19 +78,6 @@ public class HandleOverheating {
                 if (entity.getWorld().rand.nextInt(10) == 0) {
                     entity.overheatLevel += 2;
                 }
-            }
-            /**
-             * When breaking is stopped: delayer goes back to 0
-             */
-            if (!entity.isBraking) {
-                breakDelay = 0;
-            }
-
-            /**
-             * train is climbing, overheat goes up 0.05 = 10km/h 0.1 = 21km/h
-             */
-            if (entity.isClimbing && (locoActualSpeed >= entity.convertSpeed((Locomotive) entity) - 0.05) && (entity.getWorld().rand.nextInt(10) == 0)) {
-                //entity.overheatLevel++;
             }
 
             if (entity instanceof SteamTrain) {

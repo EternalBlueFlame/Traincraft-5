@@ -3,6 +3,8 @@ package train.client.gui;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
+import ebf.tim.api.TransportSkin;
+import ebf.tim.utility.DebugUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -26,6 +28,7 @@ import train.common.library.Info;
 import train.common.overlaytexture.OverlayTextureManager;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -99,6 +102,8 @@ public class GuiPaintbrushMenu extends GuiScreen {
     private int topVisSkin;
     private int lastNonSkins;
 
+    private List<String> skins=new ArrayList<>();
+
     public GuiPaintbrushMenu(EntityPlayer editingPlayer, EntityRollingStock rollingStock) {
         this.editingPlayer = editingPlayer;
         this.rollingStock = rollingStock;
@@ -109,9 +114,13 @@ public class GuiPaintbrushMenu extends GuiScreen {
         } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
             throw new RuntimeException(e);
         }
-        totalOptions = SkinRegistry.get(rollingStock).size();
+        for (String s : SkinRegistry.get(rollingStock).keySet()){
+            skins.add(s);
+        }
+        totalOptions = skins.size();
+
         for (int i = 0; i < totalOptions; i++) { // Set page to the page with the currently selected texture.
-            if (SkinRegistry.get(rollingStock).get(i).equals(rollingStock.getColor())) {
+            if (skins.get(i).equals(rollingStock.getColor())) {
                 currentDisplayTexture = i;
                 break;
             }
@@ -158,8 +167,8 @@ public class GuiPaintbrushMenu extends GuiScreen {
         this.lastNonSkins=buttonList.size();
         int entry = lastNonSkins+2;
         int amt = MAX_LISTED_SKINS;
-        if (amt > SkinRegistry.get(rollingStock).size()) {
-            amt = SkinRegistry.get(rollingStock).size();
+        if (amt > skins.size()) {
+            amt = skins.size();
         }
         for(int i=0;i<amt;i++) {
             this.buttonList.add(new GuiButtonPaintbrushMenu(entry,GUI_ANCHOR_X + 80 + 64, GUI_ANCHOR_Y + 10+yOffset,128,16, GuiButtonPaintbrushMenu.Type.SKINS));
@@ -199,7 +208,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
         this.skinListArrowUp.visible = true;
         this.skinListArrowUp.showButton = (this.drawList && topVisSkin > 0);
         this.skinListArrowDown.visible = true;
-        this.skinListArrowDown.showButton = (this.drawList && topVisSkin+10 < SkinRegistry.get(rollingStock).size());
+        this.skinListArrowDown.showButton = (this.drawList && topVisSkin+10 < skins.size());
         this.skinListDropdown.showButton = true;
         this.skinListDropdown.visible = true;
         this.renderModelsButton.visible = true;
@@ -311,12 +320,13 @@ public class GuiPaintbrushMenu extends GuiScreen {
             int endIndex = hasNextTexture ? 1 : 0;
             for (int i = startIndex; i <= endIndex; i++) {
                 if (i + currentDisplayTexture != -1 && i + currentDisplayTexture != totalOptions) {
-                    loopRenderColor = SkinRegistry.get(rollingStock).get(i + currentDisplayTexture);
+                    loopRenderColor = skins.get(i + currentDisplayTexture);
                 } else if (i + currentDisplayTexture == -1) {
-                    loopRenderColor = SkinRegistry.get(rollingStock).get(totalOptions - 1);
+                    loopRenderColor = skins.get(totalOptions - 1);
                 } else {
-                    loopRenderColor = SkinRegistry.get(rollingStock).get(0);
+                    loopRenderColor = skins.get(0);
                 }
+                //DebugUtil.println(loopRenderColor);
                 renderEntity.setColor(loopRenderColor);
                 GL11.glColor4f(1, 1, 1, 1);
                 GL11.glPushMatrix();
@@ -352,8 +362,8 @@ public class GuiPaintbrushMenu extends GuiScreen {
         } else {
             int yOffset = 22;
             for (int i=0;i<MAX_LISTED_SKINS;i++) {
-                if(i+topVisSkin<SkinRegistry.get(rollingStock).size()) {
-                    String t = SkinRegistry.get(rollingStock).get(i + topVisSkin);
+                if(i+topVisSkin<skins.size()) {
+                    String t = skins.get(i + topVisSkin);
                     fontRendererObj.drawString(t, GUI_ANCHOR_MID_X - ((int) (fontRendererObj.getStringWidth(t) * 0.5)), GUI_ANCHOR_Y + 10 + yOffset, 0);
                     yOffset += 16;
                 }
@@ -535,8 +545,8 @@ public class GuiPaintbrushMenu extends GuiScreen {
                     break;
                 default:
                     if(clickedButton.id >= this.lastNonSkins && drawList) {
-                        currentDisplayTexture = SkinRegistry.get(rollingStock).indexOf(
-                                SkinRegistry.get(rollingStock).get(this.buttonList.indexOf(clickedButton)-this.lastNonSkins+topVisSkin));
+                        currentDisplayTexture=this.buttonList.indexOf(clickedButton)-this.lastNonSkins+topVisSkin;
+
                         drawList = !drawList;
                         renderModels = !renderModels;
                         updateSelectedTextureProperties();
@@ -559,7 +569,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
                 updateButtons();
             }
         } else {
-            if(topVisSkin+10 < SkinRegistry.get(rollingStock).size()) {
+            if(topVisSkin+10 < skins.size()) {
                 topVisSkin++;
                 updateButtons();
             }
@@ -632,7 +642,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
 
     private void updateSelectedTextureProperties() {
         descriptionScrollerIndex = 0;
-        currentDisplayTextureString = SkinRegistry.get(rollingStock).get(currentDisplayTexture);
+        currentDisplayTextureString = skins.get(currentDisplayTexture);
         String currentDisplayTextureDescriptionString;
         if (rollingStock.textureDescriptionMap.containsKey(currentDisplayTextureString)) {
             if (rollingStock.textureDescriptionMap.get(currentDisplayTextureString).title != null) {
