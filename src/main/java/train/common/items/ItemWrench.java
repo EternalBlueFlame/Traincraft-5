@@ -9,7 +9,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
-import train.common.library.Info;
 import train.common.library.ItemIDs;
 
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.List;
 public class ItemWrench extends ItemPart implements buildcraft.api.tools.IToolWrench{
 
 	public ItemWrench() {
-		super(ItemIDs.composite_wrench.iconName, Info.modID);
+		super(ItemIDs.composite_wrench.iconName);
 		maxStackSize = 1;
 		setCreativeTab(Traincraft.tcTab);
 	}

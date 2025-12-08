@@ -17,10 +17,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.adminbook.ServerLogger;
@@ -48,7 +45,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     private Entity lastEntityRider;
     private boolean hasDrowned = false;
     protected boolean canCheckInvent = true;
-    public boolean isLocoTurnedOn = false;
     public boolean forwardPressed = false;
     public boolean backwardPressed = false;
     public boolean brakePressed = false;
@@ -140,7 +136,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         dataWatcher.addObject(15, (float) Math.round((getCustomSpeed() * 3.6f)));
         dataWatcher.addObject(23, locoState);
         dataWatcher.addObject(24, fuelTrain);
-        dataWatcher.addObject(25, (int) convertSpeed(Math.sqrt(Math.abs(motionX * motionX) + Math.abs(motionZ * motionZ))));//convertSpeed((Math.abs(this.motionX) + Math.abs(this.motionZ))
+        dataWatcher.addObject(25, 0); //we update this every tick, no reason to do any math on init.
         dataWatcher.addObject(26, guiDetailsJSON());
         dataWatcher.addObject(28, lightingDetailsJSONString());
 
@@ -322,6 +318,11 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         if (rate != 0) {
             return accelerate = rate;
         } else {
+            for(AbstractTrains t: consist){
+                if(t.consistLeadID!=this.getEntityId()){
+                    updateLinks();
+                }
+            }
             return accelerate = setAccel();
         }
     }
@@ -491,13 +492,14 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         }
 
         if (i == 7) {
-            if (seats != null && seats.size() != 0) {
+            if (seats != null && !seats.isEmpty()) {
                 for(EntitySeat seat: seats) {
-                    if(seat.isControlSeat() && seat.getPassenger() != null && playerEntity == seat.getPassenger()) {
-                        ((EntityPlayer) seat.getPassenger()).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+                    if(seat.isControlSeat() && seat.getPassenger() != null && playerEntity == seat.getPassenger() && playerEntity.ridingEntity == seat) {
+                        ((EntityPlayer) seat.getPassenger()).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
                         break;
                     } else if (seat.getPassenger() != null && seat.getPassenger() instanceof EntityPlayer) {
                         Traincraft.proxy.seatGUI((EntityPlayer) seat.getPassenger(),this);
+                        break;
                     }
                 }
             }
@@ -571,7 +573,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     public float transportTopSpeed(){return getSpec().getMaxSpeed();}
 
     private double convertSpeed(double speed) {
-        //System.out.println("X "+motionX +" Z "+motionZ);
         if (ConfigHandler.REAL_TRAIN_SPEED) {
             speed *= 2;// applying ratio
         } else {
@@ -633,6 +634,9 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         cycleBeaconIndex();
         if (!worldObj.isRemote) {
             if (forwardPressed || backwardPressed) {
+                if(consistLeadID!=this.getEntityId()){
+                    updateLinks();
+                }
                 if (getFuel() > 0 && this.isLocoTurnedOn() && rand.nextInt(4) == 0) {
                     if(this instanceof SteamTrain && !getState().equals("hot") && !getState().equals("too hot")){
                         return;
@@ -646,10 +650,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                             y=s.getPassenger().rotationYaw;
                         }
                     }
-
-                    double[] move=CommonUtil.rotatePoint(0.0075*(forwardPressed?-accelerate:accelerate),0,
-                            y==0?0:CommonUtil.floorDouble(y/90)*90);
-                    addVelocity(move[0],0,move[2]);
+                    appendMovement(0.0075*(forwardPressed?-accelerate:accelerate));
                 }
             } else if (brakePressed) {
                 multiplyVelocity(brake);
@@ -899,8 +900,8 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         }
 
         super.onUpdate();
-        if (!getWorld().isRemote) {
-            dataWatcher.updateObject(25, (int) convertSpeed(Math.sqrt(motionX * motionX + motionZ * motionZ)));
+        if (!worldObj.isRemote) {
+            dataWatcher.updateObject(25, (int)Math.round(convertSpeed(Math.sqrt(bogieBack.velocity[0] * bogieBack.velocity[0] + bogieBack.velocity[1] * bogieBack.velocity[1]))));
             dataWatcher.updateObject(24, fuelTrain);
             dataWatcher.updateObject(20, overheatLevel);
             dataWatcher.updateObject(23, locoState);
@@ -927,14 +928,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                 }
             }
         }
-    }
-
-    @Override
-    public void manageLink(AbstractTrains other){
-        if(forwardPressed || backwardPressed){
-            return;
-        }
-        super.manageLink(other);
     }
 
     @Override
@@ -1273,9 +1266,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         if (this.getWorld() != null) {
             if (this.getSpeed() != desiredSpeed) {
                 if ((int) this.getSpeed() <= this.speedLimit) {
-                    double rotation = this.riddenByEntity == null?rotationYaw:riddenByEntity.rotationYaw;
+                    double rotation = this.seats.get(0).getPassenger() == null?rotationYaw:seats.get(0).getPassenger().rotationYaw;
                     double[] motion = CommonUtil.rotatePoint(0.002,0,rotation==0?0:CommonUtil.floorDouble(rotation/90d)*90);
-                    addVelocity(motion[0],0,motion[2]);
+                    motion[1]= MathHelper.sqrt_double(motion[0]*motion[0]+motion[2]*motion[2]);
+                    appendMovement(motion[1]);
                 }
             }
         }

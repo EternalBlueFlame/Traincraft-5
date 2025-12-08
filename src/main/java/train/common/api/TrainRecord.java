@@ -1,6 +1,7 @@
 package train.common.api;
 
 import ebf.tim.api.SkinRegistry;
+import ebf.tim.api.TransportSkin;
 import net.minecraft.item.Item;
 import net.minecraft.world.World;
 
@@ -44,11 +45,13 @@ public abstract class TrainRecord {
 
     public abstract List<String> getColors();
 
-    public List<String> getLiveries() {
+    public List<TransportSkin> getLiveries() {
         if (!SkinRegistry.liveryMap.containsKey(getEntityClass()) && getColors() != null) {
-            SkinRegistry.liveryMap.put(getEntityClass(),getColors());
+            for(String color:getColors()){
+                SkinRegistry.addSkin(getEntityClass(),color);
+            }
         }
-        return SkinRegistry.liveryMap.get(getEntityClass());
+        return (List<TransportSkin>) SkinRegistry.get(getEntityClass()).values();
     }
 
     public abstract double getBogieLocoPosition();

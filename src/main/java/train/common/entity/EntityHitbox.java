@@ -2,6 +2,7 @@ package train.common.entity;
 
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
+import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.Vec3d;
 import fexcraft.tmt.slim.Vec3f;
 import net.minecraft.entity.Entity;
@@ -13,6 +14,7 @@ import train.common.api.AbstractTrains;
 import train.common.api.EntityBogie;
 import train.common.api.EntityRollingStock;
 import train.common.api.Locomotive;
+import train.common.core.handlers.ConfigHandler;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,12 +77,16 @@ public class EntityHitbox {
                             CommonUtil.atan2degreesf(host.posZ - e.posZ, host.posX - e.posX));
                     e.addVelocity(motion[0], 0.05, motion[2]);
                 }
-            } else {
+            }
+            else {
                 if (e instanceof CollisionBox) {
                     if(((CollisionBox) e).host==null){
                         continue;
                     }
                     EntityRollingStock entityOne = (((CollisionBox) e).host);
+                    if(host.frontLink==entityOne || host.backLink==entityOne){
+                        continue;
+                    }
                     if (entityOne.isAttaching && host.isAttaching) {
                         if(entityOne.canBeAdjusted(host) || host.canBeAdjusted(entityOne)){
 
@@ -113,12 +119,7 @@ public class EntityHitbox {
                             entityOne.isAttaching = false;
                             host.isAttaching = false;
 
-                            if(!host.consist.contains(host)){
-                                host.consist.add(host);
-                            }
-                            if(!entityOne.consist.contains(entityOne)){
-                                entityOne.consist.add(entityOne);
-                            }
+                            host.updateLinks();
 
 
                             EntityPlayer entityplayer = host.worldObj.getClosestPlayerToEntity(host, 20);//
@@ -134,26 +135,35 @@ public class EntityHitbox {
                             }
                         }
                     } else {
-                        double[] motion = CommonUtil.rotatePoint(0.005, 0,
-                                CommonUtil.atan2degreesf(e.posZ - host.posZ, e.posX - host.posX));
-                        //host.addVelocity(-motion[0], 0, -motion[2]);
-                        if (entityOne instanceof Locomotive) {
-                          //  entityOne.addVelocity(motion[0] * 0.2, 0, motion[2] * 0.2);
+                        double distanceFront = Math.sqrt((e.posX - front.posX) * (e.posX - front.posX)
+                                + (e.posZ - front.posZ) * (e.posZ - front.posZ));
+                        double distanceBack = Math.sqrt((e.posX - back.posX) * (e.posX - back.posX)
+                                + (e.posZ - back.posZ) * (e.posZ - back.posZ));
+                        if (distanceFront<distanceBack) {
+                            host.appendMovement(-0.005);
                         } else {
-                         //   entityOne.addVelocity(motion[0], 0, motion[2]);
+                            host.appendMovement(0.005);
                         }
                     }
 
-                } else if (e instanceof EntityPlayer || e instanceof EntityLiving) {
+                }
+                else if (e instanceof EntityPlayer || e instanceof EntityLiving) {
                     //hurt entity if going fast
                     if (Math.abs(host.motionX) + Math.abs(host.motionZ) > 0.25f) {
                         e.attackEntityFrom(new EntityDamageSource(
                                         host instanceof Locomotive ? "Locomotive" : "rollingstock", host),
                                 (float) (Math.abs(host.motionX) + Math.abs(host.motionZ)) * 0.5f);
-                    } else if (Math.abs(host.motionX) + Math.abs(host.motionZ) <0.05) {
-                        double[] motion = CommonUtil.rotatePoint(0.05, 0,
-                                CommonUtil.atan2degreesf( host.posZ- e.posZ, host.posX-e.posX));
-                        host.addVelocity(motion[0], 0, motion[2]);
+                    }
+                    else if (Math.abs(host.motionX) + Math.abs(host.motionZ) <0.05) {
+                        double distanceFront = Math.sqrt((e.posX - front.posX) * (e.posX - front.posX)
+                                + (e.posZ - front.posZ) * (e.posZ - front.posZ));
+                        double distanceBack = Math.sqrt((e.posX - back.posX) * (e.posX - back.posX)
+                                + (e.posZ - back.posZ) * (e.posZ - back.posZ));
+                        if (distanceFront<distanceBack) {
+                            host.appendMovement(-0.005);
+                        } else {
+                            host.appendMovement(0.005);
+                        }
                     }
                 }
             }
@@ -186,21 +196,47 @@ public class EntityHitbox {
                     for (List olist: entities) {
                         for(Object obj : olist) {
                             //this shouldn't be possible, but it's forge, sooooo....
-                            if(!(obj instanceof Entity)){
+                            if(!(obj instanceof Entity) || interactionBoxes.contains(obj)){
                                 continue;
                             }
-                            //generally we only want to collide with mobs/players/other collision boxes
-                            //EntityFX is client only, so we _shouldn't_ have to worry about it..?
-                            //we dont collide with passenger entities, we collide with the thing they are on.
-                            if(obj instanceof EntitySeat || obj instanceof EntityBogie ||
-                                    ((Entity) obj).ridingEntity!=null || obj instanceof AbstractTrains) {
+
+                            //No matter what, we don't want to push a locomotive.
+                            //If the config is disabled, we don't want to push ANYTHING.
+                            //If the cart is in a consist containing a locomotive, we do not want to push it.
+                            if (!ConfigHandler.PUSHABLE_ROLLINGSTOCK || host instanceof Locomotive || (host.consistLeadID != null && host.worldObj.getEntityByID(host.consistLeadID) instanceof Locomotive)) {
+                                //still need to push the player back though
+                                if (obj instanceof EntityLiving && containsEntity((Entity)obj)) {
+                                    ((Entity)obj).applyEntityCollision(host);
+                                }
                                 continue;
                             }
-                            if(interactionBoxes.contains(obj)){
+
+                            //we don't want to collide with bogies, data(EntityRollingStock, ElectricTrain, ect...), or seat entities.
+                            //Since those are mounted on a train itself, we can ignore them.
+                            if (obj instanceof EntityBogie || obj instanceof EntitySeat || obj instanceof AbstractTrains) {
                                 continue;
                             }
-                            if(obj instanceof CollisionBox && (((CollisionBox) obj).host==host || host.consist.contains(((CollisionBox) obj).host))){
+
+                            //we don't want to collide with any passenger that is in a seat. Can just blanket skip everything that is riding something else.
+                            if (((Entity) obj).ridingEntity != null) {
                                 continue;
+                            }
+
+
+                            //we don't want to collide with our own CollisionBoxes, or the CollisionBoxes of our own consist either
+                            if(obj instanceof CollisionBox){
+                                if((host.frontLink!=null && ((CollisionBox) obj).host.getEntityId()==host.frontLink.getEntityId()) || (host.backLink!=null && ((CollisionBox) obj).host.getEntityId()==host.backLink.getEntityId())){
+                                    continue;
+                                }
+                                boolean skip=false;
+                                for(AbstractTrains t: host.consist) {
+                                    if(t.getEntityId()==((CollisionBox) obj).host.getEntityId()){
+                                        skip=true;
+                                    }
+                                }
+                                if(skip) {
+                                    continue;
+                                }
                             }
 
                             if(containsEntity((Entity) obj)){

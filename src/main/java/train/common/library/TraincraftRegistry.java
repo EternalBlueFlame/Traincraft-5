@@ -134,7 +134,9 @@ public class TraincraftRegistry {
     public void registerTrainRenderRecord(TrainRenderRecord record) {
         trainRenderRecords.put(record.getEntityClass(), record);
         if(getTrainRecord(record.getEntityClass())!=null) {
-            SkinRegistry.liveryMap.put(record.getEntityClass(), getTrainRecord(record.getEntityClass()).getColors());
+            for(String color:getTrainRecord(record.getEntityClass()).getColors()){
+                SkinRegistry.addSkin(record.getEntityClass(),color);
+            }
         }
     }
 

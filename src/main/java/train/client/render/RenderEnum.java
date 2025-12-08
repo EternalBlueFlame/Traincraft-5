@@ -7,7 +7,14 @@ import train.client.render.models.*;
 import train.common.api.AbstractTrains;
 import train.common.api.EntityRollingStock;
 import train.common.api.TrainRenderRecord;
-import train.common.entity.rollingStockOld.*;
+import train.common.entity.rollingStockOld.caboose.*;
+import train.common.entity.rollingStockOld.diesel.*;
+import train.common.entity.rollingStockOld.electric.*;
+import train.common.entity.rollingStockOld.freight.*;
+import train.common.entity.rollingStockOld.passenger.*;
+import train.common.entity.rollingStockOld.special.*;
+import train.common.entity.rollingStockOld.steam.*;
+import train.common.entity.rollingStockOld.tender.*;
 import train.common.library.Info;
 
 import java.util.ArrayList;

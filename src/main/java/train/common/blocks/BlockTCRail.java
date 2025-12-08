@@ -1,7 +1,8 @@
 package train.common.blocks;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -121,29 +122,20 @@ public class BlockTCRail extends Block {
 	@Override
 	public void onNeighborBlockChange(World world, int i, int j, int k, Block par5) {
 		TileEntity tile = world.getTileEntity(i, j, k);
-		if (tile == null || !(tile instanceof TileTCRail))
-			return;
-
-		TileTCRail tileEntity = (TileTCRail) world.getTileEntity(i, j, k);
-		if (tileEntity != null && tileEntity.isLinkedToRail) {
-			if (world.isAirBlock(tileEntity.linkedX, tileEntity.linkedY, tileEntity.linkedZ)) {
-				// NOTE: func_147480_a = destroyBlock
-				world.removeTileEntity(i, j, k);
-				world.func_147480_a(i, j, k, false);
-			}
-		}
-		if (!World.doesBlockHaveSolidTopSurface(world, i, j - 1, k) && world.getBlock(i, j-1, k) != TCBlocks.bridgePillar) {
-			// NOTE: func_147480_a = destroyBlock
-			world.func_147480_a(i, j, k, false);
-			world.removeTileEntity(i, j, k);
-		}
-		if (tileEntity != null && !world.isRemote) {
-			boolean flag = world.isBlockIndirectlyGettingPowered(i, j, k);
-			if (tileEntity.previousRedstoneState != flag) {
-				tileEntity.changeSwitchState(world, tileEntity, i, j, k);
-				tileEntity.previousRedstoneState = flag;
-			}
-		}
+		if (tile instanceof TileTCRail) {
+            if (((TileTCRail)tile).isLinkedToRail) {
+                if (world.isAirBlock(((TileTCRail)tile).linkedX, ((TileTCRail)tile).linkedY, ((TileTCRail)tile).linkedZ)) {
+                    // NOTE: func_147480_a = destroyBlock
+                    world.removeTileEntity(i, j, k);
+                    world.func_147480_a(i, j, k, false);
+                }
+            }
+            if (!World.doesBlockHaveSolidTopSurface(world, i, j - 1, k) && world.getBlock(i, j - 1, k) != TCBlocks.bridgePillar) {
+                // NOTE: func_147480_a = destroyBlock
+                world.func_147480_a(i, j, k, false);
+                world.removeTileEntity(i, j, k);
+            }
+        }
 	}
 
 	@Override
@@ -176,7 +168,6 @@ public class BlockTCRail extends Block {
 				if (l > 3)
 					l = 0;
 				world.setBlockMetadataWithNotify(i, j, k, l, 2);
-				((TileTCRail) te).hasRotated = true;
 				return true;
 			}
 			//((TileTCRail)te).printInfo();

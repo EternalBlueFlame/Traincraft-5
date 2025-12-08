@@ -30,4 +30,5 @@ public class GuiIDs {
 	public static final int DYNAMIC_OVERLAY = 108;
 	public static final int SEAT_GUI = 109;
 	public static final int CONTROL_CAR = 110;
+	public static final int LOCK_MENU = 111;
 }

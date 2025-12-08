@@ -19,6 +19,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.networking.PacketSeatUpdate;
 import ebf.tim.utility.DebugUtil;
+import fexcraft.tmt.slim.TextureManager;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
@@ -37,7 +38,7 @@ import train.common.core.CreativeTabTraincraft;
 import train.common.core.EntityIds;
 import train.common.core.TrainModCore;
 import train.common.core.handlers.*;
-import train.common.entity.rollingStock.EntityPassengerPassengerCar1;
+import train.common.entity.rollingStock.EntityPassengerCar1;
 import train.common.entity.zeppelin.EntityZeppelinOneBalloon;
 import train.common.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.common.generation.ComponentVillageTrainstation;
@@ -272,7 +273,8 @@ public class Traincraft {
         TrainModCore.ModsLoaded();
 
         if(proxy.isClient()) {
-            trainConverter.write();
+            trainConverter.write(EnumTrains.trains());
+            TextureManager.collectIngotColors();
         }
 
         tcLog.info("Finished PostInitialization");
@@ -310,7 +312,7 @@ public class Traincraft {
         return new AbstractTrains[]{};
     }
     public static AbstractTrains[] listPassenger() {
-        return new AbstractTrains[]{new EntityPassengerPassengerCar1(null)};
+        return new AbstractTrains[]{new EntityPassengerCar1(null)};
     }
     public static AbstractTrains[] listFreight() {
         return new AbstractTrains[]{};

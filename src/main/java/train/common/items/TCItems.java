@@ -27,7 +27,7 @@ public class TCItems {
 		for (ItemIDs items : ItemIDs.values()) {
 			if (items.className != null) {
 				if (items.className.equals("ItemTrain")) {
-					items.item = new ItemPart(items.iconName, Info.modID);
+					items.item = new ItemPart(items.iconName);
 				}
 				else if (items.className.equals("ItemRollingStock")) {
 					items.item = new ItemRollingStock(Info.modID.toLowerCase() + ":trains/" + items.iconName);
@@ -216,6 +216,7 @@ public class TCItems {
 
 		ItemIDs.paintbrushThing.item = new ItemPaintbrushThing();
 		ItemIDs.whistle.item = new ItemWhistle();
+		ItemIDs.padlock.item = new ItemPadlock();
 		ItemIDs.bolt.item = new ItemBolt(); //this is the spike for crafting
 	}
 	

@@ -7,10 +7,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.texture.*;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
+import net.minecraftforge.oredict.OreDictionary;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import train.client.core.ClientProxy;
@@ -135,12 +137,24 @@ public class TextureManager {
 
     }
 
+    public static List<ItemStack> getAcceptedRailItems(){
+        List<ItemStack> Ores=new ArrayList<>();
 
+        Ores.add(new ItemStack(Items.diamond));
+        Ores.add(new ItemStack(Items.blaze_rod));
+
+        for(String o: OreDictionary.getOreNames()) {
+            if (o.contains("ingot") || o.contains("plank")) {
+                Ores.addAll(OreDictionary.getOres(o));
+            }
+        }
+        return Ores;
+    }
     /**
      * Ingot color textures
      */
     public static void collectIngotColors() {
-        List<ItemStack> Ores = new ArrayList<>();// = RecipeManager.getAcceptedRailItems();
+        List<ItemStack> Ores = getAcceptedRailItems();
 
         int red, green, blue, divisor;
         int[] rgb, colorBuff;

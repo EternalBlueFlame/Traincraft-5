@@ -27,7 +27,7 @@ import train.common.Traincraft;
 import train.common.api.*;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.util.TraincraftUtil;
-import train.common.entity.rollingStockOld.EntityTracksBuilder;
+import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
 import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
 import train.common.tile.TileTCRail;
@@ -360,7 +360,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 
 		if (rollingStock != null) {
-			rollingStock.setPosition( i + 0.5D , j+ 0.18D, k + 0.5D);
+			rollingStock.setPosition( i + 0.5D , j+ 0.3D, k + 0.5D);
 			if (SkinRegistry.get(rollingStock).size()>0) {
 				rollingStock.setColor(rollingStock.getDefaultSkin());
 			}
@@ -392,13 +392,6 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				// -90  = 6 = EAST
 				// -45  = 7 = SOUTH-EAST
 
-
-
-
-				canPlaceRollingStock(world, player, rollingStock, i, j, k, dir);
-
-
-				player.addChatMessage(new ChatComponentText("dir: " + dir));
 
 				if (dir == 0) {
 
@@ -599,6 +592,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					rollingStock.trainCreator = trainCreator;
 					if (var5.hasKey("overlayTextureConfigTag")) // Import overlay configuration from NBT and apply it to the entity.
 						rollingStock.getOverlayTextureContainer().importFromConfigTag(var5.getCompoundTag("overlayTextureConfigTag"));
+					rollingStock.importTrustedListFromNBT(var5);
 				}
 				if (player != null)
 					rollingStock.setInformation(player.getDisplayName(), trainCreator, (itemstack.getItem()).getItemStackDisplayName(itemstack), uniID);
@@ -607,10 +601,9 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 				if (ConfigHandler.SHOW_POSSIBLE_COLORS && SkinRegistry.get(rollingStock).size()>0) {
 					String concatColors = ": ";
-					for (int t = 0; t < SkinRegistry.get(rollingStock).size(); t++) {
-						if (!SkinRegistry.get(rollingStock).get(t).equals("Empty")
-								&& !SkinRegistry.get(rollingStock).get(t).equals("Full"))
-							concatColors+=SkinRegistry.get(rollingStock).get(t)+", ";
+					for (String cols : SkinRegistry.get(rollingStock).keySet()) {
+						if (!cols.equals("Empty") && !cols.equals("Full"))
+							concatColors+=cols+", ";
 					}
 					if (concatColors.length() > 4) {
 						if (player != null) {
@@ -647,11 +640,11 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					tag.setString("theOwner", player);
 				}
 				tag.setString("train_Color",color);
+				train.exportTrustedListToNBT(tag);
 			} else {
 				tag.setString("trainCreator", creator!=null && creator.length()>1?creator:"Creative");
 			}
 			tag.setInteger("uniqueID", trainID==null?AbstractTrains.uniqueIDs++:trainID);
-
 
 			stack.setTagCompound(tag);
 		} else {

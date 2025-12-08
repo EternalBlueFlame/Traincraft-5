@@ -1,7 +1,16 @@
 package train.client.render;
 
+import ebf.tim.blocks.rails.RailShapeCore;
+import ebf.tim.blocks.rails.RailSimpleShape;
+import ebf.tim.render.models.Model1x1Rail;
+import ebf.tim.utility.DebugUtil;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 import train.client.render.models.blocks.*;
 import train.common.tile.TileTCRail;
 
@@ -38,6 +47,7 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
     public RenderTCRail() {
     }
 
+    public static RailShapeCore trackRoute;
     @Override
     public void renderTileEntityAt(TileEntity var1, double x, double y, double z, float var8) {
         if (var1 instanceof TileTCRail) {
@@ -722,7 +732,35 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                         break;
                     }
                 }
+
+                //todo: new rail render logic. seems that the track needs a structure rework.
+                //current system uses a length and a radius, it could be reverse engineered to get the points needed
+                //  but to what end? vs a new system that could dramatically simplify everything by using a path
+                //  rather than needing logic on a per-shape basis and manually defining the positions of gag blocks
+                /*if(trackRoute==null){
+                    trackRoute= RailShapeCore.multiTriGenModel(railShape((TileTCRail) var1),new int[]{750});
+                    trackRoute.renderScale=1;
+                    trackRoute.rail=new ItemStack(Items.iron_ingot);
+                    trackRoute.ballast= new ItemStack(Blocks.stone);
+                    trackRoute.ties= new ItemStack(Blocks.log);
+                    trackRoute.wires=null;
+                }
+
+                GL11.glTranslated(x,y,z);
+                Model1x1Rail.Model3DRail(var1.getWorldObj(), var1.xCoord, var1.yCoord, var1.zCoord, trackRoute);*/
             }
         }
+    }
+    public static RailSimpleShape railShape(TileTCRail rail){
+        //the base shape
+        RailSimpleShape shape = new RailSimpleShape();
+        shape.setSleeperCount(5);
+        DebugUtil.println((float)rail.cx-rail.xCoord, rail.xCoord, (float)rail.cz-rail.zCoord, rail.zCoord);
+        shape.setStart(0,0,0)
+                .setEnd( (float)rail.cx-rail.xCoord,0, (float)rail.cz-rail.zCoord)
+                .setCenter( (float)(rail.cx*0.5)-rail.xCoord,0, (float)(rail.cz*0.5)-rail.zCoord);
+
+
+        return shape;
     }
 }

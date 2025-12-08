@@ -45,7 +45,7 @@ import train.common.core.handlers.ConfigHandler;
 import train.common.entity.CollisionBox;
 import train.common.entity.digger.EntityRotativeDigger;
 import train.common.entity.digger.EntityRotativeWheel;
-import train.common.entity.rollingStockOld.EntityJukeBoxCart;
+import train.common.entity.rollingStockOld.special.EntityJukeBoxCart;
 import train.common.entity.zeppelin.EntityZeppelinOneBalloon;
 import train.common.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.common.library.BlockIDs;
@@ -61,6 +61,8 @@ import java.lang.reflect.Method;
 import java.util.Calendar;
 
 public class ClientProxy extends CommonProxy {
+
+    public static int railSkin=3;
 
     public static final net.minecraft.client.renderer.entity.RenderPlayer playerRender = new net.minecraft.client.renderer.entity.RenderPlayer(){
         EntityRollingStock stock;
@@ -391,6 +393,8 @@ public class ClientProxy extends CommonProxy {
                 return entity1 != null ? new GuiFixedOverlay(player, (EntityRollingStock) entity1) : null;
             case (GuiIDs.DYNAMIC_OVERLAY):
                 return entity1 != null ? new GuiDynamicOverlay(player, (EntityRollingStock) entity1) : null;
+            case (GuiIDs.LOCK_MENU):
+                return entity1 != null ? new GuiLockMenu(player, ((EntityRollingStock) entity1)) : null;
             case (GuiIDs.SEAT_GUI):
                 return entity1 != null ? new GUISeatManager(player, (EntityRollingStock) entity1) : null;
             default:
