@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityFreightDepressedFlatbed extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(new EntityFreightDepressedFlatbed(null), Info.modID+":+train_freight_depressed_flatbed", Traincraft.tcTab); 
-    public EntityFreightDepressedFlatbed(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityFreightDepressedFlatbed(World world) {
     super (world); } 
     //main stats

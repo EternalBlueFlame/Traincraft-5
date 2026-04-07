@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityLocoSteamBerk1225 extends SteamTrain {
 
     public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamBerk1225(null), Info.modID+":+Berkshire1225", Traincraft.tcTab); 
-    public EntityLocoSteamBerk1225(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityLocoSteamBerk1225(World world) {
     super (world); } 
     //main stats

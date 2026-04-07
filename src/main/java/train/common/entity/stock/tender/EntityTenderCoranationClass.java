@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityTenderCoranationClass extends Tender {
 
     public static final Item thisItem = new ItemRollingStock(new EntityTenderCoranationClass(null), Info.modID+":+train_coronationclasstender", Traincraft.tcTab); 
-    public EntityTenderCoranationClass(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityTenderCoranationClass(World world) {
     super (world); } 
     //main stats

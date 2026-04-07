@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityCaboose3 extends EntityRollingStock implements IPassenger {
 
     public static final Item thisItem = new ItemRollingStock(new EntityCaboose3(null), Info.modID+":+train_caboose_2", Traincraft.tcTab); 
-    public EntityCaboose3(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityCaboose3(World world) {
     super (world); } 
     //main stats

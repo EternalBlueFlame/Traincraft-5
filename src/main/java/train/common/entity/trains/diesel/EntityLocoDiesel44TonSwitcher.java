@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityLocoDiesel44TonSwitcher extends DieselTrain {
 
     public static final Item thisItem = new ItemRollingStock(new EntityLocoDiesel44TonSwitcher(null), Info.modID+":+train_44tonner", Traincraft.tcTab); 
-    public EntityLocoDiesel44TonSwitcher(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityLocoDiesel44TonSwitcher(World world) {
     super (world); } 
     //main stats

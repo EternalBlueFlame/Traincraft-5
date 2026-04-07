@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityCabooseLogging extends AbstractWorkCart {
 
     public static final Item thisItem = new ItemRollingStock(new EntityCabooseLogging(null), Info.modID+":+train_logging_caboose", Traincraft.tcTab); 
-    public EntityCabooseLogging(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityCabooseLogging(World world) {
     super (world); } 
     //main stats

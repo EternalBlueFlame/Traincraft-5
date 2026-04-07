@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityLocoSteamGS4 extends SteamTrain {
 
     public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamGS4(null), Info.modID+":+GS4_engine", Traincraft.tcTab); 
-    public EntityLocoSteamGS4(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityLocoSteamGS4(World world) {
     super (world); } 
     //main stats

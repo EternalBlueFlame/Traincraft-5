@@ -111,22 +111,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		dataWatcher.addObject(28, 0);
 	}
 
-	public EntityTracksBuilder(World world, double d, double d1, double d2) {
-		this(world);
-		setPosition(d, d1 + yOffset, d2);
-		motionX = 0.0D;
-		motionY = 0.0D;
-		motionZ = 0.0D;
-		prevPosX = d;
-		prevPosY = d1;
-		prevPosZ = d2;
-		currentHeight = posY;
-		plannedHeight = (int) currentHeight - 1;
-		setPlannedHeight(plannedHeight);
-		
-		if(world instanceof WorldServer)
-			fakeplayer=new FakePlayer((WorldServer) world, getOwner()!=null?getOwner():new GameProfile(UUID.nameUUIDFromBytes(trainOwner==null||trainOwner.length()<1?"[Traincraft]".getBytes(): trainOwner.getBytes()),trainOwner==null||trainOwner.length()<1?"[Traincraft]": trainOwner));
-	}
+
 
 	@Override
 	public int getInventoryStackLimit() {

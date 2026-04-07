@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityStockCarDRWG extends EntityRollingStock implements IPassenger {
 
     public static final Item thisItem = new ItemRollingStock(new EntityStockCarDRWG(null), Info.modID+":+drwg_stockcar", Traincraft.tcTab); 
-    public EntityStockCarDRWG(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+    
     public EntityStockCarDRWG(World world) {
     super (world); } 
     //main stats

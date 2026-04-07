@@ -160,11 +160,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         fuelTrain = 0;
     }
 
-    public Locomotive(World world, double d, double d1, double d2) {
-        super(world, d, d1, d2);
-        fuelTrain = 0;
-    }
-
     /**
      * this is basically NBT for entity spawn, to keep data between client and server in sync because some data is not automatically shared.
      */

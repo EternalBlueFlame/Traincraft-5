@@ -67,10 +67,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         }
     }
 
-    public AbstractControlCar(World world, double d, double d1, double d2)
-    {
-        super(world);
-    }
+    
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound nbttagcompound)

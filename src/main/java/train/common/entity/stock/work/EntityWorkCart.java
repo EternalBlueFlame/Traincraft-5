@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityWorkCart extends AbstractWorkCart {
 
     public static final Item thisItem = new ItemRollingStock(new EntityWorkCart(null), Info.modID+":+train_work", Traincraft.tcTab); 
-    public EntityWorkCart(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityWorkCart(World world) {
     super (world); } 
     //main stats

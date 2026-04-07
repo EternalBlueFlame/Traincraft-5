@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityFreightOpen2 extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(new EntityFreightOpen2(null), Info.modID+":+train_freight_open", Traincraft.tcTab); 
-    public EntityFreightOpen2(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityFreightOpen2(World world) {
     super (world); } 
     //main stats

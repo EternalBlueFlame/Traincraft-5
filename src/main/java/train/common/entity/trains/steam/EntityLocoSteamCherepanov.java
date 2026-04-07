@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityLocoSteamCherepanov extends SteamTrain {
 
     public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamCherepanov(null), Info.modID+":+train_cherpanov", Traincraft.tcTab); 
-    public EntityLocoSteamCherepanov(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityLocoSteamCherepanov(World world) {
     super (world); } 
     //main stats

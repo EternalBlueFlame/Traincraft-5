@@ -15,9 +15,8 @@ import train.common.library.ItemIDs;
 
 public class EntityBoxCartPRR extends Freight {
 
-    public static final Item thisItem = new ItemRollingStock(new EntityBoxCartPRR(null), Info.modID+":+train_box_prr", Traincraft.tcTab); 
-    public EntityBoxCartPRR(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+    public static final Item thisItem = new ItemRollingStock(new EntityBoxCartPRR(null), Info.modID+":+train_box_prr", Traincraft.tcTab);
+
     public EntityBoxCartPRR(World world) {
     super (world); } 
     //main stats

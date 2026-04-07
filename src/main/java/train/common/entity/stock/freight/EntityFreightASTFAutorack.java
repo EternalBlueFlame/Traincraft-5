@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityFreightASTFAutorack extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(new EntityFreightASTFAutorack(null), Info.modID+":+train_autorack", Traincraft.tcTab); 
-    public EntityFreightASTFAutorack(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityFreightASTFAutorack(World world) {
     super (world); } 
     //main stats

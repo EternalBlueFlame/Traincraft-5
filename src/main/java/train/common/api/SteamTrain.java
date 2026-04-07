@@ -39,9 +39,6 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 		dataWatcher.addObject(4, 0);
 		this.dataWatcher.addObject(27, 0);
 	}
-	public SteamTrain(World world, double d, double d1, double d2) {
-		super(world, d, d1, d2);
-	}
 
 	@Override
 	public int getSizeInventory() {

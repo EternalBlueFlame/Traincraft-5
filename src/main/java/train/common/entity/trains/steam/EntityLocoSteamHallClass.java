@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityLocoSteamHallClass extends SteamTrain {
 
     public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamHallClass(null), Info.modID+":+HallClass", Traincraft.tcTab); 
-    public EntityLocoSteamHallClass(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityLocoSteamHallClass(World world) {
     super (world); } 
     //main stats

@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityPropagandaUSSR extends EntityRollingStock {
 
     public static final Item thisItem = new ItemRollingStock(new EntityPropagandaUSSR(null), Info.modID+":+propaganda_ussr", Traincraft.tcTab); 
-    public EntityPropagandaUSSR(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityPropagandaUSSR(World world) {
     super (world); } 
     //main stats

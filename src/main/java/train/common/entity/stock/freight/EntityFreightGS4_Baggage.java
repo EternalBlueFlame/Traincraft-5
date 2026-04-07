@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityFreightGS4_Baggage extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(new EntityFreightGS4_Baggage(null), Info.modID+":+GS4_baggage", Traincraft.tcTab); 
-    public EntityFreightGS4_Baggage(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityFreightGS4_Baggage(World world) {
     super (world); } 
     //main stats

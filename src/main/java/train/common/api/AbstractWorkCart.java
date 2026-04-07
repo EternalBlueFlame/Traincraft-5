@@ -26,9 +26,6 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 	public AbstractWorkCart(World world) {
 		super(world);
 	}
-	public AbstractWorkCart(World world, double d, double d1, double d2) {
-		super(world, d, d1, d2);
-	}
 	@Override
 	public void onUpdate() {
 		super.onUpdate();

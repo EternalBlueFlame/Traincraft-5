@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityLocoSteamPannier extends SteamTrain {
 
     public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamPannier(null), Info.modID+":+train_pannier", Traincraft.tcTab); 
-    public EntityLocoSteamPannier(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityLocoSteamPannier(World world) {
     super (world); } 
     //main stats

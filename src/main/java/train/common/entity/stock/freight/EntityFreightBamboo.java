@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityFreightBamboo extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(new EntityFreightBamboo(null), Info.modID+":+train_freight_bamboo", Traincraft.tcTab); 
-    public EntityFreightBamboo(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityFreightBamboo(World world) {
     super (world); } 
     //main stats

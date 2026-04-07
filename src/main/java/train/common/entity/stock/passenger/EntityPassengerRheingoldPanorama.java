@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityPassengerRheingoldPanorama extends EntityRollingStock implements IPassenger {
 
     public static final Item thisItem = new ItemRollingStock(new EntityPassengerRheingoldPanorama(null), Info.modID+":+train_passenger_rheingoldpanorama", Traincraft.tcTab); 
-    public EntityPassengerRheingoldPanorama(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityPassengerRheingoldPanorama(World world) {
     super (world); } 
     //main stats

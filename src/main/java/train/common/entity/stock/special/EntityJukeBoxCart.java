@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityJukeBoxCart extends EntityRollingStock {
 
     public static final Item thisItem = new ItemRollingStock(new EntityJukeBoxCart(null), Info.modID+":+train_jukebox", Traincraft.tcTab); 
-    public EntityJukeBoxCart(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityJukeBoxCart(World world) {
     super (world); } 
     //main stats

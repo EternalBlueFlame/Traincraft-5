@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityLocoSteamClimax extends SteamTrain {
 
     public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamClimax(null), Info.modID+":+train_climax", Traincraft.tcTab); 
-    public EntityLocoSteamClimax(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityLocoSteamClimax(World world) {
     super (world); } 
     //main stats

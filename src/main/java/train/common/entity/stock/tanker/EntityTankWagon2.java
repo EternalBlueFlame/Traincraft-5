@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityTankWagon2 extends LiquidTank {
 
     public static final Item thisItem = new ItemRollingStock(new EntityTankWagon2(null), Info.modID+":+train_tank_blue", Traincraft.tcTab); 
-    public EntityTankWagon2(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityTankWagon2(World world) {
     super (world); } 
     //main stats

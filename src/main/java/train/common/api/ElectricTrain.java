@@ -26,9 +26,6 @@ public abstract class ElectricTrain extends Locomotive {
 		Ignite = false;
 		timeSinceIgnited = 0;
 	}
-	public ElectricTrain(World world, double x, double y, double z){
-		super(world,x,y,z);
-	}
 
 	@Override//todo:why was this so much?
 	public int getSizeInventory() {

@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityTender4000 extends Tender {
 
     public static final Item thisItem = new ItemRollingStock(new EntityTender4000(null), Info.modID+":+4000GallonTender", Traincraft.tcTab); 
-    public EntityTender4000(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityTender4000(World world) {
     super (world); } 
     //main stats

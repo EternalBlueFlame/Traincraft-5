@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityFlatCartSU extends EntityRollingStock implements IPassenger {
 
     public static final Item thisItem = new ItemRollingStock(new EntityFlatCartSU(null), Info.modID+":+train_flat_su", Traincraft.tcTab); 
-    public EntityFlatCartSU(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+    
     public EntityFlatCartSU(World world) {
     super (world); } 
     //main stats

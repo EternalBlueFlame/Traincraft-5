@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityPassengerGS4_Tail extends EntityRollingStock implements IPassenger {
 
     public static final Item thisItem = new ItemRollingStock(new EntityPassengerGS4_Tail(null), Info.modID+":+GS4_tail", Traincraft.tcTab); 
-    public EntityPassengerGS4_Tail(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+    
     public EntityPassengerGS4_Tail(World world) {
     super (world); } 
     //main stats

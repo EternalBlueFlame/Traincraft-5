@@ -144,23 +144,16 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     }
 
     @Override
-    public GameProfile getOwner() {
-        return CartTools.getCartOwner(this);
-    }
-
-    public EntityRollingStock(World world, double d, double d1, double d2) {
-        super(world, d, d1, d2);
-        if(world==null){return;}
-        setPosition(d, d1, d2);
-        initRollingStock(world);
-        motionX = 0.0D;
-        motionY = 0.0D;
-        motionZ = 0.0D;
-        prevPosX = d;
-        prevPosY = d1;
-        prevPosZ = d2;
+    public void SetupRollingStockSpawn(double x, double y, double z)
+    {
+        super.SetupRollingStockSpawn(x, y, z);
         consist = new ArrayList<AbstractTrains>();
         consist.add(this);
+    }
+
+    @Override
+    public GameProfile getOwner() {
+        return CartTools.getCartOwner(this);
     }
 
     public void initRollingStock(World world) {

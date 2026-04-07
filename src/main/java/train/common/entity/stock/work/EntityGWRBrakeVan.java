@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityGWRBrakeVan extends AbstractWorkCart {
 
     public static final Item thisItem = new ItemRollingStock(new EntityGWRBrakeVan(null), Info.modID+":+train_gwr_brakevan", Traincraft.tcTab); 
-    public EntityGWRBrakeVan(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityGWRBrakeVan(World world) {
     super (world); } 
     //main stats

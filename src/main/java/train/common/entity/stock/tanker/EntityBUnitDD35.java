@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityBUnitDD35 extends LiquidTank {
 
     public static final Item thisItem = new ItemRollingStock(new EntityBUnitDD35(null), Info.modID+":+train_dd35b", Traincraft.tcTab); 
-    public EntityBUnitDD35(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityBUnitDD35(World world) {
     super (world); } 
     //main stats

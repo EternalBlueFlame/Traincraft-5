@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityLocoSteamFowler extends SteamTrain {
 
     public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamFowler(null), Info.modID+":+Fowler 4F", Traincraft.tcTab); 
-    public EntityLocoSteamFowler(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityLocoSteamFowler(World world) {
     super (world); } 
     //main stats

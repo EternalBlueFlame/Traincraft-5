@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityBulkheadFlatCart extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(new EntityBulkheadFlatCart(null), Info.modID+":+train_bulkheadflat_wood", Traincraft.tcTab); 
-    public EntityBulkheadFlatCart(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityBulkheadFlatCart(World world) {
     super (world); } 
     //main stats

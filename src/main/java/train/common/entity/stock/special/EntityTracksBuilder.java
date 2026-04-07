@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityTracksBuilder extends EntityRollingStock {
 
     public static final Item thisItem = new ItemRollingStock(new EntityTracksBuilder(null), Info.modID+":+train_builder", Traincraft.tcTab); 
-    public EntityTracksBuilder(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityTracksBuilder(World world) {
     super (world); } 
     //main stats

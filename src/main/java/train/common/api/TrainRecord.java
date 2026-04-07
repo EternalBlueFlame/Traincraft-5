@@ -210,7 +210,9 @@ public abstract class TrainRecord {
                     //if (world.isRemote) {
                         //entityClass.getConstructor(World.class).newInstance(world);
                     //} else {
-                        return (AbstractTrains) entityClass.getConstructor(World.class, double.class, double.class, double.class).newInstance(world, x, y, z);
+                        AbstractTrains abstractTrains = (AbstractTrains) entityClass.getConstructor(World.class).newInstance(world);
+                        abstractTrains.SetupRollingStockSpawn(x, y, z);
+                        return abstractTrains;
                     //}
                 } catch (IllegalArgumentException | SecurityException | InstantiationException |
                          IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {

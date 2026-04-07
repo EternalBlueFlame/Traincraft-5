@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityPassenger_1class_DB extends EntityRollingStock implements IPassenger {
 
     public static final Item thisItem = new ItemRollingStock(new EntityPassenger_1class_DB(null), Info.modID+":+train_passenger_5", Traincraft.tcTab); 
-    public EntityPassenger_1class_DB(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityPassenger_1class_DB(World world) {
     super (world); } 
     //main stats

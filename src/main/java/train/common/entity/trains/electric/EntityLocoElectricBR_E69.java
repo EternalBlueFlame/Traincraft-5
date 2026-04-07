@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityLocoElectricBR_E69 extends ElectricTrain {
 
     public static final Item thisItem = new ItemRollingStock(new EntityLocoElectricBR_E69(null), Info.modID+":+train_bre69", Traincraft.tcTab); 
-    public EntityLocoElectricBR_E69(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityLocoElectricBR_E69(World world) {
     super (world); } 
     //main stats

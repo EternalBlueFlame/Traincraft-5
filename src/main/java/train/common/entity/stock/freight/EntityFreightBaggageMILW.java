@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityFreightBaggageMILW extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(new EntityFreightBaggageMILW(null), Info.modID+":+train_baggage_milw", Traincraft.tcTab); 
-    public EntityFreightBaggageMILW(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityFreightBaggageMILW(World world) {
     super (world); } 
     //main stats

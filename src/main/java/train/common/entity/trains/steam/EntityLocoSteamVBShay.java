@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityLocoSteamVBShay extends SteamTrain {
 
     public static final Item thisItem = new ItemRollingStock(new EntityLocoSteamVBShay(null), Info.modID+":+train_vbshay", Traincraft.tcTab); 
-    public EntityLocoSteamVBShay(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+    
     public EntityLocoSteamVBShay(World world) {
     super (world); } 
     //main stats

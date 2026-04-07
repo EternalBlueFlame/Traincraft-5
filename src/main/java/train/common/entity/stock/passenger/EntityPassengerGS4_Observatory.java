@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityPassengerGS4_Observatory extends EntityRollingStock implements IPassenger {
 
     public static final Item thisItem = new ItemRollingStock(new EntityPassengerGS4_Observatory(null), Info.modID+":+GS4_observatory", Traincraft.tcTab); 
-    public EntityPassengerGS4_Observatory(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityPassengerGS4_Observatory(World world) {
     super (world); } 
     //main stats

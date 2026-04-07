@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityFreightGermanPost extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(new EntityFreightGermanPost(null), Info.modID+":+train_freight_german_post", Traincraft.tcTab); 
-    public EntityFreightGermanPost(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityFreightGermanPost(World world) {
     super (world); } 
     //main stats

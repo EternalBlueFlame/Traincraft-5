@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityPassengerICE_Restaurant extends EntityRollingStock implements IPassenger {
 
     public static final Item thisItem = new ItemRollingStock(new EntityPassengerICE_Restaurant(null), Info.modID+":+train_ice1_restaurant", Traincraft.tcTab); 
-    public EntityPassengerICE_Restaurant(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityPassengerICE_Restaurant(World world) {
     super (world); } 
     //main stats

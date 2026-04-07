@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityLocoDieselShunter extends DieselTrain {
 
     public static final Item thisItem = new ItemRollingStock(new EntityLocoDieselShunter(null), Info.modID+":+train_shunter", Traincraft.tcTab); 
-    public EntityLocoDieselShunter(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+    
     public EntityLocoDieselShunter(World world) {
     super (world); } 
     //main stats

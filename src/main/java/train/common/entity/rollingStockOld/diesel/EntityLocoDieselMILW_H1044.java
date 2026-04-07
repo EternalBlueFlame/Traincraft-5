@@ -15,16 +15,7 @@ public class EntityLocoDieselMILW_H1044 extends DieselTrain {
 
 	}
 
-	public EntityLocoDieselMILW_H1044(World world, double d, double d1, double d2) {
-		this(world);
-		setPosition(d, d1 + yOffset, d2);
-		motionX = 0.0D;
-		motionY = 0.0D;
-		motionZ = 0.0D;
-		prevPosX = d;
-		prevPosY = d1;
-		prevPosZ = d2;
-	}
+
 
 		@Override
 	public void setDead() {

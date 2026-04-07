@@ -209,9 +209,22 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
     }
 
-    public AbstractTrains(World world, double x, double y, double z) {
-        this(world);
-        this.setPosition(x, y, z);
+    /**
+     * Called to set up initial pos and motion
+     * ONLY CALLED BY SERVER SIDE
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void SetupRollingStockSpawn(double x, double y, double z)
+    {
+        setPosition(x, y + (double)yOffset, z);
+        motionX = 0.0D;
+        motionY = 0.0D;
+        motionZ = 0.0D;
+        prevPosX = x;
+        prevPosY = y;
+        prevPosZ = z;
     }
 
     @Override

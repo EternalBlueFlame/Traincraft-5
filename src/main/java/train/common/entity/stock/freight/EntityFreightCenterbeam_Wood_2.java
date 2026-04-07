@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityFreightCenterbeam_Wood_2 extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(new EntityFreightCenterbeam_Wood_2(null), Info.modID+":+train_freight_wood_2", Traincraft.tcTab); 
-    public EntityFreightCenterbeam_Wood_2(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityFreightCenterbeam_Wood_2(World world) {
     super (world); } 
     //main stats

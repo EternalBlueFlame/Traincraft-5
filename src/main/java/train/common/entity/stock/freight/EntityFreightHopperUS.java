@@ -16,8 +16,7 @@ import train.common.library.ItemIDs;
 public class EntityFreightHopperUS extends Freight {
 
     public static final Item thisItem = new ItemRollingStock(new EntityFreightHopperUS(null), Info.modID+":+train_hopper_us", Traincraft.tcTab); 
-    public EntityFreightHopperUS(World world, double x, double y, double z) {
-    super(world, x, y, z); }
+
     public EntityFreightHopperUS(World world) {
     super (world); } 
     //main stats
