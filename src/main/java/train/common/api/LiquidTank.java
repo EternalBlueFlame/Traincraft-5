@@ -79,16 +79,16 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (getWorld().isRemote) {
+        if (world.isRemote) {
             return;
         }
 
         if (ticksExisted % 5 == 0 && fill(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
             FluidStack drain = null;
-            blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
-                    getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
-                    getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
-                    getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
+            blocksToCheck = new TileEntity[]{world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
+                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
+                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
+                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
             };
 
             for (TileEntity block : blocksToCheck) {
@@ -137,7 +137,7 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
 
     public ItemStack checkInvent(ItemStack itemstack) {
         ItemStack result = null;
-        if (getWorld().isRemote) {
+        if (world.isRemote) {
             return itemstack;
         }
         this.update += 1;
@@ -352,7 +352,7 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
 
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, float i) {
-        if (getWorld().isRemote) {
+        if (world.isRemote) {
             return true;
         }
         if (canBeDestroyedByPlayer(damagesource))

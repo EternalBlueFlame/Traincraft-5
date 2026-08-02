@@ -57,7 +57,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (getWorld().isRemote || bogieFront==null || bogieBack==null) {
+		if (world.isRemote || bogieFront==null || bogieBack==null) {
 			return;
 		}
 		checkInvent(cargoItems[0], cargoItems[1], this);
@@ -94,13 +94,13 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 
 	}
 
-	private static void mineSnow(World getWorld(), double[] point, ItemStack[] locoInvent, FakePlayer fakePlayer){
-		Block b = getWorld().getBlock(MathHelper.floor(point[0]),MathHelper.floor(point[1]),MathHelper.floor(point[2]));
-		int blockMeta = getWorld().getBlockMetadata(MathHelper.floor(point[0]), MathHelper.floor(point[1]),
+	private static void mineSnow(World world, double[] point, ItemStack[] locoInvent, FakePlayer fakePlayer){
+		Block b = world.getBlock(MathHelper.floor(point[0]),MathHelper.floor(point[1]),MathHelper.floor(point[2]));
+		int blockMeta = world.getBlockMetadata(MathHelper.floor(point[0]), MathHelper.floor(point[1]),
 				MathHelper.floor(point[2]));
 
 		if((b == Blocks.snow || b == Blocks.snow_layer) && b.canHarvestBlock(fakePlayer, blockMeta)){
-			getWorld().setBlockToAir(MathHelper.floor(point[0]),MathHelper.floor(point[1]),MathHelper.floor(point[2]));
+			world.setBlockToAir(MathHelper.floor(point[0]),MathHelper.floor(point[1]),MathHelper.floor(point[2]));
 			int snowballs = new Random().nextInt(9);
 			for(int i=2; i<cargoItems.length && snowballs>0; i++){
 				if (cargoItems[i] == null){
@@ -119,7 +119,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 			if (snowballs >0){
 				EntityItem entityitem = new EntityItem(getWorld(), point[0], point[1] + 1, point[2], new ItemStack(Items.snowball, snowballs));
 				entityitem.delayBeforeCanPickup = 10;
-				getWorld().spawnEntityInWorld(entityitem);
+				world.spawnEntityInWorld(entityitem);
 
 			}
 		}

@@ -64,7 +64,7 @@ public abstract class CartTools {
      * @param owner
      */
     public static void setCartOwner(EntityMinecart cart, GameProfile owner) {
-        if (!cart.getWorld().isRemote) {
+        if (!cart.world.isRemote) {
             NBTTagCompound data = cart.getEntityData();
             if (owner.getName() != null)
                 data.setString("owner", owner.getName());

@@ -51,7 +51,7 @@ public class EntityHitbox {
                 c.setPosition(host.posX+f, host.posY, host.posZ);
                 c.host=host;
                 interactionBoxes.add(c);
-                host.getWorld().spawnEntityInWorld(c);
+                host.world.spawnEntityInWorld(c);
                 if(front==null){
                     front=c;
                 } else{
@@ -128,7 +128,7 @@ public class EntityHitbox {
                             }
 
                         } else {
-                            EntityPlayer p = host.getWorld().getClosestPlayerToEntity(host,32);
+                            EntityPlayer p = host.world.getClosestPlayerToEntity(host,32);
                             if(p!=null){
                                 p.addChatComponentMessage(new ChatComponentText("One or more trains is not in towing mode."));
                                 p.addChatComponentMessage(new ChatComponentText("Use a Stake while sneaking to toggle towing mode."));

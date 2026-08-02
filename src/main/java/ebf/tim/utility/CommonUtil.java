@@ -148,11 +148,11 @@ public class CommonUtil {
     }
 
     public static void playSound(TileEntity tile, String file, float volume, float pitch){
-        tile.getWorld().playSound(tile.xCoord,tile.yCoord,tile.zCoord, file, volume,pitch,false);
+        tile.world.playSound(tile.xCoord,tile.yCoord,tile.zCoord, file, volume,pitch,false);
     }
 
     public static void playSound(Entity entity, String file, float volume, float pitch){
-        entity.getWorld().playSoundAtEntity(entity, file, volume, pitch);
+        entity.world.playSoundAtEntity(entity, file, volume, pitch);
     }
 
     public static boolean stringContains(String s1, String... s2){

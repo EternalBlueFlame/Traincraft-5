@@ -112,7 +112,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 		if (this.furnaceBurnTime > 0) {
 			--this.furnaceBurnTime;
 		}
-		if (!this.getWorld().isRemote) {
+		if (!this.world.isRemote) {
 			if (this.furnaceBurnTime == 0 && this.canSmelt()) {
 				this.currentItemBurnTime = this.furnaceBurnTime = getItemBurnTime(this.furnaceItemStacks[1]);
 
@@ -313,7 +313,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i) {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return true;
 		}
 		if(this.canBeDestroyedByPlayer(damagesource) || damagesource.getEntity() == null){

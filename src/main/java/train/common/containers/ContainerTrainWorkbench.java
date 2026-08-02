@@ -16,7 +16,7 @@ public class ContainerTrainWorkbench extends Container {
 
 	public IInventory craftMatrix;
 	public IInventory craftResult = new InventoryCraftResult();
-	private World getWorld();
+	private World world;
 
 	public ContainerTrainWorkbench(InventoryPlayer invPlayer, World world, IInventory te) {
 		this.getWorld() = world;

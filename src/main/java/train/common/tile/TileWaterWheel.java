@@ -29,39 +29,39 @@ public class TileWaterWheel extends Energy implements IEnergyProvider {
 	public void updateEntity() {
 		super.updateEntity();
 
-		if(!getWorld().isRemote) {
+		if(!world.isRemote) {
 
-			Block blockXP = getWorld().getBlock(xCoord+1, yCoord, zCoord);
-			Block blockXN = getWorld().getBlock(xCoord-1, yCoord, zCoord);
-			Block blockZP = getWorld().getBlock(xCoord, yCoord, zCoord+1);
-			Block blockZN = getWorld().getBlock(xCoord, yCoord, zCoord-1);
-			Block blockTop = getWorld().getBlock(xCoord, yCoord+1, zCoord);
-			Block blockBottom = getWorld().getBlock(xCoord, yCoord-1, zCoord);
+			Block blockXP = world.getBlock(xCoord+1, yCoord, zCoord);
+			Block blockXN = world.getBlock(xCoord-1, yCoord, zCoord);
+			Block blockZP = world.getBlock(xCoord, yCoord, zCoord+1);
+			Block blockZN = world.getBlock(xCoord, yCoord, zCoord-1);
+			Block blockTop = world.getBlock(xCoord, yCoord+1, zCoord);
+			Block blockBottom = world.getBlock(xCoord, yCoord-1, zCoord);
 
 
 			if (blockXP instanceof BlockLiquid && blockXP.getMaterial().isLiquid()
-					&& getWorld().getBlockMetadata(xCoord + 1, yCoord, zCoord) != 0
+					&& world.getBlockMetadata(xCoord + 1, yCoord, zCoord) != 0
 					&& blockXP.getMaterial() != Material.lava) {
 				this.energy.receiveEnergy(5, false);
-				getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 2, 2);
+				world.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 2, 2);
 			} else if (blockXN instanceof BlockLiquid && blockXN.getMaterial().isLiquid()
-					&& getWorld().getBlockMetadata(xCoord - 1, yCoord, zCoord) != 0
+					&& world.getBlockMetadata(xCoord - 1, yCoord, zCoord) != 0
 					&& blockXN.getMaterial() != Material.lava) {
 				this.energy.receiveEnergy(5, false);
-				getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
+				world.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 0, 2);
 			} else if (blockZN instanceof BlockLiquid && blockZN.getMaterial().isLiquid()
-					&& getWorld().getBlockMetadata(xCoord, yCoord, zCoord - 1) != 0
+					&& world.getBlockMetadata(xCoord, yCoord, zCoord - 1) != 0
 					&& blockZN.getMaterial() != Material.lava) {
 				this.energy.receiveEnergy(5, false);
-				getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
+				world.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 1, 2);
 			} else if (blockZP instanceof BlockLiquid && blockZP.getMaterial().isLiquid()
-					&& getWorld().getBlockMetadata(xCoord, yCoord, zCoord + 1) != 0
+					&& world.getBlockMetadata(xCoord, yCoord, zCoord + 1) != 0
 					&& blockZP.getMaterial() != Material.lava) {
 				this.energy.receiveEnergy(5, false);
-				getWorld().setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 3, 2);
-			}else if(blockTop instanceof BlockLiquid && blockTop.getMaterial().isLiquid()&&getWorld().getBlockMetadata(xCoord, yCoord+1, zCoord)!= 0 && blockTop.getMaterial() != Material.lava){
+				world.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, 3, 2);
+			}else if(blockTop instanceof BlockLiquid && blockTop.getMaterial().isLiquid()&&world.getBlockMetadata(xCoord, yCoord+1, zCoord)!= 0 && blockTop.getMaterial() != Material.lava){
 				this.energy.receiveEnergy(5, false);
-			}else if(blockBottom instanceof BlockLiquid && blockBottom.getMaterial().isLiquid() &&getWorld().getBlockMetadata(xCoord, yCoord-1, zCoord)!= 0 && blockBottom.getMaterial() != Material.lava){
+			}else if(blockBottom instanceof BlockLiquid && blockBottom.getMaterial().isLiquid() &&world.getBlockMetadata(xCoord, yCoord-1, zCoord)!= 0 && blockBottom.getMaterial() != Material.lava){
 				this.energy.receiveEnergy(5, false);
 			} else {
 				setFacing(-1);

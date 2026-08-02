@@ -94,10 +94,10 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         stepHeight = 0.6F;
 
-        if (getWorld().isRemote) {
+        if (world.isRemote) {
             this.wheels = new EntityRotativeWheel[1];
             this.wheels[0] = new EntityRotativeWheel(this.getWorld(), this, 0, 5.4D, 0, 0, 0.0D);
-            getWorld().spawnEntityInWorld(this.wheels[0]);
+            world.spawnEntityInWorld(this.wheels[0]);
         }
 
         this.dataWatcher.addObject(20, fuel);
@@ -179,7 +179,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, float i) {
-        if (getWorld().isRemote || isDead) {
+        if (world.isRemote || isDead) {
             return true;
         }
 
@@ -221,7 +221,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
                 entityitem.motionX = (float) rand.nextGaussian() * f3;
                 entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
                 entityitem.motionZ = (float) rand.nextGaussian() * f3;
-                getWorld().spawnEntityInWorld(entityitem);
+                world.spawnEntityInWorld(entityitem);
             } while (true);
         }
         if (wheels != null) {
@@ -376,7 +376,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j + 1)) / i) - 0.125D;
             AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
 
-            if (getWorld().isAABBInMaterial(axisalignedbb, Material.water)) {
+            if (world.isAABBInMaterial(axisalignedbb, Material.water)) {
                 d += 1.0D / i;
             }
         }
@@ -394,16 +394,16 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             if (rand.nextBoolean()) {
                 double d21 = (posX - d13 * d18 * 0.80000000000000004D) + d15 * d20;
                 double d23 = posZ - d15 * d18 * 0.80000000000000004D - d13 * d20;
-                // getWorld().spawnParticle("splash", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
-                getWorld().spawnParticle("largesmoke", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
+                // world.spawnParticle("splash", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
+                world.spawnParticle("largesmoke", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
             } else {
                 double d22 = posX + d13 + d15 * d18 * 0.69999999999999996D;
                 double d24 = (posZ + d15) - d13 * d18 * 0.69999999999999996D;
-                // getWorld().spawnParticle("splash", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
-                getWorld().spawnParticle("largesmoke", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
+                // world.spawnParticle("splash", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
+                world.spawnParticle("largesmoke", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
             }
         }
-        if (getWorld().isRemote) {
+        if (world.isRemote) {
             if (field_9394_d > 0) {
                 double d1 = posX + (field_9393_e - posX) / field_9394_d;
                 double d5 = posY + (field_9392_f - posY) / field_9394_d;
@@ -503,7 +503,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         }
 
         setRotation(rotationYaw, rotationPitch);
-        List<?> list = getWorld().getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+        List<?> list = world.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
         if (list != null && !list.isEmpty()) {
             for (Object o : list) {
                 Entity entity = (Entity) o;
@@ -519,7 +519,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         if (Math.sqrt((motionX * motionX) + (motionZ * motionZ)) > 0.01) {
             Vec3 pos = Vec3.createVectorHelper(posX, posY - 1, posZ);
-            Block id = getWorld().getBlock((int) posX, (int) posY - 1, (int) posZ);
+            Block id = world.getBlock((int) posX, (int) posY - 1, (int) posZ);
 
             if (id != null) {
                 this.playMiningEffect(pos, Block.getIdFromBlock(id));
@@ -535,7 +535,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      */
 
     private void playMiningEffect(Vec3 pos, int block_index) {
-        Block id = getWorld().getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
         if (id != null) {
             Minecraft.getMinecraft().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
         }
@@ -732,7 +732,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             return true;
         }
 
-        if (!getWorld().isRemote) {
+        if (!world.isRemote) {
             addPassenger(entityplayer);
         }
 

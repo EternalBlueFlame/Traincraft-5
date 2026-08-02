@@ -45,7 +45,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i) {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return true;
 		}
 		if(canBeDestroyedByPlayer(damagesource))return true;
@@ -77,7 +77,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!getWorld().isRemote && this.ticksExisted % 10 == 0) {
+		if (!world.isRemote && this.ticksExisted % 10 == 0) {
 			this.dataWatcher.updateObject(22, streamURL);
 			if (isPlaying) {
 				this.dataWatcher.updateObject(23, 1);
@@ -117,7 +117,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 				}
 				if (this.isPlaying && rand.nextInt(5) == 0 && (this.player != null && this.player.isPlaying())) {
 					int random2 = rand.nextInt(24) + 1;
-					getWorld().spawnParticle("note", posX, posY + 1.2D, posZ, random2 / 24.0D, 0.0D, 0.0D);
+					world.spawnParticle("note", posX, posY + 1.2D, posZ, random2 / 24.0D, 0.0D, 0.0D);
 				}
 			}
 			
@@ -180,7 +180,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 			return false;
 		}
 		if (locked && !entityplayer.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
-			if (!getWorld().isRemote)
+			if (!world.isRemote)
 				entityplayer.addChatMessage(new ChatComponentText("this train is locked"));
 			return true;
 		}

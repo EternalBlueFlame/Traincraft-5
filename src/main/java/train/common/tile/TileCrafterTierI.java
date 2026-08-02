@@ -217,7 +217,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 		if (getWorld() == null) {
 			return true;
 		}
-		if (getWorld().getTileEntity(getPos()) != this) {
+		if (world.getTileEntity(getPos()) != this) {
 			return false;
 		}
 		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;

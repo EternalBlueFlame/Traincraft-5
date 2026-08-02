@@ -101,7 +101,7 @@ public class GuiBuilder extends GuiContainer {
         if (guibutton.id == 4) {
             if (player != null && player.getCommandSenderName().equalsIgnoreCase(builder.getTrainOwner())) {
                 AxisAlignedBB box = builder.boundingBox.expand(5, 5, 5);
-                List<?> lis3 = builder.getWorld().getEntitiesWithinAABBExcludingEntity(builder, box);
+                List<?> lis3 = builder.world.getEntitiesWithinAABBExcludingEntity(builder, box);
 
                 if (!builder.getTrainLockedFromPacket()) {
 
@@ -173,7 +173,7 @@ public class GuiBuilder extends GuiContainer {
 
     private void sendPacket(int packet, int packetID) {
         AxisAlignedBB box = (builder).boundingBox.expand(5, 5, 5);
-        List<?> lis3 = (builder).getWorld().getEntitiesWithinAABBExcludingEntity(builder, box);
+        List<?> lis3 = (builder).world.getEntitiesWithinAABBExcludingEntity(builder, box);
         if (lis3 != null && !lis3.isEmpty()) {
             for (Object entity : lis3) {
                 if (entity instanceof EntityPlayer) {
@@ -185,7 +185,7 @@ public class GuiBuilder extends GuiContainer {
 
     private void sendFollow(int packet, int packetID) {
         AxisAlignedBB box = (builder).boundingBox.expand(5, 5, 5);
-        List<?> lis3 = (builder).getWorld().getEntitiesWithinAABBExcludingEntity(builder, box);
+        List<?> lis3 = (builder).world.getEntitiesWithinAABBExcludingEntity(builder, box);
         if (lis3 != null && !lis3.isEmpty()) {
             for (Object entity : lis3) {
                 if (entity instanceof EntityPlayer) {

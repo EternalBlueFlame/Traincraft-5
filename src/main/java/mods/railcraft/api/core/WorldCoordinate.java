@@ -50,7 +50,7 @@ public class WorldCoordinate implements Comparable<WorldCoordinate> {
     }
 
     public WorldCoordinate(TileEntity tile) {
-        this.dimension = tile.getWorld().provider.dimensionId;
+        this.dimension = tile.world.provider.dimensionId;
         this.x = tile.xCoord;
         this.y = tile.yCoord;
         this.z = tile.zCoord;

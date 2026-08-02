@@ -42,7 +42,7 @@ public class TileMetroMadridPole extends TileEntity {
     }
 
     public void setFacing(EnumFacing face) {
-        getWorld().markBlockForUpdate(xCoord, yCoord, zCoord);
+        world.markBlockForUpdate(xCoord, yCoord, zCoord);
         this.facing = face;
     }
 

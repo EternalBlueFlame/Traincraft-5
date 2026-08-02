@@ -38,7 +38,7 @@ public abstract class ElectricTrain extends Locomotive {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return;
 		}
 		this.setState("hot");
@@ -74,14 +74,14 @@ public abstract class ElectricTrain extends Locomotive {
 				fuelTrain = transfer;
 				//System.out.println("Amount: " + transfer + " Fuel: " + getFuel());//TODO debug
 			}*/
-		}/* else if (getFuel() <= 0) {// fuel check if (locoInvent[0] != null && (PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[20])) && (PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[23]))) { if ((locoInvent[0].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[20]).itemID)) { hasUranium = true; fuelTrain = maxEnergy; if (!getWorld().isRemote) { decrStackSize(0, 1); } reduceExplosionChance = 1000; for (int u = 1; u < locoInvent.length; u++) {// checks the inventory
+		}/* else if (getFuel() <= 0) {// fuel check if (locoInvent[0] != null && (PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[20])) && (PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[23]))) { if ((locoInvent[0].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[20]).itemID)) { hasUranium = true; fuelTrain = maxEnergy; if (!world.isRemote) { decrStackSize(0, 1); } reduceExplosionChance = 1000; for (int u = 1; u < locoInvent.length; u++) {// checks the inventory
 		  * 
-		  * if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!getWorld().isRemote)) { locoInvent[u].setItemDamage(1); } } } } } else if ((locoInvent[0].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[23]).itemID)) { hasUranium = true; fuelTrain = 800 + 1000000; // locoInvent[0] = null; if (!getWorld().isRemote) { decrStackSize(0, 1); } reduceExplosionChance = 1000; for (int u = 1; u < locoInvent.length; u++) {// checks the inventory if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!getWorld().isRemote)) { locoInvent[u].setItemDamage(1); } } } } } } } */
+		  * if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!world.isRemote)) { locoInvent[u].setItemDamage(1); } } } } } else if ((locoInvent[0].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[23]).itemID)) { hasUranium = true; fuelTrain = 800 + 1000000; // locoInvent[0] = null; if (!world.isRemote) { decrStackSize(0, 1); } reduceExplosionChance = 1000; for (int u = 1; u < locoInvent.length; u++) {// checks the inventory if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!world.isRemote)) { locoInvent[u].setItemDamage(1); } } } } } } } */
 
-		blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY-1),MathHelper.floor(posZ)),
-				getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY+2),MathHelper.floor(posZ)),
-				getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY+3),MathHelper.floor(posZ)),
-				getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY+4),MathHelper.floor(posZ))
+		blocksToCheck = new TileEntity[]{world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY-1),MathHelper.floor(posZ)),
+				world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY+2),MathHelper.floor(posZ)),
+				world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY+3),MathHelper.floor(posZ)),
+				world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY+4),MathHelper.floor(posZ))
 		};
 
 		int draw = 0;
@@ -123,10 +123,10 @@ public abstract class ElectricTrain extends Locomotive {
 		/*if (hasUranium && (rand.nextInt(reduceExplosionChance) == 0) && (!Ignite)) {// fuse
 			Ignite = true;
 			setFire(8);
-			getWorld().playSoundAtEntity(this, "random.fuse", 1.0F, 0.5F);
+			world.playSoundAtEntity(this, "random.fuse", 1.0F, 0.5F);
 		}*/
 		if (Ignite && timeSinceIgnited == 100) {
-			getWorld().createExplosion(this, posX, posY, posZ, 200F, true);
+			world.createExplosion(this, posX, posY, posZ, 200F, true);
 			// ConfigHandler2.logger.fine("Train has exploded");
 			Ignite = false;
 			//hasUranium = false;
@@ -135,7 +135,7 @@ public abstract class ElectricTrain extends Locomotive {
 	}
 	@Override
 	public int getFuelDiv(int i) {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return ((this.dataWatcher.getWatchableObjectInt(24) * (i)) / maxEnergy);
 		}
 		return (this.fuelTrain * (i)) / maxEnergy;

@@ -35,7 +35,7 @@ public class BlockLocomotiveSpeedControllerTrack extends TrackBaseTraincraft imp
 	}
 	@Override
 	public boolean blockActivated(EntityPlayer player) {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return false;
 		}
 		ItemStack current = player.inventory.getCurrentItem();
@@ -67,7 +67,7 @@ public class BlockLocomotiveSpeedControllerTrack extends TrackBaseTraincraft imp
 	@Override
 	public void onNeighborBlockChange(Block block) {
 		if(this.powered){
-			this.mode = getWorld().getBlockPowerInput(getX(), getY(), getZ());
+			this.mode = world.getBlockPowerInput(getX(), getY(), getZ());
 			//System.out.println(input);
 		}
 		super.onNeighborBlockChange(block);
@@ -124,9 +124,9 @@ public class BlockLocomotiveSpeedControllerTrack extends TrackBaseTraincraft imp
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
+		Block block = world.getBlock(getX(), getY(), getZ());
+		world.notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
+		world.notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
 
 		markBlockNeedsUpdate();
 	}

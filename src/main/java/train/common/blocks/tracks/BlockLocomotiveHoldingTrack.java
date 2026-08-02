@@ -25,7 +25,7 @@ public class BlockLocomotiveHoldingTrack extends BlockTrackLockingBase implement
 		if ((getCurrentCart() != null) && (getCurrentCart().isEntityAlive())) {
 			setCurrentCart(null);
 		}
-		if (!getWorld().isRemote) {
+		if (!world.isRemote) {
 			if (isPowered()) {
 				this.delay = getDelayTime();
 			}

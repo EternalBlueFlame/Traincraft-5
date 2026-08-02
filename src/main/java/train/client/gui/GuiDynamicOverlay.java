@@ -318,7 +318,7 @@ public class GuiDynamicOverlay extends GuiScreen {
                         specificationDynamicList.get(dynamicOverlayNumber).setDisplayText(overlayTextBox.getText());
                         specificationDynamicList.get(dynamicOverlayNumber).setForegroundColor(foregroundColor);
                         specificationDynamicList.get(dynamicOverlayNumber).setBackgroundColor(backgroundColor);
-                        Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.DYNAMIC, rollingStock.getEntityId(), Minecraft.getMinecraft().thePlayer.getWorld().provider.dimensionId, rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
+                        Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.DYNAMIC, rollingStock.getEntityId(), Minecraft.getMinecraft().thePlayer.world.provider.dimensionId, rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
                         this.mc.thePlayer.closeScreen();
                     }
                     break;

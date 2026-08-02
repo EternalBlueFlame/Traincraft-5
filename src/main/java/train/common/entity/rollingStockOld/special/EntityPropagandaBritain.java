@@ -28,7 +28,7 @@ public class EntityPropagandaBritain extends EntityRollingStock {
 
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i) {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return true;
 		}
 		if(canBeDestroyedByPlayer(damagesource))return true;

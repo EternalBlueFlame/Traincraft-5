@@ -192,7 +192,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			idle = true;
 		}
 
-		if (i == 7 && !getWorld().isRemote) {
+		if (i == 7 && !world.isRemote) {
 			((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.ZEPPELIN, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 		if (i == 9) {
@@ -201,8 +201,8 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 					for(int t=0;t<this.zeppInvent.length;t++){
 						if(this.zeppInvent[t]!=null && this.zeppInvent[t].getItem()!=null && this.zeppInvent[t].getItem() == Item.getItemFromBlock(Blocks.tnt)){
 							EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.getWorld(), (double) ((float) posX), (double) ((float) posY -1F), (double) ((float) posZ), (EntityLivingBase) this.getPassengers().get(0));
-							this.getWorld().spawnEntityInWorld(entitytntprimed);
-							this.getWorld().playSoundAtEntity(entitytntprimed, "random.fuse", 1.0F, 1.0F);
+							this.world.spawnEntityInWorld(entitytntprimed);
+							this.world.playSoundAtEntity(entitytntprimed, "random.fuse", 1.0F, 1.0F);
 							bombTimer=100;
 							if(--this.zeppInvent[t].stackSize==0)this.zeppInvent[t]=null;
 							return;
@@ -340,7 +340,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			double d4 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j)) / i) - 0.125D;
 			double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j + 1)) / i) - 0.125D;
 			AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
-			if (getWorld().isAABBInMaterial(axisalignedbb, Material.water)) {
+			if (world.isAABBInMaterial(axisalignedbb, Material.water)) {
 				d += 1.0D / i;
 			}
 		}
@@ -354,12 +354,12 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			if (rand.nextBoolean()) {
 				double d21 = (posX - d13 * d18 * 0.80000000000000004D) + d15 * d20;
 				double d23 = posZ - d15 * d18 * 0.80000000000000004D - d13 * d20;
-				getWorld().spawnParticle("largesmoke", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
+				world.spawnParticle("largesmoke", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
 			}
 			else {
 				double d22 = posX + d13 + d15 * d18 * 0.69999999999999996D;
 				double d24 = (posZ + d15) - d13 * d18 * 0.69999999999999996D;
-				getWorld().spawnParticle("largesmoke", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
+				world.spawnParticle("largesmoke", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
 			}
 		}
 		float burn = FuelHandler.steamFuelLast(zeppInvent[0])*0.05f;
@@ -377,7 +377,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		double var12;
 		double var26;
 
-		if (this.getWorld().isRemote && this.field_70279_a) {
+		if (this.world.isRemote && this.field_70279_a) {
 			if (this.boatPosRotationIncrements > 0) {
 				var6 = this.posX + (this.boatX - this.posX) / this.boatPosRotationIncrements;
 				var8 = this.posY + (this.boatY - this.posY) / this.boatPosRotationIncrements;
@@ -466,7 +466,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			motionZ *= 0.99000000953674316D;
 		}
 
-		List list = getWorld().getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+		List list = world.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
 		if (list != null && list.size() > 0) {
 			for (int j1 = 0; j1 < list.size(); j1++) {
 				Entity entity = (Entity) list.get(j1);
@@ -499,7 +499,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		this.rotationYaw = (float) (this.rotationYaw + d12);
 		this.setRotation(this.rotationYaw, this.rotationPitch);
 		if (updateTicks % 10 == 0) {
-//			Traincraft.rotationChannel.sendToAllAround(new PacketZeppelinRotation(this, rotationYaw, roll), new NetworkRegistry.TargetPoint(getWorld().provider.dimensionId, posX, posY, posZ, 400D));
+//			Traincraft.rotationChannel.sendToAllAround(new PacketZeppelinRotation(this, rotationYaw, roll), new NetworkRegistry.TargetPoint(world.provider.dimensionId, posX, posY, posZ, 400D));
 			updateTicks=0;
 		}
 	}
@@ -634,7 +634,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	public boolean interactFirst(EntityPlayer entityplayer) {
 
 		if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) { return true; }
-		if (!getWorld().isRemote) {
+		if (!world.isRemote) {
 			addPassenger(entityplayer);
 		}
 		return true;

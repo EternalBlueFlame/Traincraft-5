@@ -34,7 +34,7 @@ public class BlockMobBoardingTrack extends TrackBaseTraincraft implements ITrack
 				return;
 			AxisAlignedBB box = null;
 			box = cart.boundingBox.expand(4, 4, 4);
-			List list = this.getWorld().getEntitiesWithinAABBExcludingEntity(cart, box);
+			List list = this.world.getEntitiesWithinAABBExcludingEntity(cart, box);
 			if (list != null && list.size() > 0) {
 
 				for (int j1 = 0; j1 < list.size(); j1++) {
@@ -49,7 +49,7 @@ public class BlockMobBoardingTrack extends TrackBaseTraincraft implements ITrack
 	}
 	@Override
 	public void updateEntity() {
-		if (getWorld().isRemote) {//not sure
+		if (world.isRemote) {//not sure
 			return;
 		}
 		if (this.delay > 0) {
@@ -67,9 +67,9 @@ public class BlockMobBoardingTrack extends TrackBaseTraincraft implements ITrack
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
+		Block block = world.getBlock(getX(), getY(), getZ());
+		world.notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
+		world.notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
 
 		markBlockNeedsUpdate();
 	}

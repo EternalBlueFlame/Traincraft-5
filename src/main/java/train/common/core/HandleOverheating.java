@@ -58,7 +58,7 @@ public class HandleOverheating {
             /**
              * train is fueled => heat level goes up to normal
              */
-            if (((Locomotive) entity).isLocoTurnedOn() && entity.fuelTrain > 1 && (entity.overheatLevel < (entity.getOverheatTime() + 30) / 2) && (entity.getWorld().rand.nextInt(7) == 0)) {
+            if (((Locomotive) entity).isLocoTurnedOn() && entity.fuelTrain > 1 && (entity.overheatLevel < (entity.getOverheatTime() + 30) / 2) && (entity.world.rand.nextInt(7) == 0)) {
                 entity.overheatLevel++;
             }
 
@@ -75,7 +75,7 @@ public class HandleOverheating {
              * Delayer has reached max and speed is not 0: overheat
              */
             if (entity.isBraking && breakDelay > 40 && (Math.abs(entity.motionX) + Math.abs(entity.motionZ)) > 0.05) {
-                if (entity.getWorld().rand.nextInt(10) == 0) {
+                if (entity.world.rand.nextInt(10) == 0) {
                     entity.overheatLevel += 2;
                 }
             }
@@ -86,7 +86,7 @@ public class HandleOverheating {
                  * water is empty => overheats
                  */
                 if ((waterLevel < 1) && entity.fuelTrain > 10) {
-                    if (entity.getWorld().rand.nextInt(10) == 0) {
+                    if (entity.world.rand.nextInt(10) == 0) {
                         entity.overheatLevel += 3;
                     }
                 }
