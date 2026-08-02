@@ -262,7 +262,7 @@ public class GuiJukebox extends GuiScreen {
             if (player != null && player.getDisplayName().equals(((AbstractTrains) jukebox).getTrainOwner())) {
                 if ((!jukebox.locked)) {
                     AxisAlignedBB box = jukebox.boundingBox.expand(5, 5, 5);
-                    List lis3 = jukebox.getWorld().getEntitiesWithinAABBExcludingEntity(jukebox, box);
+                    List lis3 = jukebox.world.getEntitiesWithinAABBExcludingEntity(jukebox, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object o : lis3) {
                             Entity entity = (Entity) o;
@@ -277,7 +277,7 @@ public class GuiJukebox extends GuiScreen {
                     this.initGui();
                 } else {
                     AxisAlignedBB box = jukebox.boundingBox.expand(5, 5, 5);
-                    List lis3 = jukebox.getWorld().getEntitiesWithinAABBExcludingEntity(jukebox, box);
+                    List lis3 = jukebox.world.getEntitiesWithinAABBExcludingEntity(jukebox, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object o : lis3) {
                             Entity entity = (Entity) o;

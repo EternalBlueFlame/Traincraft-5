@@ -26,7 +26,7 @@ public class CraftingHandler
 		  if (items != null) for (Item item: items) if (item == event.crafting.getItem()) event.player.addStat(ach.achievement, 1);
       }
 		if ((event.crafting.getItem() instanceof ItemRollingStock)) {
-			if (!event.player.getWorld().isRemote) {
+			if (!event.player.world.isRemote) {
         if (FMLCommonHandler.instance().getMinecraftServerInstance() != null) {
 					ItemRollingStock stock = (ItemRollingStock) event.crafting.getItem();
           //TraincraftSaveHandler.createFile(FMLCommonHandler.instance().getMinecraftServerInstance());

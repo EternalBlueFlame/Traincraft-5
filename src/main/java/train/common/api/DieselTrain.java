@@ -59,7 +59,7 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!getWorld().isRemote) {
+		if (!world.isRemote) {
 			if (theTank.getFluidAmount() != this.dataWatcher.getWatchableObjectInt(23)){
 				this.dataWatcher.updateObject(23, theTank.getFluidAmount());
 				fuelTrain = theTank.getFluidAmount();
@@ -130,7 +130,7 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	}
 
 	public void liquidInSlot(ItemStack itemstack) {
-		if (getWorld().isRemote)
+		if (world.isRemote)
 			return;
 		this.update += 1;
 		if (this.update % 8 == 0 && itemstack != null) {
@@ -165,10 +165,10 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 			motionZ *= 0.8;
 		} else if (ticksExisted%5==0 &&getTank().getFluidAmount()+100 < maxTank) {
 			FluidStack drain = null;
-			blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
-					getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
-					getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
-					getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
+			blocksToCheck = new TileEntity[]{world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
+					world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
+					world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
+					world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
 			};
 
 			for (TileEntity block : blocksToCheck) {

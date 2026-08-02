@@ -58,7 +58,7 @@ public class BlockDetectorAllLocomotiveTrack extends BlockDetectorTrack implemen
 	
 	@Override
 	public boolean blockActivated(EntityPlayer player) {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return false;
 		}
 		ItemStack current = player.inventory.getCurrentItem();

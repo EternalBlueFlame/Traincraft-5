@@ -44,7 +44,7 @@ public class BlockStationTrack extends BlockTrackLockingBase implements ITrackLo
 		if ((getCurrentCart() != null) && (getCurrentCart().isEntityAlive())) {
 			setCurrentCart(null);
 		}
-		if (!getWorld().isRemote) {
+		if (!world.isRemote) {
 			if(this.updateTicks>=this.getActivateRate()){
 				if(this.isPowered()){
 					this.activated=true;
@@ -76,7 +76,7 @@ public class BlockStationTrack extends BlockTrackLockingBase implements ITrackLo
 	}
 	@Override
 	public boolean blockActivated(EntityPlayer player) {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return false;
 		}
 		ItemStack current = player.inventory.getCurrentItem();

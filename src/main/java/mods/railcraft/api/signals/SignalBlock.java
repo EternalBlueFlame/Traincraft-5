@@ -144,12 +144,12 @@ public abstract class SignalBlock extends AbstractPair {
             int y = other.y;
             int z = other.z;
 
-            Block block = tile.getWorld().getBlock(x, y, z);
+            Block block = tile.world.getBlock(x, y, z);
             if (block != null)
                 log(DEBUG_LEVEL, "Signal Block target block [{0}, {1}, {2}] = {3}, {4}", x, y, z, block.getClass(), block.getUnlocalizedName());
             else
                 log(DEBUG_LEVEL, "Signal Block target block [{0}, {1}, {2}] = null", x, y, z);
-            TileEntity t = tile.getWorld().getTileEntity(x, y, z);
+            TileEntity t = tile.world.getTileEntity(x, y, z);
             if (t != null)
                 log(DEBUG_LEVEL, "Signal Block target tile [{0}, {1}, {2}] = {3}", t.xCoord, t.yCoord, t.zCoord, t.getClass());
             else
@@ -402,7 +402,7 @@ public abstract class SignalBlock extends AbstractPair {
     public Status getTrackStatus() {
         if (trackLocation == null)
             return locateTrack();
-        if (!tile.getWorld().blockExists(trackLocation.x, trackLocation.y, trackLocation.z))
+        if (!tile.world.blockExists(trackLocation.x, trackLocation.y, trackLocation.z))
             return Status.UNKNOWN;
         if (!RailTools.isRailBlockAt(tile.getWorld(), trackLocation.x, trackLocation.y, trackLocation.z)) {
             trackLocation = null;

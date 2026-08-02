@@ -15,7 +15,7 @@ import net.minecraft.world.World;
  */
 public interface IReceiverTile {
 
-    World getWorld();
+    World world;
 
     SignalReceiver getReceiver();
 

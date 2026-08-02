@@ -356,7 +356,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, float i) {
-        if (getWorld().isRemote || isDead) {
+        if (world.isRemote || isDead) {
             return true;
         }
         if (damagesource.getEntity() instanceof EntityPlayer && !damagesource.isProjectile()) {
@@ -489,13 +489,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         //remove seats
         for (EntitySeat seat : seats) {
             seat.setDead();
-            seat.getWorld().removeEntity(seat);
+            seat.world.removeEntity(seat);
         }
 
         for(CollisionBox box : collisionHandler.interactionBoxes){
             if(box !=null){
                 box.setDead();
-                getWorld().removeEntity(box);
+                world.removeEntity(box);
             }
         }
     }
@@ -520,7 +520,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
      * @param
      */
     public boolean isLockedAndNotOwner(int player) {
-        Entity p = getWorld().getEntityByID(player);
+        Entity p = world.getEntityByID(player);
         if(!(p instanceof EntityPlayer)){
             return false;
         }
@@ -673,7 +673,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         /**
          * manage chunkloading
          */
-        if (!getWorld().isRemote && this.uniqueID == -1) {
+        if (!world.isRemote && this.uniqueID == -1) {
             if (FMLCommonHandler.instance().getMinecraftServerInstance() != null) {
 
                 setNewUniqueID(this.getEntityId());
@@ -689,7 +689,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         /**
          * Set the uniqueID if the entity doesn't have one.
          */
-        if (!getWorld().isRemote && this.uniqueID == -1) {
+        if (!world.isRemote && this.uniqueID == -1) {
             if (FMLCommonHandler.instance().getMinecraftServerInstance() != null) {
                 setNewUniqueID(this.getEntityId());
             }
@@ -720,7 +720,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 if (i == 0) {
                     seats.get(i).setControlSeat();
                 }
-                getWorld().spawnEntityInWorld(seats.get(i));
+                world.spawnEntityInWorld(seats.get(i));
             }
         }
         //dont check for jumping until at least a tick after seats spawned
@@ -729,8 +729,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
 
         int var2;
-        if (!this.getWorld().isRemote && this.getWorld() instanceof WorldServer) {
-            this.getWorld().theProfiler.startSection("portal");
+        if (!this.world.isRemote && this.getWorld() instanceof WorldServer) {
+            this.world.theProfiler.startSection("portal");
             MinecraftServer var1 = MinecraftServer.getServer();
             var2 = this.getMaxInPortalTime();
 
@@ -741,7 +741,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                         this.timeUntilPortal = this.getPortalCooldown();
                         byte var3;
 
-                        if (this.getWorld().provider.dimensionId == -1) {
+                        if (this.world.provider.dimensionId == -1) {
                             var3 = 0;
                         } else {
                             var3 = -1;
@@ -766,7 +766,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 --this.timeUntilPortal;
             }
 
-            this.getWorld().theProfiler.endSection();
+            this.world.theProfiler.endSection();
         }
 
         if (Traincraft.proxy.isClient()) {
@@ -839,11 +839,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
         if (worldObj.isAirBlock(floor_posX, floor_posY, floor_posZ)) {
             floor_posY--;
-        } else if (isRailBlockAt(getWorld(), floor_posX, floor_posY + 1, floor_posZ) || getWorld().getBlock(floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRail.block || getWorld().getBlock(floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRailGag.block) {
+        } else if (isRailBlockAt(getWorld(), floor_posX, floor_posY + 1, floor_posZ) || world.getBlock(floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRail.block || world.getBlock(floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRailGag.block) {
             floor_posY++;
         }
 
-        l = getWorld().getBlock(floor_posX, floor_posY, floor_posZ);
+        l = world.getBlock(floor_posX, floor_posY, floor_posZ);
 
         updatePosition();
 
@@ -896,7 +896,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (ConfigHandler.ENABLE_LOGGING && !worldObj.isRemote && ticksExisted % 120 == 0) {
             ServerLogger.writeWagonToFolder(this);
         }
-        if(!getWorld().isRemote) {
+        if(!world.isRemote) {
             dataWatcher.updateObject(29, getVelocity());
         }
     }
@@ -911,7 +911,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     if(i1==0){
                         seats.get(i1).setControlSeat();
                     }
-                    getWorld().spawnEntityInWorld(seats.get(i1));
+                    world.spawnEntityInWorld(seats.get(i1));
                 }
                 cachedVectors[0] = new Vec3f(getRiderOffsets()[i1][0], getRiderOffsets()[i1][1], getRiderOffsets()[i1][2])
                         .rotatePoint(rotationPitch, 180+rotationYaw, 0f);
@@ -924,7 +924,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     public void updatePosition(){
 
         //reposition bogies to be sure they are the right distance
-        if(!getWorld().isRemote) {
+        if(!world.isRemote) {
 
             //do scaled rail boosting but keep it capped to the max velocity of the rail
             Block b = CommonUtil.getBlockAt(getWorld(),posX,posY,posZ);
@@ -1127,7 +1127,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 
     public float getVelocity(){
-        return getWorld().isRemote?dataWatcher.getWatchableObjectFloat(29):
+        return world.isRemote?dataWatcher.getWatchableObjectFloat(29):
                 (float)(Math.abs(motionX)+Math.abs(motionZ));
     }
     double maxBoost(Block booster){
@@ -1275,7 +1275,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (getRiderOffsets() != null && getPermissions(playerEntity, false) && !entityplayer.isSneaking()) {
             for (EntitySeat seat : seats) {
                 //1.12 is stupid, sometimes when the passenger is null, it returns the player
-                if (!getWorld().isRemote && (seat.getPassenger() == null
+                if (!world.isRemote && (seat.getPassenger() == null
                         || seat.getPassenger().getEntityId()==playerEntity.getEntityId())) {
                     seat.addPassenger(playerEntity);
                     entityplayer.mountEntity(seat);

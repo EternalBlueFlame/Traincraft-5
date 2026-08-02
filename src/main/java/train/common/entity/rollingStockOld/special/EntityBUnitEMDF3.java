@@ -51,7 +51,7 @@ public class EntityBUnitEMDF3 extends LiquidTank implements IFluidHandler {
     public void onUpdate() {
         super.onUpdate();
         checkInvent(cargoItems[0]);
-        if (getWorld().isRemote) {
+        if (world.isRemote) {
             return;
         }
 
@@ -148,7 +148,7 @@ public class EntityBUnitEMDF3 extends LiquidTank implements IFluidHandler {
     }
 
     public void liquidInSlot(ItemStack itemstack) {
-        if (getWorld().isRemote) {
+        if (world.isRemote) {
             return;
         }
 
@@ -198,7 +198,7 @@ public class EntityBUnitEMDF3 extends LiquidTank implements IFluidHandler {
         if (super.interactFirst(entityplayer)) {
             return false;
         }
-        if (!this.getWorld().isRemote) {
+        if (!this.world.isRemote) {
             entityplayer.openGui(Traincraft.instance, GuiIDs.LIQUID, getWorld(), this.getEntityId(), -1, (int) this.posZ);
         }
         return true;

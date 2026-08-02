@@ -90,7 +90,7 @@ public class EntityRotativeWheel extends Entity {
         }
 
         assert getWorld() != null;
-        List<?> listLiving = getWorld().getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.4, 0.4, 0.4));
+        List<?> listLiving = world.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.4, 0.4, 0.4));
         if (listLiving != null && !listLiving.isEmpty() && entity != null && entity instanceof EntityRotativeDigger && ((EntityRotativeDigger) entity).getFuel() > 0) {//&& ((EntityRotativeDigger) entity).start){
 
             for (Object o : listLiving) {
@@ -121,7 +121,7 @@ public class EntityRotativeWheel extends Entity {
              * } */
         }
 
-        if (getWorld().isRemote) {
+        if (world.isRemote) {
             if (field_9394_d > 0) {
                 double d1 = posX + (field_9393_e - posX) / (double) field_9394_d;
                 double d5 = posY + (field_9392_f - posY) / (double) field_9394_d;
@@ -163,17 +163,17 @@ public class EntityRotativeWheel extends Entity {
             return;
         }
 
-        Block id = getWorld().getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
-        int meta = getWorld().getBlockMetadata((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        int meta = world.getBlockMetadata((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
         if (id != null) {
             this.playMiningEffect(pos, id);
         }
 
         if (!shouldIgnoreBlockForHarvesting(pos, id)) {
             id.harvestBlock(getWorld(), fakePlayer, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, meta);
-            getWorld().setBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, null);
+            world.setBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, null);
 
-            getWorld().playAuxSFX(2001, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, Block.getIdFromBlock(id) + (meta << 12));
+            world.playAuxSFX(2001, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, Block.getIdFromBlock(id) + (meta << 12));
             this.playMiningEffect(pos, id);
         }
 
@@ -209,7 +209,7 @@ public class EntityRotativeWheel extends Entity {
     @SideOnly(Side.CLIENT)
     private void playMiningEffect(Vec3 pos, Block block_index) {
         miningTickCounter++;
-        Block id = getWorld().getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
     }
 
     /**

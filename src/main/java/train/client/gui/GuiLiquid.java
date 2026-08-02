@@ -70,7 +70,7 @@ public class GuiLiquid extends GuiContainer {
             if (player != null && player.getCommandSenderName().equalsIgnoreCase(((AbstractTrains) liquid).getTrainOwner())) {
                 if (!liquid.getTrainLockedFromPacket()) {
                     AxisAlignedBB box = liquid.boundingBox.expand(5, 5, 5);
-                    List lis3 = liquid.getWorld().getEntitiesWithinAABBExcludingEntity(liquid, box);
+                    List lis3 = liquid.world.getEntitiesWithinAABBExcludingEntity(liquid, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
                             if (entity instanceof EntityPlayer) {
@@ -85,7 +85,7 @@ public class GuiLiquid extends GuiContainer {
                     this.initGui();
                 } else {
                     AxisAlignedBB box = liquid.boundingBox.expand(5, 5, 5);
-                    List lis3 = liquid.getWorld().getEntitiesWithinAABBExcludingEntity(liquid, box);
+                    List lis3 = liquid.world.getEntitiesWithinAABBExcludingEntity(liquid, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
                             if (entity instanceof EntityPlayer) {

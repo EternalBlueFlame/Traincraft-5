@@ -126,7 +126,7 @@ public class LinkHandler {
 					}
 
 
-					EntityPlayer entityplayer = cart1.getWorld().getClosestPlayerToEntity(cart1, 20);//
+					EntityPlayer entityplayer = cart1.world.getClosestPlayerToEntity(cart1, 20);//
 					if (entityplayer != null && byPlayer) {
 						entityplayer.addChatMessage(new ChatComponentText("attached!"));
 					}

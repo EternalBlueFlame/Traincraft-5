@@ -63,8 +63,8 @@ public class TileInfoTransmitterMTC extends TileEntity implements IPeripheral {
             return;
         }
 
-        if (getWorld().isRemote) {return;}
-        List<Object> list = this.getWorld().getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
+        if (world.isRemote) {return;}
+        List<Object> list = this.world.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
         if (list != null && list.size() > 0) {
             for (Object obj : list) {
                 if (obj instanceof Locomotive) {
@@ -79,7 +79,7 @@ public class TileInfoTransmitterMTC extends TileEntity implements IPeripheral {
 
 				 if (activated) {
                     //ExampleMod.msChannel.sendToAll(new PacketMTC(daTrain.getEntityId(), MTCInfo, 2));
-                    Traincraft.mscChannel.sendToAllAround(new PacketMTC(daTrain.getEntityId(), MTCInfo, 0) , new NetworkRegistry.TargetPoint(this.getWorld().provider.dimensionId, daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
+                    Traincraft.mscChannel.sendToAllAround(new PacketMTC(daTrain.getEntityId(), MTCInfo, 0) , new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
 
                     daTrain.mtcStatus =  MTCInfo;
                     daTrain.currentSignalBlock = this.signalBlock;

@@ -34,7 +34,7 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
 
     @Override
     public void updateEntity(){
-        if(!getWorld().isRemote){
+        if(!world.isRemote){
             if(slots[0] != null){
                 ItemStack result = LiquidManager.getInstance().processContainer(this, 0, this, slots[0]);
                 if(result != null && placeInInvent(result, 1, false)){
@@ -125,7 +125,7 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
     }
 
     @Override
-    public World getWorld(){
+    public World world{
         return this.getWorld();
     }
 

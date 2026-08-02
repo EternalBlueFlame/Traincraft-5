@@ -35,7 +35,7 @@ public class TCPathFinder extends PathFinder {
         for (int i = x; i < x + point.xCoord; ++i) {
             for (int j = y; j < y + point.yCoord; ++j) {
                 for (int k = z; k < z + point.zCoord; ++k) {
-                    Block block = entity.getWorld().getBlock(i, j, k);
+                    Block block = entity.world.getBlock(i, j, k);
 
                     if (block.getMaterial() != Material.air && !(block instanceof BlockTCRail) && !(block instanceof BlockTCRailGag)) {
                         if (block == Blocks.trapdoor) {
@@ -54,12 +54,12 @@ public class TCPathFinder extends PathFinder {
 
                         int k1 = block.getRenderType();
 
-                        if (entity.getWorld().getBlock(i, j, k).getRenderType() == 9) {
+                        if (entity.world.getBlock(i, j, k).getRenderType() == 9) {
                             int j2 = MathHelper.floor(entity.posX);
                             int l1 = MathHelper.floor(entity.posY);
                             int i2 = MathHelper.floor(entity.posZ);
 
-                            if (entity.getWorld().getBlock(j2, l1, i2).getRenderType() != 9 && entity.getWorld().getBlock(j2, l1 - 1, i2).getRenderType() != 9) {
+                            if (entity.world.getBlock(j2, l1, i2).getRenderType() != 9 && entity.world.getBlock(j2, l1 - 1, i2).getRenderType() != 9) {
                                 return -3;
                             }
                         } else if (!block.getBlocksMovement(entity.getWorld(), i, j, k) && (!movement || block != Blocks.wooden_door)) {

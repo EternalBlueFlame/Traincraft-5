@@ -124,7 +124,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	}
 	@Override
 	public void updateEntity() {
-		if(!getWorld().isRemote){
+		if(!world.isRemote){
 			updateTicks++;
 			boolean flag = distilBurnTime > 0;
 			boolean flag1 = false;
@@ -166,7 +166,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			else {
 				flag1 = false;
 				BlockDistil.updateDistilBlockState(distilBurnTime > 0, getWorld(), xCoord, yCoord, zCoord);
-				this.getWorld().markBlockForUpdate(getPos());
+				this.world.markBlockForUpdate(getPos());
 			}
 
 			if (slots[2] != null) {
@@ -200,7 +200,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 						flag1 = true;
 
 						this.markDirty();
-						this.getWorld().markBlockForUpdate(getPos());
+						this.world.markBlockForUpdate(getPos());
 					}
 				}
 			}
@@ -219,7 +219,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 			if (updateTicks % 8 == 0){
 				this.markDirty();
-				this.getWorld().markBlockForUpdate(getPos());
+				this.world.markBlockForUpdate(getPos());
 			}
 			if (distilBurnTime > 0) {
 				distilBurnTime--;
@@ -298,7 +298,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 
 			this.markDirty();
-			this.getWorld().markBlockForUpdate(getPos());
+			this.world.markBlockForUpdate(getPos());
 		}
 
 		if (slots[0].getItem().hasContainerItem(slots[0])) {

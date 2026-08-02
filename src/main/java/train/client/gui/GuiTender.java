@@ -85,7 +85,7 @@ public class GuiTender extends GuiContainer {
             if (player != null && player.getCommandSenderName().equalsIgnoreCase(tender.getTrainOwner())) {
                 if (!tender.getTrainLockedFromPacket()) {
                     AxisAlignedBB box = tender.boundingBox.expand(5, 5, 5);
-                    List lis3 = tender.getWorld().getEntitiesWithinAABBExcludingEntity(tender, box);
+                    List lis3 = tender.world.getEntitiesWithinAABBExcludingEntity(tender, box);
 
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
@@ -104,7 +104,7 @@ public class GuiTender extends GuiContainer {
                     this.initGui();
                 } else {
                     AxisAlignedBB box = tender.boundingBox.expand(5, 5, 5);
-                    List lis3 = tender.getWorld().getEntitiesWithinAABBExcludingEntity(tender, box);
+                    List lis3 = tender.world.getEntitiesWithinAABBExcludingEntity(tender, box);
 
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {

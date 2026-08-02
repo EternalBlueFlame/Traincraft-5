@@ -94,7 +94,7 @@ public class EntityTender4_4_0 extends Tender {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!this.getWorld().isRemote) {
+		if (!this.world.isRemote) {
 			entityplayer.openGui(Traincraft.instance, GuiIDs.TENDER, getWorld(), this.getEntityId(), -1, (int) this.posZ);
 		}
 		return true;

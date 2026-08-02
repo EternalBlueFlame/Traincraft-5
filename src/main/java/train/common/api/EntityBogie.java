@@ -491,11 +491,11 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	}
 
 
-	public World getWorld(){return worldObj;}
+	public World world{return worldObj;}
 
 	public void minecartMove(AbstractTrains host) {
 		//server only
-		if(!getWorld().isRemote) {
+		if(!world.isRemote) {
 			xFloor = CommonUtil.floorDouble(this.posX);
 			yFloor = CommonUtil.floorDouble(this.posY);
 			zFloor = CommonUtil.floorDouble(this.posZ);
@@ -517,7 +517,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			//detect slopes
 			if(!(l instanceof BlockRailBase || l instanceof BlockTCRail || l instanceof BlockTCRailGag)){
 				prevPosY = posY;
-				if(getWorld().isAirBlock(xFloor, yFloor, zFloor)){
+				if(world.isAirBlock(xFloor, yFloor, zFloor)){
 					posY--;
 					yFloor--;
 				} else {
@@ -612,7 +612,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 					railMetadata = CommonUtil.getRailMeta(getWorld(), this, xFloor, yFloor, zFloor);
 				}
 				//get the direction of the rail from it's metadata
-				else if (getWorld().getTileEntity(xFloor, yFloor, zFloor) instanceof ITrackTile && (((ITrackTile)getWorld().getTileEntity(xFloor, yFloor, zFloor)).getTrackInstance() instanceof ITrackSwitch)){
+				else if (world.getTileEntity(xFloor, yFloor, zFloor) instanceof ITrackTile && (((ITrackTile)world.getTileEntity(xFloor, yFloor, zFloor)).getTrackInstance() instanceof ITrackSwitch)){
 					railMetadata = CommonUtil.getRailMeta(getWorld(),this,xFloor, yFloor, zFloor);//railcraft support
 				}
 			}

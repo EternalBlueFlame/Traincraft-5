@@ -46,7 +46,7 @@ public class ModelSmallStraightTCTrack extends ModelBase {
 		}
 
 
-		render( type, tcRail.getWorld().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1 , iconName, colour);
+		render( type, tcRail.world.getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1 , iconName, colour);
 	}
 
 

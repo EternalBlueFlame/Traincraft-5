@@ -24,7 +24,7 @@ public class BlockDetectorTrack extends TrackBaseTraincraft implements ITrackEmi
 	}
 	@Override
 	public void updateEntity() {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return;
 		}
 		if (this.delay > 0) {
@@ -42,9 +42,9 @@ public class BlockDetectorTrack extends TrackBaseTraincraft implements ITrackEmi
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
+		Block block = world.getBlock(getX(), getY(), getZ());
+		world.notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
+		world.notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
 
 		markBlockNeedsUpdate();
 	}

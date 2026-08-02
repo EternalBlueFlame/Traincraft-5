@@ -67,7 +67,7 @@ public class RetrogenHandler {
         private ChunkData(Chunk chunk) {
             this.chunkX = chunk.xPosition;
             this.chunkZ = chunk.zPosition;
-            this.dimension = chunk.getWorld().provider.dimensionId;
+            this.dimension = chunk.world.provider.dimensionId;
         }
 
         public ChunkData(int chunkX, int chunkZ, int dimension) {

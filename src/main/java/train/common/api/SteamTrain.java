@@ -65,7 +65,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 		/**
 		 * so the client side knows the water amount
 		 */
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return;
 		}
 		if (theTank != null && theTank.getFluid() != null) {
@@ -155,7 +155,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 
 	public void liquidInSlot(ItemStack itemstack, SteamTrain loco) {
 
-		if (getWorld().isRemote)
+		if (world.isRemote)
 			return;
 		this.update += 1;
 		if (this.update % 8 == 0 && itemstack != null) {
@@ -176,10 +176,10 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			FluidStack drain = null;
 
 			if(fill(EnumFacing.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
-				blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
-						getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
-						getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
-						getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
+				blocksToCheck = new TileEntity[]{world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
+						world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
+						world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
+						world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
 				};
 
 				for (TileEntity block : blocksToCheck) {
@@ -260,7 +260,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	/** Used for the gui */
 	@Override
 	public int getFuelDiv(int i) {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return ((this.dataWatcher.getWatchableObjectInt(24) * i) / maxFuel);
 		}
 		return (this.fuelTrain * i) / maxFuel;

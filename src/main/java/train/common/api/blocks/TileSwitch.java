@@ -86,7 +86,7 @@ public class TileSwitch extends TileRenderFacing {
 
     @Override
     public void updateEntity() {
-        if(!getWorld().isRemote){
+        if(!world.isRemote){
             return;
         }
         time = System.currentTimeMillis();
@@ -172,8 +172,8 @@ public class TileSwitch extends TileRenderFacing {
     public int checkBlockPower(int[] ... offset){
         int signalStrength=0;
         for(int[] o : offset) {
-            signalStrength = getWorld().getBlockPowerInput(xCoord + o[0], yCoord + o[1], zCoord + o[2]);
-            if (signalStrength == 0 && getWorld().isBlockIndirectlyGettingPowered(xCoord + o[0], yCoord + o[1], zCoord + o[2])) {
+            signalStrength = world.getBlockPowerInput(xCoord + o[0], yCoord + o[1], zCoord + o[2]);
+            if (signalStrength == 0 && world.isBlockIndirectlyGettingPowered(xCoord + o[0], yCoord + o[1], zCoord + o[2])) {
                 return 15;
             } else if(signalStrength!=0) {
                 return signalStrength;
@@ -185,7 +185,7 @@ public class TileSwitch extends TileRenderFacing {
     public int checkBlockPower(int[] offset, int depth){
         int signalStrength=0;
         for(int o =-1;o<depth-1;o++) {
-            signalStrength = getWorld().getBlockPowerInput(xCoord + offset[0], yCoord + offset[1]+o, zCoord + offset[2]);
+            signalStrength = world.getBlockPowerInput(xCoord + offset[0], yCoord + offset[1]+o, zCoord + offset[2]);
             if(signalStrength==0){
                 //1.12 use getMaxCurrentStrength
                 signalStrength = CommonUtil.getBlockAt(getWorld(),xCoord + offset[0], yCoord + offset[1]+o, zCoord + offset[2])
@@ -248,7 +248,7 @@ public class TileSwitch extends TileRenderFacing {
             }
         }
 
-        List list = this.getWorld().getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(
+        List list = this.world.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(
                 xCoord+start.xCoord, yCoord+start.yCoord, zCoord+start.zCoord,
                 xCoord+end.xCoord, yCoord+end.yCoord, zCoord+end.zCoord));
 
@@ -261,7 +261,7 @@ public class TileSwitch extends TileRenderFacing {
             }
         }
         if(useRedstone) {
-            setStrength(getWorld().getBlockPowerInput(xCoord, yCoord, zCoord),0);
+            setStrength(world.getBlockPowerInput(xCoord, yCoord, zCoord),0);
         } else {
             setStrength(0,0);
         }

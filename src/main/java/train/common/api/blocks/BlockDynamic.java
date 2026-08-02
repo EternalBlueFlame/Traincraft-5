@@ -153,15 +153,15 @@ public class BlockDynamic extends BlockContainer {
 
 
     @Override
-    public boolean onBlockActivated(World getWorld(), int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
+    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
         if (player.isSneaking() || slots==0) {
             return false;
-        } else if (getWorld().isRemote) {
+        } else if (world.isRemote) {
             return true;
         }
 
-        if (getWorld().getTileEntity(x, y, z) instanceof TileTraincraft) {
-            player.openGui(Traincraft.instance, 0, getWorld(), x, y, z);
+        if (world.getTileEntity(x, y, z) instanceof TileTraincraft) {
+            player.openGui(Traincraft.instance, 0, world, x, y, z);
             return true;
         } else {
             return false;

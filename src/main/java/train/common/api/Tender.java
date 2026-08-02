@@ -70,7 +70,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (getWorld().isRemote)
+        if (world.isRemote)
             return;
         if (theTank != null && theTank.getFluid() != null) {
             this.dataWatcher.updateObject(27, theTank.getFluid().amount);
@@ -152,7 +152,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
     }
 
     public void liquidInSlot(ItemStack itemstack, Tender tender) {
-        if (getWorld().isRemote)
+        if (world.isRemote)
             return;
         this.update += 1;
         if (this.update % 8 == 0 && itemstack != null) {
@@ -171,10 +171,10 @@ public abstract class Tender extends Freight implements IFluidHandler {
 
         if (ticksExisted % 5 == 0 && fill(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
             FluidStack drain = null;
-            blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
-                    getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
-                    getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
-                    getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
+            blocksToCheck = new TileEntity[]{world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
+                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
+                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
+                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
             };
 
             for (TileEntity block : blocksToCheck) {
