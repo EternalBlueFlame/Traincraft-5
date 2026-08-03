@@ -40,3 +40,4 @@ runserver
 .project
 
 fix-params.sh
+.token
