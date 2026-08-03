@@ -301,20 +301,25 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
-        Entity entity = player.ridingEntity;
-        EntityPlayer getPassengers().get(0) = player.getRidingEntity()!= null ? (EntityPlayer) entity.getPassengers().get(0) : null;
+    TileEntity te = world.getTileEntity(x, y, z);
 
-        Entity entity1 = null;
-        if (y == -1) {
-            for (Object ent : world.loadedEntityList) {
-                if (((Entity) ent).getEntityId() == x) {
-                    entity1 = (Entity) ent;
-                }
+    Entity entity = player.getRidingEntity();
+    EntityPlayer passenger = null;
+
+    if (entity != null && !entity.getPassengers().isEmpty() && entity.getPassengers().get(0) instanceof EntityPlayer) {
+        passenger = (EntityPlayer) entity.getPassengers().get(0);
+    }
+
+    Entity entity1 = null;
+    if (y == -1) {
+        for (Object ent : world.loadedEntityList) {
+            if (((Entity) ent).getEntityId() == x) {
+                entity1 = (Entity) ent;
             }
         }
+    }
 
-        switch (ID) {
+                switch (ID) {
             case (GuiIDs.CRAFTER_TIER_I):
                 return te instanceof TileCrafterTierI ? new GuiCrafterTier(player.inventory, (TileCrafterTierI) te) : null;
             case (GuiIDs.CRAFTER_TIER_II):
@@ -328,45 +333,55 @@ public class ClientProxy extends CommonProxy {
             case (GuiIDs.OPEN_HEARTH_FURNACE):
                 return te instanceof TileEntityOpenHearthFurnace ? new GuiOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
             case GuiIDs.TRAIN_WORKBENCH:
-                return te instanceof TileTrainWbench ? new GuiTrainCraftingBlock(player.inventory, player.getWorld(), (TileTrainWbench) te) : null;
+                return te instanceof TileTrainWbench ? new GuiTrainCraftingBlock(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
+
             case (GuiIDs.LOCO):
-                if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntitySeat) {
-                    return new GuiLoco2(riddenByEntity.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
+                if (passenger != null && entity instanceof EntitySeat) {
+                    return new GuiLoco2(passenger.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
+                } else if (passenger != null) {
+                    return new GuiLoco2(passenger.inventory, entity);
                 } else {
                     return null;
                 }
+
             case (GuiIDs.CONTROL_CAR):
-                if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntityRollingStock) {
-                    return new GuiControlCar(riddenByEntity.inventory, entity);
-                } else if (riddenByEntity != null && riddenByEntity.ridingEntity instanceof EntitySeat) {
-                    return new GuiControlCar(riddenByEntity.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
+                if (passenger != null && entity instanceof EntityRollingStock) {
+                    return new GuiControlCar(passenger.inventory, entity);
+                } else if (passenger != null && entity instanceof EntitySeat) {
+                    return new GuiControlCar(passenger.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
                 } else {
                     return null;
                 }
+
             case (GuiIDs.FORNEY):
-                if (getPassengers().get(0) != null && getPassengers().get(0).getRidingEntity()instanceof EntityRollingStock) {
-                    return new GuiForney(getPassengers().get(0).inventory, entity);
-                } else if (getPassengers().get(0) != null && getPassengers().get(0).getRidingEntity()instanceof EntitySeat) {
-                    return new GuiForney(getPassengers().get(0).inventory, world.getEntityByID(((EntitySeat) entity).parentId));
+                if (passenger != null && entity instanceof EntityRollingStock) {
+                    return new GuiForney(passenger.inventory, entity);
+                } else if (passenger != null && entity instanceof EntitySeat) {
+                    return new GuiForney(passenger.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
                 } else {
                     return null;
                 }
+
             case (GuiIDs.CRAFTING_CART):
-                return getPassengers().get(0) != null ? new GuiCraftingCart(getPassengers().get(0).inventory, world) : null;
+                return passenger != null ? new GuiCraftingCart(passenger.inventory, world) : null;
+
             case (GuiIDs.FURNACE_CART):
-                if (getPassengers().get(0) != null && getPassengers().get(0).getRidingEntity()instanceof EntityRollingStock) {
-                    return new GuiFurnaceCart(getPassengers().get(0).inventory, entity);
-                } else if (getPassengers().get(0) != null && getPassengers().get(0).getRidingEntity()instanceof EntitySeat) {
-                    return new GuiFurnaceCart(getPassengers().get(0).inventory, world.getEntityByID(((EntitySeat) entity).parentId));
+                if (passenger != null && entity instanceof EntityRollingStock) {
+                    return new GuiFurnaceCart(passenger.inventory, entity);
+                } else if (passenger != null && entity instanceof EntitySeat) {
+                    return new GuiFurnaceCart(passenger.inventory, world.getEntityByID(((EntitySeat) entity).parentId));
                 } else {
                     return null;
                 }
+
             case (GuiIDs.ZEPPELIN):
-                return getPassengers().get(0) != null ? new GuiZepp(getPassengers().get(0).inventory, entity) : null;
+                return passenger != null ? new GuiZepp(passenger.inventory, entity) : null;
+
             case (GuiIDs.DIGGER):
-                return getPassengers().get(0) != null ? new GuiBuilder(player, getPassengers().get(0).inventory, entity) : null;
+                return passenger != null ? new GuiBuilder(player, passenger.inventory, entity) : null;
+
             case (GuiIDs.MTC_INFO):
-                return getPassengers().get(0) != null && Loader.isModLoaded("ComputerCraft") ? new GuiMTCInfo(player) : null;
+                return passenger != null && Loader.isModLoaded("ComputerCraft") ? new GuiMTCInfo(player) : null;
 
             // Stationary entities while player is not riding.
             case (GuiIDs.FREIGHT):
@@ -379,8 +394,6 @@ public class ClientProxy extends CommonProxy {
                 return entity1 != null ? new GuiLiquid(player, player.inventory, entity1) : null;
             case (GuiIDs.RECIPE_BOOK):
                 return new GuiRecipeBook(player, player.getCurrentEquippedItem());
-		/*case (GuiIDs.RECIPE_BOOK2):
-			return te != null && te instanceof TileBook ? new GuiRecipeBook2(player, player.getCurrentEquippedItem()) : new GuiRecipeBook2(player, player.getCurrentEquippedItem());*/
             case (GuiIDs.LANTERN):
                 return new GuiLantern(player, (TileLantern) te);
             case (GuiIDs.JUKEBOX):
