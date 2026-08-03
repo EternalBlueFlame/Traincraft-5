@@ -613,12 +613,13 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					}
 				}
 				world.spawnEntityInWorld(rollingStock);
-			}
-				--itemstack.getCount();
+			            world.spawnEntityInWorld(rollingStock);
+        }
+    }
 
-
-		return rollingStock;
-	}
+    itemstack.stackSize--;
+    return rollingStock;
+}
 
 
 	public static ItemStack setPersistentData(@Nullable ItemStack oldStack, @Nullable AbstractTrains train, @Nullable Integer trainID, @Nullable String player, @Nullable String creator, String color) {
