@@ -52,26 +52,7 @@ This specific fork is maintained by **EternalBlueFlame** and **NitroxydeX**. It 
 ## Contributing
 The Traincraft project welcomes contributions from anyone, provided they have signed the Contributor Licensing Agreement (CLA) found [here](https://cla-assistant.io/Mrbrutal/Traincraft).
 
-If you are just looking to make skins, they can all be found here: [https://github.com/EternalBlueFlame/Traincraft-5/tree/1.7/src/main/resources/assets/tc/textures/trains](https://github.com/EternalBlueFlame/Traincraft-5/tree/1.7/src/main/resources/assets/tc/textures/trains).
-
-**NOTE:** With the rewrite we will continue to support community skins for the models ported from 1.6.4 and older via the "Heritage: Community edition" pack.
-
-### Getting Started
-If the IDE asks for a deobfuscator:
-
-#### Windows
-`C:\Users\[USERNAME]\.gradle\caches\minecraft\net\minecraftforge\forge\1.7.10-10.13.4.1558-1.7.10\unpacked\conf`
-
-#### OSX/Linux
-`~/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.4.1558-1.7.10/unpacked/conf`
-
-Setting up the project was made easy with the [setup.bat](./setup.bat) file (doesn't always work for Eclipse, blame Forge).
-
-Otherwise, this project follows standard Forge conventions. See ~~[http://www.minecraftforge.net/wiki/Installation/Source](http://www.minecraftforge.net/wiki/Installation/Source)~~ (dead link).
-
-After you finish the tutorial or setup, if it has not already been defined, you must manually define the root path of your JDK installation folder, and the location of your :ForgeBin:
-
-You may also need to import the required API libraries for the related mods if it is not done automatically (BuildCraft, Railcraft, etc).
+For developer environment setup, workspace initialization, coding guidelines, custom skin creation, and pull request steps, please refer to **[CONTRIBUTING.md](CONTRIBUTING.md)**.
 
 ## License
 Traincraft is licensed under a custom usage license tailored specifically for the project. It can be read [here](https://github.com/EternalBlueFlame/Traincraft-5/tree/TC4.5-1.7.10/LICENSE.md).
