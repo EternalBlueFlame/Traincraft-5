@@ -7,14 +7,14 @@ echo "$JAVA_VER"
 if [ "$JAVA_VER" -ge 19 ]
 then
     echo "This version is incompatible, 1.9 and later break stuff."
-    ins_j8;;
+    ins_j8
 elif [ -z "$JAVA_VER" ]
 then
-    ins_j8;;
+    ins_j8
 elif [ ! "$JAVA_VER" -ge 18 ]
 then
     echo "your java version is too old and doesn't support the methods we need."
-    insj8;;
+    insj8
 fi
 
 
