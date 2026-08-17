@@ -16,7 +16,7 @@ Here you will find the source code for the **Traincraft 1.7.10 Port**.
 - **[Licensing and rules, READ THIS PART ESPECIALLY](#license)**
 
 ## Join the Discussion!
-If you wish to contact the original developers, you can contact Mr. Brutal on Twitter ~~[https://twitter.com/Mrbrutall](https://twitter.com/Mrbrutall)~~ (dead link) or send an email to [spitfire4466@gmail.com](mailto:spitfire4466@gmail.com)
+If you wish to contact the original developers, you can send an email to [spitfire4466@gmail.com](mailto:spitfire4466@gmail.com).
 
 If you'd like to join the live chat, head over to our [Public Discord chat](https://discord.gg/SgpnCnK).
 
@@ -24,9 +24,9 @@ And, of course, be sure to check out the issues tab here on GitHub.
 
 ## Official Links
 * Main Site and Downloads: [http://www.traincraft-mod.com](http://www.traincraft-mod.com)
-* Brutal's Blog: ~~[http://blog.meansoft.si](http://blog.meansoft.si)~~ (Dead link)
+* Brutal's Blog: [http://blog.meansoft.si](http://blog.meansoft.si)
 * Our Blog: [https://traincraft-mod.blogspot.com](https://traincraft-mod.blogspot.com)
-* Old wiki: ~~[http://wiki.meansoft.si](http://wiki.meansoft.si)~~ (Dead link)
+* Old wiki: [http://wiki.meansoft.si](http://wiki.meansoft.si)
 * Brutal's IRC: #Traincraft on Esper.net - Currently not used
 * Curse For Downloads: [https://minecraft.curseforge.com/projects/traincraft](https://minecraft.curseforge.com/projects/traincraft)
 * 1.7.10 Forum: [http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2738593-traincraft](http://www.minecraftforum.net/forums/mapping-and-modding/minecraft-mods/2738593-traincraft)
