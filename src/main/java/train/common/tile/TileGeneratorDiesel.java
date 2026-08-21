@@ -125,8 +125,8 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
     }
 
     @Override
-    public World world{
-        return this.getWorld();
+    public World getWorld(){
+        return this.world;
     }
 
     @Override

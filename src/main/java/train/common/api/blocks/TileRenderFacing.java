@@ -51,8 +51,8 @@ public class TileRenderFacing extends TileEntity {
     }
 
     //for whatever dumb stupid reason, sometimes getgetWorld()ect() doesn't exist.
-    public World world{
-        return getWorld();
+    public World getWorld(){
+        return world;
     }
 
     public EnumFacing getFacing(){

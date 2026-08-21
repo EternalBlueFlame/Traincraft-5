@@ -1098,7 +1098,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         return null;
     }
 
-    public World world{ return worldObj;}
+    public World getWorld(){ return world;}
     @Override
     public World func_82194_d() {
         return getWorld();

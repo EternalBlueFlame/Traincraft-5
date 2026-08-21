@@ -62,7 +62,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         this.parent = parent;
     }
 
-    public World world{return getWorld();}
+    public World getWorld(){return world;}
     /** returns if this can be pushed*/
     @Override
     public boolean canBePushed() {

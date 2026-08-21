@@ -491,7 +491,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	}
 
 
-	public World world{return worldObj;}
+	public World getWorld(){return world;}
 
 	public void minecartMove(AbstractTrains host) {
 		//server only

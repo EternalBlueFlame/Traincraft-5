@@ -326,7 +326,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     @Override
-    public World world {
+    public World getWorld() {
         return tileEntity.getWorld();
     }
 

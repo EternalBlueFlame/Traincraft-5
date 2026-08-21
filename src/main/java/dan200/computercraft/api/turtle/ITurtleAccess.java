@@ -25,7 +25,7 @@ public interface ITurtleAccess
 	 * Returns the world in which the turtle resides.
 	 * @return the world in which the turtle resides.
 	 */
-	public World world;
+	public World getWorld();
 
 	/**
 	 * Returns a vector containing the integer co-ordinates at which the turtle resides.
