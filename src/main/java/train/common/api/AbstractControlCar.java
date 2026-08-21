@@ -2,7 +2,7 @@ package train.common.api;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -10,7 +10,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
@@ -154,7 +154,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     {
         cycleBeaconIndex();
 
-        if (worldObj.isRemote == false)
+        if (world.isRemote == false)
         {
             //Server side stuff.
             if (frontLink != null)
@@ -190,7 +190,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         }
 
         super.onUpdate();
-        if (!worldObj.isRemote)
+        if (!world.isRemote)
         {
             dataWatcher.updateObject(28, lightingDetailsJSONString());
         }
@@ -202,11 +202,11 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         {
             if (sounds.getEntityClass() != null && sounds.getEntityClass().equals(this.getClass()) && whistleDelay == 0)
             {
-                worldObj.playSoundAtEntity(this, Info.resourceLocation + ":" + sounds.getHornString(), sounds.getHornVolume(), 1.0F);
+                // world.playSoundAtEntity(this, Info.resourceLocation + ":" + sounds.getHornString(), sounds.getHornVolume(), 1.0F);
                 whistleDelay = 65;
             }
         }
-        List entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, AxisAlignedBB.getBoundingBox(
+        List entities = world.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(
                 this.posX-20,this.posY-5,this.posZ-20,
                 this.posX+20,this.posY+5,this.posZ+20));
 
@@ -214,26 +214,25 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         {
             if(e instanceof EntityAnimal)
             {
-                ((EntityAnimal) e).setTarget(this);
+                ((EntityAnimal) e).setAttackTarget(null);
                 ((EntityAnimal) e).getNavigator().setPath(null, 0);
             }
         }
     }
-    @Override
     public void updateRiderPosition()
     {
-        if(riddenByEntity!=null)
+        if(!getPassengers().isEmpty() && getPassengers().get(0)!=null)
         {
-            riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 0.2, posZ);
+            getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + getPassengers().get(0).getYOffset() + 0.2, posZ);
         }
     }
 
     @Override
     public void pressKey(int i)
     {
-        if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer)
+        if (i == 7 && !getPassengers().isEmpty() && getPassengers().get(0) instanceof EntityPlayer)
         {
-            ((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.CONTROL_CAR, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+            ((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.CONTROL_CAR, world, (int) this.posX, (int) this.posY, (int) this.posZ);
         }
     }
 
@@ -245,10 +244,10 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     }
 
     public boolean isNotOwner() {
-        if (this.riddenByEntity instanceof EntityPlayer && !((EntityPlayer) this.riddenByEntity).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
+        if (!this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof EntityPlayer && !((EntityPlayer) this.getPassengers().get(0)).getName().equalsIgnoreCase(this.getTrainOwner())) {
             return true;
         }
-        if (this.seats.size() > 0 && this.seats.get(0).getPassenger() instanceof EntityPlayer && !((EntityPlayer) this.seats.get(0).getPassenger()).getDisplayName().equalsIgnoreCase(this.getTrainOwner())) {
+        if (this.seats.size() > 0 && this.seats.get(0).getPassenger() instanceof EntityPlayer && !((EntityPlayer) this.seats.get(0).getPassenger()).getName().equalsIgnoreCase(this.getTrainOwner())) {
             return true;
         }
         return false;
@@ -258,7 +257,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     //I'm moving this to a separate function because it's really, really thick, and I want to try to make things look neater.
     public void handleTrainMovement()
     {
-        if (worldObj.isRemote)
+        if (world.isRemote)
         {
             if (ticksExisted % 2 == 0 && !Minecraft.getMinecraft().ingameGUI.getChatGUI().getChatOpen())
             {
@@ -313,17 +312,17 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
             {
                 if (forwardPressed || backwardPressed)
                 {
-                    if (connectedLocomotive.getFuel() > 0 && connectedLocomotive.isLocoTurnedOn() && rand.nextInt(4) == 0 && !worldObj.isRemote)
+                    if (connectedLocomotive.getFuel() > 0 && connectedLocomotive.isLocoTurnedOn() && rand.nextInt(4) == 0 && !world.isRemote)
                     {
-                        if (this.getTrainLockedFromPacket() && !((EntityPlayer) this.riddenByEntity).getDisplayName()
-                                .toLowerCase().equals(this.getTrainOwner().toLowerCase()))
+                        if (this.getTrainLockedFromPacket() && !((EntityPlayer) this.getPassengers().isEmpty()?null:getPassengers().get(0)).getName()
+                                .getUnformattedText().toLowerCase().equals(this.getTrainOwner().getUnformattedText().toLowerCase()))
                         {
                             return;
                         }
-                        if (riddenByEntity != null && riddenByEntity instanceof EntityPlayer)
+                        if (getPassengers().isEmpty()?null:getPassengers().get(0) != null && getPassengers().isEmpty()?null:getPassengers().get(0) instanceof EntityPlayer)
                         {
                             int dir = MathHelper
-                                    .floor_double((((EntityPlayer) riddenByEntity).rotationYaw * 4F) / 360F + 0.5D) & 3;
+                                    .floor_double((((EntityPlayer) getPassengers().isEmpty()?null:getPassengers().get(0)).rotationYaw * 4F) / 360F + 0.5D) & 3;
                             //System.out.println(dir);
                             if (dir == 2)
                             {
@@ -394,9 +393,9 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     {
         if (this.getTrainLockedFromPacket())
         {
-            if (this.riddenByEntity != null && this.riddenByEntity instanceof EntityPlayer
-                    && !((EntityPlayer) this.riddenByEntity).getDisplayName().toLowerCase()
-                    .equals(this.getTrainOwner().toLowerCase()))
+            if (this.getPassengers().isEmpty()?null:getPassengers().get(0) != null && this.getPassengers().isEmpty()?null:getPassengers().get(0) instanceof EntityPlayer
+                    && !((EntityPlayer) this.getPassengers().isEmpty()?null:getPassengers().get(0)).getName().getUnformattedText().toLowerCase()
+                    .equals(this.getTrainOwner().getUnformattedText().toLowerCase()))
             {
                 return;
             }
@@ -560,13 +559,13 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     @Override
     public ItemStack decrStackSize(int i, int j) {
         if (controlCarInventory[i] != null) {
-            if (controlCarInventory[i].stackSize <= j) {
+            if (controlCarInventory[i].getCount() <= j) {
                 ItemStack itemstack = controlCarInventory[i];
                 controlCarInventory[i] = null;
                 return itemstack;
             }
             ItemStack itemstack1 = controlCarInventory[i].splitStack(j);
-            if (controlCarInventory[i].stackSize == 0) {
+            if (controlCarInventory[i].getCount() == 0) {
                 controlCarInventory[i] = null;
             }
             return itemstack1;
@@ -579,9 +578,9 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     @Override
     public void setInventorySlotContents(int i, ItemStack itemstack) {
         controlCarInventory[i] = itemstack;
-        if (itemstack != null && itemstack.stackSize > getInventoryStackLimit())
+        if (itemstack != null && itemstack.getCount() > getInventoryStackLimit())
         {
-            itemstack.stackSize = getInventoryStackLimit();
+            itemstack.setCount(getInventoryStackLimit();
         }
     }
 

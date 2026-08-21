@@ -11,8 +11,10 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+
+import javax.annotation.Nullable;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
@@ -193,8 +195,9 @@ public class TileRenderFacing extends TileEntity {
         }
     }
 
+    @Nullable
     @Override
-    public SPacketUpdateTileEntity getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         writeToNBT(nbttagcompound);
         return new SPacketUpdateTileEntity(getPos(), 0, nbttagcompound);
@@ -228,7 +231,7 @@ public class TileRenderFacing extends TileEntity {
             if(o instanceof EntityPlayerMP){
                 EntityPlayerMP player = (EntityPlayerMP) o;
                 if(player.getDistance(xCoord, yCoord, zCoord) <= 64) {
-                    player.playerNetServerHandler.sendPacket(this.getDescriptionPacket());
+                    player.playerNetServerHandler.sendPacket(this.getUpdatePacket());
                 }
             }
         }

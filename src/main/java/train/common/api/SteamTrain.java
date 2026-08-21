@@ -136,13 +136,13 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			}
 			else if (loco.cargoItems[i] != null && loco.cargoItems[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() &&
 					(!itemstack1.getHasSubtypes() || cargoItems[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(cargoItems[i], itemstack1)) {
-				int var9 = cargoItems[i].stackSize + itemstack1.stackSize;
+				int var9 = cargoItems[i].getCount() + itemstack1.getCount();
 				if (var9 <= itemstack1.getMaxStackSize()) {
-					loco.cargoItems[i].stackSize = var9;
+					loco.cargoItems[i].getCount() = var9;
 					return;
 				}
-				else if (cargoItems[i].stackSize < cargoItems[i].getMaxStackSize()) {
-					loco.cargoItems[i].stackSize += 1;
+				else if (cargoItems[i].getCount() < cargoItems[i].getMaxStackSize()) {
+					loco.cargoItems[i].getCount() += 1;
 					return;
 				}
 			}

@@ -4,7 +4,7 @@ import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.Vec3f;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 

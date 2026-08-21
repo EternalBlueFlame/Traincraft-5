@@ -7,6 +7,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.api.LiquidManager.StandardTank;
 import train.common.entity.rollingStockOld.special.EntityBUnitDD35;
 import train.common.entity.rollingStockOld.special.EntityBUnitEMDF3;
@@ -136,12 +137,12 @@ public abstract class Tender extends Freight implements IFluidHandler {
                 return;
             } else if (tender.tenderItems[i] != null && tender.tenderItems[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() &&
                     (!itemstack1.getHasSubtypes() || tender.tenderItems[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(tender.tenderItems[i], itemstack1)) {
-                int var9 = tender.tenderItems[i].stackSize + itemstack1.stackSize;
+                int var9 = tender.tenderItems[i].getCount() + itemstack1.getCount();
                 if (var9 <= tender.tenderItems[i].getMaxStackSize()) {
-                    tender.tenderItems[i].stackSize = var9;
+                    tender.tenderItems[i].getCount() = var9;
                     return;
-                } else if (tender.tenderItems[i].stackSize < tender.tenderItems[i].getMaxStackSize()) {
-                    tender.tenderItems[i].stackSize += 1;
+                } else if (tender.tenderItems[i].getCount() < tender.tenderItems[i].getMaxStackSize()) {
+                    tender.tenderItems[i].getCount() += 1;
                     return;
                 }
             } else if (i == tender.tenderItems.length - 1) {
@@ -231,13 +232,13 @@ public abstract class Tender extends Freight implements IFluidHandler {
     @Override
     public ItemStack decrStackSize(int i, int j) {
         if (tenderItems[i] != null) {
-            if (tenderItems[i].stackSize <= j) {
+            if (tenderItems[i].getCount() <= j) {
                 ItemStack itemstack = tenderItems[i];
                 tenderItems[i] = null;
                 return itemstack;
             }
             ItemStack itemstack1 = tenderItems[i].splitStack(j);
-            if (tenderItems[i].stackSize == 0) {
+            if (tenderItems[i].getCount() == 0) {
                 tenderItems[i] = null;
             }
             return itemstack1;
@@ -250,7 +251,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
     public void setInventorySlotContents(int i, ItemStack itemstack) {
         tenderItems[i] = itemstack;
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-            itemstack.getCount() = getInventoryStackLimit();
+            itemstack.setCount(getInventoryStackLimit();
         }
     }
 

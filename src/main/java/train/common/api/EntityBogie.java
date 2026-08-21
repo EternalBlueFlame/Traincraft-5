@@ -1,8 +1,8 @@
 package train.common.api;
 
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
@@ -19,8 +19,10 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
@@ -36,6 +38,8 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	public EntityRollingStock entityMainTrain;
 	public TileTCRail lastTrack=null;
 	public Block l,oldL;
+	public float yOffset = 0.65f;
+	public float ySize = 0;
 
 
 	private int railMetadata, xFloor=0,yFloor=0,zFloor=0;
@@ -67,7 +71,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		super(world);
 
 		this.isOnRail = false;
-		this.worldObj = world;
+		this.world = world;
 
 		setSize(0.5f, 0.25f);
 
@@ -132,7 +136,6 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	}
 
 	private boolean isDerail = false;
-	@Override
 	@SideOnly(Side.CLIENT)
 	public float getShadowSize() {
 
@@ -140,20 +143,24 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
+	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
 
 		if (this.entityMainTrain != null) {
 
-			this.entityMainTrain.interactFirst(entityplayer);
+			this.entityMainTrain.processInitialInteract(entityplayer, EnumHand.MAIN_HAND);
 		}
 
 		return true;
 	}
 
-	@Override
 	public int getMinecartType() {
 
 		return -1;
+	}
+
+	@Override
+	public EntityMinecart.Type getType() {
+		return EntityMinecart.Type.RIDEABLE;
 	}
 
 	@Override
@@ -209,22 +216,21 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		return 1.8f;
 	}
 
-	@Override
 	protected void func_145821_a(int x, int y, int z, double maxSpeed, double slopeAdjustment, Block block, int railMeta) {
-		super.func_145821_a(x, y, z, this.getMaxCartSpeedOnRail(), slopeAdjustment, block, railMeta);
+		// 1.12: EntityMinecart.func_145821_a -> moveAlongTrack(BlockPos, IBlockState). Physics rewrite out of scope.
 	}
 
 	private void moveOnTCRail(int i, int j, int k, Block l) {
 		limitSpeedOnTCRail();
 
 		if(l instanceof BlockTCRail) {
-			if(!TCRailTypes.isCrossingTrack((TileTCRail) worldObj.getTileEntity(i, j, k)) && !TCRailTypes.isDiagonalCrossingTrack((TileTCRail) worldObj.getTileEntity(i,j,k))) {
-				lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
+			if(!TCRailTypes.isCrossingTrack((TileTCRail) world.getTileEntity(new BlockPos(i, j, k))) && !TCRailTypes.isDiagonalCrossingTrack((TileTCRail) world.getTileEntity(new BlockPos(i,j,k)))) {
+				lastTrack = (TileTCRail) world.getTileEntity(new BlockPos(i, j, k));
 			}
-		} else if(l instanceof BlockTCRailGag && (lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack))){
-			TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(i, j, k);
-			if(tileGag.originX.size()>0 && worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) != null) {
-				lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
+		} else if(l instanceof BlockTCRailGag && (lastTrack==null || !CommonUtil.getTiles(world,i,j,k).contains(lastTrack))){
+			TileTCRailGag tileGag = (TileTCRailGag) world.getTileEntity(new BlockPos(i, j, k));
+			if(tileGag.originX.size()>0 && world.getTileEntity(new BlockPos(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0))) != null) {
+				lastTrack = (TileTCRail) world.getTileEntity(new BlockPos(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)));
 			}
 		}
 
@@ -264,9 +270,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		} else if (TCRailTypes.isCrossingTrack(lastTrack)) {
 			moveOnTCTwoWaysCrossing();
 		} else if (TCRailTypes.isSlopeTrack(lastTrack)) {
-			moveOnTCSlope(j, lastTrack.xCoord, lastTrack.zCoord, lastTrack.slopeAngle, lastTrack.getBlockMetadata());
+			moveOnTCSlope(j, lastTrack.getPos().getX(), lastTrack.getPos().getZ(), lastTrack.slopeAngle, lastTrack.getBlockMetadata());
 		} else if (TCRailTypes.isCurvedSlopeTrack(lastTrack)) {
-			moveOnTCCurvedSlope(j, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.xCoord, lastTrack.zCoord, lastTrack.getBlockMetadata(), lastTrack.slopeAngle);
+			moveOnTCCurvedSlope(j, lastTrack.r, lastTrack.cx, lastTrack.cz, lastTrack.getPos().getX(), lastTrack.getPos().getZ(), lastTrack.getBlockMetadata(), lastTrack.slopeAngle);
 		} else if (TCRailTypes.isDiagonalTrack(lastTrack) || TCRailTypes.isDiagonalCrossingTrack(lastTrack)){
 			moveOnTCDiagonal(j);
 		}
@@ -379,7 +385,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	private void moveOnTCTwoWaysCrossing() {
 		double norm = Math.abs(velocity[0])+Math.abs(velocity[1])+Math.abs(velocity[2])+Math.abs(velocity[3]);
 
-		if (lastTrack.blockMetadata==0||lastTrack.blockMetadata==2) {
+		if (lastTrack.getBlockMetadata()==0||lastTrack.getBlockMetadata()==2) {
 			setPositionRelative(0.0D, 0.0D, Math.copySign(norm, Math.abs(velocity[1])+ Math.abs(velocity[3])));
 		}
 		else {
@@ -517,7 +523,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			//detect slopes
 			if(!(l instanceof BlockRailBase || l instanceof BlockTCRail || l instanceof BlockTCRailGag)){
 				prevPosY = posY;
-				if(world.isAirBlock(xFloor, yFloor, zFloor)){
+				if(world.isAirBlock(new BlockPos(xFloor, yFloor, zFloor))){
 					posY--;
 					yFloor--;
 				} else {
@@ -562,7 +568,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	private void loopVanilla(AbstractTrains host, double moveLength, BlockRailBase block){
 
 		//try to adhere to limiter track
-		railmax = block.getRailMaxSpeed(getWorld(),this,xFloor, yFloor, zFloor);
+		railmax = block.getRailMaxSpeed(getWorld(),this,new BlockPos(xFloor, yFloor, zFloor));
 		Block blockUp;
 		if(railmax!=0.4f){
 			moveLength=Math.min(moveLength,railmax);
@@ -606,13 +612,13 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 					block = (BlockRailBase) l;
 					//do the rail functions.
 					if(shouldDoRailFunctions()) {
-						block.onMinecartPass(getWorld(), this, xFloor, yFloor, zFloor);
+						block.onMinecartPass(getWorld(), this, new BlockPos(xFloor, yFloor, zFloor));
 					}
 					//get the direction of the rail from it's metadata
 					railMetadata = CommonUtil.getRailMeta(getWorld(), this, xFloor, yFloor, zFloor);
 				}
 				//get the direction of the rail from it's metadata
-				else if (world.getTileEntity(xFloor, yFloor, zFloor) instanceof ITrackTile && (((ITrackTile)world.getTileEntity(xFloor, yFloor, zFloor)).getTrackInstance() instanceof ITrackSwitch)){
+				else if (world.getTileEntity(new BlockPos(xFloor, yFloor, zFloor)) instanceof ITrackTile && (((ITrackTile)world.getTileEntity(new BlockPos(xFloor, yFloor, zFloor))).getTrackInstance() instanceof ITrackSwitch)){
 					railMetadata = CommonUtil.getRailMeta(getWorld(),this,xFloor, yFloor, zFloor);//railcraft support
 				}
 			}
@@ -669,7 +675,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		}
 		posZ+=((int)(z*10000))*0.0001;
 		float f = this.width / 2.0F;
-		this.boundingBox.setBounds(x - (double)f, y - (double)this.yOffset + (double)this.ySize, z - (double)f, x + (double)f, y - (double)this.yOffset + (double)this.ySize + (double)this.height, z + (double)f);
+		this.setEntityBoundingBox(new AxisAlignedBB(x - (double)f, y - (double)this.yOffset + (double)this.ySize, z - (double)f, x + (double)f, y - (double)this.yOffset + (double)this.ySize + (double)this.height, z + (double)f));
 
 	}
 }

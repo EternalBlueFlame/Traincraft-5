@@ -10,6 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.adminbook.ServerLogger;
 import train.common.entity.rollingStockOld.freight.EntityTankLava;
 import train.common.library.ItemIDs;
@@ -83,7 +84,7 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
             return;
         }
 
-        if (ticksExisted % 5 == 0 && fill(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
+        if (ticksExisted % 5 == 0 && fill(null, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
             FluidStack drain = null;
             blocksToCheck = new TileEntity[]{world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
                     world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
@@ -106,7 +107,7 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
             }
 
             if (drain != null) {
-                fill(EnumFacing.UNKNOWN, drain, true);
+                fill(null, drain, true);
             }
         }
 
@@ -166,13 +167,13 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
                 }
             } else if (emptyItem != null) {// Adding or removing fluid to or from the tank (if the tank already has something in it).
                 if (emptyItem.getItem() == cargoItems[1].getItem()|| emptyItem.getItem().equals(ItemIDs.emptyCanister.item) && cargoItems[1].getItem().equals(ItemIDs.diesel.item)) {
-                    if (cargoItems[1].stackSize + 1 <= cargoItems[1].getMaxStackSize()) {
+                    if (cargoItems[1].getCount() + 1 <= cargoItems[1].getMaxStackSize()) {
                         result = LiquidManager.getInstance().processContainer(this, 0, this, itemstack);
                     }
                 }
             } else {
                 if (itemstack.getItem() == cargoItems[1].getItem()) {
-                    if (cargoItems[1].stackSize + 1 <= cargoItems[1].getMaxStackSize()) {
+                    if (cargoItems[1].getCount() + 1 <= cargoItems[1].getMaxStackSize()) {
                         result = LiquidManager.getInstance().processContainer(this, 0, this, itemstack);
                     }
                 }
@@ -182,7 +183,7 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
                 if (cargoItems[1] == null) {
                     cargoItems[1] = result;
                 } else if (cargoItems[1].getItem() == result.getItem()) {
-                    cargoItems[1].stackSize += 1;
+                    cargoItems[1].getCount() += 1;
                 }
             }
         }
@@ -205,26 +206,26 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
     // if (cargoItems[i] == null) {
     // if (doAdd)
     // cargoItems[i] = itemstack1;
-    // return itemstack1.stackSize;
+    // return itemstack1.getCount();
     // }
     // else if (cargoItems[i] != null && cargoItems[i].getItem() == itemstack1.getItem() &&
     // itemstack1.isStackable() && (!itemstack1.getHasSubtypes() || cargoItems[i].getItemDamage() ==
     // itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(cargoItems[i], itemstack1)) {
     //
-    // int var9 = cargoItems[i].stackSize + itemstack1.stackSize;
+    // int var9 = cargoItems[i].getCount() + itemstack1.getCount();
     // if (var9 <= itemstack1.getMaxStackSize()) {
     // if (doAdd)
-    // cargoItems[i].stackSize = var9;
+    // cargoItems[i].getCount() = var9;
     // return var9;
     // }
-    // else if (cargoItems[i].stackSize < itemstack1.getMaxStackSize()) {
+    // else if (cargoItems[i].getCount() < itemstack1.getMaxStackSize()) {
     // if (doAdd)
-    // cargoItems[i].stackSize = cargoItems[i].getMaxStackSize();
-    // return Math.abs(cargoItems[i].getMaxStackSize() - cargoItems[i].stackSize -
-    // itemstack1.stackSize);
+    // cargoItems[i].getCount() = cargoItems[i].getMaxStackSize();
+    // return Math.abs(cargoItems[i].getMaxStackSize() - cargoItems[i].getCount() -
+    // itemstack1.getCount());
     // }
     // }
-    // return itemstack1.stackSize;
+    // return itemstack1.getCount();
     // }
 
     //TODO Fix ISided Inventory buildcraft support
@@ -299,13 +300,13 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
     @Override
     public ItemStack decrStackSize(int i, int j) {
         if (cargoItems[i] != null) {
-            if (cargoItems[i].stackSize <= j) {
+            if (cargoItems[i].getCount() <= j) {
                 ItemStack itemstack = cargoItems[i];
                 cargoItems[i] = null;
                 return itemstack;
             }
             ItemStack itemstack1 = cargoItems[i].splitStack(j);
-            if (cargoItems[i].stackSize == 0) {
+            if (cargoItems[i].getCount() == 0) {
                 cargoItems[i] = null;
             }
             return itemstack1;
@@ -318,7 +319,7 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
     public void setInventorySlotContents(int i, ItemStack itemstack) {
         cargoItems[i] = itemstack;
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-            itemstack.getCount() = getInventoryStackLimit();
+            itemstack.setCount(getInventoryStackLimit();
         }
     }
 

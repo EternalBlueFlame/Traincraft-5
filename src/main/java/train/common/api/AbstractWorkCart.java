@@ -1,6 +1,6 @@
 package train.common.api;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -120,9 +120,9 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 					var2 = true;
 
 					if (this.furnaceItemStacks[1] != null) {
-						--this.furnaceItemStacks[1].stackSize;
+						--this.furnaceItemStacks[1].getCount();
 
-						if (this.furnaceItemStacks[1].stackSize == 0) {
+						if (this.furnaceItemStacks[1].getCount() == 0) {
 							this.furnaceItemStacks[1] = this.furnaceItemStacks[1].getItem().getContainerItem(furnaceItemStacks[1]);
 						}
 					}
@@ -159,14 +159,14 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 			return false;
 		}
 		else {
-			ItemStack var1 = FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItemStacks[0]);
+			ItemStack var1 = FurnaceRecipes.instance().getSmeltingResult(this.furnaceItemStacks[0]);
 			if (var1 == null)
 				return false;
 			if (this.furnaceItemStacks[2] == null)
 				return true;
 			if (!this.furnaceItemStacks[2].isItemEqual(var1))
 				return false;
-			int result = furnaceItemStacks[2].stackSize + var1.stackSize;
+			int result = furnaceItemStacks[2].getCount() + var1.getCount();
 			return (result <= getInventoryStackLimit() && result <= var1.getMaxStackSize());
 		}
 	}
@@ -176,16 +176,16 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 	 */
 	public void smeltItem() {
 		if (this.canSmelt()) {
-			ItemStack var1 = FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItemStacks[0]);
+			ItemStack var1 = FurnaceRecipes.instance().getSmeltingResult(this.furnaceItemStacks[0]);
 
 			if (this.furnaceItemStacks[2] == null) {
 				this.furnaceItemStacks[2] = var1.copy();
 			}
 			else if (this.furnaceItemStacks[2].isItemEqual(var1)) {
-				furnaceItemStacks[2].stackSize += var1.stackSize;
+				furnaceItemStacks[2].getCount() += var1.getCount();
 			}
-			--this.furnaceItemStacks[0].stackSize;
-			if (this.furnaceItemStacks[0].stackSize <= 0) {
+			--this.furnaceItemStacks[0].getCount();
+			if (this.furnaceItemStacks[0].getCount() <= 0) {
 				this.furnaceItemStacks[0] = null;
 			}
 		}
@@ -209,7 +209,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 					return 150;
 				}
 
-				if (var3.getMaterial() == Material.wood) {
+				if (var3.getMaterial(null) == Material.WOOD) {
 					return 300;
 				}
 			}
@@ -272,14 +272,14 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 	public ItemStack decrStackSize(int par1, int par2) {
 		if (this.furnaceItemStacks[par1] != null) {
 			ItemStack var3;
-			if (this.furnaceItemStacks[par1].stackSize <= par2) {
+			if (this.furnaceItemStacks[par1].getCount() <= par2) {
 				var3 = this.furnaceItemStacks[par1];
 				this.furnaceItemStacks[par1] = null;
 				return var3;
 			}
 			else {
 				var3 = this.furnaceItemStacks[par1].splitStack(par2);
-				if (this.furnaceItemStacks[par1].stackSize == 0) {
+				if (this.furnaceItemStacks[par1].getCount() == 0) {
 					this.furnaceItemStacks[par1] = null;
 				}
 				return var3;
@@ -297,7 +297,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
 		this.furnaceItemStacks[par1] = par2ItemStack;
 		if (par2ItemStack != null && par2itemstack.getCount() > this.getInventoryStackLimit()) {
-			par2itemstack.getCount() = this.getInventoryStackLimit();
+			par2itemstack.setCount(this.getInventoryStackLimit();
 		}
 	}
 	@Override
@@ -316,7 +316,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 		if (world.isRemote) {
 			return true;
 		}
-		if(this.canBeDestroyedByPlayer(damagesource) || damagesource.getEntity() == null){
+		if(this.canBeDestroyedByPlayer(damagesource) || damagesource.getTrueSource() == null){
 			return false;
 		}
 		super.attackEntityFrom(damagesource, i);
@@ -330,13 +330,13 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 			}
 			this.setDead();
 			ServerLogger.deleteWagon(this);
-			if(damagesource.getEntity() instanceof EntityPlayer) {
+			if(damagesource.getTrueSource() instanceof EntityPlayer) {
 				for(ItemStack stack : furnaceItemStacks){
 					if (stack != null) {
 						entityDropItem(stack,1);
 					}
 				}
-				dropCartAsItem(((EntityPlayer)damagesource.getEntity()).capabilities.isCreativeMode);
+				dropCartAsItem(((EntityPlayer)damagesource.getTrueSource()).capabilities.isCreativeMode);
 			}
 		}
 		return true;
