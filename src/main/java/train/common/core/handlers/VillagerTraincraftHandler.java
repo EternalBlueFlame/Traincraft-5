@@ -1,16 +1,17 @@
 package train.common.core.handlers;
 
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
-import cpw.mods.fml.common.registry.VillagerRegistry.IVillageTradeHandler;
+import net.minecraftforge.fml.common.registry.VillagerRegistry.IVillageCreationHandler;
 import net.minecraft.block.Block;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
+import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import train.common.generation.ComponentVillageTrainstation;
 import train.common.items.ItemRollingStock;
@@ -19,9 +20,8 @@ import train.common.library.ItemIDs;
 import java.util.List;
 import java.util.Random;
 
-public class VillagerTraincraftHandler implements IVillageCreationHandler, IVillageTradeHandler {
+public class VillagerTraincraftHandler implements IVillageCreationHandler {
     //private Random rand = new Random();
-    @Override
     public void manipulateTradesForVillager(EntityVillager villager,
                                             MerchantRecipeList recipeList, Random random) {
         recipeList.add(new MerchantRecipe(getRandomSizedStack(Blocks.rail, random, 20), Items.emerald));
@@ -87,9 +87,9 @@ public class VillagerTraincraftHandler implements IVillageCreationHandler, IVill
     }
 
     @Override
-    public Object buildComponent(StructureVillagePieces.PieceWeight villagePiece,
-                                 StructureVillagePieces.Start startPiece, List pieces, Random random,
-                                 int p1, int p2, int p3, int p4, int p5) {
-        return ComponentVillageTrainstation.buildComponent(startPiece, pieces, random, p1, p2, p3, p4, p5);
+    public StructureVillagePieces.Village buildComponent(StructureVillagePieces.PieceWeight villagePiece,
+                                  StructureVillagePieces.Start startPiece, List<StructureComponent> pieces, Random random,
+                                  int p1, int p2, int p3, EnumFacing facing, int p5) {
+        return ComponentVillageTrainstation.buildComponent(startPiece, pieces, random, p1, p2, p3, facing, p5);
     }
 }

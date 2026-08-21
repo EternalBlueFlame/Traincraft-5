@@ -3,10 +3,11 @@ package train.common.tile;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+
+import javax.annotation.Nullable;
+import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 
@@ -50,8 +51,9 @@ public class TileSignal extends TileEntity {
 		nbttagcompound.setInteger("rot", this.rot);
 	}
 
+	@Nullable
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);

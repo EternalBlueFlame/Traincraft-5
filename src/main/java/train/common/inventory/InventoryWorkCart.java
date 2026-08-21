@@ -35,29 +35,29 @@ public class InventoryWorkCart extends Container {
 	}
 
 	@Override
-	public void addCraftingToCrafters(ICrafting par1ICrafting) {
-		super.addCraftingToCrafters(par1ICrafting);
-		par1ICrafting.sendProgressBarUpdate(this, 0, this.furnace.furnaceCookTime);
-		par1ICrafting.sendProgressBarUpdate(this, 1, this.furnace.furnaceBurnTime);
-		par1ICrafting.sendProgressBarUpdate(this, 2, this.furnace.currentItemBurnTime);
+	public void addListener(IContainerListener par1ICrafting) {
+		super.addListener(par1ICrafting);
+		par1ICrafting.sendWindowProperty(this, 0, this.furnace.furnaceCookTime);
+		par1ICrafting.sendWindowProperty(this, 1, this.furnace.furnaceBurnTime);
+		par1ICrafting.sendWindowProperty(this, 2, this.furnace.currentItemBurnTime);
 	}
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-			ICrafting var2 = (ICrafting) this.crafters.get(var1);
+		for (int var1 = 0; var1 < this.listeners.size(); ++var1) {
+			IContainerListener var2 = (IContainerListener) this.listeners.get(var1);
 
 			if (this.lastCookTime != this.furnace.furnaceCookTime) {
-				var2.sendProgressBarUpdate(this, 0, this.furnace.furnaceCookTime);
+				var2.sendWindowProperty(this, 0, this.furnace.furnaceCookTime);
 			}
 
 			if (this.lastBurnTime != this.furnace.furnaceBurnTime) {
-				var2.sendProgressBarUpdate(this, 1, this.furnace.furnaceBurnTime);
+				var2.sendWindowProperty(this, 1, this.furnace.furnaceBurnTime);
 			}
 
 			if (this.lastItemBurnTime != this.furnace.currentItemBurnTime) {
-				var2.sendProgressBarUpdate(this, 2, this.furnace.currentItemBurnTime);
+				var2.sendWindowProperty(this, 2, this.furnace.currentItemBurnTime);
 			}
 		}
 		this.lastCookTime = this.furnace.furnaceCookTime;
@@ -122,13 +122,13 @@ public class InventoryWorkCart extends Container {
 			else if (!this.mergeItemStack(var5, 3, 39, false)) {
 				return null;
 			}
-			if (var5.stackSize == 0) {
+			if (var5.setCount(= 0) {
 				var4.putStack(null);
 			}
 			else {
 				var4.onSlotChanged();
 			}
-			if (var5.stackSize == var3.stackSize) {
+			if (var5.setCount(= var3.getCount()) {
 				return null;
 			}
 			var4.onPickupFromSlot(player, var5);

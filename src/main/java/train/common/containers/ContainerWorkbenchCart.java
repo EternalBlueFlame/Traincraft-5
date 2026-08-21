@@ -59,7 +59,7 @@ public class ContainerWorkbenchCart extends Container {
 				ItemStack var3 = craftMatrix.getStackInSlotOnClosing(var2);
 
 				if (var3 != null) {
-					par1EntityPlayer.dropItem(var3.getItem(), var3.stackSize);
+					par1EntityPlayer.dropItem(var3.getItem(), var3.getCount());
 				}
 			}
 		}
@@ -102,14 +102,14 @@ public class ContainerWorkbenchCart extends Container {
 				return null;
 			}
 
-			if (var4.stackSize == 0) {
+			if (var4.setCount(= 0) {
 				var3.putStack(null);
 			}
 			else {
 				var3.onSlotChanged();
 			}
 
-			if (var4.stackSize == var2.stackSize) {
+			if (var4.setCount(= var2.getCount()) {
 				return null;
 			}
 

@@ -1,17 +1,18 @@
 package train.common.core.plugins;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import mods.railcraft.api.crafting.RailcraftCraftingManager;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.oredict.ShapedOreRecipe;
 import train.common.core.util.TraincraftUtil;
 import train.common.library.ItemIDs;
 import train.common.library.Tracks;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PluginRailcraft {
 
@@ -22,20 +23,20 @@ public class PluginRailcraft {
     private static void registerRecipes() {
         for (Tracks track : Tracks.values()) {
             if (track.crafting != null && track.getOutput()!=null) {
-                GameRegistry.addRecipe(new ShapedOreRecipe(track.getOutput(), track.crafting));
+                // GameRegistry.addRecipe(new ShapedOreRecipe(new ResourceLocation("traincraft", "dummy"), track.getOutput(), track.crafting));
             }
         }
-        GameRegistry.addShapelessRecipe(Tracks.SNOWY_STEEL_TRACK.getOutput(), Tracks.STEEL_TRACK.getTrackSpec().getItem(1), Items.snowball);
-        GameRegistry.addShapelessRecipe(Tracks.SNOWY_COPPER_TRACK.getOutput(), Tracks.COPPER_TRACK.getTrackSpec().getItem(1), Items.snowball);
-        GameRegistry.addShapelessRecipe(Tracks.VANILLA_SNOWY_TRACK.getOutput(), Blocks.rail, Items.snowball);
-        ArrayList<ItemStack> copper = OreDictionary.getOres("ingotCopper");
+        // GameRegistry.addShapelessRecipe(Tracks.SNOWY_STEEL_TRACK.getOutput(), Tracks.STEEL_TRACK.getTrackSpec().getItem(1), Items.SNOWBALL);
+        // GameRegistry.addShapelessRecipe(Tracks.SNOWY_COPPER_TRACK.getOutput(), Tracks.COPPER_TRACK.getTrackSpec().getItem(1), Items.SNOWBALL);
+        // GameRegistry.addShapelessRecipe(Tracks.VANILLA_SNOWY_TRACK.getOutput(), Blocks.RAIL, Items.SNOWBALL);
+        List<ItemStack> copper = OreDictionary.getOres("ingotCopper");
         if (copper != null) {
             for (ItemStack aCopper : copper) {
                 RailcraftCraftingManager.rollingMachine.addRecipe(new ItemStack(ItemIDs.copperRail.item, 8), "XXX", "   ", "XXX", 'X', aCopper);
             }
         }
 
-        ArrayList<ItemStack> steel = OreDictionary.getOres("ingotSteel");
+        List<ItemStack> steel = OreDictionary.getOres("ingotSteel");
         if (steel != null) {
             for (ItemStack aSteel : steel) {
                 RailcraftCraftingManager.rollingMachine.addRecipe(new ItemStack(ItemIDs.steelRail.item, 16), "XXX", "   ", "XXX", 'X', aSteel);

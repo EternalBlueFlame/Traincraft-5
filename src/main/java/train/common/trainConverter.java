@@ -132,7 +132,7 @@ public class trainConverter {
 
         /**Item*/
         // builder.append("    public static final Item thisItem = new ItemRollingStock(new ");
-        String itemName = trn.getItem().getUnlocalizedName().replace("item.tc:", "");
+        String itemName = trn.getItem().getTranslationKey().replace("item.tc:", "");
         for (ItemIDs items : ItemIDs.values()) {
             if (items.className.equals("ItemRollingStock")) {
                 if (itemName.equals(items.name().toString())) {
@@ -242,7 +242,7 @@ public class trainConverter {
                     builder.append("new ItemStack(");
                     builder.append(getItem(recipe.getInput().get(0)));
                     builder.append(", ");
-                    builder.append(recipe.getInput().get(0).stackSize);
+                    builder.append(recipe.getInput().get(0).getCount());
                     builder.append("), \n");
                 }
 
@@ -252,7 +252,7 @@ public class trainConverter {
                     builder.append("new ItemStack(");
                     builder.append(getItem(recipe.getInput().get(1)));
                     builder.append(", ");
-                    builder.append(recipe.getInput().get(1).stackSize);
+                    builder.append(recipe.getInput().get(1).getCount());
                     builder.append("), \n");
                 }
 
@@ -262,7 +262,7 @@ public class trainConverter {
                     builder.append("new ItemStack(");
                     builder.append(getItem(recipe.getInput().get(2)));
                     builder.append(", ");
-                    builder.append(recipe.getInput().get(2).stackSize);
+                    builder.append(recipe.getInput().get(2).getCount());
                     builder.append("), \n");
                 }
 
@@ -272,7 +272,7 @@ public class trainConverter {
                     builder.append("new ItemStack(");
                     builder.append(getItem(recipe.getInput().get(3)));
                     builder.append(", ");
-                    builder.append(recipe.getInput().get(3).stackSize);
+                    builder.append(recipe.getInput().get(3).getCount());
                     builder.append("), \n");
                 }
 
@@ -282,7 +282,7 @@ public class trainConverter {
                     builder.append("new ItemStack(");
                     builder.append(getItem(recipe.getInput().get(4)));
                     builder.append(", ");
-                    builder.append(recipe.getInput().get(4).stackSize);
+                    builder.append(recipe.getInput().get(4).getCount());
                     builder.append("), \n");
                 }
 
@@ -292,7 +292,7 @@ public class trainConverter {
                     builder.append("new ItemStack(");
                     builder.append(getItem(recipe.getInput().get(5)));
                     builder.append(", ");
-                    builder.append(recipe.getInput().get(5).stackSize);
+                    builder.append(recipe.getInput().get(5).getCount());
                     builder.append("), \n");
                 }
 
@@ -302,7 +302,7 @@ public class trainConverter {
                     builder.append("new ItemStack(");
                     builder.append(getItem(recipe.getInput().get(6)));
                     builder.append(", ");
-                    builder.append(recipe.getInput().get(6).stackSize);
+                    builder.append(recipe.getInput().get(6).getCount());
                     builder.append("), \n");
                 }
 
@@ -312,7 +312,7 @@ public class trainConverter {
                     builder.append("new ItemStack(");
                     builder.append(getItem(recipe.getInput().get(7)));
                     builder.append(", ");
-                    builder.append(recipe.getInput().get(7).stackSize);
+                    builder.append(recipe.getInput().get(7).getCount());
                     builder.append("), \n");
                 }
 
@@ -322,7 +322,7 @@ public class trainConverter {
                     builder.append("new ItemStack(");
                     builder.append(getItem(recipe.getInput().get(8)));
                     builder.append(", ");
-                    builder.append(recipe.getInput().get(8).stackSize);
+                    builder.append(recipe.getInput().get(8).getCount());
                     builder.append("),\n");
                 }
 
@@ -487,11 +487,11 @@ public class trainConverter {
 
         if (i.getItem() instanceof ItemBlock) {
             return "Blocks." +
-                    i.getItem().delegate.name().split(":")[1];
+                    i.getItem().delegate.name().getPath();
 
         } else {
             return "Items." +
-                    i.getItem().delegate.name().split(":")[1];
+                    i.getItem().delegate.name().getPath();
         }
 
     }

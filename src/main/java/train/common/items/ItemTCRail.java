@@ -9,8 +9,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import org.lwjgl.util.vector.Matrix2f;
 import org.lwjgl.util.vector.Vector2f;
@@ -1885,7 +1885,7 @@ public class ItemTCRail extends ItemPart {
                     }
                     for (int i = 0; i < tileGag.length; i++) {
                         if (player != null && tileGag[i] == null) {
-                            player.addChatMessage(new ChatComponentText(
+                            player.addChatMessage(new TextComponentString(
                                     "There was a problem when placing the track. Possibly too many tracks around"));
                             return false;
                         }
@@ -2562,7 +2562,7 @@ public class ItemTCRail extends ItemPart {
         //gives Gag rails the TileTCRail as their origin
         for (TileTCRailGag tileTCRailGag : tileGag) {
             if (player != null && tileTCRailGag == null) {
-                player.addChatMessage(new ChatComponentText("There was a problem when placing the track. Possibly too many tracks around"));
+                player.addChatMessage(new TextComponentString("There was a problem when placing the track. Possibly too many tracks around"));
                 return false;
             }
             tileTCRailGag.originX.add(x);
@@ -3166,7 +3166,7 @@ public class ItemTCRail extends ItemPart {
 
         for (TileTCRailGag tileTCRailGag : tileGag) {
             if (player != null && tileTCRailGag == null) {
-                player.addChatMessage(new ChatComponentText("There was a problem when placing the track. Possibly too many tracks around"));
+                player.addChatMessage(new TextComponentString("There was a problem when placing the track. Possibly too many tracks around"));
                 return false;
             }
             tileTCRailGag.originX.add(x);
@@ -3244,7 +3244,7 @@ public class ItemTCRail extends ItemPart {
 
         for (TileTCRailGag tileTCRailGag : tcRailGag) {
             if (player != null && tileTCRailGag == null) {
-                player.addChatMessage(new ChatComponentText("There was a problem when placing the track. Possibly too many tracks around"));
+                player.addChatMessage(new TextComponentString("There was a problem when placing the track. Possibly too many tracks around"));
                 return false;
             }
             tileTCRailGag.originX.add(x);

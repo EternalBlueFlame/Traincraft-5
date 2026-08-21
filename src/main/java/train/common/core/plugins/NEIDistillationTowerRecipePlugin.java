@@ -31,7 +31,7 @@ import static codechicken.lib.gui.GuiDraw.drawTexturedModalRect;
 public class NEIDistillationTowerRecipePlugin extends FurnaceRecipeHandler {
     public class SmeltingPair extends CachedRecipe {
         public SmeltingPair(ItemStack ingred, ItemStack result) {
-            ingred.stackSize = 1;
+            ingred.setCount(1;
             this.ingred = new PositionedStack(ingred, 51, 13);
             this.result = null;//new PositionedStack(result, 118, 29);
         }

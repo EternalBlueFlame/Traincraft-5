@@ -18,8 +18,8 @@ import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
@@ -130,10 +130,10 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		if(getEntity()!=null){
 			//year is the tell for if the TC4.5 API was used in favor of 4.3's.
 			if(getEntity().transportYear() != null && !getEntity().transportYear().equals("")) {
-				par3List.add(EnumChatFormatting.GRAY + t("menu.item.year") + ": " + getEntity().transportYear());
+				par3List.add(TextFormatting.GRAY + t("menu.item.year") + ": " + getEntity().transportYear());
 			}
 			if(getEntity().transportcountry()!=null && getEntity().transportcountry().length()>1) {
-				par3List.add(EnumChatFormatting.GRAY + t("menu.item.country") + ": " +
+				par3List.add(TextFormatting.GRAY + t("menu.item.country") + ": " +
 						t("menu.item." + getEntity().transportcountry().toLowerCase()));
 			}
 
@@ -168,37 +168,37 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 			}
 			s.delete(s.lastIndexOf(", "),s.length());
 
-			par3List.add(EnumChatFormatting.RED +s.toString());
+			par3List.add(TextFormatting.RED +s.toString());
 
 			if(getEntity().transportFuelType()!=null && !getEntity().transportFuelType().equals("")) {
-				par3List.add(EnumChatFormatting.RED + t("menu.item.fueltype") + ": " +
+				par3List.add(TextFormatting.RED + t("menu.item.fueltype") + ": " +
 						t("menu.item."+getEntity().transportFuelType().toLowerCase()));
 			}
 
-			par3List.add(EnumChatFormatting.GREEN + t("menu.item.weight") +": " + getEntity().weightKg() + "kg");
+			par3List.add(TextFormatting.GREEN + t("menu.item.weight") +": " + getEntity().weightKg() + "kg");
 			if (getEntity().transportTopSpeed()!=0){
-				par3List.add(EnumChatFormatting.GREEN + t("menu.item.speed") +": " + getEntity().transportTopSpeed() +" km/h");
+				par3List.add(TextFormatting.GREEN + t("menu.item.speed") +": " + getEntity().transportTopSpeed() +" km/h");
 
 				if (getEntity().transportMetricHorsePower() !=0){
-					par3List.add(EnumChatFormatting.GREEN +t("menu.item.mhp") +": " + getEntity().transportMetricHorsePower());
+					par3List.add(TextFormatting.GREEN +t("menu.item.mhp") +": " + getEntity().transportMetricHorsePower());
 				}
 				if (getEntity().transportTractiveEffort() != 0){
-					par3List.add(EnumChatFormatting.GREEN + t("menu.item.tractiveeffort") +": " + getEntity().transportTractiveEffort() + " lbf");
+					par3List.add(TextFormatting.GREEN + t("menu.item.tractiveeffort") +": " + getEntity().transportTractiveEffort() + " lbf");
 				}
 			}
 			if(getEntity().getInventoryRows()>0){
-				par3List.add(EnumChatFormatting.BLUE +t("menu.item.isizeof")+ ": " + (getEntity().getInventoryRows()*9) + " " + t("menu.item.slots"));
+				par3List.add(TextFormatting.BLUE +t("menu.item.isizeof")+ ": " + (getEntity().getInventoryRows()*9) + " " + t("menu.item.slots"));
 			}
 			if(getEntity().getRiderOffsets()!=null){
-				par3List.add(EnumChatFormatting.BLUE +t("menu.item.seats")+ ": " + getEntity().getRiderOffsets().length);
+				par3List.add(TextFormatting.BLUE +t("menu.item.seats")+ ": " + getEntity().getRiderOffsets().length);
 			}
 			if (getEntity().isFictional()){
-				par3List.add(EnumChatFormatting.WHITE +t("menu.item.fictional"));
+				par3List.add(TextFormatting.WHITE +t("menu.item.fictional"));
 			}
 			if (getEntity().additionalItemText()!=null){
 				for (String a : getEntity().additionalItemText()) {
 					if(!a.equals("")) {
-						par3List.add(EnumChatFormatting.LIGHT_PURPLE + a);
+						par3List.add(TextFormatting.LIGHT_PURPLE + a);
 					}
 				}
 			}
@@ -251,7 +251,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				return true;
 			}
 
-			par2EntityPlayer.addChatMessage(new ChatComponentText("Place me on a straight piece of track !"));
+			par2EntityPlayer.addChatMessage(new TextComponentString("Place me on a straight piece of track !"));
 			return false;
 		}
 		else if(tileentity instanceof TileTCRailGag){
@@ -280,7 +280,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						return true;
 					}
 					else {
-						par2EntityPlayer.addChatMessage(new ChatComponentText("Place me on the middle of the track! (also try replacing old tracks if that does not work)"));
+						par2EntityPlayer.addChatMessage(new TextComponentString("Place me on the middle of the track! (also try replacing old tracks if that does not work)"));
 						return false;
 					}
 
@@ -290,7 +290,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
 				return true;
 			}
-			par2EntityPlayer.addChatMessage(new ChatComponentText("Place me on a straight piece of track !"));
+			par2EntityPlayer.addChatMessage(new TextComponentString("Place me on a straight piece of track !"));
 			return false;
 		}
 		else if (TraincraftUtil.isRailBlockAt(par3World, par4, par5, par6) && (meta < 2 || meta > 5)) {
@@ -368,7 +368,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 				if ((rollingStock instanceof SteamTrain && !ConfigHandler.ENABLE_STEAM) || (rollingStock instanceof ElectricTrain && !ConfigHandler.ENABLE_ELECTRIC) || (rollingStock instanceof DieselTrain && !ConfigHandler.ENABLE_DIESEL) || (rollingStock instanceof EntityTracksBuilder && !ConfigHandler.ENABLE_BUILDER) || (rollingStock instanceof Tender && !ConfigHandler.ENABLE_TENDER)) {
 					if (player != null)
-						player.addChatMessage(new ChatComponentText("This type of train has been deactivated by the OP"));
+						player.addChatMessage(new TextComponentString("This type of train has been deactivated by the OP"));
 					rollingStock.setDead();
 					return rollingStock;
 				}
@@ -410,7 +410,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 							rollingStock.rotationYaw = 45;
 						}
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							player.addChatMessage(new TextComponentString("Place me on a straight piece of track!"));
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -430,7 +430,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						} else if (meta == 1 || meta == 3) {
 							rollingStock.rotationYaw = 180; // LEFT
 						} else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							player.addChatMessage(new TextComponentString("Place me on a straight piece of track!"));
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -452,7 +452,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 						}
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							player.addChatMessage(new TextComponentString("Place me on a straight piece of track!"));
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -474,7 +474,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 							rollingStock.rotationYaw = 180; // LEFT
 						}
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							player.addChatMessage(new TextComponentString("Place me on a straight piece of track!"));
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -497,7 +497,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						}
 
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							player.addChatMessage(new TextComponentString("Place me on a straight piece of track!"));
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -521,7 +521,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 							rollingStock.rotationYaw = 0; // LEFT
 						}
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							player.addChatMessage(new TextComponentString("Place me on a straight piece of track!"));
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -542,7 +542,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						else if (meta == 5 || meta == 7) {
 							rollingStock.rotationYaw = 45; // LEFT
 						}else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							player.addChatMessage(new TextComponentString("Place me on a straight piece of track!"));
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -564,7 +564,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 							rollingStock.rotationYaw = 90; // LEFT
 						}
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							player.addChatMessage(new TextComponentString("Place me on a straight piece of track!"));
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -607,8 +607,8 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					}
 					if (concatColors.length() > 4) {
 						if (player != null) {
-							player.addChatMessage(new ChatComponentText("Possible colors" + concatColors));
-							player.addChatMessage(new ChatComponentText("To paint, click me with the right (vanilla) dye"));
+							player.addChatMessage(new TextComponentString("Possible colors" + concatColors));
+							player.addChatMessage(new TextComponentString("To paint, click me with the right (vanilla) dye"));
 						}
 					}
 				}
@@ -617,7 +617,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
         }
     }
 
-    itemstack.stackSize--;
+    itemstack.getCount()--;
     return rollingStock;
 }
 

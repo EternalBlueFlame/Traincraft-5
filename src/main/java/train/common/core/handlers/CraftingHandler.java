@@ -8,8 +8,8 @@
 package train.common.core.handlers;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraft.item.Item;
 import train.common.items.ItemRollingStock;
 import train.common.library.AchievementIDs;

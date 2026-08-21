@@ -11,16 +11,15 @@ import train.common.wellcar.BlockFiftyThreeFootContainer;
 import train.common.wellcar.TileFiftyThreeFootContainer;
 
 public class FiftyThreeFootContainerRender extends TileEntitySpecialRenderer {
-    @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float p_147500_8_) {
+    public void render(TileEntity tileEntity, double x, double y, double z, float p_147500_8_, int destroyStage, float alpha) {
 
         //Tessellator.bindTexture(new ResourceLocation("tc:textures/trains/container56_Yellow.png"));
         //This will make your block brightness dependent from surroundings lighting.
 
         TileFiftyThreeFootContainer theTileEntity = (TileFiftyThreeFootContainer)tileEntity;
-        Block two = tileEntity.world.getBlock(tileEntity.xCoord,tileEntity.yCoord - 1,tileEntity.zCoord);
-        Block three = tileEntity.world.getBlock(tileEntity.xCoord,tileEntity.yCoord - 2,tileEntity.zCoord);
-        Block four = tileEntity.world.getBlock(tileEntity.xCoord,tileEntity.yCoord - 3,tileEntity.zCoord);
+        Block two = tileEntity.getWorld().getBlockState(tileEntity.getPos().down()).getBlock();
+        Block three = tileEntity.getWorld().getBlockState(tileEntity.getPos().down(2)).getBlock();
+        Block four = tileEntity.getWorld().getBlockState(tileEntity.getPos().down(3)).getBlock();
                /* int skyLight = tileEntity.world.getSkyBlockTypeBrightness(EnumSkyBlock.Block, (int)x,(int)y,(int)z);
 
                // skyLight= tileEntity.world.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (skyLight<0?0:skyLight) << 4; OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);

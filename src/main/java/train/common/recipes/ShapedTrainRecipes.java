@@ -84,7 +84,7 @@ public class ShapedTrainRecipes implements ITCRecipe {
 					slots[i] = false;
 					continue;
 				}
-				if(!TraincraftUtil.itemStackMatches(var9, var10) || var9.stackSize > var10.stackSize ){
+				if(!TraincraftUtil.itemStackMatches(var9, var10) || var9.getCount() > var10.getCount() ){
 					slots[i] = false;
 					continue;
 				}

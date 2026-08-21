@@ -8,7 +8,7 @@
 
 package mods.railcraft.api.core.items;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import java.util.Collections;
 import java.util.SortedSet;
 import java.util.TreeSet;

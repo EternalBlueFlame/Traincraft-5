@@ -7,7 +7,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import train.common.Traincraft;
@@ -181,7 +181,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 		}
 		if (locked && !entityplayer.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
 			if (!world.isRemote)
-				entityplayer.addChatMessage(new ChatComponentText("this train is locked"));
+				entityplayer.addChatMessage(new TextComponentString("this train is locked"));
 			return true;
 		}
 		

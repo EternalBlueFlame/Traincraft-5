@@ -2,7 +2,7 @@ package train.common.entity.rollingStockOld.special;
 
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import train.common.adminbook.ServerLogger;

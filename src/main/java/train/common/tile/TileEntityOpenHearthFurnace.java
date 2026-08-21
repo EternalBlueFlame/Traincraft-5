@@ -1,6 +1,6 @@
 package train.common.tile;
 
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -92,9 +92,9 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 							this.slots[2] = new ItemStack(this.slots[2].getItem().getContainerItem());
 						}
 						else {
-							this.slots[2].stackSize--;
+							this.slots[2].getCount()--;
 						}
-						if (this.slots[2].stackSize == 0) {
+						if (this.slots[2].getCount() == 0) {
 							this.slots[2] = null;
 						}
 					}
@@ -152,7 +152,7 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 		}
 		ItemStack itemstack = TrainCraftingManager.instance.getHearthFurnaceRecipeResult(this.slots[0], this.slots[1]);
 
-		return (itemstack != null) && (this.slots[3] == null || this.slots[3].isItemEqual(itemstack) && this.slots[3].stackSize < itemstack.getMaxStackSize());
+		return (itemstack != null) && (this.slots[3] == null || this.slots[3].isItemEqual(itemstack) && this.slots[3].getCount() < itemstack.getMaxStackSize());
 	}
 
 	public void smeltItem() {
@@ -165,16 +165,16 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 
 		}
 		else if (this.slots[3].getItem() == itemstack.getItem()) {
-			this.slots[3].stackSize += itemstack.getCount();
+			this.slots[3].getCount() += itemstack.getCount();
 
 		}
 		if (this.slots[0].getItem().hasContainerItem(this.slots[0])) {
 			this.slots[0] = new ItemStack(this.slots[0].getItem().getContainerItem());
 		}
 		else {
-			this.slots[0].stackSize--;
+			this.slots[0].getCount()--;
 		}
-		if (this.slots[0].stackSize <= 0) {
+		if (this.slots[0].getCount() <= 0) {
 			this.slots[0] = null;
 		}
 
@@ -182,9 +182,9 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 			this.slots[1] = new ItemStack(this.slots[1].getItem().getContainerItem());
 		}
 		else {
-			this.slots[1].stackSize--;
+			this.slots[1].getCount()--;
 		}
-		if (this.slots[1].stackSize <= 0) {
+		if (this.slots[1].getCount() <= 0) {
 			this.slots[1] = null;
 		}
 	}

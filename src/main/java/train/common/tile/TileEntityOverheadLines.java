@@ -2,9 +2,10 @@ package train.common.tile;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+
+import javax.annotation.Nullable;
 import train.common.blocks.tracks.BlockEnergyTrack;
 import train.common.core.handlers.OverheadLinesEnergyNetHandler;
 
@@ -189,8 +190,9 @@ public class TileEntityOverheadLines extends TileEntity {
 		return direction.toSideValue() == getFacing(); 
 	}
 	/*/
+	@Nullable
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);

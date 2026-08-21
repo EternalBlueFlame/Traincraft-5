@@ -9,7 +9,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -25,6 +25,12 @@ import java.util.Random;
 public class BlockFiftyThreeFootContainer extends BlockContainer {
     private final Random rand = new Random();
     private TileFortyFootContainer theTile;
+    private float minX;
+    private float minZ;
+    private float minY;
+    private float maxX;
+    private float maxY;
+    private float maxZ;
     public BlockFiftyThreeFootContainer(Material p_i45386_1_) {
         super(p_i45386_1_);
         this.minX = -1.1F;
@@ -33,7 +39,7 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
         this.maxX = 2.2F;
         this.maxY = 2F;
         this.maxZ = 1.1F;
-        this.setBlockBounds(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F);
+        // this.setBlockBounds(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F);
 
     }
 
@@ -44,12 +50,10 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
         }
         return new TileFortyFootContainer();
     }
-    @Override
     public boolean renderAsNormalBlock()
     {
         return false;
     }
-    @Override
     public boolean isOpaqueCube()
     {
         return false;
@@ -61,10 +65,9 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
         return -1;
     }
 
-    @Override
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bounds, List list, Entity entity) {
         /*System.out.println("Adding??");
-        this.setBlockBounds(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F);
+        // this.setBlockBounds(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F);
         AxisAlignedBB bounds1 = AxisAlignedBB.getBoundingBox(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F);
         list.add(bounds1);
         super.addCollisionBoxesToList(world, x, y, z, bounds1, list, entity);
@@ -75,27 +78,26 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
         this.setBlockBoundsForItemRender();*/
         AxisAlignedBB axisalignedbb1 = this.getCollisionBoundingBoxFromPool(world, x, y, z);
 
-        if (axisalignedbb1 != null && bounds.intersectsWith(axisalignedbb1))
+        if (axisalignedbb1 != null && bounds.intersects(axisalignedbb1))
         {
             list.add(axisalignedbb1);
         }
     }
 
 
-    @Override
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float lx, float ly, float lz)
     {
 
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = world.getTileEntity(new net.minecraft.util.math.BlockPos(x, y, z));
         if (te instanceof TileFortyFootContainer && world.isRemote) {
-            if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemPaintbrushThing) {
+            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemPaintbrushThing) {
                 ((TileFortyFootContainer) te).goToNextColor();
             }
         }
         if (world.isRemote) return true;
 
         if (te instanceof TileFortyFootContainer) {
-            if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemPaintbrushThing) {
+            if (player.getHeldItemMainhand() != null && player.getHeldItemMainhand().getItem() instanceof ItemPaintbrushThing) {
                 ((TileFortyFootContainer)te).goToNextColor();
             } else {
                 player.openGui(Traincraft.instance, GuiIDs.FORTY_FOOT_CONTAINER, world, x, y, z);
@@ -110,21 +112,19 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
 
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World p_149668_1_, int p_149668_2_, int p_149668_3_, int p_149668_4_)
     {
-        return AxisAlignedBB.getBoundingBox((double)p_149668_2_ + this.minX, (double)p_149668_3_ + this.minY, (double)p_149668_4_ + this.minZ, (double)p_149668_2_ + this.maxX + 7F, (double)p_149668_3_ + this.maxY, (double)p_149668_4_ + this.maxZ);
+        return new AxisAlignedBB((double)p_149668_2_ + this.minX, (double)p_149668_3_ + this.minY, (double)p_149668_4_ + this.minZ, (double)p_149668_2_ + this.maxX + 7F, (double)p_149668_3_ + this.maxY, (double)p_149668_4_ + this.maxZ);
     }
 
-    @Override
     public boolean isSideSolid(IBlockAccess world, int i, int j, int k, EnumFacing side) {
         return true;
 
 
     }
-    @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> ret = super.getDrops(world, x, y, z, metadata, fortune);
-        ItemStack stack = new ItemStack(world.getBlock(x, y, z), 1, metadata);
+        ItemStack stack = new ItemStack(world.getBlockState(new net.minecraft.util.math.BlockPos(x, y, z)).getBlock(), 1, metadata);
 
-        TileFortyFootContainer te = world.getTileEntity(x, y,z) instanceof TileFortyFootContainer ? (TileFortyFootContainer)world.getTileEntity(x,y,z) : null;
+        TileFortyFootContainer te = world.getTileEntity(new net.minecraft.util.math.BlockPos(x, y, z)) instanceof TileFortyFootContainer ? (TileFortyFootContainer)world.getTileEntity(new net.minecraft.util.math.BlockPos(x, y, z)) : null;
 
         if (te != null)
         {
@@ -142,10 +142,9 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
 
     public void harvestBlock(World world, EntityPlayer player, int x, int y, int z,  int k) {
         super.harvestBlock(world, player, x,y,z,k);
-        world.setBlockToAir(x,y,z);
+        world.setBlockToAir(new net.minecraft.util.math.BlockPos(x, y, z));
     }
 
-    @Override
     public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
     {
         if (willHarvest)
@@ -191,10 +190,9 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
 
     }*/
 
-    @Override
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack)
     {
-        TileFortyFootContainer te = (TileFortyFootContainer) world.getTileEntity(x, y, z);
+        TileFortyFootContainer te = (TileFortyFootContainer) world.getTileEntity(new net.minecraft.util.math.BlockPos(x, y, z));
         int playerYaw = MathHelper.floor((player.rotationYaw / 90.0F) + 2.5D) & 3;
 
         if (te != null && stack.getTagCompound() != null)

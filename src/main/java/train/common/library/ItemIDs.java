@@ -442,7 +442,7 @@ public enum ItemIDs implements IItemIDs {
 	}
 
 	public String getItemName() {
-		return this.item.getUnlocalizedName().replace("tc:", "");
+		return this.item.getTranslationKey().replace("tc:", "");
 	}
 }
 

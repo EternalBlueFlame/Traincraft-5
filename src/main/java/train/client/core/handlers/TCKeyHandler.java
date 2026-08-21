@@ -1,16 +1,16 @@
 package train.client.core.handlers;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import ebf.tim.entities.EntitySeat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import org.lwjgl.input.Keyboard;
 import train.client.gui.GuiMTCInfo;
 import train.common.Traincraft;
@@ -152,12 +152,12 @@ public class TCKeyHandler {
                     Locomotive train = (Locomotive) Minecraft.getMinecraft().thePlayer.ridingEntity;
                     if (train.mtcStatus != 0 && train.mtcType == 2) {
                         if (train instanceof SteamTrain && !ConfigHandler.ALLOW_ATO_ON_STEAMERS) {
-                            ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new ChatComponentText("Automatic Train Operation cannot be used with steam trains"));
+                            ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new TextComponentString("Automatic Train Operation cannot be used with steam trains"));
                         } else {
                             train.atoStatus = train.atoStatus == 1 ? 0 : 1;
                         }
                     } else {
-                        ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new ChatComponentText("Automatic Train Operation can only be activated when you are using W-MTC"));
+                        ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new TextComponentString("Automatic Train Operation can only be activated when you are using W-MTC"));
                     }
                 }
 
@@ -166,10 +166,10 @@ public class TCKeyHandler {
 
                     if (train.mtcOverridePressed) {
                         train.mtcOverridePressed = false;
-                        ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new ChatComponentText("MTC has been enabled and will re-activate when the system receives new data"));
+                        ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new TextComponentString("MTC has been enabled and will re-activate when the system receives new data"));
                     } else {
                         train.mtcOverridePressed = true;
-                        ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new ChatComponentText("MTC has been disabled and will not receive speed changes or transmit MTC data"));
+                        ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new TextComponentString("MTC has been disabled and will not receive speed changes or transmit MTC data"));
                         train.mtcStatus = 0;
                         train.speedLimit = 0;
                         train.nextSpeedLimit = 0;

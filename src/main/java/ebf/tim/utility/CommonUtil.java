@@ -11,7 +11,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -56,41 +57,42 @@ public class CommonUtil {
     }
 
     public static boolean isTrack(World world, double x, double y, double z) {
-        return world.getBlock(floorDouble(x), floorDouble(y),floorDouble(z)) instanceof BlockRailBase ||
-                world.getBlock(floorDouble(x), floorDouble(y),floorDouble(z)) instanceof BlockTCRail ||
-                world.getBlock(floorDouble(x), floorDouble(y),floorDouble(z)) instanceof BlockTCRailGag;
+        return world.getBlockState(new BlockPos(floorDouble(x), floorDouble(y),floorDouble(z))).getBlock() instanceof BlockRailBase ||
+                world.getBlockState(new BlockPos(floorDouble(x), floorDouble(y),floorDouble(z))).getBlock() instanceof BlockTCRail ||
+                world.getBlockState(new BlockPos(floorDouble(x), floorDouble(y),floorDouble(z))).getBlock() instanceof BlockTCRailGag;
     }
 
     public static Block getBlockAt(World world, double x, double y, double z){
-        return world.getBlock(floorDouble(x), floorDouble(y),floorDouble(z));
+        return world.getBlockState(new BlockPos(floorDouble(x), floorDouble(y),floorDouble(z))).getBlock();
     }
 
     public static Block getBlockAt(World world, int x, int y, int z){
-        return world.getBlock(x,y,z);
+        return world.getBlockState(new BlockPos(x,y,z)).getBlock();
     }
 
     public static boolean setBlock(World w, int x, int y, int z, Block b){
-        return w.setBlock(x,y,z,b);
+        return w.setBlockState(new BlockPos(x,y,z), b.getDefaultState());
     }
 
     public static void setBlockMeta(World w, int x, int y, int z, int meta){
-        w.setBlockMetadataWithNotify(x,y,z,meta,2);
+        BlockPos pos = new BlockPos(x, y, z);
+        w.setBlockState(pos, w.getBlockState(pos).getBlock().getStateFromMeta(meta), 2);
         w.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
-        w.notifyBlocksOfNeighborChange(x, y, z, getBlockAt(w,x,y,z));
-        w.scheduleBlockUpdate(x, y, z, getBlockAt(w,x,y,z), getBlockAt(w,x,y,z).tickRate(w));
+        w.notifyNeighborsOfStateChange(pos, getBlockAt(w,x,y,z), true);
+        w.scheduleUpdate(pos, getBlockAt(w,x,y,z), getBlockAt(w,x,y,z).tickRate(w));
 
-        w.func_147453_f(x, y, z, getBlockAt(w,x,y,z));
+        w.updateComparatorOutputLevel(pos, getBlockAt(w,x,y,z));
     }
 
     public static List<TileEntity> getTiles(World w, int x, int y, int z){
         List<TileEntity> tiles = new ArrayList<>();
         TileTCRailGag gag;
         for (Object t : w.loadedTileEntityList){
-            if(((TileEntity)t).xCoord==x && ((TileEntity)t).yCoord==y && ((TileEntity)t).zCoord==z){
+            if(((TileEntity)t).getPos().getX()==x && ((TileEntity)t).getPos().getY()==y && ((TileEntity)t).getPos().getZ()==z){
                 if(t instanceof TileTCRailGag){
                     gag=(TileTCRailGag)t;
                     for(int i=0;i<gag.originX.size();i++){
-                        tiles.add(w.getTileEntity(gag.originX.get(i),gag.originY.get(i),gag.originZ.get(i)));
+                        tiles.add(w.getTileEntity(new BlockPos(gag.originX.get(i),gag.originY.get(i),gag.originZ.get(i))));
                     }
                 } else {
                     tiles.add(((TileEntity) t));
@@ -103,15 +105,16 @@ public class CommonUtil {
     }
 
     public static void markBlockForUpdate(World w, int x, int y, int z){
-        w.markBlockForUpdate(x,y,z);
+        BlockPos pos = new BlockPos(x, y, z);
+        w.notifyBlockUpdate(pos, w.getBlockState(pos), w.getBlockState(pos), 3);
     }
 
     public static int getBlockFacing(IBlockAccess w, int x, int y, int z){
-        return w.getBlockMetadata(x,y,z);
+        return w.getBlockState(new BlockPos(x,y,z)).getBlock().getMetaFromState(w.getBlockState(new BlockPos(x,y,z)));
     }
 
     public static int getRailMeta(IBlockAccess w, EntityMinecart cart, int x, int y, int z){
-        return ((BlockRailBase)w.getBlock(x,y,z)).getBasicRailMetadata(w,cart,x,y,z);
+        return ((BlockRailBase)w.getBlockState(new BlockPos(x,y,z)).getBlock()).getRailDirection(w, new BlockPos(x,y,z), w.getBlockState(new BlockPos(x,y,z)), cart).getMetadata();
     }
 
     public static boolean setBlock(World w, int x, int y, int z, Block b, int meta){
@@ -123,7 +126,7 @@ public class CommonUtil {
     }
 
     public static float getMaxRailSpeed(World world, BlockRailBase rail, AbstractTrains host, double x, double y, double z){
-        return (rail.getRailMaxSpeed(world, host, floorDouble(x), floorDouble(y),floorDouble(z)));
+        return (rail.getRailMaxSpeed(world, host, new BlockPos(floorDouble(x), floorDouble(y),floorDouble(z))));
     }
 
     public static int floorDouble(double value){
@@ -136,7 +139,7 @@ public class CommonUtil {
      */
     public static boolean isRailBlockAt(World world, int x, int y, int z) {
         //todo ZnD support, either by jar reference or API update
-        return (/*world.getTileEntity(x, y, z) instanceof ITrackBase ||*/ world.getBlock(x, y, z) instanceof BlockRailBase);
+        return (/*world.getTileEntity(x, y, z) instanceof ITrackBase ||*/ world.getBlockState(new BlockPos(x, y, z)).getBlock() instanceof BlockRailBase);
     }
 
     /**
@@ -144,15 +147,12 @@ public class CommonUtil {
      * in later versions it's used to identify what made the sound, like if it's for an entity or a block.
      */
     public static void playSound(World world, double xCoord, double yCoord, double zCoord, String file, float volume, float pitch, int soundType){
-        world.playSound(xCoord,yCoord,zCoord, file, volume,pitch,false);
     }
 
     public static void playSound(TileEntity tile, String file, float volume, float pitch){
-        tile.world.playSound(tile.xCoord,tile.yCoord,tile.zCoord, file, volume,pitch,false);
     }
 
     public static void playSound(Entity entity, String file, float volume, float pitch){
-        entity.world.playSoundAtEntity(entity, file, volume, pitch);
     }
 
     public static boolean stringContains(String s1, String... s2){

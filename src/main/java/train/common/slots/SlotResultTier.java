@@ -33,14 +33,14 @@ public class SlotResultTier extends Slot {
 	}
 
 	@Override
-	public void onPickupFromSlot(EntityPlayer player, ItemStack itemstack) {
+	public ItemStack onTake(EntityPlayer player, ItemStack itemstack) {
 		for (int i = 0; i < 10; i++) {
 			if (inventory.getStackInSlot(i) != null) {
 				inventory.decrStackSize(i, TierRecipeManager.getInstance().getTierRecipe(tier2.Tier(), itemstack).toDecrease(i));
 			}
 		}
 		this.onCrafting(itemstack);
-		super.onPickupFromSlot(player, itemstack);
+		return super.onTake(player, itemstack);
 		FMLCommonHandler.instance().firePlayerCraftingEvent(player, itemstack, craftMatrix);
 	}
 }

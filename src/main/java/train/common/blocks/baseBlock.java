@@ -1,6 +1,7 @@
 package train.common.blocks;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -13,11 +14,11 @@ public class baseBlock extends Block {
     public baseBlock(String name, float hardness, float resistance, String harvestTool, int harvestLevel, Material material, SoundType stepSound, String textureLocation) {
         super(material);
         setCreativeTab(Traincraft.tcTab);
-        setBlockName(name);
+        setUnlocalizedName(name);
         setHardness(hardness);
         setResistance(resistance);
         setHarvestLevel(harvestTool,harvestLevel);
-        setStepSound(stepSound);
+        setSoundType(stepSound);
         setBlockTextureName(Info.modID+":"+textureLocation);
     }
 

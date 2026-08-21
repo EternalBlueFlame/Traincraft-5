@@ -8,7 +8,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import train.common.Traincraft;
@@ -133,7 +133,7 @@ public class GuiControlCar extends GuiContainer
                         this.initGui();
                     }
                 } else {
-                    getEntityPlayer().addChatMessage(new ChatComponentText("You are not the owner"));
+                    getEntityPlayer().addChatMessage(new TextComponentString("You are not the owner"));
                 }
                 break;
 

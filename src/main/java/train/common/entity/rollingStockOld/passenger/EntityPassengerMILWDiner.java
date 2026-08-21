@@ -1,5 +1,6 @@
 package train.common.entity.rollingStockOld.passenger;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

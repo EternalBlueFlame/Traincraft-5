@@ -47,12 +47,12 @@ public class SlotTrainCrafting extends Slot {
 	@Override
 	public ItemStack decrStackSize(int par1) {
 		if (this.getHasStack()) {
-			this.amountCrafted += Math.min(par1, this.getStack().stackSize);
+			this.amountCrafted += Math.min(par1, this.getStack().getCount());
 		}
 		return super.decrStackSize(par1);
 	}
 	@Override
-	public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack)
+	public ItemStack onTake(EntityPlayer par1EntityPlayer, ItemStack par2ItemStack)
 	{
 		FMLCommonHandler.instance().firePlayerCraftingEvent(par1EntityPlayer, par2ItemStack, craftMatrix);
 		this.onCrafting(par2ItemStack);

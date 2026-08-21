@@ -1,9 +1,9 @@
 package train.client.core.handlers;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -24,13 +24,13 @@ public class CustomRenderHandler {
 
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+        EntityPlayerSP player = Minecraft.getMinecraft().player;
         if (player != null && player.getHeldItem() != null && (player.getHeldItem().getItem() instanceof ItemTCRail)) {
             renderTCRailPreview(player, player.getHeldItem());
         }
     }
 
-    private void renderTCRailPreview(EntityClientPlayerMP player, ItemStack stack) {
+    private void renderTCRailPreview(EntityPlayerSP player, ItemStack stack) {
         World world = Minecraft.getMinecraft().world;
         if (world == null || Minecraft.getMinecraft().objectMouseOver == null) {
             return;

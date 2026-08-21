@@ -1,7 +1,7 @@
 package train.common.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -10,9 +10,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.items.ItemWrench;
@@ -49,7 +49,7 @@ public class BlockTCRail extends Block {
 	}
 
 	@Override
-	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player)  {
+	public ItemStack getPickBlock(RayTraceResult target, World world, int x, int y, int z, EntityPlayer player)  {
 		TileTCRail tileEntity = (TileTCRail) world.getTileEntity(x, y, z);
 		if (tileEntity != null && tileEntity.idDrop != null) {
 			return new ItemStack(tileEntity.idDrop);

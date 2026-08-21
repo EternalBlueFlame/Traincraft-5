@@ -8,9 +8,9 @@
 
 package mods.railcraft.api.tracks;
 
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 
 /**
  * Used by rails that modify the bounding boxes.
@@ -28,5 +28,5 @@ public interface ITrackCustomShape extends ITrackInstance
 
     public AxisAlignedBB getSelectedBoundingBoxFromPool();
 
-    public MovingObjectPosition collisionRayTrace(Vec3 vec3d, Vec3 vec3d1);
+    public RayTraceResult collisionRayTrace(Vec3d vec3d, Vec3d vec3d1);
 }

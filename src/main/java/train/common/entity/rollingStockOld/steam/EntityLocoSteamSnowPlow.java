@@ -113,9 +113,9 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 				if (cargoItems[i] == null){
 					cargoItems[i] = new ItemStack(Items.snowball, snowballs);
 					snowballs--;
-				} else if (cargoItems[i].getItem() == Items.snowball && cargoItems[i].stackSize < Items.snowball.getItemStackLimit()){
-					while (cargoItems[i].stackSize < cargoItems[i].getMaxStackSize() && snowballs >0){
-						cargoItems[i].stackSize++;
+				} else if (cargoItems[i].getItem() == Items.snowball && cargoItems[i].getCount() < Items.snowball.getItemStackLimit()){
+					while (cargoItems[i].getCount() < cargoItems[i].getMaxStackSize() && snowballs >0){
+						cargoItems[i].getCount()++;
 						snowballs--;
 					}
 				}

@@ -1,7 +1,7 @@
 package train.common.inventory;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -85,7 +85,7 @@ public class InventoryLoco extends Container {
 			else if (!mergeItemStack(itemstack1, 2, inventorySize, false)) {
 				return null;
 			}
-			if (itemstack1.stackSize == 0) {
+			if (itemstack1.setCount(= 0) {
 				slot.putStack(null);
 			}
 			else {

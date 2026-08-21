@@ -12,9 +12,9 @@ import net.minecraft.inventory.ContainerPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.stats.StatBase;
-import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
 import net.minecraft.world.World;
 
 import java.util.UUID;
@@ -138,8 +138,8 @@ public class FakePlayer extends EntityPlayer {
     }
 
     @Override
-    public EnumStatus sleepInBedAt(int i, int j, int k) {
-        return EnumStatus.OK;
+    public SleepResult trySleep(BlockPos bedLocation) {
+        return SleepResult.OK;
     }
 
     @Override
@@ -162,7 +162,7 @@ public class FakePlayer extends EntityPlayer {
     }
 
     @Override
-    public void addChatMessage(IChatComponent chatComponent) {
+    public void sendMessage(ITextComponent chatComponent) {
     }
 
     @Override
@@ -222,13 +222,23 @@ public class FakePlayer extends EntityPlayer {
     }
 
     @Override
-    public boolean canCommandSenderUseCommand(int var1, String var2) {
+    public boolean canUseCommand(int var1, String var2) {
         return false;
     }
 
     @Override
-    public ChunkCoordinates getPlayerCoordinates() {
-        return null;
+    public BlockPos getPosition() {
+        return BlockPos.ORIGIN;
+    }
+
+    @Override
+    public boolean isSpectator() {
+        return false;
+    }
+
+    @Override
+    public boolean isCreative() {
+        return false;
     }
 
 }

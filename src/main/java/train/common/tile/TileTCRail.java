@@ -1,7 +1,7 @@
 package train.common.tile;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.block.Block;
@@ -10,10 +10,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+
+import javax.annotation.Nullable;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import train.common.Traincraft;
@@ -29,7 +32,7 @@ import train.common.library.TraincraftRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileTCRail extends TileEntity {
+public class TileTCRail extends TileEntity implements ITickable {
 
 	public double r;
 	public double cx;
@@ -80,7 +83,7 @@ public class TileTCRail extends TileEntity {
 	}
 
 	public void setType(String type) {
-		world.markBlockForUpdate(xCoord, yCoord, zCoord);
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 		this.type = type;
 		for (EnumTracks rail : EnumTracks.values()) {
 			if (rail.getLabel().equals(type)) {
@@ -99,7 +102,7 @@ public class TileTCRail extends TileEntity {
 
 
 	public void setBallastMaterial(int  ballast) {
-		world.markBlockForUpdate(xCoord, yCoord, zCoord);
+		world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 		this.ballastMaterial = ballast;
 	}
 
@@ -114,7 +117,7 @@ public class TileTCRail extends TileEntity {
 		Block type = getBlockType();
 		if (type == BlockIDs.tcRail.block )
 		{
-			bb = AxisAlignedBB.getBoundingBox(xCoord - 32, yCoord, zCoord - 32, xCoord + 32, yCoord , zCoord + 32);
+			bb = new AxisAlignedBB(pos.getX() - 32, pos.getY(), pos.getZ() - 32, pos.getX() + 32, pos.getY(), pos.getZ() + 32);
 		}
 
 		return bb;
@@ -175,17 +178,17 @@ public class TileTCRail extends TileEntity {
 
 	private byte checkBlockXZ=0;
 	@Override
-	public void updateEntity() {
-		if (worldObj.isRemote || !TCRailTypes.isSwitchTrack(this)) {
+	public void update() {
+		if (world.isRemote || !TCRailTypes.isSwitchTrack(this)) {
 
 			return;
 		}
 
 		if (updateTicks % 11 == 0 || updateTicks==1) {
-			boolean flag = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+			boolean flag = world.isBlockPowered(pos);
 
 			if(checkBlockXZ==0){
-				if(CommonUtil.getBlockAt(worldObj,xCoord,yCoord,zCoord+1) instanceof BlockTCRail){
+				if(CommonUtil.getBlockAt(world,pos.getX(),pos.getY(),pos.getZ()+1) instanceof BlockTCRail){
 					checkBlockXZ=1;
 				} else {
 					checkBlockXZ=2;
@@ -193,14 +196,14 @@ public class TileTCRail extends TileEntity {
 			}
 			if(!flag){
 				if(checkBlockXZ==1){
-					flag = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord+1);
+					flag = world.isBlockPowered(new BlockPos(pos.getX(), pos.getY(), pos.getZ()+1));
 					if(!flag){
-						flag = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord-1);
+						flag = world.isBlockPowered(new BlockPos(pos.getX(), pos.getY(), pos.getZ()-1));
 					}
 				} else if(checkBlockXZ==2){
-					flag = worldObj.isBlockIndirectlyGettingPowered(xCoord+1, yCoord, zCoord);
+					flag = world.isBlockPowered(new BlockPos(pos.getX()+1, pos.getY(), pos.getZ()));
 					if(!flag){
-						flag = worldObj.isBlockIndirectlyGettingPowered(xCoord-1, yCoord, zCoord);
+						flag = world.isBlockPowered(new BlockPos(pos.getX()-1, pos.getY(), pos.getZ()));
 					}
 				}
 			}
@@ -241,7 +244,7 @@ public class TileTCRail extends TileEntity {
 		int offsetY = b;
 		int offsetZ = c;
 		while (Math.abs(offsetX) < getTrack().getSwitchSize() && Math.abs(offsetY) < getTrack().getSwitchSize() && Math.abs(offsetZ) < getTrack().getSwitchSize()) {
-			te1 = worldObj.getTileEntity(xCoord + offsetX, yCoord + offsetY, zCoord + offsetZ);
+			te1 = world.getTileEntity(new BlockPos(pos.getX() + offsetX, pos.getY() + offsetY, pos.getZ() + offsetZ));
 			if (te1 instanceof TileTCRail) {
 				if (getSwitchState()) {
 					if (getType().contains("SWITCH") && getType().contains("LEFT")) {
@@ -262,7 +265,7 @@ public class TileTCRail extends TileEntity {
 		}
 
 		this.markDirty();
-		this.world.markBlockForUpdate(getPos());
+		this.world.notifyBlockUpdate(pos, world.getBlockState(pos), world.getBlockState(pos), 3);
 	}
 
 	@Override
@@ -331,7 +334,7 @@ public class TileTCRail extends TileEntity {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setByte("Orientation", (byte) facingMeta);
 		nbt.setDouble("r", r);
@@ -355,10 +358,12 @@ public class TileTCRail extends TileEntity {
 		nbt.setBoolean("hasModel", hasModel);
 		nbt.setBoolean("switchActive", switchActive);
 		nbt.setInteger("idDrop", Item.getIdFromItem(idDrop));
+		return nbt;
 	}
 
+	@Nullable
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
@@ -368,7 +373,7 @@ public class TileTCRail extends TileEntity {
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
-		this.readFromNBT(pkt.func_148857_g());
+		this.readFromNBT(pkt.getNbtCompound());
 		super.onDataPacket(net, pkt);
 	}
 
@@ -399,7 +404,7 @@ public class TileTCRail extends TileEntity {
 			int offsetY = b;
 			int offsetZ = c;
 			while (Math.abs(offsetX) < tileEntity.getTrack().getSwitchSize() && Math.abs(offsetY) < tileEntity.getTrack().getSwitchSize() && Math.abs(offsetZ) < tileEntity.getTrack().getSwitchSize()) {
-				te1 = world.getTileEntity(i + offsetX, j + offsetY, k + offsetZ);
+				te1 = world.getTileEntity(new BlockPos(i + offsetX, j + offsetY, k + offsetZ));
 				if (te1 != null && te1 instanceof TileTCRail) {
 					if (tileEntity.getSwitchState()) {
 						if (tileEntity.getType().contains("SWITCH") && tileEntity.getType().contains("LEFT")) {

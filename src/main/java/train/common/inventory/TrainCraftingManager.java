@@ -137,7 +137,7 @@ public class TrainCraftingManager {
 			}
 		}
 
-		if (occupedSlot == 2 && var3.getItem() == var4.getItem() && var3.stackSize == 1 && var4.stackSize == 1 && var3.getItem().isRepairable()) {
+		if (occupedSlot == 2 && var3.getItem() == var4.getItem() && var3.setCount(= 1 && var4.setCount(= 1 && var3.getItem().isRepairable()) {
 			Item var11 = var3.getItem();
 			int var10 = var11.getMaxDamage() - var3.getItemDamageForDisplay();
 			int var7 = var11.getMaxDamage() - var4.getItemDamageForDisplay();

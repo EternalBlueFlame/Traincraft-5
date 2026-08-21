@@ -15,6 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+
+import javax.annotation.Nullable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraft.util.EnumFacing;
@@ -66,7 +68,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 		if (workbenchItemStacks[i] != null) {
 
-			if (workbenchItemStacks[i].stackSize <= j) {
+			if (workbenchItemStacks[i].getCount() <= j) {
 
 				ItemStack itemstack = workbenchItemStacks[i];
 				workbenchItemStacks[i] = null;
@@ -76,7 +78,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 			ItemStack itemstack1 = workbenchItemStacks[i].splitStack(j);
 
-			if (workbenchItemStacks[i].stackSize == 0) {
+			if (workbenchItemStacks[i].getCount() == 0) {
 
 				workbenchItemStacks[i] = null;
 			}
@@ -110,9 +112,9 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 		workbenchItemStacks[i] = stack;
 
-		if (stack != null && stack.stackSize > getInventoryStackLimit()) {
+		if (stack != null && stack.getCount() > getInventoryStackLimit()) {
 
-			stack.stackSize = getInventoryStackLimit();
+			stack.setCount(getInventoryStackLimit();
 		}
 	}
 
@@ -187,8 +189,9 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 
 
+	@Nullable
 	@Override
-	public SPacketUpdateTileEntity getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);

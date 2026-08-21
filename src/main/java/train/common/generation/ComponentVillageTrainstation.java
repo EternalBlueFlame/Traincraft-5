@@ -2,6 +2,8 @@ package train.common.generation;
 
 import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -11,6 +13,7 @@ import net.minecraft.world.gen.structure.StructureBoundingBox;
 import net.minecraft.world.gen.structure.StructureComponent;
 import net.minecraft.world.gen.structure.StructureVillagePieces;
 import train.common.api.AbstractTrains;
+import train.common.api.EntityRollingStock;
 import train.common.blocks.TCBlocks;
 import train.common.entity.rollingStockOld.caboose.EntityCaboose;
 import train.common.entity.rollingStockOld.caboose.EntityCaboose3;

@@ -8,7 +8,7 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.IIcon;
 import train.common.api.AbstractTrains;
 import train.common.api.Locomotive;
@@ -87,22 +87,22 @@ public class BlockStationTrack extends BlockTrackLockingBase implements ITrackLo
 				if (mode > 3)
 					mode = 0;
 				if (this.mode == 0){
-					player.addChatMessage(new ChatComponentText("Activated every 15s for 5s"));
+					player.addChatMessage(new TextComponentString("Activated every 15s for 5s"));
 					this.delayTime=100;
 					this.activateRate=300;
 				}
 				if (this.mode == 1){
-					player.addChatMessage(new ChatComponentText("Activated every 30s for 15s"));
+					player.addChatMessage(new TextComponentString("Activated every 30s for 15s"));
 					this.delayTime=600/2;
 					this.activateRate=600;
 				}
 				if (this.mode == 2){
-					player.addChatMessage(new ChatComponentText("Activated every minute for 30s"));
+					player.addChatMessage(new TextComponentString("Activated every minute for 30s"));
 					this.delayTime=1200/2;
 					this.activateRate=1200;
 				}
 				if (this.mode == 3){
-					player.addChatMessage(new ChatComponentText("Activated every five minutes for 30s"));
+					player.addChatMessage(new TextComponentString("Activated every five minutes for 30s"));
 					this.delayTime=1200/2;
 					this.activateRate=6000;
 				}

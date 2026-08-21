@@ -1,8 +1,6 @@
 package fexcraft.tmt.slim;
 
 
-import net.minecraft.util.Vec3;
-
 /**
  * @author EternalBlueFlame
  * <h1>Vector 3d</h1>
@@ -17,7 +15,7 @@ public class Vec3d {
         xCoord=x;yCoord=y;zCoord=z;
     }
 
-    public Vec3d(Vec3 vec){this(vec.xCoord, vec.yCoord, vec.zCoord);}
+    public Vec3d(net.minecraft.util.math.Vec3d vec){this(vec.x, vec.y, vec.z);}
 
     public void add(Vec3d vec2){
         xCoord += vec2.xCoord;

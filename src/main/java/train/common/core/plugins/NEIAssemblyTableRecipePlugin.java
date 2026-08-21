@@ -31,55 +31,55 @@ public class NEIAssemblyTableRecipePlugin extends ShapedRecipeHandler {
 		PositionedStack stack;
 		if (recipe.getInput().get(0) != null) {
 			stack = new PositionedStack(recipe.getInput().get(0), 20, 16);
-			stack.setMaxSize(recipe.getInput().get(0).stackSize);
+			stack.setMaxSize(recipe.getInput().get(0).getCount());
 			shape.ingredients.add(stack);
 		}
 
 		if (recipe.getInput().get(1) != null) {
 			stack = new PositionedStack(recipe.getInput().get(1), 38, 82);
-			stack.setMaxSize(recipe.getInput().get(1).stackSize);
+			stack.setMaxSize(recipe.getInput().get(1).getCount());
 			shape.ingredients.add(stack);
 		}
 
 		if (recipe.getInput().get(2) != null) {
 			stack = new PositionedStack(recipe.getInput().get(2), 74, 82);
-			stack.setMaxSize(recipe.getInput().get(2).stackSize);
+			stack.setMaxSize(recipe.getInput().get(2).getCount());
 			shape.ingredients.add(stack);
 		}
 
 		if (recipe.getInput().get(3) != null) {
 			stack = new PositionedStack(recipe.getInput().get(3), 140, 82);
-			stack.setMaxSize(recipe.getInput().get(3).stackSize);
+			stack.setMaxSize(recipe.getInput().get(3).getCount());
 			shape.ingredients.add(stack);
 		}
 		if (recipe.getInput().get(4) != null) {
 			stack = new PositionedStack(recipe.getInput().get(4), 74, 16);
-			stack.setMaxSize(recipe.getInput().get(4).stackSize);
+			stack.setMaxSize(recipe.getInput().get(4).getCount());
 			shape.ingredients.add(stack);
 		}
 		if (recipe.getInput().get(5) != null) {
 			stack = new PositionedStack(recipe.getInput().get(5), 110, 16);
-			stack.setMaxSize(recipe.getInput().get(5).stackSize);
+			stack.setMaxSize(recipe.getInput().get(5).getCount());
 			shape.ingredients.add(stack);
 		}
 		if (recipe.getInput().get(6) != null) {
 			stack = new PositionedStack(recipe.getInput().get(6), 74, 50);
-			stack.setMaxSize(recipe.getInput().get(6).stackSize);
+			stack.setMaxSize(recipe.getInput().get(6).getCount());
 			shape.ingredients.add(stack);
 		}
 		if (recipe.getInput().get(7) != null) {
 			stack = new PositionedStack(recipe.getInput().get(7), 110, 50);
-			stack.setMaxSize(recipe.getInput().get(7).stackSize);
+			stack.setMaxSize(recipe.getInput().get(7).getCount());
 			shape.ingredients.add(stack);
 		}
 		if (recipe.getInput().get(8) != null) {
 			stack = new PositionedStack(recipe.getInput().get(8), 20, 50);
-			stack.setMaxSize(recipe.getInput().get(8).stackSize);
+			stack.setMaxSize(recipe.getInput().get(8).getCount());
 			shape.ingredients.add(stack);
 		}
 		if (recipe.getInput().get(9) != null) {
 			stack = new PositionedStack(recipe.getInput().get(9), 140, 16);
-			stack.setMaxSize(recipe.getInput().get(9).stackSize);
+			stack.setMaxSize(recipe.getInput().get(9).getCount());
 			shape.ingredients.add(stack);
 		}
 
@@ -153,9 +153,9 @@ public class NEIAssemblyTableRecipePlugin extends ShapedRecipeHandler {
 					List<?> list = OreDictionary.getOres(OreDictionary.getOreName(OreDictionary.getOreID(ingredients.get(itemIndex).item)));
 					Random rand = new Random(cycle + System.currentTimeMillis());
 					if (cycleTicks % 15 == 0) {
-						int stackSize = ingredients.get(itemIndex).item.stackSize;
+						int stackSize = ingredients.get(itemIndex).item.getCount();
 						ingredients.get(itemIndex).item = (ItemStack) list.get(Math.abs(rand.nextInt()) % list.size());
-						ingredients.get(itemIndex).item.stackSize = stackSize;
+						ingredients.get(itemIndex).item.setCount(stackSize;
 					}
 				}
 				else {

@@ -131,12 +131,12 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
                 cargoItems[i] = itemstack1;
                 return;
             } else if (cargoItems[i] != null && cargoItems[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() && (!itemstack1.getHasSubtypes() || cargoItems[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(cargoItems[i], itemstack1)) {
-                int var9 = cargoItems[i].stackSize + itemstack1.stackSize;
+                int var9 = cargoItems[i].getCount() + itemstack1.getCount();
                 if (var9 <= itemstack1.getMaxStackSize()) {
-                    cargoItems[i].stackSize = var9;
+                    cargoItems[i].getCount() = var9;
 
-                } else if (cargoItems[i].stackSize < itemstack1.getMaxStackSize()) {
-                    cargoItems[i].stackSize += 1;
+                } else if (cargoItems[i].getCount() < itemstack1.getMaxStackSize()) {
+                    cargoItems[i].getCount() += 1;
                 }
                 return;
             } else if (i == cargoItems.length - 1) {

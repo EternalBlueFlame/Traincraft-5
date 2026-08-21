@@ -14,12 +14,13 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import train.common.core.compat.DataWatcher;
 import train.common.Traincraft;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.network.PacketKeyPress;
@@ -37,6 +38,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     public int numCargoSlots2;
     public int inventorySize;
     public int fuel;
+    public DataWatcher dataWatcher;
     public boolean idle;
     public boolean altitude;
     private static int KEY_ACC;
@@ -72,6 +74,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
     public EntityRotativeDigger(World world) {
         super(world);
+        this.dataWatcher = new DataWatcher(this);
         boatCurrentDamage = 0;
         boatTimeSinceHit = 0;
         boatRockDirection = 1;
@@ -294,9 +297,9 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      * @param x x position of the wheel
      * @param y y position of the wheel
      * @param z  z position of the wheel
-     * @return Vec3 with the position of the wheel
+     * @return Vec3d with the position of the wheel
      */
-    public Vec3 rotate(double x, double y, double z) {
+    public Vec3d rotate(double x, double y, double z) {
 
         double cosYaw = Math.cos(this.getYaw() * 3.141593F / 180.0F);
         double sinYaw = Math.sin(this.getYaw() * 3.141593F / 180.0F);
@@ -310,7 +313,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         double newY = -(((cosPitch - x) * -sinPitch));
         double newZ = (y * sinRoll - x * cosRoll) * sinYaw + v * cosYaw;
 
-        return Vec3.createVectorHelper(newX, newY, newZ);
+        return new Vec3d(newX, newY, newZ);
     }
 
     public float getYaw() {
@@ -348,7 +351,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
          */
         if (wheels != null) {
             for (EntityRotativeWheel wheel : wheels) {
-                Vec3 posVec = this.rotate(wheel.seatX, wheel.seatY, wheel.seatZ).addVector(this.posX, this.posY + 0.7, this.posZ);
+                Vec3d posVec = this.rotate(wheel.seatX, wheel.seatY, wheel.seatZ).addVector(this.posX, this.posY + 0.7, this.posZ);
                 //wheels[seatNum].setPosition(posVec.xCoord, posVec.yCoord, posVec.zCoord);
 
                 wheel.setPositionAndRotation(posVec.xCoord, posVec.yCoord, posVec.zCoord, this.rotationYaw, pitch);
@@ -472,7 +475,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         /* This is how the entity rotates with the look of the player */
         if (getFuel() > 0 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
-            Vec3 vecLook = ((EntityPlayer) getPassengers().get(0)).getLook(2);// .addVector(posX, posY, posZ);
+            Vec3d vecLook = ((EntityPlayer) getPassengers().get(0)).getLook(2);// .addVector(posX, posY, posZ);
             double da = rotationYaw;
             double db = 0 - vecLook.xCoord;
             double dc = 0 - vecLook.zCoord;
@@ -518,7 +521,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         }
 
         if (Math.sqrt((motionX * motionX) + (motionZ * motionZ)) > 0.01) {
-            Vec3 pos = Vec3.createVectorHelper(posX, posY - 1, posZ);
+            Vec3d pos = new Vec3d(posX, posY - 1, posZ);
             Block id = world.getBlock((int) posX, (int) posY - 1, (int) posZ);
 
             if (id != null) {
@@ -534,7 +537,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      * @param block_index index of the block in mining list
      */
 
-    private void playMiningEffect(Vec3 pos, int block_index) {
+    private void playMiningEffect(Vec3d pos, int block_index) {
         Block id = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
         if (id != null) {
             Minecraft.getMinecraft().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
@@ -648,13 +651,13 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     @Override
     public ItemStack decrStackSize(int i, int j) {
         if (zeppInvent[i] != null) {
-            if (zeppInvent[i].stackSize <= j) {
+            if (zeppInvent[i].getCount() <= j) {
                 ItemStack itemstack = zeppInvent[i];
                 zeppInvent[i] = null;
                 return itemstack;
             }
             ItemStack itemstack1 = zeppInvent[i].splitStack(j);
-            if (zeppInvent[i].stackSize == 0) {
+            if (zeppInvent[i].getCount() == 0) {
                 zeppInvent[i] = null;
             }
             return itemstack1;
@@ -669,7 +672,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         zeppInvent[i] = itemstack;
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-            itemstack.getCount() = getInventoryStackLimit();
+            itemstack.setCount(getInventoryStackLimit();
         }
         if (itemstack != null && itemstack.getItem() == Items.coal && i == 0 && getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer)) {
             // ((EntityPlayer)getPassengers().get(0)).func_25046_a(Train.field_27542_startTrain, 1);
@@ -723,7 +726,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         ItemStack var2 = entityplayer.inventory.getCurrentItem();
 
         if (var2 != null && var2.getItem() == ItemIDs.refinedFuel.item) {
-            if (--var2.stackSize == 0) {
+            if (var2.shrink(1) == 0) {
                 entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, (ItemStack) null);
             }
 

@@ -19,7 +19,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.EnumFacing;
 import train.common.api.ElectricTrain;
@@ -166,7 +166,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 		
 		if ((current != null) && ((current.getItem() instanceof IToolCrowbar))) {
 			IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-			player.addChatMessage(new ChatComponentText("stored: " + (this.RFChandler.getCharge()) + "/"+(int)this.getMaxEnergy()+" RF"));
+			player.addChatMessage(new TextComponentString("stored: " + (this.RFChandler.getCharge()) + "/"+(int)this.getMaxEnergy()+" RF"));
 			markBlockNeedsUpdate();
 			crowbar.onWhack(player, current, getX(), getY(), getZ());
 			sendUpdateToClient();

@@ -7,4 +7,4 @@
  */
 @API(apiVersion="1.1.0", owner="RailcraftAPI|carts", provides="RailcraftAPI|locomotive")
 package mods.railcraft.api.carts.locomotive;
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;

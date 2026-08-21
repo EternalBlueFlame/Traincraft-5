@@ -22,7 +22,7 @@ import train.common.Traincraft;
 import train.common.library.Info;
 import train.common.tile.TileStopper;
 
-import static net.minecraftforge.common.util.EnumFacing.UP;
+import static net.minecraft.util.EnumFacing.UP;
 
 public class BlockStopper extends BlockContainer {
 

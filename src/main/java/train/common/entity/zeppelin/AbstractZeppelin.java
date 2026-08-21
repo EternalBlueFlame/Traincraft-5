@@ -16,12 +16,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
+import train.common.core.compat.DataWatcher;
 import train.common.Traincraft;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.handlers.FuelHandler;
@@ -37,6 +38,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	public int numCargoSlots2;
 	public int inventorySize;
 	public int fuel;
+	public DataWatcher dataWatcher;
 	public boolean idle;
 	public boolean altitude;
 
@@ -68,6 +70,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 
 	public AbstractZeppelin(World world) {
 		super(world);
+		this.dataWatcher = new DataWatcher(this);
 		boatCurrentDamage = 0;
 		boatTimeSinceHit = 0;
 		boatRockDirection = 1;
@@ -204,7 +207,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 							this.world.spawnEntityInWorld(entitytntprimed);
 							this.world.playSoundAtEntity(entitytntprimed, "random.fuse", 1.0F, 1.0F);
 							bombTimer=100;
-							if(--this.zeppInvent[t].stackSize==0)this.zeppInvent[t]=null;
+							if(--this.zeppInvent[t].getCount()==0)this.zeppInvent[t]=null;
 							return;
 						}
 					}
@@ -291,7 +294,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	 * @param z
 	 * @return
 	 */
-	public Vec3 rotate(double x, double y, double z) {
+	public Vec3d rotate(double x, double y, double z) {
 		double cosYaw = Math.cos(this.getYaw() * 3.141593F / 180.0F);
 		double sinYaw = Math.sin(this.getYaw() * 3.141593F / 180.0F);
 		double cosPitch = Math.cos((this.getPitch()) * 3.141593F / 180.0F);
@@ -303,7 +306,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		double newY = -(((cosPitch - x) * -sinPitch));
 		double newZ = (y * sinRoll - x * cosRoll) * sinYaw + ((-x * sinRoll + y * cosRoll) * 0 + z * 0.01745) * cosYaw;
 
-		return Vec3.createVectorHelper(newX, newY, newZ);
+		return new Vec3d(newX, newY, newZ);
 	}
 
 	public float getYaw() {
@@ -584,13 +587,13 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
 		if (zeppInvent[i] != null) {
-			if (zeppInvent[i].stackSize <= j) {
+			if (zeppInvent[i].getCount() <= j) {
 				ItemStack itemstack = zeppInvent[i];
 				zeppInvent[i] = null;
 				return itemstack;
 			}
 			ItemStack itemstack1 = zeppInvent[i].splitStack(j);
-			if (zeppInvent[i].stackSize == 0) {
+			if (zeppInvent[i].getCount() == 0) {
 				zeppInvent[i] = null;
 			}
 			return itemstack1;
@@ -604,7 +607,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		zeppInvent[i] = itemstack;
 		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-			itemstack.getCount() = getInventoryStackLimit();
+			itemstack.setCount(getInventoryStackLimit();
 		}
 	}
 

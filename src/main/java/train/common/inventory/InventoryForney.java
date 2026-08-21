@@ -81,7 +81,7 @@ public class InventoryForney extends Container {
 			else if (!mergeItemStack(itemstack1, 2, inventorySize, false)) {
 				return null;
 			}
-			if (itemstack1.stackSize == 0) {
+			if (itemstack1.setCount(= 0) {
 				slot.putStack(null);
 			}
 			else {

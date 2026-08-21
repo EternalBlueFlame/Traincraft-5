@@ -9,7 +9,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
@@ -198,7 +198,7 @@ public class GuiLoco2 extends GuiContainer {
                         ((EntityPlayer) loco.seats.get(0).riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCK_MENU, ((EntityPlayer) loco.seats.get(0).riddenByEntity).getEntityWorld(), loco.getEntityId(), -1, (int) loco.seats.get(0).riddenByEntity.posZ);
                 }
             } else {
-                getEntityPlayer().addChatMessage(new ChatComponentText("You are not the owner"));
+                getEntityPlayer().addChatMessage(new TextComponentString("You are not the owner"));
             }
         }
 
@@ -215,7 +215,7 @@ public class GuiLoco2 extends GuiContainer {
                     loco.isBraking = true;
                     this.initGui();
                 } else {
-                    getEntityPlayer().addChatMessage(new ChatComponentText("Stop before turning it Off!"));
+                    getEntityPlayer().addChatMessage(new TextComponentString("Stop before turning it Off!"));
                 }
             } else {
                 Traincraft.ignitionChannel.sendToServer(new PacketSetLocoTurnedOn(true));

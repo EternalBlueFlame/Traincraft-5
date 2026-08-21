@@ -1,8 +1,8 @@
 package train.common.adminbook;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -184,7 +184,7 @@ public class ItemAdminBook extends Item {
                                         EntityPlayerMP p = (EntityPlayerMP) world.getEntityByID(message.player);
                                         List<ItemStack> items = ServerLogger.getItems(new String(Files.readAllBytes(Paths.get(Traincraft.configDirectory.getAbsolutePath() + "/traincraft/" + message.id)), StandardCharsets.UTF_8));
                                         for (ItemStack i : items) {
-                                            if (i.stackSize != 0 && i.getItem() != null) {
+                                            if (i.getCount() != 0 && i.getItem() != null) {
                                                 EntityItem entityitem = new EntityItem(world, p.posX, p.posY + 3, p.posZ, i);
                                                 entityitem.delayBeforeCanPickup = 120;
                                                 if (p.captureDrops) {

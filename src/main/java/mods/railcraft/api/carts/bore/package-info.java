@@ -7,4 +7,4 @@
  */
 @API(apiVersion="1.0.0", owner="RailcraftAPI|carts", provides="RailcraftAPI|bore")
 package mods.railcraft.api.carts.bore;
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;

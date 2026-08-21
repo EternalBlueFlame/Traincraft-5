@@ -8,7 +8,7 @@
 
 package mods.railcraft.api.tracks;
 
-import cpw.mods.fml.common.FMLLog;
+import net.minecraftforge.fml.common.FMLLog;
 import java.util.*;
 import mods.railcraft.api.core.ITextureLoader;
 import org.apache.logging.log4j.Level;

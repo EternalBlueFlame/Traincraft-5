@@ -5,8 +5,8 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fluids.Fluid;
@@ -100,7 +100,7 @@ public class GuiLiquid extends GuiContainer {
                     this.initGui();
                 }
             } else if (player != null) {
-                player.addChatMessage(new ChatComponentText("You are not the owner"));
+                player.addChatMessage(new TextComponentString("You are not the owner"));
             }
         }
     }

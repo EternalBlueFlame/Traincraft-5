@@ -6,10 +6,10 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.core.handlers.ConfigHandler;
@@ -40,7 +40,7 @@ public class ItemZeppelins extends Item {
 		double d = entityplayer.prevPosX + (entityplayer.posX - entityplayer.prevPosX) * (double) f;
 		double d1 = (entityplayer.prevPosY + (entityplayer.posY - entityplayer.prevPosY) * (double) f + 1.6200000000000001D) - (double) entityplayer.yOffset;
 		double d2 = entityplayer.prevPosZ + (entityplayer.posZ - entityplayer.prevPosZ) * (double) f;
-		Vec3 vec3d = Vec3.createVectorHelper(d, d1, d2);
+		Vec3d vec3d = new Vec3d(d, d1, d2);
 		float f3 = MathHelper.cos(-f2 * 0.01745329F - 3.141593F);
 		float f4 = MathHelper.sin(-f2 * 0.01745329F - 3.141593F);
 		float f5 = -MathHelper.cos(-f1 * 0.01745329F);
@@ -48,14 +48,14 @@ public class ItemZeppelins extends Item {
 		float f7 = f4 * f5;
 		float f9 = f3 * f5;
 		double d3 = 5D;
-		Vec3 vec3d1 = vec3d.addVector((double) f7 * d3, (double) f6 * d3, (double) f9 * d3);
-		MovingObjectPosition movingobjectposition = world.rayTraceBlocks(vec3d, vec3d1, true);
+		Vec3d vec3d1 = vec3d.addVector((double) f7 * d3, (double) f6 * d3, (double) f9 * d3);
+		RayTraceResult movingobjectposition = world.rayTraceBlocks(vec3d, vec3d1, true);
 		if (movingobjectposition == null) { return itemstack; }
 		if (!world.isRemote && !ConfigHandler.ENABLE_ZEPPELIN) {
-			if (entityplayer != null) entityplayer.addChatMessage(new ChatComponentText("Zeppelin has been deactivated by the OP"));
+			if (entityplayer != null) entityplayer.addChatMessage(new TextComponentString("Zeppelin has been deactivated by the OP"));
 			return itemstack;
 		}
-		if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK) {
+		if (movingobjectposition.typeOfHit == RayTraceResult.MovingObjectType.BLOCK) {
 			int i = movingobjectposition.blockX;
 			int j = movingobjectposition.blockY;
 			int k = movingobjectposition.blockZ;

@@ -1,6 +1,6 @@
 package train.client.core;
 
-import cpw.mods.fml.client.CustomModLoadingErrorDisplayException;
+import net.minecraftforge.fml.client.CustomModLoadingErrorDisplayException;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiErrorScreen;
 
