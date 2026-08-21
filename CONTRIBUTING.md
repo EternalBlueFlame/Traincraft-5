@@ -26,12 +26,12 @@ The repo includes cached dependencies in `gradle/caches.7z.*` for offline reprod
 ### 2. Setup Workspace & IDE
 Run the setup script for your platform:
 
-- **Linux / macOS:** `./setup.sh` (or `./gradlewLinux setupDecompWorkspace --refresh-dependencies idea`)
+- **Linux / macOS:** `./setup.sh` (or `./gradlew setupDecompWorkspace --refresh-dependencies idea`)
 - **Windows:** `setup.bat` (or `gradlew.bat setupDecompWorkspace --refresh-dependencies idea`)
 
 ### 3. Open in IDE
 - **IntelliJ IDEA (recommended):** Open `Traincraft-5.ipr` (or the root directory). Set Project SDK to Java 1.8.
-- **Eclipse:** Run `./gradlewLinux setupDecompWorkspace --refresh-dependencies eclipse` and import as an existing project.
+- **Eclipse:** Run `./gradlew setupDecompWorkspace --refresh-dependencies eclipse` and import as an existing project.
 
 *Deobfuscator path (if prompted by IDE):*  
 `~/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.4.1614-1.7.10/unpacked/conf`
@@ -42,9 +42,9 @@ Run the setup script for your platform:
 
 | Task | Linux / macOS | Windows |
 | :--- | :--- | :--- |
-| **Run Client** | `./gradlewLinux runClient` | `gradlew.bat runClient` |
-| **Run Server** | `./gradlewLinux runServer` | `gradlew.bat runServer` |
-| **Build JAR** | `./gradlewLinux build` | `gradlew.bat build` |
+| **Run Client** | `./gradlew runClient` | `gradlew.bat runClient` |
+| **Run Server** | `./gradlew runServer` | `gradlew.bat runServer` |
+| **Build JAR** | `./gradlew build` | `gradlew.bat build` |
 
 Output JAR is generated in `build/libs/`.
 
@@ -65,7 +65,7 @@ Output JAR is generated in `build/libs/`.
    ```bash
    git checkout -b my-fix-or-feature origin/TC4.5-1.7.10
    ```
-2. **Test:** Verify `./gradlewLinux build` passes.
+2. **Test:** Verify `./gradlew build` passes.
 3. **Push to fork:**
    ```bash
    git push -u fork my-fix-or-feature
