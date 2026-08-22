@@ -39,7 +39,7 @@ public class TileMetroMadridPole extends TileEntity {
         if(facing != null){
             return this.facing;
         }
-        return EnumFacing.UNKNOWN;
+        return null;
     }
 
     public void setFacing(EnumFacing face) {

@@ -139,7 +139,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 							slots[1] = new ItemStack(slots[1].getItem().getContainerItem());
 						}
 						else {
-							slots[1].getCount()--;
+							slots[1].shrink(1);
 						}
 
 						if (slots[1].getCount() == 0) {
@@ -243,12 +243,12 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			int var9 = slots[i].getCount() + itemstack1.getCount();
 			if (var9 <= itemstack1.getMaxStackSize()) {
 				if (doAdd)
-					slots[i].getCount() = var9;
+					slots[i].setCount(var9);
 
 			}
 			else if (slots[i].getCount() < itemstack1.getMaxStackSize()) {
 				if (doAdd)
-					slots[i].getCount() += 1;
+					slots[i].grow(1);
 			}
 			return true;
 		}
@@ -307,7 +307,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			slots[0] = new ItemStack(slots[0].getItem().getContainerItem());
 		}
 		else {
-			slots[0].getCount()--;
+			slots[0].shrink(1);
 		}
 		if (slots[0].getCount() <= 0) {
 			slots[0] = null;
@@ -320,7 +320,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			slots[3] = plasticStack.copy();
 		}
 		else if (Item.getIdFromItem(slots[3].getItem()) == Item.getIdFromItem(plasticStack.getItem())) {
-			slots[3].getCount() += plasticStack.getCount();
+			slots[3].grow(plasticStack.getCount());
 		}
 		this.markDirty();
 	}

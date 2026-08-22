@@ -114,7 +114,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 		if (stack != null && stack.getCount() > getInventoryStackLimit()) {
 
-			stack.setCount(getInventoryStackLimit();
+			stack.setCount(getInventoryStackLimit());
 		}
 	}
 

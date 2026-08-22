@@ -90,7 +90,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		crafterInventory[i] = itemstack;
 		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-			itemstack.setCount(getInventoryStackLimit();
+			itemstack.setCount(getInventoryStackLimit());
 		}
 	}
 

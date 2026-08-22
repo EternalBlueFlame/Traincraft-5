@@ -113,10 +113,10 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
             int var9 = slots[i].getCount()+itemstack1.getCount();
             if(doAdd){
                 if(var9 <= itemstack1.getMaxStackSize()){
-                    slots[i].getCount() = var9;
+                    slots[i].setCount(var9);
                 }
                 else if(slots[i].getCount() < itemstack1.getMaxStackSize()){
-                    slots[i].getCount() += 1;
+                    slots[i].grow(1);
                 }
             }
             return true;

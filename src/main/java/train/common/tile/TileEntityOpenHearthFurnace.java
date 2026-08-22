@@ -92,7 +92,7 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 							this.slots[2] = new ItemStack(this.slots[2].getItem().getContainerItem());
 						}
 						else {
-							this.slots[2].getCount()--;
+							this.slots[2].shrink(1);
 						}
 						if (this.slots[2].getCount() == 0) {
 							this.slots[2] = null;
@@ -165,14 +165,14 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 
 		}
 		else if (this.slots[3].getItem() == itemstack.getItem()) {
-			this.slots[3].getCount() += itemstack.getCount();
+			this.slots[3].grow(itemstack.getCount());
 
 		}
 		if (this.slots[0].getItem().hasContainerItem(this.slots[0])) {
 			this.slots[0] = new ItemStack(this.slots[0].getItem().getContainerItem());
 		}
 		else {
-			this.slots[0].getCount()--;
+			this.slots[0].shrink(1);
 		}
 		if (this.slots[0].getCount() <= 0) {
 			this.slots[0] = null;
@@ -182,7 +182,7 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 			this.slots[1] = new ItemStack(this.slots[1].getItem().getContainerItem());
 		}
 		else {
-			this.slots[1].getCount()--;
+			this.slots[1].shrink(1);
 		}
 		if (this.slots[1].getCount() <= 0) {
 			this.slots[1] = null;
