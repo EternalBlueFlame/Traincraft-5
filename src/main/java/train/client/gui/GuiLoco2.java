@@ -87,10 +87,10 @@ public class GuiLoco2 extends GuiContainer {
             this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 108, buttonPosY - 10, 67, 10, "Unlocked"));
         } else {
             EntityPlayer engineer = ((EntityPlayer) loco.seats.get(0).getPassenger());
-            if (loco.getTrainOwner().equalsIgnoreCase(engineer.getDisplayName()))
+            if (loco.getTrainOwner().equalsIgnoreCase(engineer.getName()))
                 this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 108, buttonPosY - 10, 67, 10, "Locked"));
-            else if (loco.isPlayerTrusted(engineer.getDisplayName()))
-                if (loco.isPlayerTrustedToBreak(engineer.getDisplayName()))
+            else if (loco.isPlayerTrusted(engineer.getName()))
+                if (loco.isPlayerTrustedToBreak(engineer.getName()))
                     this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 104, buttonPosY - 10, 71, 10, "Trusted+"));
                 else
                     this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 106, buttonPosY - 10, 69, 10, "Trusted"));
@@ -186,7 +186,7 @@ public class GuiLoco2 extends GuiContainer {
                         guibutton.displayString = "Locked";
                         this.initGui();
                     } else
-                        ((EntityPlayer) loco.seats.get(0).riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCK_MENU, ((EntityPlayer) loco.seats.get(0).riddenByEntity).getEntityWorld(), loco.getEntityId(), -1, (int) loco.seats.get(0).riddenByEntity.posZ);
+                        ((EntityPlayer) loco.seats.get(0).getRidingEntity()).openGui(Traincraft.instance, GuiIDs.LOCK_MENU, ((EntityPlayer) loco.seats.get(0).getRidingEntity()).getEntityWorld(), loco.getEntityId(), -1, (int) loco.seats.get(0).getRidingEntity().posZ);
                 }
                 else {
                     if (!isShiftKeyDown()) {
@@ -195,10 +195,10 @@ public class GuiLoco2 extends GuiContainer {
                         guibutton.displayString = "Unlocked";
                         this.initGui();
                     } else
-                        ((EntityPlayer) loco.seats.get(0).riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCK_MENU, ((EntityPlayer) loco.seats.get(0).riddenByEntity).getEntityWorld(), loco.getEntityId(), -1, (int) loco.seats.get(0).riddenByEntity.posZ);
+                        ((EntityPlayer) loco.seats.get(0).getRidingEntity()).openGui(Traincraft.instance, GuiIDs.LOCK_MENU, ((EntityPlayer) loco.seats.get(0).getRidingEntity()).getEntityWorld(), loco.getEntityId(), -1, (int) loco.seats.get(0).getRidingEntity().posZ);
                 }
             } else {
-                getEntityPlayer().addChatMessage(new TextComponentString("You are not the owner"));
+                getEntityPlayer().sendMessage(new TextComponentString("You are not the owner"));
             }
         }
 
@@ -215,7 +215,7 @@ public class GuiLoco2 extends GuiContainer {
                     loco.isBraking = true;
                     this.initGui();
                 } else {
-                    getEntityPlayer().addChatMessage(new TextComponentString("Stop before turning it Off!"));
+                    getEntityPlayer().sendMessage(new TextComponentString("Stop before turning it Off!"));
                 }
             } else {
                 Traincraft.ignitionChannel.sendToServer(new PacketSetLocoTurnedOn(true));
@@ -285,7 +285,6 @@ public class GuiLoco2 extends GuiContainer {
         return p;
     }
 
-    @Override
     protected void drawCreativeTabHoveringText(String str, int t, int g) {
         //int liqui = (dieselInventory.getLiquidAmount() * 50) / dieselInventory.getTankCapacity();
 
@@ -399,7 +398,7 @@ public class GuiLoco2 extends GuiContainer {
             int load = (((SteamTrain) loco).getWater());
             int lo = Math.abs(((load * 50) / (((SteamTrain) loco).getCartTankCapacity())));
 
-            if (((SteamTrain) loco).getLiquidItemID() == LiquidManager.WATER_FILTER.getFluidID()) {
+            if (((SteamTrain) loco).getLiquidItemID() == LiquidManager.WATER_FILTER.getFluid().getName().hashCode()) {
                 drawTexturedModalRect(j + 143, (k + 68) - lo, 190, 69 - lo, 18, lo + 1);
             }
 

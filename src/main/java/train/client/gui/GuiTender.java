@@ -48,10 +48,10 @@ public class GuiTender extends GuiContainer {
         if (!tender.getTrainLockedFromPacket()) {
             this.buttonList.add(this.buttonLock = new GuiButton(3, var1 + 124, var2 - 10, 51, 10, "Unlocked"));
         } else {
-            if (tender.getTrainOwner().equalsIgnoreCase(player.getDisplayName()))
+            if (tender.getTrainOwner().equalsIgnoreCase(player.getName()))
                 this.buttonList.add(this.buttonLock = new GuiButton(3, var1 + 130, var2 - 10, 43, 10, "Locked"));
-            else if (tender.isPlayerTrusted(player.getDisplayName()))
-                if (tender.isPlayerTrustedToBreak(player.getDisplayName()))
+            else if (tender.isPlayerTrusted(player.getName()))
+                if (tender.isPlayerTrustedToBreak(player.getName()))
                     this.buttonList.add(this.buttonLock = new GuiButton(3, var1 + 125, var2 - 10, 48, 10, "Trusted+"));
                 else
                     this.buttonList.add(this.buttonLock = new GuiButton(3, var1 + 128, var2 - 10, 45, 10, "Trusted"));
@@ -82,9 +82,9 @@ public class GuiTender extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 3) {
-            if (player != null && player.getCommandSenderName().equalsIgnoreCase(tender.getTrainOwner())) {
+            if (player != null && player.getName().equalsIgnoreCase(tender.getTrainOwner())) {
                 if (!tender.getTrainLockedFromPacket()) {
-                    AxisAlignedBB box = tender.boundingBox.expand(5, 5, 5);
+                    AxisAlignedBB box = tender.getEntityBoundingBox().expand(5, 5, 5);
                     List lis3 = tender.world.getEntitiesWithinAABBExcludingEntity(tender, box);
 
                     if (lis3 != null && !lis3.isEmpty()) {
@@ -93,7 +93,7 @@ public class GuiTender extends GuiContainer {
                                 if (!isShiftKeyDown()) {
                                     Traincraft.lockChannel.sendToServer(new PacketSetTrainLockedToClient(true, tender.getTrustedList(), tender.getEntityId(), false));
                                 } else {
-                                    this.mc.thePlayer.closeScreen();
+                                    this.mc.player.closeScreen();
                                     player.openGui(Traincraft.instance, GuiIDs.LOCK_MENU, player.getEntityWorld(), tender.getEntityId(), -1, (int) tender.posZ);
                                 }
                             }
@@ -103,7 +103,7 @@ public class GuiTender extends GuiContainer {
                     guibutton.displayString = "Locked";
                     this.initGui();
                 } else {
-                    AxisAlignedBB box = tender.boundingBox.expand(5, 5, 5);
+                    AxisAlignedBB box = tender.getEntityBoundingBox().expand(5, 5, 5);
                     List lis3 = tender.world.getEntitiesWithinAABBExcludingEntity(tender, box);
 
                     if (lis3 != null && !lis3.isEmpty()) {
@@ -112,7 +112,7 @@ public class GuiTender extends GuiContainer {
                                 if (!isShiftKeyDown()) {
                                     Traincraft.lockChannel.sendToServer(new PacketSetTrainLockedToClient(false, tender.getTrustedList(), tender.getEntityId(), false));
                                 } else {
-                                    this.mc.thePlayer.closeScreen();
+                                    this.mc.player.closeScreen();
                                     player.openGui(Traincraft.instance, GuiIDs.LOCK_MENU, player.getEntityWorld(), tender.getEntityId(), -1, (int) tender.posZ);
                                 }
                             }
@@ -123,7 +123,7 @@ public class GuiTender extends GuiContainer {
                     this.initGui();
                 }
             } else if (player != null) {
-                player.addChatMessage(new TextComponentString("You are not the owner"));
+                player.sendMessage(new TextComponentString("You are not the owner"));
             }
         } else if (guibutton instanceof GUIButton) {
             ((GUIButton)guibutton).onClick();
@@ -154,7 +154,6 @@ public class GuiTender extends GuiContainer {
         }
     }
 
-    @Override
     protected void drawCreativeTabHoveringText(String str, int t, int g) {
         //int liqui = (dieselInventory.getLiquidAmount() * 50) / dieselInventory.getTankCapacity();
 
@@ -170,22 +169,22 @@ public class GuiTender extends GuiContainer {
         drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 8 + 3 + 40, colour1, colour2);
         drawGradientRect(startX - 2, startY - 2, startX + textWidth + 2, startY + 8 + 2 + 40, i4, i4);
 
-        fontRendererObj.drawStringWithShadow(str, startX, startY, -1);
-        fontRendererObj.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
-        fontRendererObj.drawStringWithShadow("the GUI and destroy it.", startX, startY + 20, -1);
+        fontRenderer.drawStringWithShadow(str, startX, startY, -1);
+        fontRenderer.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
+        fontRenderer.drawStringWithShadow("the GUI and destroy it.", startX, startY + 20, -1);
         String state = "";
         if (tender.getTrainLockedFromPacket()) {
-            if (tender.getTrainOwner().equalsIgnoreCase(player.getDisplayName()))
+            if (tender.getTrainOwner().equalsIgnoreCase(player.getName()))
                 state = "Locked";
-            else if (tender.isPlayerTrusted(player.getDisplayName()))
-                if (tender.isPlayerTrustedToBreak(player.getDisplayName()))
+            else if (tender.isPlayerTrusted(player.getName()))
+                if (tender.isPlayerTrustedToBreak(player.getName()))
                     state = "Trusted Access+";
                 else
                     state = "Trusted Access";
         } else
             state = "Unlocked";
-        fontRendererObj.drawStringWithShadow("Current state: " + state, startX, startY + 30, -1);
-        fontRendererObj.drawStringWithShadow("Owner: " + tender.getTrainOwner().trim(), startX, startY + 40, -1);
+        fontRenderer.drawStringWithShadow("Current state: " + state, startX, startY + 30, -1);
+        fontRenderer.drawStringWithShadow("Owner: " + tender.getTrainOwner().trim(), startX, startY + 40, -1);
     }
 
     public boolean intersectsWith(int mouseX, int mouseY) {
@@ -225,7 +224,7 @@ public class GuiTender extends GuiContainer {
         int load = (tender.getWater());
         int lo = Math.abs(((load * 50) / (tender.getCartTankCapacity())));
 
-        if (tender.getLiquidItemID() == LiquidManager.WATER_FILTER.getFluidID()) {
+        if (tender.getLiquidItemID() == LiquidManager.WATER_FILTER.getFluid().getName().hashCode()) {
             drawTexturedModalRect(j + 143, (k + 69) - lo, 190, 69 - lo, 18, lo);
         }
     }

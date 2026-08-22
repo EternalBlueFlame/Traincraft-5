@@ -68,7 +68,7 @@ public class PacketSeatUpdate implements IMessage {
             newSeat = rollingStockEntity.seats.get(message.newSeatIndex);
             oldSeat.removePassenger(playerEntity);
             newSeat.addPassenger(playerEntity);
-            playerEntity.mountEntity(newSeat);
+            playerEntity.startRiding(newSeat);
             if (ctx.side == Side.SERVER) {
                 Traincraft.updateChannel.sendToAllAround(new PacketSeatUpdate(message.rollingStockId,message.playerId,message.oldSeatIndex,message.newSeatIndex, message.dimension),
                         new NetworkRegistry.TargetPoint(message.dimension,rollingStockEntity.posX,rollingStockEntity.posY,rollingStockEntity.posZ,256D));

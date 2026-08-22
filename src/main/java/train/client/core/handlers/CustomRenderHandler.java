@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -25,8 +26,8 @@ public class CustomRenderHandler {
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
         EntityPlayerSP player = Minecraft.getMinecraft().player;
-        if (player != null && player.getHeldItem() != null && (player.getHeldItem().getItem() instanceof ItemTCRail)) {
-            renderTCRailPreview(player, player.getHeldItem());
+        if (player != null && player.getHeldItemMainhand() != null && (player.getHeldItemMainhand().getItem() instanceof ItemTCRail)) {
+            renderTCRailPreview(player, player.getHeldItemMainhand());
         }
     }
 
@@ -35,18 +36,18 @@ public class CustomRenderHandler {
         if (world == null || Minecraft.getMinecraft().objectMouseOver == null) {
             return;
         }
-        int x = Minecraft.getMinecraft().objectMouseOver.blockX;
-        int y = Minecraft.getMinecraft().objectMouseOver.blockY;
-        int z = Minecraft.getMinecraft().objectMouseOver.blockZ;
+        int x = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getX();
+        int y = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getY();
+        int z = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getZ();
 
-        if (world.getBlock(x, y, z) == Blocks.air) {
+        if (world.getBlockState(new BlockPos(x, y, z)).getBlock() == Blocks.AIR) {
             return;
         }
 
-        ItemTCRail item = (ItemTCRail) player.getHeldItem().getItem();
+        ItemTCRail item = (ItemTCRail) player.getHeldItemMainhand().getItem();
 
         // Check if item can be placed and select color
-        boolean validPlacement = item.tryToPlaceTrack(player.getHeldItem(), player, world, x, y, z, false);
+        boolean validPlacement = item.tryToPlaceTrack(player.getHeldItemMainhand(), player, world, x, y, z, false);
         float r = 1;
         float g = 0;
         float b = 0;
@@ -148,7 +149,7 @@ public class CustomRenderHandler {
             float dx = dir.getX();
             float dz = dir.getY();
 
-            if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
+            if (item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left")) {
                 RenderTCRail.modelLeftDiamondCrossing.render(labelType, dx, 0, dz, facing, r, g, b, a);
             } else {
                 RenderTCRail.modelRightDiamondCrossing.render(labelType, dx, 0, dz, facing, r, g, b, a);
@@ -235,7 +236,7 @@ public class CustomRenderHandler {
                 }
                 blockInfo();
 
-                if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
+                if (item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left")) {
                     RenderTCRail.modelLeftCurvedSlope.render(turnSize, facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
                 } else {
                     RenderTCRail.modelRightCurvedSlope.render(turnSize, facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
@@ -253,7 +254,7 @@ public class CustomRenderHandler {
                 turnSize = "20x2";
                }
 
-            if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
+            if (item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left")) {
                 RenderTCRail.modelLeftParallelCurve.render(turnSize, variant, facing, 0, 0, 0, r, g, b, a);
             } else {
                 RenderTCRail.modelRightParallelCurve.render(turnSize, variant, facing, 0, 0, 0, r, g, b, a);
@@ -282,7 +283,7 @@ public class CustomRenderHandler {
                 turnSize = "10x22";
             }
 
-            if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
+            if (item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left")) {
                 RenderTCRail.model45DegreeLeftTurn.render(turnSize, variant, facing, 0, 0, 0, r, g, b, a);
             } else {
                 RenderTCRail.model45DegreeRightTurn.render(turnSize, variant, facing, 0, 0, 0, r, g, b, a);
@@ -311,7 +312,7 @@ public class CustomRenderHandler {
                 else if (item.getTrackType() == EnumTracks.TURN_1X1 || item.getTrackType() == EnumTracks.EMBEDDED_TURN_1X1)
                     turnSize = "1x";
 
-                if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
+                if (item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left")) {
                     RenderTCRail.modelLeftTurn.render((item.getTrackType().getLabel().contains("EMBEDDED") ? "embedded_" : "") + turnSize, facing, 0, 0, 0, r, g, b, a);
                 } else {
                     RenderTCRail.modelRightTurn.render((item.getTrackType().getLabel().contains("EMBEDDED") ? "embedded_" : "") + turnSize, facing, 0, 0, 0, r, g, b, a);
@@ -320,7 +321,7 @@ public class CustomRenderHandler {
 
             // Switches
         } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.SWITCH) {
-            boolean isLeftTurn = item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left");
+            boolean isLeftTurn = item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left");
             float dx = dir.getX();
             float dz = dir.getY();
             int out_0_start = 3;
@@ -418,16 +419,16 @@ public class CustomRenderHandler {
 
     private void blockInfo() {
         World world = Minecraft.getMinecraft().world;
-        int x = Minecraft.getMinecraft().objectMouseOver.blockX;
-        int y = Minecraft.getMinecraft().objectMouseOver.blockY;
-        int z = Minecraft.getMinecraft().objectMouseOver.blockZ;
-        Block block = world.getBlock(x, y, z);
-        int metadata = world.getBlockMetadata(x, y, z);
-
-        blockColour = block.colorMultiplier(world, x, y, z);
-        IIcon icon = block.getIcon(1, metadata);
-        if (icon != null && icon.getIconName() != null) {
-            ballastMaterial = icon.getIconName();
-        }
+        int x = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getX();
+        int y = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getY();
+        int z = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getZ();
+        Block block = world.getBlockState(new BlockPos(x, y, z)).getBlock();
+        // TODO 1.12: Block.colorMultiplier / getIcon(int,int) removed; needs block-state based rewrite
+        // int metadata = world.getBlockMetadata(x, y, z);
+        // blockColour = block.colorMultiplier(world, x, y, z);
+        // IIcon icon = block.getIcon(1, metadata);
+        // if (icon != null && icon.getIconName() != null) {
+        //     ballastMaterial = icon.getIconName();
+        // }
     }
 }

@@ -62,7 +62,7 @@ public abstract class GUIButton extends GuiButton {
     }
 
     @Override
-    public void drawButton(Minecraft mc, int mouseX, int mouseY){
+    public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks){
         if (this.visible) {
             drawButton(mouseX, mouseY);
         }
@@ -72,27 +72,27 @@ public abstract class GUIButton extends GuiButton {
     /** draws the button*/
     public void drawButton(int mouseX, int mouseY) {
         GL11.glPushMatrix();
-        TextureManager.bindTexture(buttonTextures);
+        TextureManager.bindTexture(BUTTON_TEXTURES);
         if(getColor()!=null){
             GL11.glColor4f(getColor()[0]*0.00392156862f, getColor()[1]*0.00392156862f, getColor()[2]*0.00392156862f, 1.0F);
         } else{
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         }
-        this.field_146123_n = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
-        int k = field_146123_n?2:1;
+        this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+        int k = hovered?2:1;
         //GL11.glEnable(GL11.GL_BLEND);
         //OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         //GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        ClientUtil.drawTexturedRect(this.xPosition, this.yPosition, 0, 46 + k * 20, this.width / 2, this.height);
-        ClientUtil.drawTexturedRect(this.xPosition + this.width *0.5f, this.yPosition, 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
+        ClientUtil.drawTexturedRect(this.x, this.y, 0, 46 + k * 20, this.width / 2, this.height);
+        ClientUtil.drawTexturedRect(this.x + this.width *0.5f, this.y, 200 - this.width / 2, 46 + k * 20, this.width / 2, this.height);
 
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         if(getIcon()!=null) {
             TextureManager.bindTexture(getIcon());
             if(getIconUV()==null){
-                ClientUtil.drawTexturedRect(this.xPosition+1, this.yPosition+1, 0, 0, this.width-1, this.height-1, 256,256);
+                ClientUtil.drawTexturedRect(this.x+1, this.y+1, 0, 0, this.width-1, this.height-1, 256,256);
             } else {
-                ClientUtil.drawTexturedRect(this.xPosition+1, this.yPosition+1, getIconUV()[0], getIconUV()[1], this.width-1, this.height-1, getIconUV()[2], getIconUV()[3]);
+                ClientUtil.drawTexturedRect(this.x+1, this.y+1, getIconUV()[0], getIconUV()[1], this.width-1, this.height-1, getIconUV()[2], getIconUV()[3]);
             }
         }
         int l = 14737632;
@@ -103,11 +103,11 @@ public abstract class GUIButton extends GuiButton {
         else if (!this.enabled) {
             l = 10526880;
         }
-        else if (this.field_146123_n) {
+        else if (this.hovered) {
             l = 16777120;
         }
 
-        this.drawCenteredString(Minecraft.getMinecraft().fontRenderer, this.displayString, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, l);
+        this.drawCenteredString(Minecraft.getMinecraft().fontRenderer, this.displayString, this.x + this.width / 2, this.y + (this.height - 8) / 2, l);
 
         RenderHelper.disableStandardItemLighting();
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -115,7 +115,7 @@ public abstract class GUIButton extends GuiButton {
     }
 
     public void drawText(int mouseX, int mouseY){
-        if(getHoverText()!=null && field_146123_n) {
+        if(getHoverText()!=null && hovered) {
             drawHoveringText(CommonUtil.translate(getHoverText()), mouseX, mouseY);
         }
     }
@@ -168,7 +168,7 @@ public abstract class GUIButton extends GuiButton {
 
     /** returns the bool of if the mouse is hovering over the button */
     public boolean getMouseHover(){
-        return field_146123_n;
+        return hovered;
     }
 
     /** the tooltip text for the button shows when you move the cursor over the button*/

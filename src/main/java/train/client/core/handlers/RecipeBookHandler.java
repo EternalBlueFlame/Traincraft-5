@@ -20,24 +20,24 @@ public class RecipeBookHandler {
     public static String[] vanillaWorkTableRecipes = new String[21];
 
     public RecipeBookHandler() {
-        vanillaWorkTableRecipes[0] = TCBlocks.assemblyTableI.getUnlocalizedName();
-        vanillaWorkTableRecipes[1] = TCBlocks.assemblyTableII.getUnlocalizedName();
-        vanillaWorkTableRecipes[2] = TCBlocks.assemblyTableIII.getUnlocalizedName();
-        vanillaWorkTableRecipes[3] = TCBlocks.distilIdle.getUnlocalizedName();
-        vanillaWorkTableRecipes[4] = TCBlocks.openFurnaceIdle.getUnlocalizedName();
-        vanillaWorkTableRecipes[5] = TCBlocks.trainWorkbench.getUnlocalizedName();
-        vanillaWorkTableRecipes[6] = ItemIDs.overalls.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[7] = ItemIDs.jacket.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[8] = ItemIDs.hat.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[11] = ItemIDs.recipeBook.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[12] = TCBlocks.lantern.getUnlocalizedName();
-        vanillaWorkTableRecipes[14] = ItemIDs.pants_driver_paintable.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[15] = ItemIDs.pants_ticketMan_paintable.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[16] = ItemIDs.hat_driver_paintable.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[17] = ItemIDs.hat_ticketMan_paintable.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[18] = ItemIDs.jacket_driver_paintable.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[19] = ItemIDs.jacket_ticketMan_paintable.item.getUnlocalizedName();
-        vanillaWorkTableRecipes[20] = TCBlocks.switchStand.getUnlocalizedName();
+        vanillaWorkTableRecipes[0] = TCBlocks.assemblyTableI.getTranslationKey();
+        vanillaWorkTableRecipes[1] = TCBlocks.assemblyTableII.getTranslationKey();
+        vanillaWorkTableRecipes[2] = TCBlocks.assemblyTableIII.getTranslationKey();
+        vanillaWorkTableRecipes[3] = TCBlocks.distilIdle.getTranslationKey();
+        vanillaWorkTableRecipes[4] = TCBlocks.openFurnaceIdle.getTranslationKey();
+        vanillaWorkTableRecipes[5] = TCBlocks.trainWorkbench.getTranslationKey();
+        vanillaWorkTableRecipes[6] = ItemIDs.overalls.item.getTranslationKey();
+        vanillaWorkTableRecipes[7] = ItemIDs.jacket.item.getTranslationKey();
+        vanillaWorkTableRecipes[8] = ItemIDs.hat.item.getTranslationKey();
+        vanillaWorkTableRecipes[11] = ItemIDs.recipeBook.item.getTranslationKey();
+        vanillaWorkTableRecipes[12] = TCBlocks.lantern.getTranslationKey();
+        vanillaWorkTableRecipes[14] = ItemIDs.pants_driver_paintable.item.getTranslationKey();
+        vanillaWorkTableRecipes[15] = ItemIDs.pants_ticketMan_paintable.item.getTranslationKey();
+        vanillaWorkTableRecipes[16] = ItemIDs.hat_driver_paintable.item.getTranslationKey();
+        vanillaWorkTableRecipes[17] = ItemIDs.hat_ticketMan_paintable.item.getTranslationKey();
+        vanillaWorkTableRecipes[18] = ItemIDs.jacket_driver_paintable.item.getTranslationKey();
+        vanillaWorkTableRecipes[19] = ItemIDs.jacket_ticketMan_paintable.item.getTranslationKey();
+        vanillaWorkTableRecipes[20] = TCBlocks.switchStand.getTranslationKey();
     }
 
     // TODO: Make parameters more specific than List
@@ -47,7 +47,7 @@ public class RecipeBookHandler {
         for (Object r : recipeList) {
             if (r instanceof ShapedTrainRecipes || r instanceof ShapelessTrainRecipe) {
                 ITCRecipe recipe = (ITCRecipe) r;
-                String output = Item.itemRegistry.getNameForObject(recipe.getRecipeOutput().getItem());
+                String output = Item.REGISTRY.getNameForObject(recipe.getRecipeOutput().getItem());
                 if (!outputs.contains(output)) {
                     cleaned.add(recipe);
                     outputs.add(output);
@@ -64,7 +64,7 @@ public class RecipeBookHandler {
         for (Object r : recipeList) {
             if (r instanceof TierRecipe) {
                 TierRecipe recipe = (TierRecipe) r;
-                String output = Item.itemRegistry.getNameForObject(recipe.getOutput().getItem());
+                String output = Item.REGISTRY.getNameForObject(recipe.getOutput().getItem());
                 if (!outputs.contains(output)) {
                     cleanedList.add(recipe);
                     outputs.add(output);

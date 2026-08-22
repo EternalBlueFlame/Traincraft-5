@@ -37,7 +37,7 @@ public class GuiControlCar extends GuiContainer
     {
         super(new InventoryControlCar(inventoryplayer,  (AbstractControlCar)entityminecart));
         controlCar = (AbstractControlCar) entityminecart;
-        locomotiveUnderControl = (Locomotive) Minecraft.getMinecraft().theWorld.getEntityByID(controlCar.getLocomotiveBeingControlledEntityID());
+        locomotiveUnderControl = (Locomotive) Minecraft.getMinecraft().world.getEntityByID(controlCar.getLocomotiveBeingControlledEntityID());
 
     }
 
@@ -133,7 +133,7 @@ public class GuiControlCar extends GuiContainer
                         this.initGui();
                     }
                 } else {
-                    getEntityPlayer().addChatMessage(new TextComponentString("You are not the owner"));
+                    getEntityPlayer().sendMessage(new TextComponentString("You are not the owner"));
                 }
                 break;
 
@@ -184,7 +184,7 @@ public class GuiControlCar extends GuiContainer
 
     private EntityPlayer getEntityPlayer()
     {
-        EntityPlayer p = (EntityPlayer) controlCar.riddenByEntity;
+        EntityPlayer p = (EntityPlayer) controlCar.getRidingEntity();
         if (controlCar.seats.size() != 0 && controlCar.seats.get(0).getPassenger() instanceof EntityPlayer) {
             p = (EntityPlayer) controlCar.seats.get(0).getPassenger();
         }
@@ -192,11 +192,10 @@ public class GuiControlCar extends GuiContainer
         return p;
     }
 
-    @Override
     protected void drawCreativeTabHoveringText(String str, int t, int g) {
 
         String state = "";
-        int textWidth = fontRendererObj.getStringWidth("the GUI, change speed, destroy it.");
+        int textWidth = fontRenderer.getStringWidth("the GUI, change speed, destroy it.");
         int startX = 90;
         int startY = 5;
 
@@ -207,11 +206,11 @@ public class GuiControlCar extends GuiContainer
         int colour2 = (colour1 & 0xfefefe) >> 1 | colour1 & 0xff000000;
         drawGradientRect(startX - 3, startY - 3, startX + textWidth + 3, startY + 51, colour1, colour2);
         drawGradientRect(startX - 2, startY - 2, startX + textWidth + 2, startY + 50, i4, i4);
-        fontRendererObj.drawStringWithShadow(str, startX, startY, -1);
-        fontRendererObj.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
-        fontRendererObj.drawStringWithShadow("the GUI, change speed, destroy it.", startX, startY + 20, -1);
-        fontRendererObj.drawStringWithShadow("Current state: " + state, startX, startY + 30, -1);
-        fontRendererObj.drawStringWithShadow("Owner: " + controlCar.getTrainOwner().trim(), startX,
+        fontRenderer.drawStringWithShadow(str, startX, startY, -1);
+        fontRenderer.drawStringWithShadow("only its owner can open", startX, startY + 10, -1);
+        fontRenderer.drawStringWithShadow("the GUI, change speed, destroy it.", startX, startY + 20, -1);
+        fontRenderer.drawStringWithShadow("Current state: " + state, startX, startY + 30, -1);
+        fontRenderer.drawStringWithShadow("Owner: " + controlCar.getTrainOwner().trim(), startX,
                 startY + 40, -1);
     }
 
@@ -227,16 +226,16 @@ public class GuiControlCar extends GuiContainer
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRendererObj.drawString(controlCar.getInventoryName(), 39, 7, 0x000000);
-        fontRendererObj.drawString(controlCar.getInventoryName(), 41, 5, 0x000000);
-        fontRendererObj.drawString(controlCar.getInventoryName(), 39, 5, 0x000000);
-        fontRendererObj.drawString(controlCar.getInventoryName(), 41, 7, 0x000000);
+        fontRenderer.drawString(controlCar.getName(), 39, 7, 0x000000);
+        fontRenderer.drawString(controlCar.getName(), 41, 5, 0x000000);
+        fontRenderer.drawString(controlCar.getName(), 39, 5, 0x000000);
+        fontRenderer.drawString(controlCar.getName(), 41, 7, 0x000000);
 
-        fontRendererObj.drawString(controlCar.getInventoryName(), 39, 6, 0x000000);
-        fontRendererObj.drawString(controlCar.getInventoryName(), 41, 6, 0x000000);
-        fontRendererObj.drawString(controlCar.getInventoryName(), 40, 7, 0x000000);
-        fontRendererObj.drawString(controlCar.getInventoryName(), 40, 5, 0x000000);
-        fontRendererObj.drawString(controlCar.getInventoryName(), 40, 6, 0xd3a900);
+        fontRenderer.drawString(controlCar.getName(), 39, 6, 0x000000);
+        fontRenderer.drawString(controlCar.getName(), 41, 6, 0x000000);
+        fontRenderer.drawString(controlCar.getName(), 40, 7, 0x000000);
+        fontRenderer.drawString(controlCar.getName(), 40, 5, 0x000000);
+        fontRenderer.drawString(controlCar.getName(), 40, 6, 0xd3a900);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -277,26 +276,26 @@ public class GuiControlCar extends GuiContainer
             drawTexturedModalRect(j + 8, (k + 36 + 12) - locomotiveUnderControl.getFuelDiv(12), 176, 12 - locomotiveUnderControl.getFuelDiv(12), 14, locomotiveUnderControl.getFuelDiv(12) + 2);
 
             JsonObject guiDetails = new JsonParser().parse(locomotiveUnderControl.guiDetailsDW()).getAsJsonObject();
-            fontRendererObj.drawStringWithShadow("Carts pulled: " + guiDetails. get("cartsPulled"), 1, 10, 0xFFFFFF);
-            fontRendererObj.drawStringWithShadow("Mass pulled: " + guiDetails.get("massPulled"), 1, 20, 0xFFFFFF);
-            fontRendererObj.drawStringWithShadow("Speed reduction: " + guiDetails.get("slowDown") + " km/h", 1, 30, 0xFFFFFF);
-            fontRendererObj.drawStringWithShadow("Accel reduction: " + (Math.round(guiDetails.get("accelSlowDown").getAsDouble() * 1000) / 1000), 1, 40, 0xFFFFFF);
-            fontRendererObj.drawStringWithShadow("Brake reduction: " + (Math.round(guiDetails.get("brakeSlowDown").getAsDouble() * 1000) / 1000), 1, 50, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("Carts pulled: " + guiDetails. get("cartsPulled"), 1, 10, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("Mass pulled: " + guiDetails.get("massPulled"), 1, 20, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("Speed reduction: " + guiDetails.get("slowDown") + " km/h", 1, 30, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("Accel reduction: " + (Math.round(guiDetails.get("accelSlowDown").getAsDouble() * 1000) / 1000), 1, 40, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("Brake reduction: " + (Math.round(guiDetails.get("brakeSlowDown").getAsDouble() * 1000) / 1000), 1, 50, 0xFFFFFF);
 
 
-            fontRendererObj.drawStringWithShadow("Fuel consumption: " + ((locomotiveUnderControl.getFuelConsumption() *0.2)+"").substring(0,Math.min(((locomotiveUnderControl.getFuelConsumption() *0.2)+"").length(),4))+ " mB/s", 1,
+            fontRenderer.drawStringWithShadow("Fuel consumption: " + ((locomotiveUnderControl.getFuelConsumption() *0.2)+"").substring(0,Math.min(((locomotiveUnderControl.getFuelConsumption() *0.2)+"").length(),4))+ " mB/s", 1,
                     60, 0xFFFFFF);
-            fontRendererObj.drawStringWithShadow("Fuel: " + locomotiveUnderControl.getFuel(), 1, 70, 0xFFFFFF);
-            fontRendererObj.drawStringWithShadow("Power: " + locomotiveUnderControl.transportMetricHorsePower() + " Mhp", 1, 80, 0xFFFFFF);
-            fontRendererObj.drawStringWithShadow("State: " + locomotiveUnderControl.getState(), 1, 90, 0xFFFFFF);
-            fontRendererObj.drawStringWithShadow("Heat level: " + locomotiveUnderControl.getOverheatLevel(), 1, 100, 0xFFFFFF);
-            fontRendererObj.drawStringWithShadow("Maximum Speed: " + (locomotiveUnderControl.getCustomSpeedGUI()) + " km/h", 1, 110, 0xFFFFFF);
-            fontRendererObj.drawStringWithShadow("Destination: " + (locomotiveUnderControl.getDestinationGUI()), 1, 120, 0xFFFFFF);
-            fontRendererObj.drawStringWithShadow("Primary Loco: " + (locomotiveUnderControl.getInventoryName()), 1, 130, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("Fuel: " + locomotiveUnderControl.getFuel(), 1, 70, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("Power: " + locomotiveUnderControl.transportMetricHorsePower() + " Mhp", 1, 80, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("State: " + locomotiveUnderControl.getState(), 1, 90, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("Heat level: " + locomotiveUnderControl.getOverheatLevel(), 1, 100, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("Maximum Speed: " + (locomotiveUnderControl.getCustomSpeedGUI()) + " km/h", 1, 110, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("Destination: " + (locomotiveUnderControl.getDestinationGUI()), 1, 120, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("Primary Loco: " + (locomotiveUnderControl.getName()), 1, 130, 0xFFFFFF);
         }
         else
         {
-            fontRendererObj.drawStringWithShadow("No Locomotive is attached", 1, 10, 0xFFFFFF);
+            fontRenderer.drawStringWithShadow("No Locomotive is attached", 1, 10, 0xFFFFFF);
         }
     }
 }

@@ -5,9 +5,12 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import org.lwjgl.opengl.GL11;
 import train.common.api.Locomotive;
 import train.common.library.Info;
 
@@ -21,11 +24,11 @@ public class HUDMTC extends GuiScreen {
     @SubscribeEvent
     public void onGameRender(RenderGameOverlayEvent.Text event) {
         if (game != null
-				&& game.thePlayer != null
-				&& game.thePlayer.getRidingEntity()!= null
-				&& game.thePlayer.getRidingEntity()instanceof Locomotive && Minecraft.isGuiEnabled()
+				&& game.player != null
+				&& game.player.getRidingEntity()!= null
+				&& game.player.getRidingEntity()instanceof Locomotive && Minecraft.isGuiEnabled()
 				&& game.currentScreen == null) {
-            renderSkillHUD(event, (Locomotive) game.thePlayer.ridingEntity);
+            renderSkillHUD(event, (Locomotive) game.player.getRidingEntity());
         } else {
             this.game = this.mc = Minecraft.getMinecraft();
             this.fontRenderer = this.game.fontRenderer;
@@ -33,8 +36,8 @@ public class HUDMTC extends GuiScreen {
     }
 
     public void renderSkillHUD(RenderGameOverlayEvent event, Locomotive rcCar) {
-        windowWidth = event.resolution.getScaledWidth();
-        windowHeight = event.resolution.getScaledHeight() - 100;
+        windowWidth = event.getResolution().getScaledWidth();
+        windowHeight = event.getResolution().getScaledHeight() - 100;
 
         if (rcCar.mtcStatus == 1 || rcCar.mtcStatus == 2) {
 			// Steam Trains have water.
@@ -98,12 +101,12 @@ public class HUDMTC extends GuiScreen {
         double minV = (double) v / (double) imageHeight;
         double maxV = (double) (v + height) / (double) imageHeight;
 
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + scale * (double) width, y + scale * (double) height, 0, maxU, maxV);
-        tessellator.addVertexWithUV(x + scale * (double) width, y, 0, maxU, minV);
-        tessellator.addVertexWithUV(x, y, 0, minU, minV);
-        tessellator.addVertexWithUV(x, y + scale * (double) height, 0, minU, maxV);
+        BufferBuilder tessellator = Tessellator.getInstance().getBuffer();
+        tessellator.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEXTURE);
+        tessellator.pos(x + scale * (double) width, y + scale * (double) height, 0).tex(maxU, maxV).endVertex();
+        tessellator.pos(x + scale * (double) width, y, 0).tex(maxU, minV).endVertex();
+        tessellator.pos(x, y, 0).tex(minU, minV).endVertex();
+        tessellator.pos(x, y + scale * (double) height, 0).tex(minU, maxV).endVertex();
         tessellator.draw();
     }
 }
