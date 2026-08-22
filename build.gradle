@@ -55,6 +55,10 @@ sourceSets {
     }
 }
 
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xmaxerrs' << '10000'
+}
+
 task packApi(type: Jar, dependsOn: "classes") {
     // Jar will always be updated
     outputs.upToDateWhen {false}

@@ -81,7 +81,7 @@ public class FluidContainerRegistry {
 			}
 		}
 		ItemStack copy = empty.copy();
-		copy.setCount(1;
+		copy.setCount(1);
 		IFluidHandlerItem handler = FluidUtil.getFluidHandler(copy);
 		if (handler != null) {
 			int filled = handler.fill(liquid, true);

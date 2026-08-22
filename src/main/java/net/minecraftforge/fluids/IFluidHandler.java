@@ -1,17 +1,18 @@
 package net.minecraftforge.fluids;
 
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public interface IFluidHandler {
-	int fill(ForgeDirection from, FluidStack resource, boolean doFill);
+	int fill(EnumFacing from, FluidStack resource, boolean doFill);
 
-	FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain);
+	FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain);
 
-	FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain);
+	FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain);
 
-	boolean canFill(ForgeDirection from, Fluid fluid);
+	boolean canFill(EnumFacing from, Fluid fluid);
 
-	boolean canDrain(ForgeDirection from, Fluid fluid);
+	boolean canDrain(EnumFacing from, Fluid fluid);
 
-	FluidTankInfo[] getTankInfo(ForgeDirection from);
+	IFluidTankProperties[] getTankProperties();
 }

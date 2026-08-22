@@ -1,5 +1,7 @@
 package net.minecraftforge.common.util;
 
+import net.minecraft.util.EnumFacing;
+
 public enum ForgeDirection {
 	DOWN(0, -1, 0),
 	UP(0, 1, 0),
@@ -42,5 +44,17 @@ public enum ForgeDirection {
 
 	public ForgeDirection opposite() {
 		return getOpposite();
+	}
+
+	public EnumFacing toDirection() {
+		switch (this) {
+			case DOWN: return EnumFacing.DOWN;
+			case UP: return EnumFacing.UP;
+			case NORTH: return EnumFacing.NORTH;
+			case SOUTH: return EnumFacing.SOUTH;
+			case WEST: return EnumFacing.WEST;
+			case EAST: return EnumFacing.EAST;
+			default: return null;
+		}
 	}
 }
