@@ -3,10 +3,12 @@ package train.common.api;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.FluidTankPropertiesWrapper;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.api.LiquidManager.StandardTank;
 import train.common.entity.rollingStockOld.special.EntityBUnitDD35;
@@ -75,7 +77,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
             return;
         if (theTank != null && theTank.getFluid() != null) {
             this.dataWatcher.updateObject(27, theTank.getFluid().amount);
-            this.dataWatcher.updateObject(4, theTank.getFluid().getFluidID());
+            this.dataWatcher.updateObject(4, theTank.getFluid().getFluid().getName().hashCode());
         } else if (theTank != null && theTank.getFluid() == null) {
             this.dataWatcher.updateObject(27, 0);
             this.dataWatcher.updateObject(4, 0);
@@ -139,10 +141,10 @@ public abstract class Tender extends Freight implements IFluidHandler {
                     (!itemstack1.getHasSubtypes() || tender.tenderItems[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(tender.tenderItems[i], itemstack1)) {
                 int var9 = tender.tenderItems[i].getCount() + itemstack1.getCount();
                 if (var9 <= tender.tenderItems[i].getMaxStackSize()) {
-                    tender.tenderItems[i].getCount() = var9;
+                    tender.tenderItems[i].setCount(var9);
                     return;
                 } else if (tender.tenderItems[i].getCount() < tender.tenderItems[i].getMaxStackSize()) {
-                    tender.tenderItems[i].getCount() += 1;
+                    tender.tenderItems[i].grow(1);
                     return;
                 }
             } else if (i == tender.tenderItems.length - 1) {
@@ -170,19 +172,19 @@ public abstract class Tender extends Freight implements IFluidHandler {
             liquidInSlot(tenderInvent, loco);
         }
 
-        if (ticksExisted % 5 == 0 && fill(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
+        if (ticksExisted % 5 == 0 && fill(new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
             FluidStack drain = null;
-            blocksToCheck = new TileEntity[]{world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
-                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
-                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
-                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
+            blocksToCheck = new TileEntity[]{world.getTileEntity(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ))),
+                    world.getTileEntity(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ))),
+                    world.getTileEntity(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ))),
+                    world.getTileEntity(new BlockPos(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ)))
             };
 
             for (TileEntity block : blocksToCheck) {
                 if (drain == null && block instanceof IFluidHandler) {
-                    for (EnumFacing direction : EnumFacing.VALID_DIRECTIONS) {
+                    for (EnumFacing direction : EnumFacing.VALUES) {
                         if (((IFluidHandler) block).drain(direction, 100, false) != null &&
-                                ((IFluidHandler) block).drain(direction, 100, false).fluid == FluidRegistry.WATER &&
+                                ((IFluidHandler) block).drain(direction, 100, false).getFluid() == FluidRegistry.WATER &&
                                 ((IFluidHandler) block).drain(direction, 100, false).amount == 100
                         ) {
                             drain = ((IFluidHandler) block).drain(
@@ -194,20 +196,20 @@ public abstract class Tender extends Freight implements IFluidHandler {
             if (drain == null && frontLink instanceof LiquidTank
                     && !(frontLink instanceof EntityBUnitEMDF7) && !(frontLink instanceof EntityBUnitEMDF3) && !(frontLink instanceof EntityBUnitDD35)) {
                 if (getFluid() == null) {
-                    drain = ((LiquidTank) frontLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) frontLink).drain(new FluidStack(FluidRegistry.WATER, 100), true);
                 } else if (getFluid().getFluid() == FluidRegistry.WATER) {
-                    drain = ((LiquidTank) frontLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) frontLink).drain(new FluidStack(FluidRegistry.WATER, 100), true);
                 }
             } else if (drain == null && backLink instanceof LiquidTank
                     && !(frontLink instanceof EntityBUnitEMDF7) && !(frontLink instanceof EntityBUnitEMDF3) && !(frontLink instanceof EntityBUnitDD35)) {
                 if (getFluid() == null) {
-                    drain = ((LiquidTank) backLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) backLink).drain(new FluidStack(FluidRegistry.WATER, 100), true);
                 } else if (getFluid().getFluid() == FluidRegistry.WATER) {
-                    drain = ((LiquidTank) backLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) backLink).drain(new FluidStack(FluidRegistry.WATER, 100), true);
                 }
             }
             if (drain != null) {
-                fill(EnumFacing.UNKNOWN, drain, true);
+                fill(drain, true);
             }
         }
     }
@@ -251,7 +253,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
     public void setInventorySlotContents(int i, ItemStack itemstack) {
         tenderItems[i] = itemstack;
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-            itemstack.setCount(getInventoryStackLimit();
+            itemstack.setCount(getInventoryStackLimit());
         }
     }
 
@@ -285,6 +287,25 @@ public abstract class Tender extends Freight implements IFluidHandler {
     }
 
     @Override
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+        return fill(resource, doFill);
+    }
+
+    @Override
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
+        return drain(resource, doDrain);
+    }
+
+    @Override
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
+        return drain(maxDrain, doDrain);
+    }
+
+    @Override
+    public boolean canFill(EnumFacing from, Fluid fluid) {
+        return true;
+    }
+
     public boolean canfill(Fluid fluid) {
         return true;
     }
@@ -296,7 +317,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
 
     @Override
     public IFluidTankProperties[] getTankProperties() {
-        return new FluidTankInfo[]{theTank.getInfo()};
+        return new IFluidTankProperties[]{new FluidTankPropertiesWrapper(theTank)};
     }
 
     public FluidStack getFluid() {

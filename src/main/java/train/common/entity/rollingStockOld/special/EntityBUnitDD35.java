@@ -70,7 +70,7 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
             // setColor(getColorFromString("Full"));
             setDefaultMass(-weightKg());
             if ((motionX > 0.01 || motionZ > 0.01) && ticksExisted % 40 == 0) {
-                drain(ForgeDirection.UNKNOWN, 8, true);
+                drain(8, true);
             }
 
         } else if (getAmount() <= 0) {
@@ -120,7 +120,7 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
             }
         }
         if (nbttagcompound.hasKey("FluidName")) {
-            fill(ForgeDirection.UNKNOWN, FluidStack.loadFluidStackFromNBT(nbttagcompound), true);
+            fill(FluidStack.loadFluidStackFromNBT(nbttagcompound), true);
         }
 
     }
@@ -133,10 +133,10 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
             } else if (cargoItems[i] != null && cargoItems[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() && (!itemstack1.getHasSubtypes() || cargoItems[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(cargoItems[i], itemstack1)) {
                 int var9 = cargoItems[i].getCount() + itemstack1.getCount();
                 if (var9 <= itemstack1.getMaxStackSize()) {
-                    cargoItems[i].getCount() = var9;
+                    cargoItems[i].setCount(var9);
 
                 } else if (cargoItems[i].getCount() < itemstack1.getMaxStackSize()) {
-                    cargoItems[i].getCount() += 1;
+                    cargoItems[i].grow(1);
                 }
                 return;
             } else if (i == cargoItems.length - 1) {

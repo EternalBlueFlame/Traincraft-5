@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.RayTraceResult;
@@ -218,41 +219,34 @@ public class CollisionBox extends MultiPartEntityPart implements IInventory, IFl
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
         return host.fill(resource, doFill);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
         return host.drain(resource, doDrain);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
         return host.drain(maxDrain, doDrain);
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
+    public boolean canFill(EnumFacing from, Fluid fluid) {
         return host.canFill(fluid);
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
         return host.canDrain(fluid);
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
+    public IFluidTankProperties[] getTankProperties() {
         IFluidTankProperties[] props = host.getTankProperties();
-        if (props == null) {
-            return new FluidTankInfo[0];
-        }
-        FluidTankInfo[] info = new FluidTankInfo[props.length];
-        for (int i = 0; i < props.length; i++) {
-            info[i] = new FluidTankInfo(props[i].getContents(), props[i].getCapacity());
-        }
-        return info;
+        return props == null ? new IFluidTankProperties[0] : props;
     }
 
     @Override
@@ -287,12 +281,12 @@ public class CollisionBox extends MultiPartEntityPart implements IInventory, IFl
 
     @Override
     public boolean canAcceptPushedFluid(EntityMinecart requester, Fluid fluid) {
-        return canFill(ForgeDirection.UNKNOWN,fluid);
+        return canFill(null,fluid);
     }
 
     @Override
     public boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid) {
-        return canDrain(ForgeDirection.UNKNOWN,fluid);
+        return canDrain(null,fluid);
     }
 
     @Override

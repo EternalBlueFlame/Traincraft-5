@@ -4,6 +4,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockSapling;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -120,7 +121,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 					var2 = true;
 
 					if (this.furnaceItemStacks[1] != null) {
-						--this.furnaceItemStacks[1].getCount();
+						this.furnaceItemStacks[1].shrink(1);
 
 						if (this.furnaceItemStacks[1].getCount() == 0) {
 							this.furnaceItemStacks[1] = this.furnaceItemStacks[1].getItem().getContainerItem(furnaceItemStacks[1]);
@@ -182,9 +183,9 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 				this.furnaceItemStacks[2] = var1.copy();
 			}
 			else if (this.furnaceItemStacks[2].isItemEqual(var1)) {
-				furnaceItemStacks[2].getCount() += var1.getCount();
+				furnaceItemStacks[2].grow(var1.getCount());
 			}
-			--this.furnaceItemStacks[0].getCount();
+			this.furnaceItemStacks[0].shrink(1);
 			if (this.furnaceItemStacks[0].getCount() <= 0) {
 				this.furnaceItemStacks[0] = null;
 			}
@@ -199,17 +200,16 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 			return 0;
 		}
 		else {
-			int var1 = Item.getIdFromItem(par0ItemStack.getItem());
 			Item var2 = par0ItemStack.getItem();
 
 			if (par0ItemStack.getItem() instanceof ItemBlock && Block.getBlockFromItem(var2) != null) {
 				Block var3 = Block.getBlockFromItem(var2);
 
-				if (var3 == Block.getBlockById(126)) {//126 is wooden slab
+				if (var3 == Blocks.STONE_SLAB || var3 == Blocks.WOODEN_SLAB) {//126 is wooden slab
 					return 150;
 				}
 
-				if (var3.getMaterial(null) == Material.WOOD) {
+				if (var3.getDefaultState().getMaterial() == Material.WOOD) {
 					return 300;
 				}
 			}
@@ -218,15 +218,15 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 				return 200;
 			if (var2 instanceof ItemSword && ((ItemSword) var2).getToolMaterialName().equals("WOOD"))
 				return 200;
-			if (var1 == Item.getIdFromItem(Items.stick))
+			if (var2 == Items.STICK)
 				return 100;
-			if (var1 == Item.getIdFromItem(Items.coal))
+			if (var2 == Items.COAL)
 				return 1600;
-			if (var1 == Item.getIdFromItem(Items.lava_bucket))
+			if (var2 == Items.LAVA_BUCKET)
 				return 20000;
-			if (var1 == Block.getIdFromBlock(Blocks.sapling))//6 is sapling
+			if (var2 instanceof ItemBlock && ((ItemBlock) var2).getBlock() instanceof BlockSapling)//6 is sapling
 				return 100;
-			if (var1 == Item.getIdFromItem(Items.blaze_rod))
+			if (var2 == Items.BLAZE_ROD)
 				return 2400;
 			return GameRegistry.getFuelValue(par0ItemStack);
 		}
@@ -296,8 +296,8 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 	@Override
 	public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
 		this.furnaceItemStacks[par1] = par2ItemStack;
-		if (par2ItemStack != null && par2itemstack.getCount() > this.getInventoryStackLimit()) {
-			par2itemstack.setCount(this.getInventoryStackLimit();
+		if (par2ItemStack != null && par2ItemStack.getCount() > this.getInventoryStackLimit()) {
+			par2ItemStack.setCount(this.getInventoryStackLimit());
 		}
 	}
 	@Override
@@ -322,11 +322,10 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 		super.attackEntityFrom(damagesource, i);
 		setRollingDirection(-getRollingDirection());
 		setRollingAmplitude(10);
-		setBeenAttacked();
 		setDamage(getDamage() + i * 10);
 		if (getDamage() > 40) {
 			if (getPassengers().get(0) != null) {
-				getPassengers().get(0).mountEntity(this);
+				getPassengers().get(0).startRiding(this);
 			}
 			this.setDead();
 			ServerLogger.deleteWagon(this);

@@ -35,11 +35,10 @@ public class EntityPropagandaJapan extends EntityRollingStock {
 		super.attackEntityFrom(damagesource, i);
 		setRollingDirection(-getRollingDirection());
 		setRollingAmplitude(10);
-		setBeenAttacked();
 		setDamage(getDamage() + i * 10);
 		if (getDamage() > 40) {
 			if (getPassengers().get(0) != null) {
-				getPassengers().get(0).mountEntity(this);
+				getPassengers().get(0).startRiding(this);
 			}
 			this.setDead();
 			ServerLogger.deleteWagon(this);

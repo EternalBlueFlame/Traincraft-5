@@ -132,7 +132,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
             int j = nbttagcompound1.getByte("Slot") & 0xff;
             if (j >= 0 && j < controlCarInventory.length)
             {
-                controlCarInventory[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+                controlCarInventory[j] = new ItemStack(nbttagcompound1);
             }
         }
     }
@@ -314,15 +314,17 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
                 {
                     if (connectedLocomotive.getFuel() > 0 && connectedLocomotive.isLocoTurnedOn() && rand.nextInt(4) == 0 && !world.isRemote)
                     {
-                        if (this.getTrainLockedFromPacket() && !((EntityPlayer) this.getPassengers().isEmpty()?null:getPassengers().get(0)).getName()
-                                .getUnformattedText().toLowerCase().equals(this.getTrainOwner().getUnformattedText().toLowerCase()))
+                        if (this.getTrainLockedFromPacket()
+                                && !(!this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof EntityPlayer
+                                        && !((EntityPlayer) this.getPassengers().get(0)).getName().toLowerCase()
+                                        .equals(this.getTrainOwner().toLowerCase())))
                         {
                             return;
                         }
-                        if (getPassengers().isEmpty()?null:getPassengers().get(0) != null && getPassengers().isEmpty()?null:getPassengers().get(0) instanceof EntityPlayer)
+                        if (!this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof EntityPlayer)
                         {
                             int dir = MathHelper
-                                    .floor_double((((EntityPlayer) getPassengers().isEmpty()?null:getPassengers().get(0)).rotationYaw * 4F) / 360F + 0.5D) & 3;
+                                    .floor((((EntityPlayer) this.getPassengers().get(0)).rotationYaw * 4F) / 360F + 0.5D) & 3;
                             //System.out.println(dir);
                             if (dir == 2)
                             {
@@ -393,9 +395,9 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     {
         if (this.getTrainLockedFromPacket())
         {
-            if (this.getPassengers().isEmpty()?null:getPassengers().get(0) != null && this.getPassengers().isEmpty()?null:getPassengers().get(0) instanceof EntityPlayer
-                    && !((EntityPlayer) this.getPassengers().isEmpty()?null:getPassengers().get(0)).getName().getUnformattedText().toLowerCase()
-                    .equals(this.getTrainOwner().getUnformattedText().toLowerCase()))
+            if (!this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof EntityPlayer
+                    && !((EntityPlayer) this.getPassengers().get(0)).getName().toLowerCase()
+                    .equals(this.getTrainOwner().toLowerCase()))
             {
                 return;
             }
@@ -522,11 +524,9 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         return false;
     }
 
-    @Override
     public void openInventory() {
     }
 
-    @Override
     public void closeInventory() {
     }
 
@@ -580,7 +580,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         controlCarInventory[i] = itemstack;
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit())
         {
-            itemstack.setCount(getInventoryStackLimit();
+            itemstack.setCount(getInventoryStackLimit());
         }
     }
 

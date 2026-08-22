@@ -9,6 +9,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.adminbook.ServerLogger;
@@ -52,16 +54,15 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 		super.attackEntityFrom(damagesource, i);
 		setRollingDirection(-getRollingDirection());
 		setRollingAmplitude(10);
-		setBeenAttacked();
 		setDamage(getDamage() + i * 10);
 		if (getDamage() > 40) {
 			if (getPassengers().get(0) != null) {
-				getPassengers().get(0).mountEntity(this);
+				getPassengers().get(0).startRiding(this);
 			}
 			this.setDead();
 			ServerLogger.deleteWagon(this);
-			if(damagesource.getEntity() instanceof EntityPlayer) {
-				dropCartAsItem(((EntityPlayer)damagesource.getEntity()).capabilities.isCreativeMode);
+			if(damagesource.getTrueSource() instanceof EntityPlayer) {
+				dropCartAsItem(((EntityPlayer)damagesource.getTrueSource()).capabilities.isCreativeMode);
 			}
 		}
 		return true;
@@ -92,9 +93,9 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 				this.streamURL = this.dataWatcher.getWatchableObjectString(22);
 				this.startStream();
 			}
-			if ((Minecraft.getMinecraft().thePlayer != null) && (this.player != null) && (!isInvalid)) {
-				float vol = (float) getDistanceSq(Minecraft.getMinecraft().thePlayer.posX,
-						Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ);
+			if ((Minecraft.getMinecraft().player != null) && (this.player != null) && (!isInvalid)) {
+				float vol = (float) getDistanceSq(Minecraft.getMinecraft().player.posX,
+						Minecraft.getMinecraft().player.posY, Minecraft.getMinecraft().player.posZ);
 				if (vol >= (volume * 1000.0F)) {
 					this.player.setVolume(0.0F);
 				} else {
@@ -117,7 +118,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 				}
 				if (this.isPlaying && rand.nextInt(5) == 0 && (this.player != null && this.player.isPlaying())) {
 					int random2 = rand.nextInt(24) + 1;
-					world.spawnParticle("note", posX, posY + 1.2D, posZ, random2 / 24.0D, 0.0D, 0.0D);
+					world.spawnParticle(EnumParticleTypes.NOTE, posX, posY + 1.2D, posZ, random2 / 24.0D, 0.0D, 0.0D);
 				}
 			}
 			
@@ -173,15 +174,15 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
+	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
 		//ItemStack var2 = entityplayer.inventory.getCurrentItem();
 		playerEntity = entityplayer;
-		if ((super.interactFirst(entityplayer))) {
+		if ((super.processInitialInteract(entityplayer, EnumHand.MAIN_HAND))) {
 			return false;
 		}
-		if (locked && !entityplayer.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
+		if (locked && !entityplayer.getDisplayNameString().toLowerCase().equals(this.trainOwner.toLowerCase())) {
 			if (!world.isRemote)
-				entityplayer.addChatMessage(new TextComponentString("this train is locked"));
+				entityplayer.sendMessage(new TextComponentString("this train is locked"));
 			return true;
 		}
 		

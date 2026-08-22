@@ -377,7 +377,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             setDamage(getDamage() + i * 10);
             if (getDamage() > 40) {
 /*                if (getPassengers().get(0) != null) {
-                    getPassengers().get(0).mountEntity(this);
+                    getPassengers().get(0).startRiding(this);
                 }*/ //#!#
                 ServerLogger.deleteWagon(this);
                 /**
@@ -1218,7 +1218,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     for (TransportSkin s : SkinRegistry.get(this).values()) {
                         if (itemstack.getItemDamage() == DepreciatedUtil.getColorFromString(s.addr)) {
                             this.setColor(s.addr);
-                            itemstack.getCount()--;
+                            itemstack.shrink(1);
 
                             //if (!world.isRemote)PacketHandler.sendPacketToClients(PacketHandler.sendStatsToServer(10,this.uniqueID,trainName ,trainType, this.trainOwner, this.getColorAsString(itemstack.getItemDamage()), (int)posX, (int)posY, (int)posZ),this.world, (int)posX,(int)posY,(int)posZ, 12.0D);
 
