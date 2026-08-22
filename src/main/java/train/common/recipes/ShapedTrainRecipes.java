@@ -115,7 +115,7 @@ public class ShapedTrainRecipes implements ITCRecipe {
 				ItemStack var4 = inventory.getStackInSlot(var3);
 
 				if (var4 != null && var4.hasTagCompound()) {
-					var2.setTagCompound((NBTTagCompound) var4.stackTagCompound.copy());
+					var2.setTagCompound(var4.hasTagCompound() ? (NBTTagCompound) var4.getTagCompound().copy() : null);
 				}
 			}
 		}

@@ -155,7 +155,7 @@ public class NEIAssemblyTableRecipePlugin extends ShapedRecipeHandler {
 					if (cycleTicks % 15 == 0) {
 						int stackSize = ingredients.get(itemIndex).item.getCount();
 						ingredients.get(itemIndex).item = (ItemStack) list.get(Math.abs(rand.nextInt()) % list.size());
-						ingredients.get(itemIndex).item.setCount(stackSize;
+						ingredients.get(itemIndex).item.setCount(stackSize);
 					}
 				}
 				else {

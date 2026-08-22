@@ -8,7 +8,6 @@ import train.common.library.BlockIDs;
 public class ItemDirtierBallastSlab extends ItemSlab {
     public ItemDirtierBallastSlab(Block block)
     {
-        super(block, (BlockSlab) BlockIDs.dirtierBallastSlab.block, (BlockSlab) BlockIDs.dirtierBallastDoubleSlab.block, block == BlockIDs.dirtierBallastDoubleSlab.block);
-        this.setUnlocalizedName("dirtier ballast slab");
+        super(block, (BlockSlab) BlockIDs.dirtierBallastSlab.block, (BlockSlab) BlockIDs.dirtierBallastDoubleSlab.block);
     }
 }

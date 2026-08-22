@@ -76,8 +76,8 @@ public class ServerLogger {
                     }
                 }
                 if (wagon instanceof LiquidTank) {
-                    for (FluidTankInfo tank : ((LiquidTank) wagon).getTankInfo(EnumFacing.UNKNOWN)) {
-                        addFluidXML(sb, tank.fluid);
+                    for (net.minecraftforge.fluids.capability.IFluidTankProperties tank : ((LiquidTank) wagon).getTankProperties()) {
+                        addFluidXML(sb, tank.getContents());
                     }
                 }
                 sb.append("   </inventory>");

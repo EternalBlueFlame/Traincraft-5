@@ -76,7 +76,6 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	public ItemRollingStock(AbstractTrains train, String modid, CreativeTabs tab){
 		this(modid+":trains/"+train.transportName().replace(' ','_'),tab);
-		setUnlocalizedName(train.transportName());
 		entity=train;
 		if(tab ==Traincraft.tcTab && ConfigHandler.SPLIT_CREATIVE) {
 			setCreativeTab(Traincraft.tcTrainTab);
@@ -86,7 +85,6 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	@Deprecated
 	public ItemRollingStock(String name, String iconName, String modid){
 		this(modid+":trains/" +iconName);
-		setUnlocalizedName(name);
 		if(!ConfigHandler.SPLIT_CREATIVE) {
 			setCreativeTab(Traincraft.tcTab);
 		} else {
@@ -617,7 +615,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
         }
     }
 
-    itemstack.getCount()--;
+    itemstack.shrink(1);
     return rollingStock;
 }
 

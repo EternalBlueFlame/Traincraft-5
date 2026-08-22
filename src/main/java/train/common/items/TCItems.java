@@ -223,7 +223,6 @@ public class TCItems {
 	private static void registerItems() {
 		for (ItemIDs items : ItemIDs.values()) {
 			if (items.item != null) {
-				items.item.setUnlocalizedName(Info.modID + ":" + items.name());
 				GameRegistry.registerItem(items.item, items.name());
 			}
 		}
@@ -243,7 +242,6 @@ public class TCItems {
 
 		for (TCCEItemIDs tcceItems : TCCEItemIDs.values()) {
 			if (tcceItems.item != null){
-				tcceItems.item.setUnlocalizedName(Info.modID + ":" + tcceItems.name());
 				GameRegistry.registerItem(tcceItems.item, tcceItems.name());
 			}
 		}

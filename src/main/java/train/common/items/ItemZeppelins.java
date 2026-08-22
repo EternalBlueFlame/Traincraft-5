@@ -63,7 +63,7 @@ public class ItemZeppelins extends Item {
 				if(type==0)world.spawnEntityInWorld(new EntityZeppelinTwoBalloons(world, (float) i + 0.5F, (float) j + 1.5F, (float) k + 0.5F));
 				if(type==1)world.spawnEntityInWorld(new EntityZeppelinOneBalloon(world, (float) i + 0.5F, (float) j + 1.5F, (float) k + 0.5F));
 			}
-			itemstack.getCount()--;
+			itemstack.shrink(1);
 		}
 		return itemstack;
 	}
