@@ -12,6 +12,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 
@@ -63,20 +64,21 @@ public class SlotTrainCrafting extends Slot {
 				if (var4.getItem().hasContainerItem()) {
 					ItemStack var5 = var4.getItem().getContainerItem(var4);
 					if (var5.isItemStackDamageable() && var5.getItemDamage() > var5.getMaxDamage()) {
-						MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(thePlayer, var5));
+						MinecraftForge.EVENT_BUS.post(new PlayerDestroyItemEvent(thePlayer, var5, EnumHand.MAIN_HAND));
 						var5 = null;
 					}
-					if (var5 != null && (!var4.getItem().doesContainerItemLeaveCraftingGrid(var4) || !this.thePlayer.inventory.addItemStackToInventory(var5))) {
+					if (var5 != null && (!var4.getItem().hasContainerItem(var4) || !this.thePlayer.inventory.addItemStackToInventory(var5))) {
 						if (this.craftMatrix.getStackInSlot(var3) == null) {
 							this.craftMatrix.setInventorySlotContents(var3, var5);
 						}
 						else {
-							this.thePlayer.dropItem(var5.getItem(), 1);
+							this.thePlayer.dropItem(var5, false, false);
 						}
 					}
 				}
 			}
 		}
+		return par2ItemStack;
 	}
 
 	@Override

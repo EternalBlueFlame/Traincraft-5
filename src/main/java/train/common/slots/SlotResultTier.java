@@ -40,7 +40,7 @@ public class SlotResultTier extends Slot {
 			}
 		}
 		this.onCrafting(itemstack);
-		return super.onTake(player, itemstack);
 		FMLCommonHandler.instance().firePlayerCraftingEvent(player, itemstack, craftMatrix);
+		return super.onTake(player, itemstack);
 	}
 }

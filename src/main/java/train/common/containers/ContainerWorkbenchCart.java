@@ -102,18 +102,18 @@ public class ContainerWorkbenchCart extends Container {
 				return null;
 			}
 
-			if (var4.setCount(= 0) {
+			if (var4.getCount() == 0) {
 				var3.putStack(null);
 			}
 			else {
 				var3.onSlotChanged();
 			}
 
-			if (var4.setCount(= var2.getCount()) {
+			if (var4.getCount() == var2.getCount()) {
 				return null;
 			}
 
-			var3.onPickupFromSlot(player, var4);
+			var3.onTake(player, var4);
 		}
 
 		return var2;

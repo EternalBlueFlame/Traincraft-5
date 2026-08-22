@@ -6,6 +6,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
+import net.minecraft.inventory.SlotFurnaceOutput;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.tileentity.TileEntityFurnace;
@@ -21,7 +22,7 @@ public class InventoryWorkCart extends Container {
 		this.furnace = (AbstractWorkCart) entity;
 		this.addSlotToContainer(new Slot((IInventory) entity, 0, 56, 17));
 		this.addSlotToContainer(new Slot((IInventory) entity, 1, 56, 53));
-		this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, (IInventory) entity, 2, 116, 35));
+		this.addSlotToContainer(new SlotFurnaceOutput(par1InventoryPlayer.player, (IInventory) entity, 2, 116, 35));
 		int var3;
 
 		for (var3 = 0; var3 < 3; ++var3) {
@@ -100,7 +101,7 @@ public class InventoryWorkCart extends Container {
 				var4.onSlotChange(var5, var3);
 			}
 			else if (par1 != 1 && par1 != 0) {
-				if (FurnaceRecipes.smelting().getSmeltingResult(var5) != null) {
+				if (FurnaceRecipes.instance().getSmeltingResult(var5) != null) {
 					if (!this.mergeItemStack(var5, 0, 1, false)) {
 						return null;
 					}
@@ -122,16 +123,16 @@ public class InventoryWorkCart extends Container {
 			else if (!this.mergeItemStack(var5, 3, 39, false)) {
 				return null;
 			}
-			if (var5.setCount(= 0) {
+			if (var5.getCount() == 0) {
 				var4.putStack(null);
 			}
 			else {
 				var4.onSlotChanged();
 			}
-			if (var5.setCount(= var3.getCount()) {
+			if (var5.getCount() == var3.getCount()) {
 				return null;
 			}
-			var4.onPickupFromSlot(player, var5);
+			var4.onTake(player, var5);
 		}
 
 		return var3;

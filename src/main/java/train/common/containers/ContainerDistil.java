@@ -103,7 +103,7 @@ public class ContainerDistil extends Container {
 			else if (!mergeItemStack(itemstack1, 0, 3, false)) {
 				return null;
 			}
-			if (itemstack1.setCount(= 0) {
+			if (itemstack1.getCount() == 0) {
 				slot.putStack(null);
 			}
 			else {

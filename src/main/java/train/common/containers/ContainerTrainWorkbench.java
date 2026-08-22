@@ -104,7 +104,7 @@ public class ContainerTrainWorkbench extends Container {
 			if (var4.getCount() == var2.getCount()) {
 				return null;
 			}
-			var3.onPickupFromSlot(player, var4);
+			var3.onTake(player, var4);
 		}
 		return var2;
 	}

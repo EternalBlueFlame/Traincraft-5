@@ -45,7 +45,7 @@ public class ContainerGeneratorDiesel extends Container {
 			else if (!mergeItemStack(itemstack1, 1, 1, false)) {
 				return null;
 			}
-			if (itemstack1.setCount(= 0) {
+			if (itemstack1.getCount() == 0) {
 				slot.putStack(null);
 			}
 			else {

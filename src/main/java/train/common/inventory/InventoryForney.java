@@ -64,7 +64,7 @@ public class InventoryForney extends Container {
 				}
 			}
 			else if (i > inventorySize) {
-				if (FuelHandler.steamFuelLast(itemstack) > 0 || LiquidManager.getInstance().isDieselLocoFuel(itemstack) || (itemstack.getItem() == Items.redstone)) {
+				if (FuelHandler.steamFuelLast(itemstack) > 0 || LiquidManager.getInstance().isDieselLocoFuel(itemstack) || (itemstack.getItem() == Items.REDSTONE)) {
 					if (!mergeItemStack(itemstack1, 0, 1, false)) {
 						return null;
 					}
@@ -81,7 +81,7 @@ public class InventoryForney extends Container {
 			else if (!mergeItemStack(itemstack1, 2, inventorySize, false)) {
 				return null;
 			}
-			if (itemstack1.setCount(= 0) {
+			if (itemstack1.getCount() == 0) {
 				slot.putStack(null);
 			}
 			else {
