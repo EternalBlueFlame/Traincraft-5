@@ -18,7 +18,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import mods.railcraft.api.core.items.IMinecartItem;
@@ -158,7 +158,7 @@ public abstract class CartTools {
     public static void offerOrDropItem(EntityMinecart cart, ItemStack stack) {
         stack = transferHelper.pushStack(cart, stack);
 
-        if (stack != null && stack.stackSize > 0)
+        if (stack != null && stack.getCount() > 0)
             cart.entityDropItem(stack, 1);
     }
 

@@ -92,13 +92,13 @@ public class TierRecipe implements ITierRecipe {
             return inRecipe == inSlot;
         }
 
-        return inSlot.stackSize >= inRecipe.stackSize;
+        return inSlot.getCount() >= inRecipe.getCount();
     }
 
     @Override
     public int toDecrease(int slot) {
         if (slot < stacks.length) {
-            return stacks[slot].stackSize;
+            return stacks[slot].getCount();
         }
 
         return 0;

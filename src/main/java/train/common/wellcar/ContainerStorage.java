@@ -81,7 +81,7 @@ public class ContainerStorage extends Container
                 return null;
             }
 
-            if (stackInSlot.stackSize == 0)
+            if (stackInSlot.getCount() == 0)
             {
                 slot.putStack((ItemStack)null);
             }
@@ -96,6 +96,6 @@ public class ContainerStorage extends Container
     @Override
     public boolean canInteractWith(EntityPlayer player)
     {
-        return te.isUseableByPlayer(player);
+        return te.isUsableByPlayer(player);
     }
 }

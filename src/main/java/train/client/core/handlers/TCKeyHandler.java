@@ -1,16 +1,16 @@
 package train.client.core.handlers;
 
-import cpw.mods.fml.client.FMLClientHandler;
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.InputEvent;
+import net.minecraftforge.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.InputEvent;
 import ebf.tim.entities.EntitySeat;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import org.lwjgl.input.Keyboard;
 import train.client.gui.GuiMTCInfo;
 import train.common.Traincraft;
@@ -68,43 +68,43 @@ public class TCKeyHandler {
             return;
         }
 
-        Entity riding =Minecraft.getMinecraft().thePlayer.ridingEntity;
+        Entity riding =Minecraft.getMinecraft().player.getRidingEntity();
         if(riding instanceof EntitySeat){
             riding=((EntitySeat) riding).parent;
         }
         if (riding instanceof AbstractTrains || riding instanceof AbstractZeppelin){
-            if (up.getIsKeyPressed()) {
+            if (up.isPressed()) {
                 sendKeyControlsPacket(0);
             }
 
-            if (down.getIsKeyPressed()) {
+            if (down.isPressed()) {
                 sendKeyControlsPacket(2);
             }
 
-            if (idle.getIsKeyPressed()) {
+            if (idle.isPressed()) {
                 sendKeyControlsPacket(6);
             }
 
-            if (inventory.getIsKeyPressed()) {
+            if (inventory.isPressed()) {
                 sendKeyControlsPacket(7);
             }
 
-            if (furnace.getIsKeyPressed()) {
+            if (furnace.isPressed()) {
                 sendKeyControlsPacket(9);
             }
 
-            if (FMLClientHandler.instance().getClient().gameSettings.keyBindSneak.getIsKeyPressed() && Keyboard.isKeyDown(Keyboard.KEY_F3)) {
+            if (FMLClientHandler.instance().getClient().gameSettings.keyBindSneak.isPressed() && Keyboard.isKeyDown(Keyboard.KEY_F3)) {
                 sendKeyControlsPacket(404);
             }
         }
 
         if (riding instanceof Locomotive) {
 
-            if (horn.getIsKeyPressed()) {
+            if (horn.isPressed()) {
                 sendKeyControlsPacket(8);
             }
 
-            if (bell.getIsKeyPressed()) {
+            if (bell.isPressed()) {
                 sendKeyControlsPacket(10);
             }
 
@@ -141,35 +141,35 @@ public class TCKeyHandler {
                 ((Locomotive) riding).brakePressed = false;
             }
             if (Traincraft.hasComputerCraft()) {
-                if (MTCScreen.getIsKeyPressed() && !FMLClientHandler.instance().isGUIOpen(GuiMTCInfo.class)) {
-                    if (Minecraft.getMinecraft().thePlayer.getRidingEntity()!= null) {
-                        Minecraft.getMinecraft().displayGuiScreen(new GuiMTCInfo(Minecraft.getMinecraft().thePlayer.ridingEntity));
+                if (MTCScreen.isPressed() && !FMLClientHandler.instance().isGUIOpen(GuiMTCInfo.class)) {
+                    if (Minecraft.getMinecraft().player.getRidingEntity()!= null) {
+                        Minecraft.getMinecraft().displayGuiScreen(new GuiMTCInfo(Minecraft.getMinecraft().player.getRidingEntity()));
                     }
                 }
 
-                if (toggleATO.getIsKeyPressed() && Minecraft.getMinecraft().thePlayer.getRidingEntity()instanceof Locomotive) {
+                if (toggleATO.isPressed() && Minecraft.getMinecraft().player.getRidingEntity()instanceof Locomotive) {
                     sendKeyControlsPacket(16);
-                    Locomotive train = (Locomotive) Minecraft.getMinecraft().thePlayer.ridingEntity;
+                    Locomotive train = (Locomotive) Minecraft.getMinecraft().player.getRidingEntity();
                     if (train.mtcStatus != 0 && train.mtcType == 2) {
                         if (train instanceof SteamTrain && !ConfigHandler.ALLOW_ATO_ON_STEAMERS) {
-                            ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new ChatComponentText("Automatic Train Operation cannot be used with steam trains"));
+                            ((EntityPlayer) train.getPassengers().get(0)).sendMessage(new TextComponentString("Automatic Train Operation cannot be used with steam trains"));
                         } else {
                             train.atoStatus = train.atoStatus == 1 ? 0 : 1;
                         }
                     } else {
-                        ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new ChatComponentText("Automatic Train Operation can only be activated when you are using W-MTC"));
+                        ((EntityPlayer) train.getPassengers().get(0)).sendMessage(new TextComponentString("Automatic Train Operation can only be activated when you are using W-MTC"));
                     }
                 }
 
-                if (mtcOverride.getIsKeyPressed() && Minecraft.getMinecraft().thePlayer.getRidingEntity()instanceof Locomotive) {
-                    Locomotive train = (Locomotive) Minecraft.getMinecraft().thePlayer.ridingEntity;
+                if (mtcOverride.isPressed() && Minecraft.getMinecraft().player.getRidingEntity()instanceof Locomotive) {
+                    Locomotive train = (Locomotive) Minecraft.getMinecraft().player.getRidingEntity();
 
                     if (train.mtcOverridePressed) {
                         train.mtcOverridePressed = false;
-                        ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new ChatComponentText("MTC has been enabled and will re-activate when the system receives new data"));
+                        ((EntityPlayer) train.getPassengers().get(0)).sendMessage(new TextComponentString("MTC has been enabled and will re-activate when the system receives new data"));
                     } else {
                         train.mtcOverridePressed = true;
-                        ((EntityPlayer) train.getPassengers().get(0)).addChatMessage(new ChatComponentText("MTC has been disabled and will not receive speed changes or transmit MTC data"));
+                        ((EntityPlayer) train.getPassengers().get(0)).sendMessage(new TextComponentString("MTC has been disabled and will not receive speed changes or transmit MTC data"));
                         train.mtcStatus = 0;
                         train.speedLimit = 0;
                         train.nextSpeedLimit = 0;
@@ -185,8 +185,8 @@ public class TCKeyHandler {
                     sendKeyControlsPacket(17);
                 }
 
-                if (overspeedOverride.getIsKeyPressed() && Minecraft.getMinecraft().thePlayer.getRidingEntity()instanceof Locomotive) {
-                    Locomotive train = (Locomotive) Minecraft.getMinecraft().thePlayer.ridingEntity;
+                if (overspeedOverride.isPressed() && Minecraft.getMinecraft().player.getRidingEntity()instanceof Locomotive) {
+                    Locomotive train = (Locomotive) Minecraft.getMinecraft().player.getRidingEntity();
                     sendKeyControlsPacket(18);
                     if (train.mtcStatus == 1 || train.mtcStatus == 2) {
                         train.overspeedOveridePressed = !train.overspeedOveridePressed;

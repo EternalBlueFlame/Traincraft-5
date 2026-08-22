@@ -1,7 +1,7 @@
 package train.common.entity.rollingStock;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.item.Item;
@@ -23,8 +23,8 @@ import train.common.library.ItemIDs;
  */
 public class EntityPassengerCar1 extends EntityRollingStock implements IPassenger {
     /*private static final String[] itemDescription = new String[]{
-            "\u00A77" + StatCollector.translateToLocal("menu.item.weight") +": 2 " + StatCollector.translateToLocal("menu.item.tons"),
-            "\u00A77" + StatCollector.translateToLocal("menu.item.seats") +": 4 " + StatCollector.translateToLocal("menu.item.players")};*/
+            "\u00A77" + I18n.translateToLocal("menu.item.weight") +": 2 " + I18n.translateToLocal("menu.item.tons"),
+            "\u00A77" + I18n.translateToLocal("menu.item.seats") +": 4 " + I18n.translateToLocal("menu.item.players")};*/
 
     public static final Item thisItem = new ItemRollingStock(new EntityPassengerCar1(null), Info.modID, Traincraft.tcTab);
 

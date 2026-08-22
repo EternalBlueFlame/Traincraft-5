@@ -25,7 +25,7 @@ public class BlockLocomotiveHoldingTrack extends BlockTrackLockingBase implement
 		if ((getCurrentCart() != null) && (getCurrentCart().isEntityAlive())) {
 			setCurrentCart(null);
 		}
-		if (!world.isRemote) {
+		if (!getWorld().isRemote) {
 			if (isPowered()) {
 				this.delay = getDelayTime();
 			}
@@ -95,9 +95,9 @@ public class BlockLocomotiveHoldingTrack extends BlockTrackLockingBase implement
 				cart.motionX = 0.0D;
 				cart.motionZ = 0.0D;
 				if ((meta == 0) || (meta == 4) || (meta == 5))
-					cart.setPosition(cart.posX, cart.posY, this.tileEntity.zCoord + 0.5D);
+					cart.setPosition(cart.posX, cart.posY, this.tileEntity.getPos().getZ() + 0.5D);
 				else
-					cart.setPosition(this.tileEntity.xCoord + 0.5D, cart.posY, cart.posZ);
+					cart.setPosition(this.tileEntity.getPos().getX() + 0.5D, cart.posY, cart.posZ);
 			}
 		}
 	}

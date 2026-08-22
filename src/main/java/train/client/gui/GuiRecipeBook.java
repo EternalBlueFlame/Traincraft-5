@@ -112,8 +112,8 @@ public class GuiRecipeBook extends GuiScreen {
 
         addPage("Keys:\nTo interact with the trains (e.g. enter, display the inventory) click above the shadow the train is casting on the ground.\nInside the locomotive press R to open up the GUI: This is where you can put fuel, water, additional cargo, set brakes, etc.\n", "", "right", new ArrayList<StackToDraw>() {
             {
-                add(new StackToDraw(new ItemStack(Items.coal), 60, 160));
-                add(new StackToDraw(new ItemStack(Items.water_bucket), 120, 160));
+                add(new StackToDraw(new ItemStack(Items.COAL), 60, 160));
+                add(new StackToDraw(new ItemStack(Items.WATER_BUCKET), 120, 160));
             }
         });
 
@@ -135,8 +135,8 @@ public class GuiRecipeBook extends GuiScreen {
                 add(new StackToDraw(new ItemStack(ItemIDs.balloon.item), 170, 16));
                 add(new StackToDraw(new ItemStack(ItemIDs.propeller.item), 40, 135));
                 add(new StackToDraw(new ItemStack(ItemIDs.steamengine.item), 60, 135));
-                add(new StackToDraw(new ItemStack(Items.boat), 120, 135));
-                add(new StackToDraw(new ItemStack(Items.stick), 140, 135));
+                add(new StackToDraw(new ItemStack(Items.BOAT), 120, 135));
+                add(new StackToDraw(new ItemStack(Items.STICK), 140, 135));
 
             }
         });
@@ -144,10 +144,10 @@ public class GuiRecipeBook extends GuiScreen {
             {
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartTender.item), 20, 16));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartLocomogulBlue.item), 170, 16));
-                add(new StackToDraw(new ItemStack(Items.coal), 40, 155));
-                add(new StackToDraw(new ItemStack(Items.water_bucket), 60, 155));
-                add(new StackToDraw(new ItemStack(Blocks.planks), 80, 155));
-                add(new StackToDraw(new ItemStack(Items.blaze_rod), 100, 155));
+                add(new StackToDraw(new ItemStack(Items.COAL), 40, 155));
+                add(new StackToDraw(new ItemStack(Items.WATER_BUCKET), 60, 155));
+                add(new StackToDraw(new ItemStack(Blocks.PLANKS), 80, 155));
+                add(new StackToDraw(new ItemStack(Items.BLAZE_ROD), 100, 155));
                 add(new StackToDraw(new ItemStack(ItemIDs.diesel.item), 120, 155));
                 add(new StackToDraw(new ItemStack(ItemIDs.refinedFuel.item), 140, 155));
             }
@@ -156,14 +156,14 @@ public class GuiRecipeBook extends GuiScreen {
         addPage("Electric locomotives need redstone or RF-based energy storages, they can also be powered by Electric tracks.\n\nHeat:\nHeat level is indicated by the heat bar in the HUD.\nHeat level will go to a normal state when the train is fueled but don't forget to put water in steam locomotive or it will overheat very fast.\n", "", "right", new ArrayList<StackToDraw>() {
             {
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartBR_E69.item), 20, 16));
-                add(new StackToDraw(new ItemStack(Items.redstone), 170, 16));
+                add(new StackToDraw(new ItemStack(Items.REDSTONE), 170, 16));
             }
         });
 
         addPage("Heat level will go down to cold when there's no fuel.\nWait until the locomotive has heated up before trying to move. but be careful overheating can cause explosions...\n\nRouting:\nLocomotives can be routed using Railcraft routing track. Destination will show in the GUI, Sneak+Crowbar to reset. There is no space for tickets. Not 'Color=' compatible.", "", "left", new ArrayList<StackToDraw>() {
             {
                 add(new StackToDraw(new ItemStack(ItemIDs.firebox.item), 20, 16));
-                add(new StackToDraw(new ItemStack(Blocks.tnt), 170, 16));
+                add(new StackToDraw(new ItemStack(Blocks.TNT), 170, 16));
             }
         });
         addPage("Minecraft Horse Power - Mhp:\n\nLocomotives have different pulling abilities represented by their 'power' in Mhp.\nEach cart has a mass in tons which will affect the locomotive depending on its power.\nMass pulled affects the maximum speed, the brake rate and accelerate rate, as well as fuel consumption.\n", "", "right", new ArrayList<StackToDraw>() {
@@ -180,7 +180,7 @@ public class GuiRecipeBook extends GuiScreen {
         });
         addPage("Derailment:\n\nDo not go too fast on turns or your locomotives will derail!\n\nIt is recommended to slow down under 90km/h before turning or you will find yourself crashing off tracks.", "", "left", new ArrayList<StackToDraw>() {
             {
-                add(new StackToDraw(new ItemStack(Items.skull, 1, 1), 20, 16));
+                add(new StackToDraw(new ItemStack(Items.SKULL, 1, 1), 20, 16));
             }
         });
 
@@ -199,47 +199,47 @@ public class GuiRecipeBook extends GuiScreen {
         addPage("Chunk Loading:\n\nEach rolling stock can load one chunk around itself.\nTo start chunk loading, right click with chunk loader activator on the rolling stock.\nTo stop chunk loading, right click again.\n", "", "left", new ArrayList<StackToDraw>() {
             {
                 add(new StackToDraw(new ItemStack(ItemIDs.chunkLoaderActivator.item), 20, 16));
-                add(new StackToDraw(new ItemStack(Items.ender_pearl), 170, 16));
+                add(new StackToDraw(new ItemStack(Items.ENDER_PEARL), 170, 16));
             }
         });
         addPage("Colors:\n\nSome rolling stock has several textures and can be painted with dyes.\nThe rolling stock that can be painted will show the possible colors in the chat once placed in the world.\nTo paint, simply right click with the correct dye.\n\nLantern color is randomly picked, but you can set the hex color manually with a wrench", "", "right", new ArrayList<StackToDraw>() {
             {
-                add(new StackToDraw(new ItemStack(Items.dye, 1, 1), 20, 16));
-                add(new StackToDraw(new ItemStack(Items.dye, 1, 11), 170, 16));
+                add(new StackToDraw(new ItemStack(Items.DYE, 1, 1), 20, 16));
+                add(new StackToDraw(new ItemStack(Items.DYE, 1, 11), 170, 16));
             }
         });
         addPage("Stock car:\n\nThe stock car is the only rolling stock that can be ridden by any animals and mobs.\nTo fill the stock car, either collide the animal with the car or use the animal/mob boarding tracks (Railcraft required).\nTo empty the car, use the disembark track (Railcraft required).\n", "", "left", new ArrayList<StackToDraw>() {
             {
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartStockCar.item), 20, 16));
-                add(new StackToDraw(new ItemStack(Items.skull, 1, 4), 170, 16));
+                add(new StackToDraw(new ItemStack(Items.SKULL, 1, 4), 170, 16));
             }
         });
         addPage("A word about tracks I:\nCopper tracks will slow trains down.\nSteel tracks allow trains to go faster.\nSpeed controller track allows you to change the locomotive's max speed (hit with crowbar).\nThe energy track can be powered by redstone and will power electric trains, redstone power will be transmitted two tracks away.\n", "", "right", new ArrayList<StackToDraw>() {
             {
-                add(new StackToDraw(new ItemStack(Blocks.rail), 17, 16));
-                add(new StackToDraw(new ItemStack(Blocks.rail), 17, 32));
-                add(new StackToDraw(new ItemStack(Blocks.rail), 17, 48));
-                add(new StackToDraw(new ItemStack(Blocks.rail), 17, 64));
-                add(new StackToDraw(new ItemStack(Blocks.rail), 17, 80));
-                add(new StackToDraw(new ItemStack(Blocks.rail), 17, 96));
-                add(new StackToDraw(new ItemStack(Blocks.rail), 17, 112));
-                add(new StackToDraw(new ItemStack(Blocks.rail), 17, 128));
-                add(new StackToDraw(new ItemStack(Blocks.rail), 17, 144));
-                add(new StackToDraw(new ItemStack(Blocks.rail), 17, 160));
-                add(new StackToDraw(new ItemStack(Blocks.golden_rail), 170, 16));
+                add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 16));
+                add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 32));
+                add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 48));
+                add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 64));
+                add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 80));
+                add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 96));
+                add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 112));
+                add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 128));
+                add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 144));
+                add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 160));
+                add(new StackToDraw(new ItemStack(Blocks.POWERED_RAIL), 170, 16));
             }
         });
         addPage("A word about tracks II:\nTo check the current charge click the track with a crowbar.\nAn electric track connected to a redstone power source gets 1 energy unit every two ticks.\nLocomotive holding track will only hold TC locomotives. No boost is given, the previous speed is restored once released.\nAll tracks require Railcraft to be installed.", "", "left", new ArrayList<StackToDraw>() {
             {
-                add(new StackToDraw(new ItemStack(Blocks.activator_rail), 17, 16));
-                add(new StackToDraw(new ItemStack(Blocks.golden_rail), 170, 16));
+                add(new StackToDraw(new ItemStack(Blocks.ACTIVATOR_RAIL), 17, 16));
+                add(new StackToDraw(new ItemStack(Blocks.POWERED_RAIL), 170, 16));
             }
         });
 
         addPage("Steel rails parts and copper rails parts are crafted inside RC Rolling Machine, tracks are assembled in vanilla workbench.\nTC boarding/disembarking track are designed to work only on the Stock Car. Animal boarding will take any nearby animal and put it inside a passing Stock Car. Mob boarding will affect any mob.\nDisembark will eject any mob inside the Stock Car.", "", "right", new ArrayList<StackToDraw>() {
             {
-                add(new StackToDraw(new ItemStack(Blocks.detector_rail), 17, 16));
-                add(new StackToDraw(new ItemStack(Blocks.golden_rail), 170, 16));
+                add(new StackToDraw(new ItemStack(Blocks.DETECTOR_RAIL), 17, 16));
+                add(new StackToDraw(new ItemStack(Blocks.POWERED_RAIL), 170, 16));
             }
         });
         addPage("Builder I:\n\nThe tracks builder has a very special inventory, in order to start it you must provide:\nBallast in the slot under it (planks, gravel, stone, ...).\nCoal in the fuel slot, Tracks in the slot under the fuel slot. The slot on the right of the builder will activate tunnel function when provided (not all blocks are accepted).\n", "", "left", new ArrayList<StackToDraw>() {
@@ -260,8 +260,8 @@ public class GuiRecipeBook extends GuiScreen {
         });
         addPage("Limitations:\n\nVERY IMPORTANT:\nLong trains imply limitations: Do not try to make sharp 180 turns, leave 3+ spaces between each 90 turn. Otherwise weird stuff may happen especially with very long trains.\n\nAlways PULL carts! Bounding boxes are buggy and unreliable!", "", "left", new ArrayList<StackToDraw>() {
             {
-                add(new StackToDraw(new ItemStack(Blocks.detector_rail), 20, 16));
-                add(new StackToDraw(new ItemStack(Blocks.rail), 170, 16));
+                add(new StackToDraw(new ItemStack(Blocks.DETECTOR_RAIL), 20, 16));
+                add(new StackToDraw(new ItemStack(Blocks.RAIL), 170, 16));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartPower.item), 40, 165));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartFlatCartWoodUS.item), 60, 165));
                 add(new StackToDraw(new ItemStack(ItemIDs.minecartBoxCartUS.item), 80, 165));
@@ -284,8 +284,8 @@ public class GuiRecipeBook extends GuiScreen {
                 add(new StackToDraw(new ItemStack(TCBlocks.openFurnaceIdle), 20, 16));
                 add(new StackToDraw(new ItemStack(TCBlocks.openFurnaceActive), 80, 155));
                 add(new StackToDraw(new ItemStack(ItemIDs.graphite.item), 70, 135));
-                add(new StackToDraw(new ItemStack(Items.iron_ingot), 90, 135));
-                add(new StackToDraw(new ItemStack(Items.coal), 80, 175));
+                add(new StackToDraw(new ItemStack(Items.IRON_INGOT), 90, 135));
+                add(new StackToDraw(new ItemStack(Items.COAL), 80, 175));
                 add(new StackToDraw(new ItemStack(ItemIDs.steel.item), 120, 155));
             }
         });
@@ -295,7 +295,7 @@ public class GuiRecipeBook extends GuiScreen {
 				add(new StackToDraw(new ItemStack(TCBlocks.distilIdle), 20, 16));
 				add(new StackToDraw(new ItemStack(TCBlocks.distilActive), 150, 40));
 				add(new StackToDraw(new ItemStack(BlockIDs.oreTC.block, 1, 1), 150, 20));
-				add(new StackToDraw(new ItemStack(Items.coal), 150, 60));
+				add(new StackToDraw(new ItemStack(Items.COAL), 150, 60));
 				add(new StackToDraw(new ItemStack(ItemIDs.diesel.item), 167, 40));
 				add(new StackToDraw(new ItemStack(ItemIDs.rawPlastic.item), 167, 60));
 			}
@@ -355,8 +355,8 @@ public class GuiRecipeBook extends GuiScreen {
 		addPage("Known bugs:\n- Sharp turns are not supported (close 180 turns)\n- When coming backwards from the Curve of a switch too slow Switchstate can be false\n- Jukebox Volume incorrect after rejoin/restart\n- Don't use 4 TC Slopes in a row!\n- TC Slopes won't work above about y=160 ",
 				"", "left", new ArrayList<StackToDraw>() {
 					{
-						add(new StackToDraw(new ItemStack(Items.skull, 1, 4), 20, 16));
-						add(new StackToDraw(new ItemStack(Items.skull, 1, 4), 170, 16));
+						add(new StackToDraw(new ItemStack(Items.SKULL, 1, 4), 20, 16));
+						add(new StackToDraw(new ItemStack(Items.SKULL, 1, 4), 170, 16));
 					}
 				});
 
@@ -440,7 +440,7 @@ public class GuiRecipeBook extends GuiScreen {
         int halfWidth = (this.width) / 2;
         int halfHeight = (this.height) / 2;
 
-        this.searchBar = new GuiTextField(fontRenderer, halfWidth + 23, ((halfHeight - bookImageHeight / 2) - 9), 100, 10);
+        this.searchBar = new GuiTextField(0, fontRenderer, halfWidth + 23, ((halfHeight - bookImageHeight / 2) - 9), 100, 10);
 		this.searchBar.setEnableBackgroundDrawing(false);
 		this.searchBar.setFocused(true);
 		this.searchBar.setCanLoseFocus(false);
@@ -858,7 +858,7 @@ public class GuiRecipeBook extends GuiScreen {
 	protected void keyTyped(char eventChar, int eventKey) {
 		if (eventKey == 1 || eventChar == '\u007F') { // If ESC or CTRL+Backspace...
 			if (searchBar.getText().isEmpty()) { // If search query is empty, exit.
-				this.mc.thePlayer.closeScreen();
+				this.mc.player.closeScreen();
 			} else { // If there is a search query, clear it.
 				searchBar.setText("");
 				resetSearch();

@@ -8,7 +8,7 @@
 
 package mods.railcraft.api.tracks;
 
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 
 public interface ITrackSwitch extends ITrackInstance {
     /**

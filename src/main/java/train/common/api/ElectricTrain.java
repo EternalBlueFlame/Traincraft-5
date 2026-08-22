@@ -87,7 +87,7 @@ public abstract class ElectricTrain extends Locomotive {
 		int draw = 0;
 		for (TileEntity block : blocksToCheck) {
 			if (block instanceof IEnergyHandler) {
-				for (EnumFacing direction : EnumFacing.VALID_DIRECTIONS) {
+				for (EnumFacing direction : EnumFacing.VALUES) {
 					if (draw != 0) {
 						break;
 					}

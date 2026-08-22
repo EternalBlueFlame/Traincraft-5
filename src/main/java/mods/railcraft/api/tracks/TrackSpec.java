@@ -125,7 +125,7 @@ public final class TrackSpec {
 
     public IIcon getItemIcon() {
         if (iconProvider == null)
-            return Blocks.rail.getIcon(0, 0);
+            return null;
         return iconProvider.getTrackItemIcon(this);
     }
 

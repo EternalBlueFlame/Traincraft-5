@@ -63,7 +63,7 @@ public class ModelWaterWheel extends ModelBase {
 			GL11.glScalef(0.36f, 0.36f, 1f);
 			GL11.glRotatef(180, 0, 1, 0);
 		}
-		if (waterWheel.getFacing()!= EnumFacing.UNKNOWN) {
+		if (waterWheel.getFacing()!= null) {
 			long now = System.nanoTime();
 			int elapsed = (int) ((now - lastframe) / (1000 * 100));
 			wheel -= (float) elapsed / 300.0f;

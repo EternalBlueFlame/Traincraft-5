@@ -1,13 +1,13 @@
 package train.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.input.Mouse;
 import train.common.core.handlers.ConfigHandler;
 import train.common.entity.TrustedPlayer;
@@ -165,16 +165,16 @@ public abstract class GuiLockMenuAbstract extends GuiScreen {
         for (int i = 0; i < numberOfActiveTextboxes; i++) {
             textFieldList.get(i).drawTextBox();
         }
-        fontRendererObj.drawString(StatCollector.translateToLocal("lockmenu.Title_Trusted_Players.name"), GUI_ANCHOR_MID_X - (fontRendererObj.getStringWidth(StatCollector.translateToLocal("lockmenu.Title_Trusted_Players.name")) / 2), GUI_ANCHOR_Y + 40, -16777216);
+        fontRendererObj.drawString(I18n.translateToLocal("lockmenu.Title_Trusted_Players.name"), GUI_ANCHOR_MID_X - (fontRendererObj.getStringWidth(I18n.translateToLocal("lockmenu.Title_Trusted_Players.name")) / 2), GUI_ANCHOR_Y + 40, -16777216);
         if (lockUnlockButton.getTexture() == GuiButtonLockMenu.Texture.ACTIVE)
             if (getLocked())
-                drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("lockmenu.Unlock.name")), mouseX, mouseY, fontRendererObj);
+                drawHoveringText(Collections.singletonList(I18n.translateToLocal("lockmenu.Unlock.name")), mouseX, mouseY, fontRendererObj);
             else
-                drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("lockmenu.Lock.name")), mouseX, mouseY, fontRendererObj);
+                drawHoveringText(Collections.singletonList(I18n.translateToLocal("lockmenu.Lock.name")), mouseX, mouseY, fontRendererObj);
         if (closeButton.getTexture() == GuiButtonLockMenu.Texture.ACTIVE)
-            drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("lockmenu.Save and Close.name")), mouseX, mouseY, fontRendererObj);
+            drawHoveringText(Collections.singletonList(I18n.translateToLocal("lockmenu.Save and Close.name")), mouseX, mouseY, fontRendererObj);
         if (closeAndSavetoAll.getTexture() == GuiButtonLockMenu.Texture.ACTIVE)
-            drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("lockmenu.Save To All Cars in Consist.name")), mouseX, mouseY, fontRendererObj);
+            drawHoveringText(Collections.singletonList(I18n.translateToLocal("lockmenu.Save To All Cars in Consist.name")), mouseX, mouseY, fontRendererObj);
     }
 
     @Override

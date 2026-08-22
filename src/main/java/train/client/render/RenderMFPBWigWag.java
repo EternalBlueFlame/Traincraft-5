@@ -18,7 +18,7 @@ public class RenderMFPBWigWag extends TileEntitySpecialRenderer {
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
         TileMFPBWigWag tile = ((TileMFPBWigWag) tileEntity);
-        if (tile.getFacing() != EnumFacing.UNKNOWN) {
+        if (tile.getFacing() != null) {
             Tessellator.bindTexture(tile.powered ? textureOn : textureOff);
         }
 

@@ -8,9 +8,9 @@
 
 package mods.railcraft.api.fuel;
 
-import cpw.mods.fml.common.FMLLog;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
+import net.minecraftforge.fml.common.FMLLog;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
 import java.util.HashMap;
 import java.util.Map;
 import net.minecraftforge.fluids.Fluid;

@@ -84,7 +84,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			this.dataWatcher.updateObject(4, 0);
 		}
 		if (rand.nextInt(100) == 0 && getWater() > 0 && getIsFuelled()) {
-			drain(EnumFacing.UNKNOWN, getWaterConsumption() / 5, true);
+			drain(getWaterConsumption() / 5, true);
 		}
 
 		checkInvent(cargoItems[0], cargoItems[1], this);
@@ -136,15 +136,15 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			}
 			else if (loco.cargoItems[i] != null && loco.cargoItems[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() &&
 					(!itemstack1.getHasSubtypes() || cargoItems[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(cargoItems[i], itemstack1)) {
-				int var9 = cargoItems[i].stackSize + itemstack1.stackSize;
-				if (var9 <= itemstack1.getMaxStackSize()) {
-					loco.cargoItems[i].stackSize = var9;
-					return;
-				}
-				else if (cargoItems[i].stackSize < cargoItems[i].getMaxStackSize()) {
-					loco.cargoItems[i].stackSize += 1;
-					return;
-				}
+				int var9 = cargoItems[i].getCount() + itemstack1.getCount();
+			if (var9 <= itemstack1.getMaxStackSize()) {
+				loco.cargoItems[i].setCount(var9);
+				return;
+			}
+			else if (cargoItems[i].getCount() < cargoItems[i].getMaxStackSize()) {
+				loco.cargoItems[i].grow(1);
+				return;
+			}
 			}
 			else if (i == loco.cargoItems.length - 1) {
 				entityDropItem(itemstack1,1);
@@ -175,7 +175,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 		if (isLocoTurnedOn() && ticksExisted%10==0) {
 			FluidStack drain = null;
 
-			if(fill(EnumFacing.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
+			if(fill(new FluidStack(FluidRegistry.WATER, 100), false)==100) {
 				blocksToCheck = new TileEntity[]{world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
 						world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
 						world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
@@ -184,7 +184,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 
 				for (TileEntity block : blocksToCheck) {
 					if (drain == null && block instanceof IFluidHandler) {
-						for (EnumFacing direction : EnumFacing.VALID_DIRECTIONS) {
+						for (EnumFacing direction : EnumFacing.VALUES) {
 							if(((IFluidHandler) block).drain(direction,100,false)!=null &&
 									((IFluidHandler) block).drain(direction, 100, false).fluid==FluidRegistry.WATER &&
 									((IFluidHandler) block).drain(direction, 100, false).amount ==100
@@ -198,9 +198,9 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			}
 
 			if(frontLink instanceof Tender){
-				if(drain==null && fill(ForgeDirection.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
+				if(drain==null && fill(new FluidStack(FluidRegistry.WATER, 100), false)==100) {
 					if (getFluid() == null || getFluid().getFluid() == FluidRegistry.WATER) {
-						drain = frontLink.drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+						drain = frontLink.drain(new FluidStack(FluidRegistry.WATER, 100), true);
 					}
 				}
 				for (int h = 0; h < ((Tender) frontLink).tenderItems.length; h++) {
@@ -217,9 +217,9 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 
 			} else if (backLink instanceof Tender){
 
-				if(drain==null && fill(EnumFacing.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
+				if(drain==null && fill(new FluidStack(FluidRegistry.WATER, 100), false)==100) {
 					if (getFluid() == null || getFluid().getFluid() == FluidRegistry.WATER) {
-						drain = backLink.drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+						drain = backLink.drain(new FluidStack(FluidRegistry.WATER, 100), true);
 					}
 				}
 
@@ -236,7 +236,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 				}
 			}
 			if (drain != null){
-				fill(EnumFacing.UNKNOWN, drain, true);
+				fill(drain, true);
 			}
 		}
 		if (!hasCoalInTender && locoInvent0 != null && FuelHandler.steamFuelLast(locoInvent0) != 0) {

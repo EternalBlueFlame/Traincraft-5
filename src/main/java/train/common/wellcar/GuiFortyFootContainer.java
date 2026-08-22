@@ -44,12 +44,12 @@ public class GuiFortyFootContainer extends GuiContainer {
         double maxU = (double)(u + width) / (double)imageWidth;
         double minV = (double)v / (double)imageHeight;
         double maxV = (double)(v + height) / (double)imageHeight;
-        Tessellator tessellator = Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.addVertexWithUV(x + scale*(double)width, y + scale*(double)height, 0, maxU, maxV);
-        tessellator.addVertexWithUV(x + scale*(double)width, y, 0, maxU, minV);
-        tessellator.addVertexWithUV(x, y, 0, minU, minV);
-        tessellator.addVertexWithUV(x, y + scale*(double)height, 0, minU, maxV);
+        Tessellator tessellator = Tessellator.getInstance();
+        tessellator.getBuffer().begin(GL11.GL_QUADS, net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_TEX);
+        tessellator.getBuffer().pos(x + scale*(double)width, y + scale*(double)height, 0).tex(maxU, maxV).endVertex();
+        tessellator.getBuffer().pos(x + scale*(double)width, y, 0).tex(maxU, minV).endVertex();
+        tessellator.getBuffer().pos(x, y, 0).tex(minU, minV).endVertex();
+        tessellator.getBuffer().pos(x, y + scale*(double)height, 0).tex(minU, maxV).endVertex();
         tessellator.draw();
     }
 

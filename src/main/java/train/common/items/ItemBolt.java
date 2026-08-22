@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextFormatting;
 import train.common.Traincraft;
 import train.common.library.Info;
 
@@ -31,6 +31,6 @@ public class ItemBolt extends Item {
     @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
-        par3List.add("\u00a77" + EnumChatFormatting.GREEN + "Use this to craft Track");
+        par3List.add("\u00a77" + TextFormatting.GREEN + "Use this to craft Track");
     }
 }

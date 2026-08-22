@@ -67,7 +67,7 @@ public class BlockTrainWorkbench extends BlockDynamic {
 					if (i1 > itemstack.getCount()) {
 						i1 = itemstack.getCount();
 					}
-					itemstack.getCount() -= i1;
+					itemstack.shrink(i1);
 					EntityItem entityitem = new EntityItem(world, (float) i + f, (float) j + f1, (float) k + f2, itemstack.splitStack(i1));
 					float f3 = 0.05F;
 					entityitem.motionX = (float) distilRand.nextGaussian() * f3;

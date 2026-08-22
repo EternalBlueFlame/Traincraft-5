@@ -8,7 +8,6 @@ import train.common.library.BlockIDs;
 public class ItemBallastSlab extends ItemSlab {
     public ItemBallastSlab(Block block)
     {
-        super(block, (BlockSlab) BlockIDs.ballastSlab.block, (BlockSlab) BlockIDs.ballastDoubleSlab.block, block == BlockIDs.ballastDoubleSlab.block);
-        this.setUnlocalizedName("ballast slab");
+        super(block, (BlockSlab) BlockIDs.ballastSlab.block, (BlockSlab) BlockIDs.ballastDoubleSlab.block);
     }
 }

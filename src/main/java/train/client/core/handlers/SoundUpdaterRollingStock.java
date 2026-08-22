@@ -31,7 +31,7 @@ public class SoundUpdaterRollingStock {
 
         boolean isMoving = this.isMoving;
         boolean isDead = rollingStock.isDead;
-        double cartSpeed = MathHelper.sqrt_double(rollingStock.getMotionXClient() * rollingStock.getMotionXClient() + rollingStock.getMotionZClient() * rollingStock.getMotionZClient()) / 100;
+        double cartSpeed = MathHelper.sqrt(rollingStock.getMotionXClient() * rollingStock.getMotionXClient() + rollingStock.getMotionZClient() * rollingStock.getMotionZClient()) / 100;
         this.isMoving = cartSpeed >= 0.01D;
 
         if (isDead || !this.flag && this.volume1 == 0.0F && this.volume2 == 0.0F) {
@@ -50,9 +50,9 @@ public class SoundUpdaterRollingStock {
                 this.soundPitch = 1.0F;
             }
 
-            float var10 = MathHelper.clamp_float((float) cartSpeed, 0.0F, 4.0F) / 4.0F;
+            float var10 = MathHelper.clamp((float) cartSpeed, 0.0F, 4.0F) / 4.0F;
             this.volume2 = 0.0F + var10 * 0.75F;
-            var10 = MathHelper.clamp_float(var10 * 2.0F, 0.0F, 1.0F);
+            var10 = MathHelper.clamp(var10 * 2.0F, 0.0F, 1.0F);
             this.volume1 = 0.0F + var10 * 0.7F;
         } else if (isMoving) {
             this.volume1 = 0.0F;

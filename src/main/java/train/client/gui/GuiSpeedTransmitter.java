@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import train.common.Traincraft;
 import train.common.mtc.TileInfoTransmitterSpeed;
 import train.common.mtc.packets.PacketNextSpeed;
@@ -30,8 +31,8 @@ public class GuiSpeedTransmitter extends GuiScreen {
 
         if (entity instanceof TileInfoTransmitterSpeed) {
             transmitterBlock = (TileInfoTransmitterSpeed) entity;
-            Block transmitterBlocc = entity.world.getBlock(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
-            System.out.println(entity.world.isBlockIndirectlyGettingPowered(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord));
+            Block transmitterBlocc = entity.getWorld().getBlockState(new BlockPos(transmitterBlock.getPos().getX(), transmitterBlock.getPos().getY(), transmitterBlock.getPos().getZ())).getBlock();
+            System.out.println(entity.getWorld().getRedstonePowerFromNeighbors(new BlockPos(transmitterBlock.getPos().getX(), transmitterBlock.getPos().getY(), transmitterBlock.getPos().getZ())) > 0);
         }
     }
 
@@ -87,13 +88,13 @@ public class GuiSpeedTransmitter extends GuiScreen {
     @SideOnly(Side.CLIENT)
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0) {
-            TileInfoTransmitterSpeed its = (TileInfoTransmitterSpeed) transmitterBlock.world.getTileEntity(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
+            TileInfoTransmitterSpeed its = (TileInfoTransmitterSpeed) transmitterBlock.getWorld().getTileEntity(new BlockPos(transmitterBlock.getPos().getX(), transmitterBlock.getPos().getY(), transmitterBlock.getPos().getZ()));
             its.setSpeed = Integer.parseInt(speedLimitTextField.getText());
-            Traincraft.itsChannel.sendToServer(new PacketSetSpeed(Integer.parseInt(speedLimitTextField.getText()), its.xCoord, its.yCoord, its.zCoord, 0));
+            Traincraft.itsChannel.sendToServer(new PacketSetSpeed(Integer.parseInt(speedLimitTextField.getText()), its.getPos().getX(), its.getPos().getY(), its.getPos().getZ(), 0));
             its.nextUpdateSpeed(Integer.parseInt(nextSpeedLimitTextField.getText()), Double.parseDouble(nextSpeedXTextField.getText()), Double.parseDouble(nextSpeedYTextField.getText()), Double.parseDouble(nextSpeedZTextField.getText()));
-            Traincraft.itnsChannel.sendToAll(new PacketNextSpeed(Integer.parseInt(nextSpeedLimitTextField.getText()), its.xCoord, its.yCoord, its.zCoord, Double.parseDouble(nextSpeedXTextField.getText()), Double.parseDouble(nextSpeedYTextField.getText()), Double.parseDouble(nextSpeedZTextField.getText()), 0));
+            Traincraft.itnsChannel.sendToAll(new PacketNextSpeed(Integer.parseInt(nextSpeedLimitTextField.getText()), its.getPos().getX(), its.getPos().getY(), its.getPos().getZ(), Double.parseDouble(nextSpeedXTextField.getText()), Double.parseDouble(nextSpeedYTextField.getText()), Double.parseDouble(nextSpeedZTextField.getText()), 0));
         }
-        mc.thePlayer.closeScreen();
+        mc.player.closeScreen();
     }
 
     @Override
@@ -146,7 +147,7 @@ public class GuiSpeedTransmitter extends GuiScreen {
 
         if (par2 == 1 || par2 == mc.gameSettings.keyBindBack.getKeyCode()) {
             if (!speedLimitTextField.isFocused()) {
-                mc.thePlayer.closeScreen();
+                mc.player.closeScreen();
             }
         }
     }

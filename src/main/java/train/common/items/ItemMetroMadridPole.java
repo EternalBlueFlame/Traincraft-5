@@ -55,7 +55,7 @@ public class ItemMetroMadridPole extends Item {
             if (world.getBlock(i, j, k) == spawnID) {
                 spawnID.onBlockPlacedBy(world, i, j, k, entityplayer, new ItemStack(spawnID));
             }
-            itemstack.getCount()--;
+            itemstack.shrink(1);
         }
         return true;
     }
