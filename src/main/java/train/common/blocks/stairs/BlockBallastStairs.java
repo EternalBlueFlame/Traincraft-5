@@ -5,7 +5,7 @@ import train.common.library.BlockIDs;
 
 public class BlockBallastStairs extends BlockStairs {
     public BlockBallastStairs() {
-        super(BlockIDs.oreTC.block, 3);
+        super(BlockIDs.oreTC.block.getDefaultState());
     }
 
 }

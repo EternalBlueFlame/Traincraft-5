@@ -4,12 +4,14 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
@@ -23,38 +25,34 @@ public class BlockoverheadWireDouble extends Block {
     private IIcon texture;
 
     public BlockoverheadWireDouble() {
-        super(Material.rock);
+        super(Material.ROCK);
         setCreativeTab(Traincraft.tcTab);
         this.setTickRandomly(true);
         //this.setBlockBounds(0.5F , 0.0F, 0.5F , 0.5F ,  2.0F, 0.5F);
     }
 
-    @Override
     public void addCollisionBoxesToList(World p_149743_1_, int p_149743_2_, int p_149743_3_, int p_149743_4_, AxisAlignedBB p_149743_5_, List p_149743_6_, Entity p_149743_7_)
     {
     }
 
     @Override
-    public boolean hasTileEntity(int metadata) {
+    public boolean hasTileEntity() {
         return true;
     }
 
-    @Override
     public boolean renderAsNormalBlock() {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
-    @Override
     public TileEntity createTileEntity(World world, int metadata) {
         return new TileoverheadWireDouble();
     }
 
-    @Override
     public int getRenderType() {
         return -1;
     }
@@ -63,61 +61,28 @@ public class BlockoverheadWireDouble extends Block {
     /**
      * A randomly called display update to be able to add particles or other items for display
      */
-    @Override
     public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
 
     }
 
 
     @Override
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
-        TileoverheadWireDouble te = (TileoverheadWireDouble) world.getTileEntity(i, j, k);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+        super.onBlockPlacedBy(world, pos, state, entityliving, stack);
+        TileoverheadWireDouble te = (TileoverheadWireDouble) world.getTileEntity(pos);
         if (te != null) {
             int dir = MathHelper.floor((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
             te.setFacing(EnumFacing.byHorizontalIndex(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
-            world.markBlockForUpdate(i, j, k);
+            world.notifyBlockUpdate(pos, state, state, 3);
         }
     }
 
 
-    public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_)
+    @Override
+    public void breakBlock(World worldIn, BlockPos pos, IBlockState state)
     {
-        if ((p_149749_6_ & 8) > 0)
-        {
-            p_149749_1_.notifyBlocksOfNeighborChange(p_149749_2_, p_149749_3_, p_149749_4_, this);
-            int i1 = p_149749_6_ & 7;
-
-            if (i1 == 1)
-            {
-                p_149749_1_.notifyBlocksOfNeighborChange(p_149749_2_ - 1, p_149749_3_, p_149749_4_, this);
-            }
-            else if (i1 == 2)
-            {
-                p_149749_1_.notifyBlocksOfNeighborChange(p_149749_2_ + 1, p_149749_3_, p_149749_4_, this);
-            }
-            else if (i1 == 3)
-            {
-                p_149749_1_.notifyBlocksOfNeighborChange(p_149749_2_, p_149749_3_, p_149749_4_ - 1, this);
-            }
-            else if (i1 == 4)
-            {
-                p_149749_1_.notifyBlocksOfNeighborChange(p_149749_2_, p_149749_3_, p_149749_4_ + 1, this);
-            }
-            else if (i1 != 5 && i1 != 6)
-            {
-                if (i1 == 0 || i1 == 7)
-                {
-                    p_149749_1_.notifyBlocksOfNeighborChange(p_149749_2_, p_149749_3_ + 1, p_149749_4_, this);
-                }
-            }
-            else
-            {
-                p_149749_1_.notifyBlocksOfNeighborChange(p_149749_2_, p_149749_3_ - 1, p_149749_4_, this);
-            }
-        }
-
-        super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
+        worldIn.notifyNeighborsOfStateChange(pos, this, true);
+        super.breakBlock(worldIn, pos, state);
     }
 
 
@@ -128,7 +93,6 @@ public class BlockoverheadWireDouble extends Block {
 
 
 
-    @Override
     public IIcon getIcon(int i, int j) {
         return texture;
     }

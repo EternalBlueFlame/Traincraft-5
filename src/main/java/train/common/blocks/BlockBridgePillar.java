@@ -5,8 +5,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.tile.TileBridgePillar;
@@ -15,7 +17,7 @@ public class BlockBridgePillar extends Block implements ITileEntityProvider {
 	private IIcon texture;
 
 	public BlockBridgePillar() {
-		super(Material.wood);
+		super(Material.WOOD);
 		setCreativeTab(Traincraft.tcTab);
 		setHarvestLevel("axe", 0);
 		//this.setTickRandomly(true);
@@ -23,23 +25,21 @@ public class BlockBridgePillar extends Block implements ITileEntityProvider {
 	}
 
 	@Override
-	public boolean hasTileEntity(int metadata) {
+	public boolean hasTileEntity() {
 		return true;
 	}
 
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
-	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
 
 
-	@Override
 	public TileEntity createTileEntity(World world, int metadata) {
 		return new TileBridgePillar();
 	}
@@ -50,21 +50,20 @@ public class BlockBridgePillar extends Block implements ITileEntityProvider {
 	}
 
 
-	@Override
 	public int getRenderType() {
 		return -1;
 	}
 
-	public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_) {
-		super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
-		if(p_149749_1_.getTileEntity(p_149749_2_,p_149749_3_,p_149749_4_)!=null){
-			p_149749_1_.removeTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
+	@Override
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		super.breakBlock(world, pos, state);
+		if (world.getTileEntity(pos) != null) {
+			world.removeTileEntity(pos);
 		}
 	}
 
 
 
-	@Override
 	public IIcon getIcon(int i, int j) {
 		return texture;
 	}

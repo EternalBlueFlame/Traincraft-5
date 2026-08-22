@@ -58,7 +58,7 @@ public class BlockDetectorAllLocomotiveTrack extends BlockDetectorTrack implemen
 	
 	@Override
 	public boolean blockActivated(EntityPlayer player) {
-		if (world.isRemote) {
+		if (getWorld().isRemote) {
 			return false;
 		}
 		ItemStack current = player.inventory.getCurrentItem();
@@ -74,19 +74,19 @@ public class BlockDetectorAllLocomotiveTrack extends BlockDetectorTrack implemen
 				switch(this.ThingToSet) {
 				
 				case 0: {
-					player.addChatMessage(new TextComponentString("Now set to emit a signal on all trains"));
+					player.sendMessage(new TextComponentString("Now set to emit a signal on all trains"));
 					break;
 				}
 				case 3: {
-					player.addChatMessage(new TextComponentString("Now set to emit a signal on all steam trains"));
+					player.sendMessage(new TextComponentString("Now set to emit a signal on all steam trains"));
 					break;
 				}
 				case 6: {
-					player.addChatMessage(new TextComponentString("Now set to emit a signal on all diesel trains"));
+					player.sendMessage(new TextComponentString("Now set to emit a signal on all diesel trains"));
 					break;
 				}
 				case 9: {
-					player.addChatMessage(new TextComponentString("Now set to emit a signal on all electric trains"));
+					player.sendMessage(new TextComponentString("Now set to emit a signal on all electric trains"));
 					break;
 				}
 				

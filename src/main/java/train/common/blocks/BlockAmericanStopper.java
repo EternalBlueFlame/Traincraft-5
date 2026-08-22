@@ -11,11 +11,13 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import train.common.Traincraft;
@@ -29,40 +31,37 @@ public class BlockAmericanStopper extends BlockContainer {
     private IIcon texture;
 
     public BlockAmericanStopper() {
-        super(Material.iron);
+        super(Material.IRON);
         setCreativeTab(Traincraft.tcTab);
     }
 
-    @Override
     public boolean renderAsNormalBlock() {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
-    @Override
     public int getRenderType() {
         return -1; //RenderingRegistry.getNextAvailableRenderId();
     }
 
-    @Override
     public IIcon getIcon(int i, int j) {
         return texture;
     }
 
     @Override
-    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-        return (world.isSideSolid(x, y-1, z, UP));
+    public boolean canPlaceBlockAt(World world, BlockPos pos) {
+        return (world.isSideSolid(pos.down(), UP));
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int par2, int par3, int par4, EntityLivingBase living, ItemStack stack) {
-        TileAmericanStopper te = (TileAmericanStopper) world.getTileEntity(par2, par3, par4);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase living, ItemStack stack) {
+        TileAmericanStopper te = (TileAmericanStopper) world.getTileEntity(pos);
         int var6 = MathHelper.floor(living.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-        int var7 = world.getBlockMetadata(par2, par3, par4) >> 2;
+        int var7 = state.getBlock().getMetaFromState(state) >> 2;
         ++var6;
         var6 %= 4;
 
@@ -96,7 +95,6 @@ public class BlockAmericanStopper extends BlockContainer {
         return new TileAmericanStopper(meta);
     }
 
-    @Override
     @SideOnly(Side.CLIENT)
     public void registerBlockIcons(IIconRegister iconRegister) {
         texture = iconRegister.registerIcon(Info.modID.toLowerCase() + ":stopper");

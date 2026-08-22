@@ -96,7 +96,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     public void setInventorySlotContents(int slot, ItemStack stack){
         this.slots[slot] = stack;
         if (stack != null && stack.getCount() > getInventoryStackLimit()) {
-            stack.setCount(getInventoryStackLimit();
+            stack.setCount(getInventoryStackLimit());
         }
     }
 

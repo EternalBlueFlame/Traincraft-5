@@ -2,6 +2,7 @@ package train.common.wellcar;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -9,7 +10,9 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -121,10 +124,10 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
 
     }
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
-        ArrayList<ItemStack> ret = super.getDrops(world, x, y, z, metadata, fortune);
-        ItemStack stack = new ItemStack(world.getBlockState(new net.minecraft.util.math.BlockPos(x, y, z)).getBlock(), 1, metadata);
+        ArrayList<ItemStack> ret = new ArrayList<ItemStack>();
+        ItemStack stack = new ItemStack(world.getBlockState(new BlockPos(x, y, z)).getBlock(), 1, metadata);
 
-        TileFortyFootContainer te = world.getTileEntity(new net.minecraft.util.math.BlockPos(x, y, z)) instanceof TileFortyFootContainer ? (TileFortyFootContainer)world.getTileEntity(new net.minecraft.util.math.BlockPos(x, y, z)) : null;
+        TileFortyFootContainer te = world.getTileEntity(new BlockPos(x, y, z)) instanceof TileFortyFootContainer ? (TileFortyFootContainer)world.getTileEntity(new BlockPos(x, y, z)) : null;
 
         if (te != null)
         {
@@ -140,12 +143,21 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
         return ret;
     }
 
-    public void harvestBlock(World world, EntityPlayer player, int x, int y, int z,  int k) {
-        super.harvestBlock(world, player, x,y,z,k);
-        world.setBlockToAir(new net.minecraft.util.math.BlockPos(x, y, z));
+    @Override
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+        if (world instanceof World) {
+            drops.addAll(getDrops((World) world, pos.getX(), pos.getY(), pos.getZ(), state.getBlock().getMetaFromState(state), fortune));
+        }
     }
 
-    public boolean removedByPlayer(World world, EntityPlayer player, int x, int y, int z, boolean willHarvest)
+    @Override
+    public void harvestBlock(World world, EntityPlayer player, BlockPos pos, IBlockState state, TileEntity te, ItemStack stack) {
+        super.harvestBlock(world, player, pos, state, te, stack);
+        world.setBlockToAir(pos);
+    }
+
+    @Override
+    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest)
     {
         if (willHarvest)
         {
@@ -153,12 +165,11 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
             // until after getDrops
         }
         if (player.capabilities.isCreativeMode) {
-            harvestBlock(world, player, x,y,z, 0);
+            harvestBlock(world, player, pos, state, world.getTileEntity(pos), player.getHeldItemMainhand());
         }
-        return super.removedByPlayer(world, player, x, y, z, false);
+        return super.removedByPlayer(state, world, pos, player, false);
     }
 
-    @Override
     public Item getItemDropped(int metadata, Random rand, int fortuneLevel) {
         return null;
     }

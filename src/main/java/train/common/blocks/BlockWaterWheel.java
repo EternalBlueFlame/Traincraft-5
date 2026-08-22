@@ -57,7 +57,7 @@ public class BlockWaterWheel extends Block {
 	@Override
 	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
 		TileEntity tile = par1World.getTileEntity(par2, par3, par4);
-		if (tile instanceof TileWaterWheel && ((TileWaterWheel) tile).getFacing() != EnumFacing.UNKNOWN) {
+		if (tile instanceof TileWaterWheel && ((TileWaterWheel) tile).getFacing() != null) {
 			double d0 = (double) ((float) par2 + 0.5F);
 			double d2 = (double) ((float) par4 + 0.5F);
 

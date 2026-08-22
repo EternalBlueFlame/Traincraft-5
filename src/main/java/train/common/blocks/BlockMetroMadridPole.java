@@ -5,12 +5,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
@@ -27,12 +29,13 @@ public class BlockMetroMadridPole extends Block implements ITileEntityProvider {
         setCreativeTab(Traincraft.tcTab);
 
         //this.setTickRandomly(true);
-        this.setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 1F, 1F);
+        // TODO 1.12: block bounds are per-IBlockState now
+        // this.setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 1F, 1F);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int par2, int par3, int par4, EntityLivingBase living, ItemStack stack) {
-        TileMetroMadridPole te = (TileMetroMadridPole) world.getTileEntity(par2, par3, par4);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase living, ItemStack stack) {
+        TileMetroMadridPole te = (TileMetroMadridPole) world.getTileEntity(pos);
         int dir = MathHelper.floor((double) ((living.rotationYaw * 4F) / 360F) + 0.5D) & 3;
         te.setFacing(EnumFacing.byHorizontalIndex(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
     }
@@ -42,23 +45,21 @@ public class BlockMetroMadridPole extends Block implements ITileEntityProvider {
     }
 
     @Override
-    public boolean hasTileEntity(int metadata) {
+    public boolean hasTileEntity() {
         return true;
     }
 
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
-    @Override
     public boolean renderAsNormalBlock() {
         return false;
     }
 
 
-    @Override
     public TileEntity createTileEntity(World world, int metadata) {
         return new TileMetroMadridPole();
     }
@@ -69,15 +70,15 @@ public class BlockMetroMadridPole extends Block implements ITileEntityProvider {
     }
 
 
-    @Override
     public int getRenderType() {
         return -1;
     }
 
-    public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_) {
-        super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
-        if(p_149749_1_.getTileEntity(p_149749_2_,p_149749_3_,p_149749_4_)!=null){
-            p_149749_1_.removeTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
+    @Override
+    public void breakBlock(World world, BlockPos pos, IBlockState state) {
+        super.breakBlock(world, pos, state);
+        if(world.getTileEntity(pos)!=null){
+            world.removeTileEntity(pos);
         }
     }
 
@@ -88,7 +89,6 @@ public class BlockMetroMadridPole extends Block implements ITileEntityProvider {
 
 
 
-    @Override
     public IIcon getIcon(int i, int j) {
         return texture;
     }

@@ -2,8 +2,12 @@ package train.common.api.blocks;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
@@ -30,34 +34,34 @@ public class BlockSignal extends BlockSwitch {
     }
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float hitX, float hitY, float hitZ) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         return false;
     }
 
     @Override
-    public void onBlockAdded(World world, int x, int y, int z) {
-        super.onBlockAdded(world, x,y,z);
-        TileEntity tile = world.getTileEntity(x,y,z);
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+        super.onBlockAdded(world, pos, state);
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSwitch) {
-            ((TileSwitch)tile).setStrength(world.getBlockPowerInput(x,y,z),0);
+            ((TileSwitch)tile).setStrength(world.getRedstonePowerFromNeighbors(pos),0);
         }
     }
 
-    @Override
     public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta) {
-        TileEntity tile = world.getTileEntity(x,y,z);
+        // TODO 1.12: onBlockPlaced removed; kept as dead method
+        TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
         if (tile instanceof TileSwitch) {
-            ((TileSwitch)tile).setStrength(world.getBlockPowerInput(x,y,z),0);
+            ((TileSwitch)tile).setStrength(world.getRedstonePowerFromNeighbors(new BlockPos(x, y, z)),0);
         }
-        return super.onBlockPlaced(world, x, y, z, side, hitX, hitY, hitZ, meta);
+        return meta;
     }
 
     @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block other) {
-        super.onNeighborBlockChange(world, x, y, z, other);
-        TileEntity tile = world.getTileEntity(x, y, z);
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block other, BlockPos fromPos) {
+        super.neighborChanged(state, world, pos, other, fromPos);
+        TileEntity tile = world.getTileEntity(pos);
         if (tile instanceof TileSwitch && !world.isRemote) {
-            ((TileSwitch) tile).setStrength(world.getBlockPowerInput(x,y,z),0);
+            ((TileSwitch) tile).setStrength(world.getRedstonePowerFromNeighbors(pos),0);
         }
     }
 

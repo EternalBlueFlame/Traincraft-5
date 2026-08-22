@@ -1,15 +1,19 @@
 package train.common.blocks;
 
-import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.EntityLiving;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import train.common.Traincraft;
@@ -31,14 +35,15 @@ import java.util.Random;
 public class BlockSignal extends BlockContainer {
 
 	public BlockSignal() {
-		super(Material.circuits);
+		super(Material.CIRCUITS);
 		this.setLightLevel(1.0F);
-		setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 2.6F, 0.8F);
+		// TODO 1.12: block bounds via IBlockState
+		// setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 2.6F, 0.8F);
 		setCreativeTab(Traincraft.tcTab);
 	}
 
 	@Override
-	public Item getItemDropped(int i, Random random, int j) {
+	public Item getItemDropped(IBlockState state, Random random, int j) {
 		return ItemIDs.signal.item;
 	}
 	@Override
@@ -46,22 +51,19 @@ public class BlockSignal extends BlockContainer {
 		return 1;
 	}
 
-	@Override
 	public boolean renderAsNormalBlock() {
 		return false;
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
-	@Override
 	public int getRenderType() {
-		return RenderingRegistry.getNextAvailableRenderId();
+		return -1; //RenderingRegistry.getNextAvailableRenderId();
 	}
 
-	@Override
 	public IIcon getIcon(int i, int j) {
 		return null;
 	}
@@ -70,18 +72,19 @@ public class BlockSignal extends BlockContainer {
 		return 4;
 	}
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-		setBlockBoundsBasedOnState(world, i, j, k);
-		return super.getSelectedBoundingBoxFromPool(world, i, j, k);
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World worldIn, BlockPos pos) {
+		// TODO 1.12: setBlockBoundsBasedOnState no longer exists; bounds come from IBlockState
+		return super.getSelectedBoundingBox(state, worldIn, pos);
 	}
 
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving) {
-		TileSignal te = (TileSignal) world.getTileEntity(i, j, k);
+	@Override
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+		TileSignal te = (TileSignal) world.getTileEntity(pos);
 
 		/*
 		 * if (l == 0) { world.setBlockMetadataWithNotify(i, j, k, 2); te.rot = 2; } if (l == 1) { world.setBlockMetadataWithNotify(i, j, k, 5); te.rot = 5; } if (l == 2) { world.setBlockMetadataWithNotify(i, j, k, 3); te.rot = 3; } if (l == 3) { world.setBlockMetadataWithNotify(i, j, k, 4); te.rot = 4; } */
 		int var6 = MathHelper.floor((double) (entityliving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int var7 = world.getBlockMetadata(i, j, k) >> 2;
+		int var7 = state.getBlock().getMetaFromState(state) >> 2;
 		++var6;
 		var6 %= 4;
 
@@ -113,15 +116,15 @@ public class BlockSignal extends BlockContainer {
 			}
 		}
 
-		world.scheduleBlockUpdate(i, j, k, this, 4);
-		updateTick(world, i, j, k);
+		world.scheduleBlockUpdate(pos, this, 4, 0);
+		updateTick(world, pos);
 	}
 	@Override
-	public void onBlockAdded(World world, int i, int j, int k) {
-		super.onBlockAdded(world, i, j, k);
-		TileSignal te = (TileSignal) world.getTileEntity(i, j, k);
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(world, pos, state);
+		TileSignal te = (TileSignal) world.getTileEntity(pos);
 
-		if (world.isBlockIndirectlyGettingPowered(i, j, k)) {
+		if (world.getRedstonePowerFromNeighbors(pos) > 0) {
 
 			te.state = 1;
 		}
@@ -133,7 +136,7 @@ public class BlockSignal extends BlockContainer {
 		 * 
 		 * te.rot = 3; } if (l == 4) { te.rot = 4; } */
 		//System.out.println("added " + te.rot);
-		updateTick(world, i, j, k);
+		updateTick(world, pos);
 	}
 
 	/**
@@ -157,44 +160,44 @@ public class BlockSignal extends BlockContainer {
 	 * A randomly called display update to be able to add particles or other items for display
 	 */
 	@Override
-	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
-		updateTick(world, i, j, k, random);
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random random) {
+		updateTick(world, pos);
 	}
 
-	public void updateTick(World world, int i, int j, int k) {
+	public void updateTick(World world, BlockPos pos) {
 
-		TileSignal te = (TileSignal) world.getTileEntity(i, j, k);
+		TileSignal te = (TileSignal) world.getTileEntity(pos);
 		if (te == null)
 			return;
 		//te.rot = l;
 		// int l = world.getBlockMetadata(i, j, k);
-		if (te.state == 1 && !world.isBlockIndirectlyGettingPowered(i, j, k)) {
+		if (te.state == 1 && !(world.getRedstonePowerFromNeighbors(pos) > 0)) {
 			te.state = 0;
 		}
-		if (te.state == 0 && world.isBlockIndirectlyGettingPowered(i, j, k)) {
+		if (te.state == 0 && world.getRedstonePowerFromNeighbors(pos) > 0) {
 			te.state = 1;
 		}
 	}
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer entityplayer, int par6, float par7, float par8, float par9) {
-		updateTick(world, i, j, k);
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		updateTick(world, pos);
 		return true;
 	}
 	@Override
-	public void onNeighborBlockChange(World world, int i, int j, int k, Block l) {
-		TileSignal te = (TileSignal) world.getTileEntity(i, j, k);
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		TileSignal te = (TileSignal) world.getTileEntity(pos);
 		if (te == null)
 			return;
-		if (te.state == 1 && !world.isBlockIndirectlyGettingPowered(i, j, k)) {
-			world.scheduleBlockUpdate(i, j, k, this, 4);
+		if (te.state == 1 && !(world.getRedstonePowerFromNeighbors(pos) > 0)) {
+			world.scheduleBlockUpdate(pos, this, 4, 0);
 		}
-		else if (te.state == 0 && world.isBlockIndirectlyGettingPowered(i, j, k)) {
+		else if (te.state == 0 && world.getRedstonePowerFromNeighbors(pos) > 0) {
 			// world.setBlockWithNotify(i, j, k,Train.ActiveSignalBlock.blockID);
 
 			te.state = 1;
 			// world.setBlockMetadata(i, j, k,l);
 		}
-		updateTick(world, i, j, k);
+		updateTick(world, pos);
 	}
 
 	@Override

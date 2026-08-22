@@ -16,7 +16,6 @@ public class ItemFiftyThreeFootContainer extends ItemBlock {
         setMaxStackSize(1);
     }
     @SideOnly(Side.CLIENT)
-    @Override
     public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
         par3List.add("\u00a77" + "A container that you can put items in.");
         par3List.add("\u00a77" + "Can be put on Wellcars.");
