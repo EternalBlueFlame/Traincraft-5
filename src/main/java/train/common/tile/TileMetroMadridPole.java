@@ -1,13 +1,14 @@
 package train.common.tile;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+
+import javax.annotation.Nullable;
 import net.minecraft.util.EnumFacing;
 
 public class TileMetroMadridPole extends TileEntity {
@@ -38,7 +39,7 @@ public class TileMetroMadridPole extends TileEntity {
         if(facing != null){
             return this.facing;
         }
-        return EnumFacing.UNKNOWN;
+        return null;
     }
 
     public void setFacing(EnumFacing face) {
@@ -64,8 +65,9 @@ public class TileMetroMadridPole extends TileEntity {
 
     }
 
+    @Nullable
     @Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
 
         NBTTagCompound nbt = new NBTTagCompound();
         this.writeToNBT(nbt);

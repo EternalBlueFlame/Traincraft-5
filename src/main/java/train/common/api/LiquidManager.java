@@ -1,10 +1,10 @@
 package train.common.api;
 
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.Optional;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import mods.railcraft.api.fuel.FuelManager;
@@ -15,6 +15,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.*;
 import train.common.blocks.BlockTraincraftFluid;
 import train.common.items.ItemBlockFluid;
@@ -27,8 +28,8 @@ public class LiquidManager {
 	public static FluidStack WATER_FILTER = new FluidStack(FluidRegistry.WATER, 1);
 	public static FluidStack LAVA_FILTER = new FluidStack(FluidRegistry.LAVA, 1);
 
-	public static final Fluid DIESEL = new Fluid("Diesel").setUnlocalizedName("diesel.name").setDensity(860);
-	public static final Fluid REFINED_FUEL = new Fluid("RefinedFuel").setDensity(820).setUnlocalizedName("refinedfuel.name");
+	public static final Fluid DIESEL = new Fluid("Diesel", new ResourceLocation("tc", "textures/blocks/liquid_diesel.png"), new ResourceLocation("tc", "textures/blocks/liquid_diesel_flow.png")).setUnlocalizedName("diesel.name").setDensity(860);
+	public static final Fluid REFINED_FUEL = new Fluid("RefinedFuel", new ResourceLocation("tc", "textures/blocks/liquid_refinedfuel.png"), new ResourceLocation("tc", "textures/blocks/liquid_refinedfuel_flow.png")).setDensity(820).setUnlocalizedName("refinedfuel.name");
 
 	public static LiquidManager getInstance() {
 		if (instance == null) {
@@ -38,15 +39,15 @@ public class LiquidManager {
 	}
 
 	public static void registerFluidBlock(BlockTraincraftFluid block){
-		GameRegistry.registerBlock(block, ItemBlockFluid.class, "fluid." + block.getFluid().getName());
+		// GameRegistry.registerBlock(block, ItemBlockFluid.class, "fluid." + block.getFluid().getName());
 	}
 
 	public void registerLiquids() {
 		FluidRegistry.registerFluid(DIESEL);
 		FluidRegistry.registerFluid(REFINED_FUEL);
-		BlockIDs.diesel.block = new BlockTraincraftFluid(DIESEL, Material.water).setFlammable(true).setFlammability(5);
+		BlockIDs.diesel.block = new BlockTraincraftFluid(DIESEL, Material.WATER).setFlammable(true).setFlammability(5);
 		DIESEL.setBlock(BlockIDs.diesel.block);
-		BlockIDs.refinedFuel.block = new BlockTraincraftFluid(REFINED_FUEL, Material.water).setFlammable(true).setFlammability(4);
+		BlockIDs.refinedFuel.block = new BlockTraincraftFluid(REFINED_FUEL, Material.WATER).setFlammable(true).setFlammability(4);
 		REFINED_FUEL.setBlock(BlockIDs.refinedFuel.block);
 		FluidContainerRegistry.registerFluidContainer(DIESEL, new ItemStack(ItemIDs.diesel.item), new ItemStack(ItemIDs.emptyCanister.item));
 		FluidContainerRegistry.registerFluidContainer(REFINED_FUEL, new ItemStack(ItemIDs.refinedFuel.item), new ItemStack(ItemIDs.emptyCanister.item));
@@ -77,10 +78,7 @@ public class LiquidManager {
 	@SubscribeEvent
 	@SideOnly(Side.CLIENT)
 	public void textureHook(TextureStitchEvent.Post event) {
-		if (event.map.getTextureType() == 0) {
-			DIESEL.setIcons(BlockIDs.diesel.block.getBlockTextureFromSide(1), BlockIDs.diesel.block.getBlockTextureFromSide(2));
-			REFINED_FUEL.setIcons(BlockIDs.refinedFuel.block.getBlockTextureFromSide(1), BlockIDs.refinedFuel.block.getBlockTextureFromSide(2));
-		}
+		// TODO 1.12: fluid still/flow icon assignment needs the 1.12 texture pipeline
 	}
 
 	public boolean isDieselLocoFuel(ItemStack stack) {
@@ -130,27 +128,27 @@ public class LiquidManager {
 	}
 
 
-	public ItemStack processContainer(IInventory inventory, int inventoryIndex, IFluidHandler tank, ItemStack itemstack) {
+	public ItemStack processContainer(IInventory inventory, int inventoryIndex, AbstractTrains tank, ItemStack itemstack) {
 		FluidStack bucketLiquid = getFluidInContainer(itemstack);
 		ItemStack emptyItem = itemstack.getItem().getContainerItem(itemstack);
 		if ((bucketLiquid != null)) {
-			int used = tank.fill(EnumFacing.UNKNOWN,bucketLiquid, false);
+			int used = tank.fill(bucketLiquid, false);
 			if (used >= bucketLiquid.amount) {
-				tank.fill(EnumFacing.UNKNOWN,bucketLiquid, true);
-				if (itemstack.getItem() == Items.potionitem){
-					return new ItemStack(Items.glass_bottle, 1);
+				tank.fill(bucketLiquid, true);
+				if (itemstack.getItem() == Items.POTIONITEM){
+					return new ItemStack(Items.GLASS_BOTTLE, 1);
 				}
 				inventory.decrStackSize(inventoryIndex, 1);
 				return emptyItem;
 			}
 		}
 		else if ((getInstance().isEmptyContainer(itemstack))) {
-			ItemStack filled = getInstance().fillFluidContainer(tank.drain(EnumFacing.UNKNOWN,1000,false), itemstack);
+			ItemStack filled = getInstance().fillFluidContainer(tank.drain(1000, false), itemstack);
 			if ((filled != null)) {
 				FluidStack liquid = getFluidInContainer(filled);
-				FluidStack drain = tank.drain(EnumFacing.UNKNOWN,liquid.amount, false);
+				FluidStack drain = tank.drain(liquid.amount, false);
 				if ((drain != null) && (drain.amount > 0)) {
-					tank.drain(EnumFacing.UNKNOWN,liquid.amount, true);
+					tank.drain(liquid.amount, true);
 					inventory.decrStackSize(inventoryIndex, 1);
 					return filled;
 				}

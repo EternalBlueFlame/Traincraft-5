@@ -30,16 +30,16 @@ public class SlotDistil extends Slot {
 	@Override
 	public ItemStack decrStackSize(int par1) {
 		if (this.getHasStack()) {
-			this.amount += Math.min(par1, this.getStack().stackSize);
+			this.amount += Math.min(par1, this.getStack().getCount());
 		}
 
 		return super.decrStackSize(par1);
 	}
 
 	@Override
-	public void onPickupFromSlot(EntityPlayer par1EntityPlayer, ItemStack itemstack) {
+	public ItemStack onTake(EntityPlayer par1EntityPlayer, ItemStack itemstack) {
 		this.onCrafting(itemstack);
-		super.onPickupFromSlot(par1EntityPlayer, itemstack);
+		return super.onTake(par1EntityPlayer, itemstack);
 	}
 
 	/**
@@ -56,7 +56,7 @@ public class SlotDistil extends Slot {
 	 */
 	@Override
 	protected void onCrafting(ItemStack itemstack) {
-		itemstack.onCrafting(this.thePlayer.getWorld(), this.thePlayer, this.amount);
+		itemstack.onCrafting(this.thePlayer.world, this.thePlayer, this.amount);
 
 		if (!this.thePlayer.world.isRemote) {
 			int var2 = this.amount;
@@ -69,7 +69,7 @@ public class SlotDistil extends Slot {
 			else if (var3 < 1.0F) {
 				var4 = MathHelper.floor((float) var2 * var3);
 
-				if (var4 < MathHelper.ceiling_float_int((float) var2 * var3) && (float) Math.random() < (float) var2 * var3 - (float) var4) {
+				if (var4 < MathHelper.ceil((float) var2 * var3) && (float) Math.random() < (float) var2 * var3 - (float) var4) {
 					++var4;
 				}
 
@@ -79,7 +79,7 @@ public class SlotDistil extends Slot {
 			while (var2 > 0) {
 				var4 = EntityXPOrb.getXPSplit(var2);
 				var2 -= var4;
-				this.thePlayer.world.spawnEntityInWorld(new EntityXPOrb(this.thePlayer.getWorld(), this.thePlayer.posX, this.thePlayer.posY + 0.5D, this.thePlayer.posZ + 0.5D, var4));
+				this.thePlayer.world.spawnEntity(new EntityXPOrb(this.thePlayer.world, this.thePlayer.posX, this.thePlayer.posY + 0.5D, this.thePlayer.posZ + 0.5D, var4));
 			}
 		}
 

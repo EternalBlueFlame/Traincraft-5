@@ -5,7 +5,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.ICrafting;
+import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import train.common.slots.SlotDistil;
@@ -39,29 +39,29 @@ public class ContainerDistil extends Container {
 	}
 
 	@Override
-	public void addCraftingToCrafters(ICrafting par1ICrafting) {
-		super.addCraftingToCrafters(par1ICrafting);
-		par1ICrafting.sendProgressBarUpdate(this, 0, distil.distilCookTime);
-		par1ICrafting.sendProgressBarUpdate(this, 1, distil.distilBurnTime);
-		par1ICrafting.sendProgressBarUpdate(this, 2, distil.currentItemBurnTime);
+	public void addListener(IContainerListener par1ICrafting) {
+		super.addListener(par1ICrafting);
+		par1ICrafting.sendWindowProperty(this, 0, distil.distilCookTime);
+		par1ICrafting.sendWindowProperty(this, 1, distil.distilBurnTime);
+		par1ICrafting.sendWindowProperty(this, 2, distil.currentItemBurnTime);
 	}
 
 	/*
-	 * @Override public void updateCraftingResults() { super.updateCraftingResults(); for (int i = 0; i < crafters.size(); i++) { ICrafting icrafting = (ICrafting) crafters.get(i); if (cookTime != distil.distilCookTime) { icrafting.sendProgressBarUpdate(this, 0, distil.distilCookTime); } if (burnTime != distil.distilBurnTime) { icrafting.sendProgressBarUpdate(this, 1, distil.distilBurnTime); } if (itemBurnTime != distil.currentItemBurnTime) { icrafting.sendProgressBarUpdate(this, 2, distil.currentItemBurnTime); } } cookTime = distil.distilCookTime; burnTime = distil.distilBurnTime; itemBurnTime = distil.currentItemBurnTime; } */
+	 * @Override public void updateCraftingResults() { super.updateCraftingResults(); for (int i = 0; i < listeners.size(); i++) { IContainerListener icrafting = (IContainerListener) listeners.get(i); if (cookTime != distil.distilCookTime) { icrafting.sendWindowProperty(this, 0, distil.distilCookTime); } if (burnTime != distil.distilBurnTime) { icrafting.sendWindowProperty(this, 1, distil.distilBurnTime); } if (itemBurnTime != distil.currentItemBurnTime) { icrafting.sendWindowProperty(this, 2, distil.currentItemBurnTime); } } cookTime = distil.distilCookTime; burnTime = distil.distilBurnTime; itemBurnTime = distil.currentItemBurnTime; } */
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (int i = 0; i < crafters.size(); i++) {
-			ICrafting icrafting = (ICrafting) crafters.get(i);
+		for (int i = 0; i < listeners.size(); i++) {
+			IContainerListener icrafting = (IContainerListener) listeners.get(i);
 			if (cookTime != distil.distilCookTime) {
-				icrafting.sendProgressBarUpdate(this, 0, distil.distilCookTime);
+				icrafting.sendWindowProperty(this, 0, distil.distilCookTime);
 			}
 			if (burnTime != distil.distilBurnTime) {
-				icrafting.sendProgressBarUpdate(this, 1, distil.distilBurnTime);
+				icrafting.sendWindowProperty(this, 1, distil.distilBurnTime);
 			}
 			if (itemBurnTime != distil.currentItemBurnTime) {
-				icrafting.sendProgressBarUpdate(this, 2, distil.currentItemBurnTime);
+				icrafting.sendWindowProperty(this, 2, distil.currentItemBurnTime);
 			}
 		}
 		cookTime = distil.distilCookTime;
@@ -103,7 +103,7 @@ public class ContainerDistil extends Container {
 			else if (!mergeItemStack(itemstack1, 0, 3, false)) {
 				return null;
 			}
-			if (itemstack1.stackSize == 0) {
+			if (itemstack1.getCount() == 0) {
 				slot.putStack(null);
 			}
 			else {

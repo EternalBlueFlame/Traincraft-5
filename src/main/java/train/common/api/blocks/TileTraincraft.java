@@ -14,8 +14,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+
+import javax.annotation.Nullable;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.util.Constants;
 
@@ -65,13 +66,13 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     @Override
     public ItemStack decrStackSize(int i, int j){
         if (this.slots.length >= i && this.slots[i] != null) {
-            if (this.slots[i].stackSize <= j) {
+            if (this.slots[i].getCount() <= j) {
                 ItemStack itemstack = this.slots[i];
                 this.slots[i] = null;
                 return itemstack;
             }
             ItemStack itemstack1 = this.slots[i].splitStack(j);
-            if (this.slots[i].stackSize == 0) {
+            if (this.slots[i].getCount() == 0) {
                 this.slots[i] = null;
             }
             return itemstack1;
@@ -94,8 +95,8 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack){
         this.slots[slot] = stack;
-        if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-            stack.stackSize = getInventoryStackLimit();
+        if (stack != null && stack.getCount() > getInventoryStackLimit()) {
+            stack.setCount(getInventoryStackLimit());
         }
     }
 
@@ -183,14 +184,15 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
             if(o instanceof EntityPlayerMP){
                 EntityPlayerMP player = (EntityPlayerMP) o;
                 if(player.getDistance(xCoord, yCoord, zCoord) <= 64) {
-                    player.playerNetServerHandler.sendPacket(this.getDescriptionPacket());
+                    player.playerNetServerHandler.sendPacket(this.getUpdatePacket());
                 }
             }
         }
     }
 
+    @Nullable
     @Override
-    public SPacketUpdateTileEntity getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbt = new NBTTagCompound();
         this.writeToNBT(nbt, true);
         return new SPacketUpdateTileEntity(getPos(), 1, nbt);

@@ -40,7 +40,6 @@ public class InventoryOpenHearthFurnace implements IInventory{
 		return null;
 	}
 
-	@Override
 	public boolean hasCustomInventoryName() {
 		// TODO Auto-generated method stub
 		return false;
@@ -59,24 +58,60 @@ public class InventoryOpenHearthFurnace implements IInventory{
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
+	public boolean isUsableByPlayer(EntityPlayer p_70300_1_) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
+	public boolean isEmpty() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			if (getStackInSlot(i) != null) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public void clear() {
+		// TODO Auto-generated method stub
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public boolean hasCustomName() {
+		return false;
+	}
+
+	@Override
+	public net.minecraft.util.text.ITextComponent getDisplayName() {
+		return new net.minecraft.util.text.TextComponentString(getName() == null ? "" : getName());
+	}
+
 	public void openInventory(EntityPlayer p) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public void closeInventory(EntityPlayer p) {
 		// TODO Auto-generated method stub
 		
 	}
 
-	@Override
 	public boolean isItemValidForSlot(int p_94041_1_, ItemStack p_94041_2_) {
 		// TODO Auto-generated method stub
 		return false;

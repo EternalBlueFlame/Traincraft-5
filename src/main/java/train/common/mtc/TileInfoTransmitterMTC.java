@@ -1,14 +1,14 @@
 package train.common.mtc;
 
 
-import cpw.mods.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.api.Locomotive;

@@ -4,12 +4,15 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -31,22 +34,22 @@ public class BlockAssemblyTableI extends BlockDynamic {
 	}
 
 	@Override
-	public int damageDropped(int i) {
-		return i;
+	public int damageDropped(IBlockState state) {
+		return state.getBlock().getMetaFromState(state);
 	}
 
 	@Override
-	public int quantityDropped(int meta, int fortune, Random random) {
+	public int quantityDropped(Random random) {
 		return 1;
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		TileEntity te = world.getTileEntity(i, j, k);
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		TileEntity te = world.getTileEntity(pos);
 		if (!world.isRemote) {
 			if (!player.isSneaking()) {
 				if (te != null && te instanceof TileCrafterTierI) {
-					player.openGui(Traincraft.instance, GuiIDs.CRAFTER_TIER_I, world, i, j, k);
+					player.openGui(Traincraft.instance, GuiIDs.CRAFTER_TIER_I, world, pos.getX(), pos.getY(), pos.getZ());
 				}
 			}
 			else {
@@ -58,9 +61,9 @@ public class BlockAssemblyTableI extends BlockDynamic {
 
 	
 	@Override
-	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
 		Random distilRand = new Random();
-		TileCrafterTierI tileentitytierI = (TileCrafterTierI) world.getTileEntity(i, j, k);
+		TileCrafterTierI tileentitytierI = (TileCrafterTierI) world.getTileEntity(pos);
 		if (tileentitytierI != null) {
 			label0: for (int l = 0; l < tileentitytierI.getSizeInventory()-8; l++) {
 				ItemStack itemstack = tileentitytierI.getStackInSlot(l);
@@ -78,32 +81,32 @@ public class BlockAssemblyTableI extends BlockDynamic {
 					if (i1 > itemstack.getCount()) {
 						i1 = itemstack.getCount();
 					}
-					EntityItem entityitem = new EntityItem(world, (float) i + f, (float) j + f1, (float) k + f2, itemstack.splitStack(i1));
+					EntityItem entityitem = new EntityItem(world, (double) pos.getX() + f, (double) pos.getY() + f1, (double) pos.getZ() + f2, itemstack.splitStack(i1));
 					float f3 = 0.05F;
 					entityitem.motionX = (float) distilRand.nextGaussian() * f3;
 					entityitem.motionY = (float) distilRand.nextGaussian() * f3 + 0.2F;
 					entityitem.motionZ = (float) distilRand.nextGaussian() * f3;
-					world.spawnEntityInWorld(entityitem);
+					world.spawnEntity(entityitem);
 				} while (true);
 			}
 		}
-		super.breakBlock(world, i, j, k, par5, par6);
+		super.breakBlock(world, pos, state);
 	}
 
 	@Override
-	public void onBlockAdded(World world, int i, int j, int k) {
-		super.onBlockAdded(world, i, j, k);
-		world.markBlockForUpdate(i, j, k);
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(world, pos, state);
+		world.notifyBlockUpdate(pos, state, state, 3);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
-		super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
-		TileCrafterTierI te = (TileCrafterTierI) world.getTileEntity(i, j, k);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+		super.onBlockPlacedBy(world, pos, state, entityliving, stack);
+		TileCrafterTierI te = (TileCrafterTierI) world.getTileEntity(pos);
 		if (te != null) {
 			int dir = MathHelper.floor((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 			te.setFacing(EnumFacing.byHorizontalIndex(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
-			world.markBlockForUpdate(i, j, k);
+			world.notifyBlockUpdate(pos, state, state, 3);
 		}
 	}
 
@@ -112,7 +115,6 @@ public class BlockAssemblyTableI extends BlockDynamic {
 		return new TileCrafterTierI();
 	}
 
-	@Override
 	public TileEntity createTileEntity(World var1, int meta) {
 		return new TileCrafterTierI();
 	}

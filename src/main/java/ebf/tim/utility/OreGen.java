@@ -1,10 +1,13 @@
 package ebf.tim.utility;
 
-import cpw.mods.fml.common.IWorldGenerator;
+import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
+import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
+import net.minecraft.world.gen.IChunkGenerator;
 import net.minecraft.world.gen.feature.WorldGenMinable;
 
 import java.util.Arrays;
@@ -16,7 +19,7 @@ import java.util.Random;
  * @author Eternal Blue Flame
  */
 public class OreGen implements IWorldGenerator{
-	private Block ore, notOre = Blocks.stone;
+	private Block ore, notOre = Blocks.STONE;
 	private int minY, maxY,veinSize, minOres, maxVeinsPerChunk;
 	private Integer[] dimensions = new Integer[]{0};
 	private String[] biomes;
@@ -56,11 +59,11 @@ public class OreGen implements IWorldGenerator{
 	}
 
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		//be sure it's the correct dimension
-		if ((dimensions==null || Arrays.asList(dimensions).contains(world.provider.dimensionId))
+		if ((dimensions==null || Arrays.asList(dimensions).contains(world.provider.getDimension()))
 				//be sure it's the correct biome
-				&& (biomes==null || Arrays.asList(biomes).contains(world.getBiomeGenForCoords(chunkX,chunkZ).biomeName))) {
+				&& (biomes==null || Arrays.asList(biomes).contains(world.getBiome(new BlockPos(chunkX * 16, 0, chunkZ * 16)).getBiomeName()))) {
 
 			//calculate the max ore veins per chunk
 			int maxVeins=random.nextInt(maxVeinsPerChunk);
@@ -69,30 +72,31 @@ public class OreGen implements IWorldGenerator{
 			if(heightOffset==1){//defines only in lans above water level
 				spawnHeightOffset=63;//defined in ChunkProvider around the use of BlockWater, seems hardcoded to 63
 			} else if (heightOffset==2){//defined only in areas that are above the minimum of the chunk heightmap
-				spawnHeightOffset= world.getChunkFromChunkCoords(chunkX,chunkZ).heightMapMinimum-1;
+				spawnHeightOffset= world.getChunk(chunkX,chunkZ).getLowestHeight()-1;
 			}
 			for(int i=0; i<maxVeins;i++) {
 				//actually generate the vein
 				makeVein(world,random).generate(world, random,
+						new BlockPos(
 						(chunkX * 16) + random.nextInt(16),
 						minY+spawnHeightOffset+random.nextInt(maxY-minY),
-						chunkZ * 16 + random.nextInt(16));
+						chunkZ * 16 + random.nextInt(16)));
 			}
 		}
 	}
 
 	//NOTE: 1.12 does not use blocks directly, instead use BlockMatcher.forBlock(notOre)
 	private WorldGenMinable makeVein(World world, Random random){
-		if(world.provider.dimensionId==-1){
-			if(notOre==Blocks.stone) {
-				return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), Blocks.netherrack);
-			} else if(notOre==Blocks.sand){
-				return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), Blocks.soul_sand);
+		if(world.provider.getDimension()==-1){
+			if(notOre==Blocks.STONE) {
+				return new WorldGenMinable(ore.getDefaultState(), Math.max(minOres, random.nextInt(veinSize)), BlockMatcher.forBlock(Blocks.NETHERRACK));
+			} else if(notOre==Blocks.SAND){
+				return new WorldGenMinable(ore.getDefaultState(), Math.max(minOres, random.nextInt(veinSize)), BlockMatcher.forBlock(Blocks.SOUL_SAND));
 			} else {
-				return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), notOre);
+				return new WorldGenMinable(ore.getDefaultState(), Math.max(minOres, random.nextInt(veinSize)), BlockMatcher.forBlock(notOre));
 			}
 		} else {
-			return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), notOre);
+			return new WorldGenMinable(ore.getDefaultState(), Math.max(minOres, random.nextInt(veinSize)), BlockMatcher.forBlock(notOre));
 		}
 	}
 

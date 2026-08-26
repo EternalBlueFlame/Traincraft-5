@@ -46,6 +46,19 @@ minecraft {
     replace "@VERSION1@", config.modVersion.toString()
 }
 
+sourceSets {
+    main {
+        java {
+            exclude 'train/common/core/plugins/NEI*.java'
+            exclude 'train/common/core/plugins/ForgeMultiPart.java'
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs << '-Xmaxerrs' << '10000'
+}
+
 task packApi(type: Jar, dependsOn: "classes") {
     // Jar will always be updated
     outputs.upToDateWhen {false}

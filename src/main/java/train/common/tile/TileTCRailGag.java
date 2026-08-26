@@ -5,9 +5,10 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+
+import javax.annotation.Nullable;
 import net.minecraft.world.World;
 import train.common.blocks.BlockTCRail;
 import train.common.items.TCRailTypes;
@@ -137,8 +138,9 @@ public class TileTCRailGag extends TileEntity {
 		}
 
 
-		@Override
-	public Packet getDescriptionPacket() {
+	@Nullable
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);

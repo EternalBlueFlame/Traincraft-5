@@ -4,9 +4,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.pathfinding.PathEntity;
+import net.minecraft.pathfinding.Path;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ChunkCache;
 import train.common.api.Locomotive;
 
@@ -25,9 +25,9 @@ public class EntityAIFearHorn extends EntityAIBase {
     public boolean shouldExecute() {
         if (entity.getEntityToAttack() instanceof Locomotive) {
             Entity loco = entity.getEntityToAttack();
-            Vec3 posLoco = Vec3.createVectorHelper(loco.posX, loco.posY, loco.posZ);
+            Vec3d posLoco = new Vec3d(loco.posX, loco.posY, loco.posZ);
             entity.detachHome();
-            Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 10, 8, posLoco);
+            Vec3d vec3 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 10, 8, posLoco);
 
             if (vec3 == null) {
                 return false;
@@ -59,7 +59,7 @@ public class EntityAIFearHorn extends EntityAIBase {
     /**
      * Returns the path to the given coordinates
      */
-    private PathEntity getPathToXYZ(double x, double y, double z) {
+    private Path getPathToXYZ(double x, double y, double z) {
         return getEntityPathToXYZ(MathHelper.floor(x), (int) y, MathHelper.floor(z),
                 entity.getNavigator().getPathSearchRange(), false, false, false);
     }
@@ -68,11 +68,11 @@ public class EntityAIFearHorn extends EntityAIBase {
      * Try to find and set a path to XYZ. Returns true if successful.
      */
     private boolean tryMoveToXYZ(double x, double y, double z, double speed) {
-        PathEntity pathentity = this.getPathToXYZ((double) MathHelper.floor(x), (double) ((int) y), (double) MathHelper.floor(z));
+        Path pathentity = this.getPathToXYZ((double) MathHelper.floor(x), (double) ((int) y), (double) MathHelper.floor(z));
         return entity.getNavigator().setPath(pathentity, speed);
     }
 
-    private PathEntity getEntityPathToXYZ(int targetX, int targetY, int targetZ, float range, boolean canPassOpenDoor, boolean canPassClosedDoor, boolean canSwim) {
+    private Path getEntityPathToXYZ(int targetX, int targetY, int targetZ, float range, boolean canPassOpenDoor, boolean canPassClosedDoor, boolean canSwim) {
         int x = MathHelper.floor(entity.posX);
         int y = MathHelper.floor(entity.posY);
         int z = MathHelper.floor(entity.posZ);

@@ -11,6 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+
+import javax.annotation.Nullable;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
 import net.minecraft.util.EnumFacing;
@@ -56,13 +58,13 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
 		if (crafterInventory[i] != null) {
-			if (crafterInventory[i].stackSize <= j) {
+			if (crafterInventory[i].getCount() <= j) {
 				ItemStack itemstack = crafterInventory[i];
 				crafterInventory[i] = null;
 				return itemstack;
 			}
 			ItemStack itemstack1 = crafterInventory[i].splitStack(j);
-			if (crafterInventory[i].stackSize == 0) {
+			if (crafterInventory[i].getCount() == 0) {
 				crafterInventory[i] = null;
 			}
 			return itemstack1;
@@ -88,7 +90,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		crafterInventory[i] = itemstack;
 		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-			itemstack.getCount() = getInventoryStackLimit();
+			itemstack.setCount(getInventoryStackLimit());
 		}
 	}
 
@@ -230,8 +232,9 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 	@Override
 	public void closeInventory(EntityPlayer p) {}
 
+	@Nullable
 	@Override
-	public SPacketUpdateTileEntity getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);

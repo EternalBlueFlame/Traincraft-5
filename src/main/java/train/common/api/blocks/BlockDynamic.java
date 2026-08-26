@@ -8,13 +8,16 @@ import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
@@ -36,14 +39,15 @@ public class BlockDynamic extends BlockContainer {
     public ModelBase model=null;
     public Object tesr=null;
     public int slots=0;
+    public String textureName;
 
     public BlockDynamic(Material material, int storage) {
         super(material);
         this.slots=storage;
-        setBlockBounds(hitboxShape()[0],hitboxShape()[1],hitboxShape()[2],hitboxShape()[3],hitboxShape()[4],hitboxShape()[5]);
+        // TODO 1.12: block bounds are per-IBlockState now (hitboxShape())
     }
 
-    @Override//1.7 version of getting if block is opaque, used for server side checks like if creatures can spawn on it
+    //1.7 version of getting if block is opaque, used for server side checks like if creatures can spawn on it
     public boolean func_149730_j(){return true;}
 
     public Block setModel(ModelBase modelBase){
@@ -58,14 +62,15 @@ public class BlockDynamic extends BlockContainer {
     }
 
     @Override
-    public void breakBlock(World w, int x, int y, int z, Block b, int meta) {
-        //super.breakBlock(w, x, y, z, b, meta);
-        w.getChunkFromChunkCoords(x >> 4, z >> 4)
-                .removeTileEntity(x & 15, y, z & 15);
+    public void breakBlock(World w, BlockPos pos, IBlockState state) {
+        w.getChunk(pos.getX() >> 4, pos.getZ() >> 4)
+                .removeTileEntity(new BlockPos(pos.getX() & 15, pos.getY(), pos.getZ() & 15));
     }
 
-    @Override
-    public Block setBlockTextureName(String name){return this;}
+    public Block setBlockTextureName(String name){
+        textureName = name;
+        return this;
+    }
 
     public Block setTextureName(String name){
         textureName=name;
@@ -74,37 +79,34 @@ public class BlockDynamic extends BlockContainer {
 
     @SideOnly(Side.CLIENT)
     public ResourceLocation getTexture(int x, int y, int z){
-        return new ResourceLocation(this.textureName == null ? "MISSING_ICON_BLOCK_" + getIdFromBlock(this) + "_" + this.getUnlocalizedName() :textureName);
+        return new ResourceLocation(this.textureName == null ? "MISSING_ICON_BLOCK_" + (this.getRegistryName() == null ? "unknown" : this.getRegistryName().toString()) : textureName);
     }
 
     @SideOnly(Side.CLIENT)
-    @Override
     public IIcon getIcon(int a, int b){
-        return new particleTexture(textureName,32,0,16);
+        // TODO 1.12: fluid/block icon pipeline
+        return null;
     }
 
-    @Override
     public int getRenderType(){
         return -1;
     }
 
     @Override
-    public boolean isOpaqueCube(){
+    public boolean isOpaqueCube(IBlockState state){
         return false;
     }
 
-    @Override
     public boolean renderAsNormalBlock(){
         return false;
     }
 
     @Override
-    public boolean hasTileEntity(int metadata)
+    public boolean hasTileEntity()
     {
         return true;
     }
 
-    @Override
     public TileEntity createNewTileEntity(World world, int meta) {
         return slots>0?new TileTraincraft(slots):new TileRenderFacing(this);
     }
@@ -112,39 +114,37 @@ public class BlockDynamic extends BlockContainer {
     //returns a series of values to define the size of the block from start to end, with a normal block starting at 0 and ending at 1.
     public float[] hitboxShape(){return new float[]{0,0,0,1,1,1};}
 
-    @Override
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-        return AxisAlignedBB.getBoundingBox((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + this.maxY, (double)z + this.maxZ);
+        float[] s = hitboxShape();
+        return new AxisAlignedBB((double)x + s[0], (double)y + s[1], (double)z + s[2], (double)x + s[3], (double)y + s[4], (double)z + s[5]);
     }
     @Override
-    public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB hitboxSelf, List p_149743_6_, Entity collidingEntity) {
-        this.setBlockBoundsBasedOnState(world, x, y, z);
+    public void addCollisionBoxToList(IBlockState state, World world, BlockPos pos, AxisAlignedBB hitboxSelf, List<AxisAlignedBB> p_149743_6_, Entity collidingEntity, boolean p_185476_7_) {
+        AxisAlignedBB box = getCollisionBoundingBoxFromPool(world, pos.getX(), pos.getY(), pos.getZ());
         //if there's multiple hitboxes, ex stairs, this needs to be done for each
-        if(hitboxSelf.intersectsWith(this.getCollisionBoundingBoxFromPool(world, x, y, z))) {
-            p_149743_6_.add(this.getCollisionBoundingBoxFromPool(world, x, y, z));
+        if(hitboxSelf.intersects(box)) {
+            p_149743_6_.add(box);
         }
     }
-    @Override
-    public boolean getBlocksMovement(IBlockAccess p_149655_1_, int p_149655_2_, int p_149655_3_, int p_149655_4_) {
+    public boolean getBlocksMovement(IBlockState state) {
         return hitboxShape()[4]>=1;
     }
 
-    @Override
     public TileEntity createTileEntity(World world, int meta) {
         return createNewTileEntity(world, meta);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack){
-        super.onBlockPlacedBy(world, x, y, z, entity, stack);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entity, ItemStack stack){
+        super.onBlockPlacedBy(world, pos, state, entity, stack);
         //force tile spawn manually and override any existing tile at the space
-        world.setTileEntity(x,y,z,createNewTileEntity(world,0));
-        if(world.getTileEntity(x,y,z) instanceof TileRenderFacing){
+        world.setTileEntity(pos,createNewTileEntity(world,0));
+        if(world.getTileEntity(pos) instanceof TileRenderFacing){
             switch ((CommonUtil.floorDouble(((entity.rotationYaw-45)%360) / 90.0F)&3)){
-                case 0: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(EnumFacing.SOUTH);break;
-                case 1: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(EnumFacing.EAST);break;
-                case 2: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(EnumFacing.NORTH);break;
-                case 3: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(EnumFacing.WEST);break;
+                case 0: ((TileRenderFacing) world.getTileEntity(pos)).setFacing(EnumFacing.SOUTH);break;
+                case 1: ((TileRenderFacing) world.getTileEntity(pos)).setFacing(EnumFacing.EAST);break;
+                case 2: ((TileRenderFacing) world.getTileEntity(pos)).setFacing(EnumFacing.NORTH);break;
+                case 3: ((TileRenderFacing) world.getTileEntity(pos)).setFacing(EnumFacing.WEST);break;
 
             }
 
@@ -153,15 +153,15 @@ public class BlockDynamic extends BlockContainer {
 
 
     @Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
         if (player.isSneaking() || slots==0) {
             return false;
         } else if (world.isRemote) {
             return true;
         }
 
-        if (world.getTileEntity(x, y, z) instanceof TileTraincraft) {
-            player.openGui(Traincraft.instance, 0, world, x, y, z);
+        if (world.getTileEntity(pos) instanceof TileTraincraft) {
+            player.openGui(Traincraft.instance, 0, world, pos.getX(), pos.getY(), pos.getZ());
             return true;
         } else {
             return false;

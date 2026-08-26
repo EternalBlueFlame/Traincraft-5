@@ -3,9 +3,10 @@ package train.common.tile;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+
+import javax.annotation.Nullable;
 
 import java.util.Random;
 
@@ -34,8 +35,9 @@ public class TileLantern extends TileEntity {
 		return nbt;
 	}
 
+	@Nullable
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
@@ -75,7 +77,7 @@ public class TileLantern extends TileEntity {
 			if (o instanceof EntityPlayerMP) {
 				EntityPlayerMP player = (EntityPlayerMP) o;
 				if (player.getDistance(xCoord, yCoord, zCoord) <= 64) {
-					player.playerNetServerHandler.sendPacket(this.getDescriptionPacket());
+					player.playerNetServerHandler.sendPacket(this.getUpdatePacket());
 				}
 			}
 		}

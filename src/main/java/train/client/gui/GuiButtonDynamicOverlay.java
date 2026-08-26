@@ -55,14 +55,14 @@ class GuiButtonDynamicOverlay extends GuiButton {
      * Draws this button to the screen.
      */
     @Override
-    public void drawButton(Minecraft mc, int par2, int par3) {
+    public void drawButton(Minecraft mc, int par2, int par3, float partialTicks) {
         if (this.visible && showButton) {
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             RenderHelper.enableGUIStandardItemLighting();
             GL11.glPushMatrix();
             GL11.glTranslatef(0, 0, 10);
             mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.guiPrefix + "gui_dynamic_overlay.png"));
-            this.drawTexturedModalRect(this.xPosition, this.yPosition, u, v, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+            this.drawTexturedModalRect(this.x, this.y, u, v, TEXTURE_WIDTH, TEXTURE_HEIGHT);
             RenderHelper.disableStandardItemLighting();
             GL11.glPopMatrix();
         }

@@ -9,9 +9,10 @@ package train.common.tile;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
+
+import javax.annotation.Nullable;
 
 public class TileStopper extends TileEntity {
 
@@ -50,8 +51,9 @@ public class TileStopper extends TileEntity {
 		nbtTag.setByte("Orientation", (byte) facingMeta);
 	}
 
+	@Nullable
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);

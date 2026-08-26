@@ -5,14 +5,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import train.common.core.FakePlayer;
+import train.common.core.compat.DataWatcher;
 
 import java.util.List;
 
@@ -32,10 +35,12 @@ public class EntityRotativeWheel extends Entity {
      */
     private EntityPlayer fakePlayer;
     public int startWheel;
+    public DataWatcher dataWatcher;
     private int field_9394_d;
 
     public EntityRotativeWheel(World world) {
         super(world);
+        this.dataWatcher = new DataWatcher(this);
         riderOffset = 0;
         setSize(1F, 1F);
 
@@ -85,12 +90,12 @@ public class EntityRotativeWheel extends Entity {
             this.dataWatcher.updateObject(21, startWheel);
         }
 
-        if (fakePlayer == null && getWorld() != null) {
-            fakePlayer = new FakePlayer(getWorld());
+        if (fakePlayer == null && world != null) {
+            fakePlayer = new FakePlayer(world);
         }
 
-        assert getWorld() != null;
-        List<?> listLiving = world.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.4, 0.4, 0.4));
+        assert world != null;
+        List<?> listLiving = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(0.4, 0.4, 0.4));
         if (listLiving != null && !listLiving.isEmpty() && entity != null && entity instanceof EntityRotativeDigger && ((EntityRotativeDigger) entity).getFuel() > 0) {//&& ((EntityRotativeDigger) entity).start){
 
             for (Object o : listLiving) {
@@ -103,7 +108,7 @@ public class EntityRotativeWheel extends Entity {
                 if (entity instanceof EntityRotativeDigger) {
                     // do not affect
                 } else if (entity instanceof EntityLiving) {
-                    entity.attackEntityFrom(DamageSource.generic, 4);
+                    entity.attackEntityFrom(DamageSource.GENERIC, 4);
                     entity.addVelocity(X, Y, Z);
                 } else {
                     entity.addVelocity(X, Y, Z);// for items on ground
@@ -112,11 +117,11 @@ public class EntityRotativeWheel extends Entity {
         }
 
         if (entity != null && entity instanceof EntityRotativeDigger && ((EntityRotativeDigger) entity).getFuel() > 0) {//TODO should only dig when rotative digger has fuel and dig mode is on, doesn't work yet
-            Vec3 vec = Vec3.createVectorHelper(posX - 0.5, posY, posZ - 0.5);
+            Vec3d vec = new Vec3d(posX - 0.5, posY, posZ - 0.5);
 
             this.harvestBlock_do(vec);
             //TODO how many blocks should be harvested?
-            /*for (int h = -1; h < 2; h++) { vec = Vec3.vec3dPool.getVecFromPool(posX, posY + h, posZ); this.harvestBlock_do(vec); vec = Vec3.vec3dPool.getVecFromPool(posX + 1, posY + h, posZ); this.harvestBlock_do(vec); vec = Vec3.vec3dPool.getVecFromPool(posX - 1, posY + h, posZ); this.harvestBlock_do(vec); vec = Vec3.vec3dPool.getVecFromPool(posX, posY + h, posZ - 1); this.harvestBlock_do(vec); vec = Vec3.vec3dPool.getVecFromPool(posX, posY + h, posZ + 1); this.harvestBlock_do(vec); vec = Vec3.vec3dPool.getVecFromPool(posX + 1, posY + h, posZ - 1); this.harvestBlock_do(vec); vec = Vec3.vec3dPool.getVecFromPool(posX - 1, posY + h, posZ + 1); this.harvestBlock_do(vec); vec = Vec3.vec3dPool.getVecFromPool(posX - 1, posY + h, posZ - 1); this.harvestBlock_do(vec); vec = Vec3.vec3dPool.getVecFromPool(posX + 1, posY + h, posZ + 1); this.harvestBlock_do(vec);
+            /*for (int h = -1; h < 2; h++) { vec = Vec3d.vec3dPool.getVecFromPool(posX, posY + h, posZ); this.harvestBlock_do(vec); vec = Vec3d.vec3dPool.getVecFromPool(posX + 1, posY + h, posZ); this.harvestBlock_do(vec); vec = Vec3d.vec3dPool.getVecFromPool(posX - 1, posY + h, posZ); this.harvestBlock_do(vec); vec = Vec3d.vec3dPool.getVecFromPool(posX, posY + h, posZ - 1); this.harvestBlock_do(vec); vec = Vec3d.vec3dPool.getVecFromPool(posX, posY + h, posZ + 1); this.harvestBlock_do(vec); vec = Vec3d.vec3dPool.getVecFromPool(posX + 1, posY + h, posZ - 1); this.harvestBlock_do(vec); vec = Vec3d.vec3dPool.getVecFromPool(posX - 1, posY + h, posZ + 1); this.harvestBlock_do(vec); vec = Vec3d.vec3dPool.getVecFromPool(posX - 1, posY + h, posZ - 1); this.harvestBlock_do(vec); vec = Vec3d.vec3dPool.getVecFromPool(posX + 1, posY + h, posZ + 1); this.harvestBlock_do(vec);
              *
              * } */
         }
@@ -158,22 +163,24 @@ public class EntityRotativeWheel extends Entity {
      * @param pos
      */
 
-    private void harvestBlock_do(Vec3 pos) {
+    private void harvestBlock_do(Vec3d pos) {
         if (pos == null) {
             return;
         }
 
-        Block id = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
-        int meta = world.getBlockMetadata((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        BlockPos blockPos = new BlockPos((int) pos.x, (int) pos.y, (int) pos.z);
+        IBlockState state = world.getBlockState(blockPos);
+        Block id = state.getBlock();
+        int meta = id.getMetaFromState(state);
         if (id != null) {
             this.playMiningEffect(pos, id);
         }
 
         if (!shouldIgnoreBlockForHarvesting(pos, id)) {
-            id.harvestBlock(getWorld(), fakePlayer, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, meta);
-            world.setBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, null);
+            id.harvestBlock(world, fakePlayer, blockPos, state, world.getTileEntity(blockPos), null);
+            world.setBlockToAir(blockPos);
 
-            world.playAuxSFX(2001, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, Block.getIdFromBlock(id) + (meta << 12));
+            world.playBroadcastSound(2001, blockPos, Block.getIdFromBlock(id) + (meta << 12));
             this.playMiningEffect(pos, id);
         }
 
@@ -186,12 +193,12 @@ public class EntityRotativeWheel extends Entity {
      * @param id  block id
      * @return is not harvested
      */
-    private boolean shouldIgnoreBlockForHarvesting(Vec3 pos, Block id) {
+    private boolean shouldIgnoreBlockForHarvesting(Vec3d pos, Block id) {
         if (id == null || id instanceof BlockTorch || id == Block.getBlockFromName("bedrock") || id == Block.getBlockFromName("fire") || id == Block.getBlockFromName("portal") || id == Block.getBlockFromName("endPortal") || id instanceof BlockLiquid || Block.getIdFromBlock(id) == 55 || Block.getIdFromBlock(id) == 70 || Block.getIdFromBlock(id) == 72) {
             return true;
         }
 
-        return id.getCollisionBoundingBoxFromPool(getWorld(), (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord) == null;
+        return id.getCollisionBoundingBox(world.getBlockState(new BlockPos((int) pos.x, (int) pos.y, (int) pos.z)), world, new BlockPos((int) pos.x, (int) pos.y, (int) pos.z)) == null;
     }
 
     public int getStartWheel() {
@@ -207,9 +214,9 @@ public class EntityRotativeWheel extends Entity {
     private int miningTickCounter = 0;
 
     @SideOnly(Side.CLIENT)
-    private void playMiningEffect(Vec3 pos, Block block_index) {
+    private void playMiningEffect(Vec3d pos, Block block_index) {
         miningTickCounter++;
-        Block id = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = world.getBlockState(new BlockPos((int) pos.x, (int) pos.y, (int) pos.z)).getBlock();
     }
 
     /**
@@ -255,7 +262,6 @@ public class EntityRotativeWheel extends Entity {
     }
 
     @SideOnly(Side.CLIENT)
-    @Override
     public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i) {
         field_9393_e = d;
         field_9392_f = d1;

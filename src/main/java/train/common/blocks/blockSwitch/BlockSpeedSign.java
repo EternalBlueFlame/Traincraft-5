@@ -4,16 +4,19 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import train.common.Traincraft;
 import train.common.api.blocks.BlockDynamic;
 import train.common.tile.switchStand.TileSpeedSign;
@@ -25,17 +28,17 @@ public class BlockSpeedSign extends BlockDynamic {
 	private int skinstate = 0;
 
 	public BlockSpeedSign() {
-		super(Material.iron, 0);
+		super(Material.IRON, 0);
 		this.setTickRandomly(true);
-		setBlockBounds(0.2F,0.0F,0.2F,0.8F,1.25F,0.8F);
+		// TODO 1.12: block bounds via IBlockState
+		// setBlockBounds(0.2F,0.0F,0.2F,0.8F,1.25F,0.8F);
 	}
 
 	@Override
-	public boolean hasTileEntity(int metadata) {
+	public boolean hasTileEntity() {
 		return true;
 	}
 
-	@Override
 	public void addCollisionBoxesToList(World p_149743_1_, int p_149743_2_, int p_149743_3_, int p_149743_4_, AxisAlignedBB p_149743_5_, List p_149743_6_, Entity p_149743_7_)
 	{
 	}
@@ -48,32 +51,32 @@ public class BlockSpeedSign extends BlockDynamic {
 
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
-		super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
-		TileSpeedSign te = (TileSpeedSign) world.getTileEntity(i, j, k);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+		super.onBlockPlacedBy(world, pos, state, entityliving, stack);
+		TileSpeedSign te = (TileSpeedSign) world.getTileEntity(pos);
 		if (te != null) {
 			int dir = MathHelper.floor((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
 			te.setFacing(EnumFacing.byHorizontalIndex(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
 			te.setSkinstate(0);
-			world.markBlockForUpdate(i, j, k);
+			world.notifyBlockUpdate(pos, state, state, 3);
 
 
 		}
 	}
 
 	@Override
-	public boolean onBlockActivated(World p_149727_1_, int p_149727_2_, int p_149727_3_, int p_149727_4_, EntityPlayer p_149727_5_, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_) {
-		TileSpeedSign te = (TileSpeedSign) p_149727_1_.getTileEntity(p_149727_2_, p_149727_3_, p_149727_4_);
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer entityplayer, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ) {
+		TileSpeedSign te = (TileSpeedSign) world.getTileEntity(pos);
 		te.increaseSkinState();
-		p_149727_1_.markBlockForUpdate(p_149727_2_, p_149727_3_, p_149727_4_);
+		world.notifyBlockUpdate(pos, state, state, 3);
 
 
-		return super.onBlockActivated(p_149727_1_, p_149727_2_, p_149727_3_, p_149727_4_, p_149727_5_, p_149727_6_, p_149727_7_, p_149727_8_, p_149727_9_);
+		return super.onBlockActivated(world, pos, state, entityplayer, hand, side, hitX, hitY, hitZ);
 	}
 
 	@Override
@@ -99,10 +102,11 @@ public class BlockSpeedSign extends BlockDynamic {
 
 
 
-	public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_) {
-		super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
-		if(p_149749_1_.getTileEntity(p_149749_2_,p_149749_3_,p_149749_4_)!=null){
-			p_149749_1_.removeTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
+	@Override
+	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
+		super.breakBlock(worldIn, pos, state);
+		if(worldIn.getTileEntity(pos)!=null){
+			worldIn.removeTileEntity(pos);
 		}
 	}
 

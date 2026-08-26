@@ -28,8 +28,10 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.*;
-import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
+import train.common.core.compat.DataWatcher;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.util.Constants;
@@ -37,7 +39,6 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
 import train.client.render.Bogie;
 import train.client.render.RenderEnum;
 import train.client.render.TransportRenderCache;
@@ -70,8 +71,9 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     //private Set chunks;
     protected Ticket chunkTicket;
     public TrainHandler train;
-    public List<ChunkCoordIntPair> loadedChunks = new ArrayList<>();
+    public List<ChunkPos> loadedChunks = new ArrayList<>();
     public boolean shouldChunkLoad = true;
+    public DataWatcher dataWatcher;
     protected boolean itemdropped = false;
     public float yOffset=0;
 
@@ -193,8 +195,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     public AbstractTrains(World world) {
         super(world);
+        this.dataWatcher = new DataWatcher(this);
         if(world==null){return;}
-        renderDistanceWeight = 2.0D;
         entity_data.putString("color", getDefaultSkin());
         dataWatcher.addObject(30, entity_data.toXMLString());
         dataWatcher.addObject(7, trainOwner);
@@ -210,7 +212,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         if (getSpec() != null) {
             this.setDefaultMass(weightKg()*0.1);
             this.setSize(0.98f, 1.98f);
-            this.setMinecartName(transportName());
+            this.setCustomNameTag(transportName());
         }
     }
 
@@ -228,7 +230,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
     }
 
-    @Override
     @SideOnly(Side.CLIENT)
     public float getShadowSize() {
         return 0.0F;
@@ -318,19 +319,19 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     @Override
-    public boolean interactFirst(EntityPlayer entityplayer) {
+    public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
         if (!world.isRemote && ConfigHandler.CHUNK_LOADING && (this instanceof Locomotive)) {
             if (itemstack != null && itemstack.getItem() instanceof ItemChunkLoaderActivator) {
                 this.playerEntity = entityplayer;
                 if (getFlag(7)) {
                     this.setFlag(7, false);
-                    entityplayer.addChatMessage(new ChatComponentText("Stop loading chunks"));
+                    entityplayer.sendMessage(new TextComponentString("Stop loading chunks"));
                     ForgeChunkManager.releaseTicket(chunkTicket);
                     chunkTicket = null;
                 } else if (!getFlag(7)) {
                     this.setFlag(7, true);
-                    entityplayer.addChatMessage(new ChatComponentText("Start loading chunks"));
+                    entityplayer.sendMessage(new TextComponentString("Start loading chunks"));
                 }
                 itemstack.damageItem(1, entityplayer);
                 return true;
@@ -389,7 +390,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public String getColor() {
-        if (worldObj != null) {
+        if (world != null) {
             entity_data.updateData(dataWatcher.getWatchableObjectString(30));
             if (entity_data.hasString("color")) {
                 return entity_data.getString("color");
@@ -451,15 +452,15 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         trainName = nbttagcompound.getString("theName");
         uniqueID = nbttagcompound.getInteger("uniqueID");
         //uniqueIDs = nbttagcompound.getInteger("uniqueIDs");
-        setInformation(trainOwner, trainCreator, trainName, uniqueID);
+        setInformation(getTrainType(), trainOwner, trainCreator, trainName, uniqueID);
 
         numberOfTrains = nbttagcompound.getInteger("numberOfTrains");
         isAttached = nbttagcompound.getBoolean("isAttached");
         //motionX = nbttagcompound.getDouble("motionX");
         //motionZ = nbttagcompound.getDouble("motionZ");
-        NBTTagList nbttaglist1 = nbttagcompound.getTagList("Motion", 6);            this.motionX = nbttaglist1.func_150309_d(0);
-        this.motionX = nbttaglist1.func_150309_d(0);
-        this.motionZ = nbttaglist1.func_150309_d(2);
+        NBTTagList nbttaglist1 = nbttagcompound.getTagList("Motion", 6);
+        this.motionX = nbttaglist1.getDoubleAt(0);
+        this.motionZ = nbttaglist1.getDoubleAt(2);
         Link1 = nbttagcompound.getDouble("Link1");
         Link2 = nbttagcompound.getDouble("Link2");
         if(nbttagcompound.hasKey("Dim")){
@@ -474,7 +475,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
     }
 
-    @Override
     public boolean writeMountToNBT(NBTTagCompound tag) {
         return false;
     }
@@ -571,21 +571,21 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      */
     protected boolean lockThisCart(ItemStack itemstack, EntityPlayer entityplayer) {
         if (itemstack != null && (itemstack.getItem() instanceof ItemWrench || itemstack.getItem() instanceof ItemAdminBook)) {
-            if (entityplayer.getDisplayName().equals(this.trainOwner) || entityplayer.getGameProfile().getName().equals(this.trainOwner)
-                    || this.trainOwner.isEmpty() || entityplayer.canCommandSenderUseCommand(2, "")) {
+            if (entityplayer.getName().equals(this.trainOwner) || entityplayer.getGameProfile().getName().equals(this.trainOwner)
+                    || this.trainOwner.isEmpty() || entityplayer.canUseCommand(2, "")) {
                 if (locked) {
                     locked = false;
                     if (world.isRemote) {
-                        entityplayer.addChatMessage(new ChatComponentText("Unlocked."));
+                        entityplayer.sendMessage(new TextComponentString("Unlocked."));
                     }
                 } else {
                     locked = true;
                     if (world.isRemote) {
-                        entityplayer.addChatMessage(new ChatComponentText("Locked."));
+                        entityplayer.sendMessage(new TextComponentString("Locked."));
                     }
                 }
             } else if (world.isRemote) {
-                entityplayer.addChatMessage(new ChatComponentText("You are not the owner!"));
+                entityplayer.sendMessage(new TextComponentString("You are not the owner!"));
             }
             return true;
         }
@@ -598,17 +598,17 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     protected boolean canBeDestroyedByPlayer(DamageSource damagesource) {
         if (this.getTrainLockedFromPacket()) {
-            if (damagesource.getEntity() instanceof EntityPlayer) {
-                if ((damagesource.getEntity() instanceof EntityPlayerMP) &&
-                        ((EntityPlayerMP) damagesource.getEntity()).canCommandSenderUseCommand(2, "") &&
-                        ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem() != null &&
-                        ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem().getItem() instanceof ItemWrench) {
+            if (damagesource.getTrueSource() instanceof EntityPlayer) {
+                if ((damagesource.getTrueSource() instanceof EntityPlayerMP) &&
+                        ((EntityPlayerMP) damagesource.getTrueSource()).canUseCommand(2, "") &&
+                        ((EntityPlayer) damagesource.getTrueSource()).inventory.getCurrentItem() != null &&
+                        ((EntityPlayer) damagesource.getTrueSource()).inventory.getCurrentItem().getItem() instanceof ItemWrench) {
 
-                    ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("Removing the train using OP permission."));
+                    ((EntityPlayer) damagesource.getTrueSource()).sendMessage(new TextComponentString("Removing the train using OP permission."));
                     return false;
                 }
-                else if (!((EntityPlayer) damagesource.getEntity()).getDisplayName().equalsIgnoreCase(this.trainOwner) && !(this.isPlayerTrustedToBreak(((EntityPlayerMP) damagesource.getEntity()).getDisplayName()))) {
-                    ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("You are not the owner!"));
+                else if (!((EntityPlayer) damagesource.getTrueSource()).getName().equalsIgnoreCase(this.trainOwner) && !(this.isPlayerTrustedToBreak(((EntityPlayerMP) damagesource.getTrueSource()).getName()))) {
+                    ((EntityPlayer) damagesource.getTrueSource()).sendMessage(new TextComponentString("You are not the owner!"));
                     return true;
                 }
             } else return !damagesource.isProjectile();
@@ -655,14 +655,13 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
 
-    @Override
     public String getCommandSenderName() {
         String s = EntityList.getEntityString(this);
         if (s == null) {
             s = "generic";
         }
 
-        return I18n.format("entity." + s + ".name");
+        return net.minecraft.util.text.translation.I18n.translateToLocal("entity." + s + ".name");
     }
 
 
@@ -1099,10 +1098,6 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public World getWorld(){ return world;}
-    @Override
-    public World func_82194_d() {
-        return getWorld();
-    }
 
     @Override
     public int getSizeInventory() {return 0;}
@@ -1113,14 +1108,13 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     @Override
     public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {return null;}
 
-    @Override
     public ItemStack getStackInSlotOnClosing(int p_70304_1_) {return null;}
 
     @Override
     public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {}
 
     @Override
-    public String getInventoryName() {return null;}
+    public String getName() {return null;}
 
     @Override
     public int getInventoryStackLimit() {return 0;}
@@ -1169,10 +1163,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain) {return null;}
 
-    @Override
     public boolean canFill(Fluid fluid) {return false;}
 
-    @Override
     public boolean canDrain(Fluid fluid) {return false;}
 
     @Override

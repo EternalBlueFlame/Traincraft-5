@@ -1,7 +1,7 @@
 package train.common.entity.rollingStockOld.special;
 
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.RailTools;
@@ -9,6 +9,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockRail;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
@@ -21,8 +22,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -198,12 +206,12 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 				return;
 			}
 			for (int index = 1; index < 11; index++) {
-				if (getInventory()[index] != null && getInventory()[index].getItem() != null && getInventory()[index].stackSize < getInventory()[index].getMaxStackSize()) {
+				if (getInventory()[index] != null && getInventory()[index].getItem() != null && getInventory()[index].getCount() < getInventory()[index].getMaxStackSize()) {
 
 					for (int f=0; f<link.getInventory().length;f++) {
 						if (link.getInventory()[f] != null && link.getInventory()[f].getItem() == getInventory()[index].getItem()){
 							link.decrStackSize(f,1);
-							getInventory()[index].stackSize++;
+							getInventory()[index].grow(1);
 							break;
 						}
 					}
@@ -308,13 +316,13 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
 		if (BuilderInvent[i] != null) {
-			if (BuilderInvent[i].stackSize <= j) {
+			if (BuilderInvent[i].getCount() <= j) {
 				ItemStack itemstack = BuilderInvent[i];
 				BuilderInvent[i] = null;
 				return itemstack;
 			}
 			ItemStack itemstack1 = BuilderInvent[i].splitStack(j);
-			if (BuilderInvent[i].stackSize == 0) {
+			if (BuilderInvent[i].getCount() == 0) {
 				BuilderInvent[i] = null;
 			}
 			return itemstack1;
@@ -327,7 +335,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		BuilderInvent[i] = itemstack;
 		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-			itemstack.getCount() = getInventoryStackLimit();
+			itemstack.setCount(getInventoryStackLimit());
 		}
 	}
 
@@ -337,16 +345,16 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
+	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
 		playerEntity = entityplayer;
-		if ((super.interactFirst(entityplayer))) {
+		if ((super.processInitialInteract(entityplayer, EnumHand.MAIN_HAND))) {
 			return false;
 		}
 		if (world.isRemote) {
 			return true;
 		}
 
-		entityplayer.openGui(Traincraft.instance, GuiIDs.BUILDER, getWorld(), this.getEntityId(), -1, (int) this.posZ);
+		entityplayer.openGui(Traincraft.instance, GuiIDs.BUILDER, world, this.getEntityId(), -1, (int) this.posZ);
 		pushZ = (posZ - entityplayer.posZ);
 		pushX = (posX - entityplayer.posX);
 		applyDragAndPushForces();
@@ -365,7 +373,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	
 	@Override
 	protected void applyDragAndPushForces() {
-		double d26 = MathHelper.sqrt_double(pushX * pushX + pushZ * pushZ);
+		double d26 = MathHelper.sqrt(pushX * pushX + pushZ * pushZ);
 		if (d26 > 0.01D) {
 			pushX /= d26;
 			pushZ /= d26;
@@ -389,7 +397,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	}
 
 	protected void updatePushForces() {
-		double push = MathHelper.sqrt_double(pushX * pushX + pushZ * pushZ);
+		double push = MathHelper.sqrt(pushX * pushX + pushZ * pushZ);
 		if (push > 0.01D && motionX * motionX + motionZ * motionZ > 0.001D) {
 			pushX /= push;
 			pushZ /= push;
@@ -405,11 +413,11 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	}
 
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
+		return !isDead && entityplayer.getDistanceSq(this) <= 64D;
 	}
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
-		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
+	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
+		return !isDead && entityplayer.getDistanceSq(this) <= 64D;
 	}
 
 	@Override
@@ -496,7 +504,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		boolean hasBeenPlaced = false;
 		boolean noFreight = true;
 		// ItemStack itemDug = (new ItemStack(blockNow, 1, 0));
-		@SuppressWarnings("rawtypes") List lis = world.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(4.60000000298023224D, 4.60000000298023224D, 4.60000000298023224D));
+		@SuppressWarnings("rawtypes") List lis = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(4.60000000298023224D, 4.60000000298023224D, 4.60000000298023224D));
 
 		if (lis != null && lis.size() > 0) {
 			for (int j1 = 0; j1 < lis.size(); j1++) {
@@ -505,8 +513,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 					noFreight = false;
 					for (int u = 0; u < ((Freight) entity).cargoItems.length; u++) {// checks the inventory
 						ItemStack itemInside = ((IInventory) entity).getStackInSlot(u);
-						if ((itemInside != null) && (((Freight) entity).cargoItems[u].stackSize != 0) && (((Freight) entity).cargoItems[u].getItem() == itemdug.getItem()) && (((Freight) entity).cargoItems[u].getItemDamage() == itemdug.getItemDamage()) && ((Freight) entity).cargoItems[u].stackSize != getInventoryStackLimit()) {// a stack is already in there and there is room
-							((Freight) entity).cargoItems[u].stackSize += 1;
+						if ((itemInside != null) && (((Freight) entity).cargoItems[u].getCount() != 0) && (((Freight) entity).cargoItems[u].getItem() == itemdug.getItem()) && (((Freight) entity).cargoItems[u].getItemDamage() == itemdug.getItemDamage()) && ((Freight) entity).cargoItems[u].getCount() != getInventoryStackLimit()) {// a stack is already in there and there is room
+							((Freight) entity).cargoItems[u].grow(1);
 							hasBeenPlaced = true;
 							u = ((Freight) entity).cargoItems.length;
 							j1 = lis.size();
@@ -535,8 +543,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if (noFreight) {
 			for (int u = MoreBuilderInvent; u < BuilderInvent.length; u++) {// checks the inventory
 				ItemStack itemInside = getStackInSlot(u);
-				if ((itemInside != null) && (BuilderInvent[u].stackSize != 0) && (BuilderInvent[u].getItem() == itemdug.getItem()) && (BuilderInvent[u].getItemDamage() == itemdug.getItemDamage()) && BuilderInvent[u].stackSize != getInventoryStackLimit()) {// a stack is already in there and there is room
-					BuilderInvent[u].stackSize += 1;
+				if ((itemInside != null) && (BuilderInvent[u].getCount() != 0) && (BuilderInvent[u].getItem() == itemdug.getItem()) && (BuilderInvent[u].getItemDamage() == itemdug.getItemDamage()) && BuilderInvent[u].getCount() != getInventoryStackLimit()) {// a stack is already in there and there is room
+					BuilderInvent[u].grow(1);
 					hasBeenPlaced = true;
 					u = BuilderInvent.length;
 				}
@@ -580,9 +588,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			return false;
 		if (stack.getItem()!= null) {
 			Block block = Block.getBlockFromItem(stack.getItem());
-			if (block.hasTileEntity(stack.getItem().getMetadata(stack.getItemDamage())))
+			if (block.hasTileEntity(block.getStateFromMeta(stack.getItem().getMetadata(stack.getItemDamage()))))
 				return false;
-			if(block.getRenderType()!=0)
+			if(block.getRenderType(block.getDefaultState()) != EnumBlockRenderType.MODEL)
 				return false;
 			if(block instanceof BlockFalling)
 				return false;
@@ -594,7 +602,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	private void moveStacks() {
 		if (BuilderInvent[1] == null) {
 			for (int i = 8; i <= 10; i++) {
-				if (BuilderInvent[i] != null && (RailTools.isTrackItem(BuilderInvent[i]) || Item.getIdFromItem(BuilderInvent[i].getItem()) == Block.getIdFromBlock(Blocks.rail) || Item.getIdFromItem(BuilderInvent[i].getItem()) == Block.getIdFromBlock(Block.getBlockFromName("railPowered")) || (Item.getIdFromItem(BuilderInvent[i].getItem()) == Block.getIdFromBlock(Block.getBlockFromName("railDetector.blockID"))))) {
+				if (BuilderInvent[i] != null && (RailTools.isTrackItem(BuilderInvent[i]) || Item.getIdFromItem(BuilderInvent[i].getItem()) == Block.getIdFromBlock(Blocks.RAIL) || Item.getIdFromItem(BuilderInvent[i].getItem()) == Block.getIdFromBlock(Block.getBlockFromName("railPowered")) || (Item.getIdFromItem(BuilderInvent[i].getItem()) == Block.getIdFromBlock(Block.getBlockFromName("railDetector.blockID"))))) {
 					BuilderInvent[1] = BuilderInvent[i].copy();
 					decrStackSize(i, 64);
 					break;
@@ -637,16 +645,16 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	 * @param pos position
 	 * @param block_index index of the block in mining list
 	 */
-	private void playMiningEffect(Vec3 pos, int block_index) {
+	private void playMiningEffect(Vec3d pos, int block_index) {
 		miningTickCounter++;
 
-		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer() && pos != null && getWorld() !=null) {
-			Block block = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer() && pos != null && world != null) {
+			Block block = world.getBlockState(new BlockPos((int) pos.x, (int) pos.y, (int) pos.z)).getBlock();
 			if (miningTickCounter % 8 == 0 && block != null && !world.isRemote && Minecraft.getMinecraft() != null) {
-				this.world.playSound((int) pos.xCoord + 0.5F, (int) pos.yCoord + 0.5F, (int) pos.zCoord + 0.5F, block.stepSound.getBreakSound(), 1.0F, block.stepSound.getPitch() * 0.5F, true);
+				this.world.playSound((int) pos.x + 0.5F, (int) pos.y + 0.5F, (int) pos.z + 0.5F, block.getSoundType().getBreakSound(), SoundCategory.BLOCKS, 1.0F, block.getSoundType().getPitch() * 0.5F, true);
 			}
 			if (miningTickCounter % 8 == 0 && block_index != 0 && block != null && FMLClientHandler.instance().getClient() != null ) {
-				FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
+				FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects(new BlockPos((int) pos.x, (int) pos.y, (int) pos.z), EnumFacing.byIndex(block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0)));
 			}
 		}
 	}
@@ -728,16 +736,15 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		super.attackEntityFrom(damagesource, i);
 		setRollingDirection(-getRollingDirection());
 		setRollingAmplitude(10);
-		setBeenAttacked();
 		setDamage(getDamage() + i * 10);
 		if (getDamage() > 40) {
 			if (getPassengers().get(0) != null) {
-				getPassengers().get(0).mountEntity(this);
+				getPassengers().get(0).startRiding(this);
 			}
 			this.setDead();
 			ServerLogger.deleteWagon(this);
-			if(damagesource.getEntity() instanceof EntityPlayer) {
-				dropCartAsItem(((EntityPlayer)damagesource.getEntity()).capabilities.isCreativeMode);
+			if(damagesource.getTrueSource() instanceof EntityPlayer) {
+				dropCartAsItem(((EntityPlayer)damagesource.getTrueSource()).capabilities.isCreativeMode);
 				for(ItemStack stack : BuilderInvent){
 					if (stack != null) {
 						entityDropItem(stack, 0);
@@ -805,13 +812,15 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 
 	private void harvestBlock(int i, int j, int k) {
 
-		Block block =  world.getBlock(i, j, k);
+		IBlockState state = world.getBlockState(new BlockPos(i, j, k));
 
-		int meta = world.getBlockMetadata(i, j, k);
+		Block block = state.getBlock();
 
-		if (block.getDrops(getWorld(), i, j, k, meta, 0).size()>0) {
+		int meta = block.getMetaFromState(state);
 
-			ArrayList<ItemStack> stacks = new ArrayList<ItemStack>(block.getDrops(getWorld(), i, j, k, meta, 0));
+		if (block.getDrops(world, new BlockPos(i, j, k), state, 0).size()>0) {
+
+			ArrayList<ItemStack> stacks = new ArrayList<ItemStack>(block.getDrops(world, new BlockPos(i, j, k), state, 0));
 
 			for (ItemStack s : stacks) {
 				// we do not destroy rails
@@ -830,8 +839,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		// mining effect
 		if (!world.isRemote) {
 			int id= Block.getIdFromBlock(block);
-			this.playMiningEffect(Vec3.createVectorHelper(i, j, k), id);
-			world.playAuxSFX(2001, i, j, k, id + (meta << 12));
+			this.playMiningEffect(new Vec3d(i, j, k), id);
+			world.playBroadcastSound(2001, new BlockPos(i, j, k), id + (meta << 12));
 		}
 
 	}
@@ -847,7 +856,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if(inventoryId > 0 && inventoryId < BuilderInvent.length) {
 			 if(BuilderInvent[inventoryId] == null
 					 || BuilderInvent[inventoryId].getItem() == null
-					 || BuilderInvent[inventoryId].stackSize <= 0)
+					 || BuilderInvent[inventoryId].getCount() <= 0)
 				 return true;
 
 			 newblock = Block.getBlockFromItem(BuilderInvent[inventoryId].getItem());
@@ -858,18 +867,19 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			 if(newblock == null)
 				 return true;
 		}else {
-			newblock = Blocks.air;
+			newblock = Blocks.AIR;
 		}
 
 
-		Block block = world.getBlock(i, j, k);
-		int metadata = world.getBlockMetadata(i, j, k);
+		BlockPos pos = new BlockPos(i, j, k);
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
+		int metadata = block.getMetaFromState(state);
 
 		if(block == newblock && metadata == newmeta)
 			return true;
 
-		BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(i, j, k, getWorld(),
-				block, metadata, this.fakeplayer);
+		BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, this.fakeplayer);
 
 		MinecraftForge.EVENT_BUS.post(event);
 
@@ -879,13 +889,12 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			harvestBlock(i, j, k);
 
 			// place new block
-			world.setBlock(i, j, k, newblock);
-			world.setBlockMetadataWithNotify(i, j, k, newmeta, 3);
+			world.setBlockState(pos, newblock.getStateFromMeta(newmeta));
 
 			if(consumeBlock) {
-				BuilderInvent[inventoryId].stackSize--; // ok ?
+				BuilderInvent[inventoryId].shrink(1); // ok ?
 
-				if(BuilderInvent[inventoryId].stackSize == 0)
+				if(BuilderInvent[inventoryId].getCount() == 0)
 					BuilderInvent[inventoryId] = null;
 			}
 
@@ -902,18 +911,19 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if(BuilderInvent[inventoryId] == null)
 			return false;
 
-		Block block = world.getBlock(i, j, k);
-		int metadata = world.getBlockMetadata(i, j, k);
+		BlockPos pos = new BlockPos(i, j, k);
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
+		int metadata = block.getMetaFromState(state);
 
 			// check if we need to place rails and if we can
-		if(BlockRailBase.func_150051_a(block)
+		if(BlockRailBase.isRailBlock(state)
 				|| block instanceof BlockTCRail
 				|| block instanceof BlockTCRailGag) {
 			return true;
 		}
 
-		BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(i, j, k, getWorld(),
-				block, metadata, this.fakeplayer);
+		BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(world, pos, state, this.fakeplayer);
 
 		MinecraftForge.EVENT_BUS.post(event);
 
@@ -923,13 +933,13 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			harvestBlock(i, j, k);
 
 				// place new block
-			world.setBlockToAir(i, j, k);
-			boolean success = placeRailAt(this, BuilderInvent[inventoryId], getWorld(), i, j, k);
+			world.setBlockToAir(pos);
+			boolean success = placeRailAt(this, BuilderInvent[inventoryId], world, i, j, k);
 
 			if(success) {
-				BuilderInvent[inventoryId].stackSize--; // ok ?
+				BuilderInvent[inventoryId].shrink(1); // ok ?
 
-				if(BuilderInvent[inventoryId].stackSize == 0)
+				if(BuilderInvent[inventoryId].getCount() == 0)
 					BuilderInvent[inventoryId] = null;
 
 				return true;
@@ -952,16 +962,16 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		int w = k + kZ;
 
 		if(hY < 0) {
-			Block block = world.getBlock(u - iX, v - 1, w - kZ);
-			if(BlockRail.func_150051_a(block)
+			Block block = world.getBlockState(new BlockPos(u - iX, v - 1, w - kZ)).getBlock();
+			if(BlockRail.isRailBlock(block.getDefaultState())
 					|| block instanceof BlockTCRail
 					|| block instanceof BlockTCRailGag) {
 				v--;
 				hY++;
 			}
 		}else if(hY > 0) {
-			Block block = world.getBlock(u - iX, v, w - kZ);
-			if(BlockRail.func_150051_a(block)
+			Block block = world.getBlockState(new BlockPos(u - iX, v, w - kZ)).getBlock();
+			if(BlockRail.isRailBlock(block.getDefaultState())
 					|| block instanceof BlockTCRail
 					|| block instanceof BlockTCRailGag) {
 				v++;
@@ -1007,9 +1017,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		success &= replaceBlockAt(u, v - 1, w, this.slotId_UnderBlock);
 
 		// check if underBlock will fall before placing rail
-		Block underBlock = world.getBlock(u, v-1, w);
+		Block underBlock = world.getBlockState(new BlockPos(u, v - 1, w)).getBlock();
 
-		if(underBlock instanceof BlockFalling && BlockFalling.func_149831_e(getWorld(), u, v-2, w)) {
+		if(underBlock instanceof BlockFalling && (world.isAirBlock(new BlockPos(u, v - 2, w)) || world.getBlockState(new BlockPos(u, v - 2, w)).getBlock() == Blocks.FIRE || world.getBlockState(new BlockPos(u, v - 2, w)).getMaterial().isLiquid())) {
 			this.skipTick = true;
 			return false;
 		}
@@ -1026,11 +1036,11 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if (stack.getItem() instanceof ITrackItem)
 			return ((ITrackItem) stack.getItem()).placeTrack(stack.copy(), world, i, j, k);
 		if (stack.getItem() instanceof ItemBlock) {
-			Block block = ((ItemBlock) stack.getItem()).field_150939_a;
-			if (BlockRailBase.func_150051_a(block)) {
-				boolean success = world.setBlock(i, j, k, block);
+			Block block = Block.getBlockFromItem(stack.getItem());
+			if (BlockRailBase.isRailBlock(block.getDefaultState())) {
+				boolean success = world.setBlockState(new BlockPos(i, j, k), block.getDefaultState());
 				if (success)
-					world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, block.stepSound.func_150496_b(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+					world.playSound((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, block.getSoundType().getPlaceSound(), SoundCategory.BLOCKS, (block.getSoundType().getVolume() + 1.0F) / 2.0F, block.getSoundType().getPitch() * 0.8F, true);
 				return success;
 			}
 		} if (stack.getItem() instanceof ItemTCRail){
@@ -1046,6 +1056,45 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemstack) {
 		return true;
+	}
+
+	@Override
+	public boolean isEmpty() {
+		for (ItemStack itemstack : BuilderInvent) {
+			if (itemstack != null) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	@Override
+	public void clear() {
+		// TODO
+	}
+
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	@Override
+	public boolean hasCustomName() {
+		return false;
+	}
+
+	@Override
+	public ITextComponent getDisplayName() {
+		return new TextComponentString(getName() == null ? "" : getName());
 	}
 
 	@Override

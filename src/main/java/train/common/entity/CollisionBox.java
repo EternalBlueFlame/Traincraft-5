@@ -5,38 +5,44 @@ import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.IMinecart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.boss.EntityDragonPart;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.Traincraft;
 import train.common.api.EntityRollingStock;
 import train.common.core.network.PacketInteract;
 import train.common.core.network.PacketRemove;
 
 
-public class CollisionBox extends EntityDragonPart implements IInventory, IFluidHandler, IMinecart, ILinkableCart, IFluidCart {
+public class CollisionBox extends MultiPartEntityPart implements IInventory, IFluidHandler, IMinecart, ILinkableCart, IFluidCart {
 
     static String dragonBoxName ="trainbox";
     public EntityRollingStock host;
+    public float yOffset;
+    public float ySize;
 
     //client side entity registration shenanagains. this lets us register the hitbox as a real entity
     public CollisionBox(final World w){
         super(new IEntityMultiPart() {
             @Override
-            public World func_82194_d() {return w;}
+            public World getWorld() {return w;}
 
             @Override
-            public boolean attackEntityFromPart(EntityDragonPart p, DamageSource d, float i) {return false;}
+            public boolean attackEntityFromPart(MultiPartEntityPart p, DamageSource d, float i) {return false;}
         },dragonBoxName,1,1);
     }
 
@@ -52,36 +58,41 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     }
 
     @Override
-    public String getCommandSenderName() {
-        return host==null?"collisionBox":host.getCommandSenderName();
+    public String getName() {
+        return host==null?"collisionBox":host.getName();
     }
 
     @Override
-    public boolean interactFirst(EntityPlayer p_130002_1_) {
-        if(worldObj.isRemote){
+    public boolean hasCustomName() {
+        return host != null && host.hasCustomName();
+    }
+
+    @Override
+    public boolean processInitialInteract(EntityPlayer player, EnumHand hand) {
+        if(world.isRemote){
             Traincraft.keyChannel.sendToServer(new PacketInteract(host.getEntityId()));
         }
-        return host != null && host.interactFirst(p_130002_1_);
+        return host != null && host.processInitialInteract(player, EnumHand.MAIN_HAND);
     }
 
     //check often to be sure the host actually exists and didnt somehow get deleted in such a way that would make it skip hitbox removal.
     @Override
     public void onUpdate() {
-        if(worldObj==null){
+        if(world==null){
             return;
         }
         if (ticksExisted % 100 == 0) {
-            if (host ==null || !(worldObj.getEntityByID(host.getEntityId()) instanceof EntityRollingStock)) {
+            if (host ==null || !(world.getEntityByID(host.getEntityId()) instanceof EntityRollingStock)) {
                 this.setDead();
-                worldObj.removeEntity(this);
+                world.removeEntity(this);
             }
         }
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource damageSource, float p_70097_2_) {
-        if(worldObj.isRemote){
-            Traincraft.keyChannel.sendToServer(new PacketRemove(host.getEntityId(), damageSource==null?-1:damageSource.getEntity().getEntityId()));
+        if(world.isRemote){
+            Traincraft.keyChannel.sendToServer(new PacketRemove(host.getEntityId(), damageSource==null?-1:damageSource.getTrueSource().getEntityId()));
             return true;
         }
         return host != null && host.attackEntityFromPart(this, damageSource, p_70097_2_);
@@ -143,23 +154,13 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
-        return host.getStackInSlotOnClosing(p_70304_1_);
+    public ItemStack removeStackFromSlot(int p_70304_1_) {
+        return host.removeStackFromSlot(p_70304_1_);
     }
 
     @Override
     public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
         host.setInventorySlotContents(p_70299_1_, p_70299_2_);
-    }
-
-    @Override
-    public String getInventoryName() {
-        return host.getInventoryName();
-    }
-
-    @Override
-    public boolean hasCustomInventoryName() {
-        return host.hasCustomInventoryName();
     }
 
     @Override
@@ -173,18 +174,18 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
-        return host.isUseableByPlayer(p_70300_1_);
+    public boolean isUsableByPlayer(EntityPlayer p_70300_1_) {
+        return host.isUsableByPlayer(p_70300_1_);
     }
 
     @Override
-    public void openInventory() {
-        host.openInventory();
+    public void openInventory(EntityPlayer player) {
+        host.openInventory(player);
     }
 
     @Override
-    public void closeInventory() {
-        host.closeInventory();
+    public void closeInventory(EntityPlayer player) {
+        host.closeInventory(player);
     }
 
     @Override
@@ -193,33 +194,59 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-        return host.fill(from, resource, doFill);
+    public int getField(int id) {
+        return host.getField(id);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-        return host.drain(from, resource, doDrain);
+    public void setField(int id, int value) {
+        host.setField(id, value);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-        return host.drain(from, maxDrain, doDrain);
+    public int getFieldCount() {
+        return host.getFieldCount();
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
-        return host.canFill(from, fluid);
+    public void clear() {
+        host.clear();
     }
 
     @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        return host.canDrain(from, fluid);
+    public boolean isEmpty() {
+        return host.isEmpty();
     }
 
     @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-        return host.getTankInfo(from);
+    public int fill(EnumFacing from, FluidStack resource, boolean doFill) {
+        return host.fill(resource, doFill);
+    }
+
+    @Override
+    public FluidStack drain(EnumFacing from, FluidStack resource, boolean doDrain) {
+        return host.drain(resource, doDrain);
+    }
+
+    @Override
+    public FluidStack drain(EnumFacing from, int maxDrain, boolean doDrain) {
+        return host.drain(maxDrain, doDrain);
+    }
+
+    @Override
+    public boolean canFill(EnumFacing from, Fluid fluid) {
+        return host.canFill(fluid);
+    }
+
+    @Override
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
+        return host.canDrain(fluid);
+    }
+
+    @Override
+    public IFluidTankProperties[] getTankProperties() {
+        IFluidTankProperties[] props = host.getTankProperties();
+        return props == null ? new IFluidTankProperties[0] : props;
     }
 
     @Override
@@ -229,7 +256,7 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
      * @param target The full target the player is looking at
      * @return A ItemStack to add to the player's inventory, Null if nothing should be added.
      */
-    public ItemStack getPickedResult(MovingObjectPosition target) {
+    public ItemStack getPickedResult(RayTraceResult target) {
         return host.getCartItem();
     }
 
@@ -238,7 +265,7 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
         this.prevPosX = this.posX = p_70107_1_;
         this.prevPosY = this.posY = p_70107_3_;
         this.prevPosZ = this.posZ = p_70107_5_;
-        this.boundingBox.setBounds(p_70107_1_ - (this.width*0.5), p_70107_3_ - (double) this.yOffset + (double) this.ySize, p_70107_5_ - (this.width*0.5), p_70107_1_ + (this.width*0.5), p_70107_3_ - (double) this.yOffset + (double) this.ySize + (double) this.height, p_70107_5_ + (this.width*0.5));
+        this.setEntityBoundingBox(new AxisAlignedBB(p_70107_1_ - (this.width*0.5), p_70107_3_ - (double) this.yOffset + (double) this.ySize, p_70107_5_ - (this.width*0.5), p_70107_1_ + (this.width*0.5), p_70107_3_ - (double) this.yOffset + (double) this.ySize + (double) this.height, p_70107_5_ + (this.width*0.5)));
 
     }
 
@@ -254,12 +281,12 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
 
     @Override
     public boolean canAcceptPushedFluid(EntityMinecart requester, Fluid fluid) {
-        return canFill(ForgeDirection.UNKNOWN,fluid);
+        return canFill(null,fluid);
     }
 
     @Override
     public boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid) {
-        return canDrain(ForgeDirection.UNKNOWN,fluid);
+        return canDrain(null,fluid);
     }
 
     @Override

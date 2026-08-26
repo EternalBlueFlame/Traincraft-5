@@ -2,7 +2,9 @@ package train.common.blocks.blockSwitch;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class BlocksnowGravel extends Block {
@@ -12,8 +14,7 @@ public class BlocksnowGravel extends Block {
 
     }
 
-    @Override
-    protected void dropBlockAsItem(World p_149642_1_, int p_149642_2_, int p_149642_3_, int p_149642_4_, ItemStack p_149642_5_) {
-        super.dropBlockAsItem(p_149642_1_, p_149642_2_, p_149642_3_, p_149642_4_, p_149642_5_);
+    protected void dropBlockAsItem(World p_149642_1_, BlockPos p_149642_2_, IBlockState p_149642_3_, ItemStack p_149642_4_) {
+        super.dropBlockAsItemWithChance(p_149642_1_, p_149642_2_, p_149642_3_, 1.0F, 0);
     }
 }

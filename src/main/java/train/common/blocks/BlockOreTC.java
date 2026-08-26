@@ -5,11 +5,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.library.Info;
@@ -25,11 +27,10 @@ public class BlockOreTC extends BlockFalling {
 	private static IIcon texture4;
 
 	public BlockOreTC() {
-		super(Material.rock);
+		super(Material.ROCK);
 		setCreativeTab(Traincraft.tcTab);
 	}
 
-	@Override
 	public IIcon getIcon(int side, int metadata) {
 		if (metadata == 0) return texture1;
 		else if (metadata == 1) return texture2;
@@ -38,8 +39,8 @@ public class BlockOreTC extends BlockFalling {
 	}
 
 	@Override
-	public int damageDropped(int metadata) {
-		return metadata;
+	public int damageDropped(IBlockState state) {
+		return state.getBlock().getMetaFromState(state);
 	}
 
 	@Override
@@ -48,16 +49,15 @@ public class BlockOreTC extends BlockFalling {
 	}
 
 	@Override
-    public void onBlockAdded(World world, int x, int y, int z) {
-		if (world.getBlockMetadata(x, y, z) == 1) world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world));
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		if (state.getBlock().getMetaFromState(state) == 1) world.scheduleBlockUpdate(pos, this, this.tickRate(world), 0);
     }
 
 	@Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-		if (world.getBlockMetadata(x, y, z) == 1) world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world));
+    public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		if (state.getBlock().getMetaFromState(state) == 1) world.scheduleBlockUpdate(pos, this, this.tickRate(world), 0);
     }
 
-	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(Item par1, CreativeTabs tab, List subItems) {
 		for (int i = 0; i < 4; i++) {
@@ -65,7 +65,6 @@ public class BlockOreTC extends BlockFalling {
 		}
 	}
 
-	@Override
 	@SideOnly(Side.CLIENT)
 	public void registerBlockIcons(IIconRegister iconRegister) {
 		texture1 = iconRegister.registerIcon(Info.modID.toLowerCase() + ":ores/ore_copper");

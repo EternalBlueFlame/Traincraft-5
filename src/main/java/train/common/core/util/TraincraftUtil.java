@@ -4,7 +4,7 @@ import net.minecraft.block.BlockRailBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import train.common.Traincraft;
@@ -16,8 +16,8 @@ public class TraincraftUtil {
 
 
     public static Item getItemFromName(String name) {
-        if (Item.itemRegistry.containsKey(name)) {
-            return (Item) Item.itemRegistry.getObject(name);
+        if (Item.REGISTRY.containsKey(new net.minecraft.util.ResourceLocation(name))) {
+            return Item.REGISTRY.getObject(new net.minecraft.util.ResourceLocation(name));
         } else {
             return null;
         }
@@ -39,7 +39,7 @@ public class TraincraftUtil {
     }
 
     public static boolean isRailBlockAt(World world, int x, int y, int z) {
-        return world.getBlock(x, y, z) instanceof BlockRailBase;
+        return world.getBlockState(new net.minecraft.util.math.BlockPos(x, y, z)).getBlock() instanceof BlockRailBase;
     }
 
     public static final double degrees = (180d / Math.PI);
@@ -57,7 +57,7 @@ public class TraincraftUtil {
             rotationSin1 = Math.sin(Math.toRadians((transport.rotationYaw + 90)));
         }
         float pitch = (float) (transport.posY + ((Math.tan(pitchRads) * distance) + transport.getMountedYOffset())
-                + transport.passenger.getYOffset() + yOffset);
+                + transport.getPassengers().get(0).getYOffset() + yOffset);
 
         double bogieX1 = (transport.posX + (rotationCos1 * distance));
         double bogieZ1 = (transport.posZ + (rotationSin1 * distance));
@@ -71,7 +71,7 @@ public class TraincraftUtil {
             pitch -= (float) (pitchRads * 1.2);
         }
         if (pitchRads == 0.0) {
-            transport.getPassengers().get(0).setPosition(bogieX1, (transport.posY + transport.getMountedYOffset() + transport.passenger.getYOffset() + yOffset), bogieZ1);
+            transport.getPassengers().get(0).setPosition(bogieX1, (transport.posY + transport.getMountedYOffset() + transport.getPassengers().get(0).getYOffset() + yOffset), bogieZ1);
         }
         if (pitchRads > -1.01 && pitchRads < 1.01) {
             transport.getPassengers().get(0).setPosition(bogieX1, pitch, bogieZ1);
@@ -121,7 +121,7 @@ public class TraincraftUtil {
 
     public static final float degreesF = (float) (180.0d / Math.PI);
 
-    public static Vec3 func_514_g(double d, double d1, double d2) {
-        return Vec3.createVectorHelper(MathHelper.floor(d), MathHelper.floor(d1), MathHelper.floor(d2));
+    public static Vec3d func_514_g(double d, double d1, double d2) {
+        return new Vec3d(MathHelper.floor(d), MathHelper.floor(d1), MathHelper.floor(d2));
     }
 }
