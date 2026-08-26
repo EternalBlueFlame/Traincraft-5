@@ -531,12 +531,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			//detect slopes
 			if(!(l instanceof BlockRailBase || l instanceof BlockTCRail || l instanceof BlockTCRailGag)){
 				prevPosY = posY;
-				if(getWorld().isAirBlock(xFloor, yFloor, zFloor)){
+				if(CommonUtil.getBlockAt(getWorld(),xFloor, yFloor-1, zFloor) instanceof BlockAir){
 					posY--;
 					yFloor--;
-				} else {
-					posY++;
-					yFloor++;
 				}
 				l = CommonUtil.getBlockAt(getWorld(), xFloor, yFloor, zFloor);
 
@@ -564,8 +561,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 				this.yOffset=0.425f;
 				moveOnTCRail(xFloor, yFloor, zFloor, l);
 			} else {
-				posY++;
-				yFloor++;
+				this.yOffset=1.3f;
 				posX+=(velocity[2]+velocity[0])*0.5;
 				posZ+=(velocity[3]+velocity[1])*0.5;
 				isOnRail = false;
