@@ -1,8 +1,8 @@
 package train.common.core.handlers;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
 import net.minecraftforge.event.entity.EntityStruckByLightningEvent;
@@ -57,14 +57,13 @@ public class WorldEvents {
 
     @SubscribeEvent
     public void playerQuitEvent(PlayerEvent.PlayerLoggedOutEvent event) {
-        if (event.player.getRidingEntity()instanceof AbstractTrains) {
-            if (event.player.getRidingEntity()instanceof Locomotive) {
-                ((Locomotive) event.player.ridingEntity).isBraking = true;
-                ((Locomotive) event.player.ridingEntity).parkingBrake = true;
+        if (event.player.getRidingEntity() instanceof AbstractTrains) {
+            if (event.player.getRidingEntity() instanceof Locomotive) {
+                ((Locomotive) event.player.getRidingEntity()).isBraking = true;
+                ((Locomotive) event.player.getRidingEntity()).parkingBrake = true;
             }
 
-            event.player.dismountEntity(event.player.ridingEntity);
-            event.player.getRidingEntity()= null;
+            event.player.stopRiding();
         }
     }
 

@@ -89,7 +89,7 @@ public class EntityTankWagon2 extends LiquidTank {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!this.getWorld().isRemote) {
+		if (!this.world.isRemote) {
 			entityplayer.openGui(Traincraft.instance, GuiIDs.LIQUID, getWorld(), this.getEntityId(), -1, (int) this.posZ);
 		}
 		return true;

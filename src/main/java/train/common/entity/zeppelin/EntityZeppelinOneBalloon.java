@@ -23,7 +23,7 @@ public class EntityZeppelinOneBalloon extends AbstractZeppelin{
 	}
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i) {
-		if (getWorld().isRemote || isDead) {
+		if (world.isRemote || isDead) {
 			return true;
 		}
 		boatRockDirection = -boatRockDirection;
@@ -34,7 +34,6 @@ public class EntityZeppelinOneBalloon extends AbstractZeppelin{
 				this.boatCurrentDamage = 1000;
 			}
 		}
-		setBeenAttacked();
 		if (boatCurrentDamage > 40) {
 			if (damagesource.getEntity() instanceof EntityPlayer && !(((EntityPlayer) damagesource.getEntity()).capabilities.isCreativeMode)) {
 				dropItem(ItemIDs.zeppelin.item, 1);

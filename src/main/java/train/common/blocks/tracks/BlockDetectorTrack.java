@@ -9,6 +9,7 @@ import mods.railcraft.api.tracks.ITrackEmitter;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import train.common.library.Tracks;
 
 import java.io.DataInputStream;
@@ -42,9 +43,9 @@ public class BlockDetectorTrack extends TrackBaseTraincraft implements ITrackEmi
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
+		Block block = getWorld().getBlockState(new BlockPos(getX(), getY(), getZ())).getBlock();
+		getWorld().notifyNeighborsOfStateChange(new BlockPos(getX(), getY(), getZ()), block, true);
+		getWorld().notifyNeighborsOfStateChange(new BlockPos(getX(), getY() - 1, getZ()), block, true);
 
 		markBlockNeedsUpdate();
 	}

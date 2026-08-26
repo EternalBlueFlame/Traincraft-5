@@ -26,7 +26,7 @@ public class TileHelper {
 	 * @return The side relative to the facing direction.
 	 */
 	public static EnumFacing byHorizontalIndexFromSide(EnumFacing front, EnumFacing side) {
-		if (front != EnumFacing.UNKNOWN && side != EnumFacing.UNKNOWN) {
+		if (front != null && side != null) {
 			switch (front.ordinal()) {
 			case 0:
 				switch (side.ordinal()) {
@@ -112,6 +112,6 @@ public class TileHelper {
 				}
 			}
 		}
-		return EnumFacing.UNKNOWN;
+		return null;
 	}
 }

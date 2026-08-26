@@ -1,7 +1,7 @@
 package train.common.core.handlers;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import train.common.api.AbstractTrains;
@@ -126,9 +126,9 @@ public class LinkHandler {
 					}
 
 
-					EntityPlayer entityplayer = cart1.getWorld().getClosestPlayerToEntity(cart1, 20);//
+					EntityPlayer entityplayer = cart1.world.getClosestPlayerToEntity(cart1, 20);//
 					if (entityplayer != null && byPlayer) {
-						entityplayer.addChatMessage(new ChatComponentText("attached!"));
+						entityplayer.addChatMessage(new TextComponentString("attached!"));
 					}
 				}
 			}

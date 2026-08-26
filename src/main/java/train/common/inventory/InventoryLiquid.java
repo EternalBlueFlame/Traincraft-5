@@ -54,7 +54,7 @@ public class InventoryLiquid extends Container {
 			else if (!mergeItemStack(itemstack1, 0, inventorySize, false)) {
 				return null;
 			}
-			if (itemstack1.stackSize == 0) {
+			if (itemstack1.getCount() == 0) {
 				slot.putStack(null);
 			}
 			else {

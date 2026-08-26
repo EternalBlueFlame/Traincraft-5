@@ -9,7 +9,7 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import train.common.Traincraft;
@@ -155,7 +155,7 @@ public class GuiForney extends GuiContainer {
                     this.initGui();
                 }
             } else if (loco.getPassengers().get(0) != null && loco.getPassengers().get(0) instanceof EntityPlayer) {
-                ((EntityPlayer) loco.getPassengers().get(0)).addChatMessage(new ChatComponentText("You are not the owner"));
+                ((EntityPlayer) loco.getPassengers().get(0)).addChatMessage(new TextComponentString("You are not the owner"));
             }
         } else if (guibutton instanceof GUIButton) {
             ((GUIButton)guibutton).onClick();

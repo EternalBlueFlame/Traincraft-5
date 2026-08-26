@@ -320,7 +320,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     @Override
     public boolean interactFirst(EntityPlayer entityplayer) {
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
-        if (!getWorld().isRemote && ConfigHandler.CHUNK_LOADING && (this instanceof Locomotive)) {
+        if (!world.isRemote && ConfigHandler.CHUNK_LOADING && (this instanceof Locomotive)) {
             if (itemstack != null && itemstack.getItem() instanceof ItemChunkLoaderActivator) {
                 this.playerEntity = entityplayer;
                 if (getFlag(7)) {
@@ -490,7 +490,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public void setInformation(String trainType, String trainOwner, String trainCreator, String trainName, int uniqueID) {
-        if (!getWorld().isRemote) {
+        if (!world.isRemote) {
             dataWatcher.updateObject(6, trainType);
             dataWatcher.updateObject(7, trainOwner);
             dataWatcher.updateObject(9, trainName);
@@ -556,7 +556,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * Lock packet
      */
     public void setTrainLockedFromPacket(boolean set) {
-        // System.out.println(getWorld().isRemote + " " + set);
+        // System.out.println(world.isRemote + " " + set);
         locked = set;
     }
 
@@ -575,16 +575,16 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                     || this.trainOwner.isEmpty() || entityplayer.canCommandSenderUseCommand(2, "")) {
                 if (locked) {
                     locked = false;
-                    if (getWorld().isRemote) {
+                    if (world.isRemote) {
                         entityplayer.addChatMessage(new ChatComponentText("Unlocked."));
                     }
                 } else {
                     locked = true;
-                    if (getWorld().isRemote) {
+                    if (world.isRemote) {
                         entityplayer.addChatMessage(new ChatComponentText("Locked."));
                     }
                 }
-            } else if (getWorld().isRemote) {
+            } else if (world.isRemote) {
                 entityplayer.addChatMessage(new ChatComponentText("You are not the owner!"));
             }
             return true;
@@ -1098,7 +1098,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         return null;
     }
 
-    public World getWorld(){ return worldObj;}
+    public World getWorld(){ return world;}
     @Override
     public World func_82194_d() {
         return getWorld();

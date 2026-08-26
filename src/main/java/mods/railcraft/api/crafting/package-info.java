@@ -7,4 +7,4 @@
  */
 @API(apiVersion="1.0.0", owner="RailcraftAPI|core", provides="RailcraftAPI|crafting")
 package mods.railcraft.api.crafting;
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;

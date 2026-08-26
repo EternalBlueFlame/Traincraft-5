@@ -151,7 +151,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		
 		//register current elevation = poY
 		currentHeight = posY;
-		if (getWorld().isRemote)
+		if (world.isRemote)
 			return;
 		
 		updateFuel();
@@ -342,7 +342,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return true;
 		}
 
@@ -426,14 +426,14 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	public void Smoke() {
 		if (getFuel() > 0) {
 			fuelTrain--;
-			if (!getWorld().isRemote) {
+			if (!world.isRemote) {
 				dataWatcher.updateObject(24, fuelTrain);
 			}
 		}
 	}
 
 	public int getFuel() {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return (this.dataWatcher.getWatchableObjectInt(24));
 		}
 		return fuelTrain;
@@ -472,7 +472,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	}
 
 	public int getPlannedHeight() {
-		//System.out.println("get watcher: "+this.dataWatcher.getWatchableObjectInt(26) + " "+ getWorld().isRemote + " plannedHeight "+plannedHeight);
+		//System.out.println("get watcher: "+this.dataWatcher.getWatchableObjectInt(26) + " "+ world.isRemote + " plannedHeight "+plannedHeight);
 		return (this.dataWatcher.getWatchableObjectInt(26));
 	}
 
@@ -496,7 +496,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		boolean hasBeenPlaced = false;
 		boolean noFreight = true;
 		// ItemStack itemDug = (new ItemStack(blockNow, 1, 0));
-		@SuppressWarnings("rawtypes") List lis = getWorld().getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(4.60000000298023224D, 4.60000000298023224D, 4.60000000298023224D));
+		@SuppressWarnings("rawtypes") List lis = world.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(4.60000000298023224D, 4.60000000298023224D, 4.60000000298023224D));
 
 		if (lis != null && lis.size() > 0) {
 			for (int j1 = 0; j1 < lis.size(); j1++) {
@@ -641,9 +641,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		miningTickCounter++;
 
 		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer() && pos != null && getWorld() !=null) {
-			Block block = getWorld().getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
-			if (miningTickCounter % 8 == 0 && block != null && !getWorld().isRemote && Minecraft.getMinecraft() != null) {
-				this.getWorld().playSound((int) pos.xCoord + 0.5F, (int) pos.yCoord + 0.5F, (int) pos.zCoord + 0.5F, block.stepSound.getBreakSound(), 1.0F, block.stepSound.getPitch() * 0.5F, true);
+			Block block = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+			if (miningTickCounter % 8 == 0 && block != null && !world.isRemote && Minecraft.getMinecraft() != null) {
+				this.world.playSound((int) pos.xCoord + 0.5F, (int) pos.yCoord + 0.5F, (int) pos.zCoord + 0.5F, block.stepSound.getBreakSound(), 1.0F, block.stepSound.getPitch() * 0.5F, true);
 			}
 			if (miningTickCounter % 8 == 0 && block_index != 0 && block != null && FMLClientHandler.instance().getClient() != null ) {
 				FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
@@ -693,7 +693,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	 * @return orientation
 	 */
 	private int getFacing() {
-		if (!getWorld().isRemote) {
+		if (!world.isRemote) {
 			if(d7 == 0. && d6 == 0.) {
 				if(lastFace == -1) {
 					//lastFace = ((int) Math.round(rotationYaw/90) + 5)%4;
@@ -721,7 +721,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i) {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return true;
 		}
 		if(canBeDestroyedByPlayer(damagesource))return true;
@@ -752,7 +752,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	 * This handles the Builder's digging process
 	 */
 	private void digBuilder(int i, int j, int k) {
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return;
 		}
 		/** +1/-1 on X axis, used to know where to dig */
@@ -805,9 +805,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 
 	private void harvestBlock(int i, int j, int k) {
 
-		Block block =  getWorld().getBlock(i, j, k);
+		Block block =  world.getBlock(i, j, k);
 
-		int meta = getWorld().getBlockMetadata(i, j, k);
+		int meta = world.getBlockMetadata(i, j, k);
 
 		if (block.getDrops(getWorld(), i, j, k, meta, 0).size()>0) {
 
@@ -821,17 +821,17 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 				//		&& (s.getItem() != Item.getItemFromBlock(Block.getBlockFromName("glass")))) {
 					//&& (Item.getIdFromItem(s.getItem())) != Item.getIdFromItem(tunnelBlockStack.getItem())) {
 
-				//if ((Block.getIdFromBlock(getWorld().getBlock(i, j, k)) != Item.getIdFromItem(tunnelBlockStack.getItem()))) {
+				//if ((Block.getIdFromBlock(world.getBlock(i, j, k)) != Item.getIdFromItem(tunnelBlockStack.getItem()))) {
 					putInInvent(s);
 				//}
 				//}
 			}
 		}
 		// mining effect
-		if (!getWorld().isRemote) {
+		if (!world.isRemote) {
 			int id= Block.getIdFromBlock(block);
 			this.playMiningEffect(Vec3.createVectorHelper(i, j, k), id);
-			getWorld().playAuxSFX(2001, i, j, k, id + (meta << 12));
+			world.playAuxSFX(2001, i, j, k, id + (meta << 12));
 		}
 
 	}
@@ -862,8 +862,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		}
 
 
-		Block block = getWorld().getBlock(i, j, k);
-		int metadata = getWorld().getBlockMetadata(i, j, k);
+		Block block = world.getBlock(i, j, k);
+		int metadata = world.getBlockMetadata(i, j, k);
 
 		if(block == newblock && metadata == newmeta)
 			return true;
@@ -879,8 +879,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			harvestBlock(i, j, k);
 
 			// place new block
-			getWorld().setBlock(i, j, k, newblock);
-			getWorld().setBlockMetadataWithNotify(i, j, k, newmeta, 3);
+			world.setBlock(i, j, k, newblock);
+			world.setBlockMetadataWithNotify(i, j, k, newmeta, 3);
 
 			if(consumeBlock) {
 				BuilderInvent[inventoryId].stackSize--; // ok ?
@@ -902,8 +902,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if(BuilderInvent[inventoryId] == null)
 			return false;
 
-		Block block = getWorld().getBlock(i, j, k);
-		int metadata = getWorld().getBlockMetadata(i, j, k);
+		Block block = world.getBlock(i, j, k);
+		int metadata = world.getBlockMetadata(i, j, k);
 
 			// check if we need to place rails and if we can
 		if(BlockRailBase.func_150051_a(block)
@@ -923,7 +923,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			harvestBlock(i, j, k);
 
 				// place new block
-			getWorld().setBlockToAir(i, j, k);
+			world.setBlockToAir(i, j, k);
 			boolean success = placeRailAt(this, BuilderInvent[inventoryId], getWorld(), i, j, k);
 
 			if(success) {
@@ -952,7 +952,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		int w = k + kZ;
 
 		if(hY < 0) {
-			Block block = getWorld().getBlock(u - iX, v - 1, w - kZ);
+			Block block = world.getBlock(u - iX, v - 1, w - kZ);
 			if(BlockRail.func_150051_a(block)
 					|| block instanceof BlockTCRail
 					|| block instanceof BlockTCRailGag) {
@@ -960,7 +960,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 				hY++;
 			}
 		}else if(hY > 0) {
-			Block block = getWorld().getBlock(u - iX, v, w - kZ);
+			Block block = world.getBlock(u - iX, v, w - kZ);
 			if(BlockRail.func_150051_a(block)
 					|| block instanceof BlockTCRail
 					|| block instanceof BlockTCRailGag) {
@@ -1007,7 +1007,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		success &= replaceBlockAt(u, v - 1, w, this.slotId_UnderBlock);
 
 		// check if underBlock will fall before placing rail
-		Block underBlock = getWorld().getBlock(u, v-1, w);
+		Block underBlock = world.getBlock(u, v-1, w);
 
 		if(underBlock instanceof BlockFalling && BlockFalling.func_149831_e(getWorld(), u, v-2, w)) {
 			this.skipTick = true;

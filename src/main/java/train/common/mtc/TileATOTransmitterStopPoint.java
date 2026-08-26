@@ -28,7 +28,7 @@ public class TileATOTransmitterStopPoint extends TileEntity implements IPeripher
    public void updateEntity() {
       if(getWorld() != null) {
          if(this.isActivated) {
-            List<Object> list = this.getWorld().getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
+            List<Object> list = this.world.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
             Iterator var2 = list.iterator();
 
             while(var2.hasNext()) {
@@ -44,7 +44,7 @@ public class TileATOTransmitterStopPoint extends TileEntity implements IPeripher
                      daTrain.xFromStopPoint = this.stopX;
                      daTrain.yFromStopPoint = this.stopY;
                      daTrain.zFromStopPoint = this.stopZ;
-                     Traincraft.atoSetStopPoint.sendToAllAround(new PacketATOSetStopPoint(daTrain.getEntityId(), Double.valueOf(this.stopX), Double.valueOf(this.stopY), Double.valueOf(this.stopZ), daTrain.xStationStop, daTrain.yStationStop, daTrain.zStationStop) , new NetworkRegistry.TargetPoint(this.getWorld().provider.dimensionId, daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
+                     Traincraft.atoSetStopPoint.sendToAllAround(new PacketATOSetStopPoint(daTrain.getEntityId(), Double.valueOf(this.stopX), Double.valueOf(this.stopY), Double.valueOf(this.stopZ), daTrain.xStationStop, daTrain.yStationStop, daTrain.zStationStop) , new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
                   }
                }
             }

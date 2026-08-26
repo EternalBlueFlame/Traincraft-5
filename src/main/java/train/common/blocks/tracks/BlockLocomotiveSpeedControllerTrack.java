@@ -12,8 +12,10 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import train.common.api.Locomotive;
 import train.common.library.Tracks;
 
@@ -45,17 +47,17 @@ public class BlockLocomotiveSpeedControllerTrack extends TrackBaseTraincraft imp
 				this.mode += 3;
 				if (mode > 15)mode = 0;
 				if (this.mode == 0)
-					player.addChatMessage(new ChatComponentText("20 percent of max speed"));
+					player.sendMessage(new TextComponentString("20 percent of max speed"));
 				if (this.mode == 3)
-					player.addChatMessage(new ChatComponentText("40 percent of max speed"));
+					player.sendMessage(new TextComponentString("40 percent of max speed"));
 				if (this.mode == 6)
-					player.addChatMessage(new ChatComponentText("60 percent of max speed"));
+					player.sendMessage(new TextComponentString("60 percent of max speed"));
 				if (this.mode == 9)
-					player.addChatMessage(new ChatComponentText("80 percent of max speed"));
+					player.sendMessage(new TextComponentString("80 percent of max speed"));
 				if (this.mode == 12)
-					player.addChatMessage(new ChatComponentText("90 percent of max speed"));
+					player.sendMessage(new TextComponentString("90 percent of max speed"));
 				if (this.mode == 15)
-					player.addChatMessage(new ChatComponentText("100 percent of max speed"));
+					player.sendMessage(new TextComponentString("100 percent of max speed"));
 				crowbar.onWhack(player, current, getX(), getY(), getZ());
 				sendUpdateToClient();
 				return true;
@@ -67,7 +69,7 @@ public class BlockLocomotiveSpeedControllerTrack extends TrackBaseTraincraft imp
 	@Override
 	public void onNeighborBlockChange(Block block) {
 		if(this.powered){
-			this.mode = getWorld().getBlockPowerInput(getX(), getY(), getZ());
+			this.mode = getWorld().getRedstonePower(new BlockPos(getX(), getY(), getZ()), EnumFacing.UP);
 			//System.out.println(input);
 		}
 		super.onNeighborBlockChange(block);
@@ -124,9 +126,9 @@ public class BlockLocomotiveSpeedControllerTrack extends TrackBaseTraincraft imp
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
+		Block block = getWorld().getBlockState(new BlockPos(getX(), getY(), getZ())).getBlock();
+		getWorld().notifyNeighborsOfStateChange(new BlockPos(getX(), getY(), getZ()), block, true);
+		getWorld().notifyNeighborsOfStateChange(new BlockPos(getX(), getY() - 1, getZ()), block, true);
 
 		markBlockNeedsUpdate();
 	}

@@ -1,8 +1,8 @@
 package train.common.core.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
@@ -38,7 +38,7 @@ public class PacketTrackBuilderFollow implements IMessage {
     public static class Handler implements IMessageHandler<PacketTrackBuilderFollow, IMessage> {
         @Override
         public IMessage onMessage(PacketTrackBuilderFollow message, MessageContext context) {
-            Entity builderEntity = context.getServerHandler().playerEntity.getWorld().getEntityByID(message.id);
+            Entity builderEntity = context.getServerHandler().playerEntity.world.getEntityByID(message.id);
             /*
              * "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks
              * for when the value is null anyways.

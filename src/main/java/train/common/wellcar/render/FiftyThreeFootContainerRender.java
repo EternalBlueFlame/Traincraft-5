@@ -18,15 +18,15 @@ public class FiftyThreeFootContainerRender extends TileEntitySpecialRenderer {
         //This will make your block brightness dependent from surroundings lighting.
 
         TileFiftyThreeFootContainer theTileEntity = (TileFiftyThreeFootContainer)tileEntity;
-        Block two = tileEntity.getWorld().getBlock(tileEntity.xCoord,tileEntity.yCoord - 1,tileEntity.zCoord);
-        Block three = tileEntity.getWorld().getBlock(tileEntity.xCoord,tileEntity.yCoord - 2,tileEntity.zCoord);
-        Block four = tileEntity.getWorld().getBlock(tileEntity.xCoord,tileEntity.yCoord - 3,tileEntity.zCoord);
-               /* int skyLight = tileEntity.getWorld().getSkyBlockTypeBrightness(EnumSkyBlock.Block, (int)x,(int)y,(int)z);
+        Block two = tileEntity.world.getBlock(tileEntity.xCoord,tileEntity.yCoord - 1,tileEntity.zCoord);
+        Block three = tileEntity.world.getBlock(tileEntity.xCoord,tileEntity.yCoord - 2,tileEntity.zCoord);
+        Block four = tileEntity.world.getBlock(tileEntity.xCoord,tileEntity.yCoord - 3,tileEntity.zCoord);
+               /* int skyLight = tileEntity.world.getSkyBlockTypeBrightness(EnumSkyBlock.Block, (int)x,(int)y,(int)z);
 
-               // skyLight= tileEntity.getWorld().getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (skyLight<0?0:skyLight) << 4; OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);
+               // skyLight= tileEntity.world.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (skyLight<0?0:skyLight) << 4; OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);
                 GL11.glColor4f(1,1,1,1);
                 tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
-                skyLight=tileEntity.getWorld().getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (Math.max(skyLight, 0)) << 4;
+                skyLight=tileEntity.world.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (Math.max(skyLight, 0)) << 4;
                 OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);*/
       //  GL11.glColor4f(1,1,1,1);
 

@@ -1,8 +1,8 @@
 package train.common.core.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import ebf.tim.entities.EntitySeat;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
@@ -52,25 +52,28 @@ public class PacketKeyPress implements IMessage {
     }
 
     public static class Handler implements IMessageHandler<PacketKeyPress, IMessage> {
-        @Override
-        public IMessage onMessage(PacketKeyPress message, MessageContext context) {
-            Entity getRidingEntity()= context.getServerHandler().playerEntity.ridingEntity;
-            if (getRidingEntity()instanceof EntitySeat) {
-                getRidingEntity()= ((EntitySeat) ridingEntity).parent;
+    @Override
+    public IMessage onMessage(PacketKeyPress message, MessageContext context) {
+        Entity ridingEntity = context.getServerHandler().playerEntity.getRidingEntity();
+
+        if (ridingEntity instanceof EntitySeat) {
+            ridingEntity = ((EntitySeat) ridingEntity).parent;
+        }
+
+        /* "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks for when the value is null anyways. */
+        if (ridingEntity != null) {
+            if (ridingEntity instanceof Locomotive) {
+                ((Locomotive) ridingEntity).keyHandlerFromPacket(message.key, context.getServerHandler().playerEntity.getEntityId());
+            } else if (ridingEntity instanceof EntityRollingStock) {
+                ((EntityRollingStock) ridingEntity).keyHandlerFromPacket(message.key, context.getServerHandler().playerEntity.getEntityId());
+            } else if (ridingEntity instanceof AbstractZeppelin) {
+                ((AbstractZeppelin) ridingEntity).pressKey(message.key);
+            } else if (ridingEntity instanceof EntityRotativeDigger) {
+                ((EntityRotativeDigger) ridingEntity).pressKey(message.key);
             }
-            /* "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks for when the value is null anyways. */
-            if (ridingEntity != null) {
-                if (ridingEntity instanceof Locomotive) {
-                    ((Locomotive) ridingEntity).keyHandlerFromPacket(message.key, context.getServerHandler().playerEntity.getEntityId());
-                } else if (ridingEntity instanceof EntityRollingStock) {
-                    ((EntityRollingStock) ridingEntity).keyHandlerFromPacket(message.key, context.getServerHandler().playerEntity.getEntityId());
-                } else if (ridingEntity instanceof AbstractZeppelin) {
-                    ((AbstractZeppelin) ridingEntity).pressKey(message.key);
-                } else if (getRidingEntity()instanceof EntityRotativeDigger) {
-                    ((EntityRotativeDigger) ridingEntity).pressKey(message.key);
-                }
-            }
-            return null;
+        }
+        return null;
+    }
+//
         }
     }
-}

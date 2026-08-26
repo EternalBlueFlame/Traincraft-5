@@ -84,7 +84,7 @@ public class ShapedTrainRecipes implements ITCRecipe {
 					slots[i] = false;
 					continue;
 				}
-				if(!TraincraftUtil.itemStackMatches(var9, var10) || var9.stackSize > var10.stackSize ){
+				if(!TraincraftUtil.itemStackMatches(var9, var10) || var9.getCount() > var10.getCount() ){
 					slots[i] = false;
 					continue;
 				}
@@ -115,7 +115,7 @@ public class ShapedTrainRecipes implements ITCRecipe {
 				ItemStack var4 = inventory.getStackInSlot(var3);
 
 				if (var4 != null && var4.hasTagCompound()) {
-					var2.setTagCompound((NBTTagCompound) var4.stackTagCompound.copy());
+					var2.setTagCompound(var4.hasTagCompound() ? (NBTTagCompound) var4.getTagCompound().copy() : null);
 				}
 			}
 		}

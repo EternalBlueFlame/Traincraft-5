@@ -27,7 +27,7 @@ public abstract class Freight extends EntityRollingStock {
 
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, float i) {
-        if (getWorld().isRemote) {
+        if (world.isRemote) {
             return true;
         }
 
@@ -38,19 +38,19 @@ public abstract class Freight extends EntityRollingStock {
         super.attackEntityFrom(damagesource, i);
         setRollingDirection(-getRollingDirection());
         setRollingAmplitude(10);
-        setBeenAttacked();
+        markVelocityChanged();
         setDamage(getDamage() + i * 10);
 
         if (getDamage() > 40) {
             if (getPassengers().get(0) != null) {
-                getPassengers().get(0).mountEntity(this);
+                getPassengers().get(0).startRiding(this);
             }
 
             this.setDead();
             ServerLogger.deleteWagon(this);
 
-            if (damagesource.getEntity() instanceof EntityPlayer) {
-                dropCartAsItem(((EntityPlayer) damagesource.getEntity()).capabilities.isCreativeMode);
+            if (damagesource.getTrueSource() instanceof EntityPlayer) {
+                dropCartAsItem(((EntityPlayer) damagesource.getTrueSource()).capabilities.isCreativeMode);
             }
         }
         return true;
@@ -86,13 +86,13 @@ public abstract class Freight extends EntityRollingStock {
     @Override
     public ItemStack decrStackSize(int i, int j) {
         if (cargoItems[i] != null) {
-            if (cargoItems[i].stackSize <= j) {
+            if (cargoItems[i].getCount() <= j) {
                 ItemStack itemstack = cargoItems[i];
                 cargoItems[i] = null;
                 return itemstack;
             }
             ItemStack itemstack1 = cargoItems[i].splitStack(j);
-            if (cargoItems[i].stackSize == 0) {
+            if (cargoItems[i].getCount() == 0) {
                 cargoItems[i] = null;
             }
             return itemstack1;
@@ -105,13 +105,13 @@ public abstract class Freight extends EntityRollingStock {
     public void setInventorySlotContents(int i, ItemStack itemstack) {
         cargoItems[i] = itemstack;
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-            itemstack.getCount() = getInventoryStackLimit();
+            itemstack.setCount(getInventoryStackLimit());
         }
     }
 
     @Override
     public void markDirty() {
-        if (!getWorld().isRemote) {
+        if (!world.isRemote) {
             this.slotsFilled = 0;
             for (int i = 0; i < getSizeInventory(); i++) {
                 ItemStack itemstack = getStackInSlot(i);
@@ -162,7 +162,7 @@ public abstract class Freight extends EntityRollingStock {
     protected void handleMass() {
         if (this.ticksExisted % 10 != 0)
             return;
-        if (getWorld().isRemote)
+        if (world.isRemote)
             return;
         this.mass = this.getDefaultMass();
         this.itemInsideCount = 0;
@@ -195,7 +195,7 @@ public abstract class Freight extends EntityRollingStock {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
             int j = nbttagcompound1.getByte("Slot") & 0xff;
             if (j >= 0 && j < cargoItems.length) {
-                cargoItems[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+                cargoItems[j] = new ItemStack(nbttagcompound1);
                 if(cargoItems[j]!=null){
                     slotsFilled++;
                 }

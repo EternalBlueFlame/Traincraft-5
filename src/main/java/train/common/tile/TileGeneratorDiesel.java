@@ -13,6 +13,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.api.LiquidManager;
 import train.common.core.util.Energy;
 
@@ -34,7 +35,7 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
 
     @Override
     public void updateEntity(){
-        if(!getWorld().isRemote){
+        if(!world.isRemote){
             if(slots[0] != null){
                 ItemStack result = LiquidManager.getInstance().processContainer(this, 0, this, slots[0]);
                 if(result != null && placeInInvent(result, 1, false)){
@@ -109,13 +110,13 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
                 .getItemDamage() == itemstack1.getItemDamage())
                 && ItemStack.areItemStackTagsEqual(slots[i],
                 itemstack1)){
-            int var9 = slots[i].stackSize+itemstack1.stackSize;
+            int var9 = slots[i].getCount()+itemstack1.getCount();
             if(doAdd){
                 if(var9 <= itemstack1.getMaxStackSize()){
-                    slots[i].stackSize = var9;
+                    slots[i].setCount(var9);
                 }
-                else if(slots[i].stackSize < itemstack1.getMaxStackSize()){
-                    slots[i].stackSize += 1;
+                else if(slots[i].getCount() < itemstack1.getMaxStackSize()){
+                    slots[i].grow(1);
                 }
             }
             return true;
@@ -126,7 +127,7 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
 
     @Override
     public World getWorld(){
-        return this.getWorld();
+        return this.world;
     }
 
     @Override

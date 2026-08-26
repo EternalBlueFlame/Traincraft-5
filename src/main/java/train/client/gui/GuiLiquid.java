@@ -5,8 +5,8 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fluids.Fluid;
@@ -70,7 +70,7 @@ public class GuiLiquid extends GuiContainer {
             if (player != null && player.getCommandSenderName().equalsIgnoreCase(((AbstractTrains) liquid).getTrainOwner())) {
                 if (!liquid.getTrainLockedFromPacket()) {
                     AxisAlignedBB box = liquid.boundingBox.expand(5, 5, 5);
-                    List lis3 = liquid.getWorld().getEntitiesWithinAABBExcludingEntity(liquid, box);
+                    List lis3 = liquid.world.getEntitiesWithinAABBExcludingEntity(liquid, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
                             if (entity instanceof EntityPlayer) {
@@ -85,7 +85,7 @@ public class GuiLiquid extends GuiContainer {
                     this.initGui();
                 } else {
                     AxisAlignedBB box = liquid.boundingBox.expand(5, 5, 5);
-                    List lis3 = liquid.getWorld().getEntitiesWithinAABBExcludingEntity(liquid, box);
+                    List lis3 = liquid.world.getEntitiesWithinAABBExcludingEntity(liquid, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
                             if (entity instanceof EntityPlayer) {
@@ -100,7 +100,7 @@ public class GuiLiquid extends GuiContainer {
                     this.initGui();
                 }
             } else if (player != null) {
-                player.addChatMessage(new ChatComponentText("You are not the owner"));
+                player.addChatMessage(new TextComponentString("You are not the owner"));
             }
         }
     }

@@ -6,7 +6,7 @@ import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import train.common.api.Locomotive;
 
 import java.util.List;
@@ -90,7 +90,7 @@ public class TileInfoGrabberDestination extends TileEntity implements IPeriphera
             return;
         }
         if (isActivated) {
-            List<Object> list = this.getWorld().getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
+            List<Object> list = this.world.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
             if (list != null && list.size() > 0) {
                 for (Object obj : list) {
 

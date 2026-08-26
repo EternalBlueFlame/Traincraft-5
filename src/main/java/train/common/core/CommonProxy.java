@@ -1,10 +1,10 @@
 package train.common.core;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.network.IGuiHandler;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.network.IGuiHandler;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.gui.GUISeatManager;
 import net.minecraft.client.Minecraft;
@@ -143,29 +143,36 @@ public class CommonProxy implements IGuiHandler {
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity te = world.getTileEntity(x, y, z);
-        EntityPlayer getPassengers().get(0) = null;
-        Entity entity = null;
+    TileEntity te = world.getTileEntity(x, y, z);
 
-        if (player.getRidingEntity()instanceof EntityRollingStock || player.getRidingEntity()instanceof AbstractZeppelin
-                || player.getRidingEntity()instanceof EntityRotativeDigger) {
-            entity = player.ridingEntity;
-            if (entity.getPassengers().get(0) instanceof EntityPlayer) {
-                getPassengers().get(0) = (EntityPlayer) entity.getPassengers().get(0);
+    Entity entity = null;
+    EntityPlayer passenger = null;
+
+    Entity riding = player.getRidingEntity();
+
+    if (riding instanceof EntityRollingStock || riding instanceof AbstractZeppelin || riding instanceof EntityRotativeDigger) {
+        entity = riding;
+        if (!entity.getPassengers().isEmpty() && entity.getPassengers().get(0) instanceof EntityPlayer) {
+            passenger = (EntityPlayer) entity.getPassengers().get(0);
+        }
+    }
+
+    if (riding instanceof EntitySeat) {
+        entity = ((EntitySeat) riding).parent;
+        if (entity instanceof EntityRollingStock) {
+            EntityRollingStock stock = (EntityRollingStock) entity;
+            if (!stock.seats.isEmpty() && stock.seats.get(0).getPassenger() instanceof EntityPlayer) {
+                passenger = (EntityPlayer) stock.seats.get(0).getPassenger();
             }
         }
-        if (player.getRidingEntity()instanceof EntitySeat) {
-            entity = ((EntitySeat) player.ridingEntity).parent;
-            if (((EntityRollingStock)entity).seats.get(0).getPassenger() instanceof EntityPlayer) {
-                getPassengers().get(0) = (EntityPlayer) ((EntityRollingStock)entity).seats.get(0).getPassenger();
-            }
-        }
-        Entity entity1 = null;
-        if (y == -1) {
-            entity1 = getEntity(world, x);
-        }
+    }
 
-        switch (ID) {
+    Entity entity1 = null;
+    if (y == -1) {
+        entity1 = getEntity(world, x);
+    }
+
+                switch (ID) {
             case (GuiIDs.CRAFTER_TIER_I):
                 return te instanceof TileCrafterTierI ? new ContainerTier(player.inventory, (TileCrafterTierI) te) : null;
             case (GuiIDs.CRAFTER_TIER_II):
@@ -179,34 +186,46 @@ public class CommonProxy implements IGuiHandler {
             case (GuiIDs.OPEN_HEARTH_FURNACE):
                 return te instanceof TileEntityOpenHearthFurnace ? new ContainerOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
             case (GuiIDs.TRAIN_WORKBENCH):
-                return te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, player.getWorld(), (TileTrainWbench) te) : null;
-            case (GuiIDs.LOCO):
-                if (entity instanceof EntityRollingStock)
-                {
-                    return riddenByEntity != null ? new InventoryLoco(riddenByEntity.inventory,(EntityRollingStock)entity) : null;
-                }
-            case (GuiIDs.CONTROL_CAR):
-                return riddenByEntity != null ? new InventoryControlCar(riddenByEntity.inventory, (EntityRollingStock) entity) : null;
-            case (GuiIDs.FORNEY):
-                if (entity instanceof EntityRollingStock) {
-                    return getPassengers().get(0) != null ? new InventoryForney(player.inventory, (EntityRollingStock) entity) : null;
-                }
-            case (GuiIDs.CRAFTING_CART):
-                return new ContainerWorkbenchCart(player.inventory, player.getWorld());
-            case (GuiIDs.FURNACE_CART):
-                return getPassengers().get(0) != null ? new InventoryWorkCart(player.inventory, entity) : null;
-            case (GuiIDs.ZEPPELIN):
-                if (entity instanceof AbstractZeppelin) {
-                    return getPassengers().get(0) != null ? new InventoryZepp(player.inventory, (AbstractZeppelin) entity) : null;
-                }
-            case (GuiIDs.DIGGER):
-                if (entity instanceof EntityRotativeDigger) {
-                    return getPassengers().get(0) != null ? new InventoryRotativeDigger(player.inventory, (EntityRotativeDigger) entity) : null;
-                }
+                return te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
 
-                /* Stationary entities while player is not riding. */
+            case (GuiIDs.LOCO):
+                if (entity instanceof EntityRollingStock && passenger != null) {
+                    return new InventoryLoco(passenger.inventory, (EntityRollingStock) entity);
+                }
+                return null;
+
+            case (GuiIDs.CONTROL_CAR):
+                if (entity instanceof EntityRollingStock && passenger != null) {
+                    return new InventoryControlCar(passenger.inventory, (EntityRollingStock) entity);
+                }
+                return null;
+
+            case (GuiIDs.FORNEY):
+                if (entity instanceof EntityRollingStock && passenger != null) {
+                    return new InventoryForney(player.inventory, (EntityRollingStock) entity);
+                }
+                return null;
+
+            case (GuiIDs.CRAFTING_CART):
+                return new ContainerWorkbenchCart(player.inventory, player.worldObj);
+
+            case (GuiIDs.FURNACE_CART):
+                return passenger != null ? new InventoryWorkCart(player.inventory, entity) : null;
+
+            case (GuiIDs.ZEPPELIN):
+                if (entity instanceof AbstractZeppelin && passenger != null) {
+                    return new InventoryZepp(player.inventory, (AbstractZeppelin) entity);
+                }
+                return null;
+
+            case (GuiIDs.DIGGER):
+                if (entity instanceof EntityRotativeDigger && passenger != null) {
+                    return new InventoryRotativeDigger(player.inventory, (EntityRotativeDigger) entity);
+                }
+                return null;
+
+            /* Stationary entities while player is not riding. */
             case (GuiIDs.FREIGHT):
-                //System.out.println("Freight: " + ID + " | " + entity1.getEntityName() + " | " + x + ":" + y + ":" + z);
                 return entity1 instanceof Freight ? new InventoryFreight(player.inventory, (Freight) entity1) : null;
             case (GuiIDs.JUKEBOX):
                 return entity1 instanceof EntityJukeBoxCart ? new InventoryJukeBoxCart(player.inventory, (EntityJukeBoxCart) entity1) : null;
@@ -216,16 +235,15 @@ public class CommonProxy implements IGuiHandler {
                 return entity1 instanceof EntityTracksBuilder ? new InventoryBuilder(player.inventory, (EntityTracksBuilder) entity1) : null;
             case (GuiIDs.LIQUID):
                 return entity1 instanceof LiquidTank ? new InventoryLiquid(player.inventory, (LiquidTank) entity1) : null;
+
             case (GuiIDs.SEAT_GUI):
-                if (entity instanceof EntityRollingStock) {
-                    return getPassengers().get(0) != null ? new GUISeatManager(player, (EntityRollingStock)entity) : null; //#!#doesn't work for whatever reason
+                if (entity instanceof EntityRollingStock && passenger != null) {
+                    return new GUISeatManager(player, (EntityRollingStock) entity);
                 }
-		/*case (GuiIDs.FORTY_FOOT_CONTAINER):
-			return new ContainerStorage((TileFortyFootContainer)te, player);*/
+                return null;
 
             default:
                 return null;
-
         }
     }
 

@@ -10,6 +10,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.api.LiquidManager.StandardTank;
 import train.common.entity.rollingStockOld.special.EntityBUnitDD35;
 import train.common.entity.rollingStockOld.special.EntityBUnitEMDF3;
@@ -59,7 +60,7 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (!getWorld().isRemote) {
+		if (!world.isRemote) {
 			if (theTank.getFluidAmount() != this.dataWatcher.getWatchableObjectInt(23)){
 				this.dataWatcher.updateObject(23, theTank.getFluidAmount());
 				fuelTrain = theTank.getFluidAmount();
@@ -112,14 +113,14 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 				return;
 			}
 			else if (cargoItems[i] != null && cargoItems[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() && (!itemstack1.getHasSubtypes() || cargoItems[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(cargoItems[i], itemstack1)) {
-				int var9 = cargoItems[i].stackSize + itemstack1.stackSize;
-				if (var9 <= itemstack1.getMaxStackSize()) {
-					cargoItems[i].stackSize = var9;
+				int var9 = cargoItems[i].getCount() + itemstack1.getCount();
+			if (var9 <= itemstack1.getMaxStackSize()) {
+				cargoItems[i].setCount(var9);
 
-				}
-				else if (cargoItems[i].stackSize < itemstack1.getMaxStackSize()) {
-					cargoItems[i].stackSize += 1;
-				}
+			}
+			else if (cargoItems[i].getCount() < itemstack1.getMaxStackSize()) {
+				cargoItems[i].grow(1);
+			}
 				return;
 			}
 			else if (i == cargoItems.length - 1) {
@@ -130,7 +131,7 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	}
 
 	public void liquidInSlot(ItemStack itemstack) {
-		if (getWorld().isRemote)
+		if (world.isRemote)
 			return;
 		this.update += 1;
 		if (this.update % 8 == 0 && itemstack != null) {
@@ -165,15 +166,15 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 			motionZ *= 0.8;
 		} else if (ticksExisted%5==0 &&getTank().getFluidAmount()+100 < maxTank) {
 			FluidStack drain = null;
-			blocksToCheck = new TileEntity[]{getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
-					getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
-					getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
-					getWorld().getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
+			blocksToCheck = new TileEntity[]{world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
+					world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
+					world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
+					world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
 			};
 
 			for (TileEntity block : blocksToCheck) {
 				if (drain == null && block instanceof IFluidHandler) {
-					for (EnumFacing direction : EnumFacing.VALID_DIRECTIONS) {
+					for (EnumFacing direction : EnumFacing.VALUES) {
 						if (((IFluidHandler) block).drain(direction, 100, false) != null &&
 								(getFluid()==null || ((IFluidHandler) block).drain(direction, 100, false).fluid==getTank().getFluid().fluid) &&
 								((IFluidHandler) block).drain(direction, 100, false).amount == 100
@@ -186,29 +187,29 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 			}
 			if(drain==null && frontLink instanceof LiquidTank && !(frontLink instanceof EntityBUnitEMDF7) && !(frontLink instanceof EntityBUnitEMDF3) && !(frontLink instanceof EntityBUnitDD35)){
 				if (getFluid() == null) {
-					drain = ((LiquidTank) frontLink).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+					drain = ((LiquidTank) frontLink).drain(new FluidStack(LiquidManager.DIESEL, 100), true);
 					if (drain == null){
-						drain = ((LiquidTank) frontLink).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
+						drain = ((LiquidTank) frontLink).drain(new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
 					}
 				} else if (getFluid().getFluid() == LiquidManager.DIESEL) {
-					drain = ((LiquidTank) frontLink).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+					drain = ((LiquidTank) frontLink).drain(new FluidStack(LiquidManager.DIESEL, 100), true);
 				} else {
-					drain = ((LiquidTank) frontLink).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
+					drain = ((LiquidTank) frontLink).drain(new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
 				}
 			} else if (drain==null && backLink instanceof LiquidTank && !(backLink instanceof EntityBUnitEMDF7) && !(backLink instanceof EntityBUnitEMDF3) && !(frontLink instanceof EntityBUnitDD35)){
 				if (getFluid() == null) {
-					drain = ((LiquidTank) backLink).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+					drain = ((LiquidTank) backLink).drain(new FluidStack(LiquidManager.DIESEL, 100), true);
 					if (drain == null){
-						drain = ((LiquidTank) backLink).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
+						drain = ((LiquidTank) backLink).drain(new FluidStack(LiquidManager.REFINED_FUEL, 50), true);
 					}
 				} else if (getFluid().getFluid() == LiquidManager.DIESEL) {
-					drain = ((LiquidTank) backLink).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.DIESEL, 100), true);
+					drain = ((LiquidTank) backLink).drain(new FluidStack(LiquidManager.DIESEL, 100), true);
 				} else {
-					drain = ((LiquidTank) backLink).drain(ForgeDirection.UNKNOWN, new FluidStack(LiquidManager.REFINED_FUEL, 100), true);
+					drain = ((LiquidTank) backLink).drain(new FluidStack(LiquidManager.REFINED_FUEL, 100), true);
 				}
 			}
 			if (drain != null){
-				fill(EnumFacing.UNKNOWN, drain, true);
+				fill(drain, true);
 			}
 		}
 
@@ -216,10 +217,10 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 			fuelTrain -= amount;
 			if (fuelTrain < 0) {
 				fuelTrain = 0;
-				drain(EnumFacing.UNKNOWN, amount, true);
+				drain(amount, true);
 				setLocoTurnedOnFromPacket(false);
 			} else {
-				drain(EnumFacing.UNKNOWN, amount, true);
+				drain(amount, true);
 			}
 		}
 	}

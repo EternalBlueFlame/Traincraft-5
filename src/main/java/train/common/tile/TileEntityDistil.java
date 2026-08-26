@@ -5,6 +5,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,6 +13,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.api.LiquidManager;
 import train.common.api.LiquidManager.StandardTank;
 import train.common.api.blocks.TileTraincraft;
@@ -124,7 +126,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	}
 	@Override
 	public void updateEntity() {
-		if(!getWorld().isRemote){
+		if(!world.isRemote){
 			updateTicks++;
 			boolean flag = distilBurnTime > 0;
 			boolean flag1 = false;
@@ -137,10 +139,10 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 							slots[1] = new ItemStack(slots[1].getItem().getContainerItem());
 						}
 						else {
-							slots[1].stackSize--;
+							slots[1].shrink(1);
 						}
 
-						if (slots[1].stackSize == 0) {
+						if (slots[1].getCount() == 0) {
 							slots[1] = null;
 						}
 					}
@@ -166,7 +168,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			else {
 				flag1 = false;
 				BlockDistil.updateDistilBlockState(distilBurnTime > 0, getWorld(), xCoord, yCoord, zCoord);
-				this.getWorld().markBlockForUpdate(getPos());
+				this.world.markBlockForUpdate(getPos());
 			}
 
 			if (slots[2] != null) {
@@ -200,7 +202,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 						flag1 = true;
 
 						this.markDirty();
-						this.getWorld().markBlockForUpdate(getPos());
+						this.world.markBlockForUpdate(getPos());
 					}
 				}
 			}
@@ -219,7 +221,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 			if (updateTicks % 8 == 0){
 				this.markDirty();
-				this.getWorld().markBlockForUpdate(getPos());
+				this.world.markBlockForUpdate(getPos());
 			}
 			if (distilBurnTime > 0) {
 				distilBurnTime--;
@@ -238,15 +240,15 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			return true;
 		}
 		else if (slots[i] != null && Item.getIdFromItem(slots[i].getItem()) == Item.getIdFromItem(itemstack1.getItem()) && itemstack1.isStackable() && (!itemstack1.getHasSubtypes() || slots[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(slots[i], itemstack1)) {
-			int var9 = slots[i].stackSize + itemstack1.stackSize;
+			int var9 = slots[i].getCount() + itemstack1.getCount();
 			if (var9 <= itemstack1.getMaxStackSize()) {
 				if (doAdd)
-					slots[i].stackSize = var9;
+					slots[i].setCount(var9);
 
 			}
-			else if (slots[i].stackSize < itemstack1.getMaxStackSize()) {
+			else if (slots[i].getCount() < itemstack1.getMaxStackSize()) {
 				if (doAdd)
-					slots[i].stackSize += 1;
+					slots[i].grow(1);
 			}
 			return true;
 		}
@@ -255,7 +257,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	}
 
 	private boolean canSmelt() {
-		if (slots[0] == null || (slots[3] != null && slots[3].stackSize==64) || (slots[4] != null && slots[4].stackSize==64)) {
+		if (slots[0] == null || (slots[3] != null && slots[3].getCount()==64) || (slots[4] != null && slots[4].getCount()==64)) {
 			return false;
 		}
 		ItemStack itemstack = DistilRecipes.smelting().getSmeltingResult(slots[0].getItem());
@@ -298,16 +300,16 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 
 			this.markDirty();
-			this.getWorld().markBlockForUpdate(getPos());
+			this.world.markBlockForUpdate(getPos());
 		}
 
 		if (slots[0].getItem().hasContainerItem(slots[0])) {
 			slots[0] = new ItemStack(slots[0].getItem().getContainerItem());
 		}
 		else {
-			slots[0].stackSize--;
+			slots[0].shrink(1);
 		}
-		if (slots[0].stackSize <= 0) {
+		if (slots[0].getCount() <= 0) {
 			slots[0] = null;
 		}
 		this.syncTileEntity();
@@ -318,7 +320,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			slots[3] = plasticStack.copy();
 		}
 		else if (Item.getIdFromItem(slots[3].getItem()) == Item.getIdFromItem(plasticStack.getItem())) {
-			slots[3].stackSize += plasticStack.stackSize;
+			slots[3].grow(plasticStack.getCount());
 		}
 		this.markDirty();
 	}

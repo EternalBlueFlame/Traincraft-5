@@ -137,10 +137,10 @@ public class TrainCraftingManager {
 			}
 		}
 
-		if (occupedSlot == 2 && var3.getItem() == var4.getItem() && var3.stackSize == 1 && var4.stackSize == 1 && var3.getItem().isRepairable()) {
+		if (occupedSlot == 2 && var3.getItem() == var4.getItem() && var3.getCount() == 1 && var4.getCount() == 1 && var3.getItem().isRepairable()) {
 			Item var11 = var3.getItem();
-			int var10 = var11.getMaxDamage() - var3.getItemDamageForDisplay();
-			int var7 = var11.getMaxDamage() - var4.getItemDamageForDisplay();
+			int var10 = var11.getMaxDamage() - var3.getItemDamage();
+			int var7 = var11.getMaxDamage() - var4.getItemDamage();
 			int var8 = var10 + var7 + var11.getMaxDamage() * 10 / 100;
 			int var9 = var11.getMaxDamage() - var8;
 
@@ -176,8 +176,8 @@ public class TrainCraftingManager {
 			return;
 		}
 		
-		int id1 = Item.getIdFromItem(item1.getItem());
-		int id2 = Item.getIdFromItem(item2.getItem());
+		int id1 = (item1.getItem().getRegistryName() != null ? item1.getItem().getRegistryName().hashCode() : 0);
+		int id2 = (item2.getItem().getRegistryName() != null ? item2.getItem().getRegistryName().hashCode() : 0);
 		
 		hearthFurnaceRecipes.add(new OpenHearthFurnaceRecipe(item1, item2, output, cooktime));
 		int recipeID = hearthFurnaceRecipes.size()-1;
@@ -185,7 +185,7 @@ public class TrainCraftingManager {
 		addIDtoHearthFurnaceMap(id1, recipeID);
 		addIDtoHearthFurnaceMap(id2, recipeID);
 		
-		this.hearthFurnaceXpMap.put(Item.getIdFromItem(output.getItem()), xp);
+		this.hearthFurnaceXpMap.put((output.getItem().getRegistryName() != null ? output.getItem().getRegistryName().hashCode() : 0), xp);
 	}
 	
 	public void addIDtoHearthFurnaceMap(int itemID, int recipeID){
@@ -201,8 +201,8 @@ public class TrainCraftingManager {
 		if(item1 == null || item2 == null)
 			return null;
 		
-		int id1 = Item.getIdFromItem(item1.getItem());
-		int id2 = Item.getIdFromItem(item2.getItem());
+		int id1 = (item1.getItem().getRegistryName() != null ? item1.getItem().getRegistryName().hashCode() : 0);
+		int id2 = (item2.getItem().getRegistryName() != null ? item2.getItem().getRegistryName().hashCode() : 0);
 		
 		ArrayList<Integer> recipes = hearthFurnaceMap.get(id1);
 		if(recipes == null)
@@ -243,7 +243,7 @@ public class TrainCraftingManager {
 	}
 	
 	public float getHearthFurnaceRecipeExperience(ItemStack output){
-		Object out = this.hearthFurnaceXpMap.get(Item.getIdFromItem(output.getItem()));
+		Object out = this.hearthFurnaceXpMap.get((output.getItem().getRegistryName() != null ? output.getItem().getRegistryName().hashCode() : 0));
 		if(out != null)
 			return (Float) out;
 		return 0;

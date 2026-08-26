@@ -9,7 +9,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IIcon;
 import train.common.entity.rollingStockOld.special.EntityStockCar;
 import train.common.entity.rollingStockOld.special.EntityStockCarDRWG;
@@ -33,14 +34,14 @@ public class BlockMobBoardingTrack extends TrackBaseTraincraft implements ITrack
 			if (cart.getPassengers().get(0) != null)
 				return;
 			AxisAlignedBB box = null;
-			box = cart.boundingBox.expand(4, 4, 4);
+			box = cart.getEntityBoundingBox().expand(4, 4, 4);
 			List list = this.getWorld().getEntitiesWithinAABBExcludingEntity(cart, box);
 			if (list != null && list.size() > 0) {
 
 				for (int j1 = 0; j1 < list.size(); j1++) {
 					Entity entity = (Entity) list.get(j1);
 					if ((entity instanceof EntityCreature)) {
-						entity.mountEntity(cart);
+						entity.startRiding(cart);
 						setTrackPowering();
 					}
 				}
@@ -67,9 +68,9 @@ public class BlockMobBoardingTrack extends TrackBaseTraincraft implements ITrack
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
+		Block block = getWorld().getBlockState(new BlockPos(getX(), getY(), getZ())).getBlock();
+		getWorld().notifyNeighborsOfStateChange(new BlockPos(getX(), getY(), getZ()), block, true);
+		getWorld().notifyNeighborsOfStateChange(new BlockPos(getX(), getY() - 1, getZ()), block, true);
 
 		markBlockNeedsUpdate();
 	}

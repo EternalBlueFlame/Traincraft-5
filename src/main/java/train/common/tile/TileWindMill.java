@@ -55,19 +55,19 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 		/**
 		 * Remove any block on top of the wind mill
 		 */
-		if (!getWorld().isRemote) {
+		if (!world.isRemote) {
 			if (updateTicks % 20 == 0) {
-				if (!this.getWorld().isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
-					Block block = this.getWorld().getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
+				if (!this.world.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
+					Block block = this.world.getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
 					if (block != null) {
 						EntityItem entityitem = new EntityItem(getWorld(), this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(BlockIDs.windMill.block),1));
 						float f3 = 0.05F;
 						entityitem.motionX = (float) rand.nextGaussian() * f3;
 						entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
 						entityitem.motionZ = (float) rand.nextGaussian() * f3;
-						getWorld().spawnEntityInWorld(entityitem);
+						world.spawnEntityInWorld(entityitem);
 					}
-					this.getWorld().setBlockToAir(getPos());
+					this.world.setBlockToAir(getPos());
 				}
 			}
 
@@ -82,7 +82,7 @@ public class TileWindMill extends Energy implements IEnergyProvider {
                    louter:
                    for(int x=-st;x<en;x++)
                      for(int z=-st;z<en;z++)
-                       if(!this.getWorld().canBlockSeeTheSky(this.xCoord + x, this.yCoord + 1, this.zCoord + z))
+                       if(!this.world.canBlockSeeTheSky(this.xCoord + x, this.yCoord + 1, this.zCoord + z))
                        {
                            this.standsOpen++;
                            break louter;
@@ -95,9 +95,9 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 			 */
 			if (this.standsOpen == 0 && updateTicks % 4 == 0) {
 				this.energy.receiveEnergy((WorldEvents.windStrength + (Math.round(this.yCoord *0.25f)) * 10), false);
-				if (this.getWorld().isThundering()) {
+				if (this.world.isThundering()) {
 					this.energy.receiveEnergy(Math.round(this.energy.getEnergyStored() * 3.5f), false);
-				} else if (this.getWorld().isRaining()) {
+				} else if (this.world.isRaining()) {
 					this.energy.receiveEnergy(Math.round(this.energy.getEnergyStored() * 2.2f), false);
 				}
 			}

@@ -1,5 +1,6 @@
 package train.common.entity.rollingStockOld.passenger;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -30,7 +31,7 @@ public class EntityPassengerMILWDiner extends EntityRollingStock implements IPas
 			double dZ = this.posZ - this.bogie[0].posZ;
 			dX/=2;
 			dZ/=2;*/
-			//System.out.println(getWorld().isRemote+ " "+(posX - dX) +" " + (posZ - dZ));
+			//System.out.println(world.isRemote+ " "+(posX - dX) +" " + (posZ - dZ));
 			//getPassengers().get(0).setPosition(posX - dX, posY + getMountedYOffset() + passenger.getYOffset() + 0.2, posZ-dZ);
 		//}
 		/*double rads = this.rotationYawClientReal-90 * 3.141592653589793D / 180.0D;

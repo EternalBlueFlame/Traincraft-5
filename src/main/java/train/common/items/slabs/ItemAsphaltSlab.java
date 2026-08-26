@@ -9,7 +9,6 @@ public class ItemAsphaltSlab extends ItemSlab
 {
     public ItemAsphaltSlab(Block block)
     {
-        super(block, (BlockSlab) BlockIDs.asphaltSlab.block, (BlockSlab) BlockIDs.asphaltDoubleSlab.block, block == BlockIDs.asphaltDoubleSlab.block);
-        this.setUnlocalizedName("asphalt slab");
+        super(block, (BlockSlab) BlockIDs.asphaltSlab.block, (BlockSlab) BlockIDs.asphaltDoubleSlab.block);
     }
 }

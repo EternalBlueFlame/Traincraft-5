@@ -86,7 +86,7 @@ public class EntityFreight100TonHopper extends Freight {
 		if ((super.interactFirst(entityplayer))) {
 			return false;
 		}
-		if (!this.getWorld().isRemote) {
+		if (!this.world.isRemote) {
 			entityplayer.openGui(Traincraft.instance, GuiIDs.FREIGHT, getWorld(), this.getEntityId(), -1, (int) this.posZ);
 		}
 		return true;

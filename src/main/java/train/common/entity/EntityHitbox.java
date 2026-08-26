@@ -8,7 +8,8 @@ import fexcraft.tmt.slim.Vec3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.EntityDamageSource;
 import train.common.api.AbstractTrains;
 import train.common.api.EntityBogie;
@@ -46,12 +47,12 @@ public class EntityHitbox {
             interactionBoxes = new ArrayList<>();
             for (float f = 0; f < depth - (width * 0.25f); f += width) {
                 CollisionBox c = new CollisionBox((host));
-                c.boundingBox.setBounds(-width*0.5,0,-width*0.5,
-                        width*0.5,host.getHitboxSize()[1],width*0.5);
+                c.setEntityBoundingBox(new AxisAlignedBB(-width*0.5,0,-width*0.5,
+                        width*0.5,host.getHitboxSize()[1],width*0.5));
                 c.setPosition(host.posX+f, host.posY, host.posZ);
                 c.host=host;
                 interactionBoxes.add(c);
-                host.getWorld().spawnEntityInWorld(c);
+                host.world.spawnEntity(c);
                 if(front==null){
                     front=c;
                 } else{
@@ -71,7 +72,7 @@ public class EntityHitbox {
     public void manageCollision(){
         for(Entity e:collidingEntities) {
             //on client we need to push away players.
-            if (host.worldObj.isRemote) {
+            if (host.world.isRemote) {
                 if (e instanceof EntityPlayer || e instanceof EntityLiving) {
                     double[] motion = CommonUtil.rotatePoint(-0.075, 0,
                             CommonUtil.atan2degreesf(host.posZ - e.posZ, host.posX - e.posX));
@@ -122,16 +123,16 @@ public class EntityHitbox {
                             host.updateLinks();
 
 
-                            EntityPlayer entityplayer = host.worldObj.getClosestPlayerToEntity(host, 20);//
+                            EntityPlayer entityplayer = host.world.getClosestPlayerToEntity(host, 20);//
                             if (entityplayer != null) {
-                                entityplayer.addChatMessage(new ChatComponentText("attached!"));
+                                entityplayer.sendMessage(new TextComponentString("attached!"));
                             }
 
                         } else {
-                            EntityPlayer p = host.getWorld().getClosestPlayerToEntity(host,32);
+                            EntityPlayer p = host.world.getClosestPlayerToEntity(host,32);
                             if(p!=null){
-                                p.addChatComponentMessage(new ChatComponentText("One or more trains is not in towing mode."));
-                                p.addChatComponentMessage(new ChatComponentText("Use a Stake while sneaking to toggle towing mode."));
+                                p.sendMessage(new TextComponentString("One or more trains is not in towing mode."));
+                                p.sendMessage(new TextComponentString("Use a Stake while sneaking to toggle towing mode."));
                             }
                         }
                     } else {
@@ -177,7 +178,6 @@ public class EntityHitbox {
 
     public List<Entity> collidingEntities = new ArrayList<>();
     public List<int[]> collidingBlocks = new ArrayList<>();
-    private List[] entities;
     private int x,xMax,z,zMax;
 
     public void updateCollidingEntities(EntityRollingStock host){
@@ -191,9 +191,8 @@ public class EntityHitbox {
         zMax = CommonUtil.floorDouble((longest+host.posZ + 16) / 16.0D);
         for (int i = x; i <= xMax; ++i) {
             for (int j = z; j <= zMax; ++j) {
-                if (host.worldObj.getChunkProvider().chunkExists(i,j)) {
-                    entities = host.worldObj.getChunkFromChunkCoords(i, j).entityLists;
-                    for (List olist: entities) {
+                if (host.world.isChunkGeneratedAt(i,j)) {
+                    for (Iterable olist: host.world.getChunk(i, j).getEntityLists()) {
                         for(Object obj : olist) {
                             //this shouldn't be possible, but it's forge, sooooo....
                             if(!(obj instanceof Entity) || interactionBoxes.contains(obj)){
@@ -203,7 +202,7 @@ public class EntityHitbox {
                             //No matter what, we don't want to push a locomotive.
                             //If the config is disabled, we don't want to push ANYTHING.
                             //If the cart is in a consist containing a locomotive, we do not want to push it.
-                            if (!ConfigHandler.PUSHABLE_ROLLINGSTOCK || host instanceof Locomotive || (host.consistLeadID != null && host.worldObj.getEntityByID(host.consistLeadID) instanceof Locomotive)) {
+                            if (!ConfigHandler.PUSHABLE_ROLLINGSTOCK || host instanceof Locomotive || (host.consistLeadID != null && host.world.getEntityByID(host.consistLeadID) instanceof Locomotive)) {
                                 //still need to push the player back though
                                 if (obj instanceof EntityLiving && containsEntity((Entity)obj)) {
                                     ((Entity)obj).applyEntityCollision(host);
@@ -218,7 +217,7 @@ public class EntityHitbox {
                             }
 
                             //we don't want to collide with any passenger that is in a seat. Can just blanket skip everything that is riding something else.
-                            if (((Entity) obj).ridingEntity != null) {
+                            if (((Entity) obj).getRidingEntity() != null) {
                                 continue;
                             }
 
@@ -246,13 +245,13 @@ public class EntityHitbox {
                     }
 
                     //block collisions won't happen on client due to positioning, so there's no reason to check.
-                    /*if(host.worldObj.isRemote){
+                    /*if(host.world.isRemote){
                         continue;
                     }
                     //this is basically a BlockPos for where the block is, so the entity can figure out what to do.
                     // but that's not a 1.7 thing, so we do this heresy to keep code similarities for easier porting
                     for(int k=y; k<yMax;k++) {
-                        if (!(CommonUtil.getBlockAt(host.worldObj, i, j, k) instanceof BlockAir)){
+                        if (!(CommonUtil.getBlockAt(host.world, i, j, k) instanceof BlockAir)){
                             collidingBlocks.add(new int[]{i,j,k});
                         }
                     }*/
@@ -265,7 +264,7 @@ public class EntityHitbox {
     public boolean containsEntity(Entity e){
         for(CollisionBox box : interactionBoxes){
             //check for X
-            if (e.boundingBox.intersectsWith(box.boundingBox.expand(0.2D, e instanceof EntityPlayer?1.2D:0.2D, 0.2D)))
+            if (e.getEntityBoundingBox().intersects(box.getEntityBoundingBox().grow(0.2D, e instanceof EntityPlayer?1.2D:0.2D, 0.2D)))
                 return true;
         }
         return false;

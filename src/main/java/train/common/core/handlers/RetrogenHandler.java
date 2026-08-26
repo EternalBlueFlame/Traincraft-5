@@ -1,7 +1,7 @@
 package train.common.core.handlers;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.event.world.ChunkDataEvent;
@@ -67,7 +67,7 @@ public class RetrogenHandler {
         private ChunkData(Chunk chunk) {
             this.chunkX = chunk.xPosition;
             this.chunkZ = chunk.zPosition;
-            this.dimension = chunk.getWorld().provider.dimensionId;
+            this.dimension = chunk.world.provider.dimensionId;
         }
 
         public ChunkData(int chunkX, int chunkZ, int dimension) {

@@ -7,4 +7,4 @@
  */
 @API(apiVersion="1.0.0", owner="RailcraftAPI|core", provides="RailcraftAPI|fuel")
 package mods.railcraft.api.fuel;
-import cpw.mods.fml.common.API;
+import net.minecraftforge.fml.common.API;

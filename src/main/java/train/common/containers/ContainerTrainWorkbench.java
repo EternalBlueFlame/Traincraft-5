@@ -16,7 +16,7 @@ public class ContainerTrainWorkbench extends Container {
 
 	public IInventory craftMatrix;
 	public IInventory craftResult = new InventoryCraftResult();
-	private World getWorld();
+	private World world;
 
 	public ContainerTrainWorkbench(InventoryPlayer invPlayer, World world, IInventory te) {
 		this.getWorld() = world;
@@ -104,7 +104,7 @@ public class ContainerTrainWorkbench extends Container {
 			if (var4.getCount() == var2.getCount()) {
 				return null;
 			}
-			var3.onPickupFromSlot(player, var4);
+			var3.onTake(player, var4);
 		}
 		return var2;
 	}

@@ -62,7 +62,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         this.parent = parent;
     }
 
-    public World getWorld(){return getWorld();}
+    public World getWorld(){return world;}
     /** returns if this can be pushed*/
     @Override
     public boolean canBePushed() {
@@ -81,25 +81,25 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     public void onUpdate() {
         if (ticksExisted % 10 == 0) { //no reason to do all this every tick. Every half a second should still feel responsive enough without causing issues.
             if (parent == null) {
-                if (getWorld().getEntityByID(parentId) instanceof EntityRollingStock) {
-                    if (getWorld().isRemote) {
+                if (world.getEntityByID(parentId) instanceof EntityRollingStock) {
+                    if (world.isRemote) {
                         if (parent == null) {
-                            parent = (EntityRollingStock) getWorld().getEntityByID(parentId);
+                            parent = (EntityRollingStock) world.getEntityByID(parentId);
                         }
                         parent.setSeats(this, seatNumber);
                     }
                 } else {
-                    getWorld().removeEntity(this);
+                    world.removeEntity(this);
                     this.setDead();
                 }
             }
-            if (getWorld().isRemote) {
+            if (world.isRemote) {
                 if (this.parent.seats.size() >= seatNumber + 1 && (this.pos != this.parent.seats.get(seatNumber).pos || this.getPassenger() != this.parent.seats.get(seatNumber).getPassenger())) {
                     this.setDead();
                 }
             }
         }
-        if (getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer && getWorld().isRemote && this.isControlSeat()) {
+        if (getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer && world.isRemote && this.isControlSeat()) {
             if (TCKeyHandler.inventory.isPressed()) {
                 if (this.parent instanceof Locomotive) {
                     Traincraft.keyChannel.sendToServer(new PacketKeyPress(7));
@@ -110,7 +110,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
                 Traincraft.keyChannel.sendToServer(new PacketKeyPress(9));
             }
         }
-        if (this.parent instanceof Locomotive && this.isControlSeat() && getWorld().isRemote) {
+        if (this.parent instanceof Locomotive && this.isControlSeat() && world.isRemote) {
             ((Locomotive)this.parent).keyHandling();
         }
     }
@@ -119,8 +119,8 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     public boolean shouldRiderSit(){
         if (parent != null) {
             return parent.shouldRiderSit(seatNumber);
-        } else if (getWorld().getEntityByID(this.parentId) != null && getWorld().getEntityByID(this.parentId) instanceof EntityRollingStock) {
-            parent = (EntityRollingStock) getWorld().getEntityByID(this.parentId);
+        } else if (world.getEntityByID(this.parentId) != null && world.getEntityByID(this.parentId) instanceof EntityRollingStock) {
+            parent = (EntityRollingStock) world.getEntityByID(this.parentId);
             return parent.shouldRiderSit(seatNumber);
         } else {
             this.setDead();
@@ -183,7 +183,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     public void updatePassenger(Entity passenger) {
         if (this.getPassenger() != null) {
-            this.getPassenger().setPosition(this.posX, this.posY+1+(getWorld().isRemote?(this.getPassenger()==Minecraft.getMinecraft().thePlayer?-0.4:-1.3):-1.5), this.posZ);
+            this.getPassenger().setPosition(this.posX, this.posY+1+(world.isRemote?(this.getPassenger()==Minecraft.getMinecraft().thePlayer?-0.4:-1.3):-1.5), this.posZ);
         }
     }
 

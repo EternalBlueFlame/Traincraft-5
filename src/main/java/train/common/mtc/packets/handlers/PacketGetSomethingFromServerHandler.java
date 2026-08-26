@@ -1,9 +1,9 @@
 package train.common.mtc.packets.handlers;
 
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import ebf.tim.utility.DebugUtil;
 import train.common.Traincraft;
 import train.common.api.Locomotive;
@@ -14,7 +14,7 @@ public class PacketGetSomethingFromServerHandler implements IMessageHandler<Pack
 
     @Override
     public PacketThingFromServer onMessage(PacketGetSomethingFromServer message, MessageContext ctx) {
-        Locomotive trainEntity = (Locomotive)ctx.getServerHandler().playerEntity.getWorld().getEntityByID(message.entity);
+        Locomotive trainEntity = (Locomotive)ctx.getServerHandler().playerEntity.world.getEntityByID(message.entity);
         if (message.function == 1 && trainEntity !=null) {
            //Get all of the speed/stoppoint/speedchange data.
 

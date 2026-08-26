@@ -8,6 +8,7 @@ import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import train.common.entity.rollingStockOld.special.EntityStockCar;
 import train.common.entity.rollingStockOld.special.EntityStockCarDRWG;
 import train.common.library.Tracks;
@@ -28,8 +29,8 @@ public class BlockDisembarkTrack extends TrackBaseTraincraft implements ITrackEm
 		if (cart instanceof EntityStockCar || cart instanceof EntityStockCarDRWG) {
 			if (cart.getPassengers().get(0) == null)
 				return;
-			cart.getPassengers().get(0).mountEntity(cart);
-			cart.getPassengers().get(0).getRidingEntity()= null;
+			cart.getPassengers().get(0).startRiding(cart);
+			cart.getPassengers().get(0).dismountRidingEntity();
 			setTrackPowering();
 		}
 	}
@@ -53,9 +54,9 @@ public class BlockDisembarkTrack extends TrackBaseTraincraft implements ITrackEm
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
-		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
+		Block block = getWorld().getBlockState(new BlockPos(getX(), getY(), getZ())).getBlock();
+		getWorld().notifyNeighborsOfStateChange(new BlockPos(getX(), getY(), getZ()), block, true);
+		getWorld().notifyNeighborsOfStateChange(new BlockPos(getX(), getY() - 1, getZ()), block, true);
 
 		markBlockNeedsUpdate();
 	}

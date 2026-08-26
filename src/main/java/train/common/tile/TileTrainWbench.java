@@ -177,7 +177,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
 
-		if (getWorld() == null || getWorld().getTileEntity(getPos()) != this) {
+		if (getWorld() == null || world.getTileEntity(getPos()) != this) {
 
 			return false;
 		}

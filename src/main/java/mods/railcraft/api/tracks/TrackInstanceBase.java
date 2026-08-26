@@ -46,7 +46,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     private Block getBlock() {
         if (block == null)
-            block = getWorld().getBlock(getX(), getY(), getZ());
+            block = world.getBlock(getX(), getY(), getZ());
         return block;
     }
 
@@ -121,7 +121,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     public void markBlockNeedsUpdate() {
-        getWorld().markBlockForUpdate(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+        world.markBlockForUpdate(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
     }
 
     protected boolean isRailValid(World world, int x, int y, int z, int meta) {
@@ -146,7 +146,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         if (!valid) {
             Block blockTrack = getBlock();
             blockTrack.dropBlockAsItem(getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0, 0);
-            getWorld().setBlockToAir(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+            world.setBlockToAir(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
             return;
         }
 
@@ -161,7 +161,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         int y = tileEntity.yCoord;
         int z = tileEntity.zCoord;
         BlockRailBase blockTrack = (BlockRailBase) getBlock();
-        blockTrack.new Rail(getWorld(), x, y, z).func_150655_a(getWorld().isBlockIndirectlyGettingPowered(x, y, z), flag);
+        blockTrack.new Rail(getWorld(), x, y, z).func_150655_a(world.isBlockIndirectlyGettingPowered(x, y, z), flag);
     }
 
     protected void testPower() {
@@ -172,14 +172,14 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         int k = tileEntity.zCoord;
         ITrackPowered r = (ITrackPowered) this;
         int meta = tileEntity.getBlockMetadata();
-        boolean powered = getWorld().isBlockIndirectlyGettingPowered(i, j, k) || testPowerPropagation(getWorld(), i, j, k, getTrackSpec(), meta, r.getPowerPropagation());
+        boolean powered = world.isBlockIndirectlyGettingPowered(i, j, k) || testPowerPropagation(getWorld(), i, j, k, getTrackSpec(), meta, r.getPowerPropagation());
         if (powered != r.isPowered()) {
             r.setPowered(powered);
             Block blockTrack = getBlock();
-            getWorld().notifyBlocksOfNeighborChange(i, j, k, blockTrack);
-            getWorld().notifyBlocksOfNeighborChange(i, j - 1, k, blockTrack);
+            world.notifyBlocksOfNeighborChange(i, j, k, blockTrack);
+            world.notifyBlocksOfNeighborChange(i, j - 1, k, blockTrack);
             if (meta == 2 || meta == 3 || meta == 4 || meta == 5)
-                getWorld().notifyBlocksOfNeighborChange(i, j + 1, k, blockTrack);
+                world.notifyBlocksOfNeighborChange(i, j + 1, k, blockTrack);
             sendUpdateToClient();
             // System.out.println("Setting power [" + i + ", " + j + ", " + k + "]");
         }

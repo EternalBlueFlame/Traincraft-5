@@ -52,7 +52,7 @@ public class TileRenderFacing extends TileEntity {
 
     //for whatever dumb stupid reason, sometimes getgetWorld()ect() doesn't exist.
     public World getWorld(){
-        return getWorld();
+        return world;
     }
 
     public EnumFacing getFacing(){
@@ -176,9 +176,9 @@ public class TileRenderFacing extends TileEntity {
         super.markDirty();
         if(this.getWorld() != null) {
             CommonUtil.markBlockForUpdate(getWorld(), xCoord, yCoord, zCoord);
-            getWorld().markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
-            this.getWorld().func_147453_f(getPos(), host);
-            if (getWorld().isRemote && blockGLID != null) {
+            world.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
+            this.world.func_147453_f(getPos(), host);
+            if (world.isRemote && blockGLID != null) {
             //    org.lwjgl.opengl.GL11.glDeleteLists(blockGLID, 1);
             //    blockGLID = null;
             }
@@ -218,13 +218,13 @@ public class TileRenderFacing extends TileEntity {
     public void readFromNBT(NBTTagCompound tag){
         super.readFromNBT(tag);
         facing = tag.getInteger("f");
-        if(getWorld()!=null && getWorld().isRemote) {
+        if(getWorld()!=null && world.isRemote) {
             markDirty();
         }
     }
 
     public void syncTileEntity(){
-        for(Object o : this.getWorld().playerEntities){
+        for(Object o : this.world.playerEntities){
             if(o instanceof EntityPlayerMP){
                 EntityPlayerMP player = (EntityPlayerMP) o;
                 if(player.getDistance(xCoord, yCoord, zCoord) <= 64) {

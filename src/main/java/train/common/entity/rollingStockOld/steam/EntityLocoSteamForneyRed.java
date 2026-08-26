@@ -50,23 +50,23 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		if (getWorld().isRemote) {
+		if (world.isRemote) {
 			return;
 		}
 		checkInvent(locoInvent[0], locoInvent[1], this);
 		for (int h = 0; h < this.locoInvent.length; h++) {
 			if (this.locoInvent[h] != null && steamFuelLast(this.locoInvent[h]) != 0) {
-				if (fuelTrain <= 0 && !getWorld().isRemote) {
+				if (fuelTrain <= 0 && !world.isRemote) {
 					fuelTrain = steamFuelLast(this.locoInvent[h]);
-					if (!getWorld().isRemote) {
+					if (!world.isRemote) {
 						this.decrStackSize(h, 1);
 					}
 				}
 			}
 			else if (this.locoInvent[h] != null && steamFuelLast(this.locoInvent[h]) != 0) {
-				if (fuelTrain <= 0 && !getWorld().isRemote) {
+				if (fuelTrain <= 0 && !world.isRemote) {
 					fuelTrain = steamFuelLast(this.locoInvent[h]);
-					if (!getWorld().isRemote) {
+					if (!world.isRemote) {
 						this.decrStackSize(h, 1);
 					}
 				}
