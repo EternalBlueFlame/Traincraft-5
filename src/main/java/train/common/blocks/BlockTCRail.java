@@ -98,19 +98,19 @@ public class BlockTCRail extends Block {
 		for(int x : matrixXZ){
 			for(int z : matrixXZ){
 				for(int y : matrixY){
-					if (tileEntity != null && world.getBlock(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRailGag){
+					if (tileEntity != null && CommonUtil.getBlockAt(world, x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRailGag){
 						if(((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originX.size()>1){
 							((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originX.removeAll(Arrays.asList(new int[]{tileEntity.xCoord}));
 							((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originY.removeAll(Arrays.asList(new int[]{tileEntity.yCoord}));
 							((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originY.removeAll(Arrays.asList(new int[]{tileEntity.zCoord}));
 						} else {
 							world.notifyBlockChange((x + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z + tileEntity.zCoord), Blocks.air);
-							world.markBlockForUpdate((x + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z + tileEntity.zCoord));
+							CommonUtil.markBlockForUpdate(world, (x + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z + tileEntity.zCoord));
 						}
 					}
-					if (tileEntity != null && world.getBlock(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRail){
+					if (tileEntity != null && CommonUtil.getBlockAt(world, x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRail){
 						world.notifyBlockChange((x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z  + tileEntity.zCoord), Blocks.air);
-						world.markBlockForUpdate((x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1 ), (z  + tileEntity.zCoord));
+						CommonUtil.markBlockForUpdate(world, (x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1 ), (z  + tileEntity.zCoord));
 					}
 				}
 			}
@@ -130,7 +130,7 @@ public class BlockTCRail extends Block {
                     world.func_147480_a(i, j, k, false);
                 }
             }
-            if (!World.doesBlockHaveSolidTopSurface(world, i, j - 1, k) && world.getBlock(i, j - 1, k) != TCBlocks.bridgePillar) {
+            if (!World.doesBlockHaveSolidTopSurface(world, i, j - 1, k) && CommonUtil.getBlockAt(world, i, j - 1, k) != TCBlocks.bridgePillar) {
                 // NOTE: func_147480_a = destroyBlock
                 world.func_147480_a(i, j, k, false);
                 world.removeTileEntity(i, j, k);
@@ -161,7 +161,7 @@ public class BlockTCRail extends Block {
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
 		TileEntity te = world.getTileEntity(i, j, k);
-		int l = world.getBlockMetadata(i, j, k);
+		int l = CommonUtil.getBlockFacing(world, i, j, k);
 		if (!world.isRemote && te != null && (te instanceof TileTCRail)) {
 			if (player != null && player.inventory != null && player.inventory.getCurrentItem() != null && (player.inventory.getCurrentItem().getItem() instanceof ItemWrench) && ((TileTCRail) te).getType() != null && ((TileTCRail) te).getType().equals( EnumTracks.SMALL_STRAIGHT.getLabel())) {
 				l++;

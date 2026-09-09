@@ -1,5 +1,6 @@
 package train.common.wellcar;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -10,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -122,7 +122,7 @@ public class BlockFortyFootContainer extends BlockContainer {
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> ret = super.getDrops(world, x, y, z, metadata, fortune);
-        ItemStack stack = new ItemStack(world.getBlock(x, y, z), 1, metadata);
+        ItemStack stack = new ItemStack(CommonUtil.getBlockAt(world, x, y, z), 1, metadata);
 
         TileFortyFootContainer te = world.getTileEntity(x, y,z) instanceof TileFortyFootContainer ? (TileFortyFootContainer)world.getTileEntity(x,y,z) : null;
 
@@ -195,7 +195,7 @@ public class BlockFortyFootContainer extends BlockContainer {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack)
     {
         TileFortyFootContainer te = (TileFortyFootContainer) world.getTileEntity(x, y, z);
-        int playerYaw = MathHelper.floor_double((player.rotationYaw / 90.0F) + 2.5D) & 3;
+        int playerYaw = CommonUtil.floorDouble((player.rotationYaw / 90.0F) + 2.5D) & 3;
 
         if (te != null && stack.getTagCompound() != null)
         {

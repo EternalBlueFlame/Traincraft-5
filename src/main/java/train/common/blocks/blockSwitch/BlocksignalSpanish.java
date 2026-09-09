@@ -2,6 +2,7 @@ package train.common.blocks.blockSwitch;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -11,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
@@ -69,7 +69,7 @@ public class BlocksignalSpanish extends Block {
 
             te.state = 1;
         }
-        /* int l = world.getBlockMetadata(i, j, k); if (l == 2) {
+        /* int l = CommonUtil.getBlockFacing(world, i, j, k); if (l == 2) {
          *
          * te.rot = 2; } if (l == 5) {
          *
@@ -100,9 +100,9 @@ public class BlocksignalSpanish extends Block {
         super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
         TilesignalSpanish te = (TilesignalSpanish) world.getTileEntity(i, j, k);
         if (te != null) {
-            int dir = MathHelper.floor_double((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+            int dir = CommonUtil.floorDouble((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
             te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
-            world.markBlockForUpdate(i, j, k);
+            CommonUtil.markBlockForUpdate(world, i, j, k);
         }
     }
 
@@ -162,12 +162,12 @@ public class BlocksignalSpanish extends Block {
     /*
     public int isProvidingWeakPower(IBlockAccess p_149709_1_, int p_149709_2_, int p_149709_3_, int p_149709_4_, int p_149709_5_)
     {
-        return (p_149709_1_.getBlockMetadata(p_149709_2_, p_149709_3_, p_149709_4_) & 8) > 0 ? 15 : 0;
+        return (CommonUtil.getBlockFacing(p_149709_1_, p_149709_2_, p_149709_3_, p_149709_4_) & 8) > 0 ? 15 : 0;
     }
 
     public int isProvidingStrongPower(IBlockAccess p_149748_1_, int p_149748_2_, int p_149748_3_, int p_149748_4_, int p_149748_5_)
     {
-        int i1 = p_149748_1_.getBlockMetadata(p_149748_2_, p_149748_3_, p_149748_4_);
+        int i1 = CommonUtil.getBlockFacing(p_149748_1_, p_149748_2_, p_149748_3_, p_149748_4_);
 
         if ((i1 & 8) == 0)
         {
@@ -194,7 +194,7 @@ public class BlocksignalSpanish extends Block {
         if (te.getState() == 0 && world.isBlockIndirectlyGettingPowered(i, j, k)) {
             te.setState(1);
         }
-        world.markBlockForUpdate(i, j, k);
+        CommonUtil.markBlockForUpdate(world, i, j, k);
     }
 
     public void updateTick(World world, int i, int j, int k) {
@@ -203,7 +203,7 @@ public class BlocksignalSpanish extends Block {
         if (te == null)
             return;
         //te.rot = l;
-        // int l = world.getBlockMetadata(i, j, k);
+        // int l = CommonUtil.getBlockFacing(world, i, j, k);
         if (te.state == 1 && !world.isBlockIndirectlyGettingPowered(i, j, k)) {
             te.state = 0;
         }

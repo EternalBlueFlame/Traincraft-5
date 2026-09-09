@@ -3,6 +3,7 @@ package train.common.entity.rollingStockOld.special;
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.common.FMLCommonHandler;
+import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.RailTools;
 import net.minecraft.block.Block;
@@ -145,9 +146,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 
 		updatePushForces();
 		
-		int i = MathHelper.floor_double(posX);
-		int j = MathHelper.floor_double(posY);
-		int k = MathHelper.floor_double(posZ);
+		int i = CommonUtil.floorDouble(posX);
+		int j = CommonUtil.floorDouble(posY);
+		int k = CommonUtil.floorDouble(posZ);
 		
 		if(this.skipTick) {
 			this.skipTick = false;
@@ -627,7 +628,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		miningTickCounter++;
 
 		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer() && pos != null && worldObj !=null) {
-			Block block = worldObj.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+			Block block = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
 			if (miningTickCounter % 8 == 0 && block != null && !worldObj.isRemote && Minecraft.getMinecraft() != null) {
 				this.worldObj.playSound((int) pos.xCoord + 0.5F, (int) pos.yCoord + 0.5F, (int) pos.zCoord + 0.5F, block.stepSound.getBreakSound(), 1.0F, block.stepSound.getPitch() * 0.5F, true);
 			}
@@ -791,9 +792,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 
 	private void harvestBlock(int i, int j, int k) {
 
-		Block block =  worldObj.getBlock(i, j, k);
+		Block block =  CommonUtil.getBlockAt(worldObj, i, j, k);
 
-		int meta = worldObj.getBlockMetadata(i, j, k);
+		int meta = CommonUtil.getBlockFacing(worldObj, i, j, k);
 
 		if (block.getDrops(worldObj, i, j, k, meta, 0).size()>0) {
 
@@ -848,8 +849,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		}
 
 
-		Block block = worldObj.getBlock(i, j, k);
-		int metadata = worldObj.getBlockMetadata(i, j, k);
+		Block block = CommonUtil.getBlockAt(worldObj, i, j, k);
+		int metadata = CommonUtil.getBlockFacing(worldObj, i, j, k);
 
 		if(block == newblock && metadata == newmeta)
 			return true;
@@ -888,8 +889,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if(BuilderInvent[inventoryId] == null)
 			return false;
 
-		Block block = worldObj.getBlock(i, j, k);
-		int metadata = worldObj.getBlockMetadata(i, j, k);
+		Block block = CommonUtil.getBlockAt(worldObj, i, j, k);
+		int metadata = CommonUtil.getBlockFacing(worldObj, i, j, k);
 
 			// check if we need to place rails and if we can
 		if(BlockRailBase.func_150051_a(block)
@@ -938,7 +939,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		int w = k + kZ;
 
 		if(hY < 0) {
-			Block block = worldObj.getBlock(u - iX, v - 1, w - kZ);
+			Block block = CommonUtil.getBlockAt(worldObj, u - iX, v - 1, w - kZ);
 			if(BlockRail.func_150051_a(block)
 					|| block instanceof BlockTCRail
 					|| block instanceof BlockTCRailGag) {
@@ -946,7 +947,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 				hY++;
 			}
 		}else if(hY > 0) {
-			Block block = worldObj.getBlock(u - iX, v, w - kZ);
+			Block block = CommonUtil.getBlockAt(worldObj, u - iX, v, w - kZ);
 			if(BlockRail.func_150051_a(block)
 					|| block instanceof BlockTCRail
 					|| block instanceof BlockTCRailGag) {
@@ -993,7 +994,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		success &= replaceBlockAt(u, v - 1, w, this.slotId_UnderBlock);
 
 		// check if underBlock will fall before placing rail
-		Block underBlock = worldObj.getBlock(u, v-1, w);
+		Block underBlock = CommonUtil.getBlockAt(worldObj, u, v-1, w);
 
 		if(underBlock instanceof BlockFalling && BlockFalling.func_149831_e(worldObj, u, v-2, w)) {
 			this.skipTick = true;

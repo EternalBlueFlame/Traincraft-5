@@ -2,6 +2,7 @@ package train.common.tile.switchStand;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
@@ -28,7 +29,7 @@ public class TileoverheadWireDouble extends TileTraincraft {
         if (!worldObj.isRemote) {
             if (updateTicks % 20 == 0) {
                 if (!this.worldObj.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
-                    Block block = this.worldObj.getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
+                    Block block = CommonUtil.getBlockAt(this.worldObj, this.xCoord, this.yCoord + 1, this.zCoord);
                     if (block != null) {
                         EntityItem entityitem = new EntityItem(worldObj, this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(BlockIDs.overheadWireDouble.block), 1));
                         float f3 = 0.05F;

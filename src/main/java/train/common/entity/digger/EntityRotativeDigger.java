@@ -2,6 +2,7 @@ package train.common.entity.digger;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -519,7 +520,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         if (Math.sqrt((motionX * motionX) + (motionZ * motionZ)) > 0.01) {
             Vec3 pos = Vec3.createVectorHelper(posX, posY - 1, posZ);
-            Block id = worldObj.getBlock((int) posX, (int) posY - 1, (int) posZ);
+            Block id = CommonUtil.getBlockAt(worldObj, (int) posX, (int) posY - 1, (int) posZ);
 
             if (id != null) {
                 this.playMiningEffect(pos, Block.getIdFromBlock(id));
@@ -535,7 +536,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      */
 
     private void playMiningEffect(Vec3 pos, int block_index) {
-        Block id = worldObj.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
         if (id != null) {
             Minecraft.getMinecraft().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
         }

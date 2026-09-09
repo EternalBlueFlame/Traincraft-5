@@ -1,11 +1,9 @@
 package train.common.core.util;
 
-import net.minecraft.block.BlockRailBase;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import train.common.Traincraft;
 import train.common.api.EntityRollingStock;

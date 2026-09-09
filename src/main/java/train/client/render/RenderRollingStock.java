@@ -70,9 +70,9 @@ public class RenderRollingStock extends Render {
         y-=0.3f;
 
         GL11.glTranslatef((float) x, (float) y, (float) z);
-        int i = MathHelper.floor_double(cart.posX);
-        int j = MathHelper.floor_double(cart.posY);
-        int k = MathHelper.floor_double(cart.posZ);
+        int i = CommonUtil.floorDouble(cart.posX);
+        int j = CommonUtil.floorDouble(cart.posY);
+        int k = CommonUtil.floorDouble(cart.posZ);
 
         if (cart.worldObj != null && (CommonUtil.getBlockAt(cart.worldObj,i,j,k) instanceof BlockTCRail || CommonUtil.getBlockAt(cart.worldObj,i,j,k) instanceof BlockTCRailGag)) {
             GL11.glTranslatef(0f, 0.15f, 0f);
@@ -207,7 +207,7 @@ public class RenderRollingStock extends Render {
         }
     }
 
-    public static final float radianF = (float) Math.PI / 180.0f;
+    public static final float radianF = CommonUtil.radianF;
 
     public static double[] rotatePointF(double x, double y, double z, float pitch, float yaw) {
         double[] xyz = new double[]{x, y, z};

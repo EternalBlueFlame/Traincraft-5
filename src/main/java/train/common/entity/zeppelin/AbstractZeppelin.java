@@ -2,6 +2,7 @@ package train.common.entity.zeppelin;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -413,8 +414,8 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			d13 = ((EntityLivingBase) this.riddenByEntity).moveForward;
 
 			if (d13 > 0.0D) {
-				d5 = -Math.sin(this.riddenByEntity.rotationYaw * (float) Math.PI / 180.0F);
-				d11 = Math.cos(this.riddenByEntity.rotationYaw * (float) Math.PI / 180.0F);
+				d5 = -Math.sin(this.riddenByEntity.rotationYaw * CommonUtil.radianF);
+				d11 = Math.cos(this.riddenByEntity.rotationYaw * CommonUtil.radianF);
 				this.motionX += d5 * speedMultiplier * 0.05000000074505806D;
 				this.motionZ += d11 * speedMultiplier * 0.05000000074505806D;
 			}

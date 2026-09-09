@@ -8,12 +8,12 @@
 
 package mods.railcraft.api.tracks;
 
+import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.core.items.ITrackItem;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
@@ -75,9 +75,9 @@ public abstract class RailTools {
      * @return True if being held
      */
     public static boolean isCartLockedDown(EntityMinecart cart) {
-        int x = MathHelper.floor_double(cart.posX);
-        int y = MathHelper.floor_double(cart.posY);
-        int z = MathHelper.floor_double(cart.posZ);
+        int x = CommonUtil.floorDouble(cart.posX);
+        int y = CommonUtil.floorDouble(cart.posY);
+        int z = CommonUtil.floorDouble(cart.posZ);
 
         if (BlockRailBase.func_150049_b_(cart.worldObj, x, y - 1, z))
             y--;

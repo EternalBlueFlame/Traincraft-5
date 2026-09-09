@@ -2,6 +2,7 @@ package train.common.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -9,7 +10,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
@@ -74,8 +74,8 @@ public class BlockWaterWheel extends Block {
 	 */
 	@Override
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLiving, ItemStack par6ItemStack) {
-		int l = MathHelper.floor_double((double) (par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int i1 = par1World.getBlockMetadata(par2, par3, par4) >> 2;
+		int l = CommonUtil.floorDouble((double) (par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int i1 = CommonUtil.getBlockFacing(par1World, par2, par3, par4) >> 2;
 		++l;
 		l %= 4;
 
@@ -112,7 +112,7 @@ public class BlockWaterWheel extends Block {
 	 */
 	@Override
 	public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6) {
-		int l = par1World.getBlockMetadata(par2, par3, par4);
+		int l = CommonUtil.getBlockFacing(par1World, par2, par3, par4);
 		TileEntity tile = par1World.getTileEntity(par2, par3, par4);
 		if (tile != null && tile instanceof TileWaterWheel) {
 			(tile).onChunkUnload();

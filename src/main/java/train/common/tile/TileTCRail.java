@@ -80,7 +80,7 @@ public class TileTCRail extends TileEntity {
 	}
 
 	public void setType(String type) {
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
 		this.type = type;
 		for (EnumTracks rail : EnumTracks.values()) {
 			if (rail.getLabel().equals(type)) {
@@ -99,7 +99,7 @@ public class TileTCRail extends TileEntity {
 
 
 	public void setBallastMaterial(int  ballast) {
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
 		this.ballastMaterial = ballast;
 	}
 
@@ -262,7 +262,7 @@ public class TileTCRail extends TileEntity {
 		}
 
 		this.markDirty();
-		this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+		CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 	}
 
 	@Override

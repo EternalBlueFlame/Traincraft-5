@@ -2,6 +2,7 @@ package train.common.tile.switchStand;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
@@ -20,7 +21,7 @@ public class TileSpeedSign extends TileRenderFacing {
 	}
 	public void setSkinstate(int skinstate) {
 		this.skinstate = skinstate;
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
 
 	}
 
@@ -34,7 +35,7 @@ public class TileSpeedSign extends TileRenderFacing {
 		} else {
 			skinstate++;
 		}
-		worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+		CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
 	}
 
 
