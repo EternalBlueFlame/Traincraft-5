@@ -478,7 +478,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             double db = 0 - vecLook.xCoord;
             double dc = 0 - vecLook.zCoord;
             if (db * db + dc * dc > 0.0000001D) {
-                da = (float) ((Math.atan2(dc, db) * 180D) / 3.1415926535897931D);
+                da = CommonUtil.atan2degreesf(dc, db);
             }
 
             double d19;
@@ -581,10 +581,10 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 1.1F, posZ);
         if (riddenByEntity instanceof EntityLiving) {
             pitch = riddenByEntity.rotationPitch;
-            if (pitch > Math.toDegrees(pitchLimits))
-                pitch = (float) Math.toDegrees(pitchLimits);
-            if (pitch < Math.toDegrees(-pitchLimits))
-                pitch = (float) Math.toDegrees(-pitchLimits);
+            if (pitch > pitchLimits * CommonUtil.degreesF)
+                pitch = pitchLimits * CommonUtil.degreesF;
+            if (pitch < -pitchLimits * CommonUtil.degreesF)
+                pitch = -pitchLimits * CommonUtil.degreesF;
         }
     }
 

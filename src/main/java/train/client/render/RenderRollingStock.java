@@ -238,7 +238,7 @@ public class RenderRollingStock extends Render {
     private static void renderExplosionFX(EntityRollingStock cart, float yaw, float pitch, String explosionType, List<double[]> explosionFX, int explosionFXIterations, boolean hasSmokeOnSlopes) {
         if (cart instanceof Locomotive && !((Locomotive) cart).isLocoTurnedOn()) return;
         float yawMod = yaw % 360;
-        double pitchRads = Math.toDegrees(pitch);
+        double pitchRads = pitch * CommonUtil.degreesD;
         //if (pitch != 0 && !hasSmokeOnSlopes) { return; }
         if (Math.abs(pitch) > 30) return;
         if (cart instanceof Locomotive && ((Locomotive) cart).getFuel() > 0) {

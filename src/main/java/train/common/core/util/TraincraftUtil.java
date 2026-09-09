@@ -48,11 +48,11 @@ public class TraincraftUtil {
             return;
         }
         double pitchRads = transport.rotationPitch * radian;
-        double rotationCos1 = Math.cos(Math.toRadians(transport.rotationYaw + ((transport instanceof Locomotive) ? 90 : 180)));
-        double rotationSin1 = Math.sin(Math.toRadians(transport.rotationYaw + ((transport instanceof Locomotive) ? 90 : 180)));
+        double rotationCos1 = Math.cos((transport.rotationYaw + ((transport instanceof Locomotive) ? 90 : 180)) * radian);
+        double rotationSin1 = Math.sin((transport.rotationYaw + ((transport instanceof Locomotive) ? 90 : 180)) * radian);
         if (!Traincraft.proxy.isClient()) {
-            rotationCos1 = Math.cos(Math.toRadians(transport.rotationYaw + 90));
-            rotationSin1 = Math.sin(Math.toRadians((transport.rotationYaw + 90)));
+            rotationCos1 = Math.cos((transport.rotationYaw + 90) * radian);
+            rotationSin1 = Math.sin((transport.rotationYaw + 90) * radian);
         }
         float pitch = (float) (transport.posY + ((Math.tan(pitchRads) * distance) + transport.getMountedYOffset())
                 + transport.riddenByEntity.getYOffset() + yOffset);

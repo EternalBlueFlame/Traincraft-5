@@ -150,7 +150,7 @@ public class ModelRotaryExcavator extends ModelBase {
 		/**
 		 * Pitch
 		 */
-		float pitch = (float) Math.toRadians(((EntityRotativeDigger) entity).pitch);
+		float pitch = ((EntityRotativeDigger) entity).pitch * CommonUtil.radianF;
 
 		if (pitch > ((EntityRotativeDigger) entity).pitchLimits)
 			pitch = ((EntityRotativeDigger) entity).pitchLimits;
