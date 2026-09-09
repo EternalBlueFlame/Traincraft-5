@@ -14,7 +14,6 @@ import train.common.Traincraft;
 import train.common.api.LiquidManager;
 import train.common.api.SteamTrain;
 import train.common.core.FakePlayer;
-import train.common.core.util.TraincraftUtil;
 import train.common.library.GuiIDs;
 
 import java.util.Random;
@@ -55,7 +54,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 		if (fakePlayer == null){
 			 fakePlayer = new FakePlayer(worldObj);
 		}
-		rotation = MathHelper.floor_float(TraincraftUtil.atan2degreesf(
+		rotation = MathHelper.floor_float(CommonUtil.atan2degreesf(
 				bogieFront.posZ - bogieBack.posZ,
 				bogieFront.posX - bogieBack.posX));
 

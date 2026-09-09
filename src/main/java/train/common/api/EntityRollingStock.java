@@ -67,7 +67,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ebf.tim.utility.CommonUtil.radianF;
-import static train.common.core.util.TraincraftUtil.isRailBlockAt;
+import static ebf.tim.utility.CommonUtil.isRailBlockAt;
 
 public class EntityRollingStock extends AbstractTrains implements ILinkableCart {
     public int fuelTrain;

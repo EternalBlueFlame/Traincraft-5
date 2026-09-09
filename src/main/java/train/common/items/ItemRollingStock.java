@@ -20,13 +20,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.api.*;
 import train.common.core.handlers.ConfigHandler;
-import train.common.core.util.TraincraftUtil;
 import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
 import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
@@ -293,7 +291,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 			par2EntityPlayer.addChatMessage(new ChatComponentText("Place me on a straight piece of track !"));
 			return false;
 		}
-		else if (TraincraftUtil.isRailBlockAt(par3World, par4, par5, par6) && (meta < 2 || meta > 5)) {
+		else if (CommonUtil.isRailBlockAt(par3World, par4, par5, par6) && (meta < 2 || meta > 5)) {
 			this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
 			return true;
 		}

@@ -38,7 +38,6 @@ import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
 import train.common.core.handlers.FuelHandler;
 import train.common.core.plugins.PluginRailcraft;
-import train.common.core.util.TraincraftUtil;
 import train.common.items.ItemTCRail;
 import train.common.library.GuiIDs;
 
@@ -687,13 +686,13 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 				}
 				return lastFace;
 			}
-			rotation = TraincraftUtil.atan2degreesf(d7,d6);
-			lastFace = MathHelper.floor_double(rotation * 4.0F / 360.0F + 0.5D) & 3;
+			rotation = CommonUtil.atan2degreesf(d7,d6);
+			lastFace = CommonUtil.floorDouble(rotation * 4.0F / 360.0F + 0.5D) & 3;
 		}
 		else {
-			rotation = (TraincraftUtil.atan2degreesf(0 - motionX, 0 - motionZ));
+			rotation = (CommonUtil.atan2degreesf(0 - motionX, 0 - motionZ));
 		}
-		return MathHelper.floor_double(rotation * 4.0F / 360.0F + 0.5D) & 3;
+		return CommonUtil.floorDouble(rotation * 4.0F / 360.0F + 0.5D) & 3;
 	}
 
 	/** Compares the currentHeight with given height in GUI */
