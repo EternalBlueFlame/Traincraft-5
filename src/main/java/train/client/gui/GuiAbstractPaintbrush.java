@@ -2,6 +2,7 @@ package train.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -145,7 +146,7 @@ public abstract class GuiAbstractPaintbrush extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton clickedButton) {
         if (clickedButton.enabled) {
-            editingPlayer.playSound("random.click", 1f, 1f);
+            CommonUtil.playSound(editingPlayer, "random.click", 1f, 1f);
             // Select Color
             if (clickedButton.id < 3) { // Page up or down button.
                 if (clickedButton.id == 0) { // If page up...

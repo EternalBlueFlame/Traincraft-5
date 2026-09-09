@@ -2,6 +2,7 @@ package train.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -180,7 +181,7 @@ public abstract class GuiLockMenuAbstract extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton clickedButton) {
         if (clickedButton.enabled) {
-            editingPlayer.playSound("random.click", 1f, 1f);
+            CommonUtil.playSound(editingPlayer, "random.click", 1f, 1f);
             switch (clickedButton.id) {
                 case 0:  // Main Lock Button
                     setLocked(!getLocked());

@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
+import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -436,7 +437,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton clickedButton) {
         if (clickedButton.enabled) {
-            editingPlayer.playSound("random.click", 1f, 1f);
+            CommonUtil.playSound(editingPlayer, "random.click", 1f, 1f);
             // Select Color
             switch (clickedButton.id) {
                 case 0:
@@ -617,7 +618,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
             }
             updateSelectedTextureProperties();
             updateButtons();
-            editingPlayer.playSound("random.click", 1f, 1f);
+            CommonUtil.playSound(editingPlayer, "random.click", 1f, 1f);
         }
     }
 

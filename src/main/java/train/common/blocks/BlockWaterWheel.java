@@ -64,7 +64,7 @@ public class BlockWaterWheel extends Block {
 			par1World.spawnParticle("splash", d0, par3 + 1, d2, 0.0D, 0.0D, 0.0D);
 			par1World.spawnParticle("splash", d0, par3, d2, 0.0D, 0.0D, 0.0D);
 			if (par5Random.nextInt(20) == 0) {
-				par1World.playSound(par2, par3, par4, "liquid.water", par5Random.nextFloat() * 0.25F + 0.75F, par5Random.nextFloat() * 1F + 0.1F, true);
+				CommonUtil.playSound(par1World, par2, par3, par4, "liquid.water", par5Random.nextFloat() * 0.25F + 0.75F, par5Random.nextFloat() * 1F + 0.1F, 0);
 			}
 		}
 	}

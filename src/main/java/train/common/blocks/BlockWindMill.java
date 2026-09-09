@@ -58,7 +58,7 @@ public class BlockWindMill extends Block {
 		TileEntity tile = par1World.getTileEntity(par2, par3, par4);
 		if (tile != null && tile instanceof TileWindMill && ((TileWindMill) tile).windClient > 0) {
 			if (par5Random.nextInt(20) == 0) {
-				par1World.playSound(par2, par3, par4, "minecart.inside", par5Random.nextFloat() * 0.25F + 0.1F, par5Random.nextFloat() * 1F - 0.6F, true);
+				CommonUtil.playSound(par1World, par2, par3, par4, "minecart.inside", par5Random.nextFloat() * 0.25F + 0.1F, par5Random.nextFloat() * 1F - 0.6F, 0);
 			}
 		}
 	}
