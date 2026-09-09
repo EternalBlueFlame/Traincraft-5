@@ -3,6 +3,7 @@ package train.client.gui;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import ebf.tim.gui.GUIButton;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -11,7 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import train.common.Traincraft;
 import train.common.api.*;
@@ -356,7 +356,7 @@ public class GuiLoco2 extends GuiContainer {
             int k = (height - ySize) / 2;
             if (mouseX > j + 143 && mouseX < j + 161 && mouseY > k + 18 && mouseY < k + 68) {
                 if (((DieselTrain) loco).getDiesel() != 0) {
-                    drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("fluid.tc:" + ((DieselTrain) loco).getLiquidName()) + " " +
+                    drawHoveringText(Collections.singletonList(CommonUtil.translate("fluid.tc:" + ((DieselTrain) loco).getLiquidName()) + " " +
                                     ((DieselTrain) loco).getDiesel() + "mb / " + (((DieselTrain) loco).getCartTankCapacity()) + "mb"),
                             mouseX, mouseY, fontRendererObj);
                 } else {

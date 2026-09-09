@@ -9,10 +9,10 @@ package train.common.core;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
 import train.common.library.TraincraftRegistry;
 
 import java.util.List;
@@ -38,7 +38,7 @@ public class CreativeTabTraincraft extends CreativeTabs {
 
     @Override
     public String getTranslatedTabLabel() {
-        return StatCollector.translateToLocal(super.getTabLabel());
+        return CommonUtil.translate(super.getTabLabel());
     }
 
     /**the icon for the tab. override this one*/

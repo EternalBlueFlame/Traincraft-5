@@ -8,7 +8,6 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import train.common.Traincraft;
 import train.common.api.EntityRollingStock;
@@ -269,13 +268,13 @@ public class GuiDynamicOverlay extends GuiScreen {
 
         // Draw Hovering Tooltips
         if (mouseX > backgroundButton.xPosition && mouseX < backgroundButton.xPosition + backgroundButton.width && mouseY > backgroundButton.yPosition && mouseY < backgroundButton.yPosition + backgroundButton.height)
-            drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("dynamicoverlaymenu.Background Color.name")), mouseX, mouseY, fontRendererObj);
+            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Background Color.name")), mouseX, mouseY, fontRendererObj);
         else if (mouseX > foregroundButton.xPosition && mouseX < foregroundButton.xPosition + foregroundButton.width && mouseY > foregroundButton.yPosition && mouseY < foregroundButton.yPosition + foregroundButton.height)
-            drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("dynamicoverlaymenu.Foreground Color.name")), mouseX, mouseY, fontRendererObj);
+            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Foreground Color.name")), mouseX, mouseY, fontRendererObj);
         else if (mouseX > submitButton.xPosition && mouseX < submitButton.xPosition + submitButton.width && mouseY > submitButton.yPosition && mouseY < submitButton.yPosition + submitButton.height)
-            drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("dynamicoverlaymenu.Submit.name")), mouseX, mouseY, fontRendererObj);
+            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Submit.name")), mouseX, mouseY, fontRendererObj);
         else if (mouseX > cancelButton.xPosition && mouseX < cancelButton.xPosition + cancelButton.width && mouseY > cancelButton.yPosition && mouseY < cancelButton.yPosition + cancelButton.height)
-            drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("dynamicoverlaymenu.Back.name")), mouseX, mouseY, fontRendererObj);
+            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Back.name")), mouseX, mouseY, fontRendererObj);
     }
 
     @Override
