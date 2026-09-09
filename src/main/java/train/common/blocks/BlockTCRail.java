@@ -167,7 +167,7 @@ public class BlockTCRail extends Block {
 				l++;
 				if (l > 3)
 					l = 0;
-				world.setBlockMetadataWithNotify(i, j, k, l, 2);
+				CommonUtil.setBlockMeta(world, i, j, k, l);
 				return true;
 			}
 			//((TileTCRail)te).printInfo();

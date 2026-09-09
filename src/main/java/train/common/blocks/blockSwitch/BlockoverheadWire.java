@@ -94,7 +94,7 @@ public class BlockoverheadWire extends Block {
             int i1 = CommonUtil.getBlockFacing(p_149727_1_, p_149727_2_, p_149727_3_, p_149727_4_);
             int j1 = i1 & 7;
             int k1 = 8 - (i1 & 8);
-            p_149727_1_.setBlockMetadataWithNotify(p_149727_2_, p_149727_3_, p_149727_4_, j1 + k1, 3);
+            CommonUtil.setBlockMeta(p_149727_1_, p_149727_2_, p_149727_3_, p_149727_4_, j1 + k1);
             p_149727_1_.playSoundEffect((double)p_149727_2_ + 0.5D, (double)p_149727_3_ + 0.5D, (double)p_149727_4_ + 0.5D, "random.click", 0.3F, k1 > 0 ? 0.6F : 0.5F);
             p_149727_1_.notifyBlocksOfNeighborChange(p_149727_2_, p_149727_3_, p_149727_4_, this);
 

@@ -74,19 +74,19 @@ public class BlockWindMill extends Block {
 		l %= 4;
 
 		if (l == 0) {
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 2 | i1 << 2, 2);
+			CommonUtil.setBlockMeta(par1World, par2, par3, par4, 2 | i1 << 2);
 		}
 
 		if (l == 1) {
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 3 | i1 << 2, 2);
+			CommonUtil.setBlockMeta(par1World, par2, par3, par4, 3 | i1 << 2);
 		}
 
 		if (l == 2) {
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 0 | i1 << 2, 2);
+			CommonUtil.setBlockMeta(par1World, par2, par3, par4, 0 | i1 << 2);
 		}
 
 		if (l == 3) {
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 1 | i1 << 2, 2);
+			CommonUtil.setBlockMeta(par1World, par2, par3, par4, 1 | i1 << 2);
 		}
 	}
 

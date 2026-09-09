@@ -99,28 +99,28 @@ public class BlockGeneratorDiesel extends BlockContainer {
 		if (var6 == 0) {
 			if (te != null) {
 				te.setFacing(2 | var7 << 2);
-				 world.setBlockMetadataWithNotify(par2, par3, par4, 2 | var7 << 2, 2);
+				 CommonUtil.setBlockMeta(world, par2, par3, par4, 2 | var7 << 2);
 			}
 		}
 
 		if (var6 == 1) {
 			if (te != null) {
 				te.setFacing(3 | var7 << 2);
-				world.setBlockMetadataWithNotify(par2, par3, par4, 3 | var7 << 2, 2);
+				CommonUtil.setBlockMeta(world, par2, par3, par4, 3 | var7 << 2);
 			}
 		}
 
 		if (var6 == 2) {
 			if (te != null) {
 				te.setFacing(0 | var7 << 2);
-				world.setBlockMetadataWithNotify(par2, par3, par4, 0 | var7 << 2, 2);
+				CommonUtil.setBlockMeta(world, par2, par3, par4, 0 | var7 << 2);
 			}
 		}
 
 		if (var6 == 3) {
 			if (te != null) {
 				te.setFacing(1 | var7 << 2);
-				world.setBlockMetadataWithNotify(par2, par3, par4, 1 | var7 << 2, 2);
+				CommonUtil.setBlockMeta(world, par2, par3, par4, 1 | var7 << 2);
 			}
 		}
 
