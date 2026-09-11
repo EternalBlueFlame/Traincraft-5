@@ -1,79 +1,79 @@
-JAVA_VER=$(javac -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*"/\1\2/p;')
+#!/usr/bin/env bash
 
-echo "JDK version found was:"
-echo "$JAVA_VER"
-
-
-if [ "$JAVA_VER" -ge 19 ]
-then
-    echo "This version is incompatible, 1.9 and later break stuff."
-    ins_j8
-elif [ -z "$JAVA_VER" ]
-then
-    ins_j8
-elif [ ! "$JAVA_VER" -ge 18 ]
-then
-    echo "your java version is too old and doesn't support the methods we need."
-    insj8
+# Check Java version (warning only)
+JAVA_VER=$(javac -version 2>&1 | head -n 1)
+if [[ ! "$JAVA_VER" =~ "1.8" ]]; then
+    echo "Warning: Java 8 (JDK 1.8) is required for building Forge 1.7.10."
+    echo "Current version detected: $JAVA_VER"
+    echo "Please ensure Java 8 is active in your environment."
+    echo ""
 fi
 
-
-
-
-JAVA_VER=$(javac -version 2>&1 | sed -n ';s/.* version "\(.*\)\.\(.*\)\..*"/\1\2/p;')
-if [ "$JAVA_VER" -ge 18 ]
-then
-    printf '%*s\n' "${COLUMNS:-$(tput cols)}" '' | tr ' ' -
-
+while true; do
+    echo "##########################################################################"
+    echo " Gradle setup script for Linux/macOS"
+    echo " This is to prepare the source for use with an IDE."
+    echo " Optionally you may compile the .jar as well."
+    echo "##########################################################################"
+    echo ""
     echo "Choose an option:"
-    echo "1: Setup workspace for eclipse (partial setup)."
-    echo "2: Setup workspace for Intelij IDEA."
-    echo "3: Compile a jar of the mod."
+    echo " [1] Eclipse - (Usually does not work)"
+    echo " [2] Idea (IntelliJ) - (Does work)"
+    echo " [3] Build the source"
+    echo ""
 
-    read -p "" choice
-    case "$choice" in
-        1 )
-            echo "Setting up workspace for Eclipse"
-            ./gradlewLinux setupDecompWorkspace --refresh-dependencies eclipse
-
+    read -rp "Enter choice [1-3]: " choice
+    case "${choice,,}" in
+        1|eclipse)
+            echo "Setting up workspace for Eclipse..."
+            if ./gradlew setupDecompWorkspace --refresh-dependencies eclipse; then
+                echo ""
+                echo "##########################################################################"
+                echo " Mod is ready to be opened in Eclipse."
+                echo " If prompted for a deobfuscator, select:"
+                echo " ~/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.4.1614-1.7.10/unpacked/conf"
+                echo "##########################################################################"
+            else
+                echo ""
+                echo "Gradle failed. See output above."
+                exit 1
+            fi
+            break
             ;;
-        2 )
-            echo "Setting up workspace for Intelij"
-            ./gradlewLinux setupDecompWorkspace --refresh-dependencies idea
-
+        2|idea|intellij|intelij)
+            echo "Setting up workspace for IntelliJ IDEA..."
+            if ./gradlew setupDecompWorkspace --refresh-dependencies idea; then
+                echo ""
+                echo "##########################################################################"
+                echo " Mod is ready to be opened in IntelliJ IDEA."
+                echo " Open via the generated Traincraft-5.ipr or directory import."
+                echo " If prompted for a deobfuscator, select:"
+                echo " ~/.gradle/caches/minecraft/net/minecraftforge/forge/1.7.10-10.13.4.1614-1.7.10/unpacked/conf"
+                echo "##########################################################################"
+            else
+                echo ""
+                echo "Gradle failed. See output above."
+                exit 1
+            fi
+            break
             ;;
-        3 )
-            echo "Attempting to build jar file"
-            ./gradlewLinux setupDecompWorkspace --refresh-dependencies build
-
+        3|build)
+            echo "Attempting to build jar file..."
+            if ./gradlew setupDecompWorkspace --refresh-dependencies build; then
+                echo ""
+                echo "##########################################################################"
+                echo " Built jar file can be found in build/libs/"
+                echo "##########################################################################"
+            else
+                echo ""
+                echo "Gradle failed. See output above."
+                exit 1
+            fi
+            break
             ;;
-
-
-        * ) echo "invalid answer";;
+        *)
+            echo "Incorrect option, try again."
+            echo ""
+            ;;
     esac
-
-
-fi
-
-
-
-
-
-
-ins_j8() {
-    read -p "Install Oracle Java Development Kit (JDK) 1.8 (y/n)?" choice
-    case "$choice" in
-        y|Y )
-            echo "Installing Oracle JDK 18."
-            sudo add-apt-repository ppa:webupd8team/java
-            sudo apt-get update
-            sudo apt-get install oracle-java8-installer
-            ;;
-        n|N )
-            echo "Exiting"
-            [[ "$0" = "$BASH_SOURCE" ]] && exit 1 || return 1;;
-        * ) echo "invalid answer";;
-    esac
-
-
-}
+done
