@@ -2,6 +2,7 @@ package train.common.entity.digger;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockTorch;
@@ -163,8 +164,8 @@ public class EntityRotativeWheel extends Entity {
             return;
         }
 
-        Block id = worldObj.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
-        int meta = worldObj.getBlockMetadata((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        int meta = CommonUtil.getBlockFacing(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
         if (id != null) {
             this.playMiningEffect(pos, id);
         }
@@ -209,7 +210,7 @@ public class EntityRotativeWheel extends Entity {
     @SideOnly(Side.CLIENT)
     private void playMiningEffect(Vec3 pos, Block block_index) {
         miningTickCounter++;
-        Block id = worldObj.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
     }
 
     /**

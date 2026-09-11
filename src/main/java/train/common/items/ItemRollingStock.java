@@ -20,13 +20,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.api.*;
 import train.common.core.handlers.ConfigHandler;
-import train.common.core.util.TraincraftUtil;
 import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
 import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
@@ -216,7 +214,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	@Override
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
-		int meta = par3World.getBlockMetadata(par4, par5, par6);
+		int meta = CommonUtil.getBlockFacing(par3World, par4, par5, par6);
 		TileEntity tileentity = par3World.getTileEntity(par4, par5, par6);
 		//System.out.println(meta);
 		if (par3World.isRemote) {
@@ -293,7 +291,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 			par2EntityPlayer.addChatMessage(new ChatComponentText("Place me on a straight piece of track !"));
 			return false;
 		}
-		else if (TraincraftUtil.isRailBlockAt(par3World, par4, par5, par6) && (meta < 2 || meta > 5)) {
+		else if (CommonUtil.isRailBlockAt(par3World, par4, par5, par6) && (meta < 2 || meta > 5)) {
 			this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
 			return true;
 		}
@@ -328,9 +326,9 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		for (int check = 0; check <= trackLength ; check++){
 
 
-			if (!(world.getBlock((int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ) == BlockIDs.tcRail.block
-				|| !(world.getBlock((int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ) == BlockIDs.tcRailGag.block)
-				|| !(BlockRailBase.func_150051_a(world.getBlock((int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ))))){
+			if (!(CommonUtil.getBlockAt(world, (int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ) == BlockIDs.tcRail.block
+				|| !(CommonUtil.getBlockAt(world, (int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ) == BlockIDs.tcRailGag.block)
+				|| !(BlockRailBase.func_150051_a(CommonUtil.getBlockAt(world, (int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ))))){
 
 
 				return false;
@@ -375,14 +373,14 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 				int dir = 0;
 				int meta;
-				if (world.getBlock(i, j, k) instanceof BlockRailBase) {
-					meta = ((BlockRailBase) world.getBlock(i, j, k)).getBasicRailMetadata(world, rollingStock, i, j, k);
+				if (CommonUtil.getBlockAt(world, i, j, k) instanceof BlockRailBase) {
+					meta = ((BlockRailBase) CommonUtil.getBlockAt(world, i, j, k)).getBasicRailMetadata(world, rollingStock, i, j, k);
 				} else {
-					meta = world.getBlockMetadata(i, j, k);
+					meta = CommonUtil.getBlockFacing(world, i, j, k);
 				}
 
 				if (player != null)
-					dir = MathHelper.floor_double((player.rotationYaw * 8F) / 360F + 0.5D) & 7;
+					dir = CommonUtil.floorDouble((player.rotationYaw * 8F) / 360F + 0.5D) & 7;
 				// 0    = 0 = SOUTH
 				// 45   = 1 = SOUTH-WEST
 				// 90   = 2 = WEST
@@ -397,7 +395,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 					rollingStock.rotationYaw = (meta == 2 || meta == 0) ? 90 : 0;
 
-					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
+					if (CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRail.block || CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRailGag.block) {
 
 						if (meta == 0 || meta == 2) {
 							//rollingStock.rotationYaw = -90; // LEFT
@@ -422,7 +420,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				if (dir == 1) {
 					rollingStock.rotationYaw = (meta == 2 || meta == 0) ? 90 : 0;
 
-					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
+					if (CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRail.block || CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 6 || meta == 4) {
 							rollingStock.rotationYaw = 135; // LEFT
 						} else if (meta == 2 || meta == 0) {
@@ -440,7 +438,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 				if (dir == 2) {
 					rollingStock.rotationYaw = (meta == 1 || meta == 3) ? 180 : 90;
-					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
+					if (CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRail.block || CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 1 || meta == 3){
 							rollingStock.rotationYaw = 180; // LEFT
 						}
@@ -463,7 +461,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				if (dir == 3) {
 					rollingStock.rotationYaw = (meta == 2 || meta == 0) ? -90 : 180;
 
-					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
+					if (CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRail.block || CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 5 || meta == 7) {
 							rollingStock.rotationYaw = -135; // LEFT
 						}
@@ -485,7 +483,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				if (dir == 4) {
 					rollingStock.rotationYaw = (meta == 2 || meta == 0) ? -90 : 180;
 
-					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
+					if (CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRail.block || CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 0 || meta == 2) {
 							rollingStock.rotationYaw = -90; // RIGHT
 						}
@@ -510,7 +508,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				if (dir == 5) {
 					rollingStock.rotationYaw = (meta == 2 || meta == 0) ? -90 : 0;
 
-					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
+					if (CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRail.block || CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 6 || meta == 4) {
 							rollingStock.rotationYaw = -45; // LEFT
 						}
@@ -532,7 +530,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				if (dir == 6) {
 					rollingStock.rotationYaw = (meta == 0 || meta == 2) ? -90 : 0;
 				
-					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
+					if (CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRail.block || CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 1 || meta == 3) {
 							rollingStock.rotationYaw = 0;
 						}
@@ -553,7 +551,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				if (dir == 7) {
 					rollingStock.rotationYaw = (meta == 0 || meta == 2) ? 90 : 0;
 
-					if (world.getBlock(i, j, k) == BlockIDs.tcRail.block || world.getBlock(i, j, k) == BlockIDs.tcRailGag.block) {
+					if (CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRail.block || CommonUtil.getBlockAt(world, i, j, k) == BlockIDs.tcRailGag.block) {
 						if (meta == 5 || meta == 7) {
 							rollingStock.rotationYaw = 45; // LEFT
 						}

@@ -2,11 +2,11 @@ package train.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import train.common.api.EntityRollingStock;
 import train.common.library.Info;
@@ -133,11 +133,11 @@ public abstract class GuiAbstractPaintbrush extends GuiScreen {
         // I split this up to hopefully reduce the amount of statements it has to process.
         if (mouseX > closeMenuButton.xPosition - 5) { // If mouse is on the right-hand side after the textures.
             if (closeMenuButton.getTexture() == GuiButtonPaintbrushMenu.Texture.ACTIVE)
-                drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Close Menu.name")), mouseX, mouseY, fontRendererObj);
+                drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Close Menu.name")), mouseX, mouseY, fontRendererObj);
             else if (arrowUp.getTexture() == GuiButtonPaintbrushMenu.Texture.ACTIVE && arrowUp.visible)
-                drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Previous Page.name")), mouseX, mouseY, fontRendererObj);
+                drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Previous Page.name")), mouseX, mouseY, fontRendererObj);
             else if (arrowDown.getTexture() == GuiButtonPaintbrushMenu.Texture.ACTIVE && arrowDown.visible)
-                drawHoveringText(Collections.singletonList(StatCollector.translateToLocal("paintbrushmenu.Next Page.name")), mouseX, mouseY, fontRendererObj);
+                drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Next Page.name")), mouseX, mouseY, fontRendererObj);
         }
         drawInForeground(mouseX, mouseY);
     }
@@ -145,7 +145,7 @@ public abstract class GuiAbstractPaintbrush extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton clickedButton) {
         if (clickedButton.enabled) {
-            editingPlayer.playSound("random.click", 1f, 1f);
+            CommonUtil.playSound(editingPlayer, "random.click", 1f, 1f);
             // Select Color
             if (clickedButton.id < 3) { // Page up or down button.
                 if (clickedButton.id == 0) { // If page up...

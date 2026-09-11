@@ -2,6 +2,7 @@ package train.common.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.material.Material;
@@ -49,12 +50,12 @@ public class BlockOreTC extends BlockFalling {
 
 	@Override
     public void onBlockAdded(World world, int x, int y, int z) {
-		if (world.getBlockMetadata(x, y, z) == 1) world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world));
+		if (CommonUtil.getBlockFacing(world, x, y, z) == 1) world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world));
     }
 
 	@Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block block) {
-		if (world.getBlockMetadata(x, y, z) == 1) world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world));
+		if (CommonUtil.getBlockFacing(world, x, y, z) == 1) world.scheduleBlockUpdate(x, y, z, this, this.tickRate(world));
     }
 
 	@Override

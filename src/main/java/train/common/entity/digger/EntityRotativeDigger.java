@@ -2,6 +2,7 @@ package train.common.entity.digger;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -477,7 +478,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             double db = 0 - vecLook.xCoord;
             double dc = 0 - vecLook.zCoord;
             if (db * db + dc * dc > 0.0000001D) {
-                da = (float) ((Math.atan2(dc, db) * 180D) / 3.1415926535897931D);
+                da = CommonUtil.atan2degreesf(dc, db);
             }
 
             double d19;
@@ -519,7 +520,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         if (Math.sqrt((motionX * motionX) + (motionZ * motionZ)) > 0.01) {
             Vec3 pos = Vec3.createVectorHelper(posX, posY - 1, posZ);
-            Block id = worldObj.getBlock((int) posX, (int) posY - 1, (int) posZ);
+            Block id = CommonUtil.getBlockAt(worldObj, (int) posX, (int) posY - 1, (int) posZ);
 
             if (id != null) {
                 this.playMiningEffect(pos, Block.getIdFromBlock(id));
@@ -535,7 +536,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      */
 
     private void playMiningEffect(Vec3 pos, int block_index) {
-        Block id = worldObj.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
         if (id != null) {
             Minecraft.getMinecraft().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
         }
@@ -580,10 +581,10 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 1.1F, posZ);
         if (riddenByEntity instanceof EntityLiving) {
             pitch = riddenByEntity.rotationPitch;
-            if (pitch > Math.toDegrees(pitchLimits))
-                pitch = (float) Math.toDegrees(pitchLimits);
-            if (pitch < Math.toDegrees(-pitchLimits))
-                pitch = (float) Math.toDegrees(-pitchLimits);
+            if (pitch > pitchLimits * CommonUtil.degreesF)
+                pitch = pitchLimits * CommonUtil.degreesF;
+            if (pitch < -pitchLimits * CommonUtil.degreesF)
+                pitch = -pitchLimits * CommonUtil.degreesF;
         }
     }
 

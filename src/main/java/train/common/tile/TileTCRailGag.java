@@ -1,6 +1,7 @@
 package train.common.tile;
 
 import cpw.mods.fml.relauncher.Side;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
@@ -112,9 +113,9 @@ public class TileTCRailGag extends TileEntity {
 		for(int x : matrixXZ){
 			for(int z : matrixXZ){
 				for(int y : matrixY){
-					if(p_149749_1_.getBlock(xCoord,yCoord,zCoord)instanceof BlockTCRail){
+					if(CommonUtil.getBlockAt(p_149749_1_, xCoord,yCoord,zCoord)instanceof BlockTCRail){
 						p_149749_1_.func_147453_f(p_149749_2_,p_149749_3_,p_149749_4_, Blocks.air);
-						p_149749_1_.markBlockForUpdate(p_149749_2_,p_149749_3_,p_149749_4_);
+						CommonUtil.markBlockForUpdate(p_149749_1_, p_149749_2_,p_149749_3_,p_149749_4_);
 					}
 				}
 			}

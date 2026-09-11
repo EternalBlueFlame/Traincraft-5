@@ -1,5 +1,6 @@
 package train.common.entity;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -86,11 +87,11 @@ public class EntityLasersLines extends Entity {
 
 		renderSize = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-		angleZ = 360 - (Math.atan2(dz, dx) * 180.0 / Math.PI + 180.0);
+		angleZ = 360 - (CommonUtil.atan2degreesf(dz, dx) + 180.0);
 
 		dx = Math.sqrt(renderSize * renderSize - dy * dy);
 
-		angleY = -Math.atan2(dy, dx) * 180 / Math.PI;
+		angleY = -CommonUtil.atan2degreesf(dy, dx);
 	}
 
 	@Override

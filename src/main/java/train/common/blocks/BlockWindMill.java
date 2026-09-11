@@ -2,6 +2,7 @@ package train.common.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -9,7 +10,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.library.Info;
@@ -58,7 +58,7 @@ public class BlockWindMill extends Block {
 		TileEntity tile = par1World.getTileEntity(par2, par3, par4);
 		if (tile != null && tile instanceof TileWindMill && ((TileWindMill) tile).windClient > 0) {
 			if (par5Random.nextInt(20) == 0) {
-				par1World.playSound(par2, par3, par4, "minecart.inside", par5Random.nextFloat() * 0.25F + 0.1F, par5Random.nextFloat() * 1F - 0.6F, true);
+				CommonUtil.playSound(par1World, par2, par3, par4, "minecart.inside", par5Random.nextFloat() * 0.25F + 0.1F, par5Random.nextFloat() * 1F - 0.6F, 0);
 			}
 		}
 	}
@@ -68,25 +68,25 @@ public class BlockWindMill extends Block {
 	 */
 	@Override
 	public void onBlockPlacedBy(World par1World, int par2, int par3, int par4, EntityLivingBase par5EntityLiving, ItemStack par6ItemStack) {
-		int l = MathHelper.floor_double((double) (par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
-		int i1 = par1World.getBlockMetadata(par2, par3, par4) >> 2;
+		int l = CommonUtil.floorDouble((double) (par5EntityLiving.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int i1 = CommonUtil.getBlockFacing(par1World, par2, par3, par4) >> 2;
 		++l;
 		l %= 4;
 
 		if (l == 0) {
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 2 | i1 << 2, 2);
+			CommonUtil.setBlockMeta(par1World, par2, par3, par4, 2 | i1 << 2);
 		}
 
 		if (l == 1) {
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 3 | i1 << 2, 2);
+			CommonUtil.setBlockMeta(par1World, par2, par3, par4, 3 | i1 << 2);
 		}
 
 		if (l == 2) {
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 0 | i1 << 2, 2);
+			CommonUtil.setBlockMeta(par1World, par2, par3, par4, 0 | i1 << 2);
 		}
 
 		if (l == 3) {
-			par1World.setBlockMetadataWithNotify(par2, par3, par4, 1 | i1 << 2, 2);
+			CommonUtil.setBlockMeta(par1World, par2, par3, par4, 1 | i1 << 2);
 		}
 	}
 

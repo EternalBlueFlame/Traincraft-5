@@ -2,6 +2,7 @@ package train.common.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -48,13 +49,13 @@ public class BlockTCRailGag extends Block {
 			for(int x : matrixXZ){
 				for(int z : matrixXZ){
 					for(int y : matrixY){
-						if (world.getBlock(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRailGag){
+						if (CommonUtil.getBlockAt(world, x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRailGag){
 							world.notifyBlockChange((x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z  + tileEntity.zCoord), Blocks.air);
-							world.markBlockForUpdate((x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1 ), (z  + tileEntity.zCoord));
+							CommonUtil.markBlockForUpdate(world, (x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1 ), (z  + tileEntity.zCoord));
 						}
-						if (world.getBlock(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRail){
+						if (CommonUtil.getBlockAt(world, x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRail){
 							world.notifyBlockChange((x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z  + tileEntity.zCoord), Blocks.air);
-							world.markBlockForUpdate((x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1 ), (z  + tileEntity.zCoord));
+							CommonUtil.markBlockForUpdate(world, (x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1 ), (z  + tileEntity.zCoord));
 						}
 					}
 				}
@@ -106,7 +107,7 @@ public class BlockTCRailGag extends Block {
 				world.func_147480_a(i, j, k, false);
 				world.removeTileEntity(i, j, k);
 			}
-			if (!World.doesBlockHaveSolidTopSurface(world, i, j - 1, k) && world.getBlock(i, j-1, k) != TCBlocks.bridgePillar) {
+			if (!World.doesBlockHaveSolidTopSurface(world, i, j - 1, k) && CommonUtil.getBlockAt(world, i, j-1, k) != TCBlocks.bridgePillar) {
 				// NOTE: func_147480_a = destroyBlock
 				world.func_147480_a(i, j, k, false);
 				world.removeTileEntity(i, j, k);

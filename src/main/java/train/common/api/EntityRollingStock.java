@@ -67,7 +67,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static ebf.tim.utility.CommonUtil.radianF;
-import static train.common.core.util.TraincraftUtil.isRailBlockAt;
+import static ebf.tim.utility.CommonUtil.isRailBlockAt;
 
 public class EntityRollingStock extends AbstractTrains implements ILinkableCart {
     public int fuelTrain;
@@ -818,17 +818,17 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         prevPosY = posY;
         prevPosZ = posZ;
 
-        int floor_posX = MathHelper.floor_double(posX);
-        int floor_posY = MathHelper.floor_double(posY);
-        int floor_posZ = MathHelper.floor_double(posZ);
+        int floor_posX = CommonUtil.floorDouble(posX);
+        int floor_posY = CommonUtil.floorDouble(posY);
+        int floor_posZ = CommonUtil.floorDouble(posZ);
 
         if (worldObj.isAirBlock(floor_posX, floor_posY, floor_posZ)) {
             floor_posY--;
-        } else if (isRailBlockAt(worldObj, floor_posX, floor_posY + 1, floor_posZ) || worldObj.getBlock(floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRail.block || worldObj.getBlock(floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRailGag.block) {
+        } else if (isRailBlockAt(worldObj, floor_posX, floor_posY + 1, floor_posZ) || CommonUtil.getBlockAt(worldObj, floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRail.block || CommonUtil.getBlockAt(worldObj, floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRailGag.block) {
             floor_posY++;
         }
 
-        l = worldObj.getBlock(floor_posX, floor_posY, floor_posZ);
+        l = CommonUtil.getBlockAt(worldObj, floor_posX, floor_posY, floor_posZ);
 
         updatePosition();
 

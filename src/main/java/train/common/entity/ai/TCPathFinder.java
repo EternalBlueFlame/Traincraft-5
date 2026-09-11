@@ -1,12 +1,12 @@
 package train.common.entity.ai;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.pathfinding.PathFinder;
 import net.minecraft.pathfinding.PathPoint;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
@@ -35,7 +35,7 @@ public class TCPathFinder extends PathFinder {
         for (int i = x; i < x + point.xCoord; ++i) {
             for (int j = y; j < y + point.yCoord; ++j) {
                 for (int k = z; k < z + point.zCoord; ++k) {
-                    Block block = entity.worldObj.getBlock(i, j, k);
+                    Block block = CommonUtil.getBlockAt(entity.worldObj, i, j, k);
 
                     if (block.getMaterial() != Material.air) {
                         if (block == Blocks.trapdoor) {
@@ -57,12 +57,12 @@ public class TCPathFinder extends PathFinder {
                             k1=9;
                         }
 
-                        if (entity.worldObj.getBlock(i, j, k).getRenderType() == 9) {
-                            int j2 = MathHelper.floor_double(entity.posX);
-                            int l1 = MathHelper.floor_double(entity.posY);
-                            int i2 = MathHelper.floor_double(entity.posZ);
+                        if (CommonUtil.getBlockAt(entity.worldObj, i, j, k).getRenderType() == 9) {
+                            int j2 = CommonUtil.floorDouble(entity.posX);
+                            int l1 = CommonUtil.floorDouble(entity.posY);
+                            int i2 = CommonUtil.floorDouble(entity.posZ);
 
-                            if (entity.worldObj.getBlock(j2, l1, i2).getRenderType() != 9 && entity.worldObj.getBlock(j2, l1 - 1, i2).getRenderType() != 9) {
+                            if (CommonUtil.getBlockAt(entity.worldObj, j2, l1, i2).getRenderType() != 9 && CommonUtil.getBlockAt(entity.worldObj, j2, l1 - 1, i2).getRenderType() != 9) {
                                 return -3;
                             }
                         } else if (!block.getBlocksMovement(entity.worldObj, i, j, k) && (!movement || block != Blocks.wooden_door)) {

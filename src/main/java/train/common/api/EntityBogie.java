@@ -24,7 +24,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
-import train.common.core.util.TraincraftUtil;
 import train.common.items.TCRailTypes;
 import train.common.tile.TileTCRail;
 import train.common.tile.TileTCRailGag;
