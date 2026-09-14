@@ -2,6 +2,7 @@ package train.client.render.models.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
@@ -89,7 +90,7 @@ public class ModelRightSwitchTCTrack extends ModelBase {
 	}
 
 	public void render(String type, String variant, TileTCRail tcRail, double x, double y, double z) {
-		render( type, variant, tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), tcRail.getSwitchState(), x, y, z, 1, 1, 1, 1);
+		render( type, variant, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), tcRail.getSwitchState(), x, y, z, 1, 1, 1, 1);
 	}
 
 	public void render(String type, String variant, int facing, boolean active, double x, double y, double z, float r, float g, float b, float a) {

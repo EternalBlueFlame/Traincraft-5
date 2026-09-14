@@ -1,5 +1,6 @@
 package train.common.api;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.world.World;
 import train.common.library.BlockIDs;
 
@@ -18,7 +19,7 @@ public class TrainsSignal {
 
         if ((motionX > 0) && motionZ == 0) {
             for (int t = 0; t < 12; t++) {
-                if ((worldObj.getBlock(i + t, j, k + l) == BlockIDs.signal.block) || (worldObj.getBlock(i + t, j, k - l) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
+                if ((CommonUtil.getBlockAt(worldObj, i + t, j, k + l) == BlockIDs.signal.block) || (CommonUtil.getBlockAt(worldObj, i + t, j, k - l) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
                     action = 1;
                     if (t == 2) {
                         action = 2;
@@ -31,7 +32,7 @@ public class TrainsSignal {
             /* North */
         } else if ((motionX < 0) && motionZ == 0) {
             for (int t = 0; t < 12; t++) {
-                if ((worldObj.getBlock(i - t, j, k + l) == BlockIDs.signal.block) || (worldObj.getBlock(i - t, j, k - l) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
+                if ((CommonUtil.getBlockAt(worldObj, i - t, j, k + l) == BlockIDs.signal.block) || (CommonUtil.getBlockAt(worldObj, i - t, j, k - l) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
                     action = 1;
                     if (t == 2) {
                         action = 2;
@@ -45,7 +46,7 @@ public class TrainsSignal {
         } else if ((motionZ > 0) && motionX == 0) {
             // k - = front
             for (int t = 0; t < 12; t++) {
-                if ((worldObj.getBlock(i + l, j, k + t) == BlockIDs.signal.block) || (worldObj.getBlock(i - l, j, k + t) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
+                if ((CommonUtil.getBlockAt(worldObj, i + l, j, k + t) == BlockIDs.signal.block) || (CommonUtil.getBlockAt(worldObj, i - l, j, k + t) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
                     action = 1;
                     if (t == 2) {
                         action = 2;
@@ -58,7 +59,7 @@ public class TrainsSignal {
             /* WEST */
         } else if ((motionZ < 0) && motionX == 0) {
             for (int t = 0; t < 12; t++) {
-                if ((worldObj.getBlock(i + l, j, k - t) == BlockIDs.signal.block) || (worldObj.getBlock(i - l, j, k - t) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
+                if ((CommonUtil.getBlockAt(worldObj, i + l, j, k - t) == BlockIDs.signal.block) || (CommonUtil.getBlockAt(worldObj, i - l, j, k - t) == BlockIDs.signal.block)) {// k = sides, j= heigh, i front
                     action = 1;
                     if (t == 2) {
                         action = 2;

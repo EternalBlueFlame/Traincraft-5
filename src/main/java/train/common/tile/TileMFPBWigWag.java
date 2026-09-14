@@ -1,5 +1,6 @@
 package train.common.tile;
 
+import ebf.tim.utility.CommonUtil;
 import train.common.api.blocks.TileSwitch;
 import train.common.blocks.BlockMFPBWigWag;
 import train.common.library.Info;
@@ -28,7 +29,7 @@ public class TileMFPBWigWag extends TileSwitch {
         if(worldObj.isRemote) {
             if (rotation > 20 || rotation < -20) {
                 flip = !flip;
-                worldObj.playSound(xCoord,yCoord,zCoord,Info.resourceLocation + ":" + "bell",1f,1f,true);
+                CommonUtil.playSound(this, Info.resourceLocation + ":" + "bell", 1f, 1f);
 
             }
             powered = getWorldObj().isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);

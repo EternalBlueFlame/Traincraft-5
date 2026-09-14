@@ -1,5 +1,6 @@
 package train.client.gui;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.Entity;
@@ -8,7 +9,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import org.lwjgl.opengl.GL11;
@@ -41,7 +41,7 @@ public class GuiLiquid extends GuiContainer {
 
         if (intersectsWith(t, g)) {
             if (liquid.getLiquidName() != null && !liquid.getLiquidName().isEmpty()) {
-                drawCreativeTabHoveringText(StatCollector.translateToLocal(liquid.getLiquidName()) + ": " + liquid.getAmount() + "mb/" + liquid.getCapacity() + "mb", t, g);
+                drawCreativeTabHoveringText(CommonUtil.translate(liquid.getLiquidName()) + ": " + liquid.getAmount() + "mb/" + liquid.getCapacity() + "mb", t, g);
             } else {
                 drawCreativeTabHoveringText("0mb/" + liquid.getCapacity() + "mb", t, g);
             }

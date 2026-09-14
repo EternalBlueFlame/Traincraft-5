@@ -1,5 +1,6 @@
 package train.common.items;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -19,7 +20,7 @@ public class ItemOverheadLines extends Item {
 
 	@Override
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l, float par8, float par9, float par10) {
-		Block i1 = world.getBlock(i, j, k);
+		Block i1 = CommonUtil.getBlockAt(world, i, j, k);
 		if (i1 == Blocks.snow) {
 			l = 0;
 		}
@@ -52,7 +53,7 @@ public class ItemOverheadLines extends Item {
 
 		Block block = spawnID;
 		if (world.setBlockMetadataWithNotify(i, j, k, Block.getIdFromBlock(spawnID), 0)) {
-			if (world.getBlock(i, j, k) == spawnID) {
+			if (CommonUtil.getBlockAt(world, i, j, k) == spawnID) {
 				spawnID.onBlockPlacedBy(world, i, j, k, entityplayer, new ItemStack(spawnID));
 			}
 			world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, block.stepSound.getStepResourcePath(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);

@@ -3,6 +3,7 @@ package train.common.tile;
 import cpw.mods.fml.client.FMLClientHandler;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -42,7 +43,7 @@ public class TileMetroMadridPole extends TileEntity {
     }
 
     public void setFacing(ForgeDirection face) {
-        worldObj.markBlockForUpdate(xCoord, yCoord, zCoord);
+        CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
         this.facing = face;
     }
 

@@ -166,7 +166,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			else {
 				flag1 = false;
 				BlockDistil.updateDistilBlockState(distilBurnTime > 0, worldObj, xCoord, yCoord, zCoord);
-				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 			}
 
 			if (slots[2] != null) {
@@ -200,7 +200,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 						flag1 = true;
 
 						this.markDirty();
-						this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+						CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 					}
 				}
 			}
@@ -219,7 +219,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 			if (updateTicks % 8 == 0){
 				this.markDirty();
-				this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+				CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 			}
 			if (distilBurnTime > 0) {
 				distilBurnTime--;
@@ -298,7 +298,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 
 			this.markDirty();
-			this.worldObj.markBlockForUpdate(this.xCoord, this.yCoord, this.zCoord);
+			CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 		}
 
 		if (slots[0].getItem().hasContainerItem(slots[0])) {

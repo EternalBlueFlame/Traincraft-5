@@ -10,6 +10,7 @@ package mods.railcraft.api.signals;
 import com.google.common.collect.MapMaker;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
@@ -130,8 +131,8 @@ public abstract class AbstractPair {
                 if (!world.blockExists(x, y, z))
                     continue;
 
-                Block block = world.getBlock(x, y, z);
-                int meta = world.getBlockMetadata(x, y, z);
+                Block block = CommonUtil.getBlockAt(world, x, y, z);
+                int meta = CommonUtil.getBlockFacing(world, x, y, z);
                 if (!block.hasTileEntity(meta)) {
                     clearPairing(coord);
                     continue;
@@ -194,8 +195,8 @@ public abstract class AbstractPair {
         if (!world.blockExists(x, y, z))
             return null;
 
-        Block block = world.getBlock(x, y, z);
-        int meta = world.getBlockMetadata(x, y, z);
+        Block block = CommonUtil.getBlockAt(world, x, y, z);
+        int meta = CommonUtil.getBlockFacing(world, x, y, z);
         if (!block.hasTileEntity(meta)) {
             pairingsToTest.add(coord);
             return null;

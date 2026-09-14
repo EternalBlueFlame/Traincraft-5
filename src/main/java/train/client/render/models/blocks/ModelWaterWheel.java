@@ -2,6 +2,7 @@ package train.client.render.models.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
@@ -43,7 +44,7 @@ public class ModelWaterWheel extends ModelBase {
 		float f4 = (float) (j & 255) / 255.0F;
 		GL11.glColor4f(f1 * f2, f1 * f3, f1 * f4, 1);
 		// Render the object, using modelTutBox.renderAll();
-		int facing = waterWheel.getWorldObj().getBlockMetadata((int) waterWheel.xCoord, (int) waterWheel.yCoord, (int) waterWheel.zCoord);
+		int facing = CommonUtil.getBlockFacing(waterWheel.getWorldObj(), (int) waterWheel.xCoord, (int) waterWheel.yCoord, (int) waterWheel.zCoord);
 		if (facing == 3) {
 			GL11.glScalef(0.7f, 0.5f, 0.5f);
 			GL11.glScalef(1f, 0.36f, 0.36f);

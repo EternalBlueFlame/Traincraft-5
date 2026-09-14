@@ -2,6 +2,7 @@ package train.common.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.client.renderer.texture.IIconRegister;
@@ -39,7 +40,7 @@ public class ItemTrackDebugger extends Item {
                 return false;
             }
 
-            Block block = world.getBlock(x, y, z);
+            Block block = CommonUtil.getBlockAt(world, x, y, z);
             if (block == BlockIDs.tcRail.block){
                 TileTCRail tile = (TileTCRail) world.getTileEntity(x, y, z);
 

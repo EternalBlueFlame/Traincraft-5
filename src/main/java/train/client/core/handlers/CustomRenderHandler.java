@@ -1,6 +1,7 @@
 package train.client.core.handlers;
 
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityClientPlayerMP;
@@ -39,7 +40,7 @@ public class CustomRenderHandler {
         int y = Minecraft.getMinecraft().objectMouseOver.blockY;
         int z = Minecraft.getMinecraft().objectMouseOver.blockZ;
 
-        if (world.getBlock(x, y, z) == Blocks.air) {
+        if (CommonUtil.getBlockAt(world, x, y, z) == Blocks.air) {
             return;
         }
 
@@ -61,8 +62,8 @@ public class CustomRenderHandler {
         double py = TileEntityRendererDispatcher.staticPlayerY;
         double pz = TileEntityRendererDispatcher.staticPlayerZ;
         int facing = item.getTrackType().getRailType() == TCRailTypes.RailTypes.DIAGONAL
-                ? (MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F) & 3) + 4
-                : MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+                ? (CommonUtil.floorDouble(player.rotationYaw * 4.0F / 360.0F) & 3) + 4
+                : CommonUtil.floorDouble(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         Vector2f dir = ItemTCRail.getDirectionVector(facing);
         String variant = item.getTrackType().getLabel().contains("EMBEDDED") ? "embedded" : "normal";
 
@@ -421,8 +422,8 @@ public class CustomRenderHandler {
         int x = Minecraft.getMinecraft().objectMouseOver.blockX;
         int y = Minecraft.getMinecraft().objectMouseOver.blockY;
         int z = Minecraft.getMinecraft().objectMouseOver.blockZ;
-        Block block = world.getBlock(x, y, z);
-        int metadata = world.getBlockMetadata(x, y, z);
+        Block block = CommonUtil.getBlockAt(world, x, y, z);
+        int metadata = CommonUtil.getBlockFacing(world, x, y, z);
 
         blockColour = block.colorMultiplier(world, x, y, z);
         IIcon icon = block.getIcon(1, metadata);

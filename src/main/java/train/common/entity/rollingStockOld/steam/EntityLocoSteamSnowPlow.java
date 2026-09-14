@@ -1,5 +1,6 @@
 package train.common.entity.rollingStockOld.steam;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.item.EntityMinecart;
@@ -13,7 +14,6 @@ import train.common.Traincraft;
 import train.common.api.LiquidManager;
 import train.common.api.SteamTrain;
 import train.common.core.FakePlayer;
-import train.common.core.util.TraincraftUtil;
 import train.common.library.GuiIDs;
 
 import java.util.Random;
@@ -43,7 +43,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 	private FakePlayer fakePlayer = null;
 	private int rotation =0;
 
-	private static final float radianF = (float) Math.PI / 180.0f;
+	private static final float radianF = CommonUtil.radianF;
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
@@ -54,7 +54,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 		if (fakePlayer == null){
 			 fakePlayer = new FakePlayer(worldObj);
 		}
-		rotation = MathHelper.floor_float(TraincraftUtil.atan2degreesf(
+		rotation = MathHelper.floor_float(CommonUtil.atan2degreesf(
 				bogieFront.posZ - bogieBack.posZ,
 				bogieFront.posX - bogieBack.posX));
 
@@ -85,12 +85,12 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 	}
 
 	private static void mineSnow(World worldObj, double[] point, ItemStack[] cargoItems, FakePlayer fakePlayer){
-		Block b = worldObj.getBlock(MathHelper.floor_double(point[0]),MathHelper.floor_double(point[1]),MathHelper.floor_double(point[2]));
-		int blockMeta = worldObj.getBlockMetadata(MathHelper.floor_double(point[0]), MathHelper.floor_double(point[1]),
-				MathHelper.floor_double(point[2]));
+		Block b = CommonUtil.getBlockAt(worldObj, CommonUtil.floorDouble(point[0]),CommonUtil.floorDouble(point[1]),CommonUtil.floorDouble(point[2]));
+		int blockMeta = CommonUtil.getBlockFacing(worldObj, CommonUtil.floorDouble(point[0]), CommonUtil.floorDouble(point[1]),
+				CommonUtil.floorDouble(point[2]));
 
 		if((b == Blocks.snow || b == Blocks.snow_layer) && b.canHarvestBlock(fakePlayer, blockMeta)){
-			worldObj.setBlockToAir(MathHelper.floor_double(point[0]),MathHelper.floor_double(point[1]),MathHelper.floor_double(point[2]));
+			worldObj.setBlockToAir(CommonUtil.floorDouble(point[0]),CommonUtil.floorDouble(point[1]),CommonUtil.floorDouble(point[2]));
 			int snowballs = new Random().nextInt(9);
 			for(int i=2; i<cargoItems.length && snowballs>0; i++){
 				if (cargoItems[i] == null){

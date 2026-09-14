@@ -8,6 +8,7 @@
  */
 package mods.railcraft.api.signals;
 
+import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.carts.CartTools;
 import mods.railcraft.api.core.WorldCoordinate;
 import mods.railcraft.api.tracks.RailTools;
@@ -17,7 +18,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
@@ -144,7 +144,7 @@ public abstract class SignalBlock extends AbstractPair {
             int y = other.y;
             int z = other.z;
 
-            Block block = tile.getWorldObj().getBlock(x, y, z);
+            Block block = CommonUtil.getBlockAt(tile.getWorldObj(), x, y, z);
             if (block != null)
                 log(DEBUG_LEVEL, "Signal Block target block [{0}, {1}, {2}] = {3}, {4}", x, y, z, block.getClass(), block.getUnlocalizedName());
             else
@@ -269,8 +269,8 @@ public abstract class SignalBlock extends AbstractPair {
 //        System.out.println("carts = " + carts.size());
         SignalAspect newAspect = SignalAspect.GREEN;
         for (EntityMinecart cart : carts) {
-            int cartX = MathHelper.floor_double(cart.posX);
-            int cartZ = MathHelper.floor_double(cart.posZ);
+            int cartX = CommonUtil.floorDouble(cart.posX);
+            int cartZ = CommonUtil.floorDouble(cart.posZ);
             if (Math.abs(cart.motionX) < 0.08 && Math.abs(cart.motionZ) < 0.08)
                 return SignalAspect.RED;
             else if (zAxis)

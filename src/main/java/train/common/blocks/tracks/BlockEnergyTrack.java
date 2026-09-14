@@ -8,6 +8,7 @@ package train.common.blocks.tracks;
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
 import cpw.mods.fml.common.FMLCommonHandler;
+import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.electricity.IElectricGrid;
@@ -54,7 +55,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 
 	private Block getThisBlock() {
 		if (thisBlock == null) {
-			thisBlock = getWorld().getBlock(getX(), getY(), getZ());
+			thisBlock = CommonUtil.getBlockAt(getWorld(), getX(), getY(), getZ());
 		}
 		return thisBlock;
 	}
@@ -150,7 +151,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 	}
 
 	private void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
+		Block block = CommonUtil.getBlockAt(getWorld(), getX(), getY(), getZ());
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
 

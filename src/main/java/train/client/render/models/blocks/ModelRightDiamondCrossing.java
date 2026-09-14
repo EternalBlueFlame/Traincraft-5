@@ -2,6 +2,7 @@ package train.client.render.models.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
@@ -21,7 +22,7 @@ public class ModelRightDiamondCrossing extends ModelBase{
     }
 
     public void render(String type, TileTCRail tcRail, double x, double y, double z) {
-        render(type, x, y, z, tcRail.getWorldObj().getBlockMetadata(tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), 1, 1, 1, 1);
+        render(type, x, y, z, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), 1, 1, 1, 1);
     }
 
     public void render(String type , double x, double y, double z,int facing, float r, float g, float b, float a) {

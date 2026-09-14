@@ -2,6 +2,7 @@ package train.common.entity.zeppelin;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -202,7 +203,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 						if(this.zeppInvent[t]!=null && this.zeppInvent[t].getItem()!=null && this.zeppInvent[t].getItem() == Item.getItemFromBlock(Blocks.tnt)){
 							EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.worldObj, (double) ((float) posX), (double) ((float) posY -1F), (double) ((float) posZ), (EntityLivingBase) this.riddenByEntity);
 							this.worldObj.spawnEntityInWorld(entitytntprimed);
-							this.worldObj.playSoundAtEntity(entitytntprimed, "random.fuse", 1.0F, 1.0F);
+							CommonUtil.playSound(entitytntprimed, "random.fuse", 1.0F, 1.0F);
 							bombTimer=100;
 							if(--this.zeppInvent[t].stackSize==0)this.zeppInvent[t]=null;
 							return;
@@ -413,8 +414,8 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			d13 = ((EntityLivingBase) this.riddenByEntity).moveForward;
 
 			if (d13 > 0.0D) {
-				d5 = -Math.sin(this.riddenByEntity.rotationYaw * (float) Math.PI / 180.0F);
-				d11 = Math.cos(this.riddenByEntity.rotationYaw * (float) Math.PI / 180.0F);
+				d5 = -Math.sin(this.riddenByEntity.rotationYaw * CommonUtil.radianF);
+				d11 = Math.cos(this.riddenByEntity.rotationYaw * CommonUtil.radianF);
 				this.motionX += d5 * speedMultiplier * 0.05000000074505806D;
 				this.motionZ += d11 * speedMultiplier * 0.05000000074505806D;
 			}
@@ -484,7 +485,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		double div10 = this.prevPosZ - this.posZ;
 
 		if ((div11 * div11) + (div10 * div10) > 0.001D) {
-			rot = ((float) (Math.atan2(div10, div11) * 180.0D / Math.PI));
+			rot = CommonUtil.atan2degreesf(div10, div11);
 		}
 
 		double d12 = MathHelper.wrapAngleTo180_double(rot - this.rotationYaw);

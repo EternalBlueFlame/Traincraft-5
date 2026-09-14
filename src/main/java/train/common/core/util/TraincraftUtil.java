@@ -1,11 +1,9 @@
 package train.common.core.util;
 
-import net.minecraft.block.BlockRailBase;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.Vec3;
-import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 import train.common.Traincraft;
 import train.common.api.EntityRollingStock;
@@ -38,10 +36,6 @@ public class TraincraftUtil {
                         || item2.getItemDamage() == OreDictionary.WILDCARD_VALUE);
     }
 
-    public static boolean isRailBlockAt(World world, int x, int y, int z) {
-        return world.getBlock(x, y, z) instanceof BlockRailBase;
-    }
-
     public static final double degrees = (180d / Math.PI);
     public static final double radian = (Math.PI / 180.0D);
 
@@ -50,11 +44,11 @@ public class TraincraftUtil {
             return;
         }
         double pitchRads = transport.rotationPitch * radian;
-        double rotationCos1 = Math.cos(Math.toRadians(transport.rotationYaw + ((transport instanceof Locomotive) ? 90 : 180)));
-        double rotationSin1 = Math.sin(Math.toRadians(transport.rotationYaw + ((transport instanceof Locomotive) ? 90 : 180)));
+        double rotationCos1 = Math.cos((transport.rotationYaw + ((transport instanceof Locomotive) ? 90 : 180)) * radian);
+        double rotationSin1 = Math.sin((transport.rotationYaw + ((transport instanceof Locomotive) ? 90 : 180)) * radian);
         if (!Traincraft.proxy.isClient()) {
-            rotationCos1 = Math.cos(Math.toRadians(transport.rotationYaw + 90));
-            rotationSin1 = Math.sin(Math.toRadians((transport.rotationYaw + 90)));
+            rotationCos1 = Math.cos((transport.rotationYaw + 90) * radian);
+            rotationSin1 = Math.sin((transport.rotationYaw + 90) * radian);
         }
         float pitch = (float) (transport.posY + ((Math.tan(pitchRads) * distance) + transport.getMountedYOffset())
                 + transport.riddenByEntity.getYOffset() + yOffset);
@@ -78,50 +72,7 @@ public class TraincraftUtil {
         }
     }
 
-    public static float atan2f(double x, double z) {
-        float pi = -3.141592653f;
-        float multiplier = 1.0f;
-
-        if (z < 0.0d) {
-            if (x < 0.0d) {
-                z = -z;
-                x = -x;
-            } else {
-                z = -z;
-                multiplier = -1.0f;
-            }
-
-        } else {
-            if (x < 0.0d) {
-                x = -x;
-                multiplier = -1.0f;
-            }
-
-            pi = 0.0f;
-        }
-
-        double invDiv = 1.0D / ((Math.max(z, x)) * (1.0D / (ATAN2_SQRT - 1)));
-        return (atan2[(int) (x * invDiv) * ATAN2_SQRT + (int) (z * invDiv)] + pi) * multiplier;
-    }
-
-    public static float atan2degreesf(double x, double y) {
-        return atan2f(x, y) * degreesF;
-    }
-
-    private static final int ATAN2_SQRT = (int) Math.sqrt(1024);
-    private static final float[] atan2 = new float[1024];
-
-    static {
-        for (int i = 0; i < ATAN2_SQRT; i++) {
-            for (int j = 0; j < ATAN2_SQRT; j++) {
-                atan2[j * ATAN2_SQRT + i] = (float) Math.atan2((float) j / ATAN2_SQRT, (float) i / ATAN2_SQRT);
-            }
-        }
-    }
-
-    public static final float degreesF = (float) (180.0d / Math.PI);
-
     public static Vec3 func_514_g(double d, double d1, double d2) {
-        return Vec3.createVectorHelper(MathHelper.floor_double(d), MathHelper.floor_double(d1), MathHelper.floor_double(d2));
+        return Vec3.createVectorHelper(CommonUtil.floorDouble(d), CommonUtil.floorDouble(d1), CommonUtil.floorDouble(d2));
     }
 }

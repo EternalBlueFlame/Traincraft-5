@@ -2,6 +2,7 @@ package train.common.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.BlockMushroom;
@@ -54,7 +55,7 @@ public class ItemTCRail extends ItemPart {
     }
 
     private boolean canPlaceTrack(EntityPlayer player, World world, int x, int y, int z) {
-        Block l1 = world.getBlock(x, y - 1, z);
+        Block l1 = CommonUtil.getBlockAt(world, x, y - 1, z);
 
         if (player != null && (!player.canPlayerEdit(x, y - 1, z, 0, player.getCurrentEquippedItem()) ||
                 !player.canPlayerEdit(x, y, z, 0, player.getCurrentEquippedItem()))
@@ -62,7 +63,7 @@ public class ItemTCRail extends ItemPart {
             return false;
         }
 
-        if(ConfigHandler.TRACK_OVERLAP && world.getBlock(x,y,z) instanceof BlockTCRailGag){
+        if(ConfigHandler.TRACK_OVERLAP && CommonUtil.getBlockAt(world, x,y,z) instanceof BlockTCRailGag){
             return true;
         }
 
@@ -70,7 +71,7 @@ public class ItemTCRail extends ItemPart {
     }
 
     private boolean canPlaceRootTrack(EntityPlayer player, World world, int x, int y, int z) {
-        Block l1 = world.getBlock(x, y - 1, z);
+        Block l1 = CommonUtil.getBlockAt(world, x, y - 1, z);
 
         if (player != null && (!player.canPlayerEdit(x, y - 1, z, 0, player.getCurrentEquippedItem()) ||
                 !player.canPlayerEdit(x, y, z, 0, player.getCurrentEquippedItem()))
@@ -78,7 +79,7 @@ public class ItemTCRail extends ItemPart {
             return false;
         }
 
-        if(world.getBlock(x,y,z) instanceof BlockTCRailGag){
+        if(CommonUtil.getBlockAt(world, x,y,z) instanceof BlockTCRailGag){
             return false;
         }
 
@@ -86,7 +87,7 @@ public class ItemTCRail extends ItemPart {
     }
 
     private boolean canBeReplaced(World world, int x, int y, int z) {
-        Block block = world.getBlock(x, y, z);
+        Block block = CommonUtil.getBlockAt(world, x, y, z);
         return block == null || block.isReplaceable(world, x, y, z) || block instanceof BlockFlower
                 || block == Blocks.double_plant || block instanceof BlockMushroom;
     }
@@ -208,10 +209,10 @@ public class ItemTCRail extends ItemPart {
         tcRail.idDrop = idDrop;
         tcRail.slopeAngle = slopeAngle;
         tcRail.slopeLength = slopeLength;
-        Block block = world.getBlock(x, y, z);
+        Block block = CommonUtil.getBlockAt(world, x, y, z);
         int blockID = Block.getIdFromBlock(block);
         tcRail.setBallastMaterial(blockID);
-        tcRail.ballastMetadata = world.getBlockMetadata(x, y, z);
+        tcRail.ballastMetadata = CommonUtil.getBlockFacing(world, x, y, z);
         /** Gag rails containing reference to first turn rail */
         for (int gag = 1; gag <= posX.length - 1; gag++) {
             placeTrack(world, posX[gag], y + 1, posZ[gag], BlockIDs.tcRailGag.block, 0);
@@ -468,10 +469,10 @@ public class ItemTCRail extends ItemPart {
         y = getPlacementHeight(world, x, y, z);
 
         ItemTCRail item = (ItemTCRail) itemStack.getItem();
-        if (world.getBlock(x, y, z) == TCBlocks.bridgePillar && item.getTrackType().getLabel().contains("DYNAMIC")) {
+        if (CommonUtil.getBlockAt(world, x, y, z) == TCBlocks.bridgePillar && item.getTrackType().getLabel().contains("DYNAMIC")) {
             return false;
         }
-        int facing0 = MathHelper.floor_double(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+        int facing0 = CommonUtil.floorDouble(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         Vector2f dir0 = ItemTCRail.getDirectionVector(facing0);
 
         float yaw = MathHelper.wrapAngleTo180_float(player.rotationYaw);
@@ -541,10 +542,10 @@ public class ItemTCRail extends ItemPart {
             int[] curveZArray2;
 
             if (type.getRailType() == RailTypes.DIAGONAL) {
-                l = MathHelper.floor_double((player != null ? player.rotationYaw : par10) * 4.0F / 360.0F) & 3;
+                l = CommonUtil.floorDouble((player != null ? player.rotationYaw : par10) * 4.0F / 360.0F) & 3;
                 l += 4;
             } else {
-                l = MathHelper.floor_double((player != null ? player.rotationYaw : par10) * 4.0F / 360.0F + 0.5D) & 3;
+                l = CommonUtil.floorDouble((player != null ? player.rotationYaw : par10) * 4.0F / 360.0F + 0.5D) & 3;
             }
 
 
@@ -1789,7 +1790,7 @@ public class ItemTCRail extends ItemPart {
                     if (!canPlaceTrack(player, world, x, y + 1, z)) {
                         return false;
                     }
-                    if (type.getLabel().contains("DYNAMIC") && world.getBlock(x, y, z) == TCBlocks.bridgePillar) {
+                    if (type.getLabel().contains("DYNAMIC") && CommonUtil.getBlockAt(world, x, y, z) == TCBlocks.bridgePillar) {
                         return false;
                     }
 
@@ -1855,10 +1856,10 @@ public class ItemTCRail extends ItemPart {
                     tcRail.slopeAngle = slopeAngle;
                     tcRail.slopeLength = gagEnd + 1;
 
-                    Block block = world.getBlock(x, y, z);
+                    Block block = CommonUtil.getBlockAt(world, x, y, z);
                     int blockID = Block.getIdFromBlock(block);
                     tcRail.setBallastMaterial(blockID);
-                    tcRail.ballastMetadata = world.getBlockMetadata(x, y, z);
+                    tcRail.ballastMetadata = CommonUtil.getBlockFacing(world, x, y, z);
 
 
                     for (int i2 = 1; i2 <= gagEnd; i2++) {
@@ -2497,10 +2498,10 @@ public class ItemTCRail extends ItemPart {
         tcRail.idDrop = this.type.getItem().item;
 
         if (type == EnumTracks.SMALL_ROAD_CROSSING_DYNAMIC){
-            Block block = world.getBlock(x, y, z);
+            Block block = CommonUtil.getBlockAt(world, x, y, z);
             int blockID = Block.getIdFromBlock(block);
             tcRail.setBallastMaterial(blockID);
-            tcRail.ballastMetadata = world.getBlockMetadata(x, y, z);
+            tcRail.ballastMetadata = CommonUtil.getBlockFacing(world, x, y, z);
         }
 
 
@@ -4997,9 +4998,9 @@ public class ItemTCRail extends ItemPart {
      * Drop the previous block before placing the track.
      */
     private void placeTrack(World world, int x, int y, int z, Block block, int metadata) {
-        Block removed = world.getBlock(x, y, z);
+        Block removed = CommonUtil.getBlockAt(world, x, y, z);
         if (removed != null && !(removed instanceof BlockTCRailGag) && !(block instanceof BlockTCRail)) {
-            removed.dropBlockAsItem(world, x, y, z, world.getBlockMetadata(x, y, z), 0);
+            removed.dropBlockAsItem(world, x, y, z, CommonUtil.getBlockFacing(world, x, y, z), 0);
         }
         if(!ConfigHandler.TRACK_OVERLAP || !(removed  instanceof BlockTCRail || removed instanceof BlockTCRailGag)){
             world.setBlock(x, y, z, block, metadata, 3);

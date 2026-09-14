@@ -2,6 +2,7 @@ package train.common.items;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -35,7 +36,7 @@ public class ItemWhistle extends Item {
 
     @Override
     public ItemStack onItemRightClick(ItemStack p_77659_1_, World p_77659_2_, EntityPlayer p_77659_3_) {
-        p_77659_2_.playSoundAtEntity(p_77659_3_, Info.resourceLocation + ":" + "whistle", 1F, 1.0F);
+        CommonUtil.playSound(p_77659_3_, Info.resourceLocation + ":" + "whistle", 1F, 1.0F);
         return super.onItemRightClick(p_77659_1_, p_77659_2_, p_77659_3_);
 
     }

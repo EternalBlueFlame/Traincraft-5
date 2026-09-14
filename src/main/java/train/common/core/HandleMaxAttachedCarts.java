@@ -1,5 +1,6 @@
 package train.common.core;
 
+import ebf.tim.utility.CommonUtil;
 import train.common.api.AbstractTrains;
 import train.common.api.Locomotive;
 
@@ -24,7 +25,7 @@ public class HandleMaxAttachedCarts {
 
         // Debuffs
         Loco.currentSpeedSlowDown = Loco.currentMassPulled / totalMhp * 74.57;
-        Loco.currentBrakeSlowDown = Math.pow(Loco.currentMassPulled,2) / totalMhp * 0.7457 * 0.8;
+        Loco.currentBrakeSlowDown = CommonUtil.power((float) Loco.currentMassPulled, 2) / totalMhp * 0.7457 * 0.8;
         Loco.currentAccelSlowDown = Loco.currentBrakeSlowDown * 1.13;
         Loco.currentFuelConsumptionChange = Loco.currentBrakeSlowDown * 100;
 

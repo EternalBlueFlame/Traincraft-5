@@ -19,7 +19,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -50,7 +49,7 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 
 
 	public static void updateHearthFurnaceBlockState(boolean flag, World world, int i, int j, int k, Random random) {
-		int l = world.getBlockMetadata(i, j, k);
+		int l = CommonUtil.getBlockFacing(world, i, j, k);
 		TileEntity tileentity = world.getTileEntity(i, j, k);
 
 		keepFurnaceInventory = true;
@@ -86,7 +85,7 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 	@Override
 	public void onBlockAdded(World world, int i, int j, int k) {
 		super.onBlockAdded(world, i, j, k);
-		world.markBlockForUpdate(i, j, k);
+		CommonUtil.markBlockForUpdate(world, i, j, k);
 	}
 
 	@Override
@@ -128,9 +127,9 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
 		TileEntityOpenHearthFurnace te = (TileEntityOpenHearthFurnace) world.getTileEntity(i, j, k);
 		if (te != null) {
-			int dir = MathHelper.floor_double((entityliving.rotationYaw * 4F) / 360F + 0.5D) & 3;
+			int dir = CommonUtil.floorDouble((entityliving.rotationYaw * 4F) / 360F + 0.5D) & 3;
 			te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
-			world.markBlockForUpdate(i, j, k);
+			CommonUtil.markBlockForUpdate(world, i, j, k);
 		}
 	}
 

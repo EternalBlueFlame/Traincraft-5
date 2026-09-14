@@ -8,6 +8,7 @@
 
 package mods.railcraft.api.tracks;
 
+import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
@@ -19,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -46,7 +46,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     private Block getBlock() {
         if (block == null)
-            block = getWorld().getBlock(getX(), getY(), getZ());
+            block = CommonUtil.getBlockAt(getWorld(), getX(), getY(), getZ());
         return block;
     }
 
@@ -106,7 +106,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
         if (entityliving == null)
             return;
         if (this instanceof ITrackReversable) {
-            int dir = MathHelper.floor_double((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+            int dir = CommonUtil.floorDouble((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
             ((ITrackReversable) this).setReversed(dir == 0 || dir == 1);
         }
         markBlockNeedsUpdate();
@@ -121,7 +121,7 @@ public abstract class TrackInstanceBase implements ITrackInstance {
     }
 
     public void markBlockNeedsUpdate() {
-        getWorld().markBlockForUpdate(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
+        CommonUtil.markBlockForUpdate(getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord);
     }
 
     protected boolean isRailValid(World world, int x, int y, int z, int meta) {
@@ -257,10 +257,10 @@ public abstract class TrackInstanceBase implements ITrackInstance {
 
     protected boolean testPowered(World world, int i, int j, int k, TrackSpec spec, boolean dir, int dist, int maxDist, int orientation) {
         // System.out.println("Testing Power at <" + i + ", " + j + ", " + k + ">");
-        Block blockToTest = world.getBlock(i, j, k);
+        Block blockToTest = CommonUtil.getBlockAt(world, i, j, k);
         Block blockTrack = getBlock();
         if (blockToTest == blockTrack) {
-            int meta = world.getBlockMetadata(i, j, k);
+            int meta = CommonUtil.getBlockFacing(world, i, j, k);
             TileEntity tile = world.getTileEntity(i, j, k);
             if (tile instanceof ITrackTile) {
                 ITrackInstance track = ((ITrackTile) tile).getTrackInstance();
