@@ -64,7 +64,7 @@ public class EntityFreightIceWagon extends Freight {
                 null, 
 new ItemStack(ItemIDs.woodenBogie.item, 2), 
 new ItemStack(ItemIDs.ironFrame.item, 1), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 null,
  null, 
 null, 

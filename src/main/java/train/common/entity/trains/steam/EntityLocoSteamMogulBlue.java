@@ -69,7 +69,7 @@ public class EntityLocoSteamMogulBlue extends SteamTrain {
                 null, 
 new ItemStack(ItemIDs.bogie.item, 3), 
 new ItemStack(ItemIDs.steelframe.item, 2), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 new ItemStack(ItemIDs.steelchimney.item, 1), 
 new ItemStack(ItemIDs.steelcab.item, 1), 
 new ItemStack(ItemIDs.boiler.item, 2), 

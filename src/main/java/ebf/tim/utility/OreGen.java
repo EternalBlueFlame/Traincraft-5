@@ -16,7 +16,7 @@ import java.util.Random;
  * @author Eternal Blue Flame
  */
 public class OreGen implements IWorldGenerator{
-	private Block ore, notOre = Blocks.stone;
+	private Block ore, notOre = Blocks.STONE;
 	private int minY, maxY,veinSize, minOres, maxVeinsPerChunk;
 	private Integer[] dimensions = new Integer[]{0};
 	private String[] biomes;
@@ -84,10 +84,10 @@ public class OreGen implements IWorldGenerator{
 	//NOTE: 1.12 does not use blocks directly, instead use BlockMatcher.forBlock(notOre)
 	private WorldGenMinable makeVein(World world, Random random){
 		if(world.provider.dimensionId==-1){
-			if(notOre==Blocks.stone) {
-				return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), Blocks.netherrack);
-			} else if(notOre==Blocks.sand){
-				return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), Blocks.soul_sand);
+			if(notOre==Blocks.STONE) {
+				return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), Blocks.NETHERRACK);
+			} else if(notOre==Blocks.SAND){
+				return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), Blocks.SOUL_SAND);
 			} else {
 				return new WorldGenMinable(ore, Math.max(minOres, random.nextInt(veinSize)), notOre);
 			}

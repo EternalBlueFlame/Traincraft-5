@@ -69,7 +69,7 @@ null,
  null, 
 null, 
 null, 
-new ItemStack(Blocks.chest, 2),
+new ItemStack(Blocks.CHEST, 2),
 new ItemStack(thisItem)
         };
     }

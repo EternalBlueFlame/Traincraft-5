@@ -64,7 +64,7 @@ public class EntityLocoSteamBerk1225 extends SteamTrain {
                 null, 
 new ItemStack(ItemIDs.bogie.item, 4), 
 new ItemStack(ItemIDs.steelframe.item, 4), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 new ItemStack(ItemIDs.steelchimney.item, 2), 
 new ItemStack(ItemIDs.steelcab.item, 1), 
 new ItemStack(ItemIDs.boiler.item, 3), 

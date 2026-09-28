@@ -3,7 +3,7 @@ package train.common.api;
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Optional;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

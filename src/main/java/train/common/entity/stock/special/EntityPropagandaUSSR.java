@@ -63,7 +63,7 @@ public class EntityPropagandaUSSR extends EntityRollingStock {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 2), 
+                new ItemStack(Blocks.PLANKS, 2),
 new ItemStack(ItemIDs.ironBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 2), 
 null, 

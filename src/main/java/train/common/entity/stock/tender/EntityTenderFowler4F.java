@@ -64,12 +64,12 @@ public class EntityTenderFowler4F extends Tender {
                 null, 
 new ItemStack(ItemIDs.bogie.item, 3), 
 new ItemStack(ItemIDs.steelframe.item, 3), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 null,
  null, 
 null, 
 null, 
-new ItemStack(Items.coal, 2),
+new ItemStack(Items.COAL, 2),
 new ItemStack(thisItem)
         };
     }

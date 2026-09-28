@@ -1,8 +1,8 @@
 package train.common.api;
 
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;

@@ -68,12 +68,12 @@ public class EntityTenderA4 extends Tender {
                 null, 
 new ItemStack(ItemIDs.ironBogie.item, 2), 
 new ItemStack(ItemIDs.steelframe.item, 2), 
-new ItemStack(Items.iron_ingot, 1), 
+new ItemStack(Items.IRON_INGOT, 1),
 null,
  null, 
 null, 
 null, 
-new ItemStack(Items.coal, 1),
+new ItemStack(Items.COAL, 1),
 new ItemStack(thisItem)
         };
     }

@@ -61,10 +61,10 @@ public class EntityCaboose3 extends EntityRollingStock implements IPassenger {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 2), 
+                new ItemStack(Blocks.PLANKS, 2),
 new ItemStack(ItemIDs.ironBogie.item, 2), 
 new ItemStack(ItemIDs.ironFrame.item, 2), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 null,
  new ItemStack(ItemIDs.woodenCab.item, 1), 
 null, 

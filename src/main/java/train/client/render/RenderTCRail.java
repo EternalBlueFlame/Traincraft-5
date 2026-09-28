@@ -740,8 +740,8 @@ public class RenderTCRail extends TileEntitySpecialRenderer {
                 /*if(trackRoute==null){
                     trackRoute= RailShapeCore.multiTriGenModel(railShape((TileTCRail) var1),new int[]{750});
                     trackRoute.renderScale=1;
-                    trackRoute.rail=new ItemStack(Items.iron_ingot);
-                    trackRoute.ballast= new ItemStack(Blocks.stone);
+                    trackRoute.rail=new ItemStack(Items.IRON_INGOT);
+                    trackRoute.ballast= new ItemStack(Blocks.STONE);
                     trackRoute.ties= new ItemStack(Blocks.log);
                     trackRoute.wires=null;
                 }

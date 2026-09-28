@@ -65,7 +65,7 @@ public class EntityLocoSteamMallardA4 extends SteamTrain {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Items.iron_ingot, 2), 
+                new ItemStack(Items.IRON_INGOT, 2),
 new ItemStack(ItemIDs.ironBogie.item, 3), 
 new ItemStack(ItemIDs.steelframe.item, 2), 
 null, 

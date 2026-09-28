@@ -62,15 +62,15 @@ public class EntityTenderC62Class extends Tender {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Items.iron_ingot, 6), 
+                new ItemStack(Items.IRON_INGOT, 6),
 new ItemStack(ItemIDs.bogie.item, 2), 
 new ItemStack(ItemIDs.steelframe.item, 2), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 null,
  null, 
 null, 
 null, 
-new ItemStack(Items.coal, 2),
+new ItemStack(Items.COAL, 2),
 new ItemStack(thisItem)
         };
     }

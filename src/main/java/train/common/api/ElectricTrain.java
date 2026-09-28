@@ -51,7 +51,7 @@ public abstract class ElectricTrain extends Locomotive {
 		if (getFuel() < maxEnergy && cargoItems[0] != null)
 		{
 			Item item = cargoItems[0].getItem();
-			if (item == Items.redstone && ((getFuel() + 2000) <= maxEnergy))
+			if (item == Items.REDSTONE && ((getFuel() + 2000) <= maxEnergy))
 			{
 				fuelTrain += 2000;
 				decrStackSize(0, 1);

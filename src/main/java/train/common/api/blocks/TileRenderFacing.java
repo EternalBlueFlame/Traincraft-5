@@ -1,7 +1,7 @@
 package train.common.api.blocks;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.ClientUtil;
 import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.*;

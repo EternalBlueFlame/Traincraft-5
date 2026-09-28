@@ -64,12 +64,12 @@ public class EntityLocoElectricTramNY extends ElectricTrain {
                 new ItemStack(ItemIDs.controls.item, 1), 
 new ItemStack(ItemIDs.bogie.item, 2), 
 new ItemStack(ItemIDs.steelframe.item, 1), 
-new ItemStack(Items.iron_ingot, 1), 
+new ItemStack(Items.IRON_INGOT, 1),
 null,
  new ItemStack(ItemIDs.steelcab.item, 1), 
 new ItemStack(ItemIDs.transformer.item, 2), 
 new ItemStack(ItemIDs.electmotor.item, 2), 
-new ItemStack(Items.redstone, 4),
+new ItemStack(Items.REDSTONE, 4),
 new ItemStack(thisItem)
         };
     }

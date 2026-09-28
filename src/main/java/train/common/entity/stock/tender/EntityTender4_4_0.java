@@ -75,7 +75,7 @@ null,
  null, 
 null, 
 null, 
-new ItemStack(Items.coal, 1),
+new ItemStack(Items.COAL, 1),
 new ItemStack(thisItem)
         };
     }

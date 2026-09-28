@@ -54,13 +54,13 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
 		if (crafterInventory[i] != null) {
-			if (crafterInventory[i].stackSize <= j) {
+			if (crafterInventory[i].getCount() <= j) {
 				ItemStack itemstack = crafterInventory[i];
 				crafterInventory[i] = null;
 				return itemstack;
 			}
 			ItemStack itemstack1 = crafterInventory[i].splitStack(j);
-			if (crafterInventory[i].stackSize == 0) {
+			if (crafterInventory[i].getCount() == 0) {
 				crafterInventory[i] = null;
 			}
 			return itemstack1;
@@ -86,7 +86,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 	public void setInventorySlotContents(int i, ItemStack itemstack) {
 		crafterInventory[i] = itemstack;
 		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-			itemstack.getCount() = getInventoryStackLimit();
+			itemstack.setCount(getInventoryStackLimit());
 		}
 	}
 
@@ -218,7 +218,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 		if (world.getTileEntity(getPos()) != this) {
 			return false;
 		}
-		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
+		return entityplayer.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <= 64D;
 	}
 
 

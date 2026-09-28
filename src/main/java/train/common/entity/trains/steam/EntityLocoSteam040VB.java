@@ -61,7 +61,7 @@ public class EntityLocoSteam040VB extends SteamTrain {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 4), 
+                new ItemStack(Blocks.PLANKS, 4),
 new ItemStack(ItemIDs.ironBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 1), 
 null, 

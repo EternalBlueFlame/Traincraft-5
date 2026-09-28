@@ -63,10 +63,10 @@ public class EntityCabooseLogging extends AbstractWorkCart {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 3), 
+                new ItemStack(Blocks.PLANKS, 3),
 new ItemStack(ItemIDs.woodenBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 2), 
-new ItemStack(Items.iron_ingot, 1), 
+new ItemStack(Items.IRON_INGOT, 1),
 null,
  null, 
 null, 

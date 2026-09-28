@@ -62,15 +62,15 @@ public class EntityFreightCartL extends Freight {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Items.iron_ingot, 4), 
+                new ItemStack(Items.IRON_INGOT, 4),
 new ItemStack(ItemIDs.bogie.item, 2), 
 new ItemStack(ItemIDs.steelframe.item, 2), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 null,
  null, 
 null, 
 null, 
-new ItemStack(Blocks.chest, 1),
+new ItemStack(Blocks.CHEST, 1),
 new ItemStack(thisItem)
         };
     }

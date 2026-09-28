@@ -61,7 +61,7 @@ public class EntityFlatCart extends EntityRollingStock implements IPassenger {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 3), 
+                new ItemStack(Blocks.PLANKS, 3),
 new ItemStack(ItemIDs.woodenBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 2), 
 new ItemStack(Items.stick, 2), 

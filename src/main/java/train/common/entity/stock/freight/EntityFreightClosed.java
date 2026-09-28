@@ -61,15 +61,15 @@ public class EntityFreightClosed extends Freight {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 4), 
+                new ItemStack(Blocks.PLANKS, 4),
 new ItemStack(ItemIDs.ironBogie.item, 2), 
 new ItemStack(ItemIDs.ironFrame.item, 4), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 null,
  null, 
 null, 
 null, 
-new ItemStack(Blocks.chest, 1),
+new ItemStack(Blocks.CHEST, 1),
 new ItemStack(thisItem)
         };
     }

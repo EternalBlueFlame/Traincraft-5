@@ -37,7 +37,7 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 
 
 	protected BlockOpenHearthFurnace(boolean active) {
-		super(Material.rock,0);
+		super(Material.ROCK,0);
 		furnaceRand = new Random();
 		//setRequiresSelfNotify();
 	}
@@ -109,7 +109,7 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 						if (i1 > itemstack.getCount()) {
 							i1 = itemstack.getCount();
 						}
-						itemstack.getCount() -= i1;
+						itemstack.setCount(itemstack.getCount()-i1);
 						EntityItem entityitem = new EntityItem(world, i + f, j + f1, k + f2, itemstack.splitStack(i1));
 						float f3 = 0.05F;
 						entityitem.motionX = (float) furnaceRand.nextGaussian() * f3;

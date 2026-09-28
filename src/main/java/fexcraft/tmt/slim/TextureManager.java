@@ -5,7 +5,7 @@ import ebf.tim.utility.DebugUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.texture.*;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;

@@ -76,15 +76,15 @@ public class EntityFreightCartUS extends Freight {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 6), 
+                new ItemStack(Blocks.PLANKS, 6),
 new ItemStack(ItemIDs.ironBogie.item, 2), 
 new ItemStack(ItemIDs.ironFrame.item, 2), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 null,
  null, 
 null, 
 null, 
-new ItemStack(Blocks.hopper, 2),
+new ItemStack(Blocks.HOPPER, 2),
 new ItemStack(thisItem)
         };
     }

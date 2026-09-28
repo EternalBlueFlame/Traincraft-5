@@ -80,11 +80,11 @@ public abstract class GuiTraincraft extends GuiContainer {
     }
 
     protected boolean isMouseOverSlot(Slot par1Slot, int par2, int par3) {
-        return this.func_74188_c(par1Slot.xDisplayPosition, par1Slot.yDisplayPosition, 16, 16, par2, par3);
+        return this.func_74188_c(par1Slot.xPos, par1Slot.yPos, 16, 16, par2, par3);
     }
 
     private int isMouseOverSlot2(Slot slot, int par2, int par3) {
-        boolean over = func_74188_c(slot.xDisplayPosition, slot.yDisplayPosition, 16, 16, par2, par3);
+        boolean over = func_74188_c(slot.xPos, slot.yPos, 16, 16, par2, par3);
 
         if (over) {
             return slot.slotNumber;
@@ -157,8 +157,8 @@ public abstract class GuiTraincraft extends GuiContainer {
 
             mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, guiTexture));
 
-            int x = slot.xDisplayPosition;
-            int y = slot.yDisplayPosition;
+            int x = slot.xPos;
+            int y = slot.yPos;
 
             GL11.glEnable(GL11.GL_BLEND);
             GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -190,7 +190,7 @@ public abstract class GuiTraincraft extends GuiContainer {
         }
 
         if (item != null) {
-            itemRender.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, new ItemStack(item), x, y);
+            itemRender.renderItemIntoGUI(new ItemStack(item), x, y);
         } else {
             String var4 = Info.guiPrefix + "Icons.png";
             mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, var4));
@@ -239,7 +239,7 @@ public abstract class GuiTraincraft extends GuiContainer {
         GL11.glEnable(GL11.GL_BLEND);
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_SRC_ALPHA);
 
-        itemRender.renderItemIntoGUI(this.mc.fontRenderer, this.mc.renderEngine, item, j + x, k + y);
+        itemRender.renderItemIntoGUI(item, j + x, k + y);
 
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_LIGHTING);

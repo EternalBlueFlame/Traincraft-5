@@ -1,7 +1,7 @@
 package train.common.entity.digger;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -672,7 +672,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
             itemstack.getCount() = getInventoryStackLimit();
         }
-        if (itemstack != null && itemstack.getItem() == Items.coal && i == 0 && getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer)) {
+        if (itemstack != null && itemstack.getItem() == Items.COAL && i == 0 && getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer)) {
             // ((EntityPlayer)getPassengers().get(0)).func_25046_a(Train.field_27542_startTrain, 1);
         }
 

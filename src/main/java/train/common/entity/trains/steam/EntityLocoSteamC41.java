@@ -64,12 +64,12 @@ public class EntityLocoSteamC41 extends SteamTrain {
                 null, 
 new ItemStack(ItemIDs.ironBogie.item, 3), 
 new ItemStack(ItemIDs.ironFrame.item, 2), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 new ItemStack(ItemIDs.ironChimney.item, 1), 
 new ItemStack(ItemIDs.ironCab.item, 1), 
 new ItemStack(ItemIDs.ironBoiler.item, 2), 
 new ItemStack(ItemIDs.ironFirebox.item, 1), 
-new ItemStack(Items.coal, 1),
+new ItemStack(Items.COAL, 1),
 new ItemStack(thisItem)
         };
     }

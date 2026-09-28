@@ -61,7 +61,7 @@ public class EntityFreightWood extends Freight {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 6), 
+                new ItemStack(Blocks.PLANKS, 6),
 new ItemStack(ItemIDs.woodenBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 2), 
 new ItemStack(Items.stick, 2), 

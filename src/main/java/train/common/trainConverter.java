@@ -656,7 +656,7 @@ public class trainConverter {
 
         } else {
             if(i.getItem().delegate.name().split(":")[1].equals("ingot")){
-                return "Items.iron_ingot";
+                return "Items.IRON_INGOT";
             }
 
             if(i.getItem().delegate.name().split(":")[1].equals("potion")){

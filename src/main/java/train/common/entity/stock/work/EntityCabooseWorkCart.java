@@ -61,10 +61,10 @@ public class EntityCabooseWorkCart extends AbstractWorkCart {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 6), 
+                new ItemStack(Blocks.PLANKS, 6),
 new ItemStack(ItemIDs.bogie.item, 2), 
 new ItemStack(ItemIDs.steelframe.item, 2), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 null,
  null, 
 null, 

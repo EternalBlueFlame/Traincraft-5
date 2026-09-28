@@ -62,10 +62,10 @@ public class EntityLocoSteamD51Long extends SteamTrain {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Items.iron_ingot, 2), 
+                new ItemStack(Items.IRON_INGOT, 2),
 new ItemStack(ItemIDs.bogie.item, 5), 
 new ItemStack(ItemIDs.steelframe.item, 2), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 new ItemStack(ItemIDs.steelchimney.item, 1), 
 new ItemStack(ItemIDs.steelcab.item, 1), 
 new ItemStack(ItemIDs.boiler.item, 2), 

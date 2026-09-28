@@ -62,10 +62,10 @@ public class EntityTankWagonThreeDome extends LiquidTank {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Items.iron_ingot, 4), 
+                new ItemStack(Items.IRON_INGOT, 4),
 new ItemStack(ItemIDs.bogie.item, 2), 
 new ItemStack(ItemIDs.steelframe.item, 3), 
-new ItemStack(Items.iron_ingot, 4), 
+new ItemStack(Items.IRON_INGOT, 4),
 null,
  null, 
 null, 

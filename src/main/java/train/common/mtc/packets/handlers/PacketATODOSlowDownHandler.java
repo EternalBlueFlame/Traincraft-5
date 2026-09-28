@@ -56,7 +56,7 @@ public class PacketATODOSlowDownHandler implements IMessageHandler<PacketATODoSl
    public IMessage onMessage(PacketATODoSlowDown message, MessageContext ctx) {
 
 
-         Entity trainEntity = ctx.getServerHandler().playerEntity.getEntityWorld().getEntityByID(message.entity);
+         Entity trainEntity = ctx.getServerHandler().player.getEntityWorld().getEntityByID(message.entity);
          if(trainEntity != null) {
             this.slow(trainEntity, Vec3.createVectorHelper(message.stopX, message.stopY, message.stopZ));
          }

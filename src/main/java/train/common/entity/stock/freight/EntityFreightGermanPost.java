@@ -71,7 +71,7 @@ null,
  new ItemStack(ItemIDs.steelcab.item, 1), 
 null, 
 null, 
-new ItemStack(Blocks.chest, 1),
+new ItemStack(Blocks.CHEST, 1),
 new ItemStack(thisItem)
         };
     }

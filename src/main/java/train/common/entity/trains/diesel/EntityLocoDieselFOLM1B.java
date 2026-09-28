@@ -65,7 +65,7 @@ public class EntityLocoDieselFOLM1B extends DieselTrain {
                 null, 
 new ItemStack(ItemIDs.bogie.item, 8), 
 new ItemStack(ItemIDs.steelframe.item, 3), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 null,
  null, 
 new ItemStack(ItemIDs.electmotor.item, 2), 

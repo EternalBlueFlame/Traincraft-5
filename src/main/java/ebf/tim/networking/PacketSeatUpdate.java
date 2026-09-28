@@ -57,8 +57,8 @@ public class PacketSeatUpdate implements IMessage {
             EntitySeat oldSeat;
             EntitySeat newSeat;
             if (ctx.side == Side.SERVER) {
-                rollingStockEntity = (EntityRollingStock) ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.rollingStockId);
-                playerEntity = (EntityPlayer) ctx.getServerHandler().playerEntity.worldObj.getEntityByID(message.playerId);
+                rollingStockEntity = (EntityRollingStock) ctx.getServerHandler().player.worldObj.getEntityByID(message.rollingStockId);
+                playerEntity = (EntityPlayer) ctx.getServerHandler().player.worldObj.getEntityByID(message.playerId);
 
             } else {
                 rollingStockEntity = (EntityRollingStock) Minecraft.getMinecraft().theWorld.getEntityByID(message.rollingStockId);

@@ -28,11 +28,11 @@ public class WorldGenWorld implements IWorldGenerator {
 		if(world.provider.terrainType != WorldType.FLAT){
 
 			if (ConfigHandler.ORE_GEN) {
-				addOreSpawn(BlockIDs.oreTC.block, 1, Blocks.sand, world, random, chunkX * 16, chunkZ * 16, 10, 2, 25, 75);
-				addOreSpawn(BlockIDs.oreTC.block, 2, Blocks.stone, world, random, chunkX * 16, chunkZ * 16, 14, 3, 10, 50);
+				addOreSpawn(BlockIDs.oreTC.block, 1, Blocks.SAND, world, random, chunkX * 16, chunkZ * 16, 10, 2, 25, 75);
+				addOreSpawn(BlockIDs.oreTC.block, 2, Blocks.STONE, world, random, chunkX * 16, chunkZ * 16, 14, 3, 10, 50);
 			}
 			if (ConfigHandler.COPPER_ORE_GEN) {
-				addOreSpawn(BlockIDs.oreTC.block, 0, Blocks.stone, world, random, chunkX * 16, chunkZ * 16, 6, 4, 5, 50);
+				addOreSpawn(BlockIDs.oreTC.block, 0, Blocks.STONE, world, random, chunkX * 16, chunkZ * 16, 6, 4, 5, 50);
 			}
 		}
 	}

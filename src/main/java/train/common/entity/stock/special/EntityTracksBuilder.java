@@ -61,10 +61,10 @@ public class EntityTracksBuilder extends EntityRollingStock {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Items.iron_ingot, 6), 
+                new ItemStack(Items.IRON_INGOT, 6),
 new ItemStack(ItemIDs.bogie.item, 2), 
 new ItemStack(ItemIDs.steelframe.item, 3), 
-new ItemStack(Items.iron_ingot, 1), 
+new ItemStack(Items.IRON_INGOT, 1),
 new ItemStack(ItemIDs.steelchimney.item, 1), 
 null, 
 new ItemStack(ItemIDs.boiler.item, 1), 

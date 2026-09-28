@@ -144,7 +144,7 @@ public class ServerLogger {
 
         int fill = 1000;
         while (fill < item.amount) {
-            addItemXML(string, FluidContainerRegistry.fillFluidContainer(item, new ItemStack(Items.bucket)));
+            addItemXML(string, FluidContainerRegistry.fillFluidContainer(item, new ItemStack(Items.BUCKET)));
             fill += 1000;
         }
     }

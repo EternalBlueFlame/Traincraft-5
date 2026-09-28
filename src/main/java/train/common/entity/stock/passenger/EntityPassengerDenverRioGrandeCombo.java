@@ -63,7 +63,7 @@ public class EntityPassengerDenverRioGrandeCombo extends EntityRollingStock impl
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.chest, 4), 
+                new ItemStack(Blocks.CHEST, 4),
 new ItemStack(ItemIDs.ironBogie.item, 4), 
 new ItemStack(ItemIDs.woodenFrame.item, 3), 
 null, 

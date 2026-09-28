@@ -64,15 +64,15 @@ public class EntityFreight100TonHopper extends Freight {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Items.iron_ingot, 6), 
+                new ItemStack(Items.IRON_INGOT, 6),
 new ItemStack(ItemIDs.bogie.item, 2), 
 new ItemStack(ItemIDs.steelframe.item, 3), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 null,
  null, 
 null, 
 null, 
-new ItemStack(Blocks.hopper, 3),
+new ItemStack(Blocks.HOPPER, 3),
 new ItemStack(thisItem)
         };
     }

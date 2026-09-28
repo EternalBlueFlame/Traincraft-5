@@ -11,7 +11,7 @@ import train.common.mtc.packets.PacketNCSlowDown;
 public class PacketNCSlowDownHandler implements IMessageHandler<PacketNCSlowDown, IMessage> {
     @Override
     public IMessage onMessage(PacketNCSlowDown message, MessageContext ctx) {
-        Entity trainEntity = ctx.getServerHandler().playerEntity.getEntityWorld().getEntityByID(message.entity);
+        Entity trainEntity = ctx.getServerHandler().player.getEntityWorld().getEntityByID(message.entity);
         if(trainEntity != null) {
 
 

@@ -1,13 +1,13 @@
 package train.client.gui;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.entity.RenderItem;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -226,20 +226,20 @@ public class GuiRecipeBook extends GuiScreen {
                 add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 128));
                 add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 144));
                 add(new StackToDraw(new ItemStack(Blocks.RAIL), 17, 160));
-                add(new StackToDraw(new ItemStack(Blocks.POWERED_RAIL), 170, 16));
+                add(new StackToDraw(new ItemStack(Blocks.GOLDEN_RAIL), 170, 16));
             }
         });
         addPage("A word about tracks II:\nTo check the current charge click the track with a crowbar.\nAn electric track connected to a redstone power source gets 1 energy unit every two ticks.\nLocomotive holding track will only hold TC locomotives. No boost is given, the previous speed is restored once released.\nAll tracks require Railcraft to be installed.", "", "left", new ArrayList<StackToDraw>() {
             {
                 add(new StackToDraw(new ItemStack(Blocks.ACTIVATOR_RAIL), 17, 16));
-                add(new StackToDraw(new ItemStack(Blocks.POWERED_RAIL), 170, 16));
+                add(new StackToDraw(new ItemStack(Blocks.GOLDEN_RAIL), 170, 16));
             }
         });
 
         addPage("Steel rails parts and copper rails parts are crafted inside RC Rolling Machine, tracks are assembled in vanilla workbench.\nTC boarding/disembarking track are designed to work only on the Stock Car. Animal boarding will take any nearby animal and put it inside a passing Stock Car. Mob boarding will affect any mob.\nDisembark will eject any mob inside the Stock Car.", "", "right", new ArrayList<StackToDraw>() {
             {
                 add(new StackToDraw(new ItemStack(Blocks.DETECTOR_RAIL), 17, 16));
-                add(new StackToDraw(new ItemStack(Blocks.POWERED_RAIL), 170, 16));
+                add(new StackToDraw(new ItemStack(Blocks.GOLDEN_RAIL), 170, 16));
             }
         });
         addPage("Builder I:\n\nThe tracks builder has a very special inventory, in order to start it you must provide:\nBallast in the slot under it (planks, gravel, stone, ...).\nCoal in the fuel slot, Tracks in the slot under the fuel slot. The slot on the right of the builder will activate tunnel function when provided (not all blocks are accepted).\n", "", "left", new ArrayList<StackToDraw>() {
@@ -582,7 +582,7 @@ public class GuiRecipeBook extends GuiScreen {
             if (this.leftPageItemStacks != null && this.leftPageItemStacks.get(this.currPage) != null && this.leftPageItemStacks.get(this.currPage).get(0) != null) {
                 for (int t = 0; t < this.leftPageItemStacks.get(this.currPage).size(); t++) {
                     if (this.leftPageItemStacks.get(this.currPage).get(t) != null) {
-                        renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, ((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getItemStack(), var5 + ((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getX(), var6 + ((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getY());
+                        renderItem.renderItemIntoGUI(((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getItemStack(), var5 + ((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getX(), var6 + ((StackToDraw) this.leftPageItemStacks.get(this.currPage).get(t)).getY());
                     }
                 }
             }
@@ -590,7 +590,7 @@ public class GuiRecipeBook extends GuiScreen {
             if (this.rightPageItemStacks != null && this.rightPageItemStacks.get(this.currPage) != null && this.rightPageItemStacks.get(this.currPage).get(0) != null) {
                 for (int t = 0; t < this.rightPageItemStacks.get(this.currPage).size(); t++) {
                     if (this.rightPageItemStacks.get(this.currPage).get(t) != null) {
-                        renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, ((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getItemStack(), var5 + ((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getX() + 210, var6 + ((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getY());
+                        renderItem.renderItemIntoGUI(((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getItemStack(), var5 + ((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getX() + 210, var6 + ((StackToDraw) this.rightPageItemStacks.get(this.currPage).get(t)).getY());
                     }
                 }
             }
@@ -661,42 +661,42 @@ public class GuiRecipeBook extends GuiScreen {
         if (side.equals("right")) offset = 194;
         GL11.glEnable(32826);
         if (itemList[0] != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[0], var5 + 50 + offset, var6 + 67);
+            renderItem.renderItemIntoGUI(itemList[0], var5 + 50 + offset, var6 + 67);
         }
 
         if (itemList[1] != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[1], var5 + 68 + offset, var6 + 67);
+            renderItem.renderItemIntoGUI(itemList[1], var5 + 68 + offset, var6 + 67);
         }
 
         if (itemList[2] != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[2], var5 + 86 + offset, var6 + 67);
+            renderItem.renderItemIntoGUI(itemList[2], var5 + 86 + offset, var6 + 67);
         }
 
         if (itemList[3] != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[3], var5 + 50 + offset, var6 + 85);
+            renderItem.renderItemIntoGUI(itemList[3], var5 + 50 + offset, var6 + 85);
         }
 
         if (itemList[4] != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[4], var5 + 68 + offset, var6 + 85);
+            renderItem.renderItemIntoGUI(itemList[4], var5 + 68 + offset, var6 + 85);
         }
 
         if (itemList[5] != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[5], var5 + 86 + offset, var6 + 85);
+            renderItem.renderItemIntoGUI(itemList[5], var5 + 86 + offset, var6 + 85);
         }
 
         if (itemList[6] != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[6], var5 + 50 + offset, var6 + 103);
+            renderItem.renderItemIntoGUI(itemList[6], var5 + 50 + offset, var6 + 103);
         }
         if (itemList[7] != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[7], var5 + 68 + offset, var6 + 103);
+            renderItem.renderItemIntoGUI(itemList[7], var5 + 68 + offset, var6 + 103);
         }
 
         if (itemList[8] != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList[8], var5 + 86 + offset, var6 + 103);
+            renderItem.renderItemIntoGUI(itemList[8], var5 + 86 + offset, var6 + 103);
         }
 
         if (itemOutput != null && itemOutput.getItem() != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemOutput, var5 + 145 + offset, var6 + 85);
+            renderItem.renderItemIntoGUI(itemOutput, var5 + 145 + offset, var6 + 85);
             // Draw name of recipe. Highlight in green if it contains the search query.
             this.fontRenderer.drawString(itemOutput.getItem().getItemStackDisplayName(itemOutput), var5 + 20 + offset, var6 + 40, (!searchBar.getText().isEmpty() && itemOutput.getItem().getItemStackDisplayName(itemOutput).toLowerCase().contains(searchBar.getText().toLowerCase())) ? 0x21d12d : 0);
         }
@@ -727,92 +727,92 @@ public class GuiRecipeBook extends GuiScreen {
         GL11.glEnable(32826);
 
         if (itemList.get(0) != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(0), var5 + 94 + offset, var6 + 76);
+            renderItem.renderItemIntoGUI(itemList.get(0), var5 + 94 + offset, var6 + 76);
         }
 
         if (itemList.get(0) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(0), var5 + 94 + offset, var6 + 76);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(0), var5 + 94 + offset, var6 + 76);
         }
 
         if (itemList.get(1) != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(1), var5 + 113 + offset, var6 + 143);
+            renderItem.renderItemIntoGUI(itemList.get(1), var5 + 113 + offset, var6 + 143);
         }
 
         if (itemList.get(1) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(1), var5 + 113 + offset, var6 + 143);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(1), var5 + 113 + offset, var6 + 143);
         }
         if (itemList.get(2) != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(2), var5 + 148 + offset, var6 + 143);
+            renderItem.renderItemIntoGUI(itemList.get(2), var5 + 148 + offset, var6 + 143);
         }
 
         if (itemList.get(2) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(2), var5 + 148 + offset, var6 + 143);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(2), var5 + 148 + offset, var6 + 143);
         }
 
         if (itemList.get(3) != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(3), var5 + 214 + offset, var6 + 143);
+            renderItem.renderItemIntoGUI(itemList.get(3), var5 + 214 + offset, var6 + 143);
         }
 
         if (itemList.get(3) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(3), var5 + 214 + offset, var6 + 143);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(3), var5 + 214 + offset, var6 + 143);
         }
 
         if (itemList.get(4) != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(4), var5 + 148 + offset, var6 + 77);
+            renderItem.renderItemIntoGUI(itemList.get(4), var5 + 148 + offset, var6 + 77);
         }
 
         if (itemList.get(4) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(4), var5 + 148 + offset, var6 + 77);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(4), var5 + 148 + offset, var6 + 77);
         }
 
         if (itemList.get(5) != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(5), var5 + 184 + offset, var6 + 77);
+            renderItem.renderItemIntoGUI(itemList.get(5), var5 + 184 + offset, var6 + 77);
         }
 
         if (itemList.get(5) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(5), var5 + 184 + offset, var6 + 77);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(5), var5 + 184 + offset, var6 + 77);
         }
 
         if (itemList.get(6) != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(6), var5 + 149 + offset, var6 + 110);
+            renderItem.renderItemIntoGUI(itemList.get(6), var5 + 149 + offset, var6 + 110);
         }
 
         if (itemList.get(6) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(6), var5 + 149 + offset, var6 + 110);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(6), var5 + 149 + offset, var6 + 110);
         }
 
         if (itemList.get(7) != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(7), var5 + 185 + offset, var6 + 110);
+            renderItem.renderItemIntoGUI(itemList.get(7), var5 + 185 + offset, var6 + 110);
         }
 
         if (itemList.get(7) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(7), var5 + 185 + offset, var6 + 110);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(7), var5 + 185 + offset, var6 + 110);
         }
 
         if (itemList.get(8) != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(8), var5 + 94 + offset, var6 + 110);
+            renderItem.renderItemIntoGUI(itemList.get(8), var5 + 94 + offset, var6 + 110);
         }
 
         if (itemList.get(8) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(8), var5 + 94 + offset, var6 + 110);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(8), var5 + 94 + offset, var6 + 110);
         }
 
         if (itemList.get(9) != null) {
-            renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(9), var5 + 214 + offset, var6 + 77);
+            renderItem.renderItemIntoGUI(itemList.get(9), var5 + 214 + offset, var6 + 77);
         }
 
         if (itemList.get(9) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.renderEngine, itemList.get(9), var5 + 214 + offset, var6 + 77);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(9), var5 + 214 + offset, var6 + 77);
         }
 
         ItemStack output = recipeList.get(page).getOutput();
         if (output != null) {
             if (side.equals("left")) {
-                renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, output, var5 + 162, var6 + 177);
+                renderItem.renderItemIntoGUI(output, var5 + 162, var6 + 177);
             }
 
             if (side.equals("right")) {
-                renderItem.renderItemIntoGUI(this.fontRenderer, this.mc.renderEngine, output, var5 + 432, var6 + 177);
+                renderItem.renderItemIntoGUI(output, var5 + 432, var6 + 177);
             }
         }
 

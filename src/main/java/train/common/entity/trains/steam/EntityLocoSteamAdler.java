@@ -61,10 +61,10 @@ public class EntityLocoSteamAdler extends SteamTrain {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.planks, 8), 
+                new ItemStack(Blocks.PLANKS, 8),
 new ItemStack(ItemIDs.woodenBogie.item, 3), 
 new ItemStack(ItemIDs.woodenFrame.item, 2), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 new ItemStack(ItemIDs.ironChimney.item, 1), 
 null, 
 new ItemStack(ItemIDs.ironBoiler.item, 1), 

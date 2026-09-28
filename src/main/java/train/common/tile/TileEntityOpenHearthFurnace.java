@@ -1,5 +1,6 @@
 package train.common.tile;
 
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -113,13 +114,13 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 			}
 			if (flag != (furnaceBurnTime > 0)) {
 				flag1 = true;
-				BlockOpenHearthFurnace.updateHearthFurnaceBlockState(furnaceBurnTime > 0, getWorld(), xCoord, yCoord, zCoord, random);
+				BlockOpenHearthFurnace.updateHearthFurnaceBlockState(furnaceBurnTime > 0, getWorld(),pos.getX(),pos.getY(),pos.getZ(), random);
 			}
 			this.syncTileEntity();
 		}
 		if (this.world.isRemote) {
 			if (furnaceBurnTime > 0) {
-				smoke(getWorld(), xCoord, yCoord, zCoord, random);
+				smoke(getWorld(),pos.getX(),pos.getY(),pos.getZ(), random);
 			}
 		}
 		if (flag1) {
@@ -134,13 +135,13 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 		float f3 = 0.009F;
 		double gaussian = random.nextGaussian() * f3;
 		for (int t = 0; t < 50; t++) {
-			world.spawnParticle("smoke", var7, (double) j + 1.2F, var9, gaussian, gaussian * 0.002F, gaussian);
+			world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, var7, (double) j + 1.2F, var9, gaussian, gaussian * 0.002F, gaussian);
 		}
-		world.spawnParticle("flame", var7, (double) j + 1.03F, var9, 0, 0, 0);
-		world.spawnParticle("flame", var7 + 0.06, (double) j + 1.03F, var9 + 0.06, 0, 0, 0);
-		world.spawnParticle("flame", var7 - 0.06, (double) j + 1.03F, var9 - 0.06, 0, 0, 0);
-		world.spawnParticle("flame", var7 + 0.06, (double) j + 1.03F, var9 - 0.06, 0, 0, 0);
-		world.spawnParticle("flame", var7 - 0.06, (double) j + 1.03F, var9 + 0.06, 0, 0, 0);
+		world.spawnParticle(EnumParticleTypes.FLAME, var7, (double) j + 1.03F, var9, 0, 0, 0);
+		world.spawnParticle(EnumParticleTypes.FLAME, var7 + 0.06, (double) j + 1.03F, var9 + 0.06, 0, 0, 0);
+		world.spawnParticle(EnumParticleTypes.FLAME, var7 - 0.06, (double) j + 1.03F, var9 - 0.06, 0, 0, 0);
+		world.spawnParticle(EnumParticleTypes.FLAME, var7 + 0.06, (double) j + 1.03F, var9 - 0.06, 0, 0, 0);
+		world.spawnParticle(EnumParticleTypes.FLAME, var7 - 0.06, (double) j + 1.03F, var9 + 0.06, 0, 0, 0);
 	}
 
 	private boolean canSmelt(){
@@ -197,17 +198,17 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 			return TileEntityFurnace.getItemBurnTime(it);
 		}
 		Item var1 = it.getItem();
-		if (Item.getIdFromItem(var1) < 256 && Block.getBlockFromItem(var1).getMaterial() == Material.wood)
+		if (Item.getIdFromItem(var1) < 256 && Block.getBlockFromItem(var1).getMaterial() == Material.WOOD)
 			return 300;
-		if (var1 == Items.stick)
+		if (var1 == Items.STICK)
 			return 100;
-		if (var1 == Items.coal)
+		if (var1 == Items.COAL)
 			return 2600;
-		if (var1 == Items.lava_bucket)
+		if (var1 == Items.LAVA_BUCKET)
 			return 20000;
-		if (var1 == Item.getItemFromBlock(Blocks.sapling))
+		if (var1 == Item.getItemFromBlock(Blocks.SAPLING))
 			return 100;
-		if (var1 == Items.blaze_rod)
+		if (var1 == Items.BLAZE_ROD)
 			return 2500;
 		if (var1 == Item.getItemFromBlock(BlockIDs.oreTC.block) && it.getItemDamage() == 1)
 			return 2500;

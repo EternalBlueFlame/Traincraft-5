@@ -65,12 +65,12 @@ public class EntityTenderBerk1225 extends Tender {
                 null, 
 new ItemStack(ItemIDs.bogie.item, 4), 
 new ItemStack(ItemIDs.steelframe.item, 4), 
-new ItemStack(Items.iron_ingot, 2), 
+new ItemStack(Items.IRON_INGOT, 2),
 null,
  null, 
 null, 
 null, 
-new ItemStack(Items.coal, 2),
+new ItemStack(Items.COAL, 2),
 new ItemStack(thisItem)
         };
     }
