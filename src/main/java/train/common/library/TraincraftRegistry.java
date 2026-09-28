@@ -9,6 +9,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
+import ebf.tim.render.CustomItemModel;
+import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import ebf.tim.utility.OreGen;
 import fexcraft.tmt.slim.ModelBase;
@@ -26,7 +28,8 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.client.IItemRenderer;
+import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -208,86 +211,6 @@ public class TraincraftRegistry {
                         trains.getRecipe()[4],trains.getRecipe()[5],trains.getRecipe()[6],trains.getRecipe()[7],
                         trains.getRecipe()[8],trains.getRecipe()[9], trains.getCartItem(),1);
             }
-
-            //todo:this part should be unnecessary? double-check.
-            if(Traincraft.proxy.isClient()){
-                Traincraft.instance.traincraftRegistry.registerTrainRenderRecord(new TrainRenderRecord() {
-                    @Override
-                    public Class<? extends AbstractTrains> getEntityClass() {
-                        return trains.getClass();
-                    }
-
-                    @Override
-                    public ModelBase getModel() {
-                        return trains.getModel()[0];
-                    }
-
-                    @Override
-                    public boolean hasSmoke() {
-                        return false;
-                    }
-
-                    @Override
-                    public boolean hasSmokeOnSlopes() {
-                        return false;
-                    }
-
-                    @Override
-                    public String getSmokeType() {
-                        return null;
-                    }
-
-                    @Override
-                    public ArrayList<double[]> getSmokeFX() {
-                        return null;
-                    }
-
-                    @Override
-                    public String getExplosionType() {
-                        return null;
-                    }
-
-                    @Override
-                    public boolean hasExplosion() {
-                        return false;
-                    }
-
-                    @Override
-                    public ArrayList<double[]> getExplosionFX() {
-                        return null;
-                    }
-
-                    @Override
-                    public float[] getTrans() {
-                        return new float[]{0,0,0};
-                    }
-
-                    @Override
-                    public float[] getRotate() {
-                        return new float[]{180,0,0};
-                    }
-
-                    @Override
-                    public float[] getScale() {
-                        return new float[]{1,1,1};
-                    }
-
-                    @Override
-                    public ResourceLocation getTextureFile(String colorString) {
-                        return new ResourceLocation(colorString);
-                    }
-
-                    @Override
-                    public int getSmokeIterations() {
-                        return 0;
-                    }
-
-                    @Override
-                    public int getExplosionFXIterations() {
-                        return 0;
-                    }
-                });
-            }
         }
     }
 
@@ -403,8 +326,8 @@ public class TraincraftRegistry {
         if (oreDictionaryName != null) {
             OreDictionary.registerOre(oreDictionaryName, block);
         }
-        if (DebugUtil.dev && Traincraft.proxy.isClient() && block.getTranslationKey().equals(I18n.translateToLocal(block.getTranslationKey() +".name"))) {
-            DebugUtil.println("Block missing lang entry: " + block.getTranslationKey());
+        if (DebugUtil.dev && Traincraft.proxy.isClient() && block.getUnlocalizedName().equals(CommonUtil.translate(block.getUnlocalizedName() +".name"))) {
+            DebugUtil.println("Block missing lang entry: " + block.getUnlocalizedName());
         }
         if (block instanceof ITileEntityProvider) {
             Class<? extends TileEntity> tile = ((ITileEntityProvider) block).createNewTileEntity(null, 0).getClass();
@@ -462,8 +385,8 @@ public class TraincraftRegistry {
         if (oreDictionaryName != null) {
             OreDictionary.registerOre(oreDictionaryName, itm);
         }
-        if (DebugUtil.dev && Traincraft.proxy != null && Traincraft.proxy.isClient() && itm.getTranslationKey().equals(I18n.translateToLocal(itm.getTranslationKey()+".name"))) {
-            DebugUtil.println("Item missing lang entry: " + itm.getTranslationKey());
+        if (DebugUtil.dev && Traincraft.proxy != null && Traincraft.proxy.isClient() && itm.getUnlocalizedName().equals(CommonUtil.translate(itm.getUnlocalizedName()+".name"))) {
+            DebugUtil.println("Item missing lang entry: " + itm.getUnlocalizedName());
         }
         if (Traincraft.proxy.isClient() && itemRender != null) {
             // MinecraftForgeClient.registerItemRenderer(itm, (IItemRenderer) itemRender);
@@ -520,14 +443,14 @@ public class TraincraftRegistry {
         fluidMap.put(block, bucket);
 
         if (DebugUtil.dev && Traincraft.proxy.isClient()) {
-            if (fluid.getUnlocalizedName().equals(I18n.translateToLocal(fluid.getUnlocalizedName()))) {
+            if (fluid.getUnlocalizedName().equals(CommonUtil.translate(fluid.getUnlocalizedName()))) {
                 DebugUtil.println("Fluid missing lang entry: " + fluid.getUnlocalizedName());
             }
-            if (bucket.getTranslationKey().equals(I18n.translateToLocal(block.getTranslationKey()))) {
-                DebugUtil.println("Item missing lang entry: " + bucket.getTranslationKey());
+            if (bucket.getUnlocalizedName().equals(CommonUtil.translate(block.getUnlocalizedName()))) {
+                DebugUtil.println("Item missing lang entry: " + bucket.getUnlocalizedName());
             }
-            if (block.getTranslationKey().equals(I18n.translateToLocal(block.getTranslationKey()))) {
-                DebugUtil.println("Block missing lang entry: " + block.getTranslationKey());
+            if (block.getUnlocalizedName().equals(CommonUtil.translate(block.getUnlocalizedName()))) {
+                DebugUtil.println("Block missing lang entry: " + block.getUnlocalizedName());
             }
 
         }

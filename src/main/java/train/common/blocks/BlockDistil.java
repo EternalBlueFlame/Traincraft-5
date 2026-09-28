@@ -12,8 +12,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
@@ -91,17 +89,17 @@ public class BlockDistil extends BlockDynamic {
 	}
 
 	public static void updateDistilBlockState(boolean flag, World world, int i, int j, int k) {
-		int l = world.getBlockMetadata(i, j, k);
+		int l = CommonUtil.getBlockFacing(world, i, j, k);
 		TileEntity tileentity = world.getTileEntity(i, j, k);
 		keepDistilInventory = true;
 		if (flag) {
-			world.setBlock(i, j, k, TCBlocks.distilActive);
+			CommonUtil.setBlock(world, i, j, k, TCBlocks.distilActive);
 		}
 		else {
-			world.setBlock(i, j, k, TCBlocks.distilIdle);
+			CommonUtil.setBlock(world, i, j, k, TCBlocks.distilIdle);
 		}
 		keepDistilInventory = false;
-		world.setBlockMetadataWithNotify(i, j, k, l, 2);
+		CommonUtil.setBlockMeta(world, i, j, k, l, 2);
 		if (tileentity != null) {
 			tileentity.validate();
 			world.setTileEntity(i, j, k, tileentity);
@@ -115,7 +113,7 @@ public class BlockDistil extends BlockDynamic {
 			if (tileentitydistil != null) {
 				label0: for (int l = 0; l < tileentitydistil.getSizeInventory(); l++) {
 					ItemStack itemstack = tileentitydistil.getStackInSlot(l);
-					if (itemstack == null) {
+					if (CommonUtil.isItemStackEmpty(itemstack)) {
 						continue;
 					}
 					float f = distilRand.nextFloat() * 0.8F + 0.1F;
@@ -135,7 +133,7 @@ public class BlockDistil extends BlockDynamic {
 						entityitem.motionX = (float) distilRand.nextGaussian() * f3;
 						entityitem.motionY = (float) distilRand.nextGaussian() * f3 + 0.2F;
 						entityitem.motionZ = (float) distilRand.nextGaussian() * f3;
-						world.spawnEntityInWorld(entityitem);
+						ebf.tim.utility.CommonUtil.spawnEntity(world, entityitem);
 					} while (true);
 				}
 			}
@@ -146,16 +144,16 @@ public class BlockDistil extends BlockDynamic {
 	@Override
 	public void onBlockAdded(World world, int i, int j, int k) {
 		super.onBlockAdded(world, i, j, k);
-		world.markBlockForUpdate(i, j, k);
+		CommonUtil.markBlockForUpdate(world, i, j, k);
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
 		TileEntityDistil te = (TileEntityDistil) world.getTileEntity(i, j, k);
 		if (te != null) {
-			int dir = MathHelper.floor((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-			te.setFacing(EnumFacing.byHorizontalIndex(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
-			world.markBlockForUpdate(i, j, k);
+			int dir = CommonUtil.floorDouble((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+			te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
+			CommonUtil.markBlockForUpdate(world, i, j, k);
 		}
 	}
 

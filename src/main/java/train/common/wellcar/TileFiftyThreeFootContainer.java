@@ -40,7 +40,7 @@ public class TileFiftyThreeFootContainer extends TileEntity implements IInventor
 
     @Override
     public ItemStack decrStackSize(int index, int count) {
-        if (this.getStackInSlot(index) != null) {
+        if (!CommonUtil.isItemStackEmpty(this.getStackInSlot(index))) {
             ItemStack itemstack;
 
             if (this.getStackInSlot(index).stackSize <= count) {

@@ -21,16 +21,7 @@ public class EntityPassengerRheingoldDining1 extends AbstractWorkCart implements
 		furnaceCookTime = 0;
 	}
 
-	public EntityPassengerRheingoldDining1(World world, double d, double d1, double d2) {
-		this(world);
-		setPosition(d, d1 + (double) yOffset, d2);
-		motionX = 0.0D;
-		motionY = 0.0D;
-		motionZ = 0.0D;
-		prevPosX = d;
-		prevPosY = d1;
-		prevPosZ = d2;
-	}
+	
 
 	@Override
 	public float[][] getRiderOffsets(){return new float[][]{{0f,-0.5f, 0f}, {3f,-0.5f, 0f}};}

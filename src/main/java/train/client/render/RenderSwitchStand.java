@@ -1,6 +1,7 @@
 package train.client.render;
 
 import fexcraft.tmt.slim.Tessellator;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
@@ -19,7 +20,7 @@ public class RenderSwitchStand extends TileEntitySpecialRenderer {
 
     @Override
     public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
-        boolean skipRender = false, powered = tileEntity.world.getBlock(tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getWorld(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0;
+        boolean skipRender = false, powered = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0;
         TileSwitchStand tile = ((TileSwitchStand) tileEntity);
         if (tile.getFacing() != null) {
             Tessellator.bindTexture(powered ? texture2 : texture);

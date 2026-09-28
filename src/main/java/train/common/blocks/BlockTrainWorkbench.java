@@ -1,7 +1,6 @@
 package train.common.blocks;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
@@ -9,10 +8,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
@@ -53,7 +48,7 @@ public class BlockTrainWorkbench extends BlockDynamic {
 		if (tilewb != null) {
 			label0: for (int l = 0; l < tilewb.getSizeInventory(); l++) {
 				ItemStack itemstack = tilewb.getStackInSlot(l);
-				if (itemstack == null) {
+				if (CommonUtil.isItemStackEmpty(itemstack)) {
 					continue;
 				}
 				float f = distilRand.nextFloat() * 0.8F + 0.1F;
@@ -73,7 +68,7 @@ public class BlockTrainWorkbench extends BlockDynamic {
 					entityitem.motionX = (float) distilRand.nextGaussian() * f3;
 					entityitem.motionY = (float) distilRand.nextGaussian() * f3 + 0.2F;
 					entityitem.motionZ = (float) distilRand.nextGaussian() * f3;
-					world.spawnEntityInWorld(entityitem);
+					ebf.tim.utility.CommonUtil.spawnEntity(world, entityitem);
 				} while (true);
 			}
 		}
@@ -83,16 +78,16 @@ public class BlockTrainWorkbench extends BlockDynamic {
 	@Override
 	public void onBlockAdded(World world, int i, int j, int k) {
 		super.onBlockAdded(world, i, j, k);
-		world.markBlockForUpdate(i, j, k);
+		CommonUtil.markBlockForUpdate(world, i, j, k);
 	}
 
 	@Override
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
 		TileTrainWbench te = (TileTrainWbench) world.getTileEntity(i, j, k);
 		if (te != null) {
-			int dir = MathHelper.floor((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-			te.setFacing(EnumFacing.byHorizontalIndex(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
-			world.markBlockForUpdate(i, j, k);
+			int dir = CommonUtil.floorDouble((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
+			te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
+			CommonUtil.markBlockForUpdate(world, i, j, k);
 		}
 	}
 

@@ -1,9 +1,9 @@
 package train.common.api;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
@@ -32,9 +32,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
     public Tender(World world){
         super(world);
     }
-    public Tender(World world, double x, double y, double z){
-        super(world,x,y,z);
-    }
+
     public Tender(World world, Fluid fluid, int quantity, FluidStack filter) {
         this(new FluidStack(fluid, quantity), world, filter);
     }
@@ -53,7 +51,9 @@ public abstract class Tender extends Freight implements IFluidHandler {
     }
 
     @Override
-    public abstract int getSizeInventory();
+    public int getSizeInventory(){
+        return super.getSizeInventory()+2;
+    }
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
@@ -171,10 +171,10 @@ public abstract class Tender extends Freight implements IFluidHandler {
 
         if (ticksExisted % 5 == 0 && fill(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
             FluidStack drain = null;
-            blocksToCheck = new TileEntity[]{world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
-                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
-                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
-                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
+            blocksToCheck = new TileEntity[]{worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY - 1), CommonUtil.floorDouble(posZ)),
+                    worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 2), CommonUtil.floorDouble(posZ)),
+                    worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 3), CommonUtil.floorDouble(posZ)),
+                    worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 4), CommonUtil.floorDouble(posZ))
             };
 
             for (TileEntity block : blocksToCheck) {

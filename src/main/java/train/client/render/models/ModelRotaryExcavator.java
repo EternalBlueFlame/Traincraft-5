@@ -1,5 +1,6 @@
 package train.client.render.models;
 
+import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.entity.Entity;
 import train.client.render.CustomModelRenderer;
@@ -149,7 +150,7 @@ public class ModelRotaryExcavator extends ModelBase {
 		/**
 		 * Pitch
 		 */
-		float pitch = (float) Math.toRadians(((EntityRotativeDigger) entity).pitch);
+		float pitch = ((EntityRotativeDigger) entity).pitch * CommonUtil.radianF;
 
 		if (pitch > ((EntityRotativeDigger) entity).pitchLimits)
 			pitch = ((EntityRotativeDigger) entity).pitchLimits;

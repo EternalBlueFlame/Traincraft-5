@@ -167,8 +167,8 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 			else {
 				flag1 = false;
-				BlockDistil.updateDistilBlockState(distilBurnTime > 0, getWorld(), xCoord, yCoord, zCoord);
-				this.world.markBlockForUpdate(getPos());
+				BlockDistil.updateDistilBlockState(distilBurnTime > 0, worldObj, xCoord, yCoord, zCoord);
+				CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 			}
 
 			if (slots[2] != null) {
@@ -202,7 +202,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 						flag1 = true;
 
 						this.markDirty();
-						this.world.markBlockForUpdate(getPos());
+						CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 					}
 				}
 			}
@@ -221,7 +221,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 			if (updateTicks % 8 == 0){
 				this.markDirty();
-				this.world.markBlockForUpdate(getPos());
+				CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 			}
 			if (distilBurnTime > 0) {
 				distilBurnTime--;
@@ -234,7 +234,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	}
 
 	private boolean placeInInvent(ItemStack itemstack1, int i, boolean doAdd) {
-		if (slots[i] == null) {
+		if (CommonUtil.isItemStackEmpty(slots[i])) {
 			if (doAdd)
 				slots[i] = itemstack1;
 			return true;
@@ -300,7 +300,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 			}
 
 			this.markDirty();
-			this.world.markBlockForUpdate(getPos());
+			CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
 		}
 
 		if (slots[0].getItem().hasContainerItem(slots[0])) {

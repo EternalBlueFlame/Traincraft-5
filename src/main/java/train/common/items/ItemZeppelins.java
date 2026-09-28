@@ -52,7 +52,7 @@ public class ItemZeppelins extends Item {
 		RayTraceResult movingobjectposition = world.rayTraceBlocks(vec3d, vec3d1, true);
 		if (movingobjectposition == null) { return itemstack; }
 		if (!world.isRemote && !ConfigHandler.ENABLE_ZEPPELIN) {
-			if (entityplayer != null) entityplayer.addChatMessage(new TextComponentString("Zeppelin has been deactivated by the OP"));
+			if (entityplayer != null) ebf.tim.utility.CommonUtil.sendChat(entityplayer, "Zeppelin has been deactivated by the OP");
 			return itemstack;
 		}
 		if (movingobjectposition.typeOfHit == RayTraceResult.MovingObjectType.BLOCK) {
@@ -60,8 +60,8 @@ public class ItemZeppelins extends Item {
 			int j = movingobjectposition.blockY;
 			int k = movingobjectposition.blockZ;
 			if (!world.isRemote) {
-				if(type==0)world.spawnEntityInWorld(new EntityZeppelinTwoBalloons(world, (float) i + 0.5F, (float) j + 1.5F, (float) k + 0.5F));
-				if(type==1)world.spawnEntityInWorld(new EntityZeppelinOneBalloon(world, (float) i + 0.5F, (float) j + 1.5F, (float) k + 0.5F));
+				if(type==0)ebf.tim.utility.CommonUtil.spawnEntity(world, new EntityZeppelinTwoBalloons(world, (float) i + 0.5F, (float) j + 1.5F, (float) k + 0.5F));
+				if(type==1)ebf.tim.utility.CommonUtil.spawnEntity(world, new EntityZeppelinOneBalloon(world, (float) i + 0.5F, (float) j + 1.5F, (float) k + 0.5F));
 			}
 			itemstack.shrink(1);
 		}

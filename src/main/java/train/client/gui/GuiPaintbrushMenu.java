@@ -4,6 +4,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
+import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
@@ -12,7 +13,6 @@ import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.world.World;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
@@ -376,16 +376,16 @@ public class GuiPaintbrushMenu extends GuiScreen {
                 case 0:
                 case 1: // Arrow left or right button.
                     if (GuiPaintbrushMenu.activeButtonID == 0) { // If arrow left...
-                        drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Previous Page.name")), mouseX, mouseY, fontRenderer);
+                        drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Previous Page.name")), mouseX, mouseY, fontRendererObj);
                     } else { // If arrow right...
-                        drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Next Page.name")), mouseX, mouseY, fontRenderer);
+                        drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Next Page.name")), mouseX, mouseY, fontRendererObj);
                     }
                     break;
                 case 2: // Render models button.
                     if (renderModels) {
-                        drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Hide Models.name")), mouseX, mouseY, fontRenderer);
+                        drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Hide Models.name")), mouseX, mouseY, fontRendererObj);
                     } else {
-                        drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Show Models.name")), mouseX, mouseY, fontRenderer);
+                        drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Show Models.name")), mouseX, mouseY, fontRendererObj);
                     }
                     break;
                 case 3: // Left texture button.
@@ -393,40 +393,40 @@ public class GuiPaintbrushMenu extends GuiScreen {
                 case 5: // Right texture button.
                     break;
                 case 6: // Random texture button.
-                    drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Random Texture.name")), mouseX, mouseY, fontRenderer);
+                    drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Random Texture.name")), mouseX, mouseY, fontRendererObj);
                     break;
                 case 7: // Apply & submit button.
-                    drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Apply Texture.name")), mouseX, mouseY, fontRenderer);
+                    drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Apply Texture.name")), mouseX, mouseY, fontRendererObj);
                     break;
                 case 8: // Description arrow up.
                 case 9: // Description arrow down.
                     break;
                 case 11: // Clear overlay button.
-                    drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.None.name")), mouseX, mouseY, fontRenderer);
+                    drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.None.name")), mouseX, mouseY, fontRendererObj);
                     break;
                 case 12: // Open dynamic overlay menu button.
-                    drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Dynamic Overlay.name")), mouseX, mouseY, fontRenderer);
+                    drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Dynamic Overlay.name")), mouseX, mouseY, fontRendererObj);
                     break;
                 case 13: // Open fixed overlay menu button.
-                    drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Fixed Overlay.name")), mouseX, mouseY, fontRenderer);
+                    drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Fixed Overlay.name")), mouseX, mouseY, fontRendererObj);
                     break;
                 case 14: // Close button.
-                    drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Close Menu.name")), mouseX, mouseY, fontRenderer);
+                    drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Close Menu.name")), mouseX, mouseY, fontRendererObj);
                     break;
                 case 15: // Pause/Play
                     if (doAnimation)
-                        drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Pause.name")), mouseX, mouseY, fontRenderer);
+                        drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Pause.name")), mouseX, mouseY, fontRendererObj);
                     else
-                        drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Play.name")), mouseX, mouseY, fontRenderer);
+                        drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Play.name")), mouseX, mouseY, fontRendererObj);
                     break;
                 case 17: //dropdown
-                    drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.List Skins.name")), mouseX, mouseY, fontRenderer);
+                    drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.List Skins.name")), mouseX, mouseY, fontRendererObj);
                     break;
                 case 18: //dropdown UP
-                    drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Scroll Up.name")), mouseX, mouseY, fontRenderer);
+                    drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Scroll Up.name")), mouseX, mouseY, fontRendererObj);
                     break;
                 case 19: //dropdown DOWN
-                    drawHoveringText(Collections.singletonList(I18n.format("paintbrushmenu.Scroll Down.name")), mouseX, mouseY, fontRenderer);
+                    drawHoveringText(Collections.singletonList(CommonUtil.translate("paintbrushmenu.Scroll Down.name")), mouseX, mouseY, fontRendererObj);
                     break;
             }
 
@@ -436,7 +436,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
     @Override
     protected void actionPerformed(GuiButton clickedButton) {
         if (clickedButton.enabled) {
-            editingPlayer.playSound("random.click", 1f, 1f);
+            CommonUtil.playSound(editingPlayer, "random.click", 1f, 1f);
             // Select Color
             switch (clickedButton.id) {
                 case 0:
@@ -503,7 +503,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
                 case 11: // Clear overlay button.
                     if (rollingStock.acceptsOverlayTextures() && rollingStock.getOverlayTextureContainer().getType() != OverlayTextureManager.Type.NONE) {
                         rollingStock.getOverlayTextureContainer().getOverlayConfigTag().setInteger("type", OverlayTextureManager.Type.NONE.ordinal());
-                        Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.NONE, rollingStock.getEntityId(), Minecraft.getMinecraft().thePlayer.world.provider.dimensionId, rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
+                        Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.NONE, rollingStock.getEntityId(), CommonUtil.getDimensionId(Minecraft.getMinecraft().thePlayer.worldObj), rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
                         this.mc.thePlayer.closeScreen();
                     }
                     break;
@@ -617,7 +617,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
             }
             updateSelectedTextureProperties();
             updateButtons();
-            editingPlayer.playSound("random.click", 1f, 1f);
+            CommonUtil.playSound(editingPlayer, "random.click", 1f, 1f);
         }
     }
 
@@ -655,14 +655,14 @@ public class GuiPaintbrushMenu extends GuiScreen {
             } else if (rollingStock.textureDescriptionMap.containsKey("Default")) {
                 currentDisplayTextureDescriptionString = rollingStock.textureDescriptionMap.get("Default").description;
             } else {
-                currentDisplayTextureDescriptionString = I18n.format("paintbrushmenu.No Description.name");
+                currentDisplayTextureDescriptionString = CommonUtil.translate("paintbrushmenu.No Description.name");
             }
         } else {
             currentDisplayTextureTitle = currentDisplayTextureString;
             if (rollingStock.textureDescriptionMap.containsKey("Default")) {
                 currentDisplayTextureDescriptionString = rollingStock.textureDescriptionMap.get("Default").description;
             } else {
-                currentDisplayTextureDescriptionString = I18n.format("paintbrushmenu.No Description.name");
+                currentDisplayTextureDescriptionString = CommonUtil.translate("paintbrushmenu.No Description.name");
             }
         }
         currentTextureDescription = Minecraft.getMinecraft().fontRenderer.listFormattedStringToWidth(currentDisplayTextureDescriptionString, (MENU_TEXTURE_WIDTH * 2) - 85);

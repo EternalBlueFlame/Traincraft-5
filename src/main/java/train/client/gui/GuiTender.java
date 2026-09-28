@@ -123,7 +123,7 @@ public class GuiTender extends GuiContainer {
                     this.initGui();
                 }
             } else if (player != null) {
-                player.sendMessage(new TextComponentString("You are not the owner"));
+                ebf.tim.utility.CommonUtil.sendChat(player, "You are not the owner");
             }
         } else if (guibutton instanceof GUIButton) {
             ((GUIButton)guibutton).onClick();

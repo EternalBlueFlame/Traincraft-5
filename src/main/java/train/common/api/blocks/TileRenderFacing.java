@@ -1,7 +1,8 @@
 package train.common.api.blocks;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.ClientUtil;
 import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.*;
 import net.minecraft.block.Block;
@@ -93,8 +94,8 @@ public class TileRenderFacing extends TileEntity {
             if(blockGLID ==null) {
                 blockGLID = net.minecraft.client.renderer.GLAllocation.generateDisplayLists(1);
                 org.lwjgl.opengl.GL11.glNewList(blockGLID, org.lwjgl.opengl.GL11.GL_COMPILE);
-                if (getWorld() == null) {
-                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
+                if (worldObj == null) {
+                    ClientUtil.fixItemLighting(worldObj);
                 } else {
                     Minecraft.getMinecraft().entityRenderer.enableLightmap(1);
                 }
@@ -123,8 +124,8 @@ public class TileRenderFacing extends TileEntity {
                 org.lwjgl.opengl.GL11.glRotatef(180, 1, 0, 0);
 
                 renderModel();
-                if (getWorld() == null) {
-                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
+                if (worldObj == null) {
+                    ClientUtil.fixItemLighting(worldObj);
                 }
                 org.lwjgl.opengl.GL11.glEndList();
             }

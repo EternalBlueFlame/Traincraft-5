@@ -1,7 +1,8 @@
 package train.client.gui;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
@@ -12,7 +13,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.client.resources.I18n;
 import org.lwjgl.opengl.GL11;
 import train.client.core.handlers.RecipeBookHandler;
 import train.common.blocks.TCBlocks;
@@ -563,7 +563,7 @@ public class GuiRecipeBook extends GuiScreen {
 			this.drawTexturedModalRect(var5 - 55, var6 - 15, 0, 0, 256, 256);
 		}
 
-        pageIndic = String.format(I18n.format("book.pageIndicator"), new Object[]{this.currPage + 1, this.bookTotalPages});
+        pageIndic = String.format(CommonUtil.translate("book.pageIndicator"), new Object[]{this.currPage + 1, this.bookTotalPages});
 
 		var9 = this.fontRenderer.getStringWidth(pageIndic);
 		if (this.currPage > 0) {

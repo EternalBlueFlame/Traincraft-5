@@ -1,8 +1,9 @@
 package train.common.tile;
 
 import cpw.mods.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
@@ -41,8 +42,8 @@ public class TileMetroMadridPole extends TileEntity {
         return EnumFacing.UNKNOWN;
     }
 
-    public void setFacing(EnumFacing face) {
-        world.markBlockForUpdate(xCoord, yCoord, zCoord);
+    public void setFacing(ForgeDirection face) {
+        CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
         this.facing = face;
     }
 

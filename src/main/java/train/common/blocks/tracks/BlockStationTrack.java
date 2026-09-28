@@ -87,22 +87,22 @@ public class BlockStationTrack extends BlockTrackLockingBase implements ITrackLo
 				if (mode > 3)
 					mode = 0;
 				if (this.mode == 0){
-					player.sendMessage(new TextComponentString("Activated every 15s for 5s"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "Activated every 15s for 5s");
 					this.delayTime=100;
 					this.activateRate=300;
 				}
 				if (this.mode == 1){
-					player.sendMessage(new TextComponentString("Activated every 30s for 15s"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "Activated every 30s for 15s");
 					this.delayTime=600/2;
 					this.activateRate=600;
 				}
 				if (this.mode == 2){
-					player.sendMessage(new TextComponentString("Activated every minute for 30s"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "Activated every minute for 30s");
 					this.delayTime=1200/2;
 					this.activateRate=1200;
 				}
 				if (this.mode == 3){
-					player.sendMessage(new TextComponentString("Activated every five minutes for 30s"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "Activated every five minutes for 30s");
 					this.delayTime=1200/2;
 					this.activateRate=6000;
 				}

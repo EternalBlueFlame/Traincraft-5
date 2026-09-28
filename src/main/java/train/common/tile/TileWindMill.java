@@ -2,6 +2,7 @@ package train.common.tile;
 
 
 import cofh.api.energy.IEnergyProvider;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
@@ -57,15 +58,15 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 		 */
 		if (!world.isRemote) {
 			if (updateTicks % 20 == 0) {
-				if (!this.world.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
-					Block block = this.world.getBlock(this.xCoord, this.yCoord + 1, this.zCoord);
+				if (!this.worldObj.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
+					Block block = CommonUtil.getBlockAt(this.worldObj, this.xCoord, this.yCoord + 1, this.zCoord);
 					if (block != null) {
 						EntityItem entityitem = new EntityItem(getWorld(), this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(BlockIDs.windMill.block),1));
 						float f3 = 0.05F;
 						entityitem.motionX = (float) rand.nextGaussian() * f3;
 						entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
 						entityitem.motionZ = (float) rand.nextGaussian() * f3;
-						world.spawnEntityInWorld(entityitem);
+						CommonUtil.spawnEntity(worldObj, entityitem);
 					}
 					this.world.setBlockToAir(getPos());
 				}

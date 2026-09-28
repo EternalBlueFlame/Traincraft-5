@@ -154,8 +154,8 @@ public class GuiForney extends GuiContainer {
                     guibutton.displayString = "Unlocked";
                     this.initGui();
                 }
-            } else if (loco.getPassengers().get(0) != null && loco.getPassengers().get(0) instanceof EntityPlayer) {
-                ((EntityPlayer) loco.getPassengers().get(0)).addChatMessage(new TextComponentString("You are not the owner"));
+            } else if (loco.riddenByEntity != null && loco.riddenByEntity instanceof EntityPlayer) {
+                ebf.tim.utility.CommonUtil.sendChat((EntityPlayer) loco.riddenByEntity, "You are not the owner");
             }
         } else if (guibutton instanceof GUIButton) {
             ((GUIButton)guibutton).onClick();

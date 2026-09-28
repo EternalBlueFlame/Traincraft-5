@@ -1,8 +1,9 @@
 package train.client.gui;
 
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -31,8 +32,8 @@ public class GuiSpeedTransmitter extends GuiScreen {
 
         if (entity instanceof TileInfoTransmitterSpeed) {
             transmitterBlock = (TileInfoTransmitterSpeed) entity;
-            Block transmitterBlocc = entity.getWorld().getBlockState(new BlockPos(transmitterBlock.getPos().getX(), transmitterBlock.getPos().getY(), transmitterBlock.getPos().getZ())).getBlock();
-            System.out.println(entity.getWorld().getRedstonePowerFromNeighbors(new BlockPos(transmitterBlock.getPos().getX(), transmitterBlock.getPos().getY(), transmitterBlock.getPos().getZ())) > 0);
+            Block transmitterBlocc = CommonUtil.getBlockAt(entity.getWorldObj(), transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
+            System.out.println(entity.getWorldObj().isBlockIndirectlyGettingPowered(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord));
         }
     }
 

@@ -48,7 +48,7 @@ public class ItemRotativeDigger extends Item {
 			int j = movingobjectposition.blockY;
 			int k = movingobjectposition.blockZ;
 			if (!world.isRemote) {
-				world.spawnEntityInWorld(new EntityRotativeDigger(world, (float) i + 0.5F, (float) j + 1.5F, (float) k + 0.5F));
+				ebf.tim.utility.CommonUtil.spawnEntity(world, new EntityRotativeDigger(world, (float) i + 0.5F, (float) j + 1.5F, (float) k + 0.5F));
 			}
 			itemstack.shrink(1);
 		}

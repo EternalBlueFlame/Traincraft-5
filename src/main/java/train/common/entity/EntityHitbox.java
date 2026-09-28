@@ -52,7 +52,7 @@ public class EntityHitbox {
                 c.setPosition(host.posX+f, host.posY, host.posZ);
                 c.host=host;
                 interactionBoxes.add(c);
-                host.world.spawnEntity(c);
+                CommonUtil.spawnEntity(host.getWorld(), c);
                 if(front==null){
                     front=c;
                 } else{
@@ -125,14 +125,14 @@ public class EntityHitbox {
 
                             EntityPlayer entityplayer = host.world.getClosestPlayerToEntity(host, 20);//
                             if (entityplayer != null) {
-                                entityplayer.sendMessage(new TextComponentString("attached!"));
+                                CommonUtil.sendChat(entityplayer, "attached!");
                             }
 
                         } else {
                             EntityPlayer p = host.world.getClosestPlayerToEntity(host,32);
                             if(p!=null){
-                                p.sendMessage(new TextComponentString("One or more trains is not in towing mode."));
-                                p.sendMessage(new TextComponentString("Use a Stake while sneaking to toggle towing mode."));
+                                CommonUtil.sendChat(p, "One or more trains is not in towing mode.");
+                                CommonUtil.sendChat(p, "Use a Stake while sneaking to toggle towing mode.");
                             }
                         }
                     } else {

@@ -1,5 +1,6 @@
 package train.common.wellcar;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -10,7 +11,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
@@ -65,7 +65,7 @@ public class BlockFortyFootContainer extends BlockContainer {
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bounds, List list, Entity entity) {
         /*System.out.println("Adding??");
         this.setBlockBounds(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F);
-        AxisAlignedBB bounds1 = AxisAlignedBB.getBoundingBox(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F);
+        AxisAlignedBB bounds1 = CommonUtil.createAABB(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F);
         list.add(bounds1);
         super.addCollisionBoxesToList(world, x, y, z, bounds1, list, entity);
        // super.addCollisionBoxesToList(world, x, y, z, AxisAlignedBB.getBoundingBox(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F), list, entity);
@@ -110,7 +110,7 @@ public class BlockFortyFootContainer extends BlockContainer {
 
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World p_149668_1_, int p_149668_2_, int p_149668_3_, int p_149668_4_)
     {
-        return AxisAlignedBB.getBoundingBox((double)p_149668_2_ + this.minX, (double)p_149668_3_ + this.minY, (double)p_149668_4_ + this.minZ, (double)p_149668_2_ + this.maxX + 7F, (double)p_149668_3_ + this.maxY, (double)p_149668_4_ + this.maxZ);
+        return CommonUtil.createAABB((double)p_149668_2_ + this.minX, (double)p_149668_3_ + this.minY, (double)p_149668_4_ + this.minZ, (double)p_149668_2_ + this.maxX + 7F, (double)p_149668_3_ + this.maxY, (double)p_149668_4_ + this.maxZ);
     }
 
     @Override
@@ -122,7 +122,7 @@ public class BlockFortyFootContainer extends BlockContainer {
     @Override
     public ArrayList<ItemStack> getDrops(World world, int x, int y, int z, int metadata, int fortune) {
         ArrayList<ItemStack> ret = super.getDrops(world, x, y, z, metadata, fortune);
-        ItemStack stack = new ItemStack(world.getBlock(x, y, z), 1, metadata);
+        ItemStack stack = new ItemStack(CommonUtil.getBlockAt(world, x, y, z), 1, metadata);
 
         TileFortyFootContainer te = world.getTileEntity(x, y,z) instanceof TileFortyFootContainer ? (TileFortyFootContainer)world.getTileEntity(x,y,z) : null;
 
@@ -195,7 +195,7 @@ public class BlockFortyFootContainer extends BlockContainer {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase player, ItemStack stack)
     {
         TileFortyFootContainer te = (TileFortyFootContainer) world.getTileEntity(x, y, z);
-        int playerYaw = MathHelper.floor((player.rotationYaw / 90.0F) + 2.5D) & 3;
+        int playerYaw = CommonUtil.floorDouble((player.rotationYaw / 90.0F) + 2.5D) & 3;
 
         if (te != null && stack.getTagCompound() != null)
         {

@@ -130,8 +130,8 @@ public abstract class AbstractPair {
                 if (!world.blockExists(x, y, z))
                     continue;
 
-                Block block = world.getBlock(x, y, z);
-                int meta = world.getBlockMetadata(x, y, z);
+                Block block = CommonUtil.getBlockAt(world, x, y, z);
+                int meta = CommonUtil.getBlockFacing(world, x, y, z);
                 if (!block.hasTileEntity(meta)) {
                     clearPairing(coord);
                     continue;
@@ -194,8 +194,8 @@ public abstract class AbstractPair {
         if (!world.blockExists(x, y, z))
             return null;
 
-        Block block = world.getBlock(x, y, z);
-        int meta = world.getBlockMetadata(x, y, z);
+        Block block = CommonUtil.getBlockAt(world, x, y, z);
+        int meta = CommonUtil.getBlockFacing(world, x, y, z);
         if (!block.hasTileEntity(meta)) {
             pairingsToTest.add(coord);
             return null;

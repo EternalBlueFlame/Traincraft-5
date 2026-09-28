@@ -214,9 +214,22 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
     }
 
-    public AbstractTrains(World world, double x, double y, double z) {
-        this(world);
-        this.setPosition(x, y, z);
+    /**
+     * Called to set up initial pos and motion
+     * ONLY CALLED BY SERVER SIDE
+     * @param x
+     * @param y
+     * @param z
+     */
+    public void SetupRollingStockSpawn(double x, double y, double z)
+    {
+        setPosition(x, y + (double)yOffset, z);
+        motionX = 0.0D;
+        motionY = 0.0D;
+        motionZ = 0.0D;
+        prevPosX = x;
+        prevPosY = y;
+        prevPosZ = z;
     }
 
     @Override
@@ -325,12 +338,12 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                 this.playerEntity = entityplayer;
                 if (getFlag(7)) {
                     this.setFlag(7, false);
-                    entityplayer.addChatMessage(new ChatComponentText("Stop loading chunks"));
+                    CommonUtil.sendChat(entityplayer, "Stop loading chunks");
                     ForgeChunkManager.releaseTicket(chunkTicket);
                     chunkTicket = null;
                 } else if (!getFlag(7)) {
                     this.setFlag(7, true);
-                    entityplayer.addChatMessage(new ChatComponentText("Start loading chunks"));
+                    CommonUtil.sendChat(entityplayer, "Start loading chunks");
                 }
                 itemstack.damageItem(1, entityplayer);
                 return true;
@@ -375,6 +388,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public void setColor(String color) {
+        DebugUtil.println(color);
         if (SkinRegistry.get(this) != null && SkinRegistry.get(this).size()>0) {
             if (color.equals("-1") || !SkinRegistry.get(this).containsKey(color)) {
                 List<TransportSkin> skins = new ArrayList<>();
@@ -575,17 +589,17 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                     || this.trainOwner.isEmpty() || entityplayer.canCommandSenderUseCommand(2, "")) {
                 if (locked) {
                     locked = false;
-                    if (world.isRemote) {
-                        entityplayer.addChatMessage(new ChatComponentText("Unlocked."));
+                    if (worldObj.isRemote) {
+                        CommonUtil.sendChat(entityplayer, "Unlocked.");
                     }
                 } else {
                     locked = true;
-                    if (world.isRemote) {
-                        entityplayer.addChatMessage(new ChatComponentText("Locked."));
+                    if (worldObj.isRemote) {
+                        CommonUtil.sendChat(entityplayer, "Locked.");
                     }
                 }
-            } else if (world.isRemote) {
-                entityplayer.addChatMessage(new ChatComponentText("You are not the owner!"));
+            } else if (worldObj.isRemote) {
+                CommonUtil.sendChat(entityplayer, "You are not the owner!");
             }
             return true;
         }
@@ -604,11 +618,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                         ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem() != null &&
                         ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem().getItem() instanceof ItemWrench) {
 
-                    ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("Removing the train using OP permission."));
+                    CommonUtil.sendChat((EntityPlayer) damagesource.getEntity(), "Removing the train using OP permission.");
                     return false;
                 }
                 else if (!((EntityPlayer) damagesource.getEntity()).getDisplayName().equalsIgnoreCase(this.trainOwner) && !(this.isPlayerTrustedToBreak(((EntityPlayerMP) damagesource.getEntity()).getDisplayName()))) {
-                    ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("You are not the owner!"));
+                    CommonUtil.sendChat((EntityPlayer) damagesource.getEntity(), "You are not the owner!");
                     return true;
                 }
             } else return !damagesource.isProjectile();
@@ -762,6 +776,60 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         }
         
         return transports.get(0);
+    }
+
+    /**
+     * Finds the direction from which a locomotive is pulling/pushing from.
+     * @return Returns 1 if from front, -1 if from back, or 0 if no pulling locomotive exists or this is the pulling locomotive.
+     */
+    protected int pullingLocomotiveDirection() {
+        if (this instanceof Locomotive) {
+            if (!((Locomotive) this).canBePulled) {
+                return 0;
+            }
+        }
+
+        ArrayList<AbstractTrains> visited = new ArrayList<>();  // In case somebody makes a circular train
+        visited.add(this);
+
+        boolean visitingFront = true;
+
+        AbstractTrains previousTrain = this;
+        AbstractTrains train = frontLink;
+        while (!visited.contains(train)) {
+            if (train == null) {
+                // If we have reached the front end, reset and start from the back. If we reached that other end too, break.
+                if (visitingFront) {
+                    visitingFront = false;
+                    train = backLink;
+                    previousTrain = this;
+                    continue;
+                }
+                else {
+                    break;
+                }
+            }
+
+            visited.add(train);
+
+            if (train instanceof Locomotive) {
+                if (!((Locomotive) train).canBePulled) {
+                    return visitingFront ? 1 : -1;
+                }
+            }
+
+            // Trains can link front to front and back to back, so keep traversing toward whatever side we didn't come from
+            if (train.frontLink != previousTrain) {
+                previousTrain = train;
+                train = train.frontLink;
+            }
+            else {
+                previousTrain = train;
+                train = train.backLink;
+            }
+        }
+        // Both front and back didn't find anything, so there's no pulling locomotive.
+        return 0;
     }
 
     /**
@@ -1060,6 +1128,20 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
             case 1: {return new int[]{1,200,0xFF0000};}
             default: {return new int[]{1,10,0xCCCC11};}
         }
+    }
+
+    /**
+     * returns a list of TrainParticle, this uses the legacy system for steam/smoke etc,
+     *     but with an optimized container.
+     *     example:
+     *     return new TrainParticle[]{
+     *         new TrainParticle(type,density, new double[]{x,y,z}),
+     *         new TrainParticle(type,density, new double[]{x,y,z}),
+     *         etc
+     *         };
+     */
+    public TrainParticle[] getEffects(){
+        return null;
     }
 
     public ItemStack[] getRecipe(){return null;}

@@ -1,9 +1,9 @@
 package train.client.gui;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.world.World;
 import org.lwjgl.opengl.GL11;
 import train.common.containers.ContainerWorkbenchCart;
@@ -21,8 +21,8 @@ public class GuiCraftingCart extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int i, int j) {
-        this.fontRenderer.drawString(I18n.format("container.crafting"), 28, 6, 4210752);
-        this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRendererObj.drawString(CommonUtil.translate("container.crafting"), 28, 6, 4210752);
+        this.fontRendererObj.drawString(CommonUtil.translate("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
     @Override

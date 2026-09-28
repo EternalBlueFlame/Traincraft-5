@@ -212,7 +212,7 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 			if (skins != null && !skins.isEmpty()) {
 				cart.setColor(skins.get(new Random().nextInt((skins.size() - 1))).addr);
 			}
-			world.spawnEntityInWorld(cart);
+			ebf.tim.utility.CommonUtil.spawnEntity(world, cart);
 			cart.setInformation("VillagerJoe", "VillagerJoe", cart.getCartItem().getItem().getItemStackDisplayName(cart.getCartItem()), -1);
 		}
 		int j2 = this.getXWithOffset(3, 8);
@@ -221,21 +221,21 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 
 		if (structureboundingbox.isVecInside(new Vec3i(j2, k2, l2))) {
 			int rD = random.nextInt(8);
-			EntityRollingStock cart = new EntityFreightWood2(world,j2 + 0.5D, k2, l2 + 0.5D);
+			EntityRollingStock cart = new EntityFreightWood2(world);
 			if (rD == 0)
-				cart = new EntityCaboose(world,j2 + 0.5D, k2, l2 + 0.5D);
+				cart = new EntityCaboose(world);
 			if (rD == 1)
-				cart = new EntityCaboose3(world,j2 + 0.5D, k2, l2 + 0.5D);
+				cart = new EntityCaboose3(world);
 			if (rD == 2)
-				cart = new EntityFreightCart(world,j2 + 0.5D, k2, l2 + 0.5D);
+				cart = new EntityFreightCart(world);
 			if (rD == 3)
-				cart = new EntityPassenger2(world,j2 + 0.5D, k2, l2 + 0.5D);
+				cart = new EntityPassenger2(world);
 			if (rD == 4)
-				cart = new EntityStockCar(world,j2 + 0.5D, k2, l2 + 0.5D);
+				cart = new EntityStockCar(world);
 			if (rD == 5)
-				cart = new EntityBoxCartUS(world,j2 + 0.5D, k2, l2 + 0.5D);
+				cart = new EntityBoxCartUS(world);
 			if (rD == 6)
-				cart = new EntityFreightCartSmall(world,j2 + 0.5D, k2, l2 + 0.5D);
+				cart = new EntityFreightCartSmall(world);
 			cart.setLocationAndAngles(j2 + 0.5D, k2, l2 + 0.5D, 90.0F, 0.0F);
 			if (rD == 4) {
 				cart.setSkin("Blue");
@@ -243,8 +243,7 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 			if (rD == 5) {
 				cart.setSkin("Brown");
 			}
-			world.spawnEntity(cart);
-			cart.entityData.putString("ownername","VillagerJoe");
+			ebf.tim.utility.CommonUtil.spawnEntity(world, cart);
 		}
 
 		return true;

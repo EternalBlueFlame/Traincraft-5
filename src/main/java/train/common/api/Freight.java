@@ -20,10 +20,6 @@ public abstract class Freight extends EntityRollingStock {
         dataWatcher.addObject(22, 0);
         cargoItems = new ItemStack[getSizeInventory()];
     }
-    public Freight(World world, double d, double d1, double d2) {
-        super(world, d, d1, d2);
-        cargoItems = new ItemStack[getSizeInventory()];
-    }
 
     @Override
     public boolean attackEntityFrom(DamageSource damagesource, float i) {

@@ -35,7 +35,7 @@ public class SlotResultTier extends Slot {
 	@Override
 	public void onPickupFromSlot(EntityPlayer player, ItemStack itemstack) {
 		for (int i = 0; i < 10; i++) {
-			if (inventory.getStackInSlot(i) != null) {
+			if (!CommonUtil.isItemStackEmpty(inventory.getStackInSlot(i))) {
 				inventory.decrStackSize(i, TierRecipeManager.getInstance().getTierRecipe(tier2.Tier(), itemstack).toDecrease(i));
 			}
 		}

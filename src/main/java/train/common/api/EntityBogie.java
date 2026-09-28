@@ -215,7 +215,10 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	}
 
 	private void moveOnTCRail(int i, int j, int k, Block l) {
-		limitSpeedOnTCRail();
+
+		prevPosX=posX;
+		prevPosY=posY;
+		prevPosZ=posZ;
 
 		if(l instanceof BlockTCRail) {
 			if(!TCRailTypes.isCrossingTrack((TileTCRail) worldObj.getTileEntity(i, j, k)) && !TCRailTypes.isDiagonalCrossingTrack((TileTCRail) worldObj.getTileEntity(i,j,k))) {
@@ -252,7 +255,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			}
 
 			if (goStraight) {
-				moveOnTCStraight(j, meta);
+				moveOnTCStraight(j, Math.abs(vx)>Math.abs(vz)?1:2);
 			} else {
 				moveOnTC90TurnRail(j, lastTrack.r, lastTrack.cx, lastTrack.cz);
 			}
@@ -437,25 +440,19 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		velocity[1] = Math.copySign(norm_cpx * motionSqrt, railPathZ2);
 	}
 
-	private void limitSpeedOnTCRail() {
-		double maxSpeed = Math.min(3.0D, getMaxCartSpeedOnRail());
+	private void limitSpeed(AbstractTrains host, double speedMagnitude) {
 
-		if (this.motionX < -maxSpeed) {
-
-			this.motionX = -maxSpeed;
-		}
-		else if (this.motionX > maxSpeed) {
-
-			this.motionX = maxSpeed;
+		// Default speed for most carts
+		double maxSpeed = this.getMaxCartSpeedOnRail();
+		// Current max speed for locos
+		if (host instanceof Locomotive) {
+			maxSpeed = Math.min(maxSpeed,SpeedHandler.convertSpeed((double)((Locomotive)host).getCurrentMaxSpeed()));
 		}
 
-		if (this.motionZ < -maxSpeed) {
-
-			this.motionZ = -maxSpeed;
-		}
-		else if (this.motionZ > maxSpeed) {
-
-			this.motionZ = maxSpeed;
+		if (speedMagnitude > maxSpeed) {
+			double overspeedFactor = speedMagnitude/maxSpeed;
+			velocity[0] /= overspeedFactor;
+			velocity[1] /= overspeedFactor;
 		}
 	}
 
@@ -465,33 +462,49 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		return  this.entityMainTrain.getOwner();
 	}
 
+	/*
+	 * Velocity needs to be added relative to each bogie's current rotation to prevent drifting between them, as the host's rotation doesn't match when entering curves.
+	 * Always adding in the direction of existing movement prevents reverse, and is unpredictable with null starting velocity, so we compare the bogie's rotation to the host's.
+	 */
 	public void addVelocity(AbstractTrains host, double speed) {
-		//cache rotation so it only has to be processed once per tick
-		Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180 + host.rotationYaw,0);
-		velocity[0] += speed * vec.xCoord;
-		velocity[1] += speed * vec.zCoord;
+		Vec3f bogieRotation;
+		if(Math.abs(prevPosZ-posZ)+Math.abs(prevPosX-posX)>0.1) {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(speed, 0, 0), 0, CommonUtil.atan2degreesf(prevPosZ - posZ, prevPosX - posX), 0);
+		} else {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(-speed, 0, 0), 0, host.rotationYaw, 0);
+		}
+		velocity[0] += bogieRotation.xCoord;
+		velocity[1] += bogieRotation.zCoord;
 	}
 
-	public void multiplyVelocity(AbstractTrains host, double mult) {
-		Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180 + host.rotationYaw,0);
-		velocity[0] *= (mult * vec.xCoord);
-		velocity[1] *= (mult * vec.zCoord);
+	public void addLinking(AbstractTrains host, double speed) {
+		Vec3f bogieRotation;
+		if(Math.abs(prevPosZ-posZ)+Math.abs(prevPosX-posX)>0.1) {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(speed, 0, 0), 0, CommonUtil.atan2degreesf(prevPosZ - posZ, prevPosX - posX), 0);
+		} else {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(-speed, 0, 0), 0, host.rotationYaw, 0);
+		}
+		velocity[2] += bogieRotation.xCoord;
+		velocity[3] += bogieRotation.zCoord;
 	}
 
-	public void addLinking(AbstractTrains host, double speed){
-		//cache rotation so it only has to be processed once per tick
-		Vec3f vec = CommonUtil.rotatePoint(new Vec3f(1,0,0),0,180+host.rotationYaw,0);
-		velocity[2]+=speed*vec.xCoord;
-		velocity[3]+=speed*vec.zCoord;
+	public void multiplyVelocity(double mult) {
+		velocity[0] *= mult;
+		velocity[1] *= mult;
 	}
 
-	public void drag(AbstractTrains host, double drag){
-		velocity[0]*=drag;
-		velocity[1]*=drag;
+	public void setVelocity(AbstractTrains host, double speed){
+		Vec3f bogieRotation;
+		if(Math.abs(prevPosZ-posZ)+Math.abs(prevPosX-posX)>0.1) {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(speed, 0, 0), 0, CommonUtil.atan2degreesf(prevPosZ - posZ, prevPosX - posX), 0);
+		} else {
+			bogieRotation=CommonUtil.rotatePoint(new Vec3f(-speed, 0, 0), 0, host.rotationYaw, 0);
+		}
+		velocity[0] = bogieRotation.xCoord;
+		velocity[1] = bogieRotation.zCoord;
 	}
 
-
-	public World getWorld(){return world;}
+	public World getWorld(){return worldObj;}
 
 	public void minecartMove(AbstractTrains host) {
 		//server only
@@ -500,7 +513,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			yFloor = CommonUtil.floorDouble(this.posY);
 			zFloor = CommonUtil.floorDouble(this.posZ);
 			//prevent moving without velocity
-			if (Math.abs(velocity[0]) + Math.abs(velocity[1] + Math.abs(velocity[2]) + Math.abs(velocity[3])) < 0.0000001) {
+			if (Math.abs(velocity[0]) + Math.abs(velocity[1] + Math.abs(velocity[2]) + Math.abs(velocity[3])) ==0) {
 				return;
 			}
 
@@ -517,12 +530,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 			//detect slopes
 			if(!(l instanceof BlockRailBase || l instanceof BlockTCRail || l instanceof BlockTCRailGag)){
 				prevPosY = posY;
-				if(world.isAirBlock(xFloor, yFloor, zFloor)){
+				if(CommonUtil.getBlockAt(getWorld(),xFloor, yFloor-1, zFloor) instanceof BlockAir){
 					posY--;
 					yFloor--;
-				} else {
-					posY++;
-					yFloor++;
 				}
 				l = CommonUtil.getBlockAt(getWorld(), xFloor, yFloor, zFloor);
 
@@ -539,20 +549,21 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 				oldBlockZ=zFloor;
 			}
 
-
-
 			//move on rails
+			isOnRail = true;
+			double speedMagnitude = Math.sqrt(Math.pow(velocity[0],2)+Math.pow(velocity[1],2))+Math.sqrt(Math.pow(velocity[2],2)+Math.pow(velocity[3],2));
+			limitSpeed(host, speedMagnitude);
 			if (l instanceof BlockRailBase) {
 				this.yOffset=0.3425f;
-				loopVanilla(host, Math.abs(velocity[0])+Math.abs(velocity[1])+Math.abs(velocity[2])+Math.abs(velocity[3]), (BlockRailBase) l);
+				loopVanilla(host, speedMagnitude, (BlockRailBase) l);
 			} else if (l instanceof BlockTCRail || l instanceof BlockTCRailGag){
 				this.yOffset=0.425f;
 				moveOnTCRail(xFloor, yFloor, zFloor, l);
 			} else {
-				posY++;
-				yFloor++;
+				this.yOffset=1.3f;
 				posX+=(velocity[2]+velocity[0])*0.5;
 				posZ+=(velocity[3]+velocity[1])*0.5;
+				isOnRail = false;
 			}
 			velocity[2]=0;velocity[3]=0;
 		}
@@ -562,7 +573,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	private void loopVanilla(AbstractTrains host, double moveLength, BlockRailBase block){
 
 		//try to adhere to limiter track
-		railmax = block.getRailMaxSpeed(getWorld(),this,xFloor, yFloor, zFloor);
+		railmax = CommonUtil.getMaxRailSpeed(getWorld(), block, host, xFloor, yFloor, zFloor);
 		Block blockUp;
 		if(railmax!=0.4f){
 			moveLength=Math.min(moveLength,railmax);
@@ -626,6 +637,9 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		railPathX = (martix[railMetadata][2][0]);
 		railPathZ = (martix[railMetadata][2][1]);
 
+		railPathX = Math.copySign(Math.sqrt(Math.abs(railPathX)),railPathX);
+		railPathZ = Math.copySign(Math.sqrt(Math.abs(railPathZ)),railPathZ);
+
 		//cover moving reverse of track direction using the rotation from the closed loop rather than the full motion
 		if((velocity[0]+velocity[2]) * railPathX + (velocity[1]+velocity[3]) * railPathZ <= 0.0D) {
 			railPathX = -railPathX;
@@ -634,15 +648,15 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 
 		setPositionRelative((currentMotion * railPathX), 0, (currentMotion * railPathZ));
 
-		motionSqrt = Math.abs(velocity[0])+Math.abs(velocity[1]);
+		motionSqrt = Math.sqrt(Math.pow(velocity[0],2)+Math.pow(velocity[1],2));
 		velocity[0] = (float)(motionSqrt * railPathX);
 		velocity[1] = (float)(motionSqrt * railPathZ);
 
-		motionSqrt = Math.abs(velocity[2])+Math.abs(velocity[3]);
+		motionSqrt = Math.sqrt(Math.pow(velocity[2],2)+Math.pow(velocity[3],2));
 		velocity[2] = (float)(motionSqrt * railPathX);
 		velocity[3] = (float)(motionSqrt * railPathZ);
 
-		motionSqrt = Math.abs(velocity[0])+Math.abs(velocity[1])+Math.abs(velocity[2])+Math.abs(velocity[3]);
+		motionSqrt = Math.sqrt(Math.pow(velocity[0],2)+Math.pow(velocity[1],2))+Math.sqrt(Math.pow(velocity[2],2)+Math.pow(velocity[3],2));
 
 		//define the rail path again, to center the transport.
 		railPathX2 = xFloor + 0.5D + martix[railMetadata][0][0];

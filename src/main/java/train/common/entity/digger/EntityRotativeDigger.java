@@ -1,7 +1,8 @@
 package train.common.entity.digger;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
@@ -96,8 +97,8 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         if (world.isRemote) {
             this.wheels = new EntityRotativeWheel[1];
-            this.wheels[0] = new EntityRotativeWheel(this.getWorld(), this, 0, 5.4D, 0, 0, 0.0D);
-            world.spawnEntityInWorld(this.wheels[0]);
+            this.wheels[0] = new EntityRotativeWheel(this.worldObj, this, 0, 5.4D, 0, 0, 0.0D);
+            CommonUtil.spawnEntity(worldObj, this.wheels[0]);
         }
 
         this.dataWatcher.addObject(20, fuel);
@@ -221,7 +222,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
                 entityitem.motionX = (float) rand.nextGaussian() * f3;
                 entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
                 entityitem.motionZ = (float) rand.nextGaussian() * f3;
-                world.spawnEntityInWorld(entityitem);
+                CommonUtil.spawnEntity(worldObj, entityitem);
             } while (true);
         }
         if (wheels != null) {
@@ -374,7 +375,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         for (int j = 0; j < i; j++) {
             double d4 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j)) / i) - 0.125D;
             double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j + 1)) / i) - 0.125D;
-            AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
+            AxisAlignedBB axisalignedbb = CommonUtil.createAABB(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
 
             if (world.isAABBInMaterial(axisalignedbb, Material.water)) {
                 d += 1.0D / i;
@@ -477,7 +478,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             double db = 0 - vecLook.xCoord;
             double dc = 0 - vecLook.zCoord;
             if (db * db + dc * dc > 0.0000001D) {
-                da = (float) ((Math.atan2(dc, db) * 180D) / 3.1415926535897931D);
+                da = CommonUtil.atan2degreesf(dc, db);
             }
 
             double d19;
@@ -519,7 +520,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         if (Math.sqrt((motionX * motionX) + (motionZ * motionZ)) > 0.01) {
             Vec3 pos = Vec3.createVectorHelper(posX, posY - 1, posZ);
-            Block id = world.getBlock((int) posX, (int) posY - 1, (int) posZ);
+            Block id = CommonUtil.getBlockAt(worldObj, (int) posX, (int) posY - 1, (int) posZ);
 
             if (id != null) {
                 this.playMiningEffect(pos, Block.getIdFromBlock(id));
@@ -535,7 +536,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      */
 
     private void playMiningEffect(Vec3 pos, int block_index) {
-        Block id = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
         if (id != null) {
             Minecraft.getMinecraft().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
         }
@@ -577,13 +578,13 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             return;
         }
 
-        getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + passenger.getYOffset() + 1.1F, posZ);
-        if (getPassengers().get(0) instanceof EntityLiving) {
-            pitch = getPassengers().get(0).rotationPitch;
-            if (pitch > Math.toDegrees(pitchLimits))
-                pitch = (float) Math.toDegrees(pitchLimits);
-            if (pitch < Math.toDegrees(-pitchLimits))
-                pitch = (float) Math.toDegrees(-pitchLimits);
+        riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 1.1F, posZ);
+        if (riddenByEntity instanceof EntityLiving) {
+            pitch = riddenByEntity.rotationPitch;
+            if (pitch > pitchLimits * CommonUtil.degreesF)
+                pitch = pitchLimits * CommonUtil.degreesF;
+            if (pitch < -pitchLimits * CommonUtil.degreesF)
+                pitch = -pitchLimits * CommonUtil.degreesF;
         }
     }
 

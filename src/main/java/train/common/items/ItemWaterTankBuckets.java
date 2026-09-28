@@ -1,5 +1,6 @@
 package train.common.items;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemBucket;
@@ -20,13 +21,13 @@ public class ItemWaterTankBuckets extends ItemBucket { // implements IBucketHand
 	}
 
 	public ItemStack fillCustomBucket(World w, int i, int j, int k) {
-		if (w.getBlock(i, j, k) == Blocks.water || w.getBlock(i, j, k) == Blocks.water) {
-			w.setBlockMetadataWithNotify(i, j, k, 0, 0);
+		if (CommonUtil.getBlockAt(w, i, j, k) == Blocks.water || CommonUtil.getBlockAt(w, i, j, k) == Blocks.water) {
+			CommonUtil.setBlockMeta(w, i, j, k, 0, 0);
 			return new ItemStack(this);
 		}
 
-		if (w.getBlock(i, j, k) == Blocks.flowing_water || w.getBlock(i, j, k) == Blocks.flowing_water) {
-			w.setBlockMetadataWithNotify(i, j, k, 0, 0);
+		if (CommonUtil.getBlockAt(w, i, j, k) == Blocks.flowing_water || CommonUtil.getBlockAt(w, i, j, k) == Blocks.flowing_water) {
+			CommonUtil.setBlockMeta(w, i, j, k, 0, 0);
 			return new ItemStack(this);
 		}
 		return null;

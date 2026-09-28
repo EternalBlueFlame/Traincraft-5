@@ -7,7 +7,8 @@ package train.common.blocks.tracks;
 
 import cofh.api.energy.IEnergyHandler;
 import cofh.api.energy.IEnergyProvider;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.electricity.IElectricGrid;
@@ -55,7 +56,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 
 	private Block getThisBlock() {
 		if (thisBlock == null) {
-			thisBlock = getWorld().getBlockState(new BlockPos(getX(), getY(), getZ())).getBlock();
+			thisBlock = CommonUtil.getBlockAt(getWorld(), getX(), getY(), getZ());
 		}
 		return thisBlock;
 	}
@@ -151,9 +152,9 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 	}
 
 	private void notifyNeighbors() {
-		Block block = getWorld().getBlockState(new BlockPos(getX(), getY(), getZ())).getBlock();
-		getWorld().notifyNeighborsOfStateChange(new BlockPos(getX(), getY(), getZ()), block, true);
-		getWorld().notifyNeighborsOfStateChange(new BlockPos(getX(), getY() - 1, getZ()), block, true);
+		Block block = CommonUtil.getBlockAt(getWorld(), getX(), getY(), getZ());
+		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
+		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
 
 		markBlockNeedsUpdate();
 	}
@@ -167,7 +168,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 		
 		if ((current != null) && ((current.getItem() instanceof IToolCrowbar))) {
 			IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-			player.sendMessage(new TextComponentString("stored: " + (this.RFChandler.getCharge()) + "/"+(int)this.getMaxEnergy()+" RF"));
+			ebf.tim.utility.CommonUtil.sendChat(player, "stored: " + (this.RFChandler.getCharge()) + "/"+(int)this.getMaxEnergy()+" RF");
 			markBlockNeedsUpdate();
 			crowbar.onWhack(player, current, getX(), getY(), getZ());
 			sendUpdateToClient();

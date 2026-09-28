@@ -28,10 +28,6 @@ public class EntityPassengerCar1 extends EntityRollingStock implements IPassenge
 
     public static final Item thisItem = new ItemRollingStock(new EntityPassengerCar1(null), Info.modID, Traincraft.tcTab);
 
-
-    public EntityPassengerCar1(World world, double d, double d1, double d2) {
-        super(world, d, d1, d2);
-    }
     public EntityPassengerCar1(World world){
         super(world);
     }

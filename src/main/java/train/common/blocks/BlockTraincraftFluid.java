@@ -1,7 +1,8 @@
 package train.common.blocks;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.util.IIcon;
@@ -72,12 +73,12 @@ public class BlockTraincraftFluid extends BlockFluidClassic {
 
 	@Override
 	public boolean canDisplace(IBlockAccess world, int x, int y, int z) {
-		return  (world.getBlock(x,  y,  z).getMaterial().isLiquid() && super.canDisplace(world, x, y, z));
+		return  (CommonUtil.getBlockAt(world, x, y, z).getMaterial().isLiquid() && super.canDisplace(world, x, y, z));
 	}
 	
 	@Override
 	public boolean displaceIfPossible(World world, int x, int y, int z) {
-		return (!world.getBlock(x,  y,  z).getMaterial().isLiquid() && super.displaceIfPossible(world, x, y, z));
+		return (!CommonUtil.getBlockAt(world, x,  y,  z).getMaterial().isLiquid() && super.displaceIfPossible(world, x, y, z));
 	}
 	
 	@Override

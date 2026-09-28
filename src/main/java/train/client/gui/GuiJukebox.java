@@ -292,7 +292,7 @@ public class GuiJukebox extends GuiScreen {
                     this.initGui();
                 }
             } else if (player != null) {
-                player.addChatMessage(new TextComponentString("You are not the owner"));
+                ebf.tim.utility.CommonUtil.sendChat(player, "You are not the owner");
             }
         }
     }

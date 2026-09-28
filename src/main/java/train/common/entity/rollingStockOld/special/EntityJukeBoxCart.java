@@ -32,16 +32,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 		side = FMLCommonHandler.instance().getEffectiveSide();
 	}
 
-	public EntityJukeBoxCart(World world, double d, double d1, double d2) {
-		this(world);
-		setPosition(d, d1 + yOffset, d2);
-		motionX = 0.0D;
-		motionY = 0.0D;
-		motionZ = 0.0D;
-		prevPosX = d;
-		prevPosY = d1;
-		prevPosZ = d2;
-	}
+
 
 	@Override
 	public boolean attackEntityFrom(DamageSource damagesource, float i) {
@@ -180,8 +171,8 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 			return false;
 		}
 		if (locked && !entityplayer.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
-			if (!world.isRemote)
-				entityplayer.addChatMessage(new ChatComponentText("this train is locked"));
+			if (!worldObj.isRemote)
+				ebf.tim.utility.CommonUtil.sendChat(entityplayer, "this train is locked");
 			return true;
 		}
 		

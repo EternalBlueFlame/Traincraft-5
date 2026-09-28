@@ -2,7 +2,8 @@ package train.common.api;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import net.minecraftforge.fml.client.FMLClientHandler;
+import cpw.mods.fml.client.FMLClientHandler;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.player.EntityPlayer;
@@ -67,10 +68,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         }
     }
 
-    public AbstractControlCar(World world, double d, double d1, double d2)
-    {
-        super(world);
-    }
+    
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound nbttagcompound)
@@ -202,11 +200,11 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         {
             if (sounds.getEntityClass() != null && sounds.getEntityClass().equals(this.getClass()) && whistleDelay == 0)
             {
-                // world.playSoundAtEntity(this, Info.resourceLocation + ":" + sounds.getHornString(), sounds.getHornVolume(), 1.0F);
+                CommonUtil.playSound(this, Info.resourceLocation + ":" + sounds.getHornString(), sounds.getHornVolume(), 1.0F);
                 whistleDelay = 65;
             }
         }
-        List entities = world.getEntitiesWithinAABB(EntityAnimal.class, new AxisAlignedBB(
+        List entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, ebf.tim.utility.CommonUtil.createAABB(
                 this.posX-20,this.posY-5,this.posZ-20,
                 this.posX+20,this.posY+5,this.posZ+20));
 

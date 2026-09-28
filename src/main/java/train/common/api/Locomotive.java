@@ -106,7 +106,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     /**
      * These variables are used to display changes in the GUI
      */
-    public int currentNumCartsPulled = 0;
     public double currentMassPulled = 0;
     public double currentSpeedSlowDown = 0;
     public double currentAccelSlowDown = 0;
@@ -128,7 +127,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     public Locomotive(World world) {
         super(world);
         if(world==null){return;}
-        setFuelConsumption(0);
+        setFuelConsumption(getSpecFuelConsumption());
         dataWatcher.addObject(2, 0);
         this.setDefaultMass(0);
         this.setCustomSpeed(transportTopSpeed());
@@ -141,8 +140,8 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         dataWatcher.addObject(28, lightingDetailsJSONString());
 
         //dataWatcher.addObject(32, lineWaypoints);
-        setAccel(0);
-        setBrake(0);
+        setAccel(getSpecAccel());
+        setBrake(getSpecBrake());
         this.entityCollisionReduction = 0.99F;
         if (this instanceof SteamTrain) isLocoTurnedOn = true;
         char[] chars = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
@@ -158,11 +157,6 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
             attemptConnection(serverUUID);
         }
 
-        fuelTrain = 0;
-    }
-
-    public Locomotive(World world, double d, double d1, double d2) {
-        super(world, d, d1, d2);
         fuelTrain = 0;
     }
 
@@ -293,10 +287,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         if (c != 0) {
             return fuelRate = c;
         }
-        return fuelRate = setFuelConsumption();
+        return fuelRate = getSpecFuelConsumption();
 
     }
-    public int setFuelConsumption() {
+    public int getSpecFuelConsumption() {
         return getSpec()==null?80:getSpec().getFuelConsumption();
     }
 
@@ -307,6 +301,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
      */
     public int getFuelConsumption() {
         return fuelRate == 0 ? getSpec().getFuelConsumption() : fuelRate;
+    }
+
+    public int getWaterConsumption() {
+        return getSpec().getWaterConsumption();
     }
 
     /**
@@ -323,10 +321,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                     updateLinks();
                 }
             }
-            return accelerate = setAccel();
+            return accelerate = getSpecAccel();
         }
     }
-    public double setAccel() {
+    public double getSpecAccel() {
         return getSpec()==null?0.4:getSpec().getAccelerationRate();
     }
 
@@ -339,11 +337,11 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         if (rate != 0) {
             return brake = rate;
         } else {
-            return brake = setBrake();
+            return brake = getSpecBrake();
         }
     }
 
-    public double setBrake() {
+    public double getSpecBrake() {
         return getSpec()==null?0.97:getSpec().getBrakeRate();
     }
 
@@ -572,29 +570,16 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
 
     public float transportTopSpeed(){return getSpec().getMaxSpeed();}
 
-    private double convertSpeed(double speed) {
-        if (ConfigHandler.REAL_TRAIN_SPEED) {
-            speed *= 2;// applying ratio
-        } else {
-            speed *= 6;
-        }
-        speed *= 36;
-        //speed *= 10;// convert in ms
-        //speed *= 6;// applying ratio
-        //speed *= 3.6;// convert in km/h
-        return speed;
-    }
-
     public void soundHorn() {
         if(soundHorn==null){
             soundHorn=getHorn();
         }
         if (soundHorn != null && !soundHorn.addr.isEmpty() && whistleDelay == 0) {
-            worldObj.playSoundAtEntity(this, soundHorn.addr, soundHorn.vol, soundHorn.pit);
+            CommonUtil.playSound(this, soundHorn.addr, soundHorn.vol, soundHorn.pit);
             whistleDelay = 65;
         }
 
-        List<?> entities = world.getEntitiesWithinAABB(EntityAnimal.class, AxisAlignedBB.getBoundingBox(
+        List<?> entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, CommonUtil.createAABB(
                 this.posX - 20, this.posY - 5, this.posZ - 20,
                 this.posX + 20, this.posY + 5, this.posZ + 20));
 
@@ -611,7 +596,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
             soundBell=getBell();
         }
         if (soundBell != null && !soundBell.addr.isEmpty() && whistleDelay == 0) {
-            world.playSoundAtEntity(this, soundBell.addr, soundBell.vol, soundBell.pit);
+            CommonUtil.playSound(this, soundBell.addr, soundBell.vol, soundBell.pit);
             whistleDelay = 65;
         }
     }
@@ -674,7 +659,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                     }
                 }
 
-                Traincraft.slotschannel.sendToAllAround(new PacketSlotsFilled(this, slotsFilled), new TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                Traincraft.slotschannel.sendToAllAround(new PacketSlotsFilled(this, slotsFilled), new TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
             }
             /**
              * Fuel consumption
@@ -703,7 +688,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                 if (getFuel() > 0 && this.isLocoTurnedOn()) {
                     double speed = Math.sqrt(motionX * motionX + motionZ * motionZ);
                     if (speed > -0.001D && speed < 0.01D && soundPosition == 0) {
-                        worldObj.playSoundAtEntity(this, soundIdle.addr, soundIdle.vol, soundIdle.pit);
+                        CommonUtil.playSound(this, soundIdle.addr, soundIdle.vol, soundIdle.pit);
                         soundPosition = soundIdle.len;
                     }
 
@@ -712,18 +697,18 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                     }
                     if (soundRunning!=null && soundRunning.runningPitch && !soundRunning.addr.isEmpty() && whistleDelay == 0) {
                         if (speed > 0.01D && speed < 0.06D && soundPosition == 0) {
-                            worldObj.playSoundAtEntity(this, soundRunning.addr, soundRunning.vol, soundRunning.pit-0.3f);
+                            CommonUtil.playSound(this, soundRunning.addr, soundRunning.vol, soundRunning.pit-0.3f);
                             soundPosition = soundRunning.len;
                         } else if (speed > 0.06D && speed < 0.2D && soundPosition == 0) {
-                            worldObj.playSoundAtEntity(this, soundRunning.addr, soundRunning.vol, soundRunning.pit-0.1f);
+                            CommonUtil.playSound(this, soundRunning.addr, soundRunning.vol, soundRunning.pit-0.1f);
                             soundPosition = soundRunning.len / 2;
                         } else if (speed > 0.2D && soundPosition == 0) {
-                            worldObj.playSoundAtEntity(this, soundRunning.addr, soundRunning.vol, soundRunning.pit);
+                            CommonUtil.playSound(this, soundRunning.addr, soundRunning.vol, soundRunning.pit);
                             soundPosition = soundRunning.len / 3;
                         }
                     } else {
                         if (speed > 0.01D && soundPosition == 0) {
-                            worldObj.playSoundAtEntity(this, soundRunning.addr, soundRunning.vol, soundRunning.pit);
+                            CommonUtil.playSound(this, soundRunning.addr, soundRunning.vol, soundRunning.pit);
                             soundPosition = soundRunning.len;
                         }
                     }
@@ -810,15 +795,15 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                     speedLimit = (int) Math.round(distanceFromSpeedChange);
                     speedGoingDown = true;
 
-                    Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                    Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                     if (distanceFromSpeedChange <= 6) {
                         this.xSpeedLimitChange = 0.0;
                         this.ySpeedLimitChange = 0.0;
                         this.zSpeedLimitChange = 0.0;
                         speedLimit = nextSpeedLimit;
                         this.nextSpeedLimit = 0;
-                        Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
-                        Traincraft.itnsChannel.sendToAllAround(new PacketNextSpeed( nextSpeedLimit, 0,0,0, xSpeedLimitChange, ySpeedLimitChange, zSpeedLimitChange, this.getEntityId()), new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                        Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
+                        Traincraft.itnsChannel.sendToAllAround(new PacketNextSpeed( nextSpeedLimit, 0,0,0, xSpeedLimitChange, ySpeedLimitChange, zSpeedLimitChange, this.getEntityId()), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                         speedGoingDown = false;
                     }
 
@@ -826,18 +811,18 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
 
                 if (distanceFromStopPoint >= 40 && distanceFromStopPoint < this.speedLimit && !(xFromStopPoint == 0.0) && mtcType == 1){
                     this.speedLimit = (int)Math.round(distanceFromStopPoint);
-                    Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                    Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                     speedGoingDown = true;
                 }
                 if (distanceFromStopPoint >= 10 && distanceFromStopPoint < this.speedLimit && !(xFromStopPoint == 0.0) && mtcType == 2){
                     this.speedLimit = (int)Math.round(distanceFromStopPoint);
-                    Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                    Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                     speedGoingDown = true;
                 }
 
 				/*if (distanceFromStopPoint < this.getSpeed() && !(distanceFromStopPoint < nextSpeedLimit)  && !(this instanceof EntityLocoElectricPeachDriverlessMetro)) {
 					speedLimit = (int) Math.round(distanceFromStopPoint);
-					Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D) );
+                    Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(this.speedLimit, (int) this.posX, (int) this.posY, (int) this.posZ, getEntityId()), new TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D) );
 				}*/
                 //For Automatic Train Operation
                 if (this.atoStatus == 1) {
@@ -887,10 +872,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                         this.atoStatus = 0;
                         this.stationStop = true;
 
-                        Traincraft.atoChannel.sendToAllAround(new PacketATO(this.getEntityId(), 0),new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                        Traincraft.atoChannel.sendToAllAround(new PacketATO(this.getEntityId(), 0),new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
 
-                        Traincraft.atoSetStopPoint.sendToAllAround(new PacketATOSetStopPoint(this.getEntityId(), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
-                        Traincraft.brakeChannel.sendToAllAround(new PacketParkingBrake(true, this.getEntityId()), new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                        Traincraft.atoSetStopPoint.sendToAllAround(new PacketATOSetStopPoint(this.getEntityId(), 0.0, 0.0, 0.0, 0.0, 0.0, 0.0), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
+                        Traincraft.brakeChannel.sendToAllAround(new PacketParkingBrake(true, this.getEntityId()), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                         JsonObject sendingObj = new JsonObject();
                         sendingObj.addProperty("funct", "stationstopcomplete");
                         sendMessage(new PDMMessage(this.trainID, serverUUID, sendingObj.toString(), 0));
@@ -901,7 +886,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
 
         super.onUpdate();
         if (!worldObj.isRemote) {
-            dataWatcher.updateObject(25, (int)Math.round(convertSpeed(Math.sqrt(bogieBack.velocity[0] * bogieBack.velocity[0] + bogieBack.velocity[1] * bogieBack.velocity[1]))));
+            dataWatcher.updateObject(25, (int)Math.round(SpeedHandler.convertSpeedInv(Math.sqrt(bogieBack.velocity[0] * bogieBack.velocity[0] + bogieBack.velocity[1] * bogieBack.velocity[1]))));
             dataWatcher.updateObject(24, fuelTrain);
             dataWatcher.updateObject(20, overheatLevel);
             dataWatcher.updateObject(23, locoState);
@@ -1065,12 +1050,12 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
 
     public String guiDetailsJSON() {
         JsonObject gui = new JsonObject();
-        gui.addProperty("cartsPulled", currentNumCartsPulled);
+        gui.addProperty("cartsPulled", consist.size()-1);
         gui.addProperty("massPulled", currentMassPulled);
         gui.addProperty("slowDown", Math.round(currentSpeedSlowDown));
-        gui.addProperty("accelSlowDown", currentAccelSlowDown);
-        gui.addProperty("brakeSlowDown", currentBrakeSlowDown);
-        gui.addProperty("fuelUseChange", currentFuelConsumptionChange);
+        gui.addProperty("accelSlowDown", (double)Math.round(currentAccelSlowDown*1000)/1000);
+        gui.addProperty("brakeSlowDown", (double)Math.round(currentBrakeSlowDown*1000)/1000);
+        gui.addProperty("fuelUseChange", (double)Math.round(currentFuelConsumptionChange*1000)/1000);
         return gui.toString();
     }
 
@@ -1252,7 +1237,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     public void markDirty() {
         super.markDirty();
         if (!worldObj.isRemote) {
-            Traincraft.slotschannel.sendToAllAround(new PacketSlotsFilled(this, slotsFilled), new TargetPoint(this.worldObj.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+            Traincraft.slotschannel.sendToAllAround(new PacketSlotsFilled(this, slotsFilled), new TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
         }
     }
 
@@ -1307,10 +1292,10 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                 mtcType = 2;
                 mtcStatus = thing.get("mtcStatus").getAsInt();
                 isConnected = true;
-                Traincraft.mscChannel.sendToAllAround(new PacketMTC(getEntityId(), mtcStatus, 2), new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                Traincraft.mscChannel.sendToAllAround(new PacketMTC(getEntityId(), mtcStatus, 2), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                 speedLimit = thing.get("speedLimit").getAsInt();
                 nextSpeedLimit = thing.get("nextSpeedLimit").getAsInt();
-                Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(speedLimit, 0, 0, 0, getEntityId()), new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(speedLimit, 0, 0, 0, getEntityId()), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                 if (nextSpeedLimit != 0) {
                     xSpeedLimitChange = thing.get("nextSpeedLimitChangeX").getAsDouble();
                     ySpeedLimitChange = thing.get("nextSpeedLimitChangeY").getAsDouble();
@@ -1320,18 +1305,18 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
             } else if (thing.get("funct").getAsString().equals("response")) {
                 mtcType = 2;
                 this.mtcStatus = thing.get("mtcStatus").getAsInt();
-                Traincraft.mscChannel.sendToAllAround(new PacketMTC(getEntityId(), mtcStatus, 2), new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                Traincraft.mscChannel.sendToAllAround(new PacketMTC(getEntityId(), mtcStatus, 2), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                 nextSpeedLimit = thing.get("nextSpeedLimit").getAsInt();
                 if (!speedGoingDown && xFromStopPoint == 0.0) {
                     speedLimit = thing.get("speedLimit").getAsInt();
-                    Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(speedLimit, 0, 0, 0, getEntityId()), new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                    Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(speedLimit, 0, 0, 0, getEntityId()), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                 }
 
                 if (thing.get("speedChange").getAsBoolean()) {
                     xSpeedLimitChange = thing.get("nextSpeedLimitChangeX").getAsDouble();
                     ySpeedLimitChange = thing.get("nextSpeedLimitChangeY").getAsDouble();
                     zSpeedLimitChange = thing.get("nextSpeedLimitChangeZ").getAsDouble();
-                    Traincraft.itnsChannel.sendToAllAround(new PacketNextSpeed(nextSpeedLimit, 0, 0, 0, xSpeedLimitChange, ySpeedLimitChange, zSpeedLimitChange, this.getEntityId()), new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                    Traincraft.itnsChannel.sendToAllAround(new PacketNextSpeed(nextSpeedLimit, 0, 0, 0, xSpeedLimitChange, ySpeedLimitChange, zSpeedLimitChange, this.getEntityId()), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                 }
 
                 if (thing.get("endSoon").getAsBoolean()) {
@@ -1339,7 +1324,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                         xFromStopPoint = thing.get("xStopPoint").getAsDouble();
                         yFromStopPoint = thing.get("yStopPoint").getAsDouble();
                         zFromStopPoint = thing.get("zStopPoint").getAsDouble();
-                        Traincraft.atoSetStopPoint.sendToAllAround(new PacketATOSetStopPoint(this.getEntityId(), xFromStopPoint, yFromStopPoint, zFromStopPoint, xStationStop, yStationStop, zStationStop), new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                        Traincraft.atoSetStopPoint.sendToAllAround(new PacketATOSetStopPoint(this.getEntityId(), xFromStopPoint, yFromStopPoint, zFromStopPoint, xStationStop, yStationStop, zStationStop), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                     }
                 }
 
@@ -1348,12 +1333,12 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                     yStationStop = thing.get("yStationStop").getAsDouble();
                     zStationStop = thing.get("zStationStop").getAsDouble();
 
-                    Traincraft.atoSetStopPoint.sendToAllAround(new PacketATOSetStopPoint(this.getEntityId(), xFromStopPoint, yFromStopPoint, zFromStopPoint, xStationStop, yStationStop, zStationStop), new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                    Traincraft.atoSetStopPoint.sendToAllAround(new PacketATOSetStopPoint(this.getEntityId(), xFromStopPoint, yFromStopPoint, zFromStopPoint, xStationStop, yStationStop, zStationStop), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                 }
 
                 if (thing.get("atoStatus") != null) {
                     this.atoStatus = thing.get("atoStatus").getAsInt();
-                    Traincraft.atoChannel.sendToAllAround(new PacketATO(this.getEntityId(), thing.get("atoStatus").getAsInt()), new NetworkRegistry.TargetPoint(this.world.provider.dimensionId, this.posX, this.posY, this.posZ, 150.0D));
+                    Traincraft.atoChannel.sendToAllAround(new PacketATO(this.getEntityId(), thing.get("atoStatus").getAsInt()), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(this.worldObj), this.posX, this.posY, this.posZ, 150.0D));
                 }
             }
         }
@@ -1362,8 +1347,8 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     @Override
     public void sendMessage(PDMMessage message) {
         //	System.out.println("Sendmessage..");
-        AxisAlignedBB targetBox = AxisAlignedBB.getBoundingBox(this.posX, this.posY, this.posZ, this.posX + 2000, this.posY + 2000, this.posZ + 2000);
-        List<TileEntity> allTEs = world.loadedTileEntityList;
+        AxisAlignedBB targetBox = CommonUtil.createAABB(this.posX, this.posY, this.posZ, this.posX + 2000, this.posY + 2000, this.posZ + 2000);
+        List<TileEntity> allTEs = worldObj.loadedTileEntityList;
         for (TileEntity te : allTEs) {
 
             if (te instanceof TilePDMInstructionRadio) {

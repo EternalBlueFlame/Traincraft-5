@@ -48,6 +48,30 @@ public class CommonUtil {
     public static final float degreesF = (float) (180.0d / Math.PI);
     private static List<String> loggedLangChecks = new ArrayList<>();
 
+    /** Creates a bounding box using the version-specific construction API. */
+    public static AxisAlignedBB createAABB(double minX, double minY, double minZ, double maxX, double maxY, double maxZ){
+        return AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
+    /** Returns whether a stack represents an empty inventory slot. */
+    public static boolean isItemStackEmpty(ItemStack stack){
+        return stack == null || stack.stackSize <= 0;
+    }
+
+    /** Sends a plain-text player message through the version-specific chat API. */
+    public static void sendChat(EntityPlayer player, String message){
+        player.addChatMessage(new ChatComponentText(message));
+    }
+
+    /** Returns the dimension containing the world. */
+    public static int getDimensionId(World world){
+        return world.provider.dimensionId;
+    }
+
+    /** Spawns an entity in the world and reports whether it was accepted. */
+    public static boolean spawnEntity(World world, Entity entity){
+        return world.spawnEntityInWorld(entity);
+    }
 
 
     /**redirect shorthand that typecasts doubles to ints
@@ -72,6 +96,14 @@ public class CommonUtil {
 
     public static boolean setBlock(World w, int x, int y, int z, Block b){
         return w.setBlockState(new BlockPos(x,y,z), b.getDefaultState());
+    }
+
+    public static boolean setBlock(World w, int x, int y, int z, Block b, int meta, int flags){
+        return w.setBlock(x, y, z, b, meta, flags);
+    }
+
+    public static boolean setBlockMeta(World w, int x, int y, int z, int meta, int flags){
+        return w.setBlockMetadataWithNotify(x, y, z, meta, flags);
     }
 
     public static void setBlockMeta(World w, int x, int y, int z, int meta){

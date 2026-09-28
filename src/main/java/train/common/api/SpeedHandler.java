@@ -8,56 +8,20 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import train.common.core.handlers.ConfigHandler;
 
+/*
+ * Convert between internal TC velocity and minecart velocity
+ **/
 public class SpeedHandler {
 
-	public static double handleSpeed(double railMaxSpeed, double maxSpeed, Entity entity) {
-		if(entity instanceof Locomotive) {
-			if (railMaxSpeed < 0.4f) {
-				return Math.min(convertSpeed(entity, maxSpeed), railMaxSpeed);
-			} else if (railMaxSpeed > 0.45f && railMaxSpeed < 1.1f ) {
-				return convertSpeed(entity, maxSpeed) + 0.2f;
-			}
-
-			return convertSpeed(entity, maxSpeed);
-		}else {
-			return 15;
-		}
+	public static double convertSpeed(double speed) {
+		speed /= ConfigHandler.REAL_TRAIN_SPEED?2f:6f;
+		speed /= 36f; // /10 for minecraft speed
+		return speed;
 	}
 
-	/**
-	 * 
-	 * @param world
-	 * @param i
-	 * @param j
-	 * @param k
-	 * @return
-	 */
-	public static boolean isSpeedRailAt(World world, int i, int j, int k) {
-		Block block = world.getBlock(i, j, k);
-		//Block block = Block.blocksList[id];
-		if (block != null && block.getClass().getName().equals("IRailSpeed")) {
-			return true;
-		}
-		TileEntity tile = world.getTileEntity(i, j, k);
-		return tile != null && tile.getClass().getName().equals("IRailSpeed");
-	}
-
-	public double speedXFromPitch(EntityPlayer player, double var3) {
-		//System.out.println("X Y: " + player.rotationYaw + " |P: " + player.rotationPitch + " |Sin: " + (-MathHelper.sin(player.rotationYaw / 180.0F * (float) Math.PI)) + " |Cos: " + (MathHelper.cos(player.rotationPitch / 180.0F * (float) Math.PI)));
-		return -MathHelper.sin(player.rotationYaw / 180.0F * (float) Math.PI) * var3 * MathHelper.cos(player.rotationPitch / 180.0F * (float) Math.PI) * var3;
-	}
-
-	public double speedZFromPitch(EntityPlayer player, double var3) {
-		//System.out.println("Z Y: " + player.rotationYaw + " |P: " + player.rotationPitch + " |Sin: " + (-MathHelper.sin(player.rotationYaw / 180.0F * (float) Math.PI)) + " |Cos: " + (MathHelper.cos(player.rotationPitch / 180.0F * (float) Math.PI)));
-		return MathHelper.cos(player.rotationYaw / 180.0F * (float) Math.PI) * var3 * MathHelper.cos(player.rotationPitch / 180.0F * (float) Math.PI) * var3;
-	}
-
-	/**
-	 * 
-	 */
-	private static double convertSpeed(Entity entity, double maxSpeed) {
-		double speed = ((Locomotive) entity).getMaxSpeed()*0.2775d;// speed is in m/s
-		speed /= ConfigHandler.REAL_TRAIN_SPEED?2d:6d;// applying ratio
-		return speed/10d;// converted in minecraft speed
+	public static double convertSpeedInv(double speed) {
+		speed *= ConfigHandler.REAL_TRAIN_SPEED ? 2 : 6;
+		speed *= 36; // *10 for minecraft speed
+		return speed;
 	}
 }

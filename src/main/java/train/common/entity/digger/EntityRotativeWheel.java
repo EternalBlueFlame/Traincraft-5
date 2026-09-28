@@ -1,7 +1,8 @@
 package train.common.entity.digger;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.BlockTorch;
@@ -163,15 +164,15 @@ public class EntityRotativeWheel extends Entity {
             return;
         }
 
-        Block id = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
-        int meta = world.getBlockMetadata((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        int meta = CommonUtil.getBlockFacing(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
         if (id != null) {
             this.playMiningEffect(pos, id);
         }
 
         if (!shouldIgnoreBlockForHarvesting(pos, id)) {
-            id.harvestBlock(getWorld(), fakePlayer, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, meta);
-            world.setBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, null);
+            id.harvestBlock(worldObj, fakePlayer, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, meta);
+            CommonUtil.setBlock(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, null);
 
             world.playAuxSFX(2001, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, Block.getIdFromBlock(id) + (meta << 12));
             this.playMiningEffect(pos, id);
@@ -209,7 +210,7 @@ public class EntityRotativeWheel extends Entity {
     @SideOnly(Side.CLIENT)
     private void playMiningEffect(Vec3 pos, Block block_index) {
         miningTickCounter++;
-        Block id = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
     }
 
     /**

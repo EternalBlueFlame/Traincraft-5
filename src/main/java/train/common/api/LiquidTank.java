@@ -1,12 +1,12 @@
 package train.common.api;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
@@ -43,9 +43,6 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
         dataWatcher.addObject(4, 0);
         dataWatcher.addObject(22, "");
 
-    }
-    public LiquidTank(World world, double d, double d1, double d2) {
-        super(world, d, d1, d2);
     }
 
     public int getAmount() {
@@ -85,10 +82,10 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
 
         if (ticksExisted % 5 == 0 && fill(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
             FluidStack drain = null;
-            blocksToCheck = new TileEntity[]{world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
-                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
-                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
-                    world.getTileEntity(MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
+            blocksToCheck = new TileEntity[]{worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY - 1), CommonUtil.floorDouble(posZ)),
+                    worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 2), CommonUtil.floorDouble(posZ)),
+                    worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 3), CommonUtil.floorDouble(posZ)),
+                    worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 4), CommonUtil.floorDouble(posZ))
             };
 
             for (TileEntity block : blocksToCheck) {

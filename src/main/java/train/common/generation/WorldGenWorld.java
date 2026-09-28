@@ -24,7 +24,7 @@ public class WorldGenWorld implements IWorldGenerator {
 
 	@Override
 	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
-		RetrogenHandler.gennedChunks.add(new RetrogenHandler.ChunkData(chunkX, chunkZ, world.provider.dimensionId));
+		RetrogenHandler.gennedChunks.add(new RetrogenHandler.ChunkData(chunkX, chunkZ, ebf.tim.utility.CommonUtil.getDimensionId(world)));
 		if(world.provider.terrainType != WorldType.FLAT){
 
 			if (ConfigHandler.ORE_GEN) {

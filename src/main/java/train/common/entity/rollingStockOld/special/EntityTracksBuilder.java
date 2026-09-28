@@ -2,7 +2,8 @@ package train.common.entity.rollingStockOld.special;
 
 import com.mojang.authlib.GameProfile;
 import cpw.mods.fml.client.FMLClientHandler;
-import net.minecraftforge.fml.common.FMLCommonHandler;
+import cpw.mods.fml.common.FMLCommonHandler;
+import ebf.tim.utility.CommonUtil;
 import mods.railcraft.api.core.items.ITrackItem;
 import mods.railcraft.api.tracks.RailTools;
 import net.minecraft.block.Block;
@@ -37,7 +38,6 @@ import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
 import train.common.core.handlers.FuelHandler;
 import train.common.core.plugins.PluginRailcraft;
-import train.common.core.util.TraincraftUtil;
 import train.common.items.ItemTCRail;
 import train.common.library.GuiIDs;
 
@@ -111,22 +111,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		dataWatcher.addObject(28, 0);
 	}
 
-	public EntityTracksBuilder(World world, double d, double d1, double d2) {
-		this(world);
-		setPosition(d, d1 + yOffset, d2);
-		motionX = 0.0D;
-		motionY = 0.0D;
-		motionZ = 0.0D;
-		prevPosX = d;
-		prevPosY = d1;
-		prevPosZ = d2;
-		currentHeight = posY;
-		plannedHeight = (int) currentHeight - 1;
-		setPlannedHeight(plannedHeight);
-		
-		if(world instanceof WorldServer)
-			fakeplayer=new FakePlayer((WorldServer) world, getOwner()!=null?getOwner():new GameProfile(UUID.nameUUIDFromBytes(trainOwner==null||trainOwner.length()<1?"[Traincraft]".getBytes(): trainOwner.getBytes()),trainOwner==null||trainOwner.length()<1?"[Traincraft]": trainOwner));
-	}
+
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -160,9 +145,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 
 		updatePushForces();
 		
-		int i = MathHelper.floor(posX);
-		int j = MathHelper.floor(posY);
-		int k = MathHelper.floor(posZ);
+		int i = CommonUtil.floorDouble(posX);
+		int j = CommonUtil.floorDouble(posY);
+		int k = CommonUtil.floorDouble(posZ);
 		
 		if(this.skipTick) {
 			this.skipTick = false;
@@ -362,8 +347,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	public int scaleMaxFuel(int i) {
 		return (this.getFuel() * i) / maxFuel;
 	}
-	
-	@Override
+
+	// TODO: Convert to cleaner EntityRollingStock drag?
+	@Deprecated
 	protected void applyDragAndPushForces() {
 		double d26 = MathHelper.sqrt_double(pushX * pushX + pushZ * pushZ);
 		if (d26 > 0.01D) {
@@ -383,9 +369,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			motionY *= 0.0D;
 			motionZ *= 0.69999997615814209D;
 		}
-		motionX *= getDragAir();
+		motionX *= 0.98d;
 		motionY *= 0.0D;
-		motionZ *= getDragAir();
+		motionZ *= 0.98d;
 	}
 
 	protected void updatePushForces() {
@@ -640,10 +626,10 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	private void playMiningEffect(Vec3 pos, int block_index) {
 		miningTickCounter++;
 
-		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer() && pos != null && getWorld() !=null) {
-			Block block = world.getBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
-			if (miningTickCounter % 8 == 0 && block != null && !world.isRemote && Minecraft.getMinecraft() != null) {
-				this.world.playSound((int) pos.xCoord + 0.5F, (int) pos.yCoord + 0.5F, (int) pos.zCoord + 0.5F, block.stepSound.getBreakSound(), 1.0F, block.stepSound.getPitch() * 0.5F, true);
+		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer() && pos != null && worldObj !=null) {
+			Block block = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+			if (miningTickCounter % 8 == 0 && block != null && !worldObj.isRemote && Minecraft.getMinecraft() != null) {
+				CommonUtil.playSound(this.worldObj, (int) pos.xCoord + 0.5F, (int) pos.yCoord + 0.5F, (int) pos.zCoord + 0.5F, block.stepSound.getBreakSound(), 1.0F, block.stepSound.getPitch() * 0.5F, 0);
 			}
 			if (miningTickCounter % 8 == 0 && block_index != 0 && block != null && FMLClientHandler.instance().getClient() != null ) {
 				FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
@@ -700,13 +686,13 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 				}
 				return lastFace;
 			}
-			rotation = TraincraftUtil.atan2degreesf(d7,d6);
-			lastFace = MathHelper.floor(rotation * 4.0F / 360.0F + 0.5D) & 3;
+			rotation = CommonUtil.atan2degreesf(d7,d6);
+			lastFace = CommonUtil.floorDouble(rotation * 4.0F / 360.0F + 0.5D) & 3;
 		}
 		else {
-			rotation = (TraincraftUtil.atan2degreesf(0 - motionX, 0 - motionZ));
+			rotation = (CommonUtil.atan2degreesf(0 - motionX, 0 - motionZ));
 		}
-		return MathHelper.floor(rotation * 4.0F / 360.0F + 0.5D) & 3;
+		return CommonUtil.floorDouble(rotation * 4.0F / 360.0F + 0.5D) & 3;
 	}
 
 	/** Compares the currentHeight with given height in GUI */
@@ -805,9 +791,9 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 
 	private void harvestBlock(int i, int j, int k) {
 
-		Block block =  world.getBlock(i, j, k);
+		Block block =  CommonUtil.getBlockAt(worldObj, i, j, k);
 
-		int meta = world.getBlockMetadata(i, j, k);
+		int meta = CommonUtil.getBlockFacing(worldObj, i, j, k);
 
 		if (block.getDrops(getWorld(), i, j, k, meta, 0).size()>0) {
 
@@ -862,8 +848,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		}
 
 
-		Block block = world.getBlock(i, j, k);
-		int metadata = world.getBlockMetadata(i, j, k);
+		Block block = CommonUtil.getBlockAt(worldObj, i, j, k);
+		int metadata = CommonUtil.getBlockFacing(worldObj, i, j, k);
 
 		if(block == newblock && metadata == newmeta)
 			return true;
@@ -879,8 +865,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			harvestBlock(i, j, k);
 
 			// place new block
-			world.setBlock(i, j, k, newblock);
-			world.setBlockMetadataWithNotify(i, j, k, newmeta, 3);
+			CommonUtil.setBlock(worldObj, i, j, k, newblock);
+			CommonUtil.setBlockMeta(worldObj, i, j, k, newmeta, 3);
 
 			if(consumeBlock) {
 				BuilderInvent[inventoryId].stackSize--; // ok ?
@@ -902,8 +888,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if(BuilderInvent[inventoryId] == null)
 			return false;
 
-		Block block = world.getBlock(i, j, k);
-		int metadata = world.getBlockMetadata(i, j, k);
+		Block block = CommonUtil.getBlockAt(worldObj, i, j, k);
+		int metadata = CommonUtil.getBlockFacing(worldObj, i, j, k);
 
 			// check if we need to place rails and if we can
 		if(BlockRailBase.func_150051_a(block)
@@ -952,7 +938,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		int w = k + kZ;
 
 		if(hY < 0) {
-			Block block = world.getBlock(u - iX, v - 1, w - kZ);
+			Block block = CommonUtil.getBlockAt(worldObj, u - iX, v - 1, w - kZ);
 			if(BlockRail.func_150051_a(block)
 					|| block instanceof BlockTCRail
 					|| block instanceof BlockTCRailGag) {
@@ -960,7 +946,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 				hY++;
 			}
 		}else if(hY > 0) {
-			Block block = world.getBlock(u - iX, v, w - kZ);
+			Block block = CommonUtil.getBlockAt(worldObj, u - iX, v, w - kZ);
 			if(BlockRail.func_150051_a(block)
 					|| block instanceof BlockTCRail
 					|| block instanceof BlockTCRailGag) {
@@ -1007,7 +993,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		success &= replaceBlockAt(u, v - 1, w, this.slotId_UnderBlock);
 
 		// check if underBlock will fall before placing rail
-		Block underBlock = world.getBlock(u, v-1, w);
+		Block underBlock = CommonUtil.getBlockAt(worldObj, u, v-1, w);
 
 		if(underBlock instanceof BlockFalling && BlockFalling.func_149831_e(getWorld(), u, v-2, w)) {
 			this.skipTick = true;
@@ -1028,7 +1014,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if (stack.getItem() instanceof ItemBlock) {
 			Block block = ((ItemBlock) stack.getItem()).field_150939_a;
 			if (BlockRailBase.func_150051_a(block)) {
-				boolean success = world.setBlock(i, j, k, block);
+				boolean success = CommonUtil.setBlock(world, i, j, k, block);
 				if (success)
 					world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, block.stepSound.func_150496_b(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
 				return success;
