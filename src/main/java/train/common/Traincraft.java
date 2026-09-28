@@ -38,7 +38,15 @@ import train.common.core.CreativeTabTraincraft;
 import train.common.core.EntityIds;
 import train.common.core.TrainModCore;
 import train.common.core.handlers.*;
-import train.common.entity.rollingStock.EntityPassengerCar1;
+import train.common.entity.stock.special.*;
+import train.common.entity.stock.freight.*;
+import train.common.entity.stock.tender.*;
+import train.common.entity.stock.passenger.*;
+import train.common.entity.stock.tanker.*;
+import train.common.entity.stock.work.*;
+import train.common.entity.trains.steam.*;
+import train.common.entity.trains.diesel.*;
+import train.common.entity.trains.electric.*;
 import train.common.entity.zeppelin.EntityZeppelinOneBalloon;
 import train.common.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.common.generation.ComponentVillageTrainstation;
@@ -222,17 +230,18 @@ public class Traincraft {
         EntityRegistry.registerModEntity(EntityZeppelinOneBalloon.class, "zeppelin big", EntityIds.ZEPPELIN_BIG, Traincraft.instance, 512, 1, true);//zepplin big
         EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 16, Traincraft.instance,512,3,true);//seat
         for(TrainRecord trains : EnumTrains.trains()){
-            TraincraftRegistry.registerTransport(trains);
+            //TraincraftRegistry.registerTransport(trains);
         }
 
 
-        TraincraftRegistry.registerTransports("", listSteamTrains());
-        TraincraftRegistry.registerTransports("", listFreight());
-        TraincraftRegistry.registerTransports("", listPassenger());
-        TraincraftRegistry.registerTransports("", listTanker());
-        TraincraftRegistry.registerTransports("", listElectricTrains());
-        TraincraftRegistry.registerTransports("", listDieselTrains());
-        TraincraftRegistry.registerTransports("", listTender());
+        TraincraftRegistry.registerTransports("", listspecial());
+        TraincraftRegistry.registerTransports("", listfreight());
+        TraincraftRegistry.registerTransports("", listpassenger());
+        TraincraftRegistry.registerTransports("", listtanker());
+        TraincraftRegistry.registerTransports("", listtender());
+        TraincraftRegistry.registerTransports("", liststeam());
+        TraincraftRegistry.registerTransports("", listdiesel());
+        TraincraftRegistry.registerTransports("", listelectric());
 
 
 
@@ -304,27 +313,34 @@ public class Traincraft {
 
 
 
-    public static AbstractTrains[] listElectricTrains() {
-        return new AbstractTrains[]{};
+    public static AbstractTrains[] listspecial() {
+        return new AbstractTrains[]{new EntityJukeBoxCart(null), new EntityTracksBuilder(null), new EntityPropagandaUS(null), new EntityPropagandaUSSR(null), new EntityPropagandaJapan(null), new EntityPropagandaBritain(null)};
     }
-    public static AbstractTrains[] listDieselTrains() {
-        return new AbstractTrains[]{};
+    public static AbstractTrains[] listtender() {
+        return new AbstractTrains[]{new EntityTenderSmall(null), new EntityTenderHeavy(null), new EntityTenderGS4(null), new EntityTender4000(null), new EntityTenderFowler4F(null), new EntityTenderBerk1225(null), new EntityTender4_4_0(null), new EntityTenderA4(null), new EntityTenderBR01_DB(null), new EntityTenderCoranationClass(null), new EntityTenderEr_Ussr(null), new EntityTenderC62Class(null), new EntityTenderD51(null), new EntityTenderAdler(null), new EntityTender_C41(null), new EntityTender_Southern1102(null), new EntityTenderMILW(null)};
     }
-    public static AbstractTrains[] listSteamTrains() {
-        return new AbstractTrains[]{};
+    public static AbstractTrains[] listdiesel() {
+        return new AbstractTrains[]{new EntityLocoDieselKof_DB(null), new EntityLocoDieselCD742(null), new EntityLocoDieselChME3(null), new EntityLocoDieselGP7Red(null), new EntityLocoDieselSD40(null), new EntityLocoDieselSD70(null), new EntityLocoDieselShunter(null), new EntityLocoDieselV60_DB(null), new EntityLocoDieselIC4_DSB_MG(null), new EntityLocoDieselMILW_H1044(null), new EntityLocoDieselEMDF7(null), new EntityLocoDieselEMDF3(null), new EntityLocoDieselClass66(null), new EntityLocoDieselDeltic(null), new EntityLocoDieselDD35A(null), new EntityLocoDiesel44TonSwitcher(null), new EntityLocoDieselBamboo(null), new EntityLocoDieselWLs40(null), new EntityLocoDieselFOLM1(null), new EntityLocoDieselFOLM1B(null)};
     }
-    public static AbstractTrains[] listPassenger() {
-        return new AbstractTrains[]{new EntityPassengerCar1(null)};
+    public static AbstractTrains[] listpassenger() {
+        return new AbstractTrains[]{new EntityPassenger2(null), new EntityPassenger5(null), new EntityPassenger7(null), new EntityPassenger_1class_DB(null), new EntityPassenger_2class_DB(null), new EntityPassengerHighSpeedCarZeroED(null), new EntityPassengerTramNY(null), new EntityPassengerAdler(null), new EntityPassengerDBOriental(null), new PassengerIC4_DSB_FG(null), new PassengerIC4_DSB_FH(null), new EntityPassengerICE_1class(null), new EntityPassengerICE_2class(null), new EntityPassengerICE_Restaurant(null), new EntityPassengerGS4(null), new EntityPassengerGS4_Observatory(null), new EntityPassengerGS4_Tail(null), new EntityPassengerDenverRioGrande(null), new EntityPassengerDenverRioGrandeCombo(null), new EntityPassengerRheingold(null), new EntityPassengerRheingoldPanorama(null), new EntityPassengerMILW(null), new EntityPassengerMILWTail(null), new EntityPassengerBamboo(null), new EntityCaboose(null), new EntityCaboose3(null), new EntityStockCar(null), new EntityStockCarDRWG(null), new EntityFlatCart(null), new EntityFlatCartSU(null), new EntityFlatCartUS(null), new EntityFlatCar_DB(null)};
     }
-    public static AbstractTrains[] listFreight() {
-        return new AbstractTrains[]{};
+    public static AbstractTrains[] listwork() {
+        return new AbstractTrains[]{new EntityPassengerRheingoldDining1(null), new EntityPassengerRheingoldDining2(null), new EntityGWRBrakeVan(null), new EntityWorkCart(null), new EntityCabooseWorkCart(null), new EntityCabooseLogging(null), new EntityCabooseLoggingPRR(null), new EntityMailWagen_DB(null)};
     }
-    public static AbstractTrains[] listTanker() {
-        return new AbstractTrains[]{};
+    public static AbstractTrains[] listfreight() {
+        return new AbstractTrains[]{new EntityFreightCart2(null), new EntityFreightCart(null), new EntityFreightWood(null), new EntityFreightGrain(null), new EntityFreightKClassRailBox(null), new EntityFreightShortCoveredHopper(null), new EntityFreightLongCoveredHopper(null), new EntityFreightOpenWagon(null), new EntityFreightHopperUS(null), new EntityFreight100TonHopper(null), new EntityFlatCartWoodUS(null), new EntityBulkheadFlatCart(null), new EntityFreightCartUS(null), new EntityBoxCartUS(null), new EntityBoxCartPRR(null), new EntityFreightCartSmall(null), new EntityFreightMinetrain(null), new EntityFreightGTNG(null), new EntityFreightWood2(null), new EntityFreightClosed(null), new EntityFreightOpen2(null), new EntityFreightWagenDB(null), new EntityFlatCarRails_DB(null), new EntityFreightASTFAutorack(null), new EntityFlatCarLogs_DB(null), new EntityFreightSlateWagon(null), new EntityFreightIceWagon(null), new EntityFreightGS4_Baggage(null), new EntityFreightGondola_DB(null), new EntityFreightCenterbeam_Empty(null), new EntityFreightCenterbeam_Wood_1(null), new EntityFreightCenterbeam_Wood_2(null), new EntityFreightWellcar(null), new EntityFreightTrailer(null), new EntityFreightDenverRioGrande(null), new EntityFreightBaggageMILW(null), new EntityFreightHeavyweight(null), new EntityFreightBamboo(null), new EntityFreightGermanPost(null), new EntityFreightDepressedFlatbed(null), new EntityFreightCartL(null), new EntityFreightHeavyweightBaggage(null)};
     }
-    public static AbstractTrains[] listTender() {
-        return new AbstractTrains[]{};
+    public static AbstractTrains[] listelectric() {
+        return new AbstractTrains[]{new EntityLocoElectricVL10(null), new EntityLocoElectricBR_E69(null), new EntityLocoElectricMinetrain(null), new EntityLocoElectricHighSpeedZeroED(null), new EntityLocoElectricICE1(null), new EntityLocoElectricTramWood(null), new EntityLocoElectricTramNY(null), new EntityLocoElectricBR185(null), new EntityLocoElectricE10_DB(null), new EntityLocoElectricE103(null), new EntityLocoElectricClass85(null), new EntityLocoElectricCD151(null), new EntityLocoElectricBP4(null)};
     }
+    public static AbstractTrains[] liststeam() {
+        return new AbstractTrains[]{new EntityLocoSteamMallardA4(null), new EntityLocoSteamHallClass(null), new EntityLocoSteamBerk1225(null), new EntityLocoSteamBerk765(null), new EntityLocoSteamFowler(null), new EntityLocoSteamKingClass(null), new EntityLocoSteamMILWClassA(null), new EntityLocoSteamCherepanov(null), new EntityLocoSteamBR80_DB(null), new EntityLocoSteam4_4_0(null), new EntityLocoSteamSmall(null), new EntityLocoSteamLSSP7(null), new EntityLocoSteamHeavy(null), new EntityLocoSteamC62Class(null), new EntityLocoSteamD51(null), new EntityLocoSteamD51Long(null), new EntityLocoSteamBR01_DB(null), new EntityLocoSteamCoranationClass(null), new EntityLocoSteamGS4(null), new EntityLocoSteamEr_Ussr(null), new EntityLocoSteamC41(null), new EntityLocoSteamC41_080(null), new EntityLocoSteamAlcoSC4(null), new EntityLocoSteamSouthern1102(null), new EntityLocoSteamUSATCUS(null), new EntityLocoSteamUSATCUK(null), new EntityLocoSteamC41T(null), new EntityLocoSteamForneyRed(null), new EntityLocoSteamMogulBlue(null), new EntityLocoSteamShay(null), new EntityLocoSteamVBShay(null), new EntityLocoSteamClimax(null), new EntityLocoSteamPannier(null), new EntityLocoSteamAlice0_4_0(null), new EntityLocoSteamGLYN042T(null), new EntityLocoSteam262T(null), new EntityLocoSteam040VB(null), new EntityLocoSteamAdler(null), new EntityLocoSteamSnowPlow(null)};
+    }
+    public static AbstractTrains[] listtanker() {
+        return new AbstractTrains[]{new EntityBUnitEMDF7(null), new EntityBUnitEMDF3(null), new EntityBUnitDD35(null), new EntityTankWagon_DB(null), new EntityTankWagonThreeDome(null), new EntityTankWagonUS(null), new EntityTankWagon2(null), new EntityTankLava(null), new EntityTankWagon(null)};
+    }
+
 
 
 }

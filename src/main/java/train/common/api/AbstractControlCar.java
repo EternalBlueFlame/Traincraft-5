@@ -204,7 +204,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
                 whistleDelay = 65;
             }
         }
-        List entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, AxisAlignedBB.getBoundingBox(
+        List entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, ebf.tim.utility.CommonUtil.createAABB(
                 this.posX-20,this.posY-5,this.posZ-20,
                 this.posX+20,this.posY+5,this.posZ+20));
 

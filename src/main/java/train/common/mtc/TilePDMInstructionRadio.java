@@ -201,7 +201,7 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
     public AxisAlignedBB getRenderBoundingBox() {
         if (boundingBox == null) {
           //  System.out.println("new");
-            boundingBox = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 2000, yCoord +2000, zCoord + 2000);
+            boundingBox = ebf.tim.utility.CommonUtil.createAABB(xCoord, yCoord, zCoord, xCoord + 2000, yCoord +2000, zCoord + 2000);
         }
         return boundingBox;
     }

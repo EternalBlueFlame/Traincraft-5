@@ -36,7 +36,7 @@ public class ItemTrackDebugger extends Item {
         if (!world.isRemote) {
 
             if (!(player.canCommandSenderUseCommand(2, "") && player.capabilities.isCreativeMode)){
-                player.addChatMessage(new ChatComponentText("You are not allowed to to that!"));
+                CommonUtil.sendChat(player, "You are not allowed to to that!");
                 return false;
             }
 
@@ -45,31 +45,31 @@ public class ItemTrackDebugger extends Item {
                 TileTCRail tile = (TileTCRail) world.getTileEntity(x, y, z);
 
                 if (tile != null)
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + "TileTCRail"));
+                    CommonUtil.sendChat(player, EnumChatFormatting.RED + "TileTCRail");
                 assert tile != null;
-                player.addChatMessage(new ChatComponentText( EnumChatFormatting.GOLD + "Name: " +  EnumChatFormatting.WHITE + tile.getType() + EnumChatFormatting.GOLD + " ItemID " + EnumChatFormatting.WHITE + tile.getTrack().getItem()));
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "x: "    +  EnumChatFormatting.WHITE +  tile.xCoord + EnumChatFormatting.GOLD +  " y: " +  EnumChatFormatting.WHITE +tile.yCoord +  EnumChatFormatting.GOLD + " z: "+  EnumChatFormatting.WHITE + tile.zCoord));
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Meta: " +  EnumChatFormatting.WHITE + tile.getBlockMetadata()));
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "cx: "   +  EnumChatFormatting.WHITE + tile.cx  + EnumChatFormatting.GOLD + " cy: "+ EnumChatFormatting.WHITE + tile.cy  + EnumChatFormatting.GOLD + " cz: " + EnumChatFormatting.WHITE + tile.cz));
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "r: " + EnumChatFormatting.WHITE + tile.r));
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "SwitchState: " + EnumChatFormatting.WHITE + tile.getSwitchState() + EnumChatFormatting.GOLD + " ManualOverride: " +  EnumChatFormatting.GOLD + " SwitchSize: " + EnumChatFormatting.WHITE + tile.getTrackFromName().getSwitchSize()) );
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "LinkedX: "    +  EnumChatFormatting.WHITE +  tile.linkedX + EnumChatFormatting.GOLD +  " LinkedY: " +  EnumChatFormatting.WHITE +tile.linkedY +  EnumChatFormatting.GOLD + " LinkedZ: "+  EnumChatFormatting.WHITE + tile.linkedZ));
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "SlopeLength: "    +  EnumChatFormatting.WHITE +  tile.slopeLength + EnumChatFormatting.GOLD +  " SlopeHeight: " +  EnumChatFormatting.WHITE +  EnumChatFormatting.GOLD + " SlopeAngle: "+  EnumChatFormatting.WHITE + tile.slopeAngle));
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "BallastMaterial: "    +  EnumChatFormatting.WHITE +  Block.getBlockById(tile.getBallastMaterial()).getLocalizedName() + EnumChatFormatting.GOLD +  " BallastMetadata: " +  EnumChatFormatting.WHITE +tile.ballastMetadata +  EnumChatFormatting.GOLD + " BallastColour: "+  EnumChatFormatting.WHITE + tile.ballastColour));
+                CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "Name: " +  EnumChatFormatting.WHITE + tile.getType() + EnumChatFormatting.GOLD + " ItemID " + EnumChatFormatting.WHITE + tile.getTrack().getItem());
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "x: "    +  EnumChatFormatting.WHITE +  tile.xCoord + EnumChatFormatting.GOLD +  " y: " +  EnumChatFormatting.WHITE +tile.yCoord +  EnumChatFormatting.GOLD + " z: "+  EnumChatFormatting.WHITE + tile.zCoord);
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "Meta: " +  EnumChatFormatting.WHITE + tile.getBlockMetadata());
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "cx: "   +  EnumChatFormatting.WHITE + tile.cx  + EnumChatFormatting.GOLD + " cy: "+ EnumChatFormatting.WHITE + tile.cy  + EnumChatFormatting.GOLD + " cz: " + EnumChatFormatting.WHITE + tile.cz);
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "r: " + EnumChatFormatting.WHITE + tile.r);
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "SwitchState: " + EnumChatFormatting.WHITE + tile.getSwitchState() + EnumChatFormatting.GOLD + " ManualOverride: " +  EnumChatFormatting.GOLD + " SwitchSize: " + EnumChatFormatting.WHITE + tile.getTrackFromName().getSwitchSize());
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "LinkedX: "    +  EnumChatFormatting.WHITE +  tile.linkedX + EnumChatFormatting.GOLD +  " LinkedY: " +  EnumChatFormatting.WHITE +tile.linkedY +  EnumChatFormatting.GOLD + " LinkedZ: "+  EnumChatFormatting.WHITE + tile.linkedZ);
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "SlopeLength: "    +  EnumChatFormatting.WHITE +  tile.slopeLength + EnumChatFormatting.GOLD +  " SlopeHeight: " +  EnumChatFormatting.WHITE +  EnumChatFormatting.GOLD + " SlopeAngle: "+  EnumChatFormatting.WHITE + tile.slopeAngle);
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "BallastMaterial: "    +  EnumChatFormatting.WHITE +  Block.getBlockById(tile.getBallastMaterial()).getLocalizedName() + EnumChatFormatting.GOLD +  " BallastMetadata: " +  EnumChatFormatting.WHITE +tile.ballastMetadata +  EnumChatFormatting.GOLD + " BallastColour: "+  EnumChatFormatting.WHITE + tile.ballastColour);
 
 
-                    player.addChatMessage(new ChatComponentText(" "));
+                    CommonUtil.sendChat(player, " ");
             }
             else  if (block == BlockIDs.tcRailGag.block){
                 TileTCRailGag tile = (TileTCRailGag) world.getTileEntity(x, y, z);
                 if (tile != null) {
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GREEN + "TileTCGag"));
-                    player.addChatMessage(new ChatComponentText( EnumChatFormatting.GOLD + "Name: " +  EnumChatFormatting.WHITE + tile.type));
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "x: "    +  EnumChatFormatting.WHITE +  tile.xCoord + EnumChatFormatting.GOLD +  " y: " +  EnumChatFormatting.WHITE + tile.yCoord +  EnumChatFormatting.GOLD + " z: "+  EnumChatFormatting.WHITE + tile.zCoord));
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "Meta: " +  EnumChatFormatting.WHITE + tile.getBlockMetadata()));
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.GOLD + "OriginX: "    +  EnumChatFormatting.WHITE +  tile.originX + EnumChatFormatting.GOLD +  " OriginY: " +  EnumChatFormatting.WHITE + tile.originY +  EnumChatFormatting.GOLD + " OriginZ: "+  EnumChatFormatting.WHITE + tile.originZ));
-                    player.addChatMessage(new ChatComponentText( EnumChatFormatting.GOLD + "CanPlaceRollingStockOnDiagonal: " +  EnumChatFormatting.WHITE + tile.canPlaceRollingstock));
-                    player.addChatMessage(new ChatComponentText(" "));
+                    CommonUtil.sendChat(player, EnumChatFormatting.GREEN + "TileTCGag");
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "Name: " +  EnumChatFormatting.WHITE + tile.type);
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "x: "    +  EnumChatFormatting.WHITE +  tile.xCoord + EnumChatFormatting.GOLD +  " y: " +  EnumChatFormatting.WHITE + tile.yCoord +  EnumChatFormatting.GOLD + " z: "+  EnumChatFormatting.WHITE + tile.zCoord);
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "Meta: " +  EnumChatFormatting.WHITE + tile.getBlockMetadata());
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "OriginX: "    +  EnumChatFormatting.WHITE +  tile.originX + EnumChatFormatting.GOLD +  " OriginY: " +  EnumChatFormatting.WHITE + tile.originY +  EnumChatFormatting.GOLD + " OriginZ: "+  EnumChatFormatting.WHITE + tile.originZ);
+                    CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "CanPlaceRollingStockOnDiagonal: " +  EnumChatFormatting.WHITE + tile.canPlaceRollingstock);
+                    CommonUtil.sendChat(player, " ");
 
                 }
             }
@@ -81,11 +81,11 @@ public class ItemTrackDebugger extends Item {
                 }
 
 
-                    player.addChatMessage(new ChatComponentText(EnumChatFormatting.BLUE + "BlockRailBase"));
+                    CommonUtil.sendChat(player, EnumChatFormatting.BLUE + "BlockRailBase");
 
             }
             else {
-                player.addChatMessage(new ChatComponentText("Not a rail"));
+                CommonUtil.sendChat(player, "Not a rail");
                 return false;
             }
 

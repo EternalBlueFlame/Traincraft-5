@@ -3,6 +3,7 @@ package train.client.gui;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
@@ -30,7 +31,7 @@ public class GuiSpeedTransmitter extends GuiScreen {
 
         if (entity instanceof TileInfoTransmitterSpeed) {
             transmitterBlock = (TileInfoTransmitterSpeed) entity;
-            Block transmitterBlocc = entity.getWorldObj().getBlock(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
+            Block transmitterBlocc = CommonUtil.getBlockAt(entity.getWorldObj(), transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
             System.out.println(entity.getWorldObj().isBlockIndirectlyGettingPowered(transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord));
         }
     }

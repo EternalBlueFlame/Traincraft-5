@@ -33,7 +33,7 @@ public class TileInfoGrabberDestination extends TileEntity implements IPeriphera
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         if (boundingBox == null) {
-            boundingBox = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 2, yCoord + 2, zCoord + 2);
+            boundingBox = ebf.tim.utility.CommonUtil.createAABB(xCoord, yCoord, zCoord, xCoord + 2, yCoord + 2, zCoord + 2);
         }
         return boundingBox;
     }

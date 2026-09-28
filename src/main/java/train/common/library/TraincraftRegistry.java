@@ -27,7 +27,6 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
@@ -438,13 +437,13 @@ public class TraincraftRegistry {
         fluidMap.put(block, bucket);
 
         if (DebugUtil.dev && Traincraft.proxy.isClient()) {
-            if (fluid.getUnlocalizedName().equals(StatCollector.translateToLocal(fluid.getUnlocalizedName()))) {
+            if (fluid.getUnlocalizedName().equals(CommonUtil.translate(fluid.getUnlocalizedName()))) {
                 DebugUtil.println("Fluid missing lang entry: " + fluid.getUnlocalizedName());
             }
-            if (bucket.getUnlocalizedName().equals(StatCollector.translateToLocal(block.getUnlocalizedName()))) {
+            if (bucket.getUnlocalizedName().equals(CommonUtil.translate(block.getUnlocalizedName()))) {
                 DebugUtil.println("Item missing lang entry: " + bucket.getUnlocalizedName());
             }
-            if (block.getUnlocalizedName().equals(StatCollector.translateToLocal(block.getUnlocalizedName()))) {
+            if (block.getUnlocalizedName().equals(CommonUtil.translate(block.getUnlocalizedName()))) {
                 DebugUtil.println("Block missing lang entry: " + block.getUnlocalizedName());
             }
 

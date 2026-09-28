@@ -1,6 +1,5 @@
 package train.common.adminbook;
 
-import cpw.mods.fml.common.registry.GameData;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
@@ -12,6 +11,7 @@ import net.minecraftforge.fluids.FluidTankInfo;
 import train.common.Traincraft;
 import train.common.api.EntityRollingStock;
 import train.common.api.LiquidTank;
+import train.common.core.util.TraincraftUtil;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -162,7 +162,7 @@ public class ServerLogger {
     public static List<ItemStack> getItems(String doc) {
         try {
             ArrayList<ItemStack> itemStacks = new ArrayList<>();
-            itemStacks.add(new ItemStack(GameData.getItemRegistry().getObject(doc.substring(doc.indexOf("<delegate>") + 10, doc.indexOf("</delegate>")))));
+            itemStacks.add(new ItemStack(TraincraftUtil.getItemFromName(doc.substring(doc.indexOf("<delegate>") + 10, doc.indexOf("</delegate>")))));
 
             List<String> stacks = new ArrayList<>();
             while (doc.contains("<ItemStack>")) {
@@ -186,7 +186,7 @@ public class ServerLogger {
     public static ItemStack parseItemFromXML(String doc) {
         try {
             ItemStack stack = new ItemStack(
-                    GameData.getItemRegistry().getObject(doc.substring(doc.indexOf("<delegate>") + 10, doc.indexOf("</delegate>"))),//get item by delegate name since it's static
+                    TraincraftUtil.getItemFromName(doc.substring(doc.indexOf("<delegate>") + 10, doc.indexOf("</delegate>"))),//get item by delegate name since it's static
                     Integer.parseInt(doc.substring(doc.indexOf("<StackSize>") + 11, doc.indexOf("</StackSize>")))//we always get strings so gotta parse.
             );
 

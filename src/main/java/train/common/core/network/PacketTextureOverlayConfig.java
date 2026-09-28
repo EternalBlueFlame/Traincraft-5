@@ -36,7 +36,7 @@ public class PacketTextureOverlayConfig implements IMessage {
     /**
      * @param configType       Type of overlay to use
      * @param trainEntity      Entity ID of rolling stock; recommended to retrieve by invoking rollingStockOld.getEntityId().
-     * @param dimensionID      Dimension ID of player world; recommended to retrieve by accessing Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId.
+    * @param dimensionID      Dimension ID of player world; retrieve via CommonUtil.getDimensionId(world).
      * @param overlayConfigTag NBT configuration tag; recommended to retrieve by invoking rollingStockOld.getOverlayTextureContainer().getOverlayConfigTag().
      * @author 02skaplan
      * <p>Server <-> client communication packet for overlay textures.</p>
@@ -52,7 +52,7 @@ public class PacketTextureOverlayConfig implements IMessage {
 
     /**
      * @param trainEntity    Entity ID of rolling stock; recommended to retrieve by invoking rollingStockOld.getEntityId().
-     * @param dimensionID    Dimension ID of player world; recommended to retrieve by accessing Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId.
+    * @param dimensionID    Dimension ID of player world; retrieve via CommonUtil.getDimensionId(world).
      * @param playerEntityID Entity ID of player. Used to send the response back to only the requesting player; recommended to retrieve by accessing Minecraft.getMinecraft().thePlayer.getEntityId() on the client side.
      * @author 02skaplan
      * <p>Client -> server communication packet for overlay texture requests.</p>

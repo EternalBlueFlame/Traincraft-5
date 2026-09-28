@@ -11,6 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.IBlockAccess;
@@ -47,6 +48,30 @@ public class CommonUtil {
     public static final float degreesF = (float) (180.0d / Math.PI);
     private static List<String> loggedLangChecks = new ArrayList<>();
 
+    /** Creates a bounding box using the version-specific construction API. */
+    public static AxisAlignedBB createAABB(double minX, double minY, double minZ, double maxX, double maxY, double maxZ){
+        return AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
+    }
+
+    /** Returns whether a stack represents an empty inventory slot. */
+    public static boolean isItemStackEmpty(ItemStack stack){
+        return stack == null || stack.stackSize <= 0;
+    }
+
+    /** Sends a plain-text player message through the version-specific chat API. */
+    public static void sendChat(EntityPlayer player, String message){
+        player.addChatMessage(new ChatComponentText(message));
+    }
+
+    /** Returns the dimension containing the world. */
+    public static int getDimensionId(World world){
+        return world.provider.dimensionId;
+    }
+
+    /** Spawns an entity in the world and reports whether it was accepted. */
+    public static boolean spawnEntity(World world, Entity entity){
+        return world.spawnEntityInWorld(entity);
+    }
 
 
     /**redirect shorthand that typecasts doubles to ints
@@ -73,8 +98,16 @@ public class CommonUtil {
         return w.setBlock(x,y,z,b);
     }
 
+    public static boolean setBlock(World w, int x, int y, int z, Block b, int meta, int flags){
+        return w.setBlock(x, y, z, b, meta, flags);
+    }
+
+    public static boolean setBlockMeta(World w, int x, int y, int z, int meta, int flags){
+        return w.setBlockMetadataWithNotify(x, y, z, meta, flags);
+    }
+
     public static void setBlockMeta(World w, int x, int y, int z, int meta){
-        w.setBlockMetadataWithNotify(x,y,z,meta,2);
+        setBlockMeta(w, x, y, z, meta, 2);
         w.markBlockRangeForRenderUpdate(x, y, z, x, y, z);
         w.notifyBlocksOfNeighborChange(x, y, z, getBlockAt(w,x,y,z));
         w.scheduleBlockUpdate(x, y, z, getBlockAt(w,x,y,z), getBlockAt(w,x,y,z).tickRate(w));

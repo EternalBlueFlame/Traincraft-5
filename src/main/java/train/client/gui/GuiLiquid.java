@@ -100,7 +100,7 @@ public class GuiLiquid extends GuiContainer {
                     this.initGui();
                 }
             } else if (player != null) {
-                player.addChatMessage(new ChatComponentText("You are not the owner"));
+                ebf.tim.utility.CommonUtil.sendChat(player, "You are not the owner");
             }
         }
     }

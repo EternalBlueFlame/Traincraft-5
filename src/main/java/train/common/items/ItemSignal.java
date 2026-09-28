@@ -55,7 +55,7 @@ public class ItemSignal extends Item { // implements IBoxable TODO when IC2
 		}
 
 		Block block = spawnID;
-		if (world.setBlockMetadataWithNotify(i, j, k, Block.getIdFromBlock(spawnID), 0)) {
+		if (CommonUtil.setBlockMeta(world, i, j, k, Block.getIdFromBlock(spawnID), 0)) {
 			if (CommonUtil.getBlockAt(world, i, j, k) == spawnID) {
 				spawnID.onBlockPlacedBy(world, i, j, k, entityplayer, new ItemStack(spawnID));
 			}

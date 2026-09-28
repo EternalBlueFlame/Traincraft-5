@@ -1,6 +1,7 @@
 package train.common.wellcar.render;
 
 import fexcraft.tmt.slim.Tessellator;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
@@ -18,9 +19,9 @@ public class FortyFootContainerRender extends TileEntitySpecialRenderer {
         //This will make your block brightness dependent from surroundings lighting.
 
         TileFortyFootContainer theTileEntity = (TileFortyFootContainer)tileEntity;
-        Block two = tileEntity.getWorldObj().getBlock(tileEntity.xCoord,tileEntity.yCoord - 1,tileEntity.zCoord);
-        Block three = tileEntity.getWorldObj().getBlock(tileEntity.xCoord,tileEntity.yCoord - 2,tileEntity.zCoord);
-        Block four = tileEntity.getWorldObj().getBlock(tileEntity.xCoord,tileEntity.yCoord - 3,tileEntity.zCoord);
+        Block two = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord - 1, tileEntity.zCoord);
+        Block three = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord - 2, tileEntity.zCoord);
+        Block four = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord - 3, tileEntity.zCoord);
                /* int skyLight = tileEntity.getWorldObj().getSkyBlockTypeBrightness(EnumSkyBlock.Block, (int)x,(int)y,(int)z);
 
                // skyLight= tileEntity.getWorldObj().getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (skyLight<0?0:skyLight) << 4; OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);

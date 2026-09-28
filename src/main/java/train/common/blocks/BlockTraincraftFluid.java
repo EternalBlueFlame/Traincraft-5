@@ -73,7 +73,7 @@ public class BlockTraincraftFluid extends BlockFluidClassic {
 
 	@Override
 	public boolean canDisplace(IBlockAccess world, int x, int y, int z) {
-		return  (world.getBlock(x,  y,  z).getMaterial().isLiquid() && super.canDisplace(world, x, y, z));
+		return  (CommonUtil.getBlockAt(world, x, y, z).getMaterial().isLiquid() && super.canDisplace(world, x, y, z));
 	}
 	
 	@Override

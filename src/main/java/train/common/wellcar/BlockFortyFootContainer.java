@@ -65,7 +65,7 @@ public class BlockFortyFootContainer extends BlockContainer {
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB bounds, List list, Entity entity) {
         /*System.out.println("Adding??");
         this.setBlockBounds(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F);
-        AxisAlignedBB bounds1 = AxisAlignedBB.getBoundingBox(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F);
+        AxisAlignedBB bounds1 = CommonUtil.createAABB(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F);
         list.add(bounds1);
         super.addCollisionBoxesToList(world, x, y, z, bounds1, list, entity);
        // super.addCollisionBoxesToList(world, x, y, z, AxisAlignedBB.getBoundingBox(-1.1F, 0.0F, -0.2F, 2.2F, 1.5F, 1.1F), list, entity);
@@ -110,7 +110,7 @@ public class BlockFortyFootContainer extends BlockContainer {
 
     public AxisAlignedBB getCollisionBoundingBoxFromPool(World p_149668_1_, int p_149668_2_, int p_149668_3_, int p_149668_4_)
     {
-        return AxisAlignedBB.getBoundingBox((double)p_149668_2_ + this.minX, (double)p_149668_3_ + this.minY, (double)p_149668_4_ + this.minZ, (double)p_149668_2_ + this.maxX + 7F, (double)p_149668_3_ + this.maxY, (double)p_149668_4_ + this.maxZ);
+        return CommonUtil.createAABB((double)p_149668_2_ + this.minX, (double)p_149668_3_ + this.minY, (double)p_149668_4_ + this.minZ, (double)p_149668_2_ + this.maxX + 7F, (double)p_149668_3_ + this.maxY, (double)p_149668_4_ + this.maxZ);
     }
 
     @Override

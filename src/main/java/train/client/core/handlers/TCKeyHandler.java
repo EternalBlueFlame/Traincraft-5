@@ -152,12 +152,12 @@ public class TCKeyHandler {
                     Locomotive train = (Locomotive) Minecraft.getMinecraft().thePlayer.ridingEntity;
                     if (train.mtcStatus != 0 && train.mtcType == 2) {
                         if (train instanceof SteamTrain && !ConfigHandler.ALLOW_ATO_ON_STEAMERS) {
-                            ((EntityPlayer) train.riddenByEntity).addChatMessage(new ChatComponentText("Automatic Train Operation cannot be used with steam trains"));
+                            ebf.tim.utility.CommonUtil.sendChat((EntityPlayer) train.riddenByEntity, "Automatic Train Operation cannot be used with steam trains");
                         } else {
                             train.atoStatus = train.atoStatus == 1 ? 0 : 1;
                         }
                     } else {
-                        ((EntityPlayer) train.riddenByEntity).addChatMessage(new ChatComponentText("Automatic Train Operation can only be activated when you are using W-MTC"));
+                        ebf.tim.utility.CommonUtil.sendChat((EntityPlayer) train.riddenByEntity, "Automatic Train Operation can only be activated when you are using W-MTC");
                     }
                 }
 
@@ -166,10 +166,10 @@ public class TCKeyHandler {
 
                     if (train.mtcOverridePressed) {
                         train.mtcOverridePressed = false;
-                        ((EntityPlayer) train.riddenByEntity).addChatMessage(new ChatComponentText("MTC has been enabled and will re-activate when the system receives new data"));
+                        ebf.tim.utility.CommonUtil.sendChat((EntityPlayer) train.riddenByEntity, "MTC has been enabled and will re-activate when the system receives new data");
                     } else {
                         train.mtcOverridePressed = true;
-                        ((EntityPlayer) train.riddenByEntity).addChatMessage(new ChatComponentText("MTC has been disabled and will not receive speed changes or transmit MTC data"));
+                        ebf.tim.utility.CommonUtil.sendChat((EntityPlayer) train.riddenByEntity, "MTC has been disabled and will not receive speed changes or transmit MTC data");
                         train.mtcStatus = 0;
                         train.speedLimit = 0;
                         train.nextSpeedLimit = 0;

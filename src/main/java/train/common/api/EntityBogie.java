@@ -573,7 +573,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 	private void loopVanilla(AbstractTrains host, double moveLength, BlockRailBase block){
 
 		//try to adhere to limiter track
-		railmax = block.getRailMaxSpeed(getWorld(),this,xFloor, yFloor, zFloor);
+		railmax = CommonUtil.getMaxRailSpeed(getWorld(), block, host, xFloor, yFloor, zFloor);
 		Block blockUp;
 		if(railmax!=0.4f){
 			moveLength=Math.min(moveLength,railmax);

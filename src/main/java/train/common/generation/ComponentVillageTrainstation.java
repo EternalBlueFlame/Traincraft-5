@@ -196,7 +196,7 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 			if (skins != null && !skins.isEmpty()) {
 				cart.setColor(skins.get(new Random().nextInt((skins.size() - 1))).addr);
 			}
-			world.spawnEntityInWorld(cart);
+			ebf.tim.utility.CommonUtil.spawnEntity(world, cart);
 			cart.setInformation("VillagerJoe", "VillagerJoe", cart.getCartItem().getItem().getItemStackDisplayName(cart.getCartItem()), -1);
 		}
 		int j2 = this.getXWithOffset(3, 8);
@@ -228,7 +228,7 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 			if (rD == 5) {
 				cart.setColor("Brown");
 			}
-			world.spawnEntityInWorld(cart);
+			ebf.tim.utility.CommonUtil.spawnEntity(world, cart);
 		}
 
 		return true;

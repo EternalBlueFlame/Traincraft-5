@@ -22,7 +22,7 @@ public class PacketInteract implements IMessage {
     public PacketInteract() {}
     public PacketInteract(int entityId) {
         this.entityId = entityId;
-        this.dimensionId= Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId;
+        this.dimensionId= ebf.tim.utility.CommonUtil.getDimensionId(Minecraft.getMinecraft().thePlayer.worldObj);
         this.playerId=Minecraft.getMinecraft().thePlayer.getEntityId();
 
     }

@@ -2,6 +2,7 @@ package train.common.api.blocks;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import ebf.tim.utility.ClientUtil;
 import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.*;
 import net.minecraft.block.Block;
@@ -94,7 +95,7 @@ public class TileRenderFacing extends TileEntity {
                 blockGLID = net.minecraft.client.renderer.GLAllocation.generateDisplayLists(1);
                 org.lwjgl.opengl.GL11.glNewList(blockGLID, org.lwjgl.opengl.GL11.GL_COMPILE);
                 if (worldObj == null) {
-                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
+                    ClientUtil.fixItemLighting(worldObj);
                 } else {
                     Minecraft.getMinecraft().entityRenderer.enableLightmap(1);
                 }
@@ -124,7 +125,7 @@ public class TileRenderFacing extends TileEntity {
 
                 renderModel();
                 if (worldObj == null) {
-                    Minecraft.getMinecraft().entityRenderer.disableLightmap(1);
+                    ClientUtil.fixItemLighting(worldObj);
                 }
                 org.lwjgl.opengl.GL11.glEndList();
             }

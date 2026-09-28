@@ -865,8 +865,8 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 			harvestBlock(i, j, k);
 
 			// place new block
-			worldObj.setBlock(i, j, k, newblock);
-			worldObj.setBlockMetadataWithNotify(i, j, k, newmeta, 3);
+			CommonUtil.setBlock(worldObj, i, j, k, newblock);
+			CommonUtil.setBlockMeta(worldObj, i, j, k, newmeta, 3);
 
 			if(consumeBlock) {
 				BuilderInvent[inventoryId].stackSize--; // ok ?
@@ -1014,7 +1014,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		if (stack.getItem() instanceof ItemBlock) {
 			Block block = ((ItemBlock) stack.getItem()).field_150939_a;
 			if (BlockRailBase.func_150051_a(block)) {
-				boolean success = world.setBlock(i, j, k, block);
+				boolean success = CommonUtil.setBlock(world, i, j, k, block);
 				if (success)
 					world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, block.stepSound.func_150496_b(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
 				return success;

@@ -45,7 +45,7 @@ public class TileOWOYardSwitchStand extends TileSwitch {
                         entityitem.motionX = (float) rand.nextGaussian() * f3;
                         entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
                         entityitem.motionZ = (float) rand.nextGaussian() * f3;
-                        worldObj.spawnEntityInWorld(entityitem);
+                        CommonUtil.spawnEntity(worldObj, entityitem);
                     }
                     this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
                 }
@@ -57,6 +57,6 @@ public class TileOWOYardSwitchStand extends TileSwitch {
     @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return AxisAlignedBB.getBoundingBox(xCoord - 1, yCoord - 1, zCoord - 1, xCoord + 2, yCoord + 2, zCoord + 2);
+        return CommonUtil.createAABB(xCoord - 1, yCoord - 1, zCoord - 1, xCoord + 2, yCoord + 2, zCoord + 2);
     }
 }

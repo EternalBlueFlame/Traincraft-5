@@ -248,7 +248,7 @@ public class TileSwitch extends TileRenderFacing {
             }
         }
 
-        List list = this.worldObj.getEntitiesWithinAABB(EntityMinecart.class, AxisAlignedBB.getBoundingBox(
+        List list = this.worldObj.getEntitiesWithinAABB(EntityMinecart.class, CommonUtil.createAABB(
                 xCoord+start.xCoord, yCoord+start.yCoord, zCoord+start.zCoord,
                 xCoord+end.xCoord, yCoord+end.yCoord, zCoord+end.zCoord));
 

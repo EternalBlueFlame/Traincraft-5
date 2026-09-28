@@ -175,7 +175,7 @@ public class BlockTCRailGag extends Block {
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
 		TileEntity tileEntity = world.getTileEntity(i, j, k);
 		if (tileEntity instanceof TileTCRailGag && !((TileTCRailGag)tileEntity).type.equals("null")) {
-			return AxisAlignedBB.getBoundingBox(i, j, k, i + 1, j + ((TileTCRailGag)tileEntity).bbHeight, k + 1);
+			return CommonUtil.createAABB(i, j, k, i + 1, j + ((TileTCRailGag)tileEntity).bbHeight, k + 1);
 		}
 		return null;
 	}

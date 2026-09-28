@@ -48,7 +48,7 @@ public class BlockTrainWorkbench extends BlockDynamic {
 		if (tilewb != null) {
 			label0: for (int l = 0; l < tilewb.getSizeInventory(); l++) {
 				ItemStack itemstack = tilewb.getStackInSlot(l);
-				if (itemstack == null) {
+				if (CommonUtil.isItemStackEmpty(itemstack)) {
 					continue;
 				}
 				float f = distilRand.nextFloat() * 0.8F + 0.1F;
@@ -68,7 +68,7 @@ public class BlockTrainWorkbench extends BlockDynamic {
 					entityitem.motionX = (float) distilRand.nextGaussian() * f3;
 					entityitem.motionY = (float) distilRand.nextGaussian() * f3 + 0.2F;
 					entityitem.motionZ = (float) distilRand.nextGaussian() * f3;
-					world.spawnEntityInWorld(entityitem);
+					ebf.tim.utility.CommonUtil.spawnEntity(world, entityitem);
 				} while (true);
 			}
 		}

@@ -79,7 +79,7 @@ public class TileInfoTransmitterMTC extends TileEntity implements IPeripheral {
 
 				 if (activated) {
                     //ExampleMod.msChannel.sendToAll(new PacketMTC(daTrain.getEntityId(), MTCInfo, 2));
-                    Traincraft.mscChannel.sendToAllAround(new PacketMTC(daTrain.getEntityId(), MTCInfo, 0) , new NetworkRegistry.TargetPoint(this.worldObj.provider.dimensionId, daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
+                    Traincraft.mscChannel.sendToAllAround(new PacketMTC(daTrain.getEntityId(), MTCInfo, 0) , new NetworkRegistry.TargetPoint(ebf.tim.utility.CommonUtil.getDimensionId(this.worldObj), daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
 
                     daTrain.mtcStatus =  MTCInfo;
                     daTrain.currentSignalBlock = this.signalBlock;
@@ -107,7 +107,7 @@ public class TileInfoTransmitterMTC extends TileEntity implements IPeripheral {
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         if (boundingBox == null) {
-            boundingBox = AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 2, yCoord + 2, zCoord + 2);
+            boundingBox = ebf.tim.utility.CommonUtil.createAABB(xCoord, yCoord, zCoord, xCoord + 2, yCoord + 2, zCoord + 2);
         }
         return boundingBox;
     }

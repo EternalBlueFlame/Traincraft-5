@@ -13,13 +13,13 @@ public class TrainsOnClick {
                 (FMLCommonHandler.instance().getMinecraftServerInstance().isSinglePlayer() || !train.isLinked() || train.getTrainOwner().equals(playerEntity.getDisplayName()) || train.getTrainOwner().isEmpty() || train.getTrainOwner() == null)) {
             if (playerEntity.isSneaking() && train instanceof Locomotive) {
                 if (!train.canBeAdjusted(train)) {
-                    playerEntity.addChatMessage(new ChatComponentText(((EntityRollingStock) train).getTrainName() + " can be pulled, don't forget to fuel it!"));
-                    playerEntity.addChatMessage(new ChatComponentText("Attach the BACK of this locomotive to the BACK of another locomotive. Otherwise you will encounter weird problems on turns"));
+                    CommonUtil.sendChat(playerEntity, ((EntityRollingStock) train).getTrainName() + " can be pulled, don't forget to fuel it!");
+                    CommonUtil.sendChat(playerEntity, "Attach the BACK of this locomotive to the BACK of another locomotive. Otherwise you will encounter weird problems on turns");
                     ((Locomotive) train).setCanBeAdjusted(true);
                     ((Locomotive) train).canBePulled = true;
                     ((Locomotive) train).disconnectFromServer();
                 } else {
-                    playerEntity.addChatMessage(new ChatComponentText(((EntityRollingStock) train).getTrainName() + " can pull"));
+                    CommonUtil.sendChat(playerEntity, ((EntityRollingStock) train).getTrainName() + " can pull");
                     ((Locomotive) train).setCanBeAdjusted(false);
                     ((Locomotive) train).canBePulled = false;
                 }
@@ -32,10 +32,10 @@ public class TrainsOnClick {
 
             if (!train.isAttaching) {
                 train.isAttaching = true;
-                playerEntity.addChatMessage(new ChatComponentText("Attaching mode on for: " + ((EntityRollingStock) train).getTrainName()));
+                CommonUtil.sendChat(playerEntity, "Attaching mode on for: " + ((EntityRollingStock) train).getTrainName());
                 itemstack.damageItem(1, playerEntity);
             } else {
-                playerEntity.addChatMessage(new ChatComponentText("Reset, click again to couple new cart to this one"));
+                CommonUtil.sendChat(playerEntity, "Reset, click again to couple new cart to this one");
                 train.Link1 = -1;
                 train.Link2 = -1;
                 if (train.frontLink != null && train.frontLink.Link1 == train.getUniqueTrainID()) {

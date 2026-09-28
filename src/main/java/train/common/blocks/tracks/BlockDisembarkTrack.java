@@ -4,6 +4,7 @@
 package train.common.blocks.tracks;
 
 import mods.railcraft.api.tracks.ITrackEmitter;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
@@ -53,7 +54,7 @@ public class BlockDisembarkTrack extends TrackBaseTraincraft implements ITrackEm
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
+		Block block = CommonUtil.getBlockAt(getWorld(), getX(), getY(), getZ());
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
 

@@ -202,7 +202,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 					for(int t=0;t<this.zeppInvent.length;t++){
 						if(this.zeppInvent[t]!=null && this.zeppInvent[t].getItem()!=null && this.zeppInvent[t].getItem() == Item.getItemFromBlock(Blocks.tnt)){
 							EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.worldObj, (double) ((float) posX), (double) ((float) posY -1F), (double) ((float) posZ), (EntityLivingBase) this.riddenByEntity);
-							this.worldObj.spawnEntityInWorld(entitytntprimed);
+							CommonUtil.spawnEntity(this.worldObj, entitytntprimed);
 							CommonUtil.playSound(entitytntprimed, "random.fuse", 1.0F, 1.0F);
 							bombTimer=100;
 							if(--this.zeppInvent[t].stackSize==0)this.zeppInvent[t]=null;
@@ -340,7 +340,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		for (int j = 0; j < i; j++) {
 			double d4 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j)) / i) - 0.125D;
 			double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j + 1)) / i) - 0.125D;
-			AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
+			AxisAlignedBB axisalignedbb = CommonUtil.createAABB(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
 			if (worldObj.isAABBInMaterial(axisalignedbb, Material.water)) {
 				d += 1.0D / i;
 			}

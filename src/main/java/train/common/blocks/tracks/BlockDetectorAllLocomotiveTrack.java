@@ -74,19 +74,19 @@ public class BlockDetectorAllLocomotiveTrack extends BlockDetectorTrack implemen
 				switch(this.ThingToSet) {
 				
 				case 0: {
-					player.addChatMessage(new ChatComponentText("Now set to emit a signal on all trains"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "Now set to emit a signal on all trains");
 					break;
 				}
 				case 3: {
-					player.addChatMessage(new ChatComponentText("Now set to emit a signal on all steam trains"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "Now set to emit a signal on all steam trains");
 					break;
 				}
 				case 6: {
-					player.addChatMessage(new ChatComponentText("Now set to emit a signal on all diesel trains"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "Now set to emit a signal on all diesel trains");
 					break;
 				}
 				case 9: {
-					player.addChatMessage(new ChatComponentText("Now set to emit a signal on all electric trains"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "Now set to emit a signal on all electric trains");
 					break;
 				}
 				

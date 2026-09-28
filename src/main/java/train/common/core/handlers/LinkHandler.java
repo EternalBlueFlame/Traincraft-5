@@ -128,7 +128,7 @@ public class LinkHandler {
 
 					EntityPlayer entityplayer = cart1.worldObj.getClosestPlayerToEntity(cart1, 20);//
 					if (entityplayer != null && byPlayer) {
-						entityplayer.addChatMessage(new ChatComponentText("attached!"));
+						ebf.tim.utility.CommonUtil.sendChat(entityplayer, "attached!");
 					}
 				}
 			}

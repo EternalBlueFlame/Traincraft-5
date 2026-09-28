@@ -172,7 +172,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 		}
 		if (locked && !entityplayer.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
 			if (!worldObj.isRemote)
-				entityplayer.addChatMessage(new ChatComponentText("this train is locked"));
+				ebf.tim.utility.CommonUtil.sendChat(entityplayer, "this train is locked");
 			return true;
 		}
 		

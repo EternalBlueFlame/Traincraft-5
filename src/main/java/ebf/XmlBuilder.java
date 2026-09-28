@@ -8,6 +8,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import org.apache.logging.log4j.LogManager;
+import train.common.core.util.TraincraftUtil;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -195,7 +196,7 @@ public class XmlBuilder {
 
     public static ItemStack getItemStackFromStringArray(String[] data){
         if(data[0].equals("null")){return null;}
-        Item i = GameData.getItemRegistry().getObject(data[0]);
+        Item i = TraincraftUtil.getItemFromName(data[0]);
         ItemStack s;
         if (i==null){
             Block b = GameData.getBlockRegistry().getObject(data[0]);

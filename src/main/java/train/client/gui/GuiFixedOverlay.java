@@ -77,7 +77,7 @@ public class GuiFixedOverlay extends GuiAbstractPaintbrush {
         // After the server recognizes that we changed it, it will send an update packet out to all clients.
         if (newOverlayNumber != 0) {
             rollingStock.getOverlayTextureContainer().getSpecificationFixed().setSelectedOverlay(newOverlayNumber);
-            Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.FIXED, rollingStock.getEntityId(), Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId, rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
+            Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.FIXED, rollingStock.getEntityId(), CommonUtil.getDimensionId(Minecraft.getMinecraft().thePlayer.worldObj), rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
         }
     }
 

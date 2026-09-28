@@ -249,7 +249,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				return true;
 			}
 
-			par2EntityPlayer.addChatMessage(new ChatComponentText("Place me on a straight piece of track !"));
+			CommonUtil.sendChat(par2EntityPlayer, "Place me on a straight piece of track !");
 			return false;
 		}
 		else if(tileentity instanceof TileTCRailGag){
@@ -278,7 +278,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						return true;
 					}
 					else {
-						par2EntityPlayer.addChatMessage(new ChatComponentText("Place me on the middle of the track! (also try replacing old tracks if that does not work)"));
+						CommonUtil.sendChat(par2EntityPlayer, "Place me on the middle of the track! (also try replacing old tracks if that does not work)");
 						return false;
 					}
 
@@ -288,7 +288,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
 				return true;
 			}
-			par2EntityPlayer.addChatMessage(new ChatComponentText("Place me on a straight piece of track !"));
+			CommonUtil.sendChat(par2EntityPlayer, "Place me on a straight piece of track !");
 			return false;
 		}
 		else if (CommonUtil.isRailBlockAt(par3World, par4, par5, par6) && (meta < 2 || meta > 5)) {
@@ -366,7 +366,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 				if ((rollingStock instanceof SteamTrain && !ConfigHandler.ENABLE_STEAM) || (rollingStock instanceof ElectricTrain && !ConfigHandler.ENABLE_ELECTRIC) || (rollingStock instanceof DieselTrain && !ConfigHandler.ENABLE_DIESEL) || (rollingStock instanceof EntityTracksBuilder && !ConfigHandler.ENABLE_BUILDER) || (rollingStock instanceof Tender && !ConfigHandler.ENABLE_TENDER)) {
 					if (player != null)
-						player.addChatMessage(new ChatComponentText("This type of train has been deactivated by the OP"));
+						CommonUtil.sendChat(player, "This type of train has been deactivated by the OP");
 					rollingStock.setDead();
 					return rollingStock;
 				}
@@ -374,7 +374,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				int dir = 0;
 				int meta;
 				if (CommonUtil.getBlockAt(world, i, j, k) instanceof BlockRailBase) {
-					meta = ((BlockRailBase) CommonUtil.getBlockAt(world, i, j, k)).getBasicRailMetadata(world, rollingStock, i, j, k);
+					meta = CommonUtil.getRailMeta(world, rollingStock, i, j, k);
 				} else {
 					meta = CommonUtil.getBlockFacing(world, i, j, k);
 				}
@@ -408,7 +408,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 							rollingStock.rotationYaw = 45;
 						}
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							CommonUtil.sendChat(player, "Place me on a straight piece of track!");
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -428,7 +428,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						} else if (meta == 1 || meta == 3) {
 							rollingStock.rotationYaw = 180; // LEFT
 						} else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							CommonUtil.sendChat(player, "Place me on a straight piece of track!");
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -450,7 +450,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 						}
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							CommonUtil.sendChat(player, "Place me on a straight piece of track!");
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -472,7 +472,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 							rollingStock.rotationYaw = 180; // LEFT
 						}
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							CommonUtil.sendChat(player, "Place me on a straight piece of track!");
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -495,7 +495,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						}
 
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							CommonUtil.sendChat(player, "Place me on a straight piece of track!");
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -519,7 +519,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 							rollingStock.rotationYaw = 0; // LEFT
 						}
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							CommonUtil.sendChat(player, "Place me on a straight piece of track!");
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -540,7 +540,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 						else if (meta == 5 || meta == 7) {
 							rollingStock.rotationYaw = 45; // LEFT
 						}else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							CommonUtil.sendChat(player, "Place me on a straight piece of track!");
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -562,7 +562,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 							rollingStock.rotationYaw = 90; // LEFT
 						}
 						else {
-							player.addChatMessage(new ChatComponentText("Place me on a straight piece of track!"));
+							CommonUtil.sendChat(player, "Place me on a straight piece of track!");
 							rollingStock.setDead();
 							return rollingStock;
 						}
@@ -605,12 +605,12 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					}
 					if (concatColors.length() > 4) {
 						if (player != null) {
-							player.addChatMessage(new ChatComponentText("Possible colors" + concatColors));
-							player.addChatMessage(new ChatComponentText("To paint, click me with the right (vanilla) dye"));
+							CommonUtil.sendChat(player, "Possible colors" + concatColors);
+							CommonUtil.sendChat(player, "To paint, click me with the right (vanilla) dye");
 						}
 					}
 				}
-				world.spawnEntityInWorld(rollingStock);
+				ebf.tim.utility.CommonUtil.spawnEntity(world, rollingStock);
 			}
 		}
 		--itemstack.stackSize;

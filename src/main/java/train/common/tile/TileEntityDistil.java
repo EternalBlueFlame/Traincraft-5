@@ -232,7 +232,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	}
 
 	private boolean placeInInvent(ItemStack itemstack1, int i, boolean doAdd) {
-		if (slots[i] == null) {
+		if (CommonUtil.isItemStackEmpty(slots[i])) {
 			if (doAdd)
 				slots[i] = itemstack1;
 			return true;

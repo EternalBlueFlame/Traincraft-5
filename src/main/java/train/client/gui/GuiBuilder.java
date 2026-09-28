@@ -130,7 +130,7 @@ public class GuiBuilder extends GuiContainer {
 
                 this.initGui();
             } else if (player != null) {
-                player.addChatMessage(new ChatComponentText(CommonUtil.translate("train.owner.name")));
+                CommonUtil.sendChat(player, CommonUtil.translate("train.owner.name"));
             }
         }
     }

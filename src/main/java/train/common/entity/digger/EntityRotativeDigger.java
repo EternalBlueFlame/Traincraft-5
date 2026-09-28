@@ -98,7 +98,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         if (worldObj.isRemote) {
             this.wheels = new EntityRotativeWheel[1];
             this.wheels[0] = new EntityRotativeWheel(this.worldObj, this, 0, 5.4D, 0, 0, 0.0D);
-            worldObj.spawnEntityInWorld(this.wheels[0]);
+            CommonUtil.spawnEntity(worldObj, this.wheels[0]);
         }
 
         this.dataWatcher.addObject(20, fuel);
@@ -222,7 +222,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
                 entityitem.motionX = (float) rand.nextGaussian() * f3;
                 entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
                 entityitem.motionZ = (float) rand.nextGaussian() * f3;
-                worldObj.spawnEntityInWorld(entityitem);
+                CommonUtil.spawnEntity(worldObj, entityitem);
             } while (true);
         }
         if (wheels != null) {
@@ -375,7 +375,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         for (int j = 0; j < i; j++) {
             double d4 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j)) / i) - 0.125D;
             double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j + 1)) / i) - 0.125D;
-            AxisAlignedBB axisalignedbb = AxisAlignedBB.getBoundingBox(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
+            AxisAlignedBB axisalignedbb = CommonUtil.createAABB(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
 
             if (worldObj.isAABBInMaterial(axisalignedbb, Material.water)) {
                 d += 1.0D / i;

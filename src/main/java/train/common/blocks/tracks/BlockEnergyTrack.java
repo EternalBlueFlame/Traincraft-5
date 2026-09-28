@@ -167,7 +167,7 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 		
 		if ((current != null) && ((current.getItem() instanceof IToolCrowbar))) {
 			IToolCrowbar crowbar = (IToolCrowbar) current.getItem();
-			player.addChatMessage(new ChatComponentText("stored: " + (this.RFChandler.getCharge()) + "/"+(int)this.getMaxEnergy()+" RF"));
+			ebf.tim.utility.CommonUtil.sendChat(player, "stored: " + (this.RFChandler.getCharge()) + "/"+(int)this.getMaxEnergy()+" RF");
 			markBlockNeedsUpdate();
 			crowbar.onWhack(player, current, getX(), getY(), getZ());
 			sendUpdateToClient();

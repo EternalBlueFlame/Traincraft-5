@@ -977,7 +977,7 @@ public class ItemTCRail extends ItemPart {
                         if (tcRailTurn != null) {
                             tcRailTurn.hasModel = false;
                         }
-                        world.setBlockMetadataWithNotify(x + 1, y + 1, z - 2, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x + 1, y + 1, z - 2, l, 2);//to force client update
                         /** Switch rail 1 */
                         putDownSingleRail(world, x, y + 1, z - 1, l, x + 3, y + 1, z, 2.5, tempType.getLabel(), true, x + 1, y + 1, z - 2);
 
@@ -1001,7 +1001,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z + 2);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x - 1, y + 1, z + 2, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x - 1, y + 1, z + 2, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x, y + 1, z + 1, l, x - 2, y + 1, z + 1, 2.5, tempType.getLabel(), true, x - 1, y + 1, z + 2);
@@ -1027,7 +1027,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z - 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x - 2, y + 1, z - 1, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x - 2, y + 1, z - 1, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z - 2, 2.5, tempType.getLabel(), true, x - 2, y + 1, z - 1);
@@ -1053,7 +1053,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z + 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x + 2, y + 1, z + 1, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x + 2, y + 1, z + 1, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z + 3, 2.5, tempType.getLabel(), true, x + 2, y + 1, z + 1);
@@ -1095,7 +1095,7 @@ public class ItemTCRail extends ItemPart {
                         if (tcRailTurn != null) {
                             tcRailTurn.hasModel = false;
                         }
-                        world.setBlockMetadataWithNotify(x - 1, y + 1, z - 2, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x - 1, y + 1, z - 2, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x, y + 1, z - 1, l, x - 2, y + 1, z, 2.5, tempType.getLabel(), true, x - 1, y + 1, z - 2);
@@ -1120,7 +1120,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z + 2);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x + 1, y + 1, z + 2, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x + 1, y + 1, z + 2, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x, y + 1, z + 1, l, x + 3, y + 1, z + 1, 2.5, tempType.getLabel(), true, x + 1, y + 1, z + 2);
@@ -1146,7 +1146,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z + 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x - 2, y + 1, z + 1, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x - 2, y + 1, z + 1, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z + 3, 2.5, tempType.getLabel(), true, x - 2, y + 1, z + 1);
@@ -1171,7 +1171,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z - 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x + 2, y + 1, z - 1, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x + 2, y + 1, z - 1, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z - 2, 2.5, tempType.getLabel(), true, x + 2, y + 1, z - 1);
@@ -1211,7 +1211,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z - 2);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x + 1, y + 1, z - 2, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x + 1, y + 1, z - 2, l, 2);//to force client update
                         /** Switch rail 1 */
                         putDownSingleRail(world, x, y + 1, z - 1, l, x + 5, y + 1, z, 4.5, tempType.getLabel(), true, x + 1, y + 1, z - 2);
 
@@ -1243,7 +1243,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z + 2);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x - 1, y + 1, z + 2, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x - 1, y + 1, z + 2, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x, y + 1, z + 1, l, x - 4, y + 1, z + 1, 4.5, tempType.getLabel(), true, x - 1, y + 1, z + 2);
@@ -1274,7 +1274,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z - 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x - 2, y + 1, z - 1, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x - 2, y + 1, z - 1, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z - 4, 4.5, tempType.getLabel(), true, x - 2, y + 1, z - 1);
@@ -1306,7 +1306,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z + 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x + 2, y + 1, z + 1, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x + 2, y + 1, z + 1, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z + 5, 4.5, tempType.getLabel(), true, x + 2, y + 1, z + 1);
@@ -1352,7 +1352,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z - 2);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x - 1, y + 1, z - 2, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x - 1, y + 1, z - 2, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x, y + 1, z - 1, l, x - 4, y + 1, z, 4.5, tempType.getLabel(), true, x - 1, y + 1, z - 2);
@@ -1384,7 +1384,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z + 2);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x + 1, y + 1, z + 2, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x + 1, y + 1, z + 2, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x, y + 1, z + 1, l, x + 5, y + 1, z + 1, 4.5, tempType.getLabel(), true, x + 1, y + 1, z + 2);
@@ -1416,7 +1416,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z + 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x - 2, y + 1, z + 1, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x - 2, y + 1, z + 1, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z + 5, 4.5, tempType.getLabel(), true, x - 2, y + 1, z + 1);
@@ -1448,7 +1448,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z - 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x + 2, y + 1, z - 1, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x + 2, y + 1, z - 1, l, 2);//to force client update
 
                         /** Switch rail 1 */
                         putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z - 4, 4.5, tempType.getLabel(), true, x + 2, y + 1, z - 1);
@@ -1499,7 +1499,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z - 2);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x + 1, y + 1, z - 2, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x + 1, y + 1, z - 2, l, 2);//to force client update
 
                         /** Switch rail 1 **/
                         putDownSingleRail(world, x, y + 1, z - 1, l, x + 10, y + 1, z, 9.5, tempType.getLabel(), true, x + 1, y + 1, z - 2);
@@ -1531,7 +1531,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z + 2);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x - 1, y + 1, z + 2, l, 0);//to force client update
+                        CommonUtil.setBlockMeta(world, x - 1, y + 1, z + 2, l, 0);//to force client update
 
                         /** Switch rail 1 **/
                         putDownSingleRail(world, x, y + 1, z + 1, l, x - 9, y + 1, z + 1, 9.5, tempType.getLabel(), true, x - 1, y + 1, z + 2);
@@ -1565,7 +1565,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z - 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x  - 2, y + 1, z - 1, l, 1);//to force client update
+                        CommonUtil.setBlockMeta(world, x  - 2, y + 1, z - 1, l, 1);//to force client update
 
                         /** Switch rail 1 **/
                         putDownSingleRail(world, x - 1, y + 1, z , l, x , y + 1, z - 9, 9.5, tempType.getLabel(), true, x - 2, y + 1, z - 1);
@@ -1599,7 +1599,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z + 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x  + 2, y + 1, z + 1, l, 3);//to force client update
+                        CommonUtil.setBlockMeta(world, x  + 2, y + 1, z + 1, l, 3);//to force client update
 
                         /** Switch rail 1 **/
                         putDownSingleRail(world, x + 1, y + 1, z , l, x + 1, y + 1, z + 10, 9.5, tempType.getLabel(), true, x + 2, y + 1, z + 1);
@@ -1650,7 +1650,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z - 2);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x - 1, y + 1, z - 2, l, 2);//to force client update
+                        CommonUtil.setBlockMeta(world, x - 1, y + 1, z - 2, l, 2);//to force client update
 
                         /** Switch rail 1 **/
                         putDownSingleRail(world, x, y + 1, z - 1, l, x - 9, y + 1, z, 9.5, tempType.getLabel(), true, x - 1, y + 1, z - 2);
@@ -1682,7 +1682,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z + 2);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x + 1, y + 1, z + 2, l, 0);//to force client update
+                        CommonUtil.setBlockMeta(world, x + 1, y + 1, z + 2, l, 0);//to force client update
 
                         /** Switch rail 1 **/
                         putDownSingleRail(world, x, y + 1, z + 1, l, x + 10, y + 1, z + 1, 9.5, tempType.getLabel(), true, x + 1, y + 1, z + 2);
@@ -1716,7 +1716,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 2, y + 1, z + 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x  - 2, y + 1, z + 1, l, 1);//to force client update
+                        CommonUtil.setBlockMeta(world, x  - 2, y + 1, z + 1, l, 1);//to force client update
 
                         /** Switch rail 1 **/
                         putDownSingleRail(world, x - 1, y + 1, z , l, x , y + 1, z + 10, 9.5, tempType.getLabel(), true, x - 2, y + 1, z + 1);
@@ -1748,7 +1748,7 @@ public class ItemTCRail extends ItemPart {
                         TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 2, y + 1, z - 1);
                         if (tcRailTurn != null)
                             tcRailTurn.hasModel = false;
-                        world.setBlockMetadataWithNotify(x  + 2, y + 1, z - 1, l, 3);//to force client update
+                        CommonUtil.setBlockMeta(world, x  + 2, y + 1, z - 1, l, 3);//to force client update
 
                         /** Switch rail 1 **/
                         putDownSingleRail(world, x + 1, y + 1, z , l, x + 1, y + 1, z - 9, 9.5, tempType.getLabel(), true, x + 2, y + 1, z - 1);
@@ -1886,8 +1886,7 @@ public class ItemTCRail extends ItemPart {
                     }
                     for (int i = 0; i < tileGag.length; i++) {
                         if (player != null && tileGag[i] == null) {
-                            player.addChatMessage(new ChatComponentText(
-                                    "There was a problem when placing the track. Possibly too many tracks around"));
+                                CommonUtil.sendChat(player, "There was a problem when placing the track. Possibly too many tracks around");
                             return false;
                         }
                         tileGag[i].originX.add(x);
@@ -2563,7 +2562,7 @@ public class ItemTCRail extends ItemPart {
         //gives Gag rails the TileTCRail as their origin
         for (TileTCRailGag tileTCRailGag : tileGag) {
             if (player != null && tileTCRailGag == null) {
-                player.addChatMessage(new ChatComponentText("There was a problem when placing the track. Possibly too many tracks around"));
+                CommonUtil.sendChat(player, "There was a problem when placing the track. Possibly too many tracks around");
                 return false;
             }
             tileTCRailGag.originX.add(x);
@@ -3167,7 +3166,7 @@ public class ItemTCRail extends ItemPart {
 
         for (TileTCRailGag tileTCRailGag : tileGag) {
             if (player != null && tileTCRailGag == null) {
-                player.addChatMessage(new ChatComponentText("There was a problem when placing the track. Possibly too many tracks around"));
+                CommonUtil.sendChat(player, "There was a problem when placing the track. Possibly too many tracks around");
                 return false;
             }
             tileTCRailGag.originX.add(x);
@@ -3245,7 +3244,7 @@ public class ItemTCRail extends ItemPart {
 
         for (TileTCRailGag tileTCRailGag : tcRailGag) {
             if (player != null && tileTCRailGag == null) {
-                player.addChatMessage(new ChatComponentText("There was a problem when placing the track. Possibly too many tracks around"));
+                CommonUtil.sendChat(player, "There was a problem when placing the track. Possibly too many tracks around");
                 return false;
             }
             tileTCRailGag.originX.add(x);
@@ -4048,7 +4047,7 @@ public class ItemTCRail extends ItemPart {
                 tcRailTurn.hasModel = false;
             }
 
-            world.setBlockMetadataWithNotify(x + 1, y + 1, z - 2, l, 2);//to force client update
+            CommonUtil.setBlockMeta(world, x + 1, y + 1, z - 2, l, 2);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x, y + 1, z - 1, l, x + 4.25, y + 1, z, 3.75, tempType.getLabel(), true, x + 1, y + 1, z - 2);
             /** Switch rail 2 **/
@@ -4066,7 +4065,7 @@ public class ItemTCRail extends ItemPart {
                 tcRailTurn.hasModel = false;
             }
 
-            world.setBlockMetadataWithNotify(x - 1, y + 1, z + 2, l, 0);//to force client update
+            CommonUtil.setBlockMeta(world, x - 1, y + 1, z + 2, l, 0);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x, y + 1, z + 1, l, x - 3.25, y + 1, z + 1, 3.75, tempType.getLabel(), true, x - 1, y + 1, z + 2);
             /** Switch rail 2 **/
@@ -4083,7 +4082,7 @@ public class ItemTCRail extends ItemPart {
                 tcRailTurn.hasModel = false;
             }
 
-            world.setBlockMetadataWithNotify(x - 2, y + 1, z - 1, l, 2);//to force client update
+            CommonUtil.setBlockMeta(world, x - 2, y + 1, z - 1, l, 2);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z - 3.25, 3.75, tempType.getLabel(), true, x - 2, y + 1, z - 1);
             /** Switch rail 2 **/
@@ -4100,7 +4099,7 @@ public class ItemTCRail extends ItemPart {
                 tcRailTurn.hasModel = false;
             }
 
-            world.setBlockMetadataWithNotify(x + 2, y + 1, z + 1, l, 2);//to force client update
+            CommonUtil.setBlockMeta(world, x + 2, y + 1, z + 1, l, 2);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z + 4.25, 3.75, tempType.getLabel(), true, x + 2, y + 1, z + 1);
             /** Switch rail 2 **/
@@ -4146,7 +4145,7 @@ public class ItemTCRail extends ItemPart {
                     tcRailTurn.hasModel = false;
                 }
 
-                world.setBlockMetadataWithNotify(x - 1, y + 1, z - 2, l, 2);//to force client update
+                CommonUtil.setBlockMeta(world, x - 1, y + 1, z - 2, l, 2);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x, y + 1, z - 1, l, x - 3.25, y + 1, z, 3.75, tempType.getLabel(), true, x - 1, y + 1, z - 2);
                 /** Switch rail 2 **/
@@ -4164,7 +4163,7 @@ public class ItemTCRail extends ItemPart {
                     tcRailTurn.hasModel = false;
                 }
 
-                world.setBlockMetadataWithNotify(x + 1, y + 1, z + 2, l, 2);//to force client update
+                CommonUtil.setBlockMeta(world, x + 1, y + 1, z + 2, l, 2);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x, y + 1, z + 1, l, x + 4.25, y + 1, z + 1, 3.75, tempType.getLabel(), true, x + 1, y + 1, z + 2);
                 /** Switch rail 2 **/
@@ -4181,7 +4180,7 @@ public class ItemTCRail extends ItemPart {
                     tcRailTurn.hasModel = false;
                 }
 
-                world.setBlockMetadataWithNotify(x - 2, y + 1, z + 1, l, 2);//to force client update
+                CommonUtil.setBlockMeta(world, x - 2, y + 1, z + 1, l, 2);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x - 1, y + 1, z, l, x, y + 1, z + 4.25, 3.75, tempType.getLabel(), true, x - 2, y + 1, z + 1);
                 /** Switch rail 2 **/
@@ -4198,7 +4197,7 @@ public class ItemTCRail extends ItemPart {
                     tcRailTurn.hasModel = false;
                 }
 
-                world.setBlockMetadataWithNotify(x + 2, y + 1, z + 1, l, 2);//to force client update
+                CommonUtil.setBlockMeta(world, x + 2, y + 1, z + 1, l, 2);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x + 1, y + 1, z, l, x + 1, y + 1, z - 3.25, 3.75, tempType.getLabel(), true, x + 2, y + 1, z - 1);
                 /** Switch rail 2 **/
@@ -4250,7 +4249,7 @@ public class ItemTCRail extends ItemPart {
             }
 
 
-            world.setBlockMetadataWithNotify(x + 1, y + 1, z - 3, l, 2);//to force client update
+            CommonUtil.setBlockMeta(world, x + 1, y + 1, z - 3, l, 2);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x, y + 1, z - 1 , l, x + 8.99, y + 1, z , 8.49, tempType.getLabel(), true, x + 1, y + 1, z - 3);
             /** Switch rail 2 **/
@@ -4276,7 +4275,7 @@ public class ItemTCRail extends ItemPart {
             }
 
 
-            world.setBlockMetadataWithNotify(x - 1, y + 1, z + 3, l, 0);//to force client update
+            CommonUtil.setBlockMeta(world, x - 1, y + 1, z + 3, l, 0);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x, y + 1, z + 1 , l, x - 7.99, y + 1, z + 1, 8.49, tempType.getLabel(), true, x - 1, y + 1, z + 3);
             /** Switch rail 2 **/
@@ -4302,7 +4301,7 @@ public class ItemTCRail extends ItemPart {
             }
 
 
-            world.setBlockMetadataWithNotify(x - 3, y + 1, z - 1, l, 1);//to force client update
+            CommonUtil.setBlockMeta(world, x - 3, y + 1, z - 1, l, 1);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x - 1, y + 1, z  , l, x , y + 1, z - 7.99, 8.49, tempType.getLabel(), true, x - 3, y + 1, z - 1);
             /** Switch rail 2 **/
@@ -4328,7 +4327,7 @@ public class ItemTCRail extends ItemPart {
             }
 
 
-            world.setBlockMetadataWithNotify(x + 3, y + 1, z + 1, l, 3);//to force client update
+            CommonUtil.setBlockMeta(world, x + 3, y + 1, z + 1, l, 3);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x + 1, y + 1, z  , l, x + 1 , y + 1, z + 8.99, 8.49, tempType.getLabel(), true, x + 3, y + 1, z + 1);
             /** Switch rail 2 **/
@@ -4384,7 +4383,7 @@ public class ItemTCRail extends ItemPart {
             }
 
 
-            world.setBlockMetadataWithNotify(x - 1, y + 1, z - 3, l, 2);//to force client update
+            CommonUtil.setBlockMeta(world, x - 1, y + 1, z - 3, l, 2);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x, y + 1, z - 1 , l, x - 7.99, y + 1, z , 8.49, tempType.getLabel(), true, x - 1, y + 1, z - 3);
             /** Switch rail 2 **/
@@ -4410,7 +4409,7 @@ public class ItemTCRail extends ItemPart {
             }
 
 
-            world.setBlockMetadataWithNotify(x + 1, y + 1, z + 3, l, 0);//to force client update
+            CommonUtil.setBlockMeta(world, x + 1, y + 1, z + 3, l, 0);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x, y + 1, z + 1 , l, x + 8.99, y + 1, z + 1, 8.49, tempType.getLabel(), true, x + 1, y + 1, z + 3);
             /** Switch rail 2 **/
@@ -4436,7 +4435,7 @@ public class ItemTCRail extends ItemPart {
             }
 
 
-            world.setBlockMetadataWithNotify(x - 3, y + 1, z + 1, l, 1);//to force client update
+            CommonUtil.setBlockMeta(world, x - 3, y + 1, z + 1, l, 1);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x - 1, y + 1, z  , l, x , y + 1, z + 8.99, 8.49, tempType.getLabel(), true, x - 3, y + 1, z + 1);
             /** Switch rail 2 **/
@@ -4462,7 +4461,7 @@ public class ItemTCRail extends ItemPart {
             }
 
 
-            world.setBlockMetadataWithNotify(x + 3, y + 1, z - 1, l, 3);//to force client update
+            CommonUtil.setBlockMeta(world, x + 3, y + 1, z - 1, l, 3);//to force client update
             /** Switch rail 1 **/
             putDownSingleRail(world, x + 1, y + 1, z  , l, x + 1 , y + 1, z - 7.99, 8.49, tempType.getLabel(), true, x + 3, y + 1, z - 1);
             /** Switch rail 2 **/
@@ -4533,7 +4532,7 @@ public class ItemTCRail extends ItemPart {
             TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z - 3);
             if (tcRailTurn != null) {
                 tcRailTurn.hasModel = false;
-                world.setBlockMetadataWithNotify(x + 1, y + 1, z - 3, l, 2);//to force client update
+                CommonUtil.setBlockMeta(world, x + 1, y + 1, z - 3, l, 2);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x, y + 1, z - 1, l, x + 18.48, y + 1, z + 0.95, 18, tempType.getLabel(), true, x + 1, y + 1, z - 3);
                 /** Switch rail 2 **/
@@ -4583,7 +4582,7 @@ public class ItemTCRail extends ItemPart {
             TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z + 3);
             if (tcRailTurn != null) {
                 tcRailTurn.hasModel = false;
-                world.setBlockMetadataWithNotify(x - 1, y + 1, z + 3, l, 0);//to force client update
+                CommonUtil.setBlockMeta(world, x - 1, y + 1, z + 3, l, 0);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x, y + 1, z + 1, l, x - 17.48, y + 1, z + 0.05, 18, tempType.getLabel(), true, x - 1, y + 1, z + 3);
                 /** Switch rail 2 **/
@@ -4633,7 +4632,7 @@ public class ItemTCRail extends ItemPart {
             TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 3, y + 1, z - 1);
             if (tcRailTurn != null) {
                 tcRailTurn.hasModel = false;
-                world.setBlockMetadataWithNotify(x - 3, y + 1, z - 1, l, 1);//to force client update
+                CommonUtil.setBlockMeta(world, x - 3, y + 1, z - 1, l, 1);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x - 1, y + 1, z , l, x + 0.95, y + 1, z - 17.48, 18, tempType.getLabel(), true, x - 3, y + 1, z - 1);
                 /** Switch rail 2 **/
@@ -4683,7 +4682,7 @@ public class ItemTCRail extends ItemPart {
             TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 3, y + 1, z + 1);
             if (tcRailTurn != null) {
                 tcRailTurn.hasModel = false;
-                world.setBlockMetadataWithNotify(x + 3, y + 1, z + 1, l, 3);//to force client update
+                CommonUtil.setBlockMeta(world, x + 3, y + 1, z + 1, l, 3);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x + 1, y + 1, z , l, x + 0.05, y + 1, z + 18.48, 18, tempType.getLabel(), true, x + 3, y + 1, z + 1);
                 /** Switch rail 2 **/
@@ -4781,7 +4780,7 @@ public class ItemTCRail extends ItemPart {
             TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 1, y + 1, z - 3);
             if (tcRailTurn != null) {
                 tcRailTurn.hasModel = false;
-                world.setBlockMetadataWithNotify(x - 1, y + 1, z - 3, l, 2);//to force client update
+                CommonUtil.setBlockMeta(world, x - 1, y + 1, z - 3, l, 2);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x, y + 1, z - 1, l, x - 17.48, y + 1, z + 0.95, 18, tempType.getLabel(), true, x - 1, y + 1, z - 3);
                 /** Switch rail 2 **/
@@ -4831,7 +4830,7 @@ public class ItemTCRail extends ItemPart {
             TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 1, y + 1, z + 3);
             if (tcRailTurn != null) {
                 tcRailTurn.hasModel = false;
-                world.setBlockMetadataWithNotify(x + 1, y + 1, z + 3, l, 0);//to force client update
+                CommonUtil.setBlockMeta(world, x + 1, y + 1, z + 3, l, 0);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x, y + 1, z + 1, l, x + 18.48, y + 1, z + 0.05, 18, tempType.getLabel(), true, x + 1, y + 1, z + 3);
                 /** Switch rail 2 **/
@@ -4881,7 +4880,7 @@ public class ItemTCRail extends ItemPart {
             TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x - 3, y + 1, z + 1);
             if (tcRailTurn != null) {
                 tcRailTurn.hasModel = false;
-                world.setBlockMetadataWithNotify(x - 3, y + 1, z + 1, l, 1);//to force client update
+                CommonUtil.setBlockMeta(world, x - 3, y + 1, z + 1, l, 1);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x - 1, y + 1, z , l, x + 0.95, y + 1, z + 18.48, 18, tempType.getLabel(), true, x - 3, y + 1, z + 1);
                 /** Switch rail 2 **/
@@ -4931,7 +4930,7 @@ public class ItemTCRail extends ItemPart {
             TileTCRail tcRailTurn = (TileTCRail) world.getTileEntity(x + 3, y + 1, z - 1);
             if (tcRailTurn != null) {
                 tcRailTurn.hasModel = false;
-                world.setBlockMetadataWithNotify(x + 3, y + 1, z - 1, l, 3);//to force client update
+                CommonUtil.setBlockMeta(world, x + 3, y + 1, z - 1, l, 3);//to force client update
                 /** Switch rail 1 **/
                 putDownSingleRail(world, x + 1, y + 1, z , l, x + 0.05, y + 1, z - 17.48, 18, tempType.getLabel(), true, x + 3, y + 1, z - 1);
                 /** Switch rail 2 **/
@@ -5003,7 +5002,7 @@ public class ItemTCRail extends ItemPart {
             removed.dropBlockAsItem(world, x, y, z, CommonUtil.getBlockFacing(world, x, y, z), 0);
         }
         if(!ConfigHandler.TRACK_OVERLAP || !(removed  instanceof BlockTCRail || removed instanceof BlockTCRailGag)){
-            world.setBlock(x, y, z, block, metadata, 3);
+            CommonUtil.setBlock(world, x, y, z, block, metadata, 3);
         }
     }
 

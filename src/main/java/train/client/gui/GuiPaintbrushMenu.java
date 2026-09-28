@@ -503,7 +503,7 @@ public class GuiPaintbrushMenu extends GuiScreen {
                 case 11: // Clear overlay button.
                     if (rollingStock.acceptsOverlayTextures() && rollingStock.getOverlayTextureContainer().getType() != OverlayTextureManager.Type.NONE) {
                         rollingStock.getOverlayTextureContainer().getOverlayConfigTag().setInteger("type", OverlayTextureManager.Type.NONE.ordinal());
-                        Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.NONE, rollingStock.getEntityId(), Minecraft.getMinecraft().thePlayer.worldObj.provider.dimensionId, rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
+                        Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.NONE, rollingStock.getEntityId(), CommonUtil.getDimensionId(Minecraft.getMinecraft().thePlayer.worldObj), rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
                         this.mc.thePlayer.closeScreen();
                     }
                     break;

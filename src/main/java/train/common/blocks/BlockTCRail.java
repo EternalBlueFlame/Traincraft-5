@@ -190,8 +190,8 @@ public class BlockTCRail extends Block {
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
 
-		return world==null ? AxisAlignedBB.getBoundingBox(i -18f, j, k -18f, i +18f, j, k +18f)
-		: AxisAlignedBB.getBoundingBox(i + this.minX , j + this.minY , k + this.minZ , i + maxX, j + this.maxY , k + this.maxZ);
+		return world==null ? CommonUtil.createAABB(i -18f, j, k -18f, i +18f, j, k +18f)
+		: CommonUtil.createAABB(i + this.minX , j + this.minY , k + this.minZ , i + maxX, j + this.maxY , k + this.maxZ);
 
 
 	}

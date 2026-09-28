@@ -7,6 +7,7 @@ package train.common.blocks.tracks;
 
 import mods.railcraft.api.core.items.IToolCrowbar;
 import mods.railcraft.api.tracks.ITrackPowered;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,17 +46,17 @@ public class BlockLocomotiveSpeedControllerTrack extends TrackBaseTraincraft imp
 				this.mode += 3;
 				if (mode > 15)mode = 0;
 				if (this.mode == 0)
-					player.addChatMessage(new ChatComponentText("20 percent of max speed"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "20 percent of max speed");
 				if (this.mode == 3)
-					player.addChatMessage(new ChatComponentText("40 percent of max speed"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "40 percent of max speed");
 				if (this.mode == 6)
-					player.addChatMessage(new ChatComponentText("60 percent of max speed"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "60 percent of max speed");
 				if (this.mode == 9)
-					player.addChatMessage(new ChatComponentText("80 percent of max speed"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "80 percent of max speed");
 				if (this.mode == 12)
-					player.addChatMessage(new ChatComponentText("90 percent of max speed"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "90 percent of max speed");
 				if (this.mode == 15)
-					player.addChatMessage(new ChatComponentText("100 percent of max speed"));
+					ebf.tim.utility.CommonUtil.sendChat(player, "100 percent of max speed");
 				crowbar.onWhack(player, current, getX(), getY(), getZ());
 				sendUpdateToClient();
 				return true;
@@ -124,7 +125,7 @@ public class BlockLocomotiveSpeedControllerTrack extends TrackBaseTraincraft imp
 	}
 
 	protected void notifyNeighbors() {
-		Block block = getWorld().getBlock(getX(), getY(), getZ());
+		Block block = CommonUtil.getBlockAt(getWorld(), getX(), getY(), getZ());
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY(), getZ(), block);
 		getWorld().notifyBlocksOfNeighborChange(getX(), getY() - 1, getZ(), block);
 

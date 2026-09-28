@@ -133,7 +133,7 @@ public class GuiControlCar extends GuiContainer
                         this.initGui();
                     }
                 } else {
-                    getEntityPlayer().addChatMessage(new ChatComponentText("You are not the owner"));
+                    ebf.tim.utility.CommonUtil.sendChat(getEntityPlayer(), "You are not the owner");
                 }
                 break;
 

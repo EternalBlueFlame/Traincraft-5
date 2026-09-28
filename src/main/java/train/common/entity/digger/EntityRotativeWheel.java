@@ -172,7 +172,7 @@ public class EntityRotativeWheel extends Entity {
 
         if (!shouldIgnoreBlockForHarvesting(pos, id)) {
             id.harvestBlock(worldObj, fakePlayer, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, meta);
-            worldObj.setBlock((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, null);
+            CommonUtil.setBlock(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, null);
 
             worldObj.playAuxSFX(2001, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, Block.getIdFromBlock(id) + (meta << 12));
             this.playMiningEffect(pos, id);

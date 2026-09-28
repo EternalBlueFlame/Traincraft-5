@@ -155,7 +155,7 @@ public class GuiForney extends GuiContainer {
                     this.initGui();
                 }
             } else if (loco.riddenByEntity != null && loco.riddenByEntity instanceof EntityPlayer) {
-                ((EntityPlayer) loco.riddenByEntity).addChatMessage(new ChatComponentText("You are not the owner"));
+                ebf.tim.utility.CommonUtil.sendChat((EntityPlayer) loco.riddenByEntity, "You are not the owner");
             }
         } else if (guibutton instanceof GUIButton) {
             ((GUIButton)guibutton).onClick();

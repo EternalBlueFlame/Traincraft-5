@@ -190,7 +190,7 @@ public class ItemAdminBook extends Item {
                                                 if (p.captureDrops) {
                                                     p.capturedDrops.add(entityitem);
                                                 } else {
-                                                    world.spawnEntityInWorld(entityitem);
+                                                    ebf.tim.utility.CommonUtil.spawnEntity(world, entityitem);
                                                 }
                                             }
                                         }

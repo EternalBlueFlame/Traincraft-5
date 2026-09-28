@@ -357,7 +357,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             if (((EntityPlayer) damagesource.getEntity()).capabilities.isCreativeMode) {
                 this.setDamage(1000);
                 if (ConfigHandler.ENABLE_WAGON_REMOVAL_NOTICES && ((EntityPlayer) damagesource.getEntity()).canCommandSenderUseCommand(2, "")) {
-                    ((EntityPlayer) damagesource.getEntity()).addChatComponentMessage(new ChatComponentText("Operator removed train owned by " + getTrainOwner()));
+                    CommonUtil.sendChat((EntityPlayer) damagesource.getEntity(), "Operator removed train owned by " + getTrainOwner());
                 }
             }
             setDamage(getDamage() + i * 10);
@@ -653,8 +653,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 offset=CommonUtil.rotatePoint(this.rotationPoints()[1], 0,180+rotationYaw);
                 this.bogieBack = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ, this);
 
-                worldObj.spawnEntityInWorld(bogieBack);
-                worldObj.spawnEntityInWorld(bogieFront);
+                CommonUtil.spawnEntity(worldObj, bogieBack);
+                CommonUtil.spawnEntity(worldObj, bogieFront);
             }
             this.hasSpawnedBogie = true;
         }
@@ -709,7 +709,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 if (i == 0) {
                     seats.get(i).setControlSeat();
                 }
-                getWorld().spawnEntityInWorld(seats.get(i));
+                CommonUtil.spawnEntity(getWorld(), seats.get(i));
             }
         }
         //dont check for jumping until at least a tick after seats spawned
@@ -730,7 +730,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                         this.timeUntilPortal = this.getPortalCooldown();
                         byte var3;
 
-                        if (this.worldObj.provider.dimensionId == -1) {
+                        if (CommonUtil.getDimensionId(this.worldObj) == -1) {
                             var3 = 0;
                         } else {
                             var3 = -1;
@@ -849,7 +849,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 
         if (!worldObj.isRemote && ticksExisted % 2 == 0) {
-            Traincraft.rotationChannel.sendToAllAround(new PacketRollingStockRotation(this), new TargetPoint(worldObj.provider.dimensionId, posX, posY, posZ, 300.0D));
+            Traincraft.rotationChannel.sendToAllAround(new PacketRollingStockRotation(this), new TargetPoint(CommonUtil.getDimensionId(worldObj), posX, posY, posZ, 300.0D));
         }
 
         handleTrain();
@@ -896,7 +896,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     if(i1==0){
                         seats.get(i1).setControlSeat();
                     }
-                    getWorld().spawnEntityInWorld(seats.get(i1));
+                    CommonUtil.spawnEntity(getWorld(), seats.get(i1));
                 }
                 cachedVectors[0] = new Vec3f(getRiderOffsets()[i1][0], getRiderOffsets()[i1][1], getRiderOffsets()[i1][2])
                         .rotatePoint(rotationPitch, 180+rotationYaw, 0f);
@@ -1134,11 +1134,11 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (this.getTrainLockedFromPacket() && !worldObj.isRemote) {
             boolean isTrustedPlayer = isPlayerTrusted(playerEntity.getDisplayName());
             if (!playerEntity.getDisplayName().equalsIgnoreCase(this.getTrainOwner()) && !canBeRiddenWhileLocked(this) && !isTrustedPlayer) {
-                if (!worldObj.isRemote) entityplayer.addChatMessage(new ChatComponentText("Train is locked by " + this.getTrainOwner() + "."));
+                if (!worldObj.isRemote) CommonUtil.sendChat(entityplayer, "Train is locked by " + this.getTrainOwner() + ".");
                 return true;
             }
             else if (!playerEntity.getDisplayName().equalsIgnoreCase(this.getTrainOwner()) && entityplayer.inventory.getCurrentItem() != null && entityplayer.inventory.getCurrentItem().getItem() instanceof ItemDye && (this instanceof Locomotive) && !isTrustedPlayer) {
-                if (!worldObj.isRemote) entityplayer.addChatMessage(new ChatComponentText("Train is locked by " + this.getTrainOwner() + "."));
+                if (!worldObj.isRemote) CommonUtil.sendChat(entityplayer, "Train is locked by " + this.getTrainOwner() + ".");
                 return true;
             }
         }
@@ -1147,7 +1147,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if(itemstack != null) {
             if (itemstack.getItem() instanceof ItemWrench && this instanceof Locomotive && entityplayer.isSneaking() && !worldObj.isRemote) {
                 destination = "";
-                entityplayer.addChatMessage(new ChatComponentText("Destination reset"));
+                CommonUtil.sendChat(entityplayer, "Destination reset");
                 return true;
             }
             ItemStack crowbar = GameRegistry.findItemStack("railcraft", "tool.crowbar", 1);
@@ -1189,12 +1189,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                         for (int t = 0; t < SkinRegistry.get(this).size(); t++) {
                             concatColors = concatColors.concat(SkinRegistry.get(this).get(t) + ", ");
                         }
-                        entityplayer.addChatMessage(new ChatComponentText("Possible colors" + concatColors));
-                        entityplayer.addChatMessage(new ChatComponentText("To paint, click me with the right dye"));
+                        CommonUtil.sendChat(entityplayer, "Possible colors" + concatColors);
+                        CommonUtil.sendChat(entityplayer, "To paint, click me with the right dye");
                         return true;
                     }
                 } else if (SkinRegistry.get(this) != null || SkinRegistry.get(this).size() == 0) {
-                    entityplayer.addChatMessage(new ChatComponentText("No other colors available"));
+                    CommonUtil.sendChat(entityplayer, "No other colors available");
                 }
             }
             if ((trainsOnClick.onClickWithStake(this, itemstack, playerEntity, worldObj))) {
@@ -1207,7 +1207,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 }
 
                 if (SkinRegistry.get(this).size() == 0) {
-                    entityplayer.addChatMessage(new ChatComponentText("There are no other colors available."));
+                    CommonUtil.sendChat(entityplayer, "There are no other colors available.");
                 }
                 return true;
             } else if (itemstack.getItem() instanceof ItemPaintbrushThing) {
@@ -1226,7 +1226,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     entityplayer.openGui(Traincraft.instance, GuiIDs.LOCK_MENU, entityplayer.getEntityWorld(), this.getEntityId(), -1, (int) this.posZ);
                     return true;
                 } else {
-                    if (!worldObj.isRemote) entityplayer.addChatMessage(new ChatComponentText("Train is locked by " + this.getTrainOwner() + "."));
+                    if (!worldObj.isRemote) CommonUtil.sendChat(entityplayer, "Train is locked by " + this.getTrainOwner() + ".");
                     return false;
                 }
             }

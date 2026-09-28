@@ -109,7 +109,7 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 			if (snowballs >0){
 				EntityItem entityitem = new EntityItem(worldObj, point[0], point[1] + 1, point[2], new ItemStack(Items.snowball, snowballs));
 				entityitem.delayBeforeCanPickup = 10;
-				worldObj.spawnEntityInWorld(entityitem);
+				CommonUtil.spawnEntity(worldObj, entityitem);
 
 			}
 		}

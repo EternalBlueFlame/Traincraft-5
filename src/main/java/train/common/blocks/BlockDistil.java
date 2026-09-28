@@ -93,13 +93,13 @@ public class BlockDistil extends BlockDynamic {
 		TileEntity tileentity = world.getTileEntity(i, j, k);
 		keepDistilInventory = true;
 		if (flag) {
-			world.setBlock(i, j, k, TCBlocks.distilActive);
+			CommonUtil.setBlock(world, i, j, k, TCBlocks.distilActive);
 		}
 		else {
-			world.setBlock(i, j, k, TCBlocks.distilIdle);
+			CommonUtil.setBlock(world, i, j, k, TCBlocks.distilIdle);
 		}
 		keepDistilInventory = false;
-		world.setBlockMetadataWithNotify(i, j, k, l, 2);
+		CommonUtil.setBlockMeta(world, i, j, k, l, 2);
 		if (tileentity != null) {
 			tileentity.validate();
 			world.setTileEntity(i, j, k, tileentity);
@@ -113,7 +113,7 @@ public class BlockDistil extends BlockDynamic {
 			if (tileentitydistil != null) {
 				label0: for (int l = 0; l < tileentitydistil.getSizeInventory(); l++) {
 					ItemStack itemstack = tileentitydistil.getStackInSlot(l);
-					if (itemstack == null) {
+					if (CommonUtil.isItemStackEmpty(itemstack)) {
 						continue;
 					}
 					float f = distilRand.nextFloat() * 0.8F + 0.1F;
@@ -133,7 +133,7 @@ public class BlockDistil extends BlockDynamic {
 						entityitem.motionX = (float) distilRand.nextGaussian() * f3;
 						entityitem.motionY = (float) distilRand.nextGaussian() * f3 + 0.2F;
 						entityitem.motionZ = (float) distilRand.nextGaussian() * f3;
-						world.spawnEntityInWorld(entityitem);
+						ebf.tim.utility.CommonUtil.spawnEntity(world, entityitem);
 					} while (true);
 				}
 			}

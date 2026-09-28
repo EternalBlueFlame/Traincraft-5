@@ -57,7 +57,7 @@ public class BlockAssemblyTableIII extends BlockDynamic {
 		if (tileentitytierIII != null) {
 			label0: for (int l = 0; l < tileentitytierIII.getSizeInventory()-8; l++) {
 				ItemStack itemstack = tileentitytierIII.getStackInSlot(l);
-				if (itemstack == null) {
+				if (CommonUtil.isItemStackEmpty(itemstack)) {
 					continue;
 				}
 				float f = distilRand.nextFloat() * 0.8F + 0.1F;
@@ -77,7 +77,7 @@ public class BlockAssemblyTableIII extends BlockDynamic {
 					entityitem.motionX = (float) distilRand.nextGaussian() * f3;
 					entityitem.motionY = (float) distilRand.nextGaussian() * f3 + 0.2F;
 					entityitem.motionZ = (float) distilRand.nextGaussian() * f3;
-					world.spawnEntityInWorld(entityitem);
+					ebf.tim.utility.CommonUtil.spawnEntity(world, entityitem);
 				} while (true);
 			}
 		}

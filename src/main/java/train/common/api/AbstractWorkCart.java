@@ -152,14 +152,14 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 	 * Returns true if the furnace can smelt an item, i.e. has a source item, destination stack isn't full, etc.
 	 */
 	private boolean canSmelt() {
-		if (this.furnaceItemStacks[0] == null) {
+		if (CommonUtil.isItemStackEmpty(this.furnaceItemStacks[0])) {
 			return false;
 		}
 		else {
 			ItemStack var1 = FurnaceRecipes.smelting().getSmeltingResult(this.furnaceItemStacks[0]);
 			if (var1 == null)
 				return false;
-			if (this.furnaceItemStacks[2] == null)
+			if (CommonUtil.isItemStackEmpty(this.furnaceItemStacks[2]))
 				return true;
 			if (!this.furnaceItemStacks[2].isItemEqual(var1))
 				return false;

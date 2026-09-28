@@ -333,12 +333,12 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                 this.playerEntity = entityplayer;
                 if (getFlag(7)) {
                     this.setFlag(7, false);
-                    entityplayer.addChatMessage(new ChatComponentText("Stop loading chunks"));
+                    CommonUtil.sendChat(entityplayer, "Stop loading chunks");
                     ForgeChunkManager.releaseTicket(chunkTicket);
                     chunkTicket = null;
                 } else if (!getFlag(7)) {
                     this.setFlag(7, true);
-                    entityplayer.addChatMessage(new ChatComponentText("Start loading chunks"));
+                    CommonUtil.sendChat(entityplayer, "Start loading chunks");
                 }
                 itemstack.damageItem(1, entityplayer);
                 return true;
@@ -584,16 +584,16 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                 if (locked) {
                     locked = false;
                     if (worldObj.isRemote) {
-                        entityplayer.addChatMessage(new ChatComponentText("Unlocked."));
+                        CommonUtil.sendChat(entityplayer, "Unlocked.");
                     }
                 } else {
                     locked = true;
                     if (worldObj.isRemote) {
-                        entityplayer.addChatMessage(new ChatComponentText("Locked."));
+                        CommonUtil.sendChat(entityplayer, "Locked.");
                     }
                 }
             } else if (worldObj.isRemote) {
-                entityplayer.addChatMessage(new ChatComponentText("You are not the owner!"));
+                CommonUtil.sendChat(entityplayer, "You are not the owner!");
             }
             return true;
         }
@@ -612,11 +612,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                         ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem() != null &&
                         ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem().getItem() instanceof ItemWrench) {
 
-                    ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("Removing the train using OP permission."));
+                    CommonUtil.sendChat((EntityPlayer) damagesource.getEntity(), "Removing the train using OP permission.");
                     return false;
                 }
                 else if (!((EntityPlayer) damagesource.getEntity()).getDisplayName().equalsIgnoreCase(this.trainOwner) && !(this.isPlayerTrustedToBreak(((EntityPlayerMP) damagesource.getEntity()).getDisplayName()))) {
-                    ((EntityPlayer) damagesource.getEntity()).addChatMessage(new ChatComponentText("You are not the owner!"));
+                    CommonUtil.sendChat((EntityPlayer) damagesource.getEntity(), "You are not the owner!");
                     return true;
                 }
             } else return !damagesource.isProjectile();
