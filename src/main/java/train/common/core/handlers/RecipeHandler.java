@@ -50,7 +50,7 @@ public class RecipeHandler {
 
         if (!ConfigHandler.DISABLE_TRAIN_WORKBENCH) {
             for (ItemStack ironingot : iron) {
-                addDictRecipe(new ItemStack(TCBlocks.trainWorkbench, 1), "###", "IFI", "###", '#', "plankWood", 'F', Blocks.furnace, 'I', ironingot);
+                addDictRecipe(new ItemStack(TCBlocks.trainWorkbench, 1), "###", "IFI", "###", '#', "plankWood", 'F', Blocks.FURNACE, 'I', ironingot);
             }
         }
         addDictRecipe(new ItemStack(TCBlocks.distilIdle, 1), "###", "#F#", "###", '#', "ingotSteel", 'F', ItemIDs.firebox.item);
@@ -232,7 +232,7 @@ public class RecipeHandler {
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(Blocks.rail), 1), "   ", " R ", "   ", 'R', ItemIDs.tcRailSmallRoadCrossing1.item);
         GameRegistry.addRecipe(new ItemStack(Item.getItemFromBlock(Blocks.rail), 1), "   ", " R ", "   ", 'R', ItemIDs.tcRailSmallRoadCrossing2.item);
 
-        GameRegistry.addRecipe(new ItemStack(ItemIDs.paintbrushThing.item, 1), "GB ", "RIS", " ST", 'G', new ItemStack(Items.dye, 1, 2), 'B', new ItemStack(Items.dye, 1, 4), 'R', new ItemStack(Items.dye, 1, 1), 'I', new ItemStack(Items.IRON_INGOT), 'S', new ItemStack(Items.string), 'T', new ItemStack(Items.stick));
+        GameRegistry.addRecipe(new ItemStack(ItemIDs.paintbrushThing.item, 1), "GB ", "RIS", " ST", 'G', new ItemStack(Items.dye, 1, 2), 'B', new ItemStack(Items.dye, 1, 4), 'R', new ItemStack(Items.dye, 1, 1), 'I', new ItemStack(Items.IRON_INGOT), 'S', new ItemStack(Items.string), 'T', new ItemStack(Items.STICK));
         GameRegistry.addShapelessRecipe(new ItemStack(BlockIDs.poweredGravel.block, 1), new ItemStack(Items.REDSTONE), new ItemStack(Blocks.gravel));
         GameRegistry.addShapelessRecipe(new ItemStack(BlockIDs.snowGravel.block, 1), new ItemStack(Items.snowball), new ItemStack(Blocks.gravel));
         GameRegistry.addShapelessRecipe(new ItemStack(BlockIDs.snowGravel.block, 4), new ItemStack(Blocks.snow), new ItemStack(Blocks.gravel), new ItemStack(Blocks.gravel), new ItemStack(Blocks.gravel), new ItemStack(Blocks.gravel));
@@ -281,7 +281,7 @@ public class RecipeHandler {
         GameRegistry.addRecipe(new ItemStack(BlockIDs.asphaltStairs.block, 4), "  B", " BB", "BBB", 'B', new ItemStack(BlockIDs.asphalt.block));
         GameRegistry.addRecipe(new ItemStack(BlockIDs.signalSpanish.block, 1), " L ", " I ", "RIR", 'L', new ItemStack(Blocks.redstone_lamp), 'I', new ItemStack(Items.IRON_INGOT), 'R', new ItemStack(Items.REDSTONE));
         GameRegistry.addRecipe(new ItemStack(BlockIDs.kSignal.block, 1), "RIR", " I ", " L ", 'L', new ItemStack(Blocks.redstone_lamp), 'I', new ItemStack(Items.IRON_INGOT), 'R', new ItemStack(Items.REDSTONE));
-        GameRegistry.addRecipe(new ItemStack(TCBlocks.bridgePillar, 8), "SSS", "SLS", "SSS", 'S', new ItemStack(Items.stick), 'L', new ItemStack(Blocks.log));
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.bridgePillar, 8), "SSS", "SLS", "SSS", 'S', new ItemStack(Items.STICK), 'L', new ItemStack(Blocks.log));
         GameRegistry.addRecipe(new ItemStack(TCBlocks.speedSign, 8), " R ", " I ", " I ", 'R', new ItemStack(Items.dye, 1, 1), 'I', new ItemStack(Items.IRON_INGOT));
 
         //Gravel
@@ -292,8 +292,8 @@ public class RecipeHandler {
         GameRegistry.addShapelessRecipe(new ItemStack(BlockIDs.dirtierBallast.block, 16), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), new ItemStack(BlockIDs.dirtyBallast.block, 1), Blocks.dirt);
 
         for (ItemStack ironingot : iron) {
-            addDictRecipe(new ItemStack(TCBlocks.switchStand, 1), " W ", " I ", " R ", 'W', Blocks.lever, 'R', Items.stick, 'I', ironingot);
-            addDictRecipe(new ItemStack(TCBlocks.MFPBWigWag, 1), " RW", "BWR", "AAA", 'A', new ItemStack(Items.stick), 'B', Blocks.iron_bars, 'R', new ItemStack(Items.dye, 1, 1), 'W', new ItemStack(Items.dye, 1, 15));
+            addDictRecipe(new ItemStack(TCBlocks.switchStand, 1), " W ", " I ", " R ", 'W', Blocks.lever, 'R', Items.STICK, 'I', ironingot);
+            addDictRecipe(new ItemStack(TCBlocks.MFPBWigWag, 1), " RW", "BWR", "AAA", 'A', new ItemStack(Items.STICK), 'B', Blocks.iron_bars, 'R', new ItemStack(Items.dye, 1, 1), 'W', new ItemStack(Items.dye, 1, 15));
             addDictRecipe(new ItemStack(TCBlocks.MFPBWigWag, 1), "IWI", " I ", " I ", 'W', Blocks.lever, 'I', ironingot);
             /*Buffer*/
             addDictRecipe(new ItemStack(BlockIDs.stopper.block, 1), "WWW", "I I", "RRR", 'W', "plankWood", 'R', Blocks.rail, 'I', ironingot);
@@ -325,7 +325,7 @@ public class RecipeHandler {
         /* I placed it here because workbench should be one of the first recipe shown in the recipe book */
         for (ItemStack plank : planks) {
             for (ItemStack ironingot : iron) {
-                TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.trainWorkbench, 1), "###", "IFI", "###", '#', plank, 'F', Blocks.furnace, 'I', ironingot);
+                TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.trainWorkbench, 1), "###", "IFI", "###", '#', plank, 'F', Blocks.FURNACE, 'I', ironingot);
             }
         }
 
@@ -336,11 +336,11 @@ public class RecipeHandler {
         TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.chunkLoaderActivator.item, 1), "  P", " S ", "S  ", 'S', Items.blaze_rod, 'P', Items.ender_pearl);
 
         // Switches -hariesh
-        GameRegistry.addRecipe(new ItemStack(TCBlocks.owoYardSwitchStand, 1), "   ", "OS ", "IW ", 'O', new ItemStack(Items.dye, 1, 14), 'S', Items.stick, 'I', Items.IRON_INGOT, 'W', Blocks.PLANKS);
-        GameRegistry.addRecipe(new ItemStack(TCBlocks.owoSwitchStand, 1), " O ", " S ", " IW", 'O', new ItemStack(Items.dye, 1, 14), 'S', Items.stick, 'I', Items.IRON_INGOT, 'W', Blocks.PLANKS);
-        GameRegistry.addRecipe(new ItemStack(TCBlocks.circleSwitchStand, 1), " R ", " S ", " IW", 'R', new ItemStack(Items.dye, 1, 1), 'S', Items.stick, 'I', Items.IRON_INGOT, 'W', Blocks.PLANKS);
-        GameRegistry.addRecipe(new ItemStack(TCBlocks.autoSwtichStand, 1), "   ", "C  ", "BIW", 'C', new ItemStack(ItemIDs.electronicCircuit.item, 1), 'B', Blocks.iron_block, 'S', Items.stick, 'I', Items.IRON_INGOT, 'W', Blocks.PLANKS);
-        GameRegistry.addRecipe(new ItemStack(ItemIDs.paintbrushThing.item, 1), "GB ", "RIS", " ST", 'G', new ItemStack(Items.dye, 1, 2), 'B', new ItemStack(Items.dye, 1, 4), 'R', new ItemStack(Items.dye, 1, 1), 'I', new ItemStack(Items.IRON_INGOT), 'S', new ItemStack(Items.string), 'T', new ItemStack(Items.stick));
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.owoYardSwitchStand, 1), "   ", "OS ", "IW ", 'O', new ItemStack(Items.dye, 1, 14), 'S', Items.STICK, 'I', Items.IRON_INGOT, 'W', Blocks.PLANKS);
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.owoSwitchStand, 1), " O ", " S ", " IW", 'O', new ItemStack(Items.dye, 1, 14), 'S', Items.STICK, 'I', Items.IRON_INGOT, 'W', Blocks.PLANKS);
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.circleSwitchStand, 1), " R ", " S ", " IW", 'R', new ItemStack(Items.dye, 1, 1), 'S', Items.STICK, 'I', Items.IRON_INGOT, 'W', Blocks.PLANKS);
+        GameRegistry.addRecipe(new ItemStack(TCBlocks.autoSwtichStand, 1), "   ", "C  ", "BIW", 'C', new ItemStack(ItemIDs.electronicCircuit.item, 1), 'B', Blocks.iron_block, 'S', Items.STICK, 'I', Items.IRON_INGOT, 'W', Blocks.PLANKS);
+        GameRegistry.addRecipe(new ItemStack(ItemIDs.paintbrushThing.item, 1), "GB ", "RIS", " ST", 'G', new ItemStack(Items.dye, 1, 2), 'B', new ItemStack(Items.dye, 1, 4), 'R', new ItemStack(Items.dye, 1, 1), 'I', new ItemStack(Items.IRON_INGOT), 'S', new ItemStack(Items.string), 'T', new ItemStack(Items.STICK));
 
 
 
@@ -436,7 +436,7 @@ public class RecipeHandler {
         if (ConfigHandler.ENABLE_ZEPPELIN) {
             TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.balloon.item, 1), "###", "# #", "###", '#', Blocks.wool);// Balloon
             TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.steamengine.item, 1), "C  ", "BF ", 'C', ItemIDs.steelchimney.item, 'B', ItemIDs.boiler.item, 'F', ItemIDs.firebox.item);// Small steam engine
-            TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.airship.item, 1), "B B", "SES", "POP", 'B', ItemIDs.balloon.item, 'S', Items.stick, 'E', ItemIDs.steamengine.item, 'P', ItemIDs.propeller.item, 'O', Items.boat);
+            TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.airship.item, 1), "B B", "SES", "POP", 'B', ItemIDs.balloon.item, 'S', Items.STICK, 'E', ItemIDs.steamengine.item, 'P', ItemIDs.propeller.item, 'O', Items.boat);
             TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.zeppelin.item, 1), "BBB", "SES", "POP", 'B', ItemIDs.balloon.item, 'S', ItemIDs.propeller.item, 'E', ItemIDs.controls.item, 'P', ItemIDs.electmotor.item, 'O', ItemIDs.seats.item);
         }
 
@@ -472,7 +472,7 @@ public class RecipeHandler {
 
 
                 TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.transmition.item, 1), " # ", "#X#", " # ", '#', steelItem, 'X', ItemIDs.diesel.item);// transmition
-                TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.piston.item, 3), " # ", " X ", '#', steelItem, 'X', Items.stick);// piston
+                TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.piston.item, 3), " # ", " X ", '#', steelItem, 'X', Items.STICK);// piston
                 TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.camshaft.item, 3), "###", "   ", "   ", '#', steelItem);// camshaft
                 TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.camshaft.item, 3), "   ", "###", "   ", '#', steelItem);// camshaft
                 TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.camshaft.item, 3), "   ", "   ", "###", '#', steelItem);// camshaft
@@ -497,7 +497,7 @@ public class RecipeHandler {
                 TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.ironFrame.item, 2), "   ", "# #", "AAA", 'A', ironingot, '#', plankItem);// iron Frame
                 TrainCraftingManager.instance.addRecipe(new ItemStack(ItemIDs.ironCab.item, 2), "###", "X X", "XXX", 'X', ironingot, '#', plankItem);// iron cab
                 TrainCraftingManager.instance.addRecipe(new ItemStack(BlockIDs.stopper.block, 1), "WWW", "I I", "RRR", 'W', plankItem, 'R', Blocks.rail, 'I', ironingot);// stopper
-                TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.switchStand, 1), " W ", " I ", " R ", 'W', Blocks.lever, 'R', Items.stick, 'I', ironingot);//switchstand
+                TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.switchStand, 1), " W ", " I ", " R ", 'W', Blocks.lever, 'R', Items.STICK, 'I', ironingot);//switchstand
                 TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.MFPBWigWag, 1), "IWI", " I ", " I ", 'W', Blocks.lever, 'I', ironingot);//wigwag
             }
             // Short Wood Slope
@@ -654,7 +654,7 @@ public class RecipeHandler {
 
         // Bridge Pillar
         TrainCraftingManager.instance.addRecipe(new ItemStack(TCBlocks.bridgePillar, 8),
-                "SSS", "SLS", "SSS", 'S', Items.stick, 'L', Blocks.log);
+                "SSS", "SLS", "SSS", 'S', Items.STICK, 'L', Blocks.log);
     }
 
     public static void initSmeltingRecipes() {

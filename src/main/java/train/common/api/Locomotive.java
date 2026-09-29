@@ -3,7 +3,7 @@ package train.common.api;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.Loader;
+import net.minecraftforge.fml.common.Loader;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
 import ebf.tim.entities.EntitySeat;
@@ -1165,8 +1165,8 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
             disconnectFromServer();
             ServerLogger.deleteWagon(this);
 
-            if (damagesource.getEntity() instanceof EntityPlayer) {
-                dropCartAsItem(((EntityPlayer) damagesource.getEntity()).capabilities.isCreativeMode);
+            if (damagesource.damageType.equals("player")) {
+                dropCartAsItem(damagesource.isCreativePlayer());
             } else {
                 dropCartAsItem(false);
             }

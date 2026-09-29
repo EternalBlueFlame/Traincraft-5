@@ -33,8 +33,8 @@ public class EntityPropagandaUSSR extends EntityRollingStock {
 			}
 			this.setDead();
 			ServerLogger.deleteWagon(this);
-			if(damagesource.getEntity() instanceof EntityPlayer) {
-				dropCartAsItem(((EntityPlayer)damagesource.getEntity()).capabilities.isCreativeMode);
+			if(damagesource.damageType.equals("player")) {
+				dropCartAsItem(damagesource.isCreativePlayer());
 			}
 		}
 		return true;

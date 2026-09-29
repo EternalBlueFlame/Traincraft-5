@@ -64,7 +64,7 @@ public class EntityFlatCart extends EntityRollingStock implements IPassenger {
                 new ItemStack(Blocks.PLANKS, 3),
 new ItemStack(ItemIDs.woodenBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 2), 
-new ItemStack(Items.stick, 2), 
+new ItemStack(Items.STICK, 2),
 null,
  null, 
 null, 

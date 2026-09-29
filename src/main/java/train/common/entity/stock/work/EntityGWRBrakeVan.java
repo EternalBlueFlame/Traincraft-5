@@ -61,7 +61,7 @@ public class EntityGWRBrakeVan extends AbstractWorkCart {
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.crafting_table, 1), 
+                new ItemStack(Blocks.CRAFTING_TABLE, 1),
 new ItemStack(ItemIDs.ironBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 1), 
 new ItemStack(Blocks.PLANKS, 8),
@@ -69,7 +69,7 @@ null,
  new ItemStack(ItemIDs.woodenCab.item, 1), 
 null, 
 null, 
-new ItemStack(Blocks.furnace, 1),
+new ItemStack(Blocks.FURNACE, 1),
 new ItemStack(thisItem)
         };
     }

@@ -68,7 +68,7 @@ public class EntityLocoSteamSmall extends SteamTrain {
                 null, 
 new ItemStack(ItemIDs.woodenBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 2), 
-new ItemStack(Items.stick, 2), 
+new ItemStack(Items.STICK, 2),
 new ItemStack(ItemIDs.ironChimney.item, 1), 
 new ItemStack(ItemIDs.woodenCab.item, 1), 
 new ItemStack(ItemIDs.ironBoiler.item, 1), 

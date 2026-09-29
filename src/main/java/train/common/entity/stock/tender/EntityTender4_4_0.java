@@ -70,7 +70,7 @@ public class EntityTender4_4_0 extends Tender {
                 null, 
 new ItemStack(ItemIDs.ironBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 1), 
-new ItemStack(Items.stick, 2), 
+new ItemStack(Items.STICK, 2),
 null,
  null, 
 null, 

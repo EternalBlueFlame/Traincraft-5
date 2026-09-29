@@ -65,7 +65,7 @@ public class EntityTankLava extends LiquidTank {
                 new ItemStack(Items.IRON_INGOT, 6),
 new ItemStack(ItemIDs.woodenBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 2), 
-new ItemStack(Items.stick, 2), 
+new ItemStack(Items.STICK, 2),
 null,
  null, 
 null, 

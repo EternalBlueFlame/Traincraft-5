@@ -64,7 +64,7 @@ public class EntityCaboose extends EntityRollingStock implements IPassenger {
                 new ItemStack(Blocks.PLANKS, 6),
 new ItemStack(ItemIDs.woodenBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 2), 
-new ItemStack(Items.stick, 2), 
+new ItemStack(Items.STICK, 2),
 null,
  new ItemStack(ItemIDs.woodenCab.item, 1), 
 null, 

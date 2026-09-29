@@ -33,8 +33,8 @@ public class VillagerTraincraftHandler implements IVillageCreationHandler, IVill
         recipeList.add(new MerchantRecipe(getRandomSizedStack(Blocks.detector_rail, random, 4), Items.emerald));
         recipeList.add(new MerchantRecipe(getRandomSizedItemStack(Items.emerald, random, 4), new ItemStack(Blocks.detector_rail)));
 
-        recipeList.add(new MerchantRecipe(getRandomSizedStack(Blocks.golden_rail, random, 10), Items.emerald));
-        recipeList.add(new MerchantRecipe(getRandomSizedItemStack(Items.emerald, random, 10), new ItemStack(Blocks.golden_rail)));
+        recipeList.add(new MerchantRecipe(getRandomSizedStack(Blocks.GOLDEN_RAIL, random, 10), Items.emerald));
+        recipeList.add(new MerchantRecipe(getRandomSizedItemStack(Items.emerald, random, 10), new ItemStack(Blocks.GOLDEN_RAIL)));
 
         recipeList.add(new MerchantRecipe(getRandomSizedStack(Blocks.clay, random, 10), Items.emerald));
         recipeList.add(new MerchantRecipe(getRandomSizedItemStack(Items.emerald, random, 10), new ItemStack(Blocks.brick_block)));

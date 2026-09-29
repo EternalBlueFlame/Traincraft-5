@@ -1,16 +1,16 @@
 package train.common.api;
 
 import com.mojang.authlib.GameProfile;
-import cpw.mods.fml.client.FMLClientHandler;
 import fexcraft.tmt.slim.Vec3d;
 import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.network.ByteBufUtils;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
@@ -352,14 +352,14 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         if (world.isRemote || isDead) {
             return true;
         }
-        if (damagesource.getEntity() instanceof EntityPlayer && !damagesource.isProjectile()) {
+        if (damagesource.damageType.equals("player") && !damagesource.isProjectile()) {
             if (this instanceof IPassenger) {
                 if (canBeDestroyedByPlayer(damagesource)) return false;
             }
             setRollingDirection(-getRollingDirection());
             setRollingAmplitude(10);
             setBeenAttacked();
-            if (((EntityPlayer) damagesource.getEntity()).capabilities.isCreativeMode) {
+            if (damagesource.isCreativePlayer()) {
                 this.setDamage(1000);
                 if (ConfigHandler.ENABLE_WAGON_REMOVAL_NOTICES && ((EntityPlayer) damagesource.getEntity()).canCommandSenderUseCommand(2, "")) {
                     CommonUtil.sendChat((EntityPlayer) damagesource.getEntity(), "Operator removed train owned by " + getTrainOwner());
@@ -377,7 +377,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                  */
                 if (this instanceof IPassenger) {
                     this.setDead();
-                    dropCartAsItem(((EntityPlayer) damagesource.getEntity()).capabilities.isCreativeMode);
+                    dropCartAsItem(damagesource.isCreativePlayer());
                 }
             }
         }
@@ -653,13 +653,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
             if (bogieFront == null) {
                 double[] offset=CommonUtil.rotatePoint(this.rotationPoints()[0], 0,180+rotationYaw);
-                this.bogieFront = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ, this);
+                this.bogieFront = new EntityBogie(world,offset[0]+posX,posY,offset[2]+posZ, this);
 
                 offset=CommonUtil.rotatePoint(this.rotationPoints()[1], 0,180+rotationYaw);
-                this.bogieBack = new EntityBogie(worldObj,offset[0]+posX,posY,offset[2]+posZ, this);
+                this.bogieBack = new EntityBogie(world,offset[0]+posX,posY,offset[2]+posZ, this);
 
-                CommonUtil.spawnEntity(worldObj, bogieBack);
-                CommonUtil.spawnEntity(worldObj, bogieFront);
+                CommonUtil.spawnEntity(world, bogieBack);
+                CommonUtil.spawnEntity(world, bogieFront);
             }
             this.hasSpawnedBogie = true;
         }
@@ -718,7 +718,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             }
         }
         //dont check for jumping until at least a tick after seats spawned
-        else if (!seats.isEmpty() && worldObj.isRemote && Traincraft.proxy.getCurrentScreen() == null && seats.get(0).getPassenger() != null) {
+        else if (!seats.isEmpty() && world.isRemote && Traincraft.proxy.getCurrentScreen() == null && seats.get(0).getPassenger() != null) {
             if (TraincraftEntityHelper.getIsJumping(seats.get(0).getPassenger())) isBraking = true;
         }
 
@@ -735,7 +735,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                         this.timeUntilPortal = this.getPortalCooldown();
                         byte var3;
 
-                        if (CommonUtil.getDimensionId(this.worldObj) == -1) {
+                        if (CommonUtil.getDimensionId(this.world) == -1) {
                             var3 = 0;
                         } else {
                             var3 = -1;
@@ -767,7 +767,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             soundUpdater();
         }
 
-        if (worldObj.isRemote) {
+        if (world.isRemote) {
             if (rollingturnProgress > 0) {
                 this.setPosition(this.posX + (this.rollingX - this.posX) / (double)this.rollingturnProgress,
                         this.posY + (this.rollingY - this.posY) / (double)this.rollingturnProgress,
@@ -804,7 +804,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
          * backLink will be updated accordingly
          */
         if (addedToChunk && ((this.frontLink == null && this.Link1 != 0) || (this.backLink == null && this.Link2 != 0))) {
-            List list = worldObj.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(15, 15, 15));
+            List list = world.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(15, 15, 15));
 
             if (list != null && list.size() > 0) {
                 for (Object entity : list) {
@@ -827,13 +827,13 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         int floor_posY = CommonUtil.floorDouble(posY);
         int floor_posZ = CommonUtil.floorDouble(posZ);
 
-        if (worldObj.isAirBlock(floor_posX, floor_posY, floor_posZ)) {
+        if (world.isAirBlock(floor_posX, floor_posY, floor_posZ)) {
             floor_posY--;
-        } else if (isRailBlockAt(worldObj, floor_posX, floor_posY + 1, floor_posZ) || CommonUtil.getBlockAt(worldObj, floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRail.block || CommonUtil.getBlockAt(worldObj, floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRailGag.block) {
+        } else if (isRailBlockAt(world, floor_posX, floor_posY + 1, floor_posZ) || CommonUtil.getBlockAt(world, floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRail.block || CommonUtil.getBlockAt(world, floor_posX, floor_posY + 1, floor_posZ) == BlockIDs.tcRailGag.block) {
             floor_posY++;
         }
 
-        l = CommonUtil.getBlockAt(worldObj, floor_posX, floor_posY, floor_posZ);
+        l = CommonUtil.getBlockAt(world, floor_posX, floor_posY, floor_posZ);
 
         updatePosition();
 
@@ -853,8 +853,8 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         }
 
 
-        if (!worldObj.isRemote && ticksExisted % 2 == 0) {
-            Traincraft.rotationChannel.sendToAllAround(new PacketRollingStockRotation(this), new TargetPoint(CommonUtil.getDimensionId(worldObj), posX, posY, posZ, 300.0D));
+        if (!world.isRemote && ticksExisted % 2 == 0) {
+            Traincraft.rotationChannel.sendToAllAround(new PacketRollingStockRotation(this), new NetworkRegistry.TargetPoint(CommonUtil.getDimensionId(world), posX, posY, posZ, 300.0D));
         }
 
         handleTrain();
@@ -883,7 +883,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         this.dataWatcher.updateObject(14, (int) (motionX * 100));
         this.dataWatcher.updateObject(21, (int) (motionZ * 100));
         positionSeats();
-        if (ConfigHandler.ENABLE_LOGGING && !worldObj.isRemote && ticksExisted % 120 == 0) {
+        if (ConfigHandler.ENABLE_LOGGING && !world.isRemote && ticksExisted % 120 == 0) {
             ServerLogger.writeWagonToFolder(this);
         }
         if(!world.isRemote) {
@@ -922,7 +922,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                 derail= false;
 
 
-                if (b == Blocks.golden_rail) {
+                if (b == Blocks.GOLDEN_RAIL) {
                     if ((((BlockRailBase) b).isPowered()) &&
                             //this part keeps it capped
                             getVelocity() < maxBoost(b)) {
@@ -1136,21 +1136,21 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
         playerEntity = entityplayer;
         ItemStack itemstack = entityplayer.inventory.getCurrentItem();
 
-        if (this.getTrainLockedFromPacket() && !worldObj.isRemote) {
+        if (this.getTrainLockedFromPacket() && !world.isRemote) {
             boolean isTrustedPlayer = isPlayerTrusted(playerEntity.getDisplayName());
             if (!playerEntity.getDisplayName().equalsIgnoreCase(this.getTrainOwner()) && !canBeRiddenWhileLocked(this) && !isTrustedPlayer) {
-                if (!worldObj.isRemote) CommonUtil.sendChat(entityplayer, "Train is locked by " + this.getTrainOwner() + ".");
+                if (!world.isRemote) CommonUtil.sendChat(entityplayer, "Train is locked by " + this.getTrainOwner() + ".");
                 return true;
             }
             else if (!playerEntity.getDisplayName().equalsIgnoreCase(this.getTrainOwner()) && entityplayer.inventory.getCurrentItem() != null && entityplayer.inventory.getCurrentItem().getItem() instanceof ItemDye && (this instanceof Locomotive) && !isTrustedPlayer) {
-                if (!worldObj.isRemote) CommonUtil.sendChat(entityplayer, "Train is locked by " + this.getTrainOwner() + ".");
+                if (!world.isRemote) CommonUtil.sendChat(entityplayer, "Train is locked by " + this.getTrainOwner() + ".");
                 return true;
             }
         }
 
 
         if(itemstack != null) {
-            if (itemstack.getItem() instanceof ItemWrench && this instanceof Locomotive && entityplayer.isSneaking() && !worldObj.isRemote) {
+            if (itemstack.getItem() instanceof ItemWrench && this instanceof Locomotive && entityplayer.isSneaking() && !world.isRemote) {
                 destination = "";
                 CommonUtil.sendChat(entityplayer, "Destination reset");
                 return true;
@@ -1184,12 +1184,12 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                             this.setColor(s.addr);
                             itemstack.stackSize--;
 
-                            //if (!worldObj.isRemote)PacketHandler.sendPacketToClients(PacketHandler.sendStatsToServer(10,this.uniqueID,trainName ,trainType, this.trainOwner, this.getColorAsString(itemstack.getItemDamage()), (int)posX, (int)posY, (int)posZ),this.worldObj, (int)posX,(int)posY,(int)posZ, 12.0D);
+                            //if (!world.isRemote)PacketHandler.sendPacketToClients(PacketHandler.sendStatsToServer(10,this.uniqueID,trainName ,trainType, this.trainOwner, this.getColorAsString(itemstack.getItemDamage()), (int)posX, (int)posY, (int)posZ),this.world, (int)posX,(int)posY,(int)posZ, 12.0D);
 
                             return true;
                         }
                     }
-                    if (worldObj.isRemote && ConfigHandler.SHOW_POSSIBLE_COLORS) {
+                    if (world.isRemote && ConfigHandler.SHOW_POSSIBLE_COLORS) {
                         String concatColors = ": ";
                         for (int t = 0; t < SkinRegistry.get(this).size(); t++) {
                             concatColors = concatColors.concat(SkinRegistry.get(this).get(t) + ", ");
@@ -1202,7 +1202,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     CommonUtil.sendChat(entityplayer, "No other colors available");
                 }
             }
-            if ((trainsOnClick.onClickWithStake(this, itemstack, playerEntity, worldObj))) {
+            if ((trainsOnClick.onClickWithStake(this, itemstack, playerEntity, world))) {
                 return true;
             }
 
@@ -1231,7 +1231,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
                     entityplayer.openGui(Traincraft.instance, GuiIDs.LOCK_MENU, entityplayer.getEntityWorld(), this.getEntityId(), -1, (int) this.posZ);
                     return true;
                 } else {
-                    if (!worldObj.isRemote) CommonUtil.sendChat(entityplayer, "Train is locked by " + this.getTrainOwner() + ".");
+                    if (!world.isRemote) CommonUtil.sendChat(entityplayer, "Train is locked by " + this.getTrainOwner() + ".");
                     return false;
                 }
             }
@@ -1255,7 +1255,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
             return true;
         }
 
-        return worldObj.isRemote;
+        return world.isRemote;
     }
 
     @SideOnly(Side.CLIENT)

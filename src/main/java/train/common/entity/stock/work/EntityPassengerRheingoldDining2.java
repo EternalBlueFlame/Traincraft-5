@@ -74,7 +74,7 @@ null,
  new ItemStack(ItemIDs.steelcab.item, 1), 
 null, 
 null, 
-new ItemStack(Blocks.crafting_table, 1),
+new ItemStack(Blocks.CRAFTING_TABLE, 1),
 new ItemStack(thisItem)
         };
     }

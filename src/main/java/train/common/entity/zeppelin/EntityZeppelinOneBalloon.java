@@ -29,13 +29,13 @@ public class EntityZeppelinOneBalloon extends AbstractZeppelin{
 		boatRockDirection = -boatRockDirection;
 		boatTimeSinceHit = 10;
 		boatCurrentDamage += i * 10;
-		if (damagesource.getEntity() instanceof EntityPlayer) {
-			if (damagesource.getEntity() instanceof EntityPlayer && ((EntityPlayer) damagesource.getEntity()).capabilities.isCreativeMode) {
+		if (damagesource.damageType.equals("player")) {
+			if (damagesource.damageType.equals("player") && damagesource.isCreativePlayer()) {
 				this.boatCurrentDamage = 1000;
 			}
 		}
 		if (boatCurrentDamage > 40) {
-			if (damagesource.getEntity() instanceof EntityPlayer && !(((EntityPlayer) damagesource.getEntity()).capabilities.isCreativeMode)) {
+			if (damagesource.damageType.equals("player") && !(damagesource.isCreativePlayer())) {
 				dropItem(ItemIDs.zeppelin.item, 1);
 			}
 			setDead();

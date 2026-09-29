@@ -68,7 +68,7 @@ public class EntityTenderSmall extends Tender {
                 null, 
 new ItemStack(ItemIDs.woodenBogie.item, 2), 
 new ItemStack(ItemIDs.woodenFrame.item, 1), 
-new ItemStack(Items.stick, 2), 
+new ItemStack(Items.STICK, 2),
 null,
  null, 
 null, 

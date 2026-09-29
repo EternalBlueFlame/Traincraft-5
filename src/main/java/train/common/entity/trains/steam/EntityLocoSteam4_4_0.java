@@ -70,7 +70,7 @@ public class EntityLocoSteam4_4_0 extends SteamTrain {
                 null, 
 new ItemStack(ItemIDs.ironBogie.item, 3), 
 new ItemStack(ItemIDs.woodenFrame.item, 2), 
-new ItemStack(Items.stick, 2), 
+new ItemStack(Items.STICK, 2),
 new ItemStack(ItemIDs.ironChimney.item, 1), 
 new ItemStack(ItemIDs.woodenCab.item, 1), 
 new ItemStack(ItemIDs.ironBoiler.item, 1), 
