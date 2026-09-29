@@ -51,7 +51,7 @@ public class TileMetroMadridPole extends TileEntity {
     public void readFromNBT(NBTTagCompound nbtTag) {
 
         if(nbtTag.hasKey("Orientation")) {
-            facing = ForgeDirection.getOrientation(nbtTag.getByte("Orientation"));
+            facing = CommonUtil.getOrientation(nbtTag.getByte("Orientation"));
         }
 
         super.readFromNBT(nbtTag);

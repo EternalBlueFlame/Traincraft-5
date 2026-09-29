@@ -75,10 +75,10 @@ public abstract class ElectricTrain extends Locomotive {
 		  * 
 		  * if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!worldObj.isRemote)) { locoInvent[u].setItemDamage(1); } } } } } else if ((locoInvent[0].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[23]).itemID)) { hasUranium = true; fuelTrain = 800 + 1000000; // locoInvent[0] = null; if (!worldObj.isRemote) { decrStackSize(0, 1); } reduceExplosionChance = 1000; for (int u = 1; u < locoInvent.length; u++) {// checks the inventory if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!worldObj.isRemote)) { locoInvent[u].setItemDamage(1); } } } } } } } */
 
-		blocksToCheck = new TileEntity[]{worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY-1),CommonUtil.floorDouble(posZ)),
-				worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY+2),CommonUtil.floorDouble(posZ)),
-				worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY+3),CommonUtil.floorDouble(posZ)),
-				worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY+4),CommonUtil.floorDouble(posZ))
+		blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(worldObj, posX, posY-1, posZ),
+				CommonUtil.getTileEntity(worldObj, posX, posY+2, posZ),
+				CommonUtil.getTileEntity(worldObj, posX, posY+3, posZ),
+				CommonUtil.getTileEntity(worldObj, posX, posY+4, posZ)
 		};
 
 		int draw = 0;

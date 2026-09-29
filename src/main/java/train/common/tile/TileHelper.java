@@ -9,6 +9,8 @@ package train.common.tile;
 
 import net.minecraftforge.common.util.ForgeDirection;
 
+import ebf.tim.utility.CommonUtil;
+
 public class TileHelper {
 
 	/**
@@ -31,49 +33,49 @@ public class TileHelper {
 			case 0:
 				switch (side.ordinal()) {
 				case 0:
-					return ForgeDirection.getOrientation(3);
+					return CommonUtil.getOrientation(3);
 				case 1:
-					return ForgeDirection.getOrientation(2);
+					return CommonUtil.getOrientation(2);
 				case 2:
-					return ForgeDirection.getOrientation(1);
+					return CommonUtil.getOrientation(1);
 				case 3:
-					return ForgeDirection.getOrientation(0);
+					return CommonUtil.getOrientation(0);
 				case 4:
-					return ForgeDirection.getOrientation(5);
+					return CommonUtil.getOrientation(5);
 				case 5:
-					return ForgeDirection.getOrientation(4);
+					return CommonUtil.getOrientation(4);
 				}
 
 			case 1:
 				switch (side.ordinal()) {
 				case 0:
-					return ForgeDirection.getOrientation(4);
+					return CommonUtil.getOrientation(4);
 				case 1:
-					return ForgeDirection.getOrientation(5);
+					return CommonUtil.getOrientation(5);
 				case 2:
-					return ForgeDirection.getOrientation(0);
+					return CommonUtil.getOrientation(0);
 				case 3:
-					return ForgeDirection.getOrientation(1);
+					return CommonUtil.getOrientation(1);
 				case 4:
-					return ForgeDirection.getOrientation(2);
+					return CommonUtil.getOrientation(2);
 				case 5:
-					return ForgeDirection.getOrientation(3);
+					return CommonUtil.getOrientation(3);
 				}
 
 			case 2:
 				switch (side.ordinal()) {
 				case 0:
-					return ForgeDirection.getOrientation(0);
+					return CommonUtil.getOrientation(0);
 				case 1:
-					return ForgeDirection.getOrientation(1);
+					return CommonUtil.getOrientation(1);
 				case 2:
-					return ForgeDirection.getOrientation(3);
+					return CommonUtil.getOrientation(3);
 				case 3:
-					return ForgeDirection.getOrientation(2);
+					return CommonUtil.getOrientation(2);
 				case 4:
-					return ForgeDirection.getOrientation(5);
+					return CommonUtil.getOrientation(5);
 				case 5:
-					return ForgeDirection.getOrientation(4);
+					return CommonUtil.getOrientation(4);
 				}
 
 			case 3:
@@ -82,33 +84,33 @@ public class TileHelper {
 			case 4:
 				switch (side.ordinal()) {
 				case 0:
-					return ForgeDirection.getOrientation(0);
+					return CommonUtil.getOrientation(0);
 				case 1:
-					return ForgeDirection.getOrientation(1);
+					return CommonUtil.getOrientation(1);
 				case 2:
-					return ForgeDirection.getOrientation(5);
+					return CommonUtil.getOrientation(5);
 				case 3:
-					return ForgeDirection.getOrientation(4);
+					return CommonUtil.getOrientation(4);
 				case 4:
-					return ForgeDirection.getOrientation(3);
+					return CommonUtil.getOrientation(3);
 				case 5:
-					return ForgeDirection.getOrientation(2);
+					return CommonUtil.getOrientation(2);
 				}
 
 			case 5:
 				switch (side.ordinal()) {
 				case 0:
-					return ForgeDirection.getOrientation(0);
+					return CommonUtil.getOrientation(0);
 				case 1:
-					return ForgeDirection.getOrientation(1);
+					return CommonUtil.getOrientation(1);
 				case 2:
-					return ForgeDirection.getOrientation(4);
+					return CommonUtil.getOrientation(4);
 				case 3:
-					return ForgeDirection.getOrientation(5);
+					return CommonUtil.getOrientation(5);
 				case 4:
-					return ForgeDirection.getOrientation(2);
+					return CommonUtil.getOrientation(2);
 				case 5:
-					return ForgeDirection.getOrientation(3);
+					return CommonUtil.getOrientation(3);
 				}
 			}
 		}

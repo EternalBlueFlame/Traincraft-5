@@ -41,7 +41,7 @@ public class BlockTCRailGag extends Block {
 	private static final int[] matrixXZ = {0,-1,-2,1,2}, matrixY = {0,-1,-2,1,2};
 	@Override
 	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
-		TileTCRailGag tileEntity = (TileTCRailGag) world.getTileEntity(i, j, k);
+		TileTCRailGag tileEntity = (TileTCRailGag) CommonUtil.getTileEntity(world, i, j, k);
 		if (tileEntity != null && tileEntity.originX.size()>0) {
 			world.func_147480_a(tileEntity.originX.get(0), tileEntity.originY.get(0), tileEntity.originZ.get(0), false);
 			world.removeTileEntity(tileEntity.originX.get(0), tileEntity.originY.get(0), tileEntity.originZ.get(0));
@@ -76,8 +76,8 @@ public class BlockTCRailGag extends Block {
 	@Override
 	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
 
-		TileTCRailGag gagRail = (TileTCRailGag) world.getTileEntity(x,y,z);
-		TileTCRail tileEntity = (TileTCRail) world.getTileEntity(gagRail.originX.get(0), gagRail.originY.get(0), gagRail.originZ.get(0));
+		TileTCRailGag gagRail = (TileTCRailGag) CommonUtil.getTileEntity(world, x, y, z);
+		TileTCRail tileEntity = (TileTCRail) CommonUtil.getTileEntity(world, gagRail.originX.get(0), gagRail.originY.get(0), gagRail.originZ.get(0));
 
 		if (tileEntity == null) {
 			return;
@@ -87,8 +87,8 @@ public class BlockTCRailGag extends Block {
 
 	@Override
     public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player) {
-		TileTCRailGag tileGag = (TileTCRailGag) world.getTileEntity(x, y, z);
-		TileTCRail tile = (TileTCRail) world.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
+		TileTCRailGag tileGag = (TileTCRailGag) CommonUtil.getTileEntity(world, x, y, z);
+		TileTCRail tile = (TileTCRail) CommonUtil.getTileEntity(world, tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
 		if (tile != null && tile.idDrop != null){
 			return new ItemStack(tile.idDrop);
 
@@ -100,7 +100,7 @@ public class BlockTCRailGag extends Block {
 	
 	@Override
 	public void onNeighborBlockChange(World world, int i, int j, int k, Block par5) {
-		TileEntity tileEntity = world.getTileEntity(i, j, k);
+		TileEntity tileEntity = CommonUtil.getTileEntity(world, i, j, k);
 		if (tileEntity instanceof TileTCRailGag) {
 			if (((TileTCRailGag)tileEntity).originX.size()>0 && world.isAirBlock(((TileTCRailGag)tileEntity).originX.get(0), ((TileTCRailGag)tileEntity).originY.get(0), ((TileTCRailGag)tileEntity).originZ.get(0))) {
 				// NOTE: func_147480_a = destroyBlock
@@ -173,7 +173,7 @@ public class BlockTCRailGag extends Block {
 	 */
 	@Override
 	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-		TileEntity tileEntity = world.getTileEntity(i, j, k);
+		TileEntity tileEntity = CommonUtil.getTileEntity(world, i, j, k);
 		if (tileEntity instanceof TileTCRailGag && !((TileTCRailGag)tileEntity).type.equals("null")) {
 			return CommonUtil.createAABB(i, j, k, i + 1, j + ((TileTCRailGag)tileEntity).bbHeight, k + 1);
 		}

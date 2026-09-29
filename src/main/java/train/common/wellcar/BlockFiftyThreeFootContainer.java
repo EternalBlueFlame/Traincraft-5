@@ -86,7 +86,7 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int side, float lx, float ly, float lz)
     {
 
-        TileEntity te = world.getTileEntity(x, y, z);
+        TileEntity te = CommonUtil.getTileEntity(world, x, y, z);
         if (te instanceof TileFortyFootContainer && world.isRemote) {
             if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemPaintbrushThing) {
                 ((TileFortyFootContainer) te).goToNextColor();

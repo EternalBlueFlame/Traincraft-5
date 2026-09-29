@@ -20,6 +20,7 @@ import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.common.util.ForgeDirection;
 import train.common.api.blocks.TileRenderFacing;
 import train.common.library.Info;
+import train.common.util.CommonUtil;
 
 public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
@@ -121,7 +122,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 		super.readFromNBT(nbtTag);
 
-		facing = ForgeDirection.getOrientation(nbtTag.getByte("Orientation"));
+		facing = CommonUtil.getOrientation(nbtTag.getByte("Orientation"));
 		NBTTagList tagList = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 		workbenchItemStacks = new ItemStack[getSizeInventory()];
 
@@ -177,7 +178,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player) {
 
-		if (worldObj == null || worldObj.getTileEntity(xCoord, yCoord, zCoord) != this) {
+		if (worldObj == null || CommonUtil.getTileEntity(worldObj, xCoord, yCoord, zCoord) != this) {
 
 			return false;
 		}

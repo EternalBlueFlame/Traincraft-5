@@ -171,10 +171,10 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			FluidStack drain = null;
 
 			if(fill(ForgeDirection.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
-				blocksToCheck = new TileEntity[]{worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY - 1), CommonUtil.floorDouble(posZ)),
-						worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 2), CommonUtil.floorDouble(posZ)),
-						worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 3), CommonUtil.floorDouble(posZ)),
-						worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 4), CommonUtil.floorDouble(posZ))
+				blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(worldObj, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY - 1), CommonUtil.floorDouble(posZ)),
+						CommonUtil.getTileEntity(worldObj, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 2), CommonUtil.floorDouble(posZ)),
+						CommonUtil.getTileEntity(worldObj, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 3), CommonUtil.floorDouble(posZ)),
+						CommonUtil.getTileEntity(worldObj, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 4), CommonUtil.floorDouble(posZ))
 				};
 
 				for (TileEntity block : blocksToCheck) {

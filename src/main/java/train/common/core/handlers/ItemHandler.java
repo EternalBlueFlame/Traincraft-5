@@ -82,10 +82,10 @@ public class ItemHandler {
 
 
 		if ((entity instanceof Freight) && ((Freight) entity).getCargoType() == EnumCargoTypes.CargoTypes.STONE) {
-			return block.getMaterial() == Material.rock;
+			return CommonUtil.getMaterial(block) == Material.rock;
 		}
 		if ((entity instanceof Freight) && ((Freight) entity).getCargoType() == EnumCargoTypes.CargoTypes.ICE) {
-			return block.getMaterial() == Material.ice || block.getMaterial() == Material.packedIce;
+			return CommonUtil.getMaterial(block) == Material.ice || CommonUtil.getMaterial(block) == Material.packedIce;
 		}
 
 		else {

@@ -68,7 +68,7 @@ public class TileTCRailGag extends TileEntity {
 
 
 	public void setCanPlaceRollingStock(boolean canPlace){
-		TileTCRail tile = (TileTCRail) worldObj.getTileEntity(originX.get(0), originY.get(0), originZ.get(0));
+		TileTCRail tile = (TileTCRail) CommonUtil.getTileEntity(worldObj, originX.get(0), originY.get(0), originZ.get(0));
 		if (tile != null){
 			if (tile.getTrackFromName().getRailType() == TCRailTypes.RailTypes.STRAIGHT || tile.getTrackFromName().getRailType() == TCRailTypes.RailTypes.DIAGONAL){
 				canPlaceRollingstock = canPlace;

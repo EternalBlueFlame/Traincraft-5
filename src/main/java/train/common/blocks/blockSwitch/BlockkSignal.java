@@ -63,7 +63,7 @@ public class BlockkSignal extends Block {
     @Override
     public void onBlockAdded(World world, int i, int j, int k) {
         super.onBlockAdded(world, i, j, k);
-        TilekSignal te = (TilekSignal) world.getTileEntity(i, j, k);
+        TilekSignal te = (TilekSignal) CommonUtil.getTileEntity(world, i, j, k);
 
         if (world.isBlockIndirectlyGettingPowered(i, j, k)) {
 
@@ -98,10 +98,10 @@ public class BlockkSignal extends Block {
     @Override
     public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
-        TilekSignal te = (TilekSignal) world.getTileEntity(i, j, k);
+        TilekSignal te = (TilekSignal) CommonUtil.getTileEntity(world, i, j, k);
         if (te != null) {
             int dir = CommonUtil.floorDouble((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-            te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
+            te.setFacing(CommonUtil.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
             CommonUtil.markBlockForUpdate(world, i, j, k);
         }
     }
@@ -184,7 +184,7 @@ public class BlockkSignal extends Block {
 
     @Override
     public void onNeighborBlockChange(World world, int i, int j, int k, Block l) {
-        TilekSignal te = (TilekSignal) world.getTileEntity(i, j, k);
+        TilekSignal te = (TilekSignal) CommonUtil.getTileEntity(world, i, j, k);
         if (te == null)
             return;
         if (te.state == 1 && !world.isBlockIndirectlyGettingPowered(i, j, k)) {
@@ -201,7 +201,7 @@ public class BlockkSignal extends Block {
 
     public void updateTick(World world, int i, int j, int k) {
 
-        TilekSignal te = (TilekSignal) world.getTileEntity(i, j, k);
+        TilekSignal te = (TilekSignal) CommonUtil.getTileEntity(world, i, j, k);
         if (te == null)
             return;
         //te.rot = l;

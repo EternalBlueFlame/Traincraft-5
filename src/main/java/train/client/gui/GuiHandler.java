@@ -17,6 +17,6 @@ public class GuiHandler implements IGuiHandler {
             return null;
         }
 
-        return ID == 1 ? new GuiMTCInfo(player.ridingEntity) : new GuiSpeedTransmitter(world.getTileEntity(x, y, z));
+        return ID == 1 ? new GuiMTCInfo(player.ridingEntity) : new GuiSpeedTransmitter(CommonUtil.getTileEntity(world, x, y, z));
     }
 }

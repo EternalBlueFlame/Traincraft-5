@@ -138,13 +138,13 @@ public class BlockDynamic extends BlockContainer {
     public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack){
         super.onBlockPlacedBy(world, x, y, z, entity, stack);
         //force tile spawn manually and override any existing tile at the space
-        world.setTileEntity(x,y,z,createNewTileEntity(world,0));
-        if(world.getTileEntity(x,y,z) instanceof TileRenderFacing){
+        CommonUtil.setTileEntity(world, x, y, z, createNewTileEntity(world,0));
+        if(CommonUtil.getTileEntity(world, x, y, z) instanceof TileRenderFacing){
             switch ((CommonUtil.floorDouble(((entity.rotationYaw-45)%360) / 90.0F)&3)){
-                case 0: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.SOUTH);break;
-                case 1: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.EAST);break;
-                case 2: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.NORTH);break;
-                case 3: ((TileRenderFacing) world.getTileEntity(x,y,z)).setFacing(ForgeDirection.WEST);break;
+                case 0: ((TileRenderFacing) CommonUtil.getTileEntity(world, x, y, z)).setFacing(ForgeDirection.SOUTH);break;
+                case 1: ((TileRenderFacing) CommonUtil.getTileEntity(world, x, y, z)).setFacing(ForgeDirection.EAST);break;
+                case 2: ((TileRenderFacing) CommonUtil.getTileEntity(world, x, y, z)).setFacing(ForgeDirection.NORTH);break;
+                case 3: ((TileRenderFacing) CommonUtil.getTileEntity(world, x, y, z)).setFacing(ForgeDirection.WEST);break;
 
             }
 
@@ -160,7 +160,7 @@ public class BlockDynamic extends BlockContainer {
             return true;
         }
 
-        if (worldOBJ.getTileEntity(x, y, z) instanceof TileTraincraft) {
+        if (CommonUtil.getTileEntity(worldOBJ, x, y, z) instanceof TileTraincraft) {
             player.openGui(Traincraft.instance, 0, worldOBJ, x, y, z);
             return true;
         } else {

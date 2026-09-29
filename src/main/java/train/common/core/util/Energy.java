@@ -26,7 +26,7 @@ public class Energy extends TileTraincraft implements IEnergyProvider {
 
     public void pushEnergy(World world, int x, int y, int z, EnergyStorage storage) {
         for (ForgeDirection side : getSides()) {
-            TileEntity tile = world.getTileEntity(x + side.offsetX, y + side.offsetY, z + side.offsetZ);
+            TileEntity tile = CommonUtil.getTileEntity(world, x + side.offsetX, y + side.offsetY, z + side.offsetZ);
             if (tile instanceof IEnergyReceiver && storage.getEnergyStored() > 0) {
                 if (((IEnergyReceiver) tile).canConnectEnergy(side.getOpposite())) {
                     int receive = ((IEnergyReceiver) tile).receiveEnergy(side.getOpposite(), Math.min(storage.getMaxExtract(), storage.getEnergyStored()), false);
