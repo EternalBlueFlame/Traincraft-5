@@ -648,7 +648,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	public void closeInventory(EntityPlayer p) {}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
 		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
 	}
 

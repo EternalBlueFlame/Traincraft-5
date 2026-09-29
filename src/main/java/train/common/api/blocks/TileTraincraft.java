@@ -115,7 +115,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player){
+    public boolean isUsableByPlayer(EntityPlayer player){
         return player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
     }
 

@@ -211,7 +211,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
 		if (getWorld() == null) {
 			return true;
 		}

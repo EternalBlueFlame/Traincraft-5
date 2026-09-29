@@ -59,7 +59,7 @@ public class InventoryOpenHearthFurnace implements IInventory{
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
+	public boolean isUsableByPlayer(EntityPlayer p_70300_1_) {
 		// TODO Auto-generated method stub
 		return false;
 	}

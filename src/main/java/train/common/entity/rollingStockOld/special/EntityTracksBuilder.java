@@ -394,7 +394,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
 	}
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
 		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
 	}
 

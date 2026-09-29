@@ -27,12 +27,12 @@ public class BlockAssemblyTableI extends BlockDynamic {
 	}
 
 	@Override
-	public int damageDropped(int i) {
+	public int damageDropped(IBlockState i) {
 		return i;
 	}
 
 	@Override
-	public int quantityDropped(int meta, int fortune, Random random) {
+	public int quantityDropped(Random random) {
 		return 1;
 	}
 
@@ -87,8 +87,8 @@ public class BlockAssemblyTableI extends BlockDynamic {
 	}
 
 	@Override
-	public void onBlockAdded(World world, int i, int j, int k) {
-		super.onBlockAdded(world, i, j, k);
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(world, pos, state);
 		CommonUtil.markBlockForUpdate(world, i, j, k);
 	}
 

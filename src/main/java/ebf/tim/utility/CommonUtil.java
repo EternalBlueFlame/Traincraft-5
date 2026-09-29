@@ -5,18 +5,20 @@ import fexcraft.tmt.slim.Vec3d;
 import fexcraft.tmt.slim.Vec3f;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
+import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
@@ -75,8 +77,8 @@ public class CommonUtil {
     }
 
     /** Decodes a legacy direction ordinal through the version-specific direction API. */
-    public static ForgeDirection getOrientation(int direction){
-        return ForgeDirection.getOrientation(direction);
+    public static int getOrientation(int direction){
+        return EnumFacing.byHorizontalIndex(direction).getIndex();
     }
 
     /** Gets a tile entity at integer world coordinates. */

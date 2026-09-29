@@ -198,7 +198,7 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 			return TileEntityFurnace.getItemBurnTime(it);
 		}
 		Item var1 = it.getItem();
-		if (Item.getIdFromItem(var1) < 256 && CommonUtil.getMaterial(var1) == Material.wood)
+		if (Item.getIdFromItem(var1) < 256 && CommonUtil.getMaterial(var1) == Material.WOOD)
 			return 300;
 		if (var1 == Items.STICK)
 			return 100;

@@ -87,7 +87,7 @@ public class EntityTankWagon2 extends LiquidTank {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
 		return!isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
 	}
 	@Override

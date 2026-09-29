@@ -106,7 +106,7 @@ public class TileFiftyThreeFootContainer extends TileEntity implements IInventor
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return true;
     }
 

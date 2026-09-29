@@ -22,7 +22,7 @@ public class EntityStockCar extends EntityRollingStock implements IPassenger {
 	}
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
 		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
 	}
 

@@ -117,8 +117,8 @@ public class BlockSignal extends BlockContainer {
 		updateTick(world, i, j, k);
 	}
 	@Override
-	public void onBlockAdded(World world, int i, int j, int k) {
-		super.onBlockAdded(world, i, j, k);
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(world, pos, state);
 		TileSignal te = (TileSignal) CommonUtil.getTileEntity(world, i, j, k);
 
 		if (world.isBlockIndirectlyGettingPowered(i, j, k)) {

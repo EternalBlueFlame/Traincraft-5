@@ -17,7 +17,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import train.common.Traincraft;
 import train.common.api.EntityRollingStock;
 import train.common.core.network.PacketInteract;
@@ -173,7 +173,7 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer p_70300_1_) {
+    public boolean isUsableByPlayer(EntityPlayer p_70300_1_) {
         return host.isUseableByPlayer(p_70300_1_);
     }
 
@@ -193,18 +193,18 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     }
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
-        return host.fill(from, resource, doFill);
+    public int fill( FluidStack resource, boolean doFill) {
+        return host.fill(resource, doFill);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
-        return host.drain(from, resource, doDrain);
+    public FluidStack drain( FluidStack resource, boolean doDrain) {
+        return host.drain(resource, doDrain);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
-        return host.drain(from, maxDrain, doDrain);
+    public FluidStack drain( int maxDrain, boolean doDrain) {
+        return host.drain(maxDrain, doDrain);
     }
 
     @Override

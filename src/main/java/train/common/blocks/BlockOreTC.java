@@ -39,7 +39,7 @@ public class BlockOreTC extends BlockFalling {
 	}
 
 	@Override
-	public int damageDropped(int metadata) {
+	public int damageDropped(IBlockState metadata) {
 		return metadata;
 	}
 

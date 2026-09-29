@@ -749,7 +749,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+    public boolean isUsableByPlayer(EntityPlayer entityplayer) {
         if (isDead) {
             return false;
         }

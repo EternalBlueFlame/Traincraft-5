@@ -3,11 +3,13 @@ package train.common.blocks;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
@@ -26,12 +28,12 @@ public class BlockAssemblyTableII extends BlockDynamic {
 	}
 
 	@Override
-	public int damageDropped(int i) {
+	public int damageDropped(IBlockState i) {
 		return i;
 	}
 
 	@Override
-	public int quantityDropped(int meta, int fortune, Random random) {
+	public int quantityDropped(Random random) {
 		return 1;
 	}
 
@@ -84,9 +86,9 @@ public class BlockAssemblyTableII extends BlockDynamic {
 	}
 
 	@Override
-	public void onBlockAdded(World world, int i, int j, int k) {
-		super.onBlockAdded(world, i, j, k);
-		CommonUtil.markBlockForUpdate(world, i, j, k);
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(world, pos, state);
+		CommonUtil.markBlockForUpdate(world, pos.getX(),pos.getY(),pos.getZ());
 	}
 
 	@Override

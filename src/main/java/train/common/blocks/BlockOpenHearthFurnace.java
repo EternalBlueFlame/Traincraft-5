@@ -83,8 +83,8 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 	}
 
 	@Override
-	public void onBlockAdded(World world, int i, int j, int k) {
-		super.onBlockAdded(world, i, j, k);
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		super.onBlockAdded(world, pos, state);
 		CommonUtil.markBlockForUpdate(world, i, j, k);
 	}
 

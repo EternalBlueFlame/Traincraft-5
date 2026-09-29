@@ -59,7 +59,7 @@ public class EntityPassengerRheingoldDining2  extends AbstractWorkCart implement
 
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer entityplayer) {
+	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
 		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
 	}
 

@@ -176,7 +176,7 @@ public class TileTrainWbench extends TileRenderFacing implements IInventory {
 
 
 	@Override
-	public boolean isUseableByPlayer(EntityPlayer player) {
+	public boolean isUsableByPlayer(EntityPlayer player) {
 
 		if (worldObj == null || CommonUtil.getTileEntity(worldObj, xCoord, yCoord, zCoord) != this) {
 

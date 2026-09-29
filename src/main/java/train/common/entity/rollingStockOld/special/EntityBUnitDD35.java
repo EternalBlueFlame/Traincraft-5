@@ -11,7 +11,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
-import net.minecraftforge.fluids.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import train.common.Traincraft;
 import train.common.api.LiquidManager;
 import train.common.api.LiquidTank;
@@ -203,12 +203,12 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
 
 
     @Override
-    public int fill(ForgeDirection from, FluidStack resource, boolean doFill) {
+    public int fill( FluidStack resource, boolean doFill) {
         return theTank.fill(resource, doFill);
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, FluidStack resource, boolean doDrain) {
+    public FluidStack drain( FluidStack resource, boolean doDrain) {
         if (resource == null || !resource.isFluidEqual(theTank.getFluid())) {
             return null;
         }
@@ -216,7 +216,7 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
     }
 
     @Override
-    public FluidStack drain(ForgeDirection from, int maxDrain, boolean doDrain) {
+    public FluidStack drain( int maxDrain, boolean doDrain) {
         return theTank.drain(maxDrain, doDrain);
     }
 
