@@ -50,7 +50,7 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 
 	public static void updateHearthFurnaceBlockState(boolean flag, World world, int i, int j, int k, Random random) {
 		int l = CommonUtil.getBlockFacing(world, i, j, k);
-		TileEntity tileentity = world.getTileEntity(i, j, k);
+		TileEntity tileentity = CommonUtil.getTileEntity(world, i, j, k);
 
 		keepFurnaceInventory = true;
 
@@ -64,13 +64,13 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 		CommonUtil.setBlockMeta(world, i, j, k, l, 0);
 		if (tileentity != null) {
 			tileentity.validate();
-			world.setTileEntity(i, j, k, tileentity);
+			CommonUtil.setTileEntity(world, i, j, k, tileentity);
 		}
 	}
 
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		TileEntity te = world.getTileEntity(i, j, k);
+		TileEntity te = CommonUtil.getTileEntity(world, i, j, k);
 		if (player.isSneaking()) {
 			return false;
 		}
@@ -91,7 +91,7 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 	@Override
 	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
 		if (!keepFurnaceInventory) {
-			TileEntityOpenHearthFurnace tileentityfurnace = (TileEntityOpenHearthFurnace) world.getTileEntity(i, j, k);
+			TileEntityOpenHearthFurnace tileentityfurnace = (TileEntityOpenHearthFurnace) CommonUtil.getTileEntity(world, i, j, k);
 			if (tileentityfurnace != null) {
 				label0: for (int l = 0; l < tileentityfurnace.getSizeInventory(); l++) {
 					ItemStack itemstack = tileentityfurnace.getStackInSlot(l);
@@ -125,10 +125,10 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 
 	@Override
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
-		TileEntityOpenHearthFurnace te = (TileEntityOpenHearthFurnace) world.getTileEntity(i, j, k);
+		TileEntityOpenHearthFurnace te = (TileEntityOpenHearthFurnace) CommonUtil.getTileEntity(world, i, j, k);
 		if (te != null) {
 			int dir = CommonUtil.floorDouble((entityliving.rotationYaw * 4F) / 360F + 0.5D) & 3;
-			te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
+			te.setFacing(ebf.tim.utility.CommonUtil.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
 			CommonUtil.markBlockForUpdate(world, i, j, k);
 		}
 	}

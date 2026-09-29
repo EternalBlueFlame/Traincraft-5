@@ -102,7 +102,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 
 		super.readFromNBT(nbtTag);
 
-		facing = EnumFacing.byHorizontalIndex(nbtTag.getByte("Orientation"));
+		facing = CommonUtil.getOrientation(nbtTag.getByte("Orientation"));
 		slotSelected = nbtTag.getIntArray("Selected");
 		NBTTagList nbttaglist = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 
@@ -217,7 +217,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 		if (getWorld() == null) {
 			return true;
 		}
-		if (world.getTileEntity(getPos()) != this) {
+		if (CommonUtil.getTileEntity(worldObj, xCoord, yCoord, zCoord) != this) {
 			return false;
 		}
 		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;

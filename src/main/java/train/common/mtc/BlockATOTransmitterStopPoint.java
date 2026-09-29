@@ -22,7 +22,7 @@ public class BlockATOTransmitterStopPoint extends BlockContainer implements IPer
    }
 
    public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
-      TileEntity tileEntity = world.getTileEntity(x, y, z);
+      TileEntity tileEntity = CommonUtil.getTileEntity(world, x, y, z);
       return (IPeripheral)tileEntity;
    }
 

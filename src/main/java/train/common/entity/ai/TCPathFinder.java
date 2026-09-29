@@ -37,7 +37,7 @@ public class TCPathFinder extends PathFinder {
                 for (int k = z; k < z + point.zCoord; ++k) {
                     Block block = CommonUtil.getBlockAt(entity.worldObj, i, j, k);
 
-                    if (block.getMaterial() != Material.air) {
+                    if (CommonUtil.getMaterial(block) != Material.air) {
                         if (block == Blocks.trapdoor) {
                             flag3 = true;
                         } else if (block != Blocks.flowing_water && block != Blocks.water) {
@@ -74,7 +74,7 @@ public class TCPathFinder extends PathFinder {
                                 return -4;
                             }
 
-                            Material material = block.getMaterial();
+                            Material material = CommonUtil.getMaterial(block);
 
                             if (material != Material.lava) {
                                 return 0;

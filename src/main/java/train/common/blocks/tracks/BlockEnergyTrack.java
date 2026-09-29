@@ -86,9 +86,9 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 
         if(this.updateTicks % 10 == 0) {
 			if (this.maxEnergy > this.RFChandler.getCharge()) {
-				if (this.getWorld().getTileEntity(new BlockPos(this.getX(), this.getY() - 1, this.getZ())) instanceof IEnergyProvider) {
-					DebugUtil.println("found input and it gives " + ((IEnergyProvider)this.getWorld().getTileEntity(new BlockPos(this.getX(), this.getY() - 1, this.getZ()))).extractEnergy(EnumFacing.UP, 100, true));
-					this.receiveEnergy(EnumFacing.DOWN, ((IEnergyProvider) this.getWorld().getTileEntity(new BlockPos(this.getX(), this.getY() - 1, this.getZ()))).extractEnergy(EnumFacing.UP, 100, false), false);
+				if (CommonUtil.getTileEntity(this.getWorld(), this.getX(), this.getY() - 1, this.getZ()) instanceof IEnergyProvider) {
+					DebugUtil.println("found input and it gives " + ((IEnergyProvider)CommonUtil.getTileEntity(this.getWorld(), this.getX(), this.getY() - 1, this.getZ())).extractEnergy(ForgeDirection.UP, 100, true));
+					this.receiveEnergy(ForgeDirection.DOWN, ((IEnergyProvider) CommonUtil.getTileEntity(this.getWorld(), this.getX(), this.getY() - 1, this.getZ())).extractEnergy(ForgeDirection.UP, 100, false), false);
 				}
 				int x = this.getX();
 				int y = this.getY();
@@ -97,29 +97,29 @@ public class BlockEnergyTrack extends TrackBaseTraincraft implements ITrackPower
 				int ener2 = 0;
 				for (int[] pos : new int[][]{{x - 1, z, 1}, {x + 1, z, 0}, {x, z - 1, 3}, {x, z + 1, 2}})
 					if (this.maxEnergy > this.RFChandler.getCharge()) {
-						if (this.getWorld().getTileEntity(new BlockPos(pos[0], y, pos[1])) instanceof IEnergyProvider)
-							ener1 = ((IEnergyProvider) this.getWorld().getTileEntity(new BlockPos(pos[0], y, pos[1]))).extractEnergy(dirMap[pos[2]], 100, false);
-						if (this.getWorld().getTileEntity(new BlockPos(pos[0], y - 1, pos[1])) instanceof IEnergyProvider)
-							ener2 = ((IEnergyProvider) this.getWorld().getTileEntity(new BlockPos(pos[0], y - 1, pos[1]))).extractEnergy(dirMap[pos[2]], 100, false);
-						this.receiveEnergy(EnumFacing.UP, ener1 + ener2, false);
+						if (CommonUtil.getTileEntity(this.getWorld(), pos[0], y, pos[1]) instanceof IEnergyProvider)
+							ener1 = ((IEnergyProvider) CommonUtil.getTileEntity(this.getWorld(), pos[0], y, pos[1])).extractEnergy(dirMap[pos[2]], 100, false);
+						if (CommonUtil.getTileEntity(this.getWorld(), pos[0], y - 1, pos[1]) instanceof IEnergyProvider)
+							ener2 = ((IEnergyProvider) CommonUtil.getTileEntity(this.getWorld(), pos[0], y - 1, pos[1])).extractEnergy(dirMap[pos[2]], 100, false);
+						this.receiveEnergy(ForgeDirection.UP, ener1 + ener2, false);
 					} else break;
 
 				for (int[] pos : new int[][]{{x - 1, z}, {x + 1, z}, {x, z - 1}, {x, z + 1}}) {
-					TileEntity te = (this.getWorld().getTileEntity(new BlockPos(pos[0], y, pos[1])));
+					TileEntity te = CommonUtil.getTileEntity(this.getWorld(), pos[0], y, pos[1]);
 					if (te instanceof ITrackTile && ((ITrackTile) te).getTrackInstance() instanceof BlockEnergyTrack)
 						if ((int) ((BlockEnergyTrack) ((ITrackTile) te).getTrackInstance()).getChargeHandler().getCharge() - (int) this.RFChandler.getCharge() > 1) {
 							double diff = (((BlockEnergyTrack) ((ITrackTile) te).getTrackInstance()).getChargeHandler().getCharge() - this.RFChandler.getCharge()) / 2.0;
 							this.RFChandler.addCharge(diff);
 							((BlockEnergyTrack) ((ITrackTile) te).getTrackInstance()).getChargeHandler().removeCharge(diff);
 						}
-					te = (this.getWorld().getTileEntity(new BlockPos(pos[0], y - 1, pos[1])));
+					te = CommonUtil.getTileEntity(this.getWorld(), pos[0], y - 1, pos[1]);
 					if (te instanceof ITrackTile && ((ITrackTile) te).getTrackInstance() instanceof BlockEnergyTrack)
 						if ((int) ((BlockEnergyTrack) ((ITrackTile) te).getTrackInstance()).getChargeHandler().getCharge() - (int) this.RFChandler.getCharge() > 1) {
 							double diff = (((BlockEnergyTrack) ((ITrackTile) te).getTrackInstance()).getChargeHandler().getCharge() - this.RFChandler.getCharge()) / 2.0;
 							this.RFChandler.addCharge(diff);
 							((BlockEnergyTrack) ((ITrackTile) te).getTrackInstance()).getChargeHandler().removeCharge(diff);
 						}
-					te = (this.getWorld().getTileEntity(new BlockPos(pos[0], y + 1, pos[1])));
+					te = CommonUtil.getTileEntity(this.getWorld(), pos[0], y + 1, pos[1]);
 					if (te instanceof ITrackTile && ((ITrackTile) te).getTrackInstance() instanceof BlockEnergyTrack)
 						if ((int) ((BlockEnergyTrack) ((ITrackTile) te).getTrackInstance()).getChargeHandler().getCharge() - (int) this.RFChandler.getCharge() > 1) {
 							double diff = (((BlockEnergyTrack) ((ITrackTile) te).getTrackInstance()).getChargeHandler().getCharge() - this.RFChandler.getCharge()) / 2.0;

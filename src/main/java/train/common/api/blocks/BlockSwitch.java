@@ -45,7 +45,7 @@ public class BlockSwitch extends BlockDynamic {
             return true;
         } else {
 
-            TileSwitch t = (TileSwitch)world.getTileEntity(x,y,z);
+            TileSwitch t = (TileSwitch)CommonUtil.getTileEntity(world, x,y,z);
             if(t!=null){
                 t.toggleEnabled(0);
                 world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, "random.click", 0.3F, t.getStrength(0)>0 ? 0.6F : 0.5F);
@@ -68,7 +68,7 @@ public class BlockSwitch extends BlockDynamic {
     }
 
     public int isProvidingStrongPower(IBlockAccess world, int x, int y, int z, int meta) {
-        TileSwitch t = (TileSwitch)world.getTileEntity(x,y,z);
+        TileSwitch t = (TileSwitch)CommonUtil.getTileEntity(world, x,y,z);
         if(t!=null && t.getStrength(0)>0){
             return 15;
         }
@@ -83,7 +83,7 @@ public class BlockSwitch extends BlockDynamic {
     @Override
     public void onBlockAdded(World world, int x, int y, int z) {
         super.onBlockAdded(world, x,y,z);
-        TileSwitch te = (TileSwitch) world.getTileEntity(x,y,z);
+        TileSwitch te = (TileSwitch) CommonUtil.getTileEntity(world, x, y, z);
         if (te !=null) {
             te.setStrength(0,0);
         }

@@ -72,10 +72,10 @@ public class BlockoverheadWireDouble extends Block {
     @Override
     public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
         super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
-        TileoverheadWireDouble te = (TileoverheadWireDouble) world.getTileEntity(i, j, k);
+        TileoverheadWireDouble te = (TileoverheadWireDouble) CommonUtil.getTileEntity(world, i, j, k);
         if (te != null) {
             int dir = CommonUtil.floorDouble((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-            te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
+            te.setFacing(CommonUtil.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
             CommonUtil.markBlockForUpdate(world, i, j, k);
         }
     }

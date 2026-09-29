@@ -241,7 +241,7 @@ public class TileTCRail extends TileEntity {
 		int offsetY = b;
 		int offsetZ = c;
 		while (Math.abs(offsetX) < getTrack().getSwitchSize() && Math.abs(offsetY) < getTrack().getSwitchSize() && Math.abs(offsetZ) < getTrack().getSwitchSize()) {
-			te1 = worldObj.getTileEntity(xCoord + offsetX, yCoord + offsetY, zCoord + offsetZ);
+			te1 = CommonUtil.getTileEntity(worldObj, xCoord + offsetX, yCoord + offsetY, zCoord + offsetZ);
 			if (te1 instanceof TileTCRail) {
 				if (getSwitchState()) {
 					if (getType().contains("SWITCH") && getType().contains("LEFT")) {
@@ -399,7 +399,7 @@ public class TileTCRail extends TileEntity {
 			int offsetY = b;
 			int offsetZ = c;
 			while (Math.abs(offsetX) < tileEntity.getTrack().getSwitchSize() && Math.abs(offsetY) < tileEntity.getTrack().getSwitchSize() && Math.abs(offsetZ) < tileEntity.getTrack().getSwitchSize()) {
-				te1 = world.getTileEntity(i + offsetX, j + offsetY, k + offsetZ);
+				te1 = CommonUtil.getTileEntity(world, i + offsetX, j + offsetY, k + offsetZ);
 				if (te1 != null && te1 instanceof TileTCRail) {
 					if (tileEntity.getSwitchState()) {
 						if (tileEntity.getType().contains("SWITCH") && tileEntity.getType().contains("LEFT")) {

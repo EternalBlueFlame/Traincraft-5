@@ -55,7 +55,7 @@ public class BlockWindMill extends Block {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
-		TileEntity tile = par1World.getTileEntity(par2, par3, par4);
+		TileEntity tile = CommonUtil.getTileEntity(par1World, par2, par3, par4);
 		if (tile != null && tile instanceof TileWindMill && ((TileWindMill) tile).windClient > 0) {
 			if (par5Random.nextInt(20) == 0) {
 				CommonUtil.playSound(par1World, par2, par3, par4, "minecart.inside", par5Random.nextFloat() * 0.25F + 0.1F, par5Random.nextFloat() * 1F - 0.6F, 0);
@@ -106,7 +106,7 @@ public class BlockWindMill extends Block {
 	 */
 	@Override
 	public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6) {
-		TileEntity tile = par1World.getTileEntity(par2, par3, par4);
+		TileEntity tile = CommonUtil.getTileEntity(par1World, par2, par3, par4);
 		if (tile != null && tile instanceof TileWindMill) {
 			tile.onChunkUnload();
 		}

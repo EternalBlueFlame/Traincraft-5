@@ -30,9 +30,9 @@ public class BlockMetroMadridPole extends Block implements ITileEntityProvider {
 
     @Override
     public void onBlockPlacedBy(World world, int par2, int par3, int par4, EntityLivingBase living, ItemStack stack) {
-        TileMetroMadridPole te = (TileMetroMadridPole) world.getTileEntity(par2, par3, par4);
+        TileMetroMadridPole te = (TileMetroMadridPole) CommonUtil.getTileEntity(world, par2, par3, par4);
         int dir = CommonUtil.floorDouble((double) ((living.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-        te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
+        te.setFacing(CommonUtil.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
     }
 
     public void addCollisionBoxesToList(World p_149743_1_, int p_149743_2_, int p_149743_3_, int p_149743_4_, AxisAlignedBB p_149743_5_, List p_149743_6_, Entity p_149743_7_)

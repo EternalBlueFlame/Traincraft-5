@@ -89,7 +89,7 @@ public class GuiSpeedTransmitter extends GuiScreen {
     @SideOnly(Side.CLIENT)
     protected void actionPerformed(GuiButton button) {
         if (button.id == 0) {
-            TileInfoTransmitterSpeed its = (TileInfoTransmitterSpeed) transmitterBlock.getWorld().getTileEntity(new BlockPos(transmitterBlock.getPos().getX(), transmitterBlock.getPos().getY(), transmitterBlock.getPos().getZ()));
+            TileInfoTransmitterSpeed its = (TileInfoTransmitterSpeed) CommonUtil.getTileEntity(transmitterBlock.getWorldObj(), transmitterBlock.xCoord, transmitterBlock.yCoord, transmitterBlock.zCoord);
             its.setSpeed = Integer.parseInt(speedLimitTextField.getText());
             Traincraft.itsChannel.sendToServer(new PacketSetSpeed(Integer.parseInt(speedLimitTextField.getText()), its.getPos().getX(), its.getPos().getY(), its.getPos().getZ(), 0));
             its.nextUpdateSpeed(Integer.parseInt(nextSpeedLimitTextField.getText()), Double.parseDouble(nextSpeedXTextField.getText()), Double.parseDouble(nextSpeedYTextField.getText()), Double.parseDouble(nextSpeedZTextField.getText()));

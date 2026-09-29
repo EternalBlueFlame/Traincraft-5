@@ -221,13 +221,13 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		prevPosZ=posZ;
 
 		if(l instanceof BlockTCRail) {
-			if(!TCRailTypes.isCrossingTrack((TileTCRail) worldObj.getTileEntity(i, j, k)) && !TCRailTypes.isDiagonalCrossingTrack((TileTCRail) worldObj.getTileEntity(i,j,k))) {
-				lastTrack = (TileTCRail) worldObj.getTileEntity(i, j, k);
+			if(!TCRailTypes.isCrossingTrack((TileTCRail) CommonUtil.getTileEntity(worldObj, i, j, k)) && !TCRailTypes.isDiagonalCrossingTrack((TileTCRail) CommonUtil.getTileEntity(worldObj, i, j, k))) {
+				lastTrack = (TileTCRail) CommonUtil.getTileEntity(worldObj, i, j, k);
 			}
 		} else if(l instanceof BlockTCRailGag && (lastTrack==null || !CommonUtil.getTiles(worldObj,i,j,k).contains(lastTrack))){
-			TileTCRailGag tileGag = (TileTCRailGag) worldObj.getTileEntity(i, j, k);
-			if(tileGag.originX.size()>0 && worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) != null) {
-				lastTrack = (TileTCRail) worldObj.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
+			TileTCRailGag tileGag = (TileTCRailGag) CommonUtil.getTileEntity(worldObj, i, j, k);
+			if(tileGag.originX.size()>0 && CommonUtil.getTileEntity(worldObj, tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) != null) {
+				lastTrack = (TileTCRail) CommonUtil.getTileEntity(worldObj, tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
 			}
 		}
 
@@ -623,7 +623,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 					railMetadata = CommonUtil.getRailMeta(getWorld(), this, xFloor, yFloor, zFloor);
 				}
 				//get the direction of the rail from it's metadata
-				else if (world.getTileEntity(xFloor, yFloor, zFloor) instanceof ITrackTile && (((ITrackTile)world.getTileEntity(xFloor, yFloor, zFloor)).getTrackInstance() instanceof ITrackSwitch)){
+				else if (CommonUtil.getTileEntity(getWorld(), xFloor, yFloor, zFloor) instanceof ITrackTile && (((ITrackTile)CommonUtil.getTileEntity(getWorld(), xFloor, yFloor, zFloor)).getTrackInstance() instanceof ITrackSwitch)){
 					railMetadata = CommonUtil.getRailMeta(getWorld(),this,xFloor, yFloor, zFloor);//railcraft support
 				}
 			}

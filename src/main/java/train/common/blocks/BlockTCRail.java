@@ -50,7 +50,7 @@ public class BlockTCRail extends Block {
 
 	@Override
 	public ItemStack getPickBlock(MovingObjectPosition target, World world, int x, int y, int z, EntityPlayer player)  {
-		TileTCRail tileEntity = (TileTCRail) world.getTileEntity(x, y, z);
+		TileTCRail tileEntity = (TileTCRail) CommonUtil.getTileEntity(world, x, y, z);
 		if (tileEntity != null && tileEntity.idDrop != null) {
 			return new ItemStack(tileEntity.idDrop);
 		}
@@ -70,9 +70,9 @@ public class BlockTCRail extends Block {
 
 	@Override
 	public void onBlockClicked(World world, int x, int y, int z, EntityPlayer player) {
-		TileEntity tileEntity = world.getTileEntity(x,y,z);
+		TileEntity tileEntity = CommonUtil.getTileEntity(world, x, y, z);
 		if (tileEntity instanceof TileTCRailGag) {
-			tileEntity = world.getTileEntity(((TileTCRailGag)tileEntity).originX.get(0), ((TileTCRailGag)tileEntity).originY.get(0), ((TileTCRailGag)tileEntity).originZ.get(0));
+			tileEntity = CommonUtil.getTileEntity(world, ((TileTCRailGag)tileEntity).originX.get(0), ((TileTCRailGag)tileEntity).originY.get(0), ((TileTCRailGag)tileEntity).originZ.get(0));
 		}
 		if(tileEntity instanceof TileTCRail){
 			((TileTCRail)tileEntity).lastPlayerToInteract = player;
@@ -83,7 +83,7 @@ public class BlockTCRail extends Block {
 
 	@Override
 	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
-		TileTCRail tileEntity = (TileTCRail) world.getTileEntity(i, j, k);
+		TileTCRail tileEntity = (TileTCRail) CommonUtil.getTileEntity(world, i, j, k);
 		if (tileEntity != null && tileEntity.isLinkedToRail) {
 			// NOTE: func_147480_a = destroyBlock
 			world.func_147480_a(tileEntity.linkedX, tileEntity.linkedY, tileEntity.linkedZ, false);
@@ -99,10 +99,10 @@ public class BlockTCRail extends Block {
 			for(int z : matrixXZ){
 				for(int y : matrixY){
 					if (tileEntity != null && CommonUtil.getBlockAt(world, x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRailGag){
-						if(((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originX.size()>1){
-							((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originX.removeAll(Arrays.asList(new int[]{tileEntity.xCoord}));
-							((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originY.removeAll(Arrays.asList(new int[]{tileEntity.yCoord}));
-							((TileTCRailGag)world.getTileEntity(x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originY.removeAll(Arrays.asList(new int[]{tileEntity.zCoord}));
+						if(((TileTCRailGag)CommonUtil.getTileEntity(world, x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originX.size()>1){
+							((TileTCRailGag)CommonUtil.getTileEntity(world, x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originX.removeAll(Arrays.asList(new int[]{tileEntity.xCoord}));
+							((TileTCRailGag)CommonUtil.getTileEntity(world, x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originY.removeAll(Arrays.asList(new int[]{tileEntity.yCoord}));
+							((TileTCRailGag)CommonUtil.getTileEntity(world, x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)).originY.removeAll(Arrays.asList(new int[]{tileEntity.zCoord}));
 						} else {
 							world.notifyBlockChange((x + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z + tileEntity.zCoord), Blocks.air);
 							CommonUtil.markBlockForUpdate(world, (x + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z + tileEntity.zCoord));
@@ -121,7 +121,7 @@ public class BlockTCRail extends Block {
 
 	@Override
 	public void onNeighborBlockChange(World world, int i, int j, int k, Block par5) {
-		TileEntity tile = world.getTileEntity(i, j, k);
+		TileEntity tile = CommonUtil.getTileEntity(world, i, j, k);
 		if (tile instanceof TileTCRail) {
             if (((TileTCRail)tile).isLinkedToRail) {
                 if (world.isAirBlock(((TileTCRail)tile).linkedX, ((TileTCRail)tile).linkedY, ((TileTCRail)tile).linkedZ)) {
@@ -160,7 +160,7 @@ public class BlockTCRail extends Block {
 
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		TileEntity te = world.getTileEntity(i, j, k);
+		TileEntity te = CommonUtil.getTileEntity(world, i, j, k);
 		int l = CommonUtil.getBlockFacing(world, i, j, k);
 		if (!world.isRemote && te != null && (te instanceof TileTCRail)) {
 			if (player != null && player.inventory != null && player.inventory.getCurrentItem() != null && (player.inventory.getCurrentItem().getItem() instanceof ItemWrench) && ((TileTCRail) te).getType() != null && ((TileTCRail) te).getType().equals( EnumTracks.SMALL_STRAIGHT.getLabel())) {

@@ -60,7 +60,7 @@ public class BlockEmbeddedStopper extends BlockContainer {
 
     @Override
     public void onBlockPlacedBy(World world, int par2, int par3, int par4, EntityLivingBase living, ItemStack stack) {
-        TileEmbeddedStopper te = (TileEmbeddedStopper) world.getTileEntity(par2, par3, par4);
+        TileEmbeddedStopper te = (TileEmbeddedStopper) CommonUtil.getTileEntity(world, par2, par3, par4);
         int var6 = CommonUtil.floorDouble(living.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         int var7 = CommonUtil.getBlockFacing(world, par2, par3, par4) >> 2;
         ++var6;

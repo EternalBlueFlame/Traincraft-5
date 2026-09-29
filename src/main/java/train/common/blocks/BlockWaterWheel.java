@@ -56,8 +56,8 @@ public class BlockWaterWheel extends Block {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void randomDisplayTick(World par1World, int par2, int par3, int par4, Random par5Random) {
-		TileEntity tile = par1World.getTileEntity(par2, par3, par4);
-		if (tile instanceof TileWaterWheel && ((TileWaterWheel) tile).getFacing() != null) {
+		TileEntity tile = CommonUtil.getTileEntity(par1World, par2, par3, par4);
+		if (tile instanceof TileWaterWheel && ((TileWaterWheel) tile).getFacing() != ForgeDirection.UNKNOWN) {
 			double d0 = (double) ((float) par2 + 0.5F);
 			double d2 = (double) ((float) par4 + 0.5F);
 
@@ -113,7 +113,7 @@ public class BlockWaterWheel extends Block {
 	@Override
 	public void breakBlock(World par1World, int par2, int par3, int par4, Block par5, int par6) {
 		int l = CommonUtil.getBlockFacing(par1World, par2, par3, par4);
-		TileEntity tile = par1World.getTileEntity(par2, par3, par4);
+		TileEntity tile = CommonUtil.getTileEntity(par1World, par2, par3, par4);
 		if (tile != null && tile instanceof TileWaterWheel) {
 			(tile).onChunkUnload();
 		}

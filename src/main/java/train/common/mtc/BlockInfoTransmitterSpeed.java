@@ -19,7 +19,7 @@ public class BlockInfoTransmitterSpeed extends BlockContainer implements IPeriph
     }
     @Override
     public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        TileEntity tileEntity = CommonUtil.getTileEntity(world, x, y, z);
         return (IPeripheral)tileEntity;
 
     }
@@ -30,7 +30,7 @@ public class BlockInfoTransmitterSpeed extends BlockContainer implements IPeriph
     }
     public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int metadata, float sideX, float sideY, float sideZ) {
        // System.out.println("ting");
-       // Minecraft.getMinecraft().displayGuiScreen(new GuiSpeedTransmitter( world.getTileEntity(x, y, z)));
+       // Minecraft.getMinecraft().displayGuiScreen(new GuiSpeedTransmitter( CommonUtil.getTileEntity(world, x, y, z)));
         return false;
     }
 }

@@ -21,7 +21,7 @@ public class BlockInfoGrabberMTC   extends BlockContainer implements IPeripheral
     }
 
     public IPeripheral getPeripheral(World world, int x, int y, int z, int side) {
-        TileEntity tileEntity = world.getTileEntity(x, y, z);
+        TileEntity tileEntity = CommonUtil.getTileEntity(world, x, y, z);
         return (IPeripheral)tileEntity;
     }
 }

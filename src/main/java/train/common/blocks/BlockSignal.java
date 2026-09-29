@@ -76,7 +76,7 @@ public class BlockSignal extends BlockContainer {
 	}
 
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving) {
-		TileSignal te = (TileSignal) world.getTileEntity(i, j, k);
+		TileSignal te = (TileSignal) CommonUtil.getTileEntity(world, i, j, k);
 
 		/*
 		 * if (l == 0) { world.setBlockMetadataWithNotify(i, j, k, 2); te.rot = 2; } if (l == 1) { world.setBlockMetadataWithNotify(i, j, k, 5); te.rot = 5; } if (l == 2) { world.setBlockMetadataWithNotify(i, j, k, 3); te.rot = 3; } if (l == 3) { world.setBlockMetadataWithNotify(i, j, k, 4); te.rot = 4; } */
@@ -119,7 +119,7 @@ public class BlockSignal extends BlockContainer {
 	@Override
 	public void onBlockAdded(World world, int i, int j, int k) {
 		super.onBlockAdded(world, i, j, k);
-		TileSignal te = (TileSignal) world.getTileEntity(i, j, k);
+		TileSignal te = (TileSignal) CommonUtil.getTileEntity(world, i, j, k);
 
 		if (world.isBlockIndirectlyGettingPowered(i, j, k)) {
 
@@ -163,7 +163,7 @@ public class BlockSignal extends BlockContainer {
 
 	public void updateTick(World world, int i, int j, int k) {
 
-		TileSignal te = (TileSignal) world.getTileEntity(i, j, k);
+		TileSignal te = (TileSignal) CommonUtil.getTileEntity(world, i, j, k);
 		if (te == null)
 			return;
 		//te.rot = l;
@@ -182,7 +182,7 @@ public class BlockSignal extends BlockContainer {
 	}
 	@Override
 	public void onNeighborBlockChange(World world, int i, int j, int k, Block l) {
-		TileSignal te = (TileSignal) world.getTileEntity(i, j, k);
+		TileSignal te = (TileSignal) CommonUtil.getTileEntity(world, i, j, k);
 		if (te == null)
 			return;
 		if (te.state == 1 && !world.isBlockIndirectlyGettingPowered(i, j, k)) {

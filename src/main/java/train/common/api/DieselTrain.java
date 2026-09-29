@@ -163,10 +163,10 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 			motionZ *= 0.8;
 		} else if (ticksExisted%5==0 &&getTank().getFluidAmount()+100 < maxTank) {
 			FluidStack drain = null;
-			blocksToCheck = new TileEntity[]{worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY - 1), CommonUtil.floorDouble(posZ)),
-					worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 2), CommonUtil.floorDouble(posZ)),
-					worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 3), CommonUtil.floorDouble(posZ)),
-					worldObj.getTileEntity(CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 4), CommonUtil.floorDouble(posZ))
+			blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(worldObj, posX, posY - 1, posZ),
+					CommonUtil.getTileEntity(worldObj, posX, posY + 2, posZ),
+					CommonUtil.getTileEntity(worldObj, posX, posY + 3, posZ),
+					CommonUtil.getTileEntity(worldObj, posX, posY + 4, posZ)
 			};
 
 			for (TileEntity block : blocksToCheck) {

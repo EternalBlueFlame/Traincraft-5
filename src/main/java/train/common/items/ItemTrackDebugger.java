@@ -42,7 +42,7 @@ public class ItemTrackDebugger extends Item {
 
             Block block = CommonUtil.getBlockAt(world, x, y, z);
             if (block == BlockIDs.tcRail.block){
-                TileTCRail tile = (TileTCRail) world.getTileEntity(x, y, z);
+                TileTCRail tile = (TileTCRail) CommonUtil.getTileEntity(world, x, y, z);
 
                 if (tile != null)
                     CommonUtil.sendChat(player, EnumChatFormatting.RED + "TileTCRail");
@@ -61,7 +61,7 @@ public class ItemTrackDebugger extends Item {
                     CommonUtil.sendChat(player, " ");
             }
             else  if (block == BlockIDs.tcRailGag.block){
-                TileTCRailGag tile = (TileTCRailGag) world.getTileEntity(x, y, z);
+                TileTCRailGag tile = (TileTCRailGag) CommonUtil.getTileEntity(world, x, y, z);
                 if (tile != null) {
                     CommonUtil.sendChat(player, EnumChatFormatting.GREEN + "TileTCGag");
                     CommonUtil.sendChat(player, EnumChatFormatting.GOLD + "Name: " +  EnumChatFormatting.WHITE + tile.type);
@@ -75,7 +75,7 @@ public class ItemTrackDebugger extends Item {
             }
 
             else if (BlockRailBase.func_150051_a(block)) {
-                TileEntity tile = world.getTileEntity(x, y, z);
+                TileEntity tile = CommonUtil.getTileEntity(world, x, y, z);
                 if (tile == null) {
                     return false;
                 }

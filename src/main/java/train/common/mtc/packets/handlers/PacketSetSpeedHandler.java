@@ -24,7 +24,7 @@ public  class PacketSetSpeedHandler implements IMessageHandler<PacketSetSpeed, I
        //     return null;
       //  }
 
-        TileEntity its =  Minecraft.getMinecraft().world.getTileEntity(message.x, message.y, message.z);
+        TileEntity its =  CommonUtil.getTileEntity(Minecraft.getMinecraft().theWorld, message.x, message.y, message.z);
 
 
         /* "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks for when the value is null anyways. */

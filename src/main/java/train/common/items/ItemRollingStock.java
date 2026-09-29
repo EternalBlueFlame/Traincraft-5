@@ -213,7 +213,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	@Override
 	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
 		int meta = CommonUtil.getBlockFacing(par3World, par4, par5, par6);
-		TileEntity tileentity = par3World.getTileEntity(par4, par5, par6);
+		TileEntity tileentity = CommonUtil.getTileEntity(par3World, par4, par5, par6);
 		//System.out.println(meta);
 		if (par3World.isRemote) {
 			return false;
@@ -253,10 +253,10 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		else if(tileentity instanceof TileTCRailGag){
 
 			TileTCRailGag tileGag = (TileTCRailGag) tileentity;
-			if(((TileTCRailGag) tileentity).originX.size()<1 || par3World.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) ==null){
+			if(((TileTCRailGag) tileentity).originX.size()<1 || CommonUtil.getTileEntity(par3World, tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) ==null){
 				return false;
 			}
-			TileTCRail tile = (TileTCRail) par3World.getTileEntity(tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
+			TileTCRail tile = (TileTCRail) CommonUtil.getTileEntity(par3World, tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
 
 			if(tile!=null  && (tile.getType().equals(EnumTracks.MEDIUM_STRAIGHT.getLabel())
 					|| tile.getType().equals(EnumTracks.LONG_STRAIGHT.getLabel())

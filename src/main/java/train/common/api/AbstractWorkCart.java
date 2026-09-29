@@ -206,7 +206,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 					return 150;
 				}
 
-				if (var3.getDefaultState().getMaterial() == Material.WOOD) {
+				if (CommonUtil.getMaterial(var3) == Material.wood) {
 					return 300;
 				}
 			}

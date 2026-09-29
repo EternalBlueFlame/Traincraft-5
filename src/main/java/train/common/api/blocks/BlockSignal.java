@@ -37,7 +37,7 @@ public class BlockSignal extends BlockSwitch {
     @Override
     public void onBlockAdded(World world, int x, int y, int z) {
         super.onBlockAdded(world, x,y,z);
-        TileEntity tile = world.getTileEntity(x,y,z);
+        TileEntity tile = CommonUtil.getTileEntity(world, x,y,z);
         if (tile instanceof TileSwitch) {
             ((TileSwitch)tile).setStrength(world.getBlockPowerInput(x,y,z),0);
         }
@@ -45,7 +45,7 @@ public class BlockSignal extends BlockSwitch {
 
     @Override
     public int onBlockPlaced(World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ, int meta) {
-        TileEntity tile = world.getTileEntity(x,y,z);
+        TileEntity tile = CommonUtil.getTileEntity(world, x,y,z);
         if (tile instanceof TileSwitch) {
             ((TileSwitch)tile).setStrength(world.getBlockPowerInput(x,y,z),0);
         }
@@ -55,7 +55,7 @@ public class BlockSignal extends BlockSwitch {
     @Override
     public void onNeighborBlockChange(World world, int x, int y, int z, Block other) {
         super.onNeighborBlockChange(world, x, y, z, other);
-        TileEntity tile = world.getTileEntity(x, y, z);
+        TileEntity tile = CommonUtil.getTileEntity(world, x, y, z);
         if (tile instanceof TileSwitch && !world.isRemote) {
             ((TileSwitch) tile).setStrength(world.getBlockPowerInput(x,y,z),0);
         }

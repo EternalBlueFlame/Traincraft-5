@@ -29,7 +29,7 @@ public class BlockTrainWorkbench extends BlockDynamic {
 
 	@Override
 	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
-		TileEntity te = world.getTileEntity(i, j, k);
+		TileEntity te = CommonUtil.getTileEntity(world, i, j, k);
 		if (player.isSneaking()) {
 			return false;
 		}
@@ -44,7 +44,7 @@ public class BlockTrainWorkbench extends BlockDynamic {
 	@Override
 	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
 		Random distilRand = new Random();
-		TileTrainWbench tilewb = (TileTrainWbench) world.getTileEntity(i, j, k);
+		TileTrainWbench tilewb = (TileTrainWbench) CommonUtil.getTileEntity(world, i, j, k);
 		if (tilewb != null) {
 			label0: for (int l = 0; l < tilewb.getSizeInventory(); l++) {
 				ItemStack itemstack = tilewb.getStackInSlot(l);
@@ -83,10 +83,10 @@ public class BlockTrainWorkbench extends BlockDynamic {
 
 	@Override
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
-		TileTrainWbench te = (TileTrainWbench) world.getTileEntity(i, j, k);
+		TileTrainWbench te = (TileTrainWbench) CommonUtil.getTileEntity(world, i, j, k);
 		if (te != null) {
 			int dir = CommonUtil.floorDouble((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
-			te.setFacing(ForgeDirection.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
+			te.setFacing(ebf.tim.utility.CommonUtil.getOrientation(dir == 0 ? 2 : dir == 1 ? 5 : dir == 2 ? 3 : 4));
 			CommonUtil.markBlockForUpdate(world, i, j, k);
 		}
 	}

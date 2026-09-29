@@ -16,6 +16,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.oredict.OreDictionary;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
@@ -71,6 +72,31 @@ public class CommonUtil {
     /** Spawns an entity in the world and reports whether it was accepted. */
     public static boolean spawnEntity(World world, Entity entity){
         return world.spawnEntityInWorld(entity);
+    }
+
+    /** Decodes a legacy direction ordinal through the version-specific direction API. */
+    public static ForgeDirection getOrientation(int direction){
+        return ForgeDirection.getOrientation(direction);
+    }
+
+    /** Gets a tile entity at integer world coordinates. */
+    public static TileEntity getTileEntity(World world, int x, int y, int z){
+        return world.getTileEntity(x, y, z);
+    }
+
+    /** Sets a tile entity at integer world coordinates. */
+    public static void setTileEntity(World world, int x, int y, int z, TileEntity tile){
+        world.setTileEntity(x, y, z, tile);
+    }
+
+    /** Gets a block's material through the version-specific block API. */
+    public static Material getMaterial(Block block){
+        return block.getMaterial();
+    }
+
+    /** Gets the material for an item's associated block. */
+    public static Material getMaterial(Item item){
+        return getMaterial(Block.getBlockFromItem(item));
     }
 
 
