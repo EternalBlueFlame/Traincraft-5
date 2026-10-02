@@ -1,5 +1,13 @@
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2020
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.api.tracks;
 
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -7,23 +15,17 @@ import net.minecraft.world.World;
  *
  * @author CovertJaguar <http://www.railcraft.info>
  */
-public class TrackScanner {
+public final class TrackScanner {
 
     /**
      * Verifies that two rails are connected to each other along a straight line
      * with no gaps or wanderings.
      *
      * @param world The World object
-     * @param x1    x-Coord of Rail #1
-     * @param y1    y-Coord of Rail #1
-     * @param z1    z-Coord of Rail #1
-     * @param x2    x-Coord of Rail #2
-     * @param y2    y-Coord of Rail #2
-     * @param z2    z-Coord of Rail #2
      * @return true if they are connected
      */
-    public static boolean areTracksConnectedAlongAxis(World world, int x1, int y1, int z1, int x2, int y2, int z2) {
-        return scanStraightTrackSection(world, x1, y1, z1, x2, y2, z2).verdict == ScanResult.Verdict.VALID;
+    public static boolean areTracksConnectedAlongAxis(World world, BlockPos start, BlockPos end) {
+        return scanStraightTrackSection(world, start, end).verdict == ScanResult.Verdict.VALID;
     }
 
     /**
@@ -33,15 +35,17 @@ public class TrackScanner {
      * Also records the min and max y values along the way.
      *
      * @param world The World object
-     * @param x1    x-Coord of Rail #1
-     * @param y1    y-Coord of Rail #1
-     * @param z1    z-Coord of Rail #1
-     * @param x2    x-Coord of Rail #2
-     * @param y2    y-Coord of Rail #2
-     * @param z2    z-Coord of Rail #2
      * @return ScanResult object with results
      */
-    public static ScanResult scanStraightTrackSection(World world, int x1, int y1, int z1, int x2, int y2, int z2) {
+    public static ScanResult scanStraightTrackSection(World world, BlockPos start, BlockPos end) {
+        int x1 = start.getX();
+        int y1 = start.getY();
+        int z1 = start.getZ();
+
+        int x2 = end.getX();
+        int y2 = end.getY();
+        int z2 = end.getZ();
+
         int minY = Math.min(y1, y2);
         int maxY = Math.max(y1, y2);
         if (x1 != x2 && z1 != z2)
@@ -61,16 +65,18 @@ public class TrackScanner {
             }
             for (int xx = min; xx <= max; xx++) {
 //                if (world.blockExists(xx, yy, z1))
-                if (RailTools.isRailBlockAt(world, xx, yy, z1)) {
-                } else if (RailTools.isRailBlockAt(world, xx, yy - 1, z1)) {
+                BlockPos p = new BlockPos(xx, yy, z1);
+                if (TrackToolsAPI.isRailBlockAt(world, p)) {
+                    // NOOP
+                } else if (TrackToolsAPI.isRailBlockAt(world, p.down())) {
                     yy--;
                     if (yy < minY)
                         minY = yy;
-                } else if (RailTools.isRailBlockAt(world, xx, yy + 1, z1)) {
+                } else if (TrackToolsAPI.isRailBlockAt(world, p.up())) {
                     yy++;
                     if (yy > maxY)
                         maxY = yy;
-                } else if (!world.blockExists(xx, yy, z1)) {
+                } else if (!world.isBlockLoaded(p)) {
                     return new ScanResult(ScanResult.Verdict.UNKNOWN, minY, maxY);
                 } else
                     return new ScanResult(ScanResult.Verdict.PATH_NOT_FOUND, minY, maxY);
@@ -90,16 +96,18 @@ public class TrackScanner {
             }
             for (int zz = min; zz <= max; zz++) {
 //                if (world.blockExists(x1, yy, zz))
-                if (RailTools.isRailBlockAt(world, x1, yy, zz)) {
-                } else if (RailTools.isRailBlockAt(world, x1, yy - 1, zz)) {
+                BlockPos p = new BlockPos(x1, yy, zz);
+                if (TrackToolsAPI.isRailBlockAt(world, p)) {
+                    // NOOP
+                } else if (TrackToolsAPI.isRailBlockAt(world, p.down())) {
                     yy--;
                     if (yy < minY)
                         minY = yy;
-                } else if (RailTools.isRailBlockAt(world, x1, yy + 1, zz)) {
+                } else if (TrackToolsAPI.isRailBlockAt(world, p.up())) {
                     yy++;
                     if (yy > maxY)
                         maxY = yy;
-                } else if (!world.blockExists(x1, yy, zz)) {
+                } else if (!world.isBlockLoaded(p)) {
                     return new ScanResult(ScanResult.Verdict.UNKNOWN, minY, maxY);
                 } else
                     return new ScanResult(ScanResult.Verdict.PATH_NOT_FOUND, minY, maxY);
@@ -108,8 +116,10 @@ public class TrackScanner {
         return new ScanResult(ScanResult.Verdict.VALID, minY, maxY);
     }
 
+    private TrackScanner() {
+    }
 
-    public static class ScanResult {
+    public static final class ScanResult {
         public final Verdict verdict;
         public final boolean areConnected;
         public final int minY, maxY;

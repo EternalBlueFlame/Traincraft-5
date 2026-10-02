@@ -1,11 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License,
- *  see LICENSE.md for details.
- * ******************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2020
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.api.carts;
 
 import net.minecraft.entity.item.EntityMinecart;
@@ -14,6 +12,10 @@ import net.minecraft.item.ItemStack;
 /**
  * This class replaces IItemTransfer for controlling how items move through a train.
  * It is entirely optional to implement this class, default values will be determined based on several factors.
+ *
+ * It is not required that every cart implementing this also has an inventory, but if you wish to accept or provide
+ * items you should implement IInventory or provide an IItemHandler capability.
+ *
  * <p/>
  * Created by CovertJaguar on 5/9/2015.
  *
@@ -29,7 +31,7 @@ public interface IItemCart {
      *
      * @return true if can pass push and pull requests
      */
-    boolean canPassItemRequests();
+    boolean canPassItemRequests(ItemStack stack);
 
     /**
      * This function controls whether a cart will accept a pushed Item.
@@ -39,7 +41,7 @@ public interface IItemCart {
      *
      * @param requester the EntityMinecart that initiated the action
      * @param stack     the ItemStack
-     * @return
+     * @return true if the cart can accept the item
      */
     boolean canAcceptPushedItem(EntityMinecart requester, ItemStack stack);
 
@@ -51,7 +53,7 @@ public interface IItemCart {
      *
      * @param requester the EntityMinecart that initiated the action
      * @param stack     the ItemStack
-     * @return
+     * @return true if the cart can provide the item
      */
     boolean canProvidePulledItem(EntityMinecart requester, ItemStack stack);
 }

@@ -1,16 +1,15 @@
-/* 
- * Copyright (c) CovertJaguar, 2014 http://railcraft.info
- * 
- * This code is the property of CovertJaguar
- * and may only be used with explicit written
- * permission unless otherwise specified on the
- * license page at http://railcraft.info/wiki/info:license.
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2020
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
+
 package mods.railcraft.api.signals;
 
-import mods.railcraft.api.core.WorldCoordinate;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>
@@ -34,7 +33,7 @@ public class SignalBlockSimple extends SignalBlock {
     }
 
     @Override
-    protected SignalAspect getSignalAspectForPair(WorldCoordinate otherCoord) {
+    protected SignalAspect getSignalAspectForPair(BlockPos otherCoord) {
         return SignalAspect.GREEN;
     }
 
