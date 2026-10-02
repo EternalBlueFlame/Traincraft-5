@@ -76,9 +76,14 @@ public class CommonUtil {
         return world.spawnEntityInWorld(entity);
     }
 
+    /** Decodes a legacy ForgeDirection ordinal into the version's direction type. */
+    public static EnumFacing getFacing(int direction){
+        return EnumFacing.byIndex(direction);
+    }
+
     /** Decodes a legacy direction ordinal through the version-specific direction API. */
     public static int getOrientation(int direction){
-        return EnumFacing.byHorizontalIndex(direction).getIndex();
+        return getFacing(direction).getIndex();
     }
 
     /** Gets a tile entity at integer world coordinates. */
