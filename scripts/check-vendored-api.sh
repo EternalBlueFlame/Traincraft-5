@@ -10,8 +10,12 @@ fail=0
 while read -r expected tree; do
   [ -z "${expected:-}" ] && continue
   # Tracked files plus untracked ones (so a new API copy is hashed before it
-  # is committed), ignoring .gitignore entries, in a stable order.
-  files=$( (git ls-files "$tree"; git ls-files --others --exclude-standard "$tree") | sort -u )
+  # is committed), ignoring .gitignore entries.
+  # LC_ALL=C forces byte-order sorting. The default locale differs between
+  # machines (en_US.UTF-8 sorts '_' before '/', C sorts '/' before '_'), which
+  # reorders paths like package-info.java vs TileEnergyHandler.java and changes
+  # the hash.
+  files=$( (git ls-files "$tree"; git ls-files --others --exclude-standard "$tree") | LC_ALL=C sort -u )
 
   # Hash against the git blob contents, not file contents
   # to avoid newline issues on different operating systems
