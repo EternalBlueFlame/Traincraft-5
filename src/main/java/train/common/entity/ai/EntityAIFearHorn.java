@@ -6,7 +6,7 @@ import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.ChunkCache;
 import train.common.api.Locomotive;
 
@@ -25,16 +25,16 @@ public class EntityAIFearHorn extends EntityAIBase {
     public boolean shouldExecute() {
         if (entity.getEntityToAttack() instanceof Locomotive) {
             Entity loco = entity.getEntityToAttack();
-            Vec3 posLoco = Vec3.createVectorHelper(loco.posX, loco.posY, loco.posZ);
+            Vec3d posLoco = new Vec3d(loco.posX, loco.posY, loco.posZ);
             entity.detachHome();
-            Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 10, 8, posLoco);
+            Vec3d vec3 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 10, 8, posLoco);
 
             if (vec3 == null) {
                 return false;
             } else {
-                this.randPosX = vec3.xCoord;
-                this.randPosY = vec3.yCoord;
-                this.randPosZ = vec3.zCoord;
+                this.randPosX = vec3.x;
+                this.randPosY = vec3.y;
+                this.randPosZ = vec3.z;
                 entity.setTarget(null);
                 return true;
             }

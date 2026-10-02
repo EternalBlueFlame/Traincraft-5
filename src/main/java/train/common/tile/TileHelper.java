@@ -33,49 +33,49 @@ public class TileHelper {
 			case 0:
 				switch (side.ordinal()) {
 				case 0:
-					return CommonUtil.getOrientation(3);
+					return CommonUtil.getFacing(3);
 				case 1:
-					return CommonUtil.getOrientation(2);
+					return CommonUtil.getFacing(2);
 				case 2:
-					return CommonUtil.getOrientation(1);
+					return CommonUtil.getFacing(1);
 				case 3:
-					return CommonUtil.getOrientation(0);
+					return CommonUtil.getFacing(0);
 				case 4:
-					return CommonUtil.getOrientation(5);
+					return CommonUtil.getFacing(5);
 				case 5:
-					return CommonUtil.getOrientation(4);
+					return CommonUtil.getFacing(4);
 				}
 
 			case 1:
 				switch (side.ordinal()) {
 				case 0:
-					return CommonUtil.getOrientation(4);
+					return CommonUtil.getFacing(4);
 				case 1:
-					return CommonUtil.getOrientation(5);
+					return CommonUtil.getFacing(5);
 				case 2:
-					return CommonUtil.getOrientation(0);
+					return CommonUtil.getFacing(0);
 				case 3:
-					return CommonUtil.getOrientation(1);
+					return CommonUtil.getFacing(1);
 				case 4:
-					return CommonUtil.getOrientation(2);
+					return CommonUtil.getFacing(2);
 				case 5:
-					return CommonUtil.getOrientation(3);
+					return CommonUtil.getFacing(3);
 				}
 
 			case 2:
 				switch (side.ordinal()) {
 				case 0:
-					return CommonUtil.getOrientation(0);
+					return CommonUtil.getFacing(0);
 				case 1:
-					return CommonUtil.getOrientation(1);
+					return CommonUtil.getFacing(1);
 				case 2:
-					return CommonUtil.getOrientation(3);
+					return CommonUtil.getFacing(3);
 				case 3:
-					return CommonUtil.getOrientation(2);
+					return CommonUtil.getFacing(2);
 				case 4:
-					return CommonUtil.getOrientation(5);
+					return CommonUtil.getFacing(5);
 				case 5:
-					return CommonUtil.getOrientation(4);
+					return CommonUtil.getFacing(4);
 				}
 
 			case 3:
@@ -84,33 +84,33 @@ public class TileHelper {
 			case 4:
 				switch (side.ordinal()) {
 				case 0:
-					return CommonUtil.getOrientation(0);
+					return CommonUtil.getFacing(0);
 				case 1:
-					return CommonUtil.getOrientation(1);
+					return CommonUtil.getFacing(1);
 				case 2:
-					return CommonUtil.getOrientation(5);
+					return CommonUtil.getFacing(5);
 				case 3:
-					return CommonUtil.getOrientation(4);
+					return CommonUtil.getFacing(4);
 				case 4:
-					return CommonUtil.getOrientation(3);
+					return CommonUtil.getFacing(3);
 				case 5:
-					return CommonUtil.getOrientation(2);
+					return CommonUtil.getFacing(2);
 				}
 
 			case 5:
 				switch (side.ordinal()) {
 				case 0:
-					return CommonUtil.getOrientation(0);
+					return CommonUtil.getFacing(0);
 				case 1:
-					return CommonUtil.getOrientation(1);
+					return CommonUtil.getFacing(1);
 				case 2:
-					return CommonUtil.getOrientation(4);
+					return CommonUtil.getFacing(4);
 				case 3:
-					return CommonUtil.getOrientation(5);
+					return CommonUtil.getFacing(5);
 				case 4:
-					return CommonUtil.getOrientation(2);
+					return CommonUtil.getFacing(2);
 				case 5:
-					return CommonUtil.getOrientation(3);
+					return CommonUtil.getFacing(3);
 				}
 			}
 		}

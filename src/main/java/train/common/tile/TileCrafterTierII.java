@@ -100,7 +100,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 
 		super.readFromNBT(nbtTag);
 
-		facing = CommonUtil.getOrientation(nbtTag.getByte("Orientation"));
+		facing = CommonUtil.getFacing(nbtTag.getByte("Orientation"));
 		slotSelected = nbtTag.getIntArray("Selected");
 		NBTTagList nbttaglist = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 

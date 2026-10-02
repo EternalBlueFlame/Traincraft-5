@@ -1,13 +1,13 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2020
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.api.core;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.world.IWorldNameable;
 
 /**
  * Implemented by objects that can be owned.
@@ -16,18 +16,9 @@ import com.mojang.authlib.GameProfile;
  *
  * @author CovertJaguar <http://www.railcraft.info/>
  */
-public interface IOwnable {
+public interface IOwnable extends IWorldNameable {
     /**
      * Returns the GameProfile of the owner of the object.
-     *
-     * @return
      */
     GameProfile getOwner();
-
-    /**
-     * Returns a localization tag (object-tag.name) that can be used in chat messages and such.
-     *
-     * @return
-     */
-    String getLocalizationTag();
 }

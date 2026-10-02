@@ -1,57 +1,72 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2020
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.carts;
 
 import net.minecraft.entity.item.EntityMinecart;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.UUID;
+import java.util.stream.Stream;
 
 /**
  * The LinkageManager contains all the functions needed to link and interact
  * with linked carts.
  * <p/>
- * To obtain an instance of this interface, call CartTools.getLinkageManager().
+ * To obtain an instance of this interface, call {@link CartToolsAPI#linkageManager()}.
  * <p/>
  * Each cart can up to two links. They are called Link A and Link B. Some carts
  * will have only Link A, for example the Tunnel Bore.
  *
  * @author CovertJaguar <http://www.railcraft.info>
- * @see CartTools, ILinkableCart
+ * @see CartToolsAPI , ILinkableCart
  */
 public interface ILinkageManager {
 
     /**
      * The default max distance at which carts can be linked, divided by 2.
      */
-    public static final float LINKAGE_DISTANCE = 1.25f;
+    float LINKAGE_DISTANCE = 1.25f;
     /**
      * The default distance at which linked carts are maintained, divided by 2.
      */
-    public static final float OPTIMAL_DISTANCE = 0.78f;
+    float OPTIMAL_DISTANCE = 0.78f;
 
-    boolean setAutoLink(EntityMinecart cart, boolean autoLink);
+    /**
+     * Allows or disallows the cart to automatically link to the next cart it collides with.
+     *
+     * @param cart     The minecart
+     * @param autoLink Whether the auto link feature is enabled
+     * @return True if tries to disable link or enable link while there is any free link
+     */
+    default boolean setAutoLink(EntityMinecart cart, boolean autoLink) {
+        return false;
+    }
 
-    boolean hasAutoLink(EntityMinecart cart);
+    default boolean hasAutoLink(EntityMinecart cart) {
+        return false;
+    }
 
-    boolean tryAutoLink(EntityMinecart cart1, EntityMinecart cart2);
+    default boolean tryAutoLink(EntityMinecart cart1, EntityMinecart cart2) {
+        return false;
+    }
 
     /**
      * Creates a link between two carts, but only if there is nothing preventing
      * such a link.
      *
-     * @param cart1
-     * @param cart2
      * @return True if the link succeeded.
      */
-    boolean createLink(EntityMinecart cart1, EntityMinecart cart2);
+    default boolean createLink(EntityMinecart cart1, EntityMinecart cart2) {
+        return false;
+    }
 
-    boolean hasFreeLink(EntityMinecart cart);
+    default boolean hasFreeLink(EntityMinecart cart) {
+        return false;
+    }
 
     /**
      * Returns the cart linked to Link A or null if nothing is currently
@@ -60,7 +75,9 @@ public interface ILinkageManager {
      * @param cart The cart for which to get the link
      * @return The linked cart or null
      */
-    EntityMinecart getLinkedCartA(EntityMinecart cart);
+    default @Nullable EntityMinecart getLinkedCartA(EntityMinecart cart) {
+        return null;
+    }
 
     /**
      * Returns the cart linked to Link B or null if nothing is currently
@@ -69,45 +86,30 @@ public interface ILinkageManager {
      * @param cart The cart for which to get the link
      * @return The linked cart or null
      */
-    EntityMinecart getLinkedCartB(EntityMinecart cart);
+    default @Nullable EntityMinecart getLinkedCartB(EntityMinecart cart) {
+        return null;
+    }
 
     /**
      * Returns true if the two carts are linked to each other.
      *
-     * @param cart1
-     * @param cart2
      * @return True if linked
      */
-    boolean areLinked(EntityMinecart cart1, EntityMinecart cart2);
+    default boolean areLinked(EntityMinecart cart1, EntityMinecart cart2) {
+        return false;
+    }
 
     /**
      * Breaks a link between two carts, if any link exists.
-     *
-     * @param cart1
-     * @param cart2
      */
-    void breakLink(EntityMinecart cart1, EntityMinecart cart2);
+    default void breakLink(EntityMinecart cart1, EntityMinecart cart2) {
+    }
 
     /**
      * Breaks all links the cart has.
-     *
-     * @param cart
      */
-    void breakLinks(EntityMinecart cart);
-
-    /**
-     * Break only link A.
-     *
-     * @param cart
-     */
-    void breakLinkA(EntityMinecart cart);
-
-    /**
-     * Break only link B.
-     *
-     * @param cart
-     */
-    void breakLinkB(EntityMinecart cart);
+    default void breakLinks(EntityMinecart cart) {
+    }
 
     /**
      * Counts how many carts are in the train.
@@ -115,23 +117,21 @@ public interface ILinkageManager {
      * @param cart Any cart in the train
      * @return The number of carts in the train
      */
-    int countCartsInTrain(EntityMinecart cart);
-
-    Iterable<EntityMinecart> getCartsInTrain(EntityMinecart cart);
+    @SuppressWarnings("unused")
+    default int countCartsInTrain(EntityMinecart cart) {
+        return 0;
+    }
 
     /**
-     * Given a persistent Entity UUID, it will return a matching minecart,
-     * assuming one is loaded in the world.
-     * <p/>
-     * The Mapping is stored in a Map<UUID, EntityMinecart> so its fairly fast.
-     * <p/>
-     * This would probably be better in CartTools, but
-     * Railcraft really only uses it for linking and this was the
-     * easiest way to expose it.
+     * Returns a Stream which will iterate over every cart in the provided cart's train.
      *
-     * @param id Persistent Entity UUID
-     * @return A Minecart
+     * There is no guarantee of order.
+     *
+     * If called on the client, it will only contain the passed cart object.
+     * There is no linkage information on the client.
      */
-    EntityMinecart getCartFromUUID(UUID id);
+    default Stream<EntityMinecart> streamTrain(EntityMinecart cart) {
+        return Stream.empty();
+    }
 
 }

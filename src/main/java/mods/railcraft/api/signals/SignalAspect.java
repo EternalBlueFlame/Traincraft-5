@@ -1,14 +1,14 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2020
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.signals;
 
 import net.minecraft.nbt.NBTTagCompound;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Locale;
 
@@ -22,36 +22,38 @@ public enum SignalAspect {
     /**
      * The All Clear.
      */
-    GREEN(0, "railcraft.gui.aspect.green.name"),
+    GREEN(0, 5, "gui.railcraft.aspect.green.name"),
     /**
      * Typically means pairing in progress.
      */
-    BLINK_YELLOW(1, "railcraft.gui.aspect.blink.yellow.name"),
+    BLINK_YELLOW(1, 3, "gui.railcraft.aspect.blink.yellow.name"),
     /**
      * Caution, cart heading away.
      */
-    YELLOW(1, "railcraft.gui.aspect.yellow.name"),
+    YELLOW(1, 5, "gui.railcraft.aspect.yellow.name"),
     /**
      * Maintenance warning, the signal is malfunctioning.
      */
-    BLINK_RED(2, "railcraft.gui.aspect.blink.red.name"),
+    BLINK_RED(2, 3, "gui.railcraft.aspect.blink.red.name"),
     /**
      * Stop!
      */
-    RED(2, "railcraft.gui.aspect.red.name"),
+    RED(2, 5, "gui.railcraft.aspect.red.name"),
     /**
      * Can't happen, really it can't (or shouldn't). Only used when rendering
      * blink states (for the texture offset).
      */
-    OFF(3, "railcraft.gui.aspect.off.name");
+    OFF(3, 0, "gui.railcraft.aspect.off.name");
     private final int textureIndex;
+    private final int lightValue;
     private final String localizationTag;
     private static boolean blinkState;
     private static final int SIGNAL_BRIGHTNESS = 210;
     public static final SignalAspect[] VALUES = values();
 
-    SignalAspect(int textureIndex, String localizationTag) {
+    SignalAspect(int textureIndex, int lightValue, String localizationTag) {
         this.textureIndex = textureIndex;
+        this.lightValue = lightValue;
         this.localizationTag = localizationTag;
     }
 
@@ -69,9 +71,9 @@ public enum SignalAspect {
      *
      * @return brightness
      */
-    public int getTextureBrightness() {
-        if (this == OFF) return -1;
-        return SIGNAL_BRIGHTNESS;
+    public float getTextureBrightness() {
+        if (this == OFF) return 0F;
+        return SIGNAL_BRIGHTNESS / 16F;
     }
 
     /**
@@ -84,13 +86,36 @@ public enum SignalAspect {
     }
 
     /**
-     * Returns true if the aspect should emit light. The return value varies for
+     * Returns true if the aspect should appear off. The return value varies for
      * Blink states.
      *
-     * @return true if emitting light.
+     * @return true if appears off.
      */
-    public boolean isLit() {
-        return this != OFF && (!isBlinkAspect() || isBlinkOn());
+    public boolean isOffState() {
+        return this == OFF || (isBlinkAspect() && !isBlinkOn());
+    }
+
+    /**
+     * Returns the SignalAspect that should be used during rendering.
+     * This will vary for blinking SignalAspects based on the global blink state.
+     *
+     * @return the SignalAspect that should be rendered
+     */
+    public SignalAspect getDisplayAspect() {
+        if (isOffState())
+            return OFF;
+        if (this == BLINK_YELLOW)
+            return YELLOW;
+        if (this == BLINK_RED)
+            return RED;
+        return this;
+    }
+
+    /**
+     * Returns the level at which the Aspect emits light.
+     */
+    public int getLightValue() {
+        return lightValue;
     }
 
     /**
@@ -148,7 +173,7 @@ public enum SignalAspect {
      * @param second aspect two
      * @return The most restrictive Aspect
      */
-    public static SignalAspect mostRestrictive(SignalAspect first, SignalAspect second) {
+    public static SignalAspect mostRestrictive(@Nullable SignalAspect first, @Nullable SignalAspect second) {
         if (first == null && second == null)
             return RED;
         if (first == null)
@@ -167,12 +192,11 @@ public enum SignalAspect {
     @Override
     public String toString() {
         String[] sa = name().split("_");
-        String out = "";
+        StringBuilder out = new StringBuilder();
         for (String s : sa) {
-            out = out + s.substring(0, 1) + s.substring(1).toLowerCase(Locale.ENGLISH) + " ";
+            out.append(s, 0, 1).append(s.substring(1).toLowerCase(Locale.ENGLISH)).append(" ");
         }
-        out = out.trim();
-        return out;
+        return out.toString().trim();
     }
 
 }
