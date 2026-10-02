@@ -11,7 +11,8 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import train.common.core.FakePlayer;
 
@@ -113,7 +114,7 @@ public class EntityRotativeWheel extends Entity {
         }
 
         if (entity != null && entity instanceof EntityRotativeDigger && ((EntityRotativeDigger) entity).getFuel() > 0) {//TODO should only dig when rotative digger has fuel and dig mode is on, doesn't work yet
-            Vec3 vec = Vec3.createVectorHelper(posX - 0.5, posY, posZ - 0.5);
+            Vec3d vec = new Vec3d(posX - 0.5, posY, posZ - 0.5);
 
             this.harvestBlock_do(vec);
             //TODO how many blocks should be harvested?
@@ -159,22 +160,22 @@ public class EntityRotativeWheel extends Entity {
      * @param pos
      */
 
-    private void harvestBlock_do(Vec3 pos) {
+    private void harvestBlock_do(Vec3d pos) {
         if (pos == null) {
             return;
         }
 
-        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
-        int meta = CommonUtil.getBlockFacing(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.x, (int) pos.y, (int) pos.z);
+        int meta = CommonUtil.getBlockFacing(worldObj, (int) pos.x, (int) pos.y, (int) pos.z);
         if (id != null) {
             this.playMiningEffect(pos, id);
         }
 
         if (!shouldIgnoreBlockForHarvesting(pos, id)) {
-            id.harvestBlock(worldObj, fakePlayer, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, meta);
-            CommonUtil.setBlock(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, null);
+            id.harvestBlock(worldObj, fakePlayer, (int) pos.x, (int) pos.y, (int) pos.z, meta);
+            CommonUtil.setBlock(worldObj, (int) pos.x, (int) pos.y, (int) pos.z, null);
 
-            world.playAuxSFX(2001, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, Block.getIdFromBlock(id) + (meta << 12));
+            world.playAuxSFX(2001, (int) pos.x, (int) pos.y, (int) pos.z, Block.getIdFromBlock(id) + (meta << 12));
             this.playMiningEffect(pos, id);
         }
 
@@ -187,12 +188,12 @@ public class EntityRotativeWheel extends Entity {
      * @param id  block id
      * @return is not harvested
      */
-    private boolean shouldIgnoreBlockForHarvesting(Vec3 pos, Block id) {
+    private boolean shouldIgnoreBlockForHarvesting(Vec3d pos, Block id) {
         if (id == null || id instanceof BlockTorch || id == Block.getBlockFromName("bedrock") || id == Block.getBlockFromName("fire") || id == Block.getBlockFromName("portal") || id == Block.getBlockFromName("endPortal") || id instanceof BlockLiquid || Block.getIdFromBlock(id) == 55 || Block.getIdFromBlock(id) == 70 || Block.getIdFromBlock(id) == 72) {
             return true;
         }
 
-        return id.getCollisionBoundingBoxFromPool(getWorld(), (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord) == null;
+        return id.getCollisionBoundingBox(getWorld().getBlockState(new BlockPos((int) pos.x, (int) pos.y, (int) pos.z)), getWorld(), new BlockPos((int) pos.x, (int) pos.y, (int) pos.z)) == null;
     }
 
     public int getStartWheel() {
@@ -208,9 +209,9 @@ public class EntityRotativeWheel extends Entity {
     private int miningTickCounter = 0;
 
     @SideOnly(Side.CLIENT)
-    private void playMiningEffect(Vec3 pos, Block block_index) {
+    private void playMiningEffect(Vec3d pos, Block block_index) {
         miningTickCounter++;
-        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.x, (int) pos.y, (int) pos.z);
     }
 
     /**

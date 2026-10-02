@@ -612,8 +612,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     protected boolean canBeDestroyedByPlayer(DamageSource damagesource) {
         if (this.getTrainLockedFromPacket()) {
-            if (damagesource.damageType.equals("player")) {
-                if ((damagesource.damageType.equals("player")MP) &&
+            if (damagesource.getEntity() instanceof EntityPlayer) {
+                if ((damagesource.getEntity() instanceof EntityPlayerMP) &&
                         ((EntityPlayerMP) damagesource.getEntity()).canCommandSenderUseCommand(2, "") &&
                         ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem() != null &&
                         ((EntityPlayer) damagesource.getEntity()).inventory.getCurrentItem().getItem() instanceof ItemWrench) {

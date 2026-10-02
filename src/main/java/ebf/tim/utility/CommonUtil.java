@@ -53,7 +53,7 @@ public class CommonUtil {
 
     /** Creates a bounding box using the version-specific construction API. */
     public static AxisAlignedBB createAABB(double minX, double minY, double minZ, double maxX, double maxY, double maxZ){
-        return AxisAlignedBB.getBoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
+        return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
     }
 
     /** Returns whether a stack represents an empty inventory slot. */

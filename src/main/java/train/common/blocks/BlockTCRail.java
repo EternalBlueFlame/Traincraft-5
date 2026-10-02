@@ -5,14 +5,17 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.items.ItemWrench;
@@ -188,10 +191,10 @@ public class BlockTCRail extends Block {
 
 
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
 
-		return world==null ? CommonUtil.createAABB(i -18f, j, k -18f, i +18f, j, k +18f)
-		: CommonUtil.createAABB(i + this.minX , j + this.minY , k + this.minZ , i + maxX, j + this.maxY , k + this.maxZ);
+		return world==null ? CommonUtil.createAABB(pos.getX() -18f, pos.getY(), pos.getZ() -18f, pos.getX() +18f, pos.getY(), pos.getZ() +18f)
+		: CommonUtil.createAABB(pos.getX() + this.minX , pos.getY() + this.minY , pos.getZ() + this.minZ , pos.getX() + maxX, pos.getY() + this.maxY , pos.getZ() + this.maxZ);
 
 
 	}

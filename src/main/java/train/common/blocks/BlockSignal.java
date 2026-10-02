@@ -5,11 +5,13 @@ import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import train.common.Traincraft;
@@ -70,9 +72,9 @@ public class BlockSignal extends BlockContainer {
 		return 4;
 	}
 	@Override
-	public AxisAlignedBB getSelectedBoundingBoxFromPool(World world, int i, int j, int k) {
-		setBlockBoundsBasedOnState(world, i, j, k);
-		return super.getSelectedBoundingBoxFromPool(world, i, j, k);
+	public AxisAlignedBB getSelectedBoundingBox(IBlockState state, World world, BlockPos pos) {
+		setBlockBoundsBasedOnState(world, pos.getX(), pos.getY(), pos.getZ());
+		return super.getSelectedBoundingBox(state, world, pos);
 	}
 
 	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLiving entityliving) {

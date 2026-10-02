@@ -12,7 +12,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
 import org.lwjgl.input.Keyboard;
@@ -37,8 +37,8 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     /**used to define which index the seat is supposed to be at*/
     private int seatNumber =0;
 
-    public Vec3 rotation =null;
-    public Vec3 pos = null;
+    public Vec3d rotation =null;
+    public Vec3d pos = null;
     public EntityRollingStock parent;
     private boolean controller=false, locomotive=false;
 
@@ -51,10 +51,10 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         this.posX = xPos;
         this.posY = yPos;
         this.posZ = zPos;
-        this.pos = Vec3.createVectorHelper(xPos,yPos,zPos);
+        this.pos = new Vec3d(xPos,yPos,zPos);
 
         if (pitch!=0 || yaw !=0) {
-            rotation = Vec3.createVectorHelper(pitch, yaw, roll);
+            rotation = new Vec3d(pitch, yaw, roll);
         }
         parentId = parent.getEntityId();
         this.seatNumber = seatNumber;
@@ -158,7 +158,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     protected void func_145780_a(int p_145780_1_, int p_145780_2_, int p_145780_3_, Block p_145780_4_) {}
 
     @Override
-    public Vec3 getLookVec() {
+    public Vec3d getLookVec() {
         return rotation;
     }
 
