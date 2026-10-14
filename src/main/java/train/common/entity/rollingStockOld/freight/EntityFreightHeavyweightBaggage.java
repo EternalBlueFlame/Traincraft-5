@@ -1,5 +1,7 @@
 package train.common.entity.rollingStockOld.freight;
 
+import net.minecraft.util.EnumHand;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -71,9 +73,9 @@ public class EntityFreightHeavyweightBaggage extends Freight {
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
+	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
 		playerEntity = entityplayer;
-		if ((super.interactFirst(entityplayer))) {
+		if ((super.processInitialInteract(entityplayer, hand))) {
 			return false;
 		}
 		if (!this.world.isRemote) {

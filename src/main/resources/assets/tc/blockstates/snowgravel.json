@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "normal": {
+      "model": "tc:snowgravel"
+    },
+    "inventory": {
+      "model": "tc:snowgravel"
+    }
+  }
+}

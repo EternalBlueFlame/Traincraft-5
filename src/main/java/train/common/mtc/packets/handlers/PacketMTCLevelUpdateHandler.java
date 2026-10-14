@@ -10,7 +10,13 @@ import train.common.mtc.packets.PacketMTCLevelUpdate;
 
 public class PacketMTCLevelUpdateHandler implements IMessageHandler<PacketMTCLevelUpdate, IMessage> {
     @Override
-    public IMessage onMessage(PacketMTCLevelUpdate message, MessageContext ctx) {
+    public IMessage onMessage(final PacketMTCLevelUpdate message, final MessageContext ctx) {
+        // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+        net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handleOnMainThread(message, ctx));
+        return null;
+    }
+
+    private IMessage handleOnMainThread(PacketMTCLevelUpdate message, MessageContext ctx) {
 
         Entity trainEntity = ctx.getServerHandler().player.world.getEntityByID(message.entity);
 

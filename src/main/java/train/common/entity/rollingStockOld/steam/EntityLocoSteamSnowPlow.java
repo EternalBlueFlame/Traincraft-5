@@ -1,5 +1,7 @@
 package train.common.entity.rollingStockOld.steam;
 
+import net.minecraft.util.math.BlockPos;
+
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
@@ -14,7 +16,8 @@ import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.api.LiquidManager;
 import train.common.api.SteamTrain;
-import train.common.core.FakePlayer;
+import net.minecraftforge.common.util.FakePlayer;
+import train.common.core.TraincraftFakePlayer;
 import train.common.library.GuiIDs;
 
 import java.util.Random;
@@ -34,11 +37,11 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 
 	@Override
 	public void pressKey(int i) {
-	    if (i == 7 && !this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof EntityPlayer) {
-	        ((EntityPlayer) this.getPassengers().get(0)).openGui(
+	    if (i == 7 && !this.getPassengers().isEmpty() && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer) {
+	        ((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).openGui(
 	            Traincraft.instance,
 	            GuiIDs.LOCO,
-	            this.worldObj,          // ou this.world se o campo se chamar world
+	            this.world,          // ou this.world se o campo se chamar world
 	            (int) this.posX,
 	            (int) this.posY,
 	            (int) this.posZ
@@ -60,35 +63,35 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 		}
 		checkInvent(cargoItems[0], cargoItems[1], this);
 		if (fakePlayer == null){
-			 fakePlayer = new FakePlayer(world);
+			 fakePlayer = TraincraftFakePlayer.get(world);
 		}
-		rotation = MathHelper.floor_float(CommonUtil.atan2degreesf(
+		rotation = MathHelper.floor(CommonUtil.atan2degreesf(
 				bogieFront.posZ - bogieBack.posZ,
 				bogieFront.posX - bogieBack.posX));
 
 		point1 = rotateVec3(blockpos[0], this.rotationPitch, rotation);
 		point1[0] += posX;point1[1] += posY;point1[2] += posZ;
-		mineSnow(world, point1, locoInvent, fakePlayer);
+		mineSnow(world, point1, cargoItems, fakePlayer);
 		point1[1]++;
-		mineSnow(world, point1, locoInvent, fakePlayer);
+		mineSnow(world, point1, cargoItems, fakePlayer);
 		point1[1]++;
-		mineSnow(world, point1, locoInvent, fakePlayer);
+		mineSnow(world, point1, cargoItems, fakePlayer);
 
 
 		point1 = rotateVec3(blockpos[1], this.rotationPitch, rotation);
 		point1[0] += posX;point1[1] += posY;point1[2] += posZ;
-		mineSnow(world, point1, locoInvent, fakePlayer);
+		mineSnow(world, point1, cargoItems, fakePlayer);
 		point1[1]++;
-		mineSnow(world, point1, locoInvent, fakePlayer);
+		mineSnow(world, point1, cargoItems, fakePlayer);
 		point1[1]++;
-		mineSnow(world, point1, locoInvent, fakePlayer);
+		mineSnow(world, point1, cargoItems, fakePlayer);
 
 
 		point1 = rotateVec3(blockpos[2], this.rotationPitch, rotation);
 		point1[0] += posX;point1[1] += posY+1;point1[2] += posZ;
-		mineSnow(world, point1, locoInvent, fakePlayer);
+		mineSnow(world, point1, cargoItems, fakePlayer);
 		point1[1]++;
-		mineSnow(world, point1, locoInvent, fakePlayer);
+		mineSnow(world, point1, cargoItems, fakePlayer);
 
 	}
 
@@ -97,14 +100,14 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 		int blockMeta = CommonUtil.getBlockFacing(worldObj, CommonUtil.floorDouble(point[0]), CommonUtil.floorDouble(point[1]),
 				CommonUtil.floorDouble(point[2]));
 
-		if((b == Blocks.snow || b == Blocks.snow_layer) && b.canHarvestBlock(fakePlayer, blockMeta)){
-			worldObj.setBlockToAir(CommonUtil.floorDouble(point[0]),CommonUtil.floorDouble(point[1]),CommonUtil.floorDouble(point[2]));
+		if((b == Blocks.SNOW || b == Blocks.SNOW_LAYER) && (fakePlayer == null || b.canHarvestBlock(worldObj, new BlockPos(CommonUtil.floorDouble(point[0]), CommonUtil.floorDouble(point[1]), CommonUtil.floorDouble(point[2])), fakePlayer))){
+			worldObj.setBlockToAir(new BlockPos(CommonUtil.floorDouble(point[0]), CommonUtil.floorDouble(point[1]), CommonUtil.floorDouble(point[2])));
 			int snowballs = new Random().nextInt(9);
 			for(int i=2; i<cargoItems.length && snowballs>0; i++){
-				if (cargoItems[i] == null){
-					cargoItems[i] = new ItemStack(Items.snowball, snowballs);
+				if (cargoItems[i] == null || cargoItems[i].isEmpty()){
+					cargoItems[i] = new ItemStack(Items.SNOWBALL, snowballs);
 					snowballs--;
-				} else if (cargoItems[i].getItem() == Items.snowball && cargoItems[i].getCount() < Items.snowball.getItemStackLimit()){
+				} else if (cargoItems[i].getItem() == Items.SNOWBALL && cargoItems[i].getCount() < Items.SNOWBALL.getItemStackLimit()){
 					while (cargoItems[i].getCount() < cargoItems[i].getMaxStackSize() && snowballs >0){
 						cargoItems[i].grow(1);
 						snowballs--;
@@ -115,8 +118,8 @@ public class EntityLocoSteamSnowPlow extends SteamTrain {
 				}
 			}
 			if (snowballs >0){
-				EntityItem entityitem = new EntityItem(world, point[0], point[1] + 1, point[2], new ItemStack(Items.snowball, snowballs));
-				entityitem.delayBeforeCanPickup = 10;
+				EntityItem entityitem = new EntityItem(worldObj, point[0], point[1] + 1, point[2], new ItemStack(Items.SNOWBALL, snowballs));
+				entityitem.setPickupDelay(10);
 				CommonUtil.spawnEntity(worldObj, entityitem);
 
 			}

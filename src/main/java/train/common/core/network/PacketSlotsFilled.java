@@ -45,7 +45,13 @@ public class PacketSlotsFilled implements IMessage {
 
     public static class Handler implements IMessageHandler<PacketSlotsFilled, IMessage> {
         @Override
-        public IMessage onMessage(PacketSlotsFilled message, MessageContext context) {
+        public IMessage onMessage(final PacketSlotsFilled message, final MessageContext context) {
+            // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+            net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(context.netHandler).addScheduledTask(() -> handleOnMainThread(message, context));
+            return null;
+        }
+
+        private IMessage handleOnMainThread(PacketSlotsFilled message, MessageContext context) {
             Entity entity = Minecraft.getMinecraft().world.getEntityByID(message.entityID);
 
             if (entity instanceof Locomotive) {

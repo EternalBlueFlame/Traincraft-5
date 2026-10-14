@@ -16,9 +16,9 @@ public class RenderkSignal extends TileEntitySpecialRenderer {
     private static final ResourceLocation texture2 = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "kSignalGreen.png");
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
+    public void render(TileEntity tileEntity, double x, double y, double z, float tick, int destroyStage, float alpha) {
         boolean powered = ((TilekSignal)tileEntity).state ==0;
-        Tessellator.bindTexture(powered?texture2:texture);
+        fexcraft.tmt.slim.Tessellator.bindTexture(powered?texture2:texture);
         GL11.glPushMatrix();
         GL11.glTranslated(x+0.5,y+0.6,z+0.5);
         GL11.glRotated(180,0,1,0);

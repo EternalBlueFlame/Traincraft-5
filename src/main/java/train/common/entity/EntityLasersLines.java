@@ -1,5 +1,7 @@
 package train.common.entity;
 
+import net.minecraft.util.math.AxisAlignedBB;
+
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
@@ -57,21 +59,10 @@ public class EntityLasersLines extends Entity {
 		posY = d1;
 		posZ = d2;
 
-		boundingBox.minX = x1 <= x2 ? x1 : x2;
-		boundingBox.minY = y1 <= y2 ? y1 : y2;
-		boundingBox.minZ = z1 <= z2 ? z1 : z2;
-
-		boundingBox.maxX = x1 <= x2 ? x2 : x1;
-		boundingBox.maxY = y1 <= y2 ? y2 : y1;
-		boundingBox.maxZ = z1 <= z2 ? z2 : z1;
-
-		boundingBox.minX--;
-		boundingBox.minY--;
-		boundingBox.minZ--;
-
-		boundingBox.maxX++;
-		boundingBox.maxY++;
-		boundingBox.maxZ++;
+		// 1.12: AxisAlignedBB is immutable
+		setEntityBoundingBox(new AxisAlignedBB(
+				(x1 <= x2 ? x1 : x2) - 1, (y1 <= y2 ? y1 : y2) - 1, (z1 <= z2 ? z1 : z2) - 1,
+				(x1 <= x2 ? x2 : x1) + 1, (y1 <= y2 ? y2 : y1) + 1, (z1 <= z2 ? z2 : z1) + 1));
 
 		updateGraphicData();
 	}

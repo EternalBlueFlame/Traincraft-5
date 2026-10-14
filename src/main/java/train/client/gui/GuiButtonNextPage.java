@@ -28,10 +28,10 @@ class GuiButtonNextPage extends GuiButton {
      * Draws this button to the screen.
      */
     @Override
-    public void drawButton(Minecraft mc, int par2, int par3) {
+    public void drawButton(Minecraft mc, int par2, int par3, float partialTicks) {
         if (this.visible && showButton) {
-            boolean var4 = par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height;
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            boolean var4 = par2 >= this.x && par3 >= this.y && par2 < this.x + this.width && par3 < this.y + this.height;
+            net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.bookPrefix + "bookleft.png"));
             int var5 = 0;
             int var6 = 206;
@@ -43,7 +43,7 @@ class GuiButtonNextPage extends GuiButton {
             if (!this.nextPage) {
                 var6 += 13;
             }
-            this.drawTexturedModalRect(this.xPosition, this.yPosition, var5, var6, 23, 13);
+            this.drawTexturedModalRect(this.x, this.y, var5, var6, 23, 13);
         }
     }
 }

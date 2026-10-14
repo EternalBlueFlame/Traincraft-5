@@ -1,5 +1,7 @@
 package train.common.api;
 
+import net.minecraft.util.math.MathHelper;
+
 import cofh.api.energy.IEnergyContainerItem;
 import cofh.api.energy.IEnergyHandler;
 import ebf.tim.utility.CommonUtil;
@@ -55,7 +57,7 @@ public abstract class ElectricTrain extends Locomotive {
 			{
 				fuelTrain += 2000;
 				decrStackSize(0, 1);
-			} else if (item == Item.getItemFromBlock(Blocks.redstone_block) && (getFuel() + (18000)) <= maxEnergy)
+			} else if (item == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK) && (getFuel() + (18000)) <= maxEnergy)
 			{
 				fuelTrain += 18000;
 				decrStackSize(0, 1);
@@ -67,18 +69,18 @@ public abstract class ElectricTrain extends Locomotive {
 			}
 			/*else if ((PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[4]) && PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[3])) && (item == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[4]).getItem())) {
 
-				int transfer = ElectricItem.manager.discharge(locoInvent[0], maxEnergy - getFuel(), 2, false, false);
+				int transfer = ElectricItem.manager.discharge(cargoItems[0], maxEnergy - getFuel(), 2, false, false);
 				fuelTrain = transfer;
 				//System.out.println("Amount: " + transfer + " Fuel: " + getFuel());//TODO debug
 			}*/
-		}/* else if (getFuel() <= 0) {// fuel check if (locoInvent[0] != null && (PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[20])) && (PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[23]))) { if ((locoInvent[0].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[20]).itemID)) { hasUranium = true; fuelTrain = maxEnergy; if (!world.isRemote) { decrStackSize(0, 1); } reduceExplosionChance = 1000; for (int u = 1; u < locoInvent.length; u++) {// checks the inventory
+		}/* else if (getFuel() <= 0) {// fuel check if (cargoItems[0] != null && (PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[20])) && (PluginIndustrialCraft.getItems().containsKey(PluginIndustrialCraft.getNames()[23]))) { if ((cargoItems[0].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[20]).itemID)) { hasUranium = true; fuelTrain = maxEnergy; if (!world.isRemote) { decrStackSize(0, 1); } reduceExplosionChance = 1000; for (int u = 1; u < cargoItems.length; u++) {// checks the inventory
 		  * 
-		  * if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!world.isRemote)) { locoInvent[u].setItemDamage(1); } } } } } else if ((locoInvent[0].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[23]).itemID)) { hasUranium = true; fuelTrain = 800 + 1000000; // locoInvent[0] = null; if (!world.isRemote) { decrStackSize(0, 1); } reduceExplosionChance = 1000; for (int u = 1; u < locoInvent.length; u++) {// checks the inventory if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!world.isRemote)) { locoInvent[u].setItemDamage(1); } } } } } } } */
+		  * if (cargoItems[u] != null) { if (cargoItems[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!world.isRemote)) { cargoItems[u].setItemDamage(1); } } } } } else if ((cargoItems[0].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[23]).itemID)) { hasUranium = true; fuelTrain = 800 + 1000000; // cargoItems[0] = null; if (!world.isRemote) { decrStackSize(0, 1); } reduceExplosionChance = 1000; for (int u = 1; u < cargoItems.length; u++) {// checks the inventory if (cargoItems[u] != null) { if (cargoItems[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!world.isRemote)) { cargoItems[u].setItemDamage(1); } } } } } } } */
 
-		blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(worldObj, posX, posY-1, posZ),
-				CommonUtil.getTileEntity(worldObj, posX, posY+2, posZ),
-				CommonUtil.getTileEntity(worldObj, posX, posY+3, posZ),
-				CommonUtil.getTileEntity(worldObj, posX, posY+4, posZ)
+		blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY-1), MathHelper.floor(posZ)),
+				CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY+2), MathHelper.floor(posZ)),
+				CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY+3), MathHelper.floor(posZ)),
+				CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY+4), MathHelper.floor(posZ))
 		};
 
 		int draw = 0;
@@ -120,7 +122,7 @@ public abstract class ElectricTrain extends Locomotive {
 		/*if (hasUranium && (rand.nextInt(reduceExplosionChance) == 0) && (!Ignite)) {// fuse
 			Ignite = true;
 			setFire(8);
-			world.playSoundAtEntity(this, "random.fuse", 1.0F, 0.5F);
+			world.playSound(null, posX, posY, posZ, net.minecraft.init.SoundEvents.ENTITY_TNT_PRIMED, net.minecraft.util.SoundCategory.NEUTRAL, 1.0F, 0.5F);
 		}*/
 		if (Ignite && timeSinceIgnited == 100) {
 			world.createExplosion(this, posX, posY, posZ, 200F, true);
@@ -133,7 +135,7 @@ public abstract class ElectricTrain extends Locomotive {
 	@Override
 	public int getFuelDiv(int i) {
 		if (world.isRemote) {
-			return ((this.dataWatcher.getWatchableObjectInt(24) * (i)) / maxEnergy);
+			return ((getDataWatcher().getWatchableObjectInt(24) * (i)) / maxEnergy);
 		}
 		return (this.fuelTrain * (i)) / maxEnergy;
 	}

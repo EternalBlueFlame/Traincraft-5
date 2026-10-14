@@ -562,7 +562,7 @@ public class ModelTankWagonThreeDome extends ModelBase
 	public void render(Entity entity, float f, float f1, float f2, float f3, float f4, float f5)
 	{
 		super.render(entity, f, f1, f2, f3, f4, f5);
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/freighttruckm.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/freighttruckm.png"));
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(-2.6,-0.0,-0.175);

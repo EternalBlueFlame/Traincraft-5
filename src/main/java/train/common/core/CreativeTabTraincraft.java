@@ -23,7 +23,7 @@ public class CreativeTabTraincraft extends CreativeTabs {
     /**instances the tab by handling it through the super.*/
     public CreativeTabTraincraft(String name, String MODID, String textureName) {
         super(CreativeTabs.getNextID(), name);
-        tabItem= TraincraftRegistry.RegisterItem(new Item(),MODID,textureName,null);
+        tabItem= TraincraftRegistry.RegisterItem(new train.common.items.ItemTabIcon(MODID + ":" + textureName),MODID,textureName,null);
     }
 
     public CreativeTabTraincraft(String name, Item itm) {
@@ -32,12 +32,12 @@ public class CreativeTabTraincraft extends CreativeTabs {
     }
 
     @Override
-    public ItemStack getIconItemStack() {
+    public ItemStack getIcon() {
         return new ItemStack(tabItem);
     }
 
     @Override
-    public String getTranslatedTabLabel() {
+    public String getTranslationKey() {
         return CommonUtil.translate(super.getTabLabel());
     }
 
@@ -46,14 +46,15 @@ public class CreativeTabTraincraft extends CreativeTabs {
 
     /**the icon for the tab. don't override this one*/
     @Override
-    public Item getTabIconItem() {
-        return getTabItem();
+    public ItemStack createIcon() {
+        return new ItemStack(getTabItem());
     }
 
     /**This is used to hide items from the creative tab, but could also be used for sorting.*/
     @SideOnly(Side.CLIENT)
-    public void displayAllReleventItems(List p_78018_1_) {
-        super.displayAllReleventItems(p_78018_1_);
+    @Override
+    public void displayAllRelevantItems(net.minecraft.util.NonNullList<ItemStack> p_78018_1_) {
+        super.displayAllRelevantItems(p_78018_1_);
     }
 
 }

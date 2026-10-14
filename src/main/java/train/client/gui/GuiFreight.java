@@ -57,10 +57,10 @@ public class GuiFreight extends GuiContainer {
             this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 124, buttonPosY - 10, 51, 10, "Unlocked"));
         }
         else {
-            if (freight.getTrainOwner().equalsIgnoreCase(player.getDisplayName()))
+            if (freight.getTrainOwner().equalsIgnoreCase(player.getName()))
                 this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 130, buttonPosY - 10, 43, 10, "Locked"));
-            else if (freight.isPlayerTrusted(player.getDisplayName()))
-                if (freight.isPlayerTrustedToBreak(player.getDisplayName()))
+            else if (freight.isPlayerTrusted(player.getName()))
+                if (freight.isPlayerTrustedToBreak(player.getName()))
                     this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 125, buttonPosY - 10, 48, 10, "Trusted+"));
                 else
                     this.buttonList.add(this.buttonLock = new GuiButton(3, buttonPosX + 128, buttonPosY - 10, 45, 10, "Trusted"));
@@ -91,7 +91,7 @@ public class GuiFreight extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 3) {
-            if (player != null && player.getCommandSenderName().equalsIgnoreCase(freight.getTrainOwner())) {
+            if (player != null && player.getName().equalsIgnoreCase(freight.getTrainOwner())) {
                 if (!freight.getTrainLockedFromPacket() && !isShiftKeyDown()) {
                     freight.locked = true;
                     guibutton.displayString = "Locked";
@@ -101,15 +101,15 @@ public class GuiFreight extends GuiContainer {
                     guibutton.displayString = "Unlocked";
                     this.initGui();
                 }
-                AxisAlignedBB box = freight.boundingBox.expand(5, 5, 5);
-                List lis3 = freight.worldObj.getEntitiesWithinAABBExcludingEntity(freight, box);
+                AxisAlignedBB box = freight.getEntityBoundingBox().expand(5, 5, 5);
+                List lis3 = freight.world.getEntitiesWithinAABBExcludingEntity(freight, box);
                 if (lis3 != null && !lis3.isEmpty()) {
                     for (Object entity : lis3) {
                         if (entity instanceof EntityPlayer) {
                             if (!isShiftKeyDown()) {
                                 Traincraft.lockChannel.sendToServer(new PacketSetTrainLockedToClient(freight.locked, freight.getTrustedList(), freight.getEntityId(), false));
                             } else {
-                                this.mc.thePlayer.closeScreen();
+                                this.mc.player.closeScreen();
                                 player.openGui(Traincraft.instance, GuiIDs.LOCK_MENU, player.getEntityWorld(), freight.getEntityId(), -1, (int) freight.posZ);
                                 return;
                             }
@@ -125,14 +125,13 @@ public class GuiFreight extends GuiContainer {
         }
     }
 
-    @Override
-    protected void drawCreativeTabHoveringText(String str, int t, int g) {
+    public void drawHoveringText(String str, int t, int g) {
         String state = "";
         if (freight.getTrainLockedFromPacket()) {
-            if (freight.getTrainOwner().equalsIgnoreCase(player.getDisplayName()))
+            if (freight.getTrainOwner().equalsIgnoreCase(player.getName()))
                 state = "Locked";
-            else if (freight.isPlayerTrusted(player.getDisplayName()))
-                if (freight.isPlayerTrustedToBreak(player.getDisplayName()))
+            else if (freight.isPlayerTrusted(player.getName()))
+                if (freight.isPlayerTrustedToBreak(player.getName()))
                     state = "Trusted Access+";
                 else
                     state = "Trusted Access";
@@ -180,20 +179,20 @@ public class GuiFreight extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRenderer.drawString(freight.getCommandSenderName(), 10, 6, 0x404040);
+        fontRenderer.drawString(freight.getName(), 10, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
 
         if (intersectsWith(i, j)) {
-            drawCreativeTabHoveringText("When a freight is locked,", i, j);
+            drawHoveringText("When a freight is locked,", i, j);
         }
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int t, int g) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.guiPrefix + "container.png"));
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;

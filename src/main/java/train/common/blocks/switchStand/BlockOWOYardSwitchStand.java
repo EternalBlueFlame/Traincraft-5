@@ -1,12 +1,18 @@
 package train.common.blocks.switchStand;
 
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.block.state.IBlockState;
+
+import net.minecraft.block.SoundType;
+
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
 import train.common.api.blocks.BlockSwitch;
 import train.common.tile.switchStand.TileOWOYardSwitchStand;
@@ -15,22 +21,24 @@ import train.common.tile.switchStand.TileOWOYardSwitchStand;
 public class BlockOWOYardSwitchStand extends BlockSwitch {
 
     public BlockOWOYardSwitchStand() {
-        super(Material.iron, 0);
+        super(Material.IRON, 0);
         setCreativeTab(Traincraft.tcTab);
         this.setTickRandomly(true);
         setHardness(1.75F);
         setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.75F, 0.8F);
-        setStepSound(soundTypeMetal);
+        setSoundType(SoundType.METAL);
     }
     @Override
-    public void onBlockAdded(World world, int i, int j, int k) {
-        super.onBlockAdded(world, i, j, k);
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+    	int i = pos.getX(), j = pos.getY(), k = pos.getZ();
+        super.onBlockAdded(world, new BlockPos(i, j, k), world.getBlockState(new BlockPos(i, j, k)));
         CommonUtil.markBlockForUpdate(world, i, j, k);
     }
 
     @Override
-    public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
-        super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+    	int i = pos.getX(), j = pos.getY(), k = pos.getZ();
+        super.onBlockPlacedBy(world, new BlockPos(i, j, k), world.getBlockState(new BlockPos(i, j, k)), entityliving, stack);
         TileOWOYardSwitchStand te = (TileOWOYardSwitchStand) CommonUtil.getTileEntity(world, i, j, k);
         if (te != null) {
             int dir = CommonUtil.floorDouble((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
@@ -41,7 +49,8 @@ public class BlockOWOYardSwitchStand extends BlockSwitch {
 
 
     @Override
-    public TileEntity createTileEntity(World world, int metadata) {
+    public TileEntity createTileEntity(World world, IBlockState state) {
+    	int metadata = getMetaFromState(state);
         return new TileOWOYardSwitchStand(this);
     }
 

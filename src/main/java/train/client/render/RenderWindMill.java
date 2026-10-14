@@ -11,7 +11,7 @@ public class RenderWindMill extends TileEntitySpecialRenderer {
     private static final ModelWindMillWheel modelWindMillWheel = new ModelWindMillWheel();
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
+    public void render(TileEntity tileEntity, double x, double y, double z, float tick, int destroyStage, float alpha) {
         modelWindMill.render((TileWindMill) tileEntity, x, y, z);
         modelWindMillWheel.render((TileWindMill) tileEntity, x, y, z);
     }

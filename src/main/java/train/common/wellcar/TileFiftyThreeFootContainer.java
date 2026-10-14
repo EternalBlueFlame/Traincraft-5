@@ -1,5 +1,9 @@
 package train.common.wellcar;
 
+import train.common.core.util.StackUtil;
+
+import ebf.tim.utility.CommonUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
@@ -11,6 +15,13 @@ import net.minecraftforge.common.util.Constants;
 import java.util.ArrayList;
 
 public class TileFiftyThreeFootContainer extends TileEntity implements IInventory {
+
+	// 1.12: modded tile entities are dropped on any block state change by default; only drop them when the block changes
+	@Override
+	public boolean shouldRefresh(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.state.IBlockState oldState, net.minecraft.block.state.IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
     public ItemStack[] inventory;
     public int directionPlaced;
     public int currentColor = 0;
@@ -34,8 +45,8 @@ public class TileFiftyThreeFootContainer extends TileEntity implements IInventor
     @Override
     public ItemStack getStackInSlot(int index) {
         if (index < 0 || index >= this.getSizeInventory())
-            return null;
-        return this.inventory[index];
+            return ItemStack.EMPTY;
+        return StackUtil.nn(this.inventory[index]);
     }
 
     @Override
@@ -43,45 +54,45 @@ public class TileFiftyThreeFootContainer extends TileEntity implements IInventor
         if (!CommonUtil.isItemStackEmpty(this.getStackInSlot(index))) {
             ItemStack itemstack;
 
-            if (this.getStackInSlot(index).stackSize <= count) {
+            if (this.getStackInSlot(index).getCount() <= count) {
                 itemstack = this.getStackInSlot(index);
-                this.setInventorySlotContents(index, null);
+                this.setInventorySlotContents(index, ItemStack.EMPTY);
                 this.markDirty();
-                return itemstack;
+                return StackUtil.nn(itemstack);
             } else {
                 itemstack = this.getStackInSlot(index).splitStack(count);
 
-                if (this.getStackInSlot(index).stackSize <= 0) {
-                    this.setInventorySlotContents(index, null);
+                if (this.getStackInSlot(index).getCount() <= 0) {
+                    this.setInventorySlotContents(index, ItemStack.EMPTY);
                 } else {
                     //Just to show that changes happened
                     this.setInventorySlotContents(index, this.getStackInSlot(index));
                 }
 
                 this.markDirty();
-                return itemstack;
+                return StackUtil.nn(itemstack);
             }
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
     public ItemStack removeStackFromSlot(int index) {
         ItemStack stack = this.getStackInSlot(index);
-        this.setInventorySlotContents(index, null);
-        return stack;
+        this.setInventorySlotContents(index, ItemStack.EMPTY);
+        return StackUtil.nn(stack);
     }
 
     @Override
-    public void setInventorySlotContents(int index, ItemStack stack) {
+    public void setInventorySlotContents(int index, ItemStack stack) { if (stack != null && stack.isEmpty()) stack = null;
         if (index < 0 || index >= this.getSizeInventory())
             return;
 
-        if (stack != null && stack.stackSize > this.getInventoryStackLimit())
-            stack.stackSize = this.getInventoryStackLimit();
+        if (stack != null && stack.getCount() > this.getInventoryStackLimit())
+            stack.setCount(this.getInventoryStackLimit());
 
-        if (stack != null && stack.stackSize == 0)
+        if (stack != null && stack.getCount() == 0)
             stack = null;
 
         this.inventory[index] = stack;
@@ -96,7 +107,7 @@ public class TileFiftyThreeFootContainer extends TileEntity implements IInventor
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return false;
     }
 
@@ -142,8 +153,7 @@ public class TileFiftyThreeFootContainer extends TileEntity implements IInventor
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbt)
-    {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         NBTTagList list = new NBTTagList();
 
@@ -161,6 +171,7 @@ public class TileFiftyThreeFootContainer extends TileEntity implements IInventor
         nbt.setTag("Items", list);
         nbt.setInteger("currentColor", currentColor);
         nbt.setString("currentColorString", getAvailableColors().get(currentColor));
+    	return nbt;
     }
 
     public ArrayList<String> getAvailableColors() {
@@ -185,5 +196,40 @@ public class TileFiftyThreeFootContainer extends TileEntity implements IInventor
 
     }
 
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void clear() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			setInventorySlotContents(i, ItemStack.EMPTY);
+		}
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public boolean isEmpty() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			ItemStack s = getStackInSlot(i);
+			if (s != null && !s.isEmpty()) return false;
+		}
+		return true;
+	}
 }
 

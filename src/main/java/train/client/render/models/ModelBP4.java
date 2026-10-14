@@ -994,9 +994,9 @@ public class ModelBP4 extends ModelConverter
 
 
 		if(entity instanceof AbstractTrains && DepreciatedUtil.getColorFromString(((AbstractTrains) entity).getColor())==5){
-			Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/bp4bogie_purple.png"));
+			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/bp4bogie_purple.png"));
 		} else {
-			Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/bp4bogie.png"));
+			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/bp4bogie.png"));
 		}
 
 		GL11.glPushMatrix();

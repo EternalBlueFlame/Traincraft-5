@@ -486,7 +486,7 @@ public class ModelBulkheadFlat extends ModelBase
 		{
 			bulkheadflatModel[i].render(f5);
 		}
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/wellcar_bogie.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/wellcar_bogie.png"));
 		GL11.glPushMatrix();
 		GL11.glTranslated(-1.8,0.16,-0.35);
 		GL11.glScalef(1.1f,1.1f,0.9f);

@@ -127,7 +127,7 @@ public class ModelGS4Tender extends ModelBase
 		}
 
 
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/GS4_tender_bogie.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/GS4_tender_bogie.png"));
 		GL11.glPushMatrix();
 		GL11.glTranslated(-1.8,0.0,-0.1);
 		bogie1.render(entity,f,f1,f2,f3,f4,f5);

@@ -6,6 +6,17 @@
  ******************************************************************************/
 
 package train.common.items;
+import train.common.Traincraft;
+
+import net.minecraft.util.EnumHand;
+
+import net.minecraft.util.EnumActionResult;
+
+import net.minecraft.util.ActionResult;
+
+import net.minecraft.client.util.ITooltipFlag;
+
+import javax.annotation.Nullable;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -27,18 +38,20 @@ public class ItemBlockBook extends ItemBlock {
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean par4) {
+	public void addInformation(ItemStack stack, @Nullable World world, List<String> list, ITooltipFlag flag) {
+		boolean par4 = flag.isAdvanced(); EntityPlayer player = Traincraft.proxy.getPlayer();
 		list.add("\u00a77" + "Book 2, WIP");
 	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
 	public EnumRarity getRarity(ItemStack stack) {
-		return EnumRarity.common;
+		return EnumRarity.COMMON;
 	}
 	
 	@Override
-	public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand);
 		NBTTagCompound var3 = stack.getTagCompound();
 		if (var3 == null) {
 			var3 = new NBTTagCompound();
@@ -48,8 +61,8 @@ public class ItemBlockBook extends ItemBlock {
 			stack.getTagCompound().setInteger("open", 1);
 		}
 		if (!world.isRemote)
-			return stack;
+			return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 		//player.openGui(Traincraft.instance, GuiIDs.RECIPE_BOOK2, world, (int) player.posX, (int) player.posY, (int) player.posZ);
-		return stack;
+		return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
 	}
 }

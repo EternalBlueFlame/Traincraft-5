@@ -7,14 +7,15 @@
 
 package train.client.render;
 
+import train.client.render.item.TCItemRenderer;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.models.blocks.ModelBlockSignal;
 import train.common.library.Info;
 
-public class ItemRenderSignal implements IItemRenderer {
+public class ItemRenderSignal extends TCItemRenderer {
 
     private static final ModelBlockSignal signal = new ModelBlockSignal(1F);
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation, Info.trainsPrefix + "signal_suisse_green.png");

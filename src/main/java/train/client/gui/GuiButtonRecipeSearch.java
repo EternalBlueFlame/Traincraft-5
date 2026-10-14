@@ -46,17 +46,17 @@ class GuiButtonRecipeSearch extends GuiButton {
      * Draws this button to the screen.
      */
     @Override
-    public void drawButton(Minecraft mc, int par2, int par3) {
+    public void drawButton(Minecraft mc, int par2, int par3, float partialTicks) {
         if (this.visible && showButton) {
             if (type == Type.SEARCH) {
-                if (par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height)
+                if (par2 >= this.x && par3 >= this.y && par2 < this.x + this.width && par3 < this.y + this.height)
                     this.setType(Type.SEARCH, Texture.ACTIVE);
                 else
                     this.setType(Type.SEARCH, Texture.INACTIVE);
             }
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.bookPrefix + "searchbar.png"));
-            this.drawTexturedModalRect(this.xPosition, this.yPosition, u, v, 10, 10);
+            this.drawTexturedModalRect(this.x, this.y, u, v, 10, 10);
         }
     }
     public void setType(Type type, Texture texture) {

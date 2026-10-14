@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "normal": {
+      "model": "tc:poweredgravel"
+    },
+    "inventory": {
+      "model": "tc:poweredgravel"
+    }
+  }
+}

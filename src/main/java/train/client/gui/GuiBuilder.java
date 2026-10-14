@@ -70,11 +70,11 @@ public class GuiBuilder extends GuiContainer {
         fontRenderer.drawString("with new tracks", 4, 170, 0x404040);
         fontRenderer.drawString("yet", 4, 180, 0x404040);
 
-        fontRendererObj.drawString(CommonUtil.translate("builder.currElev.name") + ": " + (int) builder.currentHeight, 120, -25, 0xFFFFFF);
-        fontRendererObj.drawString(CommonUtil.translate("builder.reqElev.name") + ": " + builder.getPlannedHeight(), 120, -10, 0xFFFFFF);
+        fontRenderer.drawString(CommonUtil.translate("builder.currElev.name") + ": " + (int) builder.currentHeight, 120, -25, 0xFFFFFF);
+        fontRenderer.drawString(CommonUtil.translate("builder.reqElev.name") + ": " + builder.getPlannedHeight(), 120, -10, 0xFFFFFF);
 
         if (intersectsWith(i, j)) {
-            drawCreativeTabHoveringText("When a builder is locked,", i, j);
+            drawHoveringText("When a builder is locked,", i, j);
         }
     }
 
@@ -99,8 +99,8 @@ public class GuiBuilder extends GuiContainer {
         }
 
         if (guibutton.id == 4) {
-            if (player != null && player.getCommandSenderName().equalsIgnoreCase(builder.getTrainOwner())) {
-                AxisAlignedBB box = builder.boundingBox.expand(5, 5, 5);
+            if (player != null && player.getName().equalsIgnoreCase(builder.getTrainOwner())) {
+                AxisAlignedBB box = builder.getEntityBoundingBox().expand(5, 5, 5);
                 List<?> lis3 = builder.world.getEntitiesWithinAABBExcludingEntity(builder, box);
 
                 if (!builder.getTrainLockedFromPacket()) {
@@ -135,8 +135,7 @@ public class GuiBuilder extends GuiContainer {
         }
     }
 
-    @Override
-    protected void drawCreativeTabHoveringText(String str, int t, int g) {
+    public void drawHoveringText(String str, int t, int g) {
         String state = "";
         if ((builder).getTrainLockedFromPacket())
             state = "Locked";
@@ -172,7 +171,7 @@ public class GuiBuilder extends GuiContainer {
     }
 
     private void sendPacket(int packet, int packetID) {
-        AxisAlignedBB box = (builder).boundingBox.expand(5, 5, 5);
+        AxisAlignedBB box = (builder).getEntityBoundingBox().expand(5, 5, 5);
         List<?> lis3 = (builder).world.getEntitiesWithinAABBExcludingEntity(builder, box);
         if (lis3 != null && !lis3.isEmpty()) {
             for (Object entity : lis3) {
@@ -184,7 +183,7 @@ public class GuiBuilder extends GuiContainer {
     }
 
     private void sendFollow(int packet, int packetID) {
-        AxisAlignedBB box = (builder).boundingBox.expand(5, 5, 5);
+        AxisAlignedBB box = (builder).getEntityBoundingBox().expand(5, 5, 5);
         List<?> lis3 = (builder).world.getEntitiesWithinAABBExcludingEntity(builder, box);
         if (lis3 != null && !lis3.isEmpty()) {
             for (Object entity : lis3) {
@@ -197,7 +196,7 @@ public class GuiBuilder extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int t, int g) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
         mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.guiPrefix + "gui_builder2.png"));
 

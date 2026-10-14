@@ -1,5 +1,7 @@
 package train.common.entity.rollingStockOld.tender;
 
+import net.minecraft.util.EnumHand;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
@@ -83,9 +85,9 @@ public class EntityTenderBR01_DB extends Tender implements IInventory {
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
+	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
 		playerEntity = entityplayer;
-		if ((super.interactFirst(entityplayer))) {
+		if ((super.processInitialInteract(entityplayer, hand))) {
 			return false;
 		}
 		if (!this.world.isRemote) {

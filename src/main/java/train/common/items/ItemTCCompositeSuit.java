@@ -7,6 +7,12 @@
 
 package train.common.items;
 
+import net.minecraft.init.MobEffects;
+
+import net.minecraft.inventory.EntityEquipmentSlot;
+
+import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -46,7 +52,8 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
      * @return Path of texture to bind, or null to use default
      */
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type){
+	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slotType, String type) {
+		int slot = 3 - slotType.getIndex();
 		if(stack.getItem() == ItemIDs.helmet_suit_paintable.item || stack.getItem() == ItemIDs.jacket_suit_paintable.item || stack.getItem() == ItemIDs.boots_suit_paintable.item){
 			if(type!=null)return Info.resourceLocation+":"+Info.armorPrefix+"composite_suit_"+2+".png";
 			return Info.resourceLocation+":"+Info.armorPrefix+"composite_suit_"+1+".png";
@@ -55,7 +62,7 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
 			return Info.resourceLocation+":"+Info.armorPrefix+"composite_suit_pants_"+1+".png";	
 		}
 		else{
-			return super.getArmorTexture(stack, entity, slot, type);
+			return super.getArmorTexture(stack, entity, slotType, type);
 		}
 	}
 
@@ -66,7 +73,7 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
 	@SideOnly(Side.CLIENT)
     public EnumRarity getRarity(ItemStack par1ItemStack)
     {
-        return EnumRarity.epic;
+        return EnumRarity.EPIC;
     }
 	@Override
 	public void onArmorTick(World world, EntityPlayer player,
@@ -82,13 +89,13 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
 			 * and night vision
 			 */
 			if(itemarmor.getArmorMaterial() == Traincraft.instance.armorCompositeSuit){
-				PotionEffect poison = player.getActivePotionEffect(Potion.poison);
-				PotionEffect wither = player.getActivePotionEffect(Potion.wither);
-				PotionEffect blindness = player.getActivePotionEffect(Potion.blindness);
-				PotionEffect confusion = player.getActivePotionEffect(Potion.confusion);
+				PotionEffect poison = player.getActivePotionEffect(MobEffects.POISON);
+				PotionEffect wither = player.getActivePotionEffect(MobEffects.WITHER);
+				PotionEffect blindness = player.getActivePotionEffect(MobEffects.BLINDNESS);
+				PotionEffect confusion = player.getActivePotionEffect(MobEffects.NAUSEA);
 				if(poison!=null){
 					if (armorHelmet.getMaxDamage()-armorHelmet.getItemDamage()>5) {
-						player.removePotionEffect(poison.getPotionID());
+						player.removePotionEffect(poison.getPotion());
 						armorHelmet.damageItem(5, player);
 					} else {
 						armorHelmet.damageItem(armorHelmet.getMaxDamage()-armorHelmet.getItemDamage(), player);
@@ -96,7 +103,7 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
 				}
 				if(wither!=null){
 					if (armorHelmet.getMaxDamage()-armorHelmet.getItemDamage()>5) {
-						player.removePotionEffect(wither.getPotionID());
+						player.removePotionEffect(wither.getPotion());
 						armorHelmet.damageItem(5, player);
 					} else {
 						armorHelmet.damageItem(armorHelmet.getMaxDamage()-armorHelmet.getItemDamage(), player);
@@ -104,7 +111,7 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
 				}
 				if(blindness!=null){
 					if (armorHelmet.getMaxDamage()-armorHelmet.getItemDamage()>5) {
-						player.removePotionEffect(blindness.getPotionID());
+						player.removePotionEffect(blindness.getPotion());
 						armorHelmet.damageItem(5, player);
 					} else {
 						armorHelmet.damageItem(armorHelmet.getMaxDamage()-armorHelmet.getItemDamage(), player);
@@ -112,25 +119,25 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
 				}
 				if(confusion!=null){
 					if (armorHelmet.getMaxDamage()-armorHelmet.getItemDamage()>5) {
-						player.removePotionEffect(confusion.getPotionID());
+						player.removePotionEffect(confusion.getPotion());
 						armorHelmet.damageItem(5, player);
 					} else {
 						armorHelmet.damageItem(armorHelmet.getMaxDamage()-armorHelmet.getItemDamage(), player);
 					}
 				}
-				if(player.isInWater() && player.getActivePotionEffect(Potion.waterBreathing)==null){
+				if(player.isInWater() && player.getActivePotionEffect(MobEffects.WATER_BREATHING)==null){
 					if (armorHelmet.getMaxDamage()-armorHelmet.getItemDamage()>1) {
-						player.addPotionEffect(new PotionEffect(Potion.waterBreathing.id, 10 * 20, 0));
+						player.addPotionEffect(new PotionEffect(MobEffects.WATER_BREATHING, 10 * 20, 0));
 						armorHelmet.damageItem(1, player);
 					} else {
 						armorHelmet.damageItem(armorHelmet.getMaxDamage()-armorHelmet.getItemDamage(), player);
 					}
 				}
-				//System.out.println(world.getBlockLightValue((int)player.posX, (int)player.posY+(int)player.getEyeHeight(), (int)player.posZ) +" "+world.isAirBlock((int)player.posX, (int)player.posY+(int)player.getEyeHeight(), (int)player.posZ) +" "+world.isAnyLiquid(player.boundingBox));
-				if(!world.isRemote && world.getBlockLightValue((int)player.posX, (int)player.posY+(int)player.getEyeHeight(), (int)player.posZ)<=4 && (world.isAirBlock((int)player.posX, (int)player.posY+(int)player.getEyeHeight(), (int)player.posZ)||world.isAnyLiquid(player.boundingBox))){
+				//System.out.println(world.getLightFromNeighbors(new BlockPos((int)player.posX, (int)player.posY+(int)player.getEyeHeight(), (int)player.posZ)) +" "+world.isAirBlock(new net.minecraft.util.math.BlockPos((int)player.posX, (int)player.posY+(int)player.getEyeHeight(), (int)player.posZ)) +" "+world.containsAnyLiquid(player.boundingBox));
+				if(!world.isRemote && world.getLightFromNeighbors(new BlockPos((int)player.posX, (int)player.posY+(int)player.getEyeHeight(), (int)player.posZ))<=4 && (world.isAirBlock(new BlockPos((int)player.posX, (int)player.posY+(int)player.getEyeHeight(), (int)player.posZ))||world.containsAnyLiquid(player.getEntityBoundingBox()))){
 					if (armorHelmet.getMaxDamage()-armorHelmet.getItemDamage()>1) {
-						if (player.getActivePotionEffect(Potion.nightVision) ==null || player.getActivePotionEffect(Potion.nightVision).getDuration()<220) {
-							player.addPotionEffect(new PotionEffect(Potion.nightVision.id, 820, 0, true));
+						if (player.getActivePotionEffect(MobEffects.NIGHT_VISION) ==null || player.getActivePotionEffect(MobEffects.NIGHT_VISION).getDuration()<220) {
+							player.addPotionEffect(new PotionEffect(MobEffects.NIGHT_VISION, 820, 0, true, true));
 							armorHelmet.damageItem(1, player);
 						}
 					} else {
@@ -182,14 +189,14 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
 	@SubscribeEvent
 	public void onEntityLivingJumpEvent(LivingEvent.LivingJumpEvent event)
 	{
-		if(event.entity instanceof EntityPlayer){
-			EntityPlayer player = (EntityPlayer)event.entity;
+		if(event.getEntity() instanceof EntityPlayer){
+			EntityPlayer player = (EntityPlayer)event.getEntity();
 			ItemStack armor = player.inventory.armorItemInSlot(1);
 			if(armor!=null && armor.getItem() instanceof ItemTCArmor){
 				ItemTCArmor itemarmor = (ItemTCArmor)armor.getItem();
 				if(itemarmor.getArmorMaterial() == Traincraft.instance.armorCompositeSuit){
 					if (armor.getMaxDamage()-armor.getItemDamage()>5) {
-						event.entity.motionY+=0.05;
+						event.getEntity().motionY+=0.05;
 						armor.damageItem(5, player);
 					} else {
 						armor.damageItem(armor.getMaxDamage()-armor.getItemDamage(), player);
@@ -205,13 +212,13 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
 	@SubscribeEvent
 	public void onEntityLivingFallEvent(LivingFallEvent event)
 	{
-		if(event.entity instanceof EntityPlayer){
-			EntityPlayer player = (EntityPlayer)event.entity;
+		if(event.getEntity() instanceof EntityPlayer){
+			EntityPlayer player = (EntityPlayer)event.getEntity();
 			ItemStack armor = player.inventory.armorItemInSlot(0);
 			if(armor!=null && armor.getItem() instanceof ItemTCCompositeSuit){
 				ItemTCCompositeSuit itemarmor = (ItemTCCompositeSuit)armor.getItem();
 				if(itemarmor.getArmorMaterial() == Traincraft.instance.armorCompositeSuit){
-					if(event.distance-3>0){
+					if(event.getDistance()-3>0){
 						if (armor.getMaxDamage()-armor.getItemDamage()>5) {
 							armor.damageItem(5, player);
 							event.setCanceled(true);
@@ -227,6 +234,6 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
 
 	@Override
 	public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack) {
-		return(par2ItemStack.getItem() == Items.diamond);
+		return(par2ItemStack.getItem() == Items.DIAMOND);
 	}
 }

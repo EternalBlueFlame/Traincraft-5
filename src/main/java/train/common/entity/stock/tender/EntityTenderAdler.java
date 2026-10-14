@@ -1,4 +1,5 @@
 package train.common.entity.stock.tender;
+import train.client.render.models.ModelTenderAdler;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -83,9 +84,9 @@ return 1;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelTenderAdler()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelTenderAdler()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -1.55f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0f, 1.05f, 0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{180.0f, -90.0f, 0.0f}};}
     @Override

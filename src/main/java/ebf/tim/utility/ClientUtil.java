@@ -22,6 +22,13 @@ import java.util.List;
 
 public class ClientUtil {
 
+    /** 1.7.10 {@code Block.colorMultiplier(world, x, y, z)}: the block-color tint at a position. */
+    public static int colorMultiplier(net.minecraft.world.IBlockAccess world, int x, int y, int z) {
+        net.minecraft.util.math.BlockPos pos = new net.minecraft.util.math.BlockPos(x, y, z);
+        return net.minecraft.client.Minecraft.getMinecraft().getBlockColors().colorMultiplier(world.getBlockState(pos), world, pos, 0);
+    }
+
+
     static boolean useVanillaInventoryTextures=true;
 
     public static final ResourceLocation vanillaInventory =
@@ -102,10 +109,10 @@ public class ClientUtil {
 
         if(overlay!=null && overlay.getItem()!=null) {
             //render the item and the overlay
-            itemRender.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(),
-                    overlay, (int)x, (int)y);
-            itemRender.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(),
-                    overlay, (int)x, (int)y, null);
+            itemRender.renderItemAndEffectIntoGUI(overlay, (int)x, (int)y);
+
+            itemRender.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, overlay, (int)x, (int)y, null);
+
 
             if(mouseX>x && mouseX<x+18 && mouseY>y && mouseY<y+18){
                 GL11.glPushMatrix();
@@ -253,14 +260,13 @@ public class ClientUtil {
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         GL11.glShadeModel(GL11.GL_SMOOTH);
-        net.minecraft.client.renderer.Tessellator tessellator = net.minecraft.client.renderer.Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.setColorRGBA_F(f1, f2, f3, f);
-        tessellator.addVertex(p_73733_3_, p_73733_2_, 300);
-        tessellator.addVertex(p_73733_1_, p_73733_2_, 300);
-        tessellator.setColorRGBA_F(f5, f6, f7, f4);
-        tessellator.addVertex(p_73733_1_, p_73733_4_, 300);
-        tessellator.addVertex(p_73733_3_, p_73733_4_, 300);
+        net.minecraft.client.renderer.Tessellator tessellator = net.minecraft.client.renderer.Tessellator.getInstance();
+        net.minecraft.client.renderer.BufferBuilder buf = tessellator.getBuffer();
+        buf.begin(GL11.GL_QUADS, net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION_COLOR);
+        buf.pos(p_73733_3_, p_73733_2_, 300).color(f1, f2, f3, f).endVertex();
+        buf.pos(p_73733_1_, p_73733_2_, 300).color(f1, f2, f3, f).endVertex();
+        buf.pos(p_73733_1_, p_73733_4_, 300).color(f5, f6, f7, f4).endVertex();
+        buf.pos(p_73733_3_, p_73733_4_, 300).color(f5, f6, f7, f4).endVertex();
         tessellator.draw();
         GL11.glShadeModel(GL11.GL_FLAT);
         GL11.glDisable(GL11.GL_BLEND);

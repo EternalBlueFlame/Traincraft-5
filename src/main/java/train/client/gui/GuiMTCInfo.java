@@ -77,7 +77,7 @@ public class GuiMTCInfo extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char par1, int par2) {
+    protected void keyTyped(char par1, int par2) throws java.io.IOException {
         if (trainLevel.isFocused() && par2 == Keyboard.KEY_1 || par2 == Keyboard.KEY_2 || par2 == Keyboard.KEY_3 || par2 == Keyboard.KEY_4 || par2 == Keyboard.KEY_5 || par2 == Keyboard.KEY_6 || par2 == Keyboard.KEY_7 || par2 == Keyboard.KEY_8 || par2 == Keyboard.KEY_9 || par2 == Keyboard.KEY_0 || par2 == Keyboard.KEY_BACK) {
             trainLevel.textboxKeyTyped(par1, par2);
         }
@@ -92,7 +92,7 @@ public class GuiMTCInfo extends GuiScreen {
 
         if (par2 == 1) {
             if (!destination.isFocused() || !trainID.isFocused() || !trainLevel.isFocused()) {
-                mc.thePlayer.closeScreen();
+                mc.player.closeScreen();
                 theLocomotive.trainLevel = trainLevel.getText();
                 if (!trainLevel.getText().isEmpty()) {
                     Traincraft.mtlChannel.sendToServer(new PacketMTCLevelUpdate(theLocomotive.getEntityId(), Integer.parseInt(trainLevel.getText())));
@@ -102,14 +102,14 @@ public class GuiMTCInfo extends GuiScreen {
                 Traincraft.updateTrainIDChannel.sendToServer(new PacketUpdateTrainID(theLocomotive.getEntityId(), trainID.getText()));
                 theLocomotive.destination = destination.getText();
                 Traincraft.updateDestinationChannel.sendToServer(new PacketDestination(theLocomotive.getEntityId(), destination.getText()));
-                mc.thePlayer.closeScreen();
+                mc.player.closeScreen();
             }
         }
 
     }
 
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) {
+    protected void mouseClicked(int par1, int par2, int par3) throws java.io.IOException {
         trainLevel.mouseClicked(par1, par2, par3);
         trainID.mouseClicked(par1, par2, par3);
         destination.mouseClicked(par1, par2, par3);

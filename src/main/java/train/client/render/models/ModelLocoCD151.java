@@ -46,7 +46,7 @@ public class ModelLocoCD151 extends ModelConverter //Same as Filename
 			}
 		}
 
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation,Info.trainsPrefix +"cd151_front_bogie.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation,Info.trainsPrefix +"cd151_front_bogie.png"));
 		GL11.glPushMatrix();
 		GL11.glTranslatef(-2.15f,0.3f,-0.4f);
 		bogie.render(entity, f0, f1, f2, f3, f4, scale);

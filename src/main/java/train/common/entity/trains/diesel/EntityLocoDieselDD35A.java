@@ -1,4 +1,5 @@
 package train.common.entity.trains.diesel;
+import train.client.render.models.ModelDD35A;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -84,16 +85,16 @@ return 3;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelDD35A()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelDD35A()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-5.0f, -0.68f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-5f, 0.18f, 0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{0.9f, 1.0f, 0.9f}};}
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{-2.8f,1.5f,-0.2f}};}  // from the 1.7.10 class
     @Override
     public float[] getHitboxSize(){return new float[]{7.349999904632568f,2.1f,1.1f};}
     public TrainParticle[] getEffects(){

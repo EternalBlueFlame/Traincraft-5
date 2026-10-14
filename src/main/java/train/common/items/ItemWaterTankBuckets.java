@@ -21,12 +21,12 @@ public class ItemWaterTankBuckets extends ItemBucket { // implements IBucketHand
 	}
 
 	public ItemStack fillCustomBucket(World w, int i, int j, int k) {
-		if (CommonUtil.getBlockAt(w, i, j, k) == Blocks.water || CommonUtil.getBlockAt(w, i, j, k) == Blocks.water) {
+		if (CommonUtil.getBlockAt(w, i, j, k) == Blocks.WATER || CommonUtil.getBlockAt(w, i, j, k) == Blocks.WATER) {
 			CommonUtil.setBlockMeta(w, i, j, k, 0, 0);
 			return new ItemStack(this);
 		}
 
-		if (CommonUtil.getBlockAt(w, i, j, k) == Blocks.flowing_water || CommonUtil.getBlockAt(w, i, j, k) == Blocks.flowing_water) {
+		if (CommonUtil.getBlockAt(w, i, j, k) == Blocks.FLOWING_WATER || CommonUtil.getBlockAt(w, i, j, k) == Blocks.FLOWING_WATER) {
 			CommonUtil.setBlockMeta(w, i, j, k, 0, 0);
 			return new ItemStack(this);
 		}

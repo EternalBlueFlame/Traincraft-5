@@ -1,11 +1,11 @@
 package train.common.blocks;
 
+import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
@@ -15,9 +15,7 @@ import train.common.library.Info;
 
 public class BlockTraincraftFluid extends BlockFluidClassic {
 	
-	@SideOnly(Side.CLIENT)
-	protected IIcon[] theIcon;
-	protected boolean flammable;
+		protected boolean flammable;
 	protected int flammability = 0;
 
 	public String MODID=Info.modID;
@@ -30,16 +28,7 @@ public class BlockTraincraftFluid extends BlockFluidClassic {
 		super(fluid, material);
 	}
 
-	@Override
-	public IIcon getIcon(int side, int meta) {
-		return this.theIcon != null ? side != 0 && side != 1 ? this.theIcon[1] : this.theIcon[0] : null;
-	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerBlockIcons(IIconRegister iconRegister) {
-		this.theIcon = new IIcon[]{iconRegister.registerIcon(MODID.toLowerCase() + ":liquid_" + fluidName), iconRegister.registerIcon(Info.modID.toLowerCase() +":liquid_" + fluidName + "_flow")};
-	}
 
 	public BlockTraincraftFluid setFlammable(boolean flammable) {
 		this.flammable = flammable;
@@ -52,37 +41,43 @@ public class BlockTraincraftFluid extends BlockFluidClassic {
 	}
 
 	@Override
-	public int getFireSpreadSpeed(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
 		return flammable ? 300 : 0;
 	}
 
 	@Override
-	public int getFlammability(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
 		return flammability;
 	}
 
 	@Override
-	public boolean isFlammable(IBlockAccess world, int x, int y, int z, EnumFacing face) {
+	public boolean isFlammable(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
 		return flammable;
 	}
 
 	@Override
-	public boolean isFireSource(World world, int x, int y, int z, EnumFacing side) {
+	public boolean isFireSource(World world, BlockPos pos, EnumFacing side) {
+		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
 		return flammable && flammability == 0;
 	}
 
 	@Override
-	public boolean canDisplace(IBlockAccess world, int x, int y, int z) {
-		return  (CommonUtil.getMaterial(CommonUtil.getBlockAt(world, x, y, z)).isLiquid() && super.canDisplace(world, x, y, z));
+	public boolean canDisplace(IBlockAccess world, BlockPos pos) {
+		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
+		return !world.getBlockState(pos).getMaterial().isLiquid() && super.canDisplace(world, pos);
 	}
 	
 	@Override
-	public boolean displaceIfPossible(World world, int x, int y, int z) {
-		return (!CommonUtil.getMaterial(CommonUtil.getBlockAt(world, x, y, z)).isLiquid() && super.displaceIfPossible(world, x, y, z));
+	public boolean displaceIfPossible(World world, BlockPos pos) {
+		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
+		return !world.getBlockState(pos).getMaterial().isLiquid() && super.displaceIfPossible(world, pos);
 	}
 	
 	@Override
-	public String getUnlocalizedName() {
+	public String getTranslationKey() {
 		return "fluid." + MODID + ":" + fluidName;
 	}
 }

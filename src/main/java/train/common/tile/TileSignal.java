@@ -1,17 +1,28 @@
 package train.common.tile;
 
+import net.minecraft.util.ITickable;
+
+import ebf.tim.utility.CommonUtil;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 
 import java.util.List;
 
 //client
-public class TileSignal extends TileEntity {
+public class TileSignal extends TileEntity implements ITickable {
+
+	// 1.12: modded tile entities are dropped on any block state change by default; only drop them when the block changes
+	@Override
+	public boolean shouldRefresh(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.state.IBlockState oldState, net.minecraft.block.state.IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
 	public int state;// 0=red 1=green
 	public int rot;
 
@@ -25,7 +36,7 @@ public class TileSignal extends TileEntity {
 		tempSpeedX = 0;
 		tempSpeedZ = 0;
 		fu = 0;
-		facingMeta = this.blockMetadata;
+		facingMeta = this.getBlockMetadata();
 	}
 
 	public int getFacing() {
@@ -44,14 +55,21 @@ public class TileSignal extends TileEntity {
 		facingMeta = nbttagcompound.getByte("Orientation");
 	}
 	@Override
-	public void writeToNBT(NBTTagCompound nbttagcompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
 		nbttagcompound.setByte("Orientation", (byte) facingMeta);
 		nbttagcompound.setInteger("state", this.state);
 		nbttagcompound.setInteger("rot", this.rot);
+		return nbttagcompound;
+	}
+
+	/** 1.12 sends this with the chunk data (1.7.10 sent the description packet instead). */
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
@@ -60,7 +78,7 @@ public class TileSignal extends TileEntity {
 	}
 
 	@Override
-	public void updateEntity() {
+	public void update() {
 		int x1 = 1;// x2
 		int x2 = 1;// y2
 		int x3 = 1;// z2
@@ -98,7 +116,7 @@ public class TileSignal extends TileEntity {
 			break;
 		}
 
-		List list = this.worldObj.getEntitiesWithinAABB(EntityMinecart.class, CommonUtil.createAABB( this.xCoord + x4, this.yCoord, this.zCoord + x5, (this.xCoord + x1), (this.yCoord + 1),  (this.zCoord + x3)).expand(1.0D, 1.0D, 1.0D));
+		List list = this.world.getEntitiesWithinAABB(EntityMinecart.class, CommonUtil.createAABB( this.getPos().getX() + x4, this.getPos().getY(), this.getPos().getZ() + x5, (this.getPos().getX() + x1), (this.getPos().getY() + 1),  (this.getPos().getZ() + x3)).expand(1.0D, 1.0D, 1.0D));
 		Entity entity;
 
 		if (list != null && list.size() > 0) {

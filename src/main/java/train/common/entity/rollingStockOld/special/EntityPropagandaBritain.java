@@ -28,8 +28,8 @@ public class EntityPropagandaBritain extends EntityRollingStock {
 		setRollingAmplitude(10);
 		setDamage(getDamage() + i * 10);
 		if (getDamage() > 40) {
-			if (getPassengers().get(0) != null) {
-				getPassengers().get(0).startRiding(this);
+			if (ebf.tim.utility.CommonUtil.rider(this) != null) {
+				this.removePassengers(); // 1.7.10 mountEntity(this) dismounted, 1.12 startRiding would mount
 			}
 			this.setDead();
 			ServerLogger.deleteWagon(this);

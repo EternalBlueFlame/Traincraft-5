@@ -1,4 +1,6 @@
 package train.common;
+import train.common.items.ItemRollingStock;
+import train.common.Traincraft;
 
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
@@ -114,11 +116,11 @@ public class trainConverter {
                         "import net.minecraft.item.ItemStack;\n"+
                         "import net.minecraft.init.Blocks;\n"+
                         "import net.minecraft.world.World;\n"+
-                        "import train.common.Traincraft;\n"+
+                        "import Traincraft;\n"+
                         "import train.common.api.*;\n"+
-                        "import train.common.items.ItemRollingStock;\n"+
-                        "import train.common.library.Info;\n"+
-                        "import train.common.library.ItemIDs;\n"+
+                        "import ItemRollingStock;\n"+
+                        "import Info;\n"+
+                        "import ItemIDs;\n"+
                         "\n");
 
         builder.append("public class ");
@@ -174,7 +176,7 @@ public class trainConverter {
 
         /**Item*/
         // builder.append("    public static final Item thisItem = new ItemRollingStock(this, new ");
-        String itemName = trn.getItem().getUnlocalizedName().replace("item.tc:", "");
+        String itemName = trn.getItem().getTranslationKey().replace("item.tc:", "");
         for (ItemIDs items : ItemIDs.values()) {
             if (items.className.equals("ItemRollingStock")) {
                 if (itemName.equals(items.name().toString())) {
@@ -655,12 +657,12 @@ public class trainConverter {
                     i.getItem().delegate.name().getPath();
 
         } else {
-            if(i.getItem().delegate.name().split(":")[1].equals("ingot")){
+            if(i.getItem().delegate.name().getPath().equals("ingot")){
                 return "Items.IRON_INGOT";
             }
 
-            if(i.getItem().delegate.name().split(":")[1].equals("potion")){
-                return "Items.potionitem";
+            if(i.getItem().delegate.name().getPath().equals("potion")){
+                return "Items.POTIONITEM";
             }
             return "Items." +
                     i.getItem().delegate.name().getPath();

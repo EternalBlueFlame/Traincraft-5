@@ -21,7 +21,7 @@ public class TileLinesRenderer extends TileEntitySpecialRenderer {
      *
      * } */
     @Override
-    public void renderTileEntityAt(TileEntity tileentity, double d, double d1, double d2, float f) {
+    public void render(TileEntity tileentity, double d, double d1, double d2, float f, int destroyStage, float alpha) {
         // renderAModelAt((TileEntityElectricConverter)tileentity, d, d1, d2, f);
     }
 

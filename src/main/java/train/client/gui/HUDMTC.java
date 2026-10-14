@@ -102,11 +102,11 @@ public class HUDMTC extends GuiScreen {
         double maxV = (double) (v + height) / (double) imageHeight;
 
         BufferBuilder tessellator = Tessellator.getInstance().getBuffer();
-        tessellator.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEXTURE);
+        tessellator.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
         tessellator.pos(x + scale * (double) width, y + scale * (double) height, 0).tex(maxU, maxV).endVertex();
         tessellator.pos(x + scale * (double) width, y, 0).tex(maxU, minV).endVertex();
         tessellator.pos(x, y, 0).tex(minU, minV).endVertex();
         tessellator.pos(x, y + scale * (double) height, 0).tex(minU, maxV).endVertex();
-        tessellator.draw();
+        Tessellator.getInstance().draw();
     }
 }

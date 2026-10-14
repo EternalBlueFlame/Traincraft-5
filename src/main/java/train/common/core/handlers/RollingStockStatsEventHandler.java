@@ -26,18 +26,18 @@ public class RollingStockStatsEventHandler {
         double xDist = train.prevPosX - train.posX;
         double yDist = train.prevPosY - train.posY;
         double zDist = train.prevPosZ - train.posZ;
-        int var7 = Math.round(MathHelper.sqrt_double(xDist * xDist + yDist * yDist + zDist * zDist) * 100);
+        int var7 = Math.round(MathHelper.sqrt(xDist * xDist + yDist * yDist + zDist * zDist) * 100);
         train.trainDistanceTraveled += (var7);
         //System.out.println(trainDistanceTraveled);
-        if (train.getPassengers().get(0) != null && train.getPassengers().get(0) instanceof EntityPlayer) {
+        if (ebf.tim.utility.CommonUtil.rider(train) != null && ebf.tim.utility.CommonUtil.rider(train) instanceof EntityPlayer) {
             for (playerDistance d : plDist) {
-                if (((EntityPlayer) train.getPassengers().get(0)).getDisplayName().equals(d.getUsername())) {
+                if (((EntityPlayer) ebf.tim.utility.CommonUtil.rider(train)).getDisplayName().equals(d.getUsername())) {
                     d.setDistance(d.getDistance() + (var7));
-                    //System.out.println(d.getDistance()+" "+((EntityPlayer)getPassengers().get(0)).username);
+                    //System.out.println(d.getDistance()+" "+((EntityPlayer)ebf.tim.utility.CommonUtil.rider(this)).username);
                     return;
                 }
             }
-            plDist.add(new playerDistance(((EntityPlayer) train.getPassengers().get(0)).getDisplayName(), (var7)));
+            plDist.add(new playerDistance(((EntityPlayer) ebf.tim.utility.CommonUtil.rider(train)).getName(), (var7)));
         }
     }
 

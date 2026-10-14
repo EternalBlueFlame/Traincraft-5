@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "half=bottom,variant=default": {
+      "model": "tc:snowgravelslab_bottom"
+    },
+    "half=top,variant=default": {
+      "model": "tc:snowgravelslab_top"
+    },
+    "inventory": {
+      "model": "tc:snowgravelslab_bottom"
+    }
+  }
+}

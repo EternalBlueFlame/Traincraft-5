@@ -1,12 +1,12 @@
 package train.common.mtc.packets.handlers;
 
+import net.minecraft.util.math.Vec3d;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
-import cpw.mods.fml.common.network.simpleimpl.IMessageHandler;
-import cpw.mods.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.Vec3;
 import train.common.Traincraft;
 import train.common.api.Locomotive;
 import train.common.mtc.packets.PacketATO;
@@ -16,8 +16,8 @@ import train.common.mtc.packets.PacketATOSetStopPoint;
 public class PacketATODOSlowDownHandler implements IMessageHandler<PacketATODoSlowDown, IMessage> {
 
 
-   public void slow(Entity entity, Vec3 signalPosition) {
-      double currentDistance = Math.copySign(Vec3.createVectorHelper(entity.posX, entity.posY, entity.posZ).distanceTo(signalPosition), 1.0D);
+   public void slow(Entity entity, Vec3d signalPosition) {
+      double currentDistance = Math.copySign(new Vec3d(entity.posX, entity.posY, entity.posZ).distanceTo(signalPosition), 1.0D);
       double originalDistance;
       if (entity.getEntityData().hasKey("signal.distance") && entity.getEntityData().getDouble("signal.distance") > currentDistance){
          originalDistance = entity.getEntityData().getDouble("signal.distance");
@@ -53,12 +53,18 @@ public class PacketATODOSlowDownHandler implements IMessageHandler<PacketATODoSl
 
 
    @Override
-   public IMessage onMessage(PacketATODoSlowDown message, MessageContext ctx) {
+   public IMessage onMessage(final PacketATODoSlowDown message, final MessageContext ctx) {
+       // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+       net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handleOnMainThread(message, ctx));
+       return null;
+   }
+
+   private IMessage handleOnMainThread(PacketATODoSlowDown message, MessageContext ctx) {
 
 
          Entity trainEntity = ctx.getServerHandler().player.getEntityWorld().getEntityByID(message.entity);
          if(trainEntity != null) {
-            this.slow(trainEntity, Vec3.createVectorHelper(message.stopX, message.stopY, message.stopZ));
+            this.slow(trainEntity, new Vec3d(message.stopX, message.stopY, message.stopZ));
          }
 
          return null;

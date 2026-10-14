@@ -1,13 +1,14 @@
 package train.common.wellcar.render;
 
+import train.client.render.item.TCItemRenderer;
+
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.models.containers.Modelcontainer40;
 
-public class ItemRenderFortyFootContainer implements IItemRenderer {
+public class ItemRenderFortyFootContainer extends TCItemRenderer {
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
         return true;

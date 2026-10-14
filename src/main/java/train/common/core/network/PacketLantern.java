@@ -1,5 +1,7 @@
 package train.common.core.network;
 
+import ebf.tim.utility.CommonUtil;
+
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -45,8 +47,14 @@ public class PacketLantern implements IMessage {
 
     public static class Handler implements IMessageHandler<PacketLantern, IMessage> {
         @Override
-        public IMessage onMessage(PacketLantern message, MessageContext context) {
-            TileEntity lantern = CommonUtil.getTileEntity(context.getServerHandler().playerEntity.worldObj, message.xPos, message.yPos, message.zPos);
+        public IMessage onMessage(final PacketLantern message, final MessageContext context) {
+            // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+            net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(context.netHandler).addScheduledTask(() -> handleOnMainThread(message, context));
+            return null;
+        }
+
+        private IMessage handleOnMainThread(PacketLantern message, MessageContext context) {
+            TileEntity lantern = CommonUtil.getTileEntity(context.getServerHandler().player.world, message.xPos, message.yPos, message.zPos);
 
             /* "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks for when the value is null anyways. */
             if (lantern != null) {

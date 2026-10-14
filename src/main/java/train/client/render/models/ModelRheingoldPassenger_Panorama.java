@@ -41,7 +41,7 @@ public class ModelRheingoldPassenger_Panorama extends ModelConverter
 	{
 		super.render(entity, f, f1, f2, f3, f4, f5);
 
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/Rheingold_Bogie.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/Rheingold_Bogie.png"));
 		GL11.glPushMatrix();
 		GL11.glTranslated(-2.945,0.20,-0.26);
 		bogie1.render(entity,f,f1,f2,f3,f4,f5);

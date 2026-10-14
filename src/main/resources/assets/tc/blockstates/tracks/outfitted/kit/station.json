@@ -1,0 +1,76 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rail_flat",
+    "textures": {
+      "rail": "tc:blocks/tracks/outfitted/kit/station_0"
+    }
+  },
+  "variants": {
+    "state": {
+      "0": {
+        "textures": {
+          "rail": "tc:blocks/tracks/outfitted/kit/station_0"
+        }
+      },
+      "1": {
+        "textures": {
+          "rail": "tc:blocks/tracks/outfitted/kit/station_1"
+        }
+      },
+      "2": {
+        "textures": {
+          "rail": "tc:blocks/tracks/outfitted/kit/station_2"
+        }
+      },
+      "3": {
+        "textures": {
+          "rail": "tc:blocks/tracks/outfitted/kit/station_3"
+        }
+      },
+      "4": {
+        "textures": {
+          "rail": "tc:blocks/tracks/outfitted/kit/station_4"
+        }
+      },
+      "5": {
+        "textures": {
+          "rail": "tc:blocks/tracks/outfitted/kit/station_5"
+        }
+      },
+      "6": {
+        "textures": {
+          "rail": "tc:blocks/tracks/outfitted/kit/station_6"
+        }
+      },
+      "7": {
+        "textures": {
+          "rail": "tc:blocks/tracks/outfitted/kit/station_7"
+        }
+      }
+    },
+    "shape": {
+      "north_south": {
+        "model": "rail_flat"
+      },
+      "east_west": {
+        "model": "rail_flat",
+        "y": 90
+      },
+      "ascending_east": {
+        "model": "rail_raised_ne",
+        "y": 90
+      },
+      "ascending_west": {
+        "model": "rail_raised_sw",
+        "y": 90
+      },
+      "ascending_north": {
+        "model": "rail_raised_ne"
+      },
+      "ascending_south": {
+        "model": "rail_raised_sw"
+      }
+    }
+  }
+}

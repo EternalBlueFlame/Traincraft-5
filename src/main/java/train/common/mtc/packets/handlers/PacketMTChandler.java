@@ -11,7 +11,13 @@ import train.common.mtc.packets.PacketMTC;
 
 public class PacketMTChandler implements IMessageHandler<PacketMTC, IMessage> {
     @Override
-    public IMessage onMessage(PacketMTC message, MessageContext ctx) {
+    public IMessage onMessage(final PacketMTC message, final MessageContext ctx) {
+        // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+        net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handleOnMainThread(message, ctx));
+        return null;
+    }
+
+    private IMessage handleOnMainThread(PacketMTC message, MessageContext ctx) {
 
             Entity theTrain = Minecraft.getMinecraft().world.getEntityByID(message.entity);
             if (theTrain != null && theTrain instanceof Locomotive) {

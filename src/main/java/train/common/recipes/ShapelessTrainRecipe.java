@@ -41,12 +41,12 @@ public class ShapelessTrainRecipe implements ITCRecipe {
 		ArrayList var3 = new ArrayList(this.recipeItems);
 		for (int i = 0; i < 9; i++) {
 			ItemStack var6 = inventory.getStackInSlot(i);
-			if (var6 != null) {
+			if (var6 != null && !var6.isEmpty()) {
 				boolean var7 = false;
 				Iterator var8 = var3.iterator();
 				while (var8.hasNext()) {
 					ItemStack var9 = (ItemStack) var8.next();
-					if (var6 == var9 && (var9.getItemDamage() == OreDictionary.WILDCARD_VALUE || var6.getItemDamage() == var9.getItemDamage()) /* && var6.setCount(= var9.getCount() */) {
+					if (var9 != null && var6.getItem() == var9.getItem() && (var9.getItemDamage() == OreDictionary.WILDCARD_VALUE || var6.getItemDamage() == var9.getItemDamage()) /* && var6.setCount(= var9.getCount() */) {
 						var7 = true;
 						var3.remove(var9);
 						break;

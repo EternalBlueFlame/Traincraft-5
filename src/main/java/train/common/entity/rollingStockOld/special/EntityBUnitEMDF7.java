@@ -1,5 +1,7 @@
 package train.common.entity.rollingStockOld.special;
 
+import net.minecraft.util.EnumHand;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -7,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -47,15 +49,15 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
         }
 
         if (theTank != null && theTank.getFluid() != null) {
-            this.dataWatcher.updateObject(18, theTank.getFluidAmount());
-            this.dataWatcher.updateObject(4, theTank.getFluid().getFluidID());
+            getDataWatcher().updateObject(18, theTank.getFluidAmount());
+            getDataWatcher().updateObject(4, theTank.getFluid().getFluid().getName());
             if (theTank.getFluid().amount <= 1) {
                 motionX *= 0.94;
                 motionZ *= 0.94;
             }
         } else if (theTank != null && theTank.getFluid() == null) {
-            this.dataWatcher.updateObject(18, 0);
-            this.dataWatcher.updateObject(4, 0);
+            getDataWatcher().updateObject(18, 0);
+            getDataWatcher().updateObject(4, 0);
         }
 
         if (getAmount() > 0) {
@@ -72,7 +74,7 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
     }
 
     public int getDiesel() {
-        return (this.dataWatcher.getWatchableObjectInt(18));
+        return (getDataWatcher().getWatchableObjectInt(18));
     }
 
     public LiquidManager.StandardTank getTank() {
@@ -95,7 +97,7 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
 
         nbttagcompound.setTag("Items", nbttaglist);
         if (theTank != null && theTank.getFluid() != null) {
-            new FluidStack(theTank.getFluid(), this.dataWatcher.getWatchableObjectInt(18)).writeToNBT(nbttagcompound);
+            new FluidStack(theTank.getFluid(), getDataWatcher().getWatchableObjectInt(18)).writeToNBT(nbttagcompound);
         }
     }
 
@@ -184,8 +186,8 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
     }
 
     @Override
-    public boolean interactFirst(EntityPlayer entityplayer) {
-        if ((super.interactFirst(entityplayer))) {
+    public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
+        if ((super.processInitialInteract(entityplayer, hand))) {
             return false;
         }
 
@@ -226,7 +228,7 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
 
     @Override
     public IFluidTankProperties[] getTankProperties() {
-        return new FluidTankInfo[]{theTank.getInfo()};
+        return theTank.getTankProperties();
     }
 
     public FluidStack getFluid() {
@@ -234,11 +236,11 @@ public class EntityBUnitEMDF7 extends LiquidTank implements IFluidHandler {
     }
 
     public int getFluidAmount() {
-        return dataWatcher.getWatchableObjectInt(18);
+        return getDataWatcher().getWatchableObjectInt(18);
     }
 
     @Override
     public String getLiquidName() {
-        return FluidRegistry.getFluid(this.dataWatcher.getWatchableObjectInt(4)) != null ? FluidRegistry.getFluid(this.dataWatcher.getWatchableObjectInt(4)).getName() : null;
+        return LiquidManager.fluidById(getDataWatcher().getWatchableObjectInt(4)) != null ? LiquidManager.fluidById(getDataWatcher().getWatchableObjectInt(4)).getName() : null;
     }
 }

@@ -1,15 +1,16 @@
 package train.client.render.renderSwitch;
 
+import train.client.render.item.TCItemRenderer;
+
 import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 
 import static train.client.render.renderSwitch.RenderSpeedSign.modelspeedSign;
 
-public class ItemRenderSpeedSign implements IItemRenderer {
+public class ItemRenderSpeedSign extends TCItemRenderer {
 
 	public ItemRenderSpeedSign() {
 	}
@@ -26,7 +27,7 @@ public class ItemRenderSpeedSign implements IItemRenderer {
 
 	@Override
 	public void renderItem(ItemRenderType type, ItemStack item, Object... data) {
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "SpeedSign10.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "SpeedSign10.png"));
 		switch (type) {
 		case ENTITY: {
 			GL11.glPushMatrix();

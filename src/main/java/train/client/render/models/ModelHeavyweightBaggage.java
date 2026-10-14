@@ -359,7 +359,7 @@ public class ModelHeavyweightBaggage extends ModelBase
 	{
 		super.render(entity, f, f1, f2, f3, f4, f5);
 
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/HeavyweightBogie.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/HeavyweightBogie.png"));
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(-3.7,-0.025,0);

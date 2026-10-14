@@ -1,19 +1,25 @@
 package train.common.entity;
 
+import train.common.core.util.StackUtil;
+
+import net.minecraft.util.math.AxisAlignedBB;
+
+import net.minecraft.util.EnumHand;
+
 import mods.railcraft.api.carts.IFluidCart;
 import mods.railcraft.api.carts.ILinkableCart;
 import mods.railcraft.api.carts.IMinecart;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityMultiPart;
-import net.minecraft.entity.boss.EntityDragonPart;
+import net.minecraft.entity.MultiPartEntityPart;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -24,7 +30,7 @@ import train.common.core.network.PacketInteract;
 import train.common.core.network.PacketRemove;
 
 
-public class CollisionBox extends EntityDragonPart implements IInventory, IFluidHandler, IMinecart, ILinkableCart, IFluidCart {
+public class CollisionBox extends MultiPartEntityPart implements IInventory, IFluidHandler, IMinecart, ILinkableCart, IFluidCart {
 
     static String dragonBoxName ="trainbox";
     public EntityRollingStock host;
@@ -33,10 +39,10 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     public CollisionBox(final World w){
         super(new IEntityMultiPart() {
             @Override
-            public World func_82194_d() {return w;}
+            public World getWorld() {return w;}
 
             @Override
-            public boolean attackEntityFromPart(EntityDragonPart p, DamageSource d, float i) {return false;}
+            public boolean attackEntityFromPart(MultiPartEntityPart p, DamageSource d, float i) {return false;}
         },dragonBoxName,1,1);
     }
 
@@ -52,36 +58,36 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     }
 
     @Override
-    public String getCommandSenderName() {
-        return host==null?"collisionBox":host.getCommandSenderName();
+    public String getName() {
+        return host==null?"collisionBox":host.getName();
     }
 
     @Override
-    public boolean interactFirst(EntityPlayer p_130002_1_) {
-        if(worldObj.isRemote){
+    public boolean processInitialInteract(EntityPlayer p_130002_1_, EnumHand hand) {
+        if(world.isRemote){
             Traincraft.keyChannel.sendToServer(new PacketInteract(host.getEntityId()));
         }
-        return host != null && host.interactFirst(p_130002_1_);
+        return host != null && host.processInitialInteract(p_130002_1_, net.minecraft.util.EnumHand.MAIN_HAND);
     }
 
     //check often to be sure the host actually exists and didnt somehow get deleted in such a way that would make it skip hitbox removal.
     @Override
     public void onUpdate() {
-        if(worldObj==null){
+        if(world==null){
             return;
         }
         if (ticksExisted % 100 == 0) {
-            if (host ==null || !(worldObj.getEntityByID(host.getEntityId()) instanceof EntityRollingStock)) {
+            if (host ==null || !(world.getEntityByID(host.getEntityId()) instanceof EntityRollingStock)) {
                 this.setDead();
-                worldObj.removeEntity(this);
+                world.removeEntity(this);
             }
         }
     }
 
     @Override
     public boolean attackEntityFrom(DamageSource damageSource, float p_70097_2_) {
-        if(worldObj.isRemote){
-            Traincraft.keyChannel.sendToServer(new PacketRemove(host.getEntityId(), damageSource==null?-1:damageSource.getEntity().getEntityId()));
+        if(world.isRemote){
+            Traincraft.keyChannel.sendToServer(new PacketRemove(host.getEntityId(), damageSource==null?-1:damageSource.getTrueSource().getEntityId()));
             return true;
         }
         return host != null && host.attackEntityFromPart(this, damageSource, p_70097_2_);
@@ -93,8 +99,8 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     }
 
     @Override
-    public boolean canLinkWithCart(EntityMinecart cart) {
-        return host.canLinkWithCart(cart);
+    public boolean canLink(EntityMinecart cart) {
+        return host.canLink(cart);
     }
 
     @Override
@@ -134,32 +140,28 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
 
     @Override
     public ItemStack getStackInSlot(int p_70301_1_) {
-        return host.getStackInSlot(p_70301_1_);
+        return StackUtil.nn(host.getStackInSlot(p_70301_1_));
     }
 
     @Override
     public ItemStack decrStackSize(int p_70298_1_, int p_70298_2_) {
-        return host.decrStackSize(p_70298_1_, p_70298_2_);
+        return StackUtil.nn(host.decrStackSize(p_70298_1_, p_70298_2_));
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int p_70304_1_) {
-        return host.getStackInSlotOnClosing(p_70304_1_);
+    public ItemStack removeStackFromSlot(int p_70304_1_) {
+        return StackUtil.nn(host.removeStackFromSlot(p_70304_1_));
     }
 
     @Override
-    public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) {
+    public void setInventorySlotContents(int p_70299_1_, ItemStack p_70299_2_) { if (p_70299_2_ != null && p_70299_2_.isEmpty()) p_70299_2_ = null;
         host.setInventorySlotContents(p_70299_1_, p_70299_2_);
     }
 
-    @Override
-    public String getInventoryName() {
-        return host.getInventoryName();
-    }
 
     @Override
-    public boolean hasCustomInventoryName() {
-        return host.hasCustomInventoryName();
+    public boolean hasCustomName() {
+        return host.hasCustomName();
     }
 
     @Override
@@ -174,17 +176,17 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer p_70300_1_) {
-        return host.isUseableByPlayer(p_70300_1_);
+        return host.isUsableByPlayer(p_70300_1_);
     }
 
     @Override
-    public void openInventory() {
-        host.openInventory();
+    public void openInventory(EntityPlayer player) {
+        host.openInventory(player);
     }
 
     @Override
-    public void closeInventory() {
-        host.closeInventory();
+    public void closeInventory(EntityPlayer player) {
+        host.closeInventory(player);
     }
 
     @Override
@@ -208,18 +210,16 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     }
 
     @Override
-    public boolean canFill(ForgeDirection from, Fluid fluid) {
-        return host.canFill(from, fluid);
+    public net.minecraftforge.fluids.capability.IFluidTankProperties[] getTankProperties() {
+        return host.getTankProperties();
     }
 
-    @Override
-    public boolean canDrain(ForgeDirection from, Fluid fluid) {
-        return host.canDrain(from, fluid);
+    public boolean canFill(EnumFacing from, Fluid fluid) {
+        return host.canFill(fluid);
     }
 
-    @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-        return host.getTankInfo(from);
+    public boolean canDrain(EnumFacing from, Fluid fluid) {
+        return host.canDrain(fluid);
     }
 
     @Override
@@ -229,7 +229,7 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
      * @param target The full target the player is looking at
      * @return A ItemStack to add to the player's inventory, Null if nothing should be added.
      */
-    public ItemStack getPickedResult(MovingObjectPosition target) {
+    public ItemStack getPickedResult(RayTraceResult target) {
         return host.getCartItem();
     }
 
@@ -238,7 +238,7 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
         this.prevPosX = this.posX = p_70107_1_;
         this.prevPosY = this.posY = p_70107_3_;
         this.prevPosZ = this.posZ = p_70107_5_;
-        this.boundingBox.setBounds(p_70107_1_ - (this.width*0.5), p_70107_3_ - (double) this.yOffset + (double) this.ySize, p_70107_5_ - (this.width*0.5), p_70107_1_ + (this.width*0.5), p_70107_3_ - (double) this.yOffset + (double) this.ySize + (double) this.height, p_70107_5_ + (this.width*0.5));
+        setEntityBoundingBox(new AxisAlignedBB(p_70107_1_ - (this.width*0.5), p_70107_3_ - (double) getYOffset() + (double) 0.0F, p_70107_5_ - (this.width*0.5), p_70107_1_ + (this.width*0.5), p_70107_3_ - (double) getYOffset() + (double) 0.0F + (double) this.height, p_70107_5_ + (this.width*0.5)));
 
     }
 
@@ -248,18 +248,21 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     }
 
     @Override
-    public boolean canPassFluidRequests(Fluid fluid) {
+    public boolean canPassFluidRequests(FluidStack fluidStack) {
+    	Fluid fluid = fluidStack == null ? null : fluidStack.getFluid();
         return true;
     }
 
     @Override
-    public boolean canAcceptPushedFluid(EntityMinecart requester, Fluid fluid) {
-        return canFill(ForgeDirection.UNKNOWN,fluid);
+    public boolean canAcceptPushedFluid(EntityMinecart requester, FluidStack fluidStack) {
+    	Fluid fluid = fluidStack == null ? null : fluidStack.getFluid();
+        return canFill(null,fluid);
     }
 
     @Override
-    public boolean canProvidePulledFluid(EntityMinecart requester, Fluid fluid) {
-        return canDrain(ForgeDirection.UNKNOWN,fluid);
+    public boolean canProvidePulledFluid(EntityMinecart requester, FluidStack fluidStack) {
+    	Fluid fluid = fluidStack == null ? null : fluidStack.getFluid();
+        return canDrain(null,fluid);
     }
 
     @Override
@@ -271,4 +274,39 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     public boolean isEntityEqual(Entity p_70028_1_) {
         return this == p_70028_1_;
     }
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void clear() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			setInventorySlotContents(i, ItemStack.EMPTY);
+		}
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public boolean isEmpty() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			ItemStack s = getStackInSlot(i);
+			if (s != null && !s.isEmpty()) return false;
+		}
+		return true;
+	}
 }

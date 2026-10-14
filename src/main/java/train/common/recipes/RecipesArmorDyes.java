@@ -30,7 +30,7 @@ public class RecipesArmorDyes implements ITCRecipe {
 					itemstack = itemstack1;
 				}
 				else {
-					if (itemstack1.getItem() != Items.dye) {
+					if (itemstack1.getItem() != Items.DYE) {
 						return false;
 					}
 
@@ -83,11 +83,11 @@ public class RecipesArmorDyes implements ITCRecipe {
 					}
 				}
 				else {
-					if (itemstack1.getItem() != Items.dye) {
+					if (itemstack1.getItem() != Items.DYE) {
 						return null;
 					}
 
-					float[] afloat = EntitySheep.fleeceColorTable[itemstack1.getItemDamage()];
+					float[] afloat = EntitySheep.getDyeRgb(net.minecraft.item.EnumDyeColor.byMetadata(itemstack1.getItemDamage()));
 
 					int j1 = (int) (afloat[0] * 255.0F);
 					int k1 = (int) (afloat[1] * 255.0F);

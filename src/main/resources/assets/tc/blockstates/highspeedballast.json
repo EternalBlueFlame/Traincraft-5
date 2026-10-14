@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "normal": {
+      "model": "tc:highspeedballast"
+    },
+    "inventory": {
+      "model": "tc:highspeedballast"
+    }
+  }
+}

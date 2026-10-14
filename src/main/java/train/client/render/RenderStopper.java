@@ -34,7 +34,7 @@ public class RenderStopper extends TileEntitySpecialRenderer {
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity tile, double x, double y, double z, float var8) {
+    public void render(TileEntity tile, double x, double y, double z, float var8, int destroyStage, float alpha) {
         render(tile, x, y, z);
     }
 }

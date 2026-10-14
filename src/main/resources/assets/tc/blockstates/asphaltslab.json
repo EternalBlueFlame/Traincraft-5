@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "half=bottom,variant=default": {
+      "model": "tc:asphaltslab_bottom"
+    },
+    "half=top,variant=default": {
+      "model": "tc:asphaltslab_top"
+    },
+    "inventory": {
+      "model": "tc:asphaltslab_bottom"
+    }
+  }
+}

@@ -1,5 +1,7 @@
 package train.common.items;
 
+import net.minecraft.util.math.BlockPos;
+
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,10 +26,10 @@ public class ItemSignal extends Item { // implements IBoxable TODO when IC2
 
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l) {
 		Block i1 = CommonUtil.getBlockAt(world, i, j, k);
-		if (i1 == Blocks.snow) {
+		if (i1 == Blocks.SNOW) {
 			l = 0;
 		}
-		else if (i1 != Blocks.vine) {
+		else if (i1 != Blocks.VINE) {
 			if (l == 0) {
 				j--;
 			}
@@ -57,9 +59,9 @@ public class ItemSignal extends Item { // implements IBoxable TODO when IC2
 		Block block = spawnID;
 		if (CommonUtil.setBlockMeta(world, i, j, k, Block.getIdFromBlock(spawnID), 0)) {
 			if (CommonUtil.getBlockAt(world, i, j, k) == spawnID) {
-				spawnID.onBlockPlacedBy(world, i, j, k, entityplayer, new ItemStack(spawnID));
+				spawnID.onBlockPlacedBy(world, new BlockPos(i, j, k), world.getBlockState(new BlockPos(i, j, k)), entityplayer, new ItemStack(spawnID));
 			}
-			world.playSoundEffect((float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, block.stepSound.getStepResourcePath(), (block.stepSound.getVolume() + 1.0F) / 2.0F, block.stepSound.getPitch() * 0.8F);
+			world.playSound(null, (float) i + 0.5F, (float) j + 0.5F, (float) k + 0.5F, block.getSoundType().getPlaceSound(), net.minecraft.util.SoundCategory.BLOCKS, (block.getSoundType().getVolume() + 1.0F) / 2.0F, block.getSoundType().getPitch() * 0.8F);
 			itemstack.shrink(1);
 		}
 		return true;

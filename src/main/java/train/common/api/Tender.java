@@ -1,12 +1,21 @@
 package train.common.api;
 
+import train.common.core.util.StackUtil;
+
+import train.common.core.util.FluidContainers;
+
+import net.minecraft.util.math.MathHelper;
+
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.api.LiquidManager.StandardTank;
 import train.common.entity.rollingStockOld.special.EntityBUnitDD35;
 import train.common.entity.rollingStockOld.special.EntityBUnitEMDF3;
@@ -30,8 +39,13 @@ public abstract class Tender extends Freight implements IFluidHandler {
         this(new FluidStack(fluid, quantity), world, null);
     }
     public Tender(World world){
-        super(world);
+        // the generated tender classes only call this one: it left the tank, the tank data watchers (4, 27) and
+        // the item slots uninitialised, so the GUI/HUD and saving the world crashed. Same setup as the 1.7.10 tenders.
+        this((FluidStack) null, world, LiquidManager.WATER_FILTER);
     }
+
+    /** fuel slot + 15 cargo slots, as InventoryTender lays them out */
+    public static final int TENDER_SLOTS = 16;
 
     public Tender(World world, Fluid fluid, int quantity, FluidStack filter) {
         this(new FluidStack(fluid, quantity), world, filter);
@@ -46,25 +60,45 @@ public abstract class Tender extends Freight implements IFluidHandler {
             this.theTank = LiquidManager.getInstance().new FilteredTank(maxTank, filter);
         IFluidTank[] tankArray = new IFluidTank[1];
         tankArray[0] = theTank;
-        dataWatcher.addObject(4, 0);
-        this.dataWatcher.addObject(27, 0);
+        getDataWatcher().addObject(4, 0);
+        getDataWatcher().addObject(27, 0);
+        this.tenderItems = new ItemStack[TENDER_SLOTS];
     }
 
     @Override
     public int getSizeInventory(){
-        return super.getSizeInventory()+2;
+        return this.tenderItems == null ? TENDER_SLOTS : this.tenderItems.length;
     }
 
     @Override
     protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
         super.writeEntityToNBT(nbttagcompound);
         this.theTank.writeToNBT(nbttagcompound);
+        NBTTagList items = new NBTTagList();
+        for (int i = 0; i < tenderItems.length; i++) {
+            if (tenderItems[i] != null && !tenderItems[i].isEmpty()) {
+                NBTTagCompound slot = new NBTTagCompound();
+                slot.setByte("Slot", (byte) i);
+                tenderItems[i].writeToNBT(slot);
+                items.appendTag(slot);
+            }
+        }
+        nbttagcompound.setTag("TenderItems", items);
     }
 
     @Override
     protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
         super.readEntityFromNBT(nbttagcompound);
         this.theTank.readFromNBT(nbttagcompound);
+        NBTTagList items = nbttagcompound.getTagList("TenderItems", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < items.tagCount(); i++) {
+            NBTTagCompound slot = items.getCompoundTagAt(i);
+            int j = slot.getByte("Slot") & 0xff;
+            if (j < tenderItems.length) {
+                ItemStack stack = new ItemStack(slot);
+                tenderItems[j] = stack.isEmpty() ? null : stack;
+            }
+        }
     }
 
     @Override
@@ -72,12 +106,13 @@ public abstract class Tender extends Freight implements IFluidHandler {
         super.onUpdate();
         if (world.isRemote)
             return;
+        checkInvent(tenderItems[0], this); // was in every 1.7.10 tender subclass
         if (theTank != null && theTank.getFluid() != null) {
-            this.dataWatcher.updateObject(27, theTank.getFluid().amount);
-            this.dataWatcher.updateObject(4, theTank.getFluid().getFluidID());
+            getDataWatcher().updateObject(27, theTank.getFluid().amount);
+            getDataWatcher().updateObject(4, LiquidManager.fluidId(theTank.getFluid().getFluid()));
         } else if (theTank != null && theTank.getFluid() == null) {
-            this.dataWatcher.updateObject(27, 0);
-            this.dataWatcher.updateObject(4, 0);
+            getDataWatcher().updateObject(27, 0);
+            getDataWatcher().updateObject(4, 0);
         }
     }
 
@@ -109,7 +144,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
      * @return
      */
     public int getWater() {
-        return (this.dataWatcher.getWatchableObjectInt(27));
+        return (getDataWatcher().getWatchableObjectInt(27));
     }
 
     /**
@@ -118,7 +153,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
      * @return int
      */
     public int getLiquidItemID() {
-        return (this.dataWatcher.getWatchableObjectInt(4));
+        return (getDataWatcher().getWatchableObjectInt(4));
     }
 
     public int getCartTankCapacity() {
@@ -136,12 +171,12 @@ public abstract class Tender extends Freight implements IFluidHandler {
                 return;
             } else if (tender.tenderItems[i] != null && tender.tenderItems[i].getItem() == itemstack1.getItem() && itemstack1.isStackable() &&
                     (!itemstack1.getHasSubtypes() || tender.tenderItems[i].getItemDamage() == itemstack1.getItemDamage()) && ItemStack.areItemStackTagsEqual(tender.tenderItems[i], itemstack1)) {
-                int var9 = tender.tenderItems[i].stackSize + itemstack1.stackSize;
+                int var9 = tender.tenderItems[i].getCount() + itemstack1.getCount();
                 if (var9 <= tender.tenderItems[i].getMaxStackSize()) {
-                    tender.tenderItems[i].stackSize = var9;
+                    tender.tenderItems[i].setCount(var9);
                     return;
-                } else if (tender.tenderItems[i].stackSize < tender.tenderItems[i].getMaxStackSize()) {
-                    tender.tenderItems[i].stackSize += 1;
+                } else if (tender.tenderItems[i].getCount() < tender.tenderItems[i].getMaxStackSize()) {
+                    tender.tenderItems[i].grow(1);
                     return;
                 }
             } else if (i == tender.tenderItems.length - 1) {
@@ -169,23 +204,22 @@ public abstract class Tender extends Freight implements IFluidHandler {
             liquidInSlot(tenderInvent, loco);
         }
 
-        if (ticksExisted % 5 == 0 && fill(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
+        if (ticksExisted % 5 == 0 && fill(new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
             FluidStack drain = null;
-            blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(worldObj, posX, posY - 1, posZ),
-                    CommonUtil.getTileEntity(worldObj, posX, posY + 2, posZ),
-                    CommonUtil.getTileEntity(worldObj, posX, posY + 3, posZ),
-                    CommonUtil.getTileEntity(worldObj, posX, posY + 4, posZ)
+            blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
+                    CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
+                    CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
+                    CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
             };
 
             for (TileEntity block : blocksToCheck) {
-                if (drain == null && block instanceof IFluidHandler) {
-                    for (EnumFacing direction : EnumFacing.VALID_DIRECTIONS) {
-                        if (((IFluidHandler) block).drain(direction, 100, false) != null &&
-                                ((IFluidHandler) block).drain(direction, 100, false).fluid == FluidRegistry.WATER &&
-                                ((IFluidHandler) block).drain(direction, 100, false).amount == 100
+                if (drain == null && FluidContainers.hasHandler(block)) {
+                    for (EnumFacing direction : EnumFacing.VALUES) {
+                        if (FluidContainers.drain(block, direction, 100, false) != null &&
+                                FluidContainers.drain(block, direction, 100, false).getFluid() == FluidRegistry.WATER &&
+                                FluidContainers.drain(block, direction, 100, false).amount == 100
                         ) {
-                            drain = ((IFluidHandler) block).drain(
-                                    direction, 100, true);
+                            drain = FluidContainers.drain(block, direction, 100, true);
                         }
                     }
                 }
@@ -193,20 +227,20 @@ public abstract class Tender extends Freight implements IFluidHandler {
             if (drain == null && frontLink instanceof LiquidTank
                     && !(frontLink instanceof EntityBUnitEMDF7) && !(frontLink instanceof EntityBUnitEMDF3) && !(frontLink instanceof EntityBUnitDD35)) {
                 if (getFluid() == null) {
-                    drain = ((LiquidTank) frontLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) frontLink).drain(new FluidStack(FluidRegistry.WATER, 100), true);
                 } else if (getFluid().getFluid() == FluidRegistry.WATER) {
-                    drain = ((LiquidTank) frontLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) frontLink).drain(new FluidStack(FluidRegistry.WATER, 100), true);
                 }
             } else if (drain == null && backLink instanceof LiquidTank
                     && !(frontLink instanceof EntityBUnitEMDF7) && !(frontLink instanceof EntityBUnitEMDF3) && !(frontLink instanceof EntityBUnitDD35)) {
                 if (getFluid() == null) {
-                    drain = ((LiquidTank) backLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) backLink).drain(new FluidStack(FluidRegistry.WATER, 100), true);
                 } else if (getFluid().getFluid() == FluidRegistry.WATER) {
-                    drain = ((LiquidTank) backLink).drain(ForgeDirection.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), true);
+                    drain = ((LiquidTank) backLink).drain(new FluidStack(FluidRegistry.WATER, 100), true);
                 }
             }
             if (drain != null) {
-                fill(EnumFacing.UNKNOWN, drain, true);
+                fill(drain, true);
             }
         }
     }
@@ -214,7 +248,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
     /*IInventory implements*/
     @Override
     public ItemStack getStackInSlot(int i) {
-        return tenderItems[i];
+        return StackUtil.nn(tenderItems[i]);
     }
 
     @Override
@@ -222,35 +256,35 @@ public abstract class Tender extends Freight implements IFluidHandler {
         if (this.tenderItems[par1] != null) {
             ItemStack var2 = this.tenderItems[par1];
             this.tenderItems[par1] = null;
-            return var2;
+            return StackUtil.nn(var2);
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
         if (tenderItems[i] != null) {
-            if (tenderItems[i].stackSize <= j) {
+            if (tenderItems[i].getCount() <= j) {
                 ItemStack itemstack = tenderItems[i];
                 tenderItems[i] = null;
-                return itemstack;
+                return StackUtil.nn(itemstack);
             }
             ItemStack itemstack1 = tenderItems[i].splitStack(j);
-            if (tenderItems[i].stackSize == 0) {
+            if (tenderItems[i].getCount() == 0) {
                 tenderItems[i] = null;
             }
-            return itemstack1;
+            return StackUtil.nn(itemstack1);
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemstack) {
+    public void setInventorySlotContents(int i, ItemStack itemstack) { if (itemstack != null && itemstack.isEmpty()) itemstack = null;
         tenderItems[i] = itemstack;
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-            itemstack.getCount() = getInventoryStackLimit();
+            itemstack.setCount(getInventoryStackLimit());
         }
     }
 
@@ -283,19 +317,17 @@ public abstract class Tender extends Freight implements IFluidHandler {
         return theTank.drain(maxDrain, doDrain);
     }
 
-    @Override
     public boolean canfill(Fluid fluid) {
         return true;
     }
 
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
+        public boolean canDrain(EnumFacing from, Fluid fluid) {
         return true;
     }
 
     @Override
     public IFluidTankProperties[] getTankProperties() {
-        return new FluidTankInfo[]{theTank.getInfo()};
+        return theTank.getTankProperties();
     }
 
     public FluidStack getFluid() {

@@ -37,8 +37,14 @@ public class PacketTrackBuilderFollow implements IMessage {
 
     public static class Handler implements IMessageHandler<PacketTrackBuilderFollow, IMessage> {
         @Override
-        public IMessage onMessage(PacketTrackBuilderFollow message, MessageContext context) {
-            Entity builderEntity = context.getServerHandler().playerEntity.world.getEntityByID(message.id);
+        public IMessage onMessage(final PacketTrackBuilderFollow message, final MessageContext context) {
+            // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+            net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(context.netHandler).addScheduledTask(() -> handleOnMainThread(message, context));
+            return null;
+        }
+
+        private IMessage handleOnMainThread(PacketTrackBuilderFollow message, MessageContext context) {
+            Entity builderEntity = context.getServerHandler().player.world.getEntityByID(message.id);
             /*
              * "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks
              * for when the value is null anyways.

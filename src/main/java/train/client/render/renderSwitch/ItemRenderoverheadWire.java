@@ -1,14 +1,15 @@
 package train.client.render.renderSwitch;
 
+import train.client.render.item.TCItemRenderer;
+
 import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.renderSwitch.models.ModeloverheadWire;
 import train.common.library.Info;
 
-public class ItemRenderoverheadWire implements IItemRenderer {
+public class ItemRenderoverheadWire extends TCItemRenderer {
     private static final ModeloverheadWire modeSwitch = new ModeloverheadWire();
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "overheadWire.png");
 
@@ -17,18 +18,18 @@ public class ItemRenderoverheadWire implements IItemRenderer {
 
 
     @Override
-    public boolean handleRenderType(ItemStack item, IItemRenderer.ItemRenderType type) {
+    public boolean handleRenderType(ItemStack item, TCItemRenderer.ItemRenderType type) {
             return true;
     }
 
     @Override
-    public boolean shouldUseRenderHelper(IItemRenderer.ItemRenderType type, ItemStack item, IItemRenderer.ItemRendererHelper helper) {
+    public boolean shouldUseRenderHelper(TCItemRenderer.ItemRenderType type, ItemStack item, TCItemRenderer.ItemRendererHelper helper) {
         return true;
     }
 
 
     @Override
-    public void renderItem(IItemRenderer.ItemRenderType type, ItemStack item, Object... data) {
+    public void renderItem(TCItemRenderer.ItemRenderType type, ItemStack item, Object... data) {
         switch (type) {
             case ENTITY: {
                 renderSwitch(0f, 0f, 0f, 1f);
@@ -52,7 +53,7 @@ public class ItemRenderoverheadWire implements IItemRenderer {
     }
 
     private void renderSwitch(float x, float y, float z, float scale) {
-        Tessellator.bindTexture(texture);
+        fexcraft.tmt.slim.Tessellator.bindTexture(texture);
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
 

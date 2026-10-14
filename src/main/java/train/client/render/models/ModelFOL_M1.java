@@ -801,9 +801,9 @@ public class ModelFOL_M1 extends ModelBase
 
 
 		if(entity instanceof AbstractTrains && DepreciatedUtil.getColorFromString(((AbstractTrains) entity).getColor())==8){
-			Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/FOL_M1_Bogie_grey.png"));
+			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/FOL_M1_Bogie_grey.png"));
 		} else {
-			Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/FOL_M1_Bogie.png"));
+			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/FOL_M1_Bogie.png"));
 		}
 
 		GL11.glPushMatrix();

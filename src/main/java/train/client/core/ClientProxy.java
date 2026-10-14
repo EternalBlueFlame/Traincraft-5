@@ -1,17 +1,23 @@
 package train.client.core;
 
-import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import train.client.render.RenderNothing;
+
+import ebf.tim.utility.CommonUtil;
+
+import train.client.render.item.TCItemRenderRegistry;
+
+import net.minecraftforge.fml.client.registry.ClientRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.VillagerRegistry;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.registry.VillagerRegistry;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.gui.GUISeatManager;
 import javazoom.jl.decoder.JavaLayerUtils;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -64,40 +70,49 @@ public class ClientProxy extends CommonProxy {
 
     public static int railSkin=3;
 
-    public static final net.minecraft.client.renderer.entity.RenderPlayer playerRender = new net.minecraft.client.renderer.entity.RenderPlayer(){
-        EntityRollingStock stock;
-        @Override
-        public void doRender(net.minecraft.client.entity.AbstractClientPlayer player, double x, double y, double z, float f0, float f1){
-            if(player.getRidingEntity()instanceof EntityRollingStock) {
-                stock = (EntityRollingStock) player.ridingEntity;
-            } else if (player.getRidingEntity()instanceof EntitySeat) {
-                stock =  ((EntitySeat) player.ridingEntity).parent;
+    /** Scales players riding rolling stock (1.7.10 replaced the player renderer for this). */
+    public static class PlayerScaler {
+        private boolean pushed = false;
+
+        @net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+        public void pre(net.minecraftforge.client.event.RenderPlayerEvent.Pre event) {
+            EntityPlayer player = event.getEntityPlayer();
+            EntityRollingStock stock;
+            if (player.getRidingEntity() instanceof EntityRollingStock) {
+                stock = (EntityRollingStock) player.getRidingEntity();
+            } else if (player.getRidingEntity() instanceof EntitySeat) {
+                stock = ((EntitySeat) player.getRidingEntity()).parent;
             } else {
                 stock = null;
             }
+            pushed = stock != null;
             if (stock != null) {
+                double x = event.getX(), y = event.getY(), z = event.getZ();
                 GL11.glPushMatrix();
                 float scale = stock.getPlayerScale();
-                scale = player.height * scale / player.height;
                 GL11.glTranslated(x, (y + .35), z);
                 GL11.glScalef(scale, scale, scale);
                 GL11.glTranslated(-x, -(y + .35), -z);
-                if (player != Minecraft.getMinecraft().thePlayer && stock.getPlayerScale() != 1) {
+                if (player != Minecraft.getMinecraft().player && stock.getPlayerScale() != 1) {
                     GL11.glTranslated(0, 1 - (stock.getPlayerScale() - 0.2), 0); //rough approx. but gets the job done for everything in range 0.5-1
                 } else {
                     GL11.glTranslated(0, (1 - stock.getPlayerScale()) * -1, 0); //rough approx. but gets the job done for everything in range 0.5-1
                 }
-                super.doRender(player, x, y, z, f0, f1);
-                GL11.glPopMatrix();
-                return;
             }
-            super.doRender(player, x, y, z, f0, f1);
         }
-    };
+
+        @net.minecraftforge.fml.common.eventhandler.SubscribeEvent
+        public void post(net.minecraftforge.client.event.RenderPlayerEvent.Post event) {
+            if (pushed) {
+                GL11.glPopMatrix();
+                pushed = false;
+            }
+        }
+    }
 
     @Override
     public void registerPlayerScaler(){
-        RenderingRegistry.registerEntityRenderingHandler(EntityPlayer.class, playerRender);
+        MinecraftForge.EVENT_BUS.register(new PlayerScaler());
     }
 
     public static boolean hdTransportItems=false;
@@ -148,7 +163,7 @@ public class ClientProxy extends CommonProxy {
         }
 
         HUDloco huDloco = new HUDloco();
-        if (Loader.isModLoaded("ComputerCraft")) {
+        if (Loader.isModLoaded("computercraft")) {
             HUDMTC hudMTC = new HUDMTC();
             registerEvent(hudMTC);
         }
@@ -159,104 +174,102 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
+    public void registerEntityRenderers() {
+        RenderingRegistry.registerEntityRenderingHandler(CollisionBox.class, RenderNothing::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, RenderNothing::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityRollingStock.class, RenderRollingStock::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityZeppelinTwoBalloons.class, RenderZeppelins::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityZeppelinOneBalloon.class, RenderZeppelins::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityRotativeDigger.class, RenderRotativeDigger::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityRotativeWheel.class, RenderRotativeWheel::new);
+        RenderingRegistry.registerEntityRenderingHandler(EntityBogie.class, RenderBogie::new);
+    }
+
+    @Override
     public void registerRenderInformation() {
         FMLCommonHandler.instance().bus().register(new ClientTickHandler());
-        RenderingRegistry.registerEntityRenderingHandler(CollisionBox.class, nullRender);
+        ClientRegistry.bindTileEntitySpecialRenderer(TileStopper.class, train.client.render.gl.TCSafeTESR.wrap(new RenderStopper()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.stopper.block), new ItemRenderStopper());
 
-        RenderingRegistry.registerEntityRenderingHandler(EntityRollingStock.class, new RenderRollingStock());
-        RenderingRegistry.registerEntityRenderingHandler(EntityZeppelinTwoBalloons.class, new RenderZeppelins());
-        RenderingRegistry.registerEntityRenderingHandler(EntityZeppelinOneBalloon.class, new RenderZeppelins());
-        RenderingRegistry.registerEntityRenderingHandler(EntityRotativeDigger.class, new RenderRotativeDigger());
-        RenderingRegistry.registerEntityRenderingHandler(EntityRotativeWheel.class, new RenderRotativeWheel());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEmbeddedStopper.class, train.client.render.gl.TCSafeTESR.wrap(new RenderEmbeddedStopper()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.embeddedStopper.block), new ItemRenderEmbeddedStopper());
 
-        // Register Renderer for Bogies
-        RenderingRegistry.registerEntityRenderingHandler(EntityBogie.class, new RenderBogie());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAmericanStopper.class, train.client.render.gl.TCSafeTESR.wrap(new RenderAmericanStopper()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.americanstopper.block), new ItemRenderAmericanStopper());
 
+        //ClientRegistry.bindTileEntitySpecialRenderer(TileBook.class, train.client.render.gl.TCSafeTESR.wrap(new RenderTCBook()));
+        //TCItemRenderRegistry.register(BlockIDs.book.blockID, new ItemRenderBook());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileStopper.class, new RenderStopper());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.stopper.block), new ItemRenderStopper());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileSignal.class, train.client.render.gl.TCSafeTESR.wrap(new RenderSignal()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.signal.block), new ItemRenderSignal());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileEmbeddedStopper.class, new RenderEmbeddedStopper());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.embeddedStopper.block), new ItemRenderEmbeddedStopper());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileLantern.class, train.client.render.gl.TCSafeTESR.wrap(new RenderLantern()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(TCBlocks.lantern), new ItemRenderLantern());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAmericanStopper.class, new RenderAmericanStopper());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.americanstopper.block), new ItemRenderAmericanStopper());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileMFPBWigWag.class, train.client.render.gl.TCSafeTESR.wrap(new RenderMFPBWigWag()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(TCBlocks.MFPBWigWag), new ItemRenderMFPBWigWag());
 
-        //ClientRegistry.bindTileEntitySpecialRenderer(TileBook.class, new RenderTCBook());
-        //MinecraftForgeClient.registerItemRenderer(BlockIDs.book.blockID, new ItemRenderBook());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileWaterWheel.class, train.client.render.gl.TCSafeTESR.wrap(new RenderWaterWheel()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.waterWheel.block), new ItemRenderWaterWheel());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileSignal.class, new RenderSignal());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.signal.block), new ItemRenderSignal());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileWindMill.class, train.client.render.gl.TCSafeTESR.wrap(new RenderWindMill()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.windMill.block), new ItemRenderWindMill());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileLantern.class, new RenderLantern());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.lantern), new ItemRenderLantern());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileGeneratorDiesel.class, train.client.render.gl.TCSafeTESR.wrap(new RenderGeneratorDiesel()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.generatorDiesel.block), new ItemRenderGeneratorDiesel());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileMFPBWigWag.class, new RenderMFPBWigWag());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.MFPBWigWag), new ItemRenderMFPBWigWag());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileTCRail.class, train.client.render.gl.TCSafeTESR.wrap(new RenderTCRail()));
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileWaterWheel.class, new RenderWaterWheel());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.waterWheel.block), new ItemRenderWaterWheel());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileMetroMadridPole.class, train.client.render.gl.TCSafeTESR.wrap(new RenderMetroMadridPole()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.metroMadridPole.block), new ItemRenderModelMetroMadridPole());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileWindMill.class, new RenderWindMill());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.windMill.block), new ItemRenderWindMill());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileSwitchStand.class, train.client.render.gl.TCSafeTESR.wrap(new RenderSwitchStand()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(TCBlocks.switchStand), new ItemRenderSwitchStand());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileGeneratorDiesel.class, new RenderGeneratorDiesel());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.generatorDiesel.block), new ItemRenderGeneratorDiesel());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileOWOYardSwitchStand.class, train.client.render.gl.TCSafeTESR.wrap(new RenderowoYardSwtichStand()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(TCBlocks.owoYardSwitchStand), new ItemRenderowoYardSwitchStand());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileTCRail.class, new RenderTCRail());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileMILWSwitchStand.class, train.client.render.gl.TCSafeTESR.wrap(new RenderMILWSwitchStand()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(TCBlocks.MILWSwitchStand), new ItemRenderMILWSwitchStand());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileMetroMadridPole.class, new RenderMetroMadridPole());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.metroMadridPole.block), new ItemRenderModelMetroMadridPole());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileCircleSwitchStand.class, train.client.render.gl.TCSafeTESR.wrap(new RendercircleSwitchStand()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(TCBlocks.circleSwitchStand), new ItemRendercircleSwitchStand());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileSwitchStand.class, new RenderSwitchStand());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.switchStand), new ItemRenderSwitchStand());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileOWOSwitchStand.class, train.client.render.gl.TCSafeTESR.wrap(new RenderowoSwitchStand()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(TCBlocks.owoSwitchStand), new ItemRenderowoSwitchStand());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileOWOYardSwitchStand.class, new RenderowoYardSwtichStand());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.owoYardSwitchStand), new ItemRenderowoYardSwitchStand());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSwitchStand.class, train.client.render.gl.TCSafeTESR.wrap(new RenderautoSwitchStand()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(TCBlocks.autoSwtichStand), new ItemRenderautoSwitchStand());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileMILWSwitchStand.class, new RenderMILWSwitchStand());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.MILWSwitchStand), new ItemRenderMILWSwitchStand());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileoverheadWire.class, train.client.render.gl.TCSafeTESR.wrap(new RenderoverheadWire()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.overheadWire.block), new ItemRenderoverheadWire());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileCircleSwitchStand.class, new RendercircleSwitchStand());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.circleSwitchStand), new ItemRendercircleSwitchStand());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileoverheadWireDouble.class, train.client.render.gl.TCSafeTESR.wrap(new RenderoverheadWireDouble()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.overheadWireDouble.block), new ItemRenderoverheadWireDouble());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileOWOSwitchStand.class, new RenderowoSwitchStand());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.owoSwitchStand), new ItemRenderowoSwitchStand());
+        ClientRegistry.bindTileEntitySpecialRenderer(TilesignalSpanish.class, train.client.render.gl.TCSafeTESR.wrap(new RendersignalSpanish()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.signalSpanish.block), new ItemRendersignalSpanish());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileAutoSwitchStand.class, new RenderautoSwitchStand());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.autoSwtichStand), new ItemRenderautoSwitchStand());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileoverheadWire.class, new RenderoverheadWire());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.overheadWire.block), new ItemRenderoverheadWire());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TileoverheadWireDouble.class, new RenderoverheadWireDouble());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.overheadWireDouble.block), new ItemRenderoverheadWireDouble());
-
-        ClientRegistry.bindTileEntitySpecialRenderer(TilesignalSpanish.class, new RendersignalSpanish());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.signalSpanish.block), new ItemRendersignalSpanish());
-
-        //ClientRegistry.bindTileEntitySpecialRenderer(TiletrackConcrete.class, new RendertrackEmbeddedSmallStraight());
-        //MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.trackConcrete.block), new ItemRendertrackEmbeddedSmallStraight());
+        //ClientRegistry.bindTileEntitySpecialRenderer(TiletrackConcrete.class, train.client.render.gl.TCSafeTESR.wrap(new RendertrackEmbeddedSmallStraight()));
+        //TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.trackConcrete.block), new ItemRendertrackEmbeddedSmallStraight());
 
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TilekSignal.class, new RenderkSignal());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.kSignal.block), new ItemRenderkSignal());
+        ClientRegistry.bindTileEntitySpecialRenderer(TilekSignal.class, train.client.render.gl.TCSafeTESR.wrap(new RenderkSignal()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.kSignal.block), new ItemRenderkSignal());
 
-        ClientRegistry.bindTileEntitySpecialRenderer(TileSpeedSign.class, new RenderSpeedSign());
-        MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(TCBlocks.speedSign), new ItemRenderSpeedSign());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileSpeedSign.class, train.client.render.gl.TCSafeTESR.wrap(new RenderSpeedSign()));
+        TCItemRenderRegistry.register(Item.getItemFromBlock(TCBlocks.speedSign), new ItemRenderSpeedSign());
 
 
-        //seats
-        RenderingRegistry.registerEntityRenderingHandler(EntitySeat.class, nullRender);
 
 		/*
-		ClientRegistry.bindTileEntitySpecialRenderer(TileFortyFootContainer.class, new FortyFootContainerRender());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.FortyFootContainer.block), new ItemRenderFortyFootContainer());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileFortyFootContainer.class, train.client.render.gl.TCSafeTESR.wrap(new FortyFootContainerRender()));
+		TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.FortyFootContainer.block), new ItemRenderFortyFootContainer());
 		*/
 
 		/*
-		ClientRegistry.bindTileEntitySpecialRenderer(TileFortyFootContainer.class, new FortyFootContainerRender());
-		MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.FortyFootContainer.block), new ItemRenderFortyFootContainer());*/
+		ClientRegistry.bindTileEntitySpecialRenderer(TileFortyFootContainer.class, train.client.render.gl.TCSafeTESR.wrap(new FortyFootContainerRender()));
+		TCItemRenderRegistry.register(Item.getItemFromBlock(BlockIDs.FortyFootContainer.block), new ItemRenderFortyFootContainer());*/
     }
 
 
@@ -264,17 +277,39 @@ public class ClientProxy extends CommonProxy {
     public Object getTESR(){return specialRenderer;}
 
     @Override
-    public Render getEntityRender(){return transportRenderer;}
+    public Object getCustomItemModel(){return ebf.tim.render.CustomItemModel.instance;}
+
     @Override
-    public Object getNullRender(){return nullRender;}
+    public void registerItemRenderer(net.minecraft.item.Item item, Object renderer){
+        if (renderer instanceof train.client.render.item.TCItemRenderer) {
+            train.client.render.item.TCItemRenderRegistry.register(item, (train.client.render.item.TCItemRenderer) renderer);
+        }
+    }
+
+    @Override
+    public void registerBlockItemRenderer(net.minecraft.block.Block block, net.minecraft.tileentity.TileEntity template){
+        net.minecraft.item.Item item = net.minecraft.item.Item.getItemFromBlock(block);
+        if (item != net.minecraft.init.Items.AIR) {
+            train.client.render.item.TCItemRenderRegistry.register(item, ebf.tim.render.CustomItemModel.instance);
+            ebf.tim.render.CustomItemModel.registerBlockTextures(item, template);
+        }
+    }
+
+    @Override
+    public Object newBlockTESR(){return new ebf.tim.render.BlockTESR();}
+
+    @Override
+    public Render getEntityRender(){return getTransportRenderer();}
+    @Override
+    public Object getNullRender(){return null;}
 
 
     public static final TileEntitySpecialRenderer specialRenderer = new TileEntitySpecialRenderer() {
         @Override
-        public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float p_147500_8_) {
+        public void render(TileEntity tileEntity, double x, double y, double z, float p_147500_8_, int destroyStage, float alpha) {
             GL11.glPushMatrix();
             GL11.glTranslated(x,y, z);
-            tileEntity.func_145828_a(null);
+            tileEntity.addInfoToCrashReport(null);
             GL11.glPopMatrix();
         }
 
@@ -283,33 +318,24 @@ public class ClientProxy extends CommonProxy {
     };
 
 
-    public static final RenderRollingStock transportRenderer = new RenderRollingStock();
+    private static RenderRollingStock transportRenderer;
 
-    /**
-     * <h3>null render</h3>
-     * this is just a simple render that never draws anything, since its static it only ever needs to exist once, which makes it lighter on the render.
-     */
-    private static final Render nullRender = new Render() {
-        @Override
-        public void doRender(Entity p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_, float p_76986_9_) {}
-
-        @Override
-        protected ResourceLocation getEntityTexture(Entity p_110775_1_) {
-            return null;
+    /** Shared rolling stock renderer (for item/GUI rendering); created once the render manager exists. */
+    public static RenderRollingStock getTransportRenderer() {
+        if (transportRenderer == null) {
+            transportRenderer = new RenderRollingStock(Minecraft.getMinecraft().getRenderManager());
         }
-    };
+        return transportRenderer;
+    }
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity te = CommonUtil.getTileEntity(world, x, y, z);
-        Entity entity = player.ridingEntity;
-        EntityPlayer riddenByEntity = player.ridingEntity != null ? (EntityPlayer) entity.riddenByEntity : null;
-
     Entity entity = player.getRidingEntity();
     EntityPlayer passenger = null;
 
-    if (entity != null && !entity.getPassengers().isEmpty() && entity.getPassengers().get(0) instanceof EntityPlayer) {
-        passenger = (EntityPlayer) entity.getPassengers().get(0);
+    if (entity != null && !entity.getPassengers().isEmpty() && ebf.tim.utility.CommonUtil.rider(entity) instanceof EntityPlayer) {
+        passenger = (EntityPlayer) ebf.tim.utility.CommonUtil.rider(entity);
     }
 
     Entity entity1 = null;
@@ -335,7 +361,7 @@ public class ClientProxy extends CommonProxy {
             case (GuiIDs.OPEN_HEARTH_FURNACE):
                 return te instanceof TileEntityOpenHearthFurnace ? new GuiOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
             case GuiIDs.TRAIN_WORKBENCH:
-                return te instanceof TileTrainWbench ? new GuiTrainCraftingBlock(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
+                return te instanceof TileTrainWbench ? new GuiTrainCraftingBlock(player.inventory, player.world, (TileTrainWbench) te) : null;
 
             case (GuiIDs.LOCO):
                 if (passenger != null && entity instanceof EntitySeat) {
@@ -383,7 +409,7 @@ public class ClientProxy extends CommonProxy {
                 return passenger != null ? new GuiBuilder(player, passenger.inventory, entity) : null;
 
             case (GuiIDs.MTC_INFO):
-                return passenger != null && Loader.isModLoaded("ComputerCraft") ? new GuiMTCInfo(player) : null;
+                return passenger != null && Loader.isModLoaded("computercraft") ? new GuiMTCInfo(player) : null;
 
             // Stationary entities while player is not riding.
             case (GuiIDs.FREIGHT):
@@ -395,7 +421,7 @@ public class ClientProxy extends CommonProxy {
             case (GuiIDs.LIQUID):
                 return entity1 != null ? new GuiLiquid(player, player.inventory, entity1) : null;
             case (GuiIDs.RECIPE_BOOK):
-                return new GuiRecipeBook(player, player.getCurrentEquippedItem());
+                return new GuiRecipeBook(player, player.getHeldItemMainhand());
             case (GuiIDs.LANTERN):
                 return new GuiLantern(player, (TileLantern) te);
             case (GuiIDs.JUKEBOX):
@@ -417,20 +443,12 @@ public class ClientProxy extends CommonProxy {
         }
     }
 
-    @Override
-    public int addArmor(String armor) {
-        return RenderingRegistry.addNewArmourRendererPrefix(armor);
-    }
 
     @Override
     public GuiScreen getCurrentScreen() {
         return Minecraft.getMinecraft().currentScreen;
     }
 
-    @Override
-    public void registerVillagerSkin(int villagerId, String textureName) {
-        VillagerRegistry.instance().registerVillagerSkin(villagerId, new ResourceLocation(Info.resourceLocation, Info.villagerPrefix + textureName));
-    }
 
     @Override
     public void registerSounds() {
@@ -449,14 +467,14 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public EntityPlayer getPlayer() {
-        return getMinecraft().thePlayer;
+        return getMinecraft().player;
     }
 
-    @Optional.Method(modid = "NotEnoughItems")
+    @Optional.Method(modid = "jei")
     @Override
     public void doNEICheck(ItemStack stack) {
-        if (Minecraft.getMinecraft().thePlayer != null) {
-            if (Loader.isModLoaded("Not Enough Items")) {
+        if (Minecraft.getMinecraft().player != null) {
+            if (Loader.isModLoaded("jei")) {
                 try {
                     Class<?> neiApi = Class.forName("codechicken.nei.api.API");
                     Method hideItem = neiApi.getDeclaredMethod("hideItem", stack.getClass());

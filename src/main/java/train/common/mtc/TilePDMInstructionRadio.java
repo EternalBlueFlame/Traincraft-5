@@ -7,13 +7,20 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import ebf.tim.utility.DebugUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import train.common.api.Locomotive;
 import train.common.api.WirelessTransmitter;
 
 import java.util.*;
 
 public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, WirelessTransmitter {
+
+	// 1.12: modded tile entities are dropped on any block state change by default; only drop them when the block changes
+	@Override
+	public boolean shouldRefresh(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.state.IBlockState oldState, net.minecraft.block.state.IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
     public Boolean isActivated = false;
     public ArrayList<IComputerAccess> computers = new ArrayList<IComputerAccess>();
     public int system = 0;
@@ -34,10 +41,11 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("activated", this.isActivated);
         nbttagcompound.setString("uniqueID", this.uniqueID);
+    	return nbttagcompound;
     }
     @Override
     public String getType() {
@@ -141,24 +149,17 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
             }
         }Oka
         return returnList;*/
-        int i = (this.xCoord / 16) -50;
-        int j = (this.xCoord / 16 )+ 50;
-        int k = (this.zCoord / 16)-50;
-        int l = (this.zCoord / 16) + 50;
-        List[] entities;
+        int i = (this.getPos().getX() / 16) -50;
+        int j = (this.getPos().getX() / 16 )+ 50;
+        int k = (this.getPos().getZ() / 16)-50;
+        int l = (this.getPos().getZ() / 16) + 50;
         ArrayList<WirelessTransmitter> toAdd = new ArrayList();
         for (int i1 = i; i1 <= j; ++i1) {
             for (int j1 = k; j1 <= l; ++j1) {
-                if (world.getChunkProvider().chunkExists(i1, j1)) {
-                    entities = world.getChunkFromChunkCoords(i1, j1).entityLists;
-                    for (List olist: entities) {
-                        for(Object obj : olist) {
-
-                            if(obj instanceof Locomotive){
-
-                                toAdd.add((Locomotive)obj);
-                            }
-
+                if (world.getChunkProvider().getLoadedChunk(i1, j1) != null) {
+                    for (net.minecraft.util.ClassInheritanceMultiMap<net.minecraft.entity.Entity> section : world.getChunk(i1, j1).getEntityLists()) {
+                        for (Locomotive loco : section.getByClass(Locomotive.class)) {
+                            toAdd.add(loco);
                         }
                     }
                 }
@@ -201,7 +202,7 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
     public AxisAlignedBB getRenderBoundingBox() {
         if (boundingBox == null) {
           //  System.out.println("new");
-            boundingBox = ebf.tim.utility.CommonUtil.createAABB(xCoord, yCoord, zCoord, xCoord + 2000, yCoord +2000, zCoord + 2000);
+            boundingBox = ebf.tim.utility.CommonUtil.createAABB(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX() + 2000, getPos().getY() +2000, getPos().getZ() + 2000);
         }
         return boundingBox;
     }

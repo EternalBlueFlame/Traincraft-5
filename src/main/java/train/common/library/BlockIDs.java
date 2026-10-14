@@ -6,6 +6,7 @@
  ******************************************************************************/
 
 package train.common.library;
+import train.common.blocks.tracks.BlockTCFlexRail;
 
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemBlock;
@@ -73,6 +74,12 @@ public enum BlockIDs {
 	kSignal(false,null),
 	metroMadridPole(false, null),
 	FortyFootContainer(true, ItemFortyFootContainer.class),
+	//flex rails, see BlockTCFlexRail
+	track_copper(false, null),
+	track_steel(false, null),
+	track_snowy(false, null),
+	track_snowy_copper(false, null),
+	track_snowy_steel(false, null),
 
 
 	;

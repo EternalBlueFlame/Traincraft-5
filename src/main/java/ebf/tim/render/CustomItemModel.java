@@ -1,5 +1,7 @@
 package ebf.tim.render;
 
+import train.client.render.item.TCItemRenderer;
+
 import ebf.tim.utility.Vec5f;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import fexcraft.tmt.slim.Tessellator;
@@ -11,9 +13,7 @@ import net.minecraft.client.resources.IResourceManager;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 import train.client.core.ClientProxy;
@@ -23,7 +23,7 @@ import train.common.items.ItemRollingStock;
 
 import java.util.HashMap;
 
-public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
+public class CustomItemModel extends TCItemRenderer /*ICustomModelLoader*/ {
 
     public static CustomItemModel instance = new CustomItemModel();
 
@@ -153,7 +153,7 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
                 }
 
             }
-            ClientProxy.transportRenderer.doRender(
+            ClientProxy.getTransportRenderer().doRender(
                     ((ItemRollingStock)item.getItem()).entity,0,0,0, 0,0);
             GL11.glPopMatrix();
         } else if(blockTextures.containsKey(item.getItem())) {
@@ -167,7 +167,10 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
             }
             switch (type){
                 case EQUIPPED_FIRST_PERSON:{break;}
-                case INVENTORY:{break;}
+                case INVENTORY:{
+                    // the TESR draws the block from 0..1, the 1.12 item origin is the middle of the slot
+                    GL11.glTranslatef(-0.5f,-0.5f,-0.5f);
+                    break;}
                 case EQUIPPED:{break;}
                 case FIRST_PERSON_MAP:{break;}
                 case ENTITY:{
@@ -181,9 +184,9 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
             }
             if (blockTextures.get(item.getItem()).host!=null && blockTextures.get(item.getItem()).host.tesr instanceof TileEntitySpecialRenderer) {
                 ((TileEntitySpecialRenderer) blockTextures.get(item.getItem()).host.tesr)
-                        .renderTileEntityAt(blockTextures.get(item.getItem()), 0, 0, 0, 0);
+                        .render(blockTextures.get(item.getItem()), 0, 0, 0, 0, -1, 1f);
             } else {
-                blockTextures.get(item.getItem()).func_145828_a(null);
+                blockTextures.get(item.getItem()).addInfoToCrashReport(null);
             }
             GL11.glPopMatrix();
 

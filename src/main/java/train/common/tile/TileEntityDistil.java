@@ -1,5 +1,9 @@
 package train.common.tile;
 
+import net.minecraft.util.ITickable;
+
+import train.common.core.util.FluidContainers;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -13,6 +17,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.api.LiquidManager;
 import train.common.api.LiquidManager.StandardTank;
@@ -25,7 +30,7 @@ import train.common.recipes.DistilRecipes;
 
 import java.util.Random;
 
-public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
+public class TileEntityDistil extends TileTraincraft implements ITickable, IFluidHandler {
 
 	public int distilBurnTime;
 	public int currentItemBurnTime;
@@ -119,13 +124,11 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 		return distilBurnTime > 0;
 	}
 
-	@Override
-	public boolean canUpdate()
-	{
+	public boolean canUpdateLegacy() {
 		return true;
 	}
 	@Override
-	public void updateEntity() {
+	public void update() {
 		if(!world.isRemote){
 			updateTicks++;
 			boolean flag = distilBurnTime > 0;
@@ -163,12 +166,12 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 
 			if (flag != (distilBurnTime > 0)) {
 				flag1 = true;
-				BlockDistil.updateDistilBlockState(distilBurnTime > 0, getWorld(), xCoord, yCoord, zCoord);
+				BlockDistil.updateDistilBlockState(distilBurnTime > 0, getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
 			}
 			else {
 				flag1 = false;
-				BlockDistil.updateDistilBlockState(distilBurnTime > 0, worldObj, xCoord, yCoord, zCoord);
-				CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+				BlockDistil.updateDistilBlockState(distilBurnTime > 0, world, getPos().getX(), getPos().getY(), getPos().getZ());
+				CommonUtil.markBlockForUpdate(this.world, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 			}
 
 			if (slots[2] != null) {
@@ -192,7 +195,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 
 						if (theTank.getFluid() != null) {
 
-							liquidItemID = theTank.getFluid().getFluidID();
+							liquidItemID = LiquidManager.fluidId(theTank.getFluid().getFluid());
 						}
 						else {
 
@@ -202,7 +205,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 						flag1 = true;
 
 						this.markDirty();
-						CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+						CommonUtil.markBlockForUpdate(this.world, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 					}
 				}
 			}
@@ -214,14 +217,14 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 				amount = 0;
 			}
 			if (theTank.getFluid() != null) {
-				liquidItemID = theTank.getFluid().getFluidID();
+				liquidItemID = LiquidManager.fluidId(theTank.getFluid().getFluid());
 			}
 			else {
 				liquidItemID = 0;
 			}
 			if (updateTicks % 8 == 0){
 				this.markDirty();
-				CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+				CommonUtil.markBlockForUpdate(this.world, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 			}
 			if (distilBurnTime > 0) {
 				distilBurnTime--;
@@ -268,7 +271,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 				&& (slots[0].getItemDamage() != 1 && slots[0].getItemDamage() != 2)) {
 			return false;
 		}
-		FluidStack resultLiquid = FluidContainerRegistry.getFluidForFilledItem(itemstack);
+		FluidStack resultLiquid = FluidContainers.getFluidForFilledItem(itemstack);
 		if (resultLiquid == null)
 			return false;
 		int used = getTank().fill(resultLiquid, false);
@@ -282,7 +285,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 		ItemStack itemstack = DistilRecipes.smelting().getSmeltingResult(slots[0].getItem());
 		ItemStack plasticStack = DistilRecipes.smelting().getPlasticResult(slots[0].getItem());
 		int plasticChance = DistilRecipes.smelting().getPlasticChance(slots[0].getItem());
-		FluidStack resultLiquid = FluidContainerRegistry.getFluidForFilledItem(itemstack);
+		FluidStack resultLiquid = FluidContainers.getFluidForFilledItem(itemstack);
 		if (resultLiquid == null)
 			return;
 
@@ -296,11 +299,11 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 				amount = theTank.getFluid().amount;
 			}
 			if (theTank.getFluid() != null) {
-				liquidItemID = theTank.getFluid().getFluidID();
+				liquidItemID = LiquidManager.fluidId(theTank.getFluid().getFluid());
 			}
 
 			this.markDirty();
-			CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+			CommonUtil.markBlockForUpdate(this.world, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 		}
 
 		if (slots[0].getItem().hasContainerItem(slots[0])) {
@@ -364,7 +367,7 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	@Override
 	public IFluidTankProperties[] getTankProperties()
 	{
-		return new FluidTankInfo[] { theTank.getInfo() };
+		return theTank.getTankProperties();
 	}
 
 
@@ -374,14 +377,16 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 	}
 
 	@Override
-	public boolean canInsertItem(int slot, ItemStack stack, int side){
+	public boolean canInsertItem(int slot, ItemStack stack, EnumFacing face) {
+		int side = face.getIndex();
 		if(side == 0) return false;          // bottom is extract only
 		else if(side == 1) return slot == 0; // insert input into top
 		else return slot == 1;               // insert fuel into sides
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack stack, int side){
+	public boolean canExtractItem(int slot, ItemStack stack, EnumFacing face) {
+		int side = face.getIndex();
 		return side != 1 && slot == 3;
 	}
 

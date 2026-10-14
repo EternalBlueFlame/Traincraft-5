@@ -1,5 +1,9 @@
 package train.common.api;
 
+import train.common.core.util.StackUtil;
+
+import ebf.tim.utility.CommonUtil;
+
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -206,7 +210,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 					return 150;
 				}
 
-				if (CommonUtil.getMaterial(var3) == Material.wood) {
+				if (CommonUtil.getMaterial(var3) == Material.WOOD) {
 					return 300;
 				}
 			}
@@ -244,7 +248,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 	/** for the freight carts inventory **/
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return this.furnaceItemStacks[i];
+		return StackUtil.nn(this.furnaceItemStacks[i]);
 	}
 
 	/**
@@ -255,10 +259,10 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 		if (this.furnaceItemStacks[par1] != null) {
 			ItemStack var2 = this.furnaceItemStacks[par1];
 			this.furnaceItemStacks[par1] = null;
-			return var2;
+			return StackUtil.nn(var2);
 		}
 		else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -272,18 +276,18 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 			if (this.furnaceItemStacks[par1].getCount() <= par2) {
 				var3 = this.furnaceItemStacks[par1];
 				this.furnaceItemStacks[par1] = null;
-				return var3;
+				return StackUtil.nn(var3);
 			}
 			else {
 				var3 = this.furnaceItemStacks[par1].splitStack(par2);
 				if (this.furnaceItemStacks[par1].getCount() == 0) {
 					this.furnaceItemStacks[par1] = null;
 				}
-				return var3;
+				return StackUtil.nn(var3);
 			}
 		}
 		else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -291,7 +295,7 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 	 * Sets the given item stack to the specified slot in the inventory (can be crafting or armor sections).
 	 */
 	@Override
-	public void setInventorySlotContents(int par1, ItemStack par2ItemStack) {
+	public void setInventorySlotContents(int par1, ItemStack par2ItemStack) { if (par2ItemStack != null && par2ItemStack.isEmpty()) par2ItemStack = null;
 		this.furnaceItemStacks[par1] = par2ItemStack;
 		if (par2ItemStack != null && par2ItemStack.getCount() > this.getInventoryStackLimit()) {
 			par2ItemStack.setCount(this.getInventoryStackLimit());
@@ -321,8 +325,8 @@ public abstract class AbstractWorkCart extends EntityRollingStock{
 		setRollingAmplitude(10);
 		setDamage(getDamage() + i * 10);
 		if (getDamage() > 40) {
-			if (getPassengers().get(0) != null) {
-				getPassengers().get(0).startRiding(this);
+			if (ebf.tim.utility.CommonUtil.rider(this) != null) {
+				this.removePassengers(); // 1.7.10 mountEntity(this) dismounted, 1.12 startRiding would mount
 			}
 			this.setDead();
 			ServerLogger.deleteWagon(this);

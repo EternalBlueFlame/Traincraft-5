@@ -7,6 +7,10 @@
 
 package train.common.api.blocks;
 
+import train.common.core.util.StackUtil;
+
+import net.minecraft.util.EnumFacing;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ISidedInventory;
@@ -30,7 +34,8 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int side){
+    public int[] getSlotsForFace(EnumFacing face) {
+    	int side = face.getIndex();
         if(this.slots.length > 0){
             int[] theInt = new int[slots.length];
             for(int i = 0; i < theInt.length; i++){
@@ -43,12 +48,14 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     @Override
-    public boolean canInsertItem(int slot, ItemStack stack, int side){
+    public boolean canInsertItem(int slot, ItemStack stack, EnumFacing face) {
+    	int side = face.getIndex();
         return false;
     }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack stack, int side){
+    public boolean canExtractItem(int slot, ItemStack stack, EnumFacing face) {
+    	int side = face.getIndex();
         return false;
     }
 
@@ -59,25 +66,25 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
 
     @Override
     public ItemStack getStackInSlot(int slot){
-        return this.slots.length >= slot ? this.slots[slot] : null;
+        return StackUtil.nn(this.slots.length >= slot ? this.slots[slot] : null);
     }
 
     @Override
     public ItemStack decrStackSize(int i, int j){
         if (this.slots.length >= i && this.slots[i] != null) {
-            if (this.slots[i].stackSize <= j) {
+            if (this.slots[i].getCount() <= j) {
                 ItemStack itemstack = this.slots[i];
                 this.slots[i] = null;
-                return itemstack;
+                return StackUtil.nn(itemstack);
             }
             ItemStack itemstack1 = this.slots[i].splitStack(j);
-            if (this.slots[i].stackSize == 0) {
+            if (this.slots[i].getCount() == 0) {
                 this.slots[i] = null;
             }
-            return itemstack1;
+            return StackUtil.nn(itemstack1);
         }
         else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
@@ -86,16 +93,16 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
         if (this.slots[slot] != null) {
             ItemStack var2 = this.slots[slot];
             this.slots[slot] = null;
-            return var2;
+            return StackUtil.nn(var2);
         }
-        return null;
+        return ItemStack.EMPTY;
     }
 
     @Override
-    public void setInventorySlotContents(int slot, ItemStack stack){
+    public void setInventorySlotContents(int slot, ItemStack stack){ if (stack != null && stack.isEmpty()) stack = null;
         this.slots[slot] = stack;
-        if (stack != null && stack.stackSize > getInventoryStackLimit()) {
-            stack.stackSize = getInventoryStackLimit();
+        if (stack != null && stack.getCount() > getInventoryStackLimit()) {
+            stack.setCount(getInventoryStackLimit());
         }
     }
 
@@ -105,7 +112,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     @Override
-    public boolean hasCustomInventoryName(){
+    public boolean hasCustomName() {
         return false;
     }
 
@@ -116,7 +123,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer player){
-        return player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+        return player.getDistanceSq((double) this.getPos().getX() + 0.5D, (double) this.getPos().getY() + 0.5D, (double) this.getPos().getZ() + 0.5D) <= 64.0D;
     }
 
     @Override
@@ -135,9 +142,10 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     @Override
-    public final void writeToNBT(NBTTagCompound nbt){
+    public final NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         this.writeToNBT(nbt, false);
+    	return nbt;
     }
 
     @Override
@@ -182,15 +190,21 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
         for(Object o : this.world.playerEntities){
             if(o instanceof EntityPlayerMP){
                 EntityPlayerMP player = (EntityPlayerMP) o;
-                if(player.getDistance(xCoord, yCoord, zCoord) <= 64) {
-                    player.playerNetServerHandler.sendPacket(this.getDescriptionPacket());
+                if(player.getDistance(getPos().getX(), getPos().getY(), getPos().getZ()) <= 64) {
+                    player.connection.sendPacket(this.getUpdatePacket());
                 }
             }
         }
     }
 
+    /** 1.12 sends this with the chunk data (1.7.10 sent the description packet instead). */
     @Override
-    public SPacketUpdateTileEntity getDescriptionPacket() {
+    public NBTTagCompound getUpdateTag() {
+    	return this.writeToNBT(new NBTTagCompound());
+    }
+
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbt = new NBTTagCompound();
         this.writeToNBT(nbt, true);
         return new SPacketUpdateTileEntity(getPos(), 1, nbt);
@@ -199,8 +213,43 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
         if(pkt != null){
-            this.readFromNBT(pkt.func_148857_g(), true);
+            this.readFromNBT(pkt.getNbtCompound(), true);
         }
     }
 
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void clear() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			setInventorySlotContents(i, ItemStack.EMPTY);
+		}
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public boolean isEmpty() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			ItemStack s = getStackInSlot(i);
+			if (s != null && !s.isEmpty()) return false;
+		}
+		return true;
+	}
 }

@@ -1,4 +1,5 @@
 package train.common.entity.stock.freight;
+import train.client.render.models.ModelFreightCenterBeam_Wood_1;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -85,9 +86,9 @@ return 2;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelFreightCenterBeam_Wood_1()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelFreightCenterBeam_Wood_1()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.060000002f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0f, -0.44f, 0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 90.0f, 0.0f}};}
     @Override

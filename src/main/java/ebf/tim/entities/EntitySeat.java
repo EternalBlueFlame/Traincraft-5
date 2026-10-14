@@ -1,7 +1,10 @@
 package ebf.tim.entities;
 
+import net.minecraft.util.math.BlockPos;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraft.util.math.Vec3d;
+
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
@@ -11,10 +14,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.registry.IEntityAdditionalSpawnData;
+import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import org.lwjgl.input.Keyboard;
 import train.client.core.handlers.TCKeyHandler;
 import train.common.Traincraft;
@@ -37,8 +39,8 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     /**used to define which index the seat is supposed to be at*/
     private int seatNumber =0;
 
-    public Vec3 rotation =null;
-    public Vec3 pos = null;
+    public Vec3d rotation =null;
+    public Vec3d pos = null;
     public EntityRollingStock parent;
     private boolean controller=false, locomotive=false;
 
@@ -51,10 +53,10 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         this.posX = xPos;
         this.posY = yPos;
         this.posZ = zPos;
-        this.pos = Vec3.createVectorHelper(xPos,yPos,zPos);
+        this.pos = new Vec3d(xPos,yPos,zPos);
 
         if (pitch!=0 || yaw !=0) {
-            rotation = Vec3.createVectorHelper(pitch, yaw, roll);
+            rotation = new Vec3d(pitch, yaw, roll);
         }
         parentId = parent.getEntityId();
         this.seatNumber = seatNumber;
@@ -91,15 +93,16 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
                 } else {
                     world.removeEntity(this);
                     this.setDead();
+                    return;
                 }
             }
-            if (world.isRemote) {
+            if (world.isRemote && this.parent != null) {
                 if (this.parent.seats.size() >= seatNumber + 1 && (this.pos != this.parent.seats.get(seatNumber).pos || this.getPassenger() != this.parent.seats.get(seatNumber).getPassenger())) {
                     this.setDead();
                 }
             }
         }
-        if (getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer && world.isRemote && this.isControlSeat()) {
+        if (ebf.tim.utility.CommonUtil.rider(this) != null && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer && world.isRemote && this.isControlSeat()) {
             if (TCKeyHandler.inventory.isPressed()) {
                 if (this.parent instanceof Locomotive) {
                     Traincraft.keyChannel.sendToServer(new PacketKeyPress(7));
@@ -110,9 +113,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
                 Traincraft.keyChannel.sendToServer(new PacketKeyPress(9));
             }
         }
-        if (this.parent instanceof Locomotive && this.isControlSeat() && world.isRemote) {
-            ((Locomotive)this.parent).keyHandling();
-        }
+        // NOTE: the 1.7.10 sources called a Locomotive.keyHandling() that never existed; loco keys are handled above.
     }
 
     @Override
@@ -129,7 +130,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     }
     /**returns the bounding box, this doesn't handle collisions, soo.. null.*/
     @Override
-    public AxisAlignedBB getBoundingBox(){
+    public AxisAlignedBB getCollisionBoundingBox() {
         return null;
     }
     /**returns the bounding box, this doesn't handle collisions, soo.. null.*/
@@ -151,14 +152,15 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     public boolean writeToNBTOptional(NBTTagCompound tagCompound){return false;}
     @Override
-    public boolean writeMountToNBT(NBTTagCompound tagCompound){return false;}
+    public boolean writeToNBTAtomically(NBTTagCompound tagCompound) {return false;}
 
     /**plays a sound during entity movement*/
     @Override
-    protected void func_145780_a(int p_145780_1_, int p_145780_2_, int p_145780_3_, Block p_145780_4_) {}
+    protected void playStepSound(BlockPos pos, Block p_145780_4_) {
+    	int p_145780_1_ = pos.getX(), p_145780_2_ = pos.getY(), p_145780_3_ = pos.getZ();}
 
     @Override
-    public Vec3 getLookVec() {
+    public Vec3d getLookVec() {
         return rotation;
     }
 
@@ -183,31 +185,28 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
     @Override
     public void updatePassenger(Entity passenger) {
         if (this.getPassenger() != null) {
-            this.getPassenger().setPosition(this.posX, this.posY+1+(world.isRemote?(this.getPassenger()==Minecraft.getMinecraft().thePlayer?-0.4:-1.3):-1.5), this.posZ);
+            // 1.7.10 positioned the player by its eye height on the local client (posY was the eye there) and by
+            // its feet everywhere else. In 1.12 posY is always the feet, so the old +0.6 put the driver on the
+            // roof. Use what the local player saw in 1.7.10 (feet = seat - 1.02, eyes = seat + 0.6) on both sides.
+            this.getPassenger().setPosition(this.posX, this.posY - 1.02D, this.posZ);
         }
     }
 
     public EntityLivingBase getPassenger(){
-        return (EntityLivingBase) this.getPassengers().get(0);
+        return this.getPassengers().isEmpty() || !(ebf.tim.utility.CommonUtil.rider(this) instanceof EntityLivingBase) ? null : (EntityLivingBase) ebf.tim.utility.CommonUtil.rider(this);
     }
 
     //@Override
     public void addPassenger(EntityPlayer passenger) {
 //        DebugUtil.println(passengerEntity==null, passengerEntity.ridingEntity==null, passenger instanceof EntityLivingBase);
-        if(riddenByEntity==null && passenger != null) {
-            //super.addPassenger(passenger);
-            this.getPassengers().get(0)=passenger;
-            passenger.ridingEntity=this;
-            passenger.mountEntity(this);
+        if(this.getPassengers().isEmpty() && passenger != null) {
+            passenger.startRiding(this);
         }
     }
 
-    //@Override
+    @Override
     public void removePassenger(Entity passenger){
-        //super.removePassenger(passenger);
-        //passengerEntity=null;
-        this.getPassengers().get(0)=null;
-        passenger.ridingEntity=null;
+        super.removePassenger(passenger);
     }
 
     public boolean isControlSeat(){return controller;}
@@ -223,7 +222,7 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
      */
     @Override
     @SideOnly(Side.CLIENT)
-    public void setPositionAndRotation2(double x, double y, double z, float yaw, float pitch, int turnProgress) {
+    public void setPositionAndRotationDirect(double x, double y, double z, float yaw, float pitch, int turnProgress, boolean teleport) {
     }
     @Override
     public void setVelocity(double x, double y, double z) {
@@ -238,6 +237,6 @@ public class EntitySeat extends Entity implements IEntityAdditionalSpawnData {
         this.posZ = p_70107_5_;
         float f = this.width / 2.0F;
         float f1 = this.height;
-        this.boundingBox.setBounds(p_70107_1_ - (double)f, p_70107_3_ - (double)this.yOffset + (double)this.ySize, p_70107_5_ - (double)f, p_70107_1_ + (double)f, p_70107_3_ - (double)this.yOffset + (double)this.ySize + (double)f1, p_70107_5_ + (double)f);
+        setEntityBoundingBox(new AxisAlignedBB(p_70107_1_ - (double)f, p_70107_3_ - (double)getYOffset() + (double)0.0F, p_70107_5_ - (double)f, p_70107_1_ + (double)f, p_70107_3_ - (double)getYOffset() + (double)0.0F + (double)f1, p_70107_5_ + (double)f));
     }
 }

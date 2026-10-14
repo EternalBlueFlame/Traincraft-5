@@ -109,7 +109,7 @@ public class ModelPropagandaCar extends ModelBase
 		{
 			propagandacarModel[i].render(f5);
 		}
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/freighttruckm.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/freighttruckm.png"));
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(-4.5, 0, -0.27);

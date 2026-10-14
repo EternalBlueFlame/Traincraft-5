@@ -1,14 +1,15 @@
 package train.client.render.renderSwitch;
 
+import train.client.render.item.TCItemRenderer;
+
 import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.renderSwitch.models.ModeloverheadWireDouble;
 import train.common.library.Info;
 
-public class ItemRenderoverheadWireDouble implements IItemRenderer {
+public class ItemRenderoverheadWireDouble extends TCItemRenderer {
     private static final ModeloverheadWireDouble modeSwitch = new ModeloverheadWireDouble();
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "overheadWireDouble.png");
 
@@ -52,7 +53,7 @@ public class ItemRenderoverheadWireDouble implements IItemRenderer {
     }
 
     private void renderSwitch(float x, float y, float z, float scale) {
-        Tessellator.bindTexture(texture);
+        fexcraft.tmt.slim.Tessellator.bindTexture(texture);
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
 

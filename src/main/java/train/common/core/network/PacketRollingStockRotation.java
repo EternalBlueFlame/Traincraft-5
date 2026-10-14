@@ -62,10 +62,16 @@ public class PacketRollingStockRotation implements IMessage {
 
     public static class Handler implements IMessageHandler<PacketRollingStockRotation, IMessage> {
         @Override
-        public IMessage onMessage(PacketRollingStockRotation message, MessageContext context) {
+        public IMessage onMessage(final PacketRollingStockRotation message, final MessageContext context) {
+            // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+            net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(context.netHandler).addScheduledTask(() -> handleOnMainThread(message, context));
+            return null;
+        }
+
+        private IMessage handleOnMainThread(PacketRollingStockRotation message, MessageContext context) {
             Minecraft mc = Minecraft.getMinecraft();
-            if (mc.theWorld != null) {
-                Entity entity = mc.theWorld.getEntityByID(message.entityID);
+            if (mc.world != null) {
+                Entity entity = mc.world.getEntityByID(message.entityID);
                 if (entity instanceof EntityRollingStock) {
                     EntityRollingStock rollingStock = (EntityRollingStock) entity;
                     rollingStock.rotationYaw = message.rotationYawServer;

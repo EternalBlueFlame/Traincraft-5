@@ -1,6 +1,6 @@
 package train.common.core.network;
 
-import cpw.mods.fml.common.network.simpleimpl.IMessage;
+import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -22,8 +22,8 @@ public class PacketInteract implements IMessage {
     public PacketInteract() {}
     public PacketInteract(int entityId) {
         this.entityId = entityId;
-        this.dimensionId= ebf.tim.utility.CommonUtil.getDimensionId(Minecraft.getMinecraft().thePlayer.worldObj);
-        this.playerId=Minecraft.getMinecraft().thePlayer.getEntityId();
+        this.dimensionId= ebf.tim.utility.CommonUtil.getDimensionId(Minecraft.getMinecraft().player.world);
+        this.playerId=Minecraft.getMinecraft().player.getEntityId();
 
     }
     /**reads the packet on server to get the variables from the Byte Buffer*/
@@ -35,7 +35,7 @@ public class PacketInteract implements IMessage {
         Entity e = DimensionManager.getWorld(dimensionId).getEntityByID(entityId);
         Entity p = DimensionManager.getWorld(dimensionId).getEntityByID(playerId);
         if (e instanceof AbstractTrains && p instanceof EntityPlayer) {
-            e.interactFirst((EntityPlayer)p);
+            e.processInitialInteract((EntityPlayer) p, net.minecraft.util.EnumHand.MAIN_HAND);
         }
     }
     /**puts the variables into a Byte Buffer so they can be sent to server*/

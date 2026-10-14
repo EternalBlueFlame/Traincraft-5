@@ -1,4 +1,5 @@
 package train.common.entity.stock.work;
+import train.client.render.models.ModelWorkCart;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -83,16 +84,16 @@ return 1;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelWorkCart()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelWorkCart()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.08000001f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0f, -0.42f, 0f}};}
 @Override
-    public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
+    public float[][] modelRotations(){return new float[][]{{0f,0f,0f}};}  // 1.7.10 RenderEnum: no rotation (was {0,180,180}: rendered upside down)
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{0f,-0.15f,0f}};}  // from the 1.7.10 class
     @Override
     public float[] getHitboxSize(){return new float[]{3.5999999046325684f,2.1f,1.1f};}
     public TrainParticle[] getEffects(){

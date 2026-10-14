@@ -19,11 +19,11 @@ public class ItemBlockOreTC extends ItemBlock {
 	}
 
 	@Override
-	public String getUnlocalizedName(ItemStack itemstack) {
+	public String getTranslationKey(ItemStack itemstack) {
 		if(itemstack.getItemDamage()<subNames.length){
-			return super.getUnlocalizedName() + "." + subNames[itemstack.getItemDamage()];
+			return super.getTranslationKey() + "." + subNames[itemstack.getItemDamage()];
 		}else{
-			return super.getUnlocalizedName() + "." + "";
+			return super.getTranslationKey() + "." + "";
 		}
 	}
 }

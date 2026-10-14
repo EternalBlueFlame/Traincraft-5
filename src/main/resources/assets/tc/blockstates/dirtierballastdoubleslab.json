@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "variant=default": {
+      "model": "tc:dirtierballastslab_double"
+    },
+    "inventory": {
+      "model": "tc:dirtierballastslab_double"
+    }
+  }
+}

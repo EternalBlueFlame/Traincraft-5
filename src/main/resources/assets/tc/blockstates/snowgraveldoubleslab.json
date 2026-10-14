@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "variant=default": {
+      "model": "tc:snowgravelslab_double"
+    },
+    "inventory": {
+      "model": "tc:snowgravelslab_double"
+    }
+  }
+}

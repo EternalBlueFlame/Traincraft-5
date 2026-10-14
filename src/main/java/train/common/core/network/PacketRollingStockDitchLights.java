@@ -40,9 +40,14 @@ public class PacketRollingStockDitchLights implements IMessage
     public static class Handler implements IMessageHandler<PacketRollingStockDitchLights, IMessage>
     {
         @Override
-        public IMessage onMessage(PacketRollingStockDitchLights message, MessageContext context)
-        {
-			Entity TrainEntity = context.getServerHandler().playerEntity.world.getEntityByID(message.entityID);
+        public IMessage onMessage(final PacketRollingStockDitchLights message, final MessageContext context) {
+            // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+            net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(context.netHandler).addScheduledTask(() -> handleOnMainThread(message, context));
+            return null;
+        }
+
+        private IMessage handleOnMainThread(PacketRollingStockDitchLights message, MessageContext context) {
+			Entity TrainEntity = context.getServerHandler().player.world.getEntityByID(message.entityID);
 			
 			if (TrainEntity instanceof IRollingStockLightControls)
             {

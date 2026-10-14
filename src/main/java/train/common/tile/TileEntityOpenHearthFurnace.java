@@ -1,5 +1,7 @@
 package train.common.tile;
 
+import net.minecraft.util.ITickable;
+
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -27,7 +29,7 @@ import train.common.library.ItemIDs;
 
 import java.util.Random;
 
-public class TileEntityOpenHearthFurnace extends TileTraincraft {
+public class TileEntityOpenHearthFurnace extends TileTraincraft implements ITickable {
 
 	public int furnaceBurnTime;
 	public int currentItemBurnTime;
@@ -70,13 +72,11 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 		return furnaceBurnTime > 0;
 	}
 
-	@Override
-	public boolean canUpdate()
-	{
+	public boolean canUpdateLegacy() {
 		return true;
 	}
 	@Override
-	public void updateEntity() {
+	public void update() {
 		boolean flag = furnaceBurnTime > 0;
 		boolean flag1 = false;
 		cookDuration = TrainCraftingManager.instance.getHearthFurnaceRecipeDuration(this.slots[0], this.slots[1]);

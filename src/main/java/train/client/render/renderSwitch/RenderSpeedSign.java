@@ -22,8 +22,8 @@ public class RenderSpeedSign extends TileEntitySpecialRenderer {
 	private ResourceLocation[] textures = {new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "SpeedSign10.png"), new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "SpeedSign50.png"), new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "SpeedSign90.png"), new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "SpeedSign125.png"), new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "SpeedSign160.png")};
 
 	@Override
-	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
-		Tessellator.bindTexture(textures[(((TileSpeedSign) tileEntity).getSkinstate())]);
+	public void render(TileEntity tileEntity, double x, double y, double z, float tick, int destroyStage, float alpha) {
+		fexcraft.tmt.slim.Tessellator.bindTexture(textures[(((TileSpeedSign) tileEntity).getSkinstate())]);
 		GL11.glPushMatrix();
 		GL11.glTranslated(x +0.5 , y+0.625, z +0.125);
 		GL11.glRotated(180, 0, 1, 0);
@@ -77,13 +77,13 @@ public class RenderSpeedSign extends TileEntitySpecialRenderer {
 
 			/*
 			if (((TileSpeedSign) tileEntity).getSkinstate() == 0) {
-				Tessellator.bindTexture(texture);
+				fexcraft.tmt.slim.Tessellator.bindTexture(texture);
 			} else if (((TileSpeedSign) tileEntity).getSkinstate() == 1){
-				Tessellator.bindTexture(texture2);
+				fexcraft.tmt.slim.Tessellator.bindTexture(texture2);
 			} else if (((TileSpeedSign) tileEntity).getSkinstate() == 2){
-				Tessellator.bindTexture(texture3);
+				fexcraft.tmt.slim.Tessellator.bindTexture(texture3);
 			} else if (((TileSpeedSign) tileEntity).getSkinstate() == 3) {
-				Tessellator.bindTexture(texture4);
+				fexcraft.tmt.slim.Tessellator.bindTexture(texture4);
 			}
 
 			 */

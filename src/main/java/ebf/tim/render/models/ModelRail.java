@@ -21,12 +21,12 @@ public class ModelRail {
     }
     public static void railShading(float offset, int[] color, int darkRed, int darkGreen, int darkBlue, boolean pass0){
         if(offset>0 ^ !pass0) {
-            GL11.glColor4f(
+            net.minecraft.client.renderer.GlStateManager.color(
                     (color[0])* 0.00392156863f,
                     (color[1])* 0.00392156863f,
                     (color[2])* 0.00392156863f, 1);
         } else {
-            GL11.glColor4f(
+            net.minecraft.client.renderer.GlStateManager.color(
                     (color[0]-darkRed)* 0.00392156863f,
                     (color[1]-darkGreen)* 0.00392156863f,
                     (color[2]-darkBlue)* 0.00392156863f, 1);
@@ -34,12 +34,12 @@ public class ModelRail {
     }
     public static void centerShading(float offset, int[] color, int dark, boolean pass0){
         if(offset>0 ^ !pass0) {
-            GL11.glColor4f(
+            net.minecraft.client.renderer.GlStateManager.color(
                     (color[0]) * 0.00392156863f,
                     (color[1]) * 0.00392156863f,
                     (color[2]) * 0.00392156863f, 1);
         } else {
-            GL11.glColor4f(
+            net.minecraft.client.renderer.GlStateManager.color(
                     (color[0]-dark)* 0.00392156863f,
                     (color[1]-dark)* 0.00392156863f,
                     (color[2]-dark)* 0.00392156863f, 1);
@@ -118,7 +118,7 @@ public class ModelRail {
             drawFace(shape.activePath, rail, -0.0625f, -0.0625f,-0.06f, -0.085f, scale);
 
 
-            GL11.glColor4f(
+            net.minecraft.client.renderer.GlStateManager.color(
                     (color[0]-30)* 0.00392156863f,
                     (color[1]-30)* 0.00392156863f,
                     (color[2]-30)* 0.00392156863f, 1);
@@ -128,7 +128,7 @@ public class ModelRail {
 
 
 
-            GL11.glColor4f(
+            net.minecraft.client.renderer.GlStateManager.color(
                     (color[0]-20)* 0.00392156863f,
                     (color[1]-20)* 0.00392156863f,
                     (color[2]-20)* 0.00392156863f, 1);
@@ -200,13 +200,13 @@ public class ModelRail {
             railShading(rail,color, 33, 43, 58, false);
             drawFace(shape.activePath, rail, 0.021875f,0.0125f,0,0, scale);//railhead top dull
 
-            GL11.glColor4f(
+            net.minecraft.client.renderer.GlStateManager.color(
                     (color[0]-17)* 0.00392156863f,
                     (color[1]-20)* 0.00392156863f,
                     (color[2]-24)* 0.00392156863f, 1);
             drawFace(shape.activePath, rail, 0.0125f, -0.0125f,0,0, scale);//railhead top shiny
 
-            GL11.glColor4f(
+            net.minecraft.client.renderer.GlStateManager.color(
                     (color[0]-129)* 0.00392156863f,
                     (color[1]-141)* 0.00392156863f,
                     (color[2]-164)* 0.00392156863f, 1);
@@ -220,7 +220,7 @@ public class ModelRail {
             drawFace(shape.activePath, rail, -0.0125f,-0.0125f,-0.0231f,-0.055f, scale);//Rail neck west
             drawFace(shape.activePath, rail, 0.0125f,0.0125f,-0.055f,-0.0231f, scale);//Rail neck east
 
-            GL11.glColor4f(
+            net.minecraft.client.renderer.GlStateManager.color(
                     (color[0]-101)* 0.00392156863f,
                     (color[1]-120)* 0.00392156863f,
                     (color[2]-153)* 0.00392156863f, 1);

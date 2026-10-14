@@ -1,4 +1,5 @@
 package train.common.entity.stock.passenger;
+import train.client.render.models.ModelPassenger2;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -83,11 +84,11 @@ return 1;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelPassenger2()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelPassenger2()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.18f, -0.1f}};}
+    public float[][] modelOffsets(){return new float[][]{{0f, -0.32f, -0.1f}};}
 @Override
-    public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
+    public float[][] modelRotations(){return new float[][]{{0f,0f,0f}};}  // 1.7.10 RenderEnum: no rotation (was {0,180,180}: rendered upside down)
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.

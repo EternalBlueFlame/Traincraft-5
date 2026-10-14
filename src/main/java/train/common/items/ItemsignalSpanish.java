@@ -3,12 +3,11 @@ package train.common.items;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemBlock;
 import train.common.Traincraft;
 import train.common.library.Info;
 
-public class ItemsignalSpanish extends ItemBlock {
+public class ItemsignalSpanish extends ItemBlock implements train.common.items.ILegacyIcon {
 
     public ItemsignalSpanish(Block id) {
         super(id);
@@ -16,11 +15,11 @@ public class ItemsignalSpanish extends ItemBlock {
         setCreativeTab(Traincraft.tcTab);
     }
 
+
+
+
     @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":paintbrushThing");
+    public String legacyIcon(int meta) {
+        return "tc:paintbrushThing";
     }
-
-
 }

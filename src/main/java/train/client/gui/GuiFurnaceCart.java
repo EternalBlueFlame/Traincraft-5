@@ -20,14 +20,14 @@ public class GuiFurnaceCart extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int i, int j) {
-        this.fontRendererObj.drawString(CommonUtil.translate("container.furnace"), 60, 6, 4210752);
-        this.fontRendererObj.drawString(CommonUtil.translate("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString(CommonUtil.translate("container.furnace"), 60, 6, 4210752);
+        this.fontRenderer.drawString(CommonUtil.translate("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float par1, int par2, int par3) {
         //int var4 = this.mc.renderEngine.getTexture("/gui/furnace.png");
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.guiPrefix + "furnace.png"));
         int var5 = (this.width - this.xSize) / 2;
         int var6 = (this.height - this.ySize) / 2;

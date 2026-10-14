@@ -56,7 +56,7 @@ public class SideTabRecipes extends SideTab {
         drawRect(x - 59, y + 30, -40, 85, 0xff293240);
         drawRect(x - 58, y + 29, -41, 86, 0xff293240);
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         gui.drawTexturedModalRect(x - 76, y + 34, 0, 64, 16, 16);
         gui.drawTexturedModalRect(x - 16, y + 34, 16, 64, 16, 16);
 
@@ -81,7 +81,7 @@ public class SideTabRecipes extends SideTab {
             }
 
             if (item != null) {
-                fontRenderer.drawString(CommonUtil.translate(item.getUnlocalizedName()), x - 93, y + 78, headerColour);
+                fontRenderer.drawString(CommonUtil.translate(item.getTranslationKey()), x - 93, y + 78, headerColour);
                 gui.currentKnownItem = item;
             } else {
                 fontRenderer.drawString("Item name not found", x - 93, y + 78, headerColour);
@@ -102,20 +102,20 @@ public class SideTabRecipes extends SideTab {
             return false;
         } else {
             if ((x > -98 && x < -88) && (y < 49 && y > 33)) {
-                soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+                soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 recipeSize--;
                 return true;
             } else if ((x > -36 && x < -10) && (y < 49 && y > 33)) {
-                soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+                soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 recipeSize++;
                 return true;
             } else if ((x > -98 && x < -71) && (y < 71 && y > 61)) {
-                soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+                soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 isShow = true;
                 isClear = false;
                 return true;
             } else if ((x > -54 && x < -26) && (y < 71 && y > 61)) {
-                soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+                soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 isClear = true;
                 isShow = false;
                 return true;

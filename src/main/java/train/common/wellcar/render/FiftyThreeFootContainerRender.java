@@ -13,29 +13,29 @@ import train.common.wellcar.TileFiftyThreeFootContainer;
 
 public class FiftyThreeFootContainerRender extends TileEntitySpecialRenderer {
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float p_147500_8_) {
+    public void render(TileEntity tileEntity, double x, double y, double z, float p_147500_8_, int destroyStage, float alpha) {
 
-        //Tessellator.bindTexture(new ResourceLocation("tc:textures/trains/container56_Yellow.png"));
+        //fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation("tc:textures/trains/container56_Yellow.png"));
         //This will make your block brightness dependent from surroundings lighting.
 
         TileFiftyThreeFootContainer theTileEntity = (TileFiftyThreeFootContainer)tileEntity;
-        Block two = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord - 1, tileEntity.zCoord);
-        Block three = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord - 2, tileEntity.zCoord);
-        Block four = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord - 3, tileEntity.zCoord);
+        Block two = CommonUtil.getBlockAt(tileEntity.getWorld(), tileEntity.getPos().getX(), tileEntity.getPos().getY() - 1, tileEntity.getPos().getZ());
+        Block three = CommonUtil.getBlockAt(tileEntity.getWorld(), tileEntity.getPos().getX(), tileEntity.getPos().getY() - 2, tileEntity.getPos().getZ());
+        Block four = CommonUtil.getBlockAt(tileEntity.getWorld(), tileEntity.getPos().getX(), tileEntity.getPos().getY() - 3, tileEntity.getPos().getZ());
                /* int skyLight = tileEntity.getWorldObj().getSkyBlockTypeBrightness(EnumSkyBlock.Block, (int)x,(int)y,(int)z);
 
                // skyLight= tileEntity.world.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (skyLight<0?0:skyLight) << 4; OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);
-                GL11.glColor4f(1,1,1,1);
+                net.minecraft.client.renderer.GlStateManager.color(1,1,1,1);
                 tessellator.setColorOpaque_F(1.0F, 1.0F, 1.0F);
                 skyLight=tileEntity.world.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (Math.max(skyLight, 0)) << 4;
                 OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);*/
-      //  GL11.glColor4f(1,1,1,1);
+      //  net.minecraft.client.renderer.GlStateManager.color(1,1,1,1);
 
-        Tessellator.bindTexture(new ResourceLocation("tc:textures/trains/container53_" + theTileEntity.getAvailableColors().get(theTileEntity.currentColor) + ".png"));
-       // GL11.glColor4f(1,1,1,1);
+        fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation("tc:textures/trains/container53_" + theTileEntity.getAvailableColors().get(theTileEntity.currentColor) + ".png"));
+       // net.minecraft.client.renderer.GlStateManager.color(1,1,1,1);
        // tessellator.setBrightness(theBlock.getMixedBrightnessForBlock(tileEntity.getWorld(), (int)x, (int)y, (int)z));
        // tessellator.setBrightness(15);
-       // Tessellator.bindTexture(new ResourceLocation("tc:textures/trains/test.png"));
+       // fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation("tc:textures/trains/test.png"));
         GL11.glPushMatrix();
 
        //GL11.glRotatef(180,0,10,1);

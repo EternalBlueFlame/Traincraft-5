@@ -61,15 +61,15 @@ public class GUISeatManager extends GuiScreen {
         this.drawDefaultBackground();
         super.drawScreen(parWidth, parHeight, p_73863_3_);
         locations = new ArrayList<>();
-        guiLeft=new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight).getScaledWidth();
-        guiTop=new ScaledResolution(Minecraft.getMinecraft(), Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight).getScaledHeight();
+        guiLeft=new ScaledResolution(Minecraft.getMinecraft()).getScaledWidth();
+        guiTop=new ScaledResolution(Minecraft.getMinecraft()).getScaledHeight();
 
         if (entity.getRiderOffsets().length==0 || entity.getRiderOffsets() == null){
             return;
         }
         for(EntitySeat seat : entity.seats) {
             if (seat.getPassenger() != null) {
-                if (seat.getPassenger() instanceof EntityPlayer && ((EntityPlayer)seat.getPassenger()).getDisplayName() == mc.thePlayer.getDisplayName()) {
+                if (seat.getPassenger() instanceof EntityPlayer && ((EntityPlayer)seat.getPassenger()).getDisplayName() == mc.player.getDisplayName()) {
                     currentSeat = seat;
                 }
                 filledSeatIDs.add(seat.getEntityId());
@@ -114,13 +114,13 @@ public class GUISeatManager extends GuiScreen {
                     int width = fontRenderer.getStringWidth("Empty Seat") + 6;
                     if (entity.seats.get(i).getPassenger() instanceof EntityPlayer) {
 
-                        if (fontRenderer.getStringWidth(entity.seats.get(i).getPassenger().getCommandSenderName()) > width) {
-                            width = fontRenderer.getStringWidth(entity.seats.get(i).getPassenger().getCommandSenderName()) + 7;
+                        if (fontRenderer.getStringWidth(entity.seats.get(i).getPassenger().getName()) > width) {
+                            width = fontRenderer.getStringWidth(entity.seats.get(i).getPassenger().getName()) + 7;
                             if(width%2 !=0)
                                 width++;
                         }
                         buttonList.add(
-                                new GUIButton(percentLeft(50)-60-(totalColumns/2)+(column*120)-(width/2), percentTop(25)+(28*activeRow+1)-11, width,20,entity.seats.get(i).getPassenger().getCommandSenderName()) {
+                                new GUIButton(percentLeft(50)-60-(totalColumns/2)+(column*120)-(width/2), percentTop(25)+(28*activeRow+1)-11, width,20,entity.seats.get(i).getPassenger().getName()) {
                                     @Override
                                     public String getHoverText() {
                                         return "Seat is currently occupied";
@@ -193,7 +193,7 @@ public class GUISeatManager extends GuiScreen {
                 mc.getTextureManager().bindTexture(((AbstractClientPlayer) seat.getPassenger()).getLocationSkin());
                 ClientUtil.drawTexturedRect(locations.get(entity.seats.indexOf(seat)).x, locations.get(entity.seats.indexOf(seat)).y, 32, 64, 24, 24, 32, 64);
             } else if (seat.getPassenger() instanceof EntityPlayer) {
-                mc.getTextureManager().bindTexture(Minecraft.getMinecraft().thePlayer.getLocationSkin());
+                mc.getTextureManager().bindTexture(Minecraft.getMinecraft().player.getLocationSkin());
                 ClientUtil.drawTexturedRect(locations.get(entity.seats.indexOf(seat)).x, locations.get(entity.seats.indexOf(seat)).y, 32, 64, 24, 24, 32, 64);
             }
         }

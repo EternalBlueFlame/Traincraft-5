@@ -25,8 +25,8 @@ public class EntityLocoDieselChME3 extends DieselTrain {
 
 	@Override
 	public void pressKey(int i) {
-		if (i == 7 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
-			((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+		if (i == 7 && ebf.tim.utility.CommonUtil.rider(this) != null && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer) {
+			((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).openGui(Traincraft.instance, GuiIDs.LOCO, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 

@@ -28,13 +28,12 @@ public class GuiGeneratorDiesel extends GuiContainer {
         super.drawScreen(t, g, par3);
         //if ((LiquidManager.diesel != null && dieselInventory.getLiquidItemIDClient() == LiquidManager.diesel.itemID)) {
         if (intersectsWith(t, g)) {
-            drawCreativeTabHoveringText("Diesel", t, g);
+            drawHoveringText("Diesel", t, g);
         }
         //}
     }
 
-    @Override
-    protected void drawCreativeTabHoveringText(String str, int t, int g) {
+    public void drawHoveringText(String str, int t, int g) {
         int textWidth = fontRenderer.getStringWidth(dieselInventory.theTank.getFluidAmount() + "/" + dieselInventory.getTankCapacity());
         int startX = t + 14;
         int startY = g - 12;
@@ -53,7 +52,7 @@ public class GuiGeneratorDiesel extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int t, int g) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
         mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.guiPrefix + "gui_generator_diesel.png"));
 

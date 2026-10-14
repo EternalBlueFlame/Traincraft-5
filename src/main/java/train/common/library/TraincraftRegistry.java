@@ -1,6 +1,9 @@
 package train.common.library;
 
-import buildcraft.api.fuels.BuildcraftFuelRegistry;
+import train.common.core.util.FluidContainers;
+
+import train.client.render.item.TCItemRenderer;
+
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
@@ -14,7 +17,7 @@ import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import ebf.tim.utility.OreGen;
 import fexcraft.tmt.slim.ModelBase;
-import mods.railcraft.api.fuel.FuelManager;
+import mods.railcraft.api.fuel.FluidFuelManager;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.MapColor;
@@ -28,10 +31,8 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import train.client.render.RenderEnum;
@@ -178,7 +179,7 @@ public class TraincraftRegistry {
 
     public static int trainID= 32;
     public static void registerTransport(TrainRecord record){
-        EntityRegistry.registerModEntity(new ResourceLocation("traincraft", record.getInternalName()), record.getEntityClass(), record.getInternalName(), trainID, Traincraft.instance, 512, 1, true);
+        EntityRegistry.registerModEntity(new ResourceLocation(Info.modID, registryPath(record.getInternalName())), record.getEntityClass(), record.getInternalName(), trainID, Traincraft.instance, 512, 1, true);
         AbstractTrains entity = record.getEntity(null);
         if(entity!=null) {
             entity.registerSkins();
@@ -198,11 +199,30 @@ public class TraincraftRegistry {
         }
     }
 
+    /** Registry-safe path (1.12 wants lowercase [a-z0-9_./-]): "Loco Electric EWS Class 66" -> "loco_electric_ews_class_66". */
+    public static String registryPath(String name) {
+        return name.trim().toLowerCase(java.util.Locale.ROOT).replaceAll("[^a-z0-9_./-]+", "_");
+    }
+
+    /** registered (TiM-style) transports by registry path, see {@link #findRegisteredTransport} */
+    private static final Map<String, AbstractTrains> registeredTransports = new HashMap<>();
+
+    /**
+     * The legacy EnumTrains records point at the old train.common.entity.rollingStockOld classes, which are
+     * not registered as entities (the loop above is commented out upstream). Spawning one on the server
+     * made vanilla send it to the client as a plain minecart. Every legacy record has a registered
+     * replacement with the same name, so legacy items spawn that instead.
+     */
+    public static AbstractTrains findRegisteredTransport(String name) {
+        return name == null ? null : registeredTransports.get(registryPath(name));
+    }
+
     public static void registerTransports(String MODID, AbstractTrains[] entities) {
         for(final AbstractTrains trains : entities){
-            EntityRegistry.registerModEntity(new ResourceLocation("traincraft", trains.transportName()), trains.getClass(), trains.transportName(), trainID, Traincraft.instance, 512, 1, true);
+            registeredTransports.put(registryPath(trains.transportName()), trains);
+            EntityRegistry.registerModEntity(new ResourceLocation(Info.modID, registryPath(trains.transportName())), trains.getClass(), trains.transportName(), trainID, Traincraft.instance, 512, 1, true);
             trains.registerSkins();
-            trains.getItem().setRegistryName("entity/"+trains.transportName());
+            trains.getItem().setRegistryName(Info.modID, registryPath(trains.transportName()));
             ForgeRegistries.ITEMS.register(trains.getItem());
             trainID+=1;
             if(trains.getRecipe()!=null){
@@ -304,12 +324,12 @@ public class TraincraftRegistry {
         }
         if (unlocalizedName.length() > 0) {
             block.setTranslationKey(unlocalizedName);
-            block.setRegistryName(unlocalizedName);
+            block.setRegistryName(registryPath(unlocalizedName));
             ForgeRegistries.BLOCKS.register(block);
             if(model!=null || (block instanceof ITileEntityProvider && ((ITileEntityProvider) block).createNewTileEntity(null,0) instanceof TileRenderFacing)) {
-                RegisterItem(new ItemBlock(block), MODID, unlocalizedName, oreDictionaryName + ".item", tab, null, ebf.tim.render.CustomItemModel.instance, textureName);
+                RegisterItem(new ItemBlock(block), MODID, unlocalizedName, oreDictionaryName + ".item", tab, null, Traincraft.proxy.getCustomItemModel(), textureName);
                 if(Traincraft.proxy.isClient() && TESR==null){
-                    TESR=new ebf.tim.render.BlockTESR();
+                    TESR=Traincraft.proxy.newBlockTESR();
                 }
             } else {
                 RegisterItem(new ItemBlock(block), MODID, unlocalizedName, oreDictionaryName + ".item", tab, null, null, textureName);
@@ -326,13 +346,13 @@ public class TraincraftRegistry {
         if (oreDictionaryName != null) {
             OreDictionary.registerOre(oreDictionaryName, block);
         }
-        if (DebugUtil.dev && Traincraft.proxy.isClient() && block.getUnlocalizedName().equals(CommonUtil.translate(block.getUnlocalizedName() +".name"))) {
-            DebugUtil.println("Block missing lang entry: " + block.getUnlocalizedName());
+        if (DebugUtil.dev && Traincraft.proxy.isClient() && block.getTranslationKey().equals(CommonUtil.translate(block.getTranslationKey() +".name"))) {
+            DebugUtil.println("Block missing lang entry: " + block.getTranslationKey());
         }
         if (block instanceof ITileEntityProvider) {
             Class<? extends TileEntity> tile = ((ITileEntityProvider) block).createNewTileEntity(null, 0).getClass();
             if (!redundantTiles.contains(tile.getName())) {
-                GameRegistry.registerTileEntity(tile, unlocalizedName + "tile");
+                train.common.core.CommonProxy.registerTile(tile, unlocalizedName + "tile");
                 redundantTiles.add(tile.getName());
                 redundantTiles.add(unlocalizedName + "tile");
                 if (Traincraft.proxy.isClient() && TESR!=null) {
@@ -380,23 +400,24 @@ public class TraincraftRegistry {
             DebugUtil.println("ERROR: ", "attempted to register Item with no unlocalizedName");
             DebugUtil.throwStackTrace();
         }
-        itm.setRegistryName(unlocalizedName);
+        itm.setRegistryName(registryPath(unlocalizedName));
         ForgeRegistries.ITEMS.register(itm);
         if (oreDictionaryName != null) {
             OreDictionary.registerOre(oreDictionaryName, itm);
         }
-        if (DebugUtil.dev && Traincraft.proxy != null && Traincraft.proxy.isClient() && itm.getUnlocalizedName().equals(CommonUtil.translate(itm.getUnlocalizedName()+".name"))) {
-            DebugUtil.println("Item missing lang entry: " + itm.getUnlocalizedName());
+        if (DebugUtil.dev && Traincraft.proxy != null && Traincraft.proxy.isClient() && itm.getTranslationKey().equals(CommonUtil.translate(itm.getTranslationKey()+".name"))) {
+            DebugUtil.println("Item missing lang entry: " + itm.getTranslationKey());
         }
         if (Traincraft.proxy.isClient() && itemRender != null) {
-            // MinecraftForgeClient.registerItemRenderer(itm, (IItemRenderer) itemRender);
+            Traincraft.proxy.registerItemRenderer(itm, itemRender);
+            // MinecraftForgeClient.registerItemRenderer(itm, (TCItemRenderer) itemRender);
             // if (ClientProxy.preRenderModels) {
-            //     ebf.tim.render.CustomItemModel.instance.renderItem(IItemRenderer.ItemRenderType.INVENTORY, new ItemStack(itm));
+            //     ebf.tim.render.CustomItemModel.instance.renderItem(TCItemRenderer.ItemRenderType.INVENTORY, new ItemStack(itm));
             // }
         } else if (Traincraft.proxy.isClient() && itm instanceof ItemRollingStock) {
             // MinecraftForgeClient.registerItemRenderer(itm, ebf.tim.render.CustomItemModel.instance);
             // if (ClientProxy.preRenderModels) {
-            //     ebf.tim.render.CustomItemModel.instance.renderItem(IItemRenderer.ItemRenderType.INVENTORY, new ItemStack(itm));
+            //     ebf.tim.render.CustomItemModel.instance.renderItem(TCItemRenderer.ItemRenderType.INVENTORY, new ItemStack(itm));
             // }
         } else if(Traincraft.proxy.isClient()){
             // itm.setTextureName(MODID+ ":" + textureName);
@@ -438,7 +459,7 @@ public class TraincraftRegistry {
         bucket.setTranslationKey(unlocalizedName + ".bucket");
         bucket.setRegistryName("fluid." + unlocalizedName + ".bucket");
         ForgeRegistries.ITEMS.register(bucket);
-        FluidContainerRegistry.registerFluidContainer(fluid, new ItemStack(bucket), new ItemStack(Items.BUCKET));
+        FluidContainers.register(fluid, new ItemStack(bucket), new ItemStack(Items.BUCKET));
 
         fluidMap.put(block, bucket);
 
@@ -446,11 +467,11 @@ public class TraincraftRegistry {
             if (fluid.getUnlocalizedName().equals(CommonUtil.translate(fluid.getUnlocalizedName()))) {
                 DebugUtil.println("Fluid missing lang entry: " + fluid.getUnlocalizedName());
             }
-            if (bucket.getUnlocalizedName().equals(CommonUtil.translate(block.getUnlocalizedName()))) {
-                DebugUtil.println("Item missing lang entry: " + bucket.getUnlocalizedName());
+            if (bucket.getTranslationKey().equals(CommonUtil.translate(block.getTranslationKey()))) {
+                DebugUtil.println("Item missing lang entry: " + bucket.getTranslationKey());
             }
-            if (block.getUnlocalizedName().equals(CommonUtil.translate(block.getUnlocalizedName()))) {
-                DebugUtil.println("Block missing lang entry: " + block.getUnlocalizedName());
+            if (block.getTranslationKey().equals(CommonUtil.translate(block.getTranslationKey()))) {
+                DebugUtil.println("Block missing lang entry: " + block.getTranslationKey());
             }
 
         }
@@ -468,12 +489,14 @@ public class TraincraftRegistry {
             }
         }
         if (TESR != null) {
-            net.minecraftforge.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(tile, (TileEntitySpecialRenderer) TESR);
+            net.minecraftforge.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(tile, train.client.render.gl.TCSafeTESR.wrap((TileEntitySpecialRenderer) TESR));
             // MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(block), CustomItemModel.instance);
+            Traincraft.proxy.registerBlockItemRenderer(block, ((ITileEntityProvider) block).createNewTileEntity(null, 0));
             // CustomItemModel.registerBlockTextures(Item.getItemFromBlock(block), ((ITileEntityProvider) block).createNewTileEntity(null, 0));
         } else {
-            net.minecraftforge.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(tile, (TileEntitySpecialRenderer) Traincraft.proxy.getTESR());
+            net.minecraftforge.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(tile, train.client.render.gl.TCSafeTESR.wrap((TileEntitySpecialRenderer) Traincraft.proxy.getTESR()));
             // MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(block), CustomItemModel.instance);
+            Traincraft.proxy.registerBlockItemRenderer(block, ((ITileEntityProvider) block).createNewTileEntity(null, 0));
             // CustomItemModel.registerBlockTextures(Item.getItemFromBlock(block), ((ITileEntityProvider) block).createNewTileEntity(null, 0));
         }
     }
@@ -496,14 +519,13 @@ public class TraincraftRegistry {
 
     //todo:add support for buildcraft/railcraft burnable fluids
 
-    @Optional.Method(modid = "BuildCraft|Energy")
     static void registerBCFluid(Fluid f, int powerPerCycle, int totalBurningTime) {
-        BuildcraftFuelRegistry.fuel.addFuel(f, powerPerCycle, totalBurningTime);
+        train.common.api.LiquidManager.addBCFluid(f, powerPerCycle, totalBurningTime);
     }
 
-    @Optional.Method(modid = "Railcraft")
+    @Optional.Method(modid = "railcraft")
     static void registerRCFluid(Fluid f, int totalBurningTime) {
-        FuelManager.addBoilerFuel(f, totalBurningTime);
+        FluidFuelManager.addFuel(f, totalBurningTime);
     }
 
 }

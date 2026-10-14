@@ -1,5 +1,7 @@
 package train.common.tile;
 
+import train.common.core.util.StackUtil;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,7 +45,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return crafterInventory[i];
+		return StackUtil.nn(crafterInventory[i]);
 	}
 
 	@Override
@@ -57,16 +59,16 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 			if (crafterInventory[i].getCount() <= j) {
 				ItemStack itemstack = crafterInventory[i];
 				crafterInventory[i] = null;
-				return itemstack;
+				return StackUtil.nn(itemstack);
 			}
 			ItemStack itemstack1 = crafterInventory[i].splitStack(j);
 			if (crafterInventory[i].getCount() == 0) {
 				crafterInventory[i] = null;
 			}
-			return itemstack1;
+			return StackUtil.nn(itemstack1);
 		}
 		else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -75,15 +77,15 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 		if (crafterInventory[par1] != null) {
 			ItemStack var2 = crafterInventory[par1];
 			crafterInventory[par1] = null;
-			return var2;
+			return StackUtil.nn(var2);
 		}
 		else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
+	public void setInventorySlotContents(int i, ItemStack itemstack) { if (itemstack != null && itemstack.isEmpty()) itemstack = null;
 		crafterInventory[i] = itemstack;
 		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
 			itemstack.setCount(getInventoryStackLimit());
@@ -100,7 +102,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 
 		super.readFromNBT(nbtTag);
 
-		facing = CommonUtil.getOrientation(nbtTag.getByte("Orientation"));
+		facing = EnumFacing.byIndex(nbtTag.getByte("Orientation"));
 		slotSelected = nbtTag.getIntArray("Selected");
 		NBTTagList nbttaglist = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 
@@ -137,7 +139,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbtTag) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbtTag) {
 
 		super.writeToNBT(nbtTag);
 
@@ -178,6 +180,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 
 			nbtTag.setTag("Known", nbttaglist2);
 		}
+		return nbtTag;
 	}
 
 	@Override
@@ -228,8 +231,14 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 	@Override
 	public void closeInventory(EntityPlayer p) {}
 
+	/** 1.12 sends this with the chunk data (1.7.10 sent the description packet instead). */
 	@Override
-	public SPacketUpdateTileEntity getDescriptionPacket() {
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
@@ -277,7 +286,7 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 
@@ -307,4 +316,39 @@ public class TileCrafterTierII extends TileRenderFacing implements IInventory, I
 
 	static final ResourceLocation texture = new ResourceLocation(Info.modID, "textures/blocks/assembly_2.png");
 
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void clear() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			setInventorySlotContents(i, ItemStack.EMPTY);
+		}
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public boolean isEmpty() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			ItemStack s = getStackInSlot(i);
+			if (s != null && !s.isEmpty()) return false;
+		}
+		return true;
+	}
 }

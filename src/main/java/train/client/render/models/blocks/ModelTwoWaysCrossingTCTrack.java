@@ -1,28 +1,28 @@
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
 @SideOnly(Side.CLIENT)
 public class ModelTwoWaysCrossingTCTrack extends ModelBase {
-	private IModelCustom modelTwoWaysCrossing;
-	private IModelCustom modelDoubleDiamondCrossing;
-	private IModelCustom modelDiagonalTwoWaysCrossing;
-	private IModelCustom modelFourWaysCrossing;
+	private TCObjModel modelTwoWaysCrossing;
+	private TCObjModel modelDoubleDiamondCrossing;
+	private TCObjModel modelDiagonalTwoWaysCrossing;
+	private TCObjModel modelFourWaysCrossing;
 
 	public ModelTwoWaysCrossingTCTrack() {
-		modelTwoWaysCrossing = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_x.obj"));
-		modelDoubleDiamondCrossing = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_double_diamond_crossing.obj"));
-		modelDiagonalTwoWaysCrossing = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_diagonal_crossing.obj"));
-		modelFourWaysCrossing = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_universal_crossing.obj"));
+		modelTwoWaysCrossing = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_x.obj"));
+		modelDoubleDiamondCrossing = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_double_diamond_crossing.obj"));
+		modelDiagonalTwoWaysCrossing = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_diagonal_crossing.obj"));
+		modelFourWaysCrossing = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_universal_crossing.obj"));
 	}
 
 	public void render(String type) {
@@ -39,7 +39,7 @@ public class ModelTwoWaysCrossingTCTrack extends ModelBase {
 
 
 	public void render(String type, TileTCRail tcRail,  double x, double y, double z) {
-		render(type, x, y, z, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), 1, 1, 1, 1);
+		render(type, x, y, z, CommonUtil.getBlockFacing(tcRail.getWorld(), tcRail.getPos().getX(), tcRail.getPos().getY(), tcRail.getPos().getZ()), 1, 1, 1, 1);
 
 	}
 
@@ -55,7 +55,7 @@ public class ModelTwoWaysCrossingTCTrack extends ModelBase {
 		// Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
 		GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
 
-		GL11.glColor4f(r, g, b, a);
+		net.minecraft.client.renderer.GlStateManager.color(r, g, b, a);
 		//GL11.glScalef(0.5f, 0.5f, 0.5f);
 
 		if (type.contains("diamond"))

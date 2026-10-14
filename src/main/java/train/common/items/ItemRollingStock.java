@@ -1,5 +1,15 @@
 package train.common.items;
 
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.util.EnumHand;
+
+import net.minecraft.util.EnumFacing;
+
+import net.minecraft.util.EnumActionResult;
+
+import net.minecraft.client.util.ITooltipFlag;
+
 import com.mojang.authlib.GameProfile;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -7,9 +17,8 @@ import ebf.tim.api.SkinRegistry;
 import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import mods.railcraft.api.carts.IMinecart;
-import mods.railcraft.api.core.items.IMinecartItem;
+import mods.railcraft.api.items.IMinecartItem;
 import net.minecraft.block.BlockRailBase;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
@@ -18,8 +27,8 @@ import net.minecraft.item.ItemMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import train.common.Traincraft;
@@ -34,7 +43,7 @@ import train.common.tile.TileTCRailGag;
 import javax.annotation.Nullable;
 import java.util.List;
 
-public class ItemRollingStock extends ItemMinecart implements IMinecart, IMinecartItem {
+public class ItemRollingStock extends ItemMinecart implements train.common.items.ILegacyIcon, IMinecart, IMinecartItem {
 
 	private String iconName = "";
 	private ResourceLocation itemTexture;
@@ -44,13 +53,20 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	private AbstractTrains getEntity(){
 		if(entity==null){
-			entity=Traincraft.instance.traincraftRegistry.findTrainRecordByItem(this).getEntity(null);
+			train.common.api.TrainRecord record = Traincraft.instance.traincraftRegistry.findTrainRecordByItem(this);
+			entity = record == null ? null : record.getEntity(null);
+			if (entity != null && net.minecraftforge.fml.common.registry.EntityRegistry.getEntry(entity.getClass()) == null) {
+				AbstractTrains registered = train.common.library.TraincraftRegistry.findRegisteredTransport(record.getInternalName());
+				if (registered != null) {
+					entity = registered;
+				}
+			}
 		}
 		return entity;
 	}
 
 	public ItemRollingStock(String iconName) {
-		super(1);
+		super(net.minecraft.entity.item.EntityMinecart.Type.RIDEABLE);
 		this.iconName = iconName;
 		itemTexture=new ResourceLocation(iconName);
 		maxStackSize = 1;
@@ -66,7 +82,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	}
 
 	public ItemRollingStock(String iconName, CreativeTabs tab) {
-		super(1);
+		super(net.minecraft.entity.item.EntityMinecart.Type.RIDEABLE);
 		this.iconName = iconName;
 		maxStackSize = 1;
 		setCreativeTab(tab);
@@ -74,6 +90,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	public ItemRollingStock(AbstractTrains train, String modid, CreativeTabs tab){
 		this(modid+":trains/"+train.transportName().replace(' ','_'),tab);
+		setTranslationKey(train.transportName());
 		entity=train;
 		if(tab ==Traincraft.tcTab && ConfigHandler.SPLIT_CREATIVE) {
 			setCreativeTab(Traincraft.tcTrainTab);
@@ -83,6 +100,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	@Deprecated
 	public ItemRollingStock(String name, String iconName, String modid){
 		this(modid+":trains/" +iconName);
+		setTranslationKey(name);
 		if(!ConfigHandler.SPLIT_CREATIVE) {
 			setCreativeTab(Traincraft.tcTab);
 		} else {
@@ -104,13 +122,14 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 			stack.setTagCompound(var3);
 		}
 		stack.getTagCompound().setInteger("uniqueID", numberOfTrains);
-		stack.getTagCompound().setString("trainCreator", player.getDisplayName());
+		stack.getTagCompound().setString("trainCreator", player.getName());
 		return numberOfTrains;
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	public void addInformation(ItemStack par1ItemStack, @Nullable World world, List<String> par3List, ITooltipFlag flag) {
+		boolean par4 = flag.isAdvanced(); EntityPlayer par2EntityPlayer = Traincraft.proxy.getPlayer();
 		if (par1ItemStack.hasTagCompound()) {
 			NBTTagCompound var5 = par1ItemStack.getTagCompound();
 			trainCreator = var5.getString("trainCreator");
@@ -201,9 +220,31 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		}
 
 	}
+	/**
+	 * Train items from the TC 4.5 registry use the transport name as translation key, which has no lang entry;
+	 * their names live under "entity.tc.&lt;transport name&gt;.name" (the entity's name), so fall back to that.
+	 */
+	@Override
+	@SuppressWarnings("deprecation")
+	public String getItemStackDisplayName(ItemStack stack) {
+		String key = getTranslationKey(stack) + ".name";
+		if (net.minecraft.util.text.translation.I18n.canTranslate(key)) {
+			return net.minecraft.util.text.translation.I18n.translateToLocal(key).trim();
+		}
+		AbstractTrains transport = getEntity();
+		if (transport != null && transport.transportName() != null) {
+			String entityKey = "entity." + train.common.library.Info.modID + "." + transport.transportName() + ".name";
+			if (net.minecraft.util.text.translation.I18n.canTranslate(entityKey)) {
+				return net.minecraft.util.text.translation.I18n.translateToLocal(entityKey).trim();
+			}
+			return transport.transportName();
+		}
+		return super.getItemStackDisplayName(stack);
+	}
+
 	@Override
 	public EnumRarity getRarity(ItemStack par1ItemStack) {
-		return EnumRarity.rare;
+		return EnumRarity.RARE;
 	}
 
 	public String getTrainType() {
@@ -211,12 +252,13 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	}
 
 	@Override
-	public boolean onItemUse(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, World par3World, int par4, int par5, int par6, int par7, float par8, float par9, float par10) {
+	public EnumActionResult onItemUse(EntityPlayer par2EntityPlayer, World par3World, BlockPos pos, EnumHand hand, EnumFacing facing, float par8, float par9, float par10) {
+		ItemStack par1ItemStack = par2EntityPlayer.getHeldItem(hand); int par4 = pos.getX(), par5 = pos.getY(), par6 = pos.getZ(); int par7 = facing.getIndex();
 		int meta = CommonUtil.getBlockFacing(par3World, par4, par5, par6);
 		TileEntity tileentity = CommonUtil.getTileEntity(par3World, par4, par5, par6);
 		//System.out.println(meta);
 		if (par3World.isRemote) {
-			return false;
+			return EnumActionResult.PASS;
 		}
 		if(tileentity instanceof TileTCRail){
 			TileTCRail tile = (TileTCRail) tileentity;
@@ -244,17 +286,17 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 			)
 			{
 				this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
-				return true;
+				return EnumActionResult.SUCCESS;
 			}
 
 			CommonUtil.sendChat(par2EntityPlayer, "Place me on a straight piece of track !");
-			return false;
+			return EnumActionResult.PASS;
 		}
 		else if(tileentity instanceof TileTCRailGag){
 
 			TileTCRailGag tileGag = (TileTCRailGag) tileentity;
 			if(((TileTCRailGag) tileentity).originX.size()<1 || CommonUtil.getTileEntity(par3World, tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0)) ==null){
-				return false;
+				return EnumActionResult.PASS;
 			}
 			TileTCRail tile = (TileTCRail) CommonUtil.getTileEntity(par3World, tileGag.originX.get(0), tileGag.originY.get(0), tileGag.originZ.get(0));
 
@@ -273,28 +315,28 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				if (tile.getTrackFromName().getRailType().equals(TCRailTypes.RailTypes.DIAGONAL)){
 					if (tileGag.canPlaceRollingstock) {
 						this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
-						return true;
+						return EnumActionResult.SUCCESS;
 					}
 					else {
 						CommonUtil.sendChat(par2EntityPlayer, "Place me on the middle of the track! (also try replacing old tracks if that does not work)");
-						return false;
+						return EnumActionResult.PASS;
 					}
 
 				}
 
 
 				this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
-				return true;
+				return EnumActionResult.SUCCESS;
 			}
 			CommonUtil.sendChat(par2EntityPlayer, "Place me on a straight piece of track !");
-			return false;
+			return EnumActionResult.PASS;
 		}
 		else if (CommonUtil.isRailBlockAt(par3World, par4, par5, par6) && (meta < 2 || meta > 5)) {
 			this.placeCart(par2EntityPlayer, par1ItemStack, par3World, par4, par5, par6);
-			return true;
+			return EnumActionResult.SUCCESS;
 		}
 		else {
-			return false;
+			return EnumActionResult.PASS;
 		}
 	}
 
@@ -326,7 +368,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 			if (!(CommonUtil.getBlockAt(world, (int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ) == BlockIDs.tcRail.block
 				|| !(CommonUtil.getBlockAt(world, (int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ) == BlockIDs.tcRailGag.block)
-				|| !(BlockRailBase.func_150051_a(CommonUtil.getBlockAt(world, (int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ))))){
+				|| !(BlockRailBase.isRailBlock(CommonUtil.getBlockAt(world, (int) (i - ((rollingstock.rotationPoints()[1] + check) * xDir)), j, (int) (k - ((rollingstock.rotationPoints()[1] + check) * zDir)) ).getDefaultState())))){
 
 
 				return false;
@@ -356,7 +398,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 
 		if (rollingStock != null) {
-			rollingStock.setPosition( i + 0.5D , j+ 0.3D, k + 0.5D);
+			rollingStock.setPosition( i + 0.5D , j + train.common.api.EntityBogie.RAIL_HEIGHT, k + 0.5D);
 			if (SkinRegistry.get(rollingStock).size()>0) {
 				rollingStock.setColor(rollingStock.getDefaultSkin());
 			}
@@ -570,7 +612,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 				rollingStock.trainName = (itemstack.getItem()).getItemStackDisplayName(itemstack);
 				if (player != null) {
-					rollingStock.trainOwner = player.getDisplayName();
+					rollingStock.trainOwner = player.getName();
 				}
 				rollingStock.mass = rollingStock.weightKg()*0.1;
 
@@ -591,7 +633,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 					rollingStock.importTrustedListFromNBT(var5);
 				}
 				if (player != null)
-					rollingStock.setInformation(player.getDisplayName(), trainCreator, (itemstack.getItem()).getItemStackDisplayName(itemstack), uniID);
+					rollingStock.setInformation(player.getName(), trainCreator, (itemstack.getItem()).getItemStackDisplayName(itemstack), uniID);
 				if (player == null)
 					rollingStock.setInformation("", trainCreator, (itemstack.getItem()).getItemStackDisplayName(itemstack), uniID);
 
@@ -611,7 +653,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 				ebf.tim.utility.CommonUtil.spawnEntity(world, rollingStock);
 			}
 		}
-		--itemstack.stackSize;
+		itemstack.shrink(1);
 
     itemstack.shrink(1);
     return rollingStock;
@@ -661,8 +703,8 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	}
 
 	@Override
-	public EntityMinecart placeCart(GameProfile owner, ItemStack cart, World world, int i, int j, int k) {
-		return placeCart((EntityPlayer) null, cart, world, i, j, k);
+	public EntityMinecart placeCart(GameProfile owner, ItemStack cart, World world, net.minecraft.util.math.BlockPos pos) {
+		return placeCart((EntityPlayer) null, cart, world, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	@Override
@@ -670,9 +712,16 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 		return false;
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(this.iconName);
-	}
+
+    @Override
+    public String legacyIcon(int meta) {
+        // TiM style "tc:+train_br80:trains/loco_steam_br80": the icon is the part after '+'
+        int plus = this.iconName.indexOf(":+");
+        if (plus >= 0) {
+            String icon = this.iconName.substring(plus + 2);
+            int end = icon.indexOf(':');
+            return this.iconName.substring(0, plus) + ":trains/" + (end >= 0 ? icon.substring(0, end) : icon);
+        }
+        return (this.iconName.contains(":") ? this.iconName : "tc:" + this.iconName);
+    }
 }

@@ -1,4 +1,5 @@
 package train.common.entity.stock.work;
+import train.client.render.models.ModelPRRCaboose;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -85,9 +86,9 @@ return 3;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelPRRCaboose()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelPRRCaboose()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.120000005f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0f, -0.38f, 0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override

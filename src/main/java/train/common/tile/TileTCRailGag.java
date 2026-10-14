@@ -1,6 +1,10 @@
 package train.common.tile;
 
-import cpw.mods.fml.relauncher.Side;
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.block.state.IBlockState;
+
+import net.minecraftforge.fml.relauncher.Side;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -18,6 +22,13 @@ import java.util.List;
 import java.util.Random;
 
 public class TileTCRailGag extends TileEntity {
+
+	// 1.12: modded tile entities are dropped on any block state change by default; only drop them when the block changes
+	@Override
+	public boolean shouldRefresh(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.state.IBlockState oldState, net.minecraft.block.state.IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
 
 	protected Random rand = new Random();
 	protected Side side;
@@ -68,7 +79,7 @@ public class TileTCRailGag extends TileEntity {
 
 
 	public void setCanPlaceRollingStock(boolean canPlace){
-		TileTCRail tile = (TileTCRail) CommonUtil.getTileEntity(worldObj, originX.get(0), originY.get(0), originZ.get(0));
+		TileTCRail tile = (TileTCRail) CommonUtil.getTileEntity(world, originX.get(0), originY.get(0), originZ.get(0));
 		if (tile != null){
 			if (tile.getTrackFromName().getRailType() == TCRailTypes.RailTypes.STRAIGHT || tile.getTrackFromName().getRailType() == TCRailTypes.RailTypes.DIAGONAL){
 				canPlaceRollingstock = canPlace;
@@ -79,7 +90,7 @@ public class TileTCRailGag extends TileEntity {
 
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 
 		int[] xorg=new int[originX.size()];
 		for (int i=0; i<originX.size();i++){
@@ -106,15 +117,17 @@ public class TileTCRailGag extends TileEntity {
 		nbt.setBoolean("canPlaceRollingstock", canPlaceRollingstock);
 
 		super.writeToNBT(nbt);
+		return nbt;
 	}
 
 	private static final int[] matrixXZ = {0,-1,1}, matrixY = {0,-1,+1};
-	public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_) {
+	public void breakBlock(World p_149749_1_, BlockPos pos, IBlockState state) {
+		int p_149749_2_ = pos.getX(), p_149749_3_ = pos.getY(), p_149749_4_ = pos.getZ();
 		for(int x : matrixXZ){
 			for(int z : matrixXZ){
 				for(int y : matrixY){
-					if(CommonUtil.getBlockAt(p_149749_1_, xCoord,yCoord,zCoord)instanceof BlockTCRail){
-						p_149749_1_.func_147453_f(p_149749_2_,p_149749_3_,p_149749_4_, Blocks.air);
+					if(CommonUtil.getBlockAt(p_149749_1_, getPos().getX(),getPos().getY(),getPos().getZ())instanceof BlockTCRail){
+						p_149749_1_.updateComparatorOutputLevel(pos, Blocks.AIR);
 						CommonUtil.markBlockForUpdate(p_149749_1_, p_149749_2_,p_149749_3_,p_149749_4_);
 					}
 				}
@@ -138,8 +151,14 @@ public class TileTCRailGag extends TileEntity {
 		}
 
 
+		/** 1.12 sends this with the chunk data (1.7.10 sent the description packet instead). */
 		@Override
-	public Packet getDescriptionPacket() {
+		public NBTTagCompound getUpdateTag() {
+			return this.writeToNBT(new NBTTagCompound());
+		}
+
+		@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
@@ -149,7 +168,7 @@ public class TileTCRailGag extends TileEntity {
 	
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
-		this.readFromNBT(pkt.func_148857_g());
+		this.readFromNBT(pkt.getNbtCompound());
 		super.onDataPacket(net, pkt);
 	}
 }

@@ -20,7 +20,7 @@ public class GuiZepp extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int i, int j) {
-        fontRenderer.drawString(zepp.getCommandSenderName(), 60, 6, 0x404040);
+        fontRenderer.drawString(zepp.getName(), 60, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 
         if (zepp.numCargoSlots > 0) {
@@ -31,7 +31,7 @@ public class GuiZepp extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int t, int g) {
         String guiTexture = Info.guiPrefix + "gui_zeppelin.png";
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
         mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, guiTexture));
 

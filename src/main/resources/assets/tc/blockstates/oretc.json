@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "type=0": {
+      "model": "tc:oretc_0"
+    },
+    "type=1": {
+      "model": "tc:oretc_1"
+    },
+    "type=2": {
+      "model": "tc:oretc_2"
+    },
+    "type=3": {
+      "model": "tc:oretc_3"
+    }
+  }
+}

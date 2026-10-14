@@ -18,7 +18,7 @@ public class EntityLocoDieselFOLM1B extends DieselTrain {
     
 
     @Override
-    public void updateRiderPosition() {
+    public void updatePassenger(net.minecraft.entity.Entity passenger) {
         TraincraftUtil.updateRider(this, 4.0, 0.35f);
     }
 
@@ -30,13 +30,13 @@ public class EntityLocoDieselFOLM1B extends DieselTrain {
 
     @Override
     public void pressKey(int i) {
-        if (i == 7 && riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-            ((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.LOCO, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+        if (i == 7 && getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer) {
+            ((EntityPlayer) getControllingPassenger()).openGui(Traincraft.instance, GuiIDs.LOCO, world, (int) this.posX, (int) this.posY, (int) this.posZ);
         }
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "FOL-M1B";
     }
 

@@ -7,26 +7,26 @@
 
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileBook;
 
 public class ModelTCBook extends ModelBase {
-	private IModelCustom book;
+	private TCObjModel book;
 	
 	private final GameSettings settings = Minecraft.getMinecraft().gameSettings;
 	
 	float rot = 0.0f;
 	
 	public ModelTCBook() {
-		book = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "book2.obj"));
+		book = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "book2.obj"));
 	}
 	
 	public void render(int pages) {
@@ -85,7 +85,7 @@ public class ModelTCBook extends ModelBase {
 	}
 	
 	public void render2(int pages) {
-		Tessellator tesselator = Tessellator.instance;
+		Tessellator tesselator = Tessellator.getInstance();
 		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "book2.png"));
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.0f, 0.0f, 0.0f);
@@ -156,7 +156,7 @@ public class ModelTCBook extends ModelBase {
 		if(rot > 360.0f) {
 			rot -= 360.0f;
 		}
-		Tessellator tesselator = Tessellator.instance;
+		Tessellator tesselator = Tessellator.getInstance();
 		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "book2.png"));
 		GL11.glPushMatrix();
 		if(settings.guiScale == 0) {

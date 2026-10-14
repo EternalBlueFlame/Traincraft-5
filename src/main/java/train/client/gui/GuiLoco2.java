@@ -277,7 +277,7 @@ public class GuiLoco2 extends GuiContainer {
 
     private EntityPlayer getEntityPlayer()
     {
-        EntityPlayer p = (EntityPlayer) loco.getPassengers().get(0);
+        EntityPlayer p = (EntityPlayer) ebf.tim.utility.CommonUtil.rider(loco);
         if (loco.seats.size() != 0 && loco.seats.get(0).getPassenger() instanceof EntityPlayer) {
             p = (EntityPlayer) loco.seats.get(0).getPassenger();
         }
@@ -285,7 +285,7 @@ public class GuiLoco2 extends GuiContainer {
         return p;
     }
 
-    protected void drawCreativeTabHoveringText(String str, int t, int g) {
+    public void drawHoveringText(String str, int t, int g) {
         //int liqui = (dieselInventory.getLiquidAmount() * 50) / dieselInventory.getTankCapacity();
 
         int textWidth = fontRenderer.getStringWidth("the GUI, change speed, destroy it.");
@@ -334,7 +334,7 @@ public class GuiLoco2 extends GuiContainer {
         GL11.glEnable(GL11.GL_DEPTH_TEST);
 
         if (intersectsWith(i, j)) {
-            drawCreativeTabHoveringText("When a locomotive is locked,", i, j);
+            drawHoveringText("When a locomotive is locked,", i, j);
         }
     }
 
@@ -388,7 +388,7 @@ public class GuiLoco2 extends GuiContainer {
             i = Info.guiPrefix + "gui_loco_diesel.png";
         }
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, i));
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
@@ -436,19 +436,19 @@ public class GuiLoco2 extends GuiContainer {
 
         JsonObject guiDetails = new JsonParser().parse(loco.guiDetailsDW()).getAsJsonObject();
 
-        fontRendererObj.drawStringWithShadow("Carts pulled: " + guiDetails. get("cartsPulled"), 1, 10, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Mass pulled: " + guiDetails.get("massPulled") +  " tons", 1, 20, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Speed reduction: " + guiDetails.get("slowDown") + " km/h", 1, 30, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Accel reduction: " + guiDetails.get("accelSlowDown"), 1, 40, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Brake reduction: " + guiDetails.get("brakeSlowDown"), 1, 50, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Fuel increase: " + guiDetails.get("fuelUseChange"), 1, 60, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Fuel base consumption: " + ((loco.getFuelConsumption() * 0.2) + "").substring(0, Math.min(((loco.getFuelConsumption() * 0.2) + "").length(), 4)) + " mB/s", 1,
+        fontRenderer.drawStringWithShadow("Carts pulled: " + guiDetails. get("cartsPulled"), 1, 10, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Mass pulled: " + guiDetails.get("massPulled") +  " tons", 1, 20, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Speed reduction: " + guiDetails.get("slowDown") + " km/h", 1, 30, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Accel reduction: " + guiDetails.get("accelSlowDown"), 1, 40, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Brake reduction: " + guiDetails.get("brakeSlowDown"), 1, 50, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Fuel increase: " + guiDetails.get("fuelUseChange"), 1, 60, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Fuel base consumption: " + ((loco.getFuelConsumption() * 0.2) + "").substring(0, Math.min(((loco.getFuelConsumption() * 0.2) + "").length(), 4)) + " mB/s", 1,
                 70, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Fuel: " + loco.getFuel(), 1, 80, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Power: " + loco.transportMetricHorsePower() + " Mhp", 1, 90, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("State: " + loco.getState(), 1, 100, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Heat level: " + loco.getOverheatLevel(), 1, 110, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Maximum Speed: " + (loco.getCustomSpeedGUI()) + " km/h" + " (" + (loco.getCustomSpeedGUI() + guiDetails.get("slowDown").getAsFloat()) + "km/h)", 1, 120, 0xFFFFFF);
-        fontRendererObj.drawStringWithShadow("Destination: " + (loco.getDestinationGUI()), 1, 130, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Fuel: " + loco.getFuel(), 1, 80, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Power: " + loco.transportMetricHorsePower() + " Mhp", 1, 90, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("State: " + loco.getState(), 1, 100, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Heat level: " + loco.getOverheatLevel(), 1, 110, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Maximum Speed: " + (loco.getCustomSpeedGUI()) + " km/h" + " (" + (loco.getCustomSpeedGUI() + guiDetails.get("slowDown").getAsFloat()) + "km/h)", 1, 120, 0xFFFFFF);
+        fontRenderer.drawStringWithShadow("Destination: " + (loco.getDestinationGUI()), 1, 130, 0xFFFFFF);
     }
 }

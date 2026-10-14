@@ -1,0 +1,66 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "rail_flat",
+    "textures": {
+      "rail": "tc:blocks/tracks/track.snow.steel.0"
+    }
+  },
+  "variants": {
+    "shape": {
+      "north_south": {
+        "model": "rail_flat"
+      },
+      "east_west": {
+        "model": "rail_flat",
+        "y": 90
+      },
+      "ascending_east": {
+        "model": "rail_raised_ne",
+        "y": 90
+      },
+      "ascending_west": {
+        "model": "rail_raised_sw",
+        "y": 90
+      },
+      "ascending_north": {
+        "model": "rail_raised_ne"
+      },
+      "ascending_south": {
+        "model": "rail_raised_sw"
+      },
+      "south_east": {
+        "model": "rail_curved",
+        "textures": {
+          "rail": "tc:blocks/tracks/track.snow.steel.1"
+        }
+      },
+      "south_west": {
+        "model": "rail_curved",
+        "y": 90,
+        "textures": {
+          "rail": "tc:blocks/tracks/track.snow.steel.1"
+        }
+      },
+      "north_west": {
+        "model": "rail_curved",
+        "y": 180,
+        "textures": {
+          "rail": "tc:blocks/tracks/track.snow.steel.1"
+        }
+      },
+      "north_east": {
+        "model": "rail_curved",
+        "y": 270,
+        "textures": {
+          "rail": "tc:blocks/tracks/track.snow.steel.1"
+        }
+      }
+    },
+    "inventory": [
+      {
+        "model": "rail_flat"
+      }
+    ]
+  }
+}

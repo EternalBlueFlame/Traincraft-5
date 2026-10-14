@@ -7,17 +7,17 @@
 
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.client.render.CustomModelRenderer;
 import train.common.library.Info;
 
 public class ModelEmbeddedStopper extends ModelBase {
 
-    private IModelCustom track;
+    private TCObjModel track;
 
     public CustomModelRenderer box;
     public CustomModelRenderer box0;
@@ -32,7 +32,7 @@ public class ModelEmbeddedStopper extends ModelBase {
 
     public ModelEmbeddedStopper(float scale) {
 
-        track =  AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_normal.obj"));
+        track =  TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_normal.obj"));
 
         box = new CustomModelRenderer(this, 43, 4, 64, 64);
         box.addBox(0F, 0F, 0F, 2, 15, 1, scale);
@@ -104,7 +104,7 @@ public class ModelEmbeddedStopper extends ModelBase {
         GL11.glRotatef(90, 0, 1, 0);
         fexcraft.tmt.slim.Tessellator
                 .bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
-        GL11.glColor4f(1, 1, 1, 1);
+        net.minecraft.client.renderer.GlStateManager.color(1, 1, 1, 1);
         track.renderAll();
         GL11.glPopMatrix();
     }
@@ -122,7 +122,7 @@ public class ModelEmbeddedStopper extends ModelBase {
         GL11.glRotatef(90, 0, 1, 0);
         fexcraft.tmt.slim.Tessellator
                 .bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
-        GL11.glColor4f(1, 1, 1, 1);
+        net.minecraft.client.renderer.GlStateManager.color(1, 1, 1, 1);
         track.renderAll();
     }
 }

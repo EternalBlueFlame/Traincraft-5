@@ -1,5 +1,7 @@
 package train.common.entity.rollingStockOld.tender;
 
+import net.minecraft.util.EnumHand;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -80,9 +82,9 @@ public class EntityTender4_4_0 extends Tender {
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
+	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
 		playerEntity = entityplayer;
-		if ((super.interactFirst(entityplayer))) {
+		if ((super.processInitialInteract(entityplayer, hand))) {
 			return false;
 		}
 		if (!this.world.isRemote) {

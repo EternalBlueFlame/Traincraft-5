@@ -1,4 +1,5 @@
 package train.common.entity.stock.freight;
+import train.client.render.models.ModelBambooTrainCargo;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -98,9 +99,9 @@ return 1;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelBambooTrainCargo()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelBambooTrainCargo()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.1f, -0.5f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.1f, 0f, 0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override

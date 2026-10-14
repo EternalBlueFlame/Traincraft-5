@@ -50,8 +50,8 @@ public class WorldEvents {
 
     @SubscribeEvent
     public void entitySpawn(EntityJoinWorldEvent event) {
-        if (event.entity instanceof EntityAnimal) {
-            ((EntityAnimal) event.entity).tasks.addTask(0, new EntityAIFearHorn(((EntityAnimal) event.entity)));
+        if (event.getEntity() instanceof EntityAnimal) {
+            ((EntityAnimal) event.getEntity()).tasks.addTask(0, new EntityAIFearHorn(((EntityAnimal) event.getEntity())));
         }
     }
 
@@ -63,23 +63,25 @@ public class WorldEvents {
                 ((Locomotive) event.player.getRidingEntity()).parkingBrake = true;
             }
 
-            event.player.stopRiding();
+            event.player.dismountRidingEntity();
         }
     }
 
     @SubscribeEvent
     public void chunkUnloadEvent(ChunkEvent.Unload event) {
-        for (Object o : event.getChunk().entityLists) {
-            if (o instanceof EntityJukeBoxCart && ((EntityJukeBoxCart) o).isPlaying) {
-                ((EntityJukeBoxCart) o).player.stop();
-                ((EntityJukeBoxCart) o).player.setVolume(0);
+        for (net.minecraft.util.ClassInheritanceMultiMap<net.minecraft.entity.Entity> section : event.getChunk().getEntityLists()) {
+            for (EntityJukeBoxCart o : section.getByClass(EntityJukeBoxCart.class)) {
+                if (o.isPlaying) {
+                    o.player.stop();
+                    o.player.setVolume(0);
+                }
             }
         }
     }
 
     @SubscribeEvent
     public void EntityStruckByLightningEvent(EntityStruckByLightningEvent event) {
-        if (event.entity instanceof AbstractTrains) {
+        if (event.getEntity() instanceof AbstractTrains) {
             event.setCanceled(true);
         }
     }

@@ -1,5 +1,7 @@
 package train.common.inventory;
 
+import train.common.core.util.StackUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -44,24 +46,24 @@ public class InventoryLiquid extends Container {
 			ItemStack itemstack1 = slot.getStack();
 			itemstack = itemstack1.copy();
 			if (!LiquidManager.getInstance().isContainer(itemstack1))
-				return null;
+				return ItemStack.EMPTY;
 
 			if (i < inventorySize) {
 				if (!mergeItemStack(itemstack1, inventorySize, inventorySlots.size(), true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (!mergeItemStack(itemstack1, 0, inventorySize, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 			if (itemstack1.getCount() == 0) {
-				slot.putStack(null);
+				slot.putStack(ItemStack.EMPTY);
 			}
 			else {
 				slot.onSlotChanged();
 			}
 		}
-		return itemstack;
+		return StackUtil.nn(itemstack);
 	}
 
 	@Override

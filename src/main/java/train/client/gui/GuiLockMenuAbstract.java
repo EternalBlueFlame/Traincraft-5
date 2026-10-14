@@ -99,7 +99,7 @@ public abstract class GuiLockMenuAbstract extends GuiScreen {
         textFieldList.clear();
         for (int i = 0; i < MAX_TRUSTEES_ON_PAGE; i ++) { // Add text boxes, line select delete buttons, import current trustees to text boxes.
             this.buttonList.add(new GuiButtonLockMenu(i + NUMBER_OF_STATIC_BUTTONS, TEXTBOX_LEFT_ANCHOR + textBoxWidth + 3, (GUI_ANCHOR_Y + 55 + (i * (textBoxHeight + 5))) + 2, 17, 17, GuiButtonLockMenu.Type.REMOVE));
-            textFieldList.add(new GuiLockMenuTextField(i, fontRendererObj, TEXTBOX_LEFT_ANCHOR, (GUI_ANCHOR_Y + 55 + (i * (textBoxHeight + 5))), textBoxWidth, textBoxHeight, this));
+            textFieldList.add(new GuiLockMenuTextField(i, fontRenderer, TEXTBOX_LEFT_ANCHOR, (GUI_ANCHOR_Y + 55 + (i * (textBoxHeight + 5))), textBoxWidth, textBoxHeight, this));
             textFieldList.get(i).setCanLoseFocus(true);
             textFieldList.get(i).setMaxStringLength(16);
         }
@@ -165,16 +165,16 @@ public abstract class GuiLockMenuAbstract extends GuiScreen {
         for (int i = 0; i < numberOfActiveTextboxes; i++) {
             textFieldList.get(i).drawTextBox();
         }
-        fontRendererObj.drawString(CommonUtil.translate("lockmenu.Title_Trusted_Players.name"), GUI_ANCHOR_MID_X - (fontRendererObj.getStringWidth(CommonUtil.translate("lockmenu.Title_Trusted_Players.name")) / 2), GUI_ANCHOR_Y + 40, -16777216);
+        fontRenderer.drawString(CommonUtil.translate("lockmenu.Title_Trusted_Players.name"), GUI_ANCHOR_MID_X - (fontRenderer.getStringWidth(CommonUtil.translate("lockmenu.Title_Trusted_Players.name")) / 2), GUI_ANCHOR_Y + 40, -16777216);
         if (lockUnlockButton.getTexture() == GuiButtonLockMenu.Texture.ACTIVE)
             if (getLocked())
-                drawHoveringText(Collections.singletonList(CommonUtil.translate("lockmenu.Unlock.name")), mouseX, mouseY, fontRendererObj);
+                drawHoveringText(Collections.singletonList(CommonUtil.translate("lockmenu.Unlock.name")), mouseX, mouseY, fontRenderer);
             else
-                drawHoveringText(Collections.singletonList(CommonUtil.translate("lockmenu.Lock.name")), mouseX, mouseY, fontRendererObj);
+                drawHoveringText(Collections.singletonList(CommonUtil.translate("lockmenu.Lock.name")), mouseX, mouseY, fontRenderer);
         if (closeButton.getTexture() == GuiButtonLockMenu.Texture.ACTIVE)
-            drawHoveringText(Collections.singletonList(CommonUtil.translate("lockmenu.Save and Close.name")), mouseX, mouseY, fontRendererObj);
+            drawHoveringText(Collections.singletonList(CommonUtil.translate("lockmenu.Save and Close.name")), mouseX, mouseY, fontRenderer);
         if (closeAndSavetoAll.getTexture() == GuiButtonLockMenu.Texture.ACTIVE)
-            drawHoveringText(Collections.singletonList(CommonUtil.translate("lockmenu.Save To All Cars in Consist.name")), mouseX, mouseY, fontRendererObj);
+            drawHoveringText(Collections.singletonList(CommonUtil.translate("lockmenu.Save To All Cars in Consist.name")), mouseX, mouseY, fontRenderer);
     }
 
     @Override
@@ -189,11 +189,11 @@ public abstract class GuiLockMenuAbstract extends GuiScreen {
                     break;
                 case 1:  // Save and Close Button
                     sendUpdatePacket(false);
-                    this.mc.thePlayer.closeScreen();
+                    this.mc.player.closeScreen();
                     break;
                 case 2:
                     sendUpdatePacket(true);
-                    this.mc.thePlayer.closeScreen();
+                    this.mc.player.closeScreen();
                     break;
                 case 3:
                 case 4:
@@ -254,7 +254,7 @@ public abstract class GuiLockMenuAbstract extends GuiScreen {
     }
 
     @Override
-    public void mouseClicked(int x, int y, int par3) {
+    public void mouseClicked(int x, int y, int par3) throws java.io.IOException {
         super.mouseClicked(x, y, par3);
         for (GuiTextField textField : textFieldList) {
             textField.mouseClicked(x, y, par3);
@@ -262,7 +262,7 @@ public abstract class GuiLockMenuAbstract extends GuiScreen {
     }
 
     @Override
-    public void handleMouseInput() {
+    public void handleMouseInput() throws java.io.IOException {
         int mouseEvent = Mouse.getEventDWheel();
         if (mouseEvent != 0) {
             if (mouseEvent > 0) { // Scroll up.
@@ -280,9 +280,9 @@ public abstract class GuiLockMenuAbstract extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char eventChar, int eventKey) {
+    protected void keyTyped(char eventChar, int eventKey) throws java.io.IOException {
         if (eventKey == 1) { // If ESC...
-            this.mc.thePlayer.closeScreen();
+            this.mc.player.closeScreen();
         }
         for (int i = 0; i < MAX_TRUSTEES_ON_PAGE; i++) {
             GuiTextField textField = textFieldList.get(i);

@@ -1,14 +1,15 @@
 package train.client.render;
 
+import train.client.render.item.TCItemRenderer;
+
 import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.models.blocks.ModelMetroMadridOHW;
 import train.common.library.Info;
 
-public class ItemRenderModelMetroMadridPole implements IItemRenderer {
+public class ItemRenderModelMetroMadridPole extends TCItemRenderer {
 
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "MetroMadridPole.png");
     private static final ModelMetroMadridOHW modelMetroMadridPole = new ModelMetroMadridOHW();
@@ -45,7 +46,7 @@ public class ItemRenderModelMetroMadridPole implements IItemRenderer {
     }
 
     private void renderMetroMadridPole(float x, float y, float z) {
-        Tessellator.bindTexture(texture);
+        fexcraft.tmt.slim.Tessellator.bindTexture(texture);
         GL11.glPushMatrix();
         GL11.glTranslatef(x, y + 0.125f, z);
         GL11.glRotatef(180f, 0f, 0f, 1f);

@@ -8,7 +8,13 @@ import train.common.mtc.packets.PacketThingFromServer;
 
 public class PacketThingFromServerHandler implements IMessageHandler<PacketThingFromServer, IMessage> {
     @Override
-    public IMessage onMessage(PacketThingFromServer message, MessageContext ctx) {
+    public IMessage onMessage(final PacketThingFromServer message, final MessageContext ctx) {
+        // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+        net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handleOnMainThread(message, ctx));
+        return null;
+    }
+
+    private IMessage handleOnMainThread(PacketThingFromServer message, MessageContext ctx) {
 
         return null;
 }

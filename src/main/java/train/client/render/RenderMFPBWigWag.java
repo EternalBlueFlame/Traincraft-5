@@ -16,10 +16,10 @@ public class RenderMFPBWigWag extends TileEntitySpecialRenderer {
     private static final ResourceLocation textureOff = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "MFPBWigWagOff.png");
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
+    public void render(TileEntity tileEntity, double x, double y, double z, float tick, int destroyStage, float alpha) {
         TileMFPBWigWag tile = ((TileMFPBWigWag) tileEntity);
         if (tile.getFacing() != null) {
-            Tessellator.bindTexture(tile.powered ? textureOn : textureOff);
+            fexcraft.tmt.slim.Tessellator.bindTexture(tile.powered ? textureOn : textureOff);
         }
 
         GL11.glPushMatrix();

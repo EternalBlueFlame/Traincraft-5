@@ -1,16 +1,23 @@
 package train.common.entity.ai;
 
-import ebf.tim.utility.CommonUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.RandomPositionGenerator;
 import net.minecraft.entity.passive.EntityAnimal;
-import net.minecraft.pathfinding.PathEntity;
-import net.minecraft.util.Vec3;
-import net.minecraft.world.ChunkCache;
-import train.common.api.Locomotive;
+import net.minecraft.util.math.Vec3d;
 
+import java.util.Map;
+import java.util.WeakHashMap;
+
+/**
+ * Animals run away from a locomotive that sounds its horn.
+ * <p>
+ * 1.7.10 stored the locomotive as the animal's "entity to attack"; in 1.12 attack targets must be living
+ * entities, so the locomotive that scared an animal is kept in a weak map instead ({@link #scare}).
+ */
 public class EntityAIFearHorn extends EntityAIBase {
+    private static final Map<EntityAnimal, Entity> SCARED_BY = new WeakHashMap<>();
+
     private final EntityAnimal entity;
     private double randPosX;
     private double randPosY;
@@ -21,69 +28,36 @@ public class EntityAIFearHorn extends EntityAIBase {
         this.setMutexBits(1);
     }
 
+    /** Makes the animal flee from {@code source} the next time its AI runs. */
+    public static void scare(EntityAnimal animal, Entity source) {
+        SCARED_BY.put(animal, source);
+        animal.getNavigator().clearPath();
+    }
+
     @Override
     public boolean shouldExecute() {
-        if (entity.getEntityToAttack() instanceof Locomotive) {
-            Entity loco = entity.getEntityToAttack();
-            Vec3 posLoco = Vec3.createVectorHelper(loco.posX, loco.posY, loco.posZ);
-            entity.detachHome();
-            Vec3 vec3 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 10, 8, posLoco);
-
-            if (vec3 == null) {
-                return false;
-            } else {
-                this.randPosX = vec3.xCoord;
-                this.randPosY = vec3.yCoord;
-                this.randPosZ = vec3.zCoord;
-                entity.setTarget(null);
-                return true;
-            }
+        Entity loco = SCARED_BY.remove(entity);
+        if (loco == null) {
+            return false;
         }
-        return false;
+        entity.detachHome();
+        Vec3d vec3 = RandomPositionGenerator.findRandomTargetBlockAwayFrom(entity, 10, 8, new Vec3d(loco.posX, loco.posY, loco.posZ));
+        if (vec3 == null) {
+            return false;
+        }
+        this.randPosX = vec3.x;
+        this.randPosY = vec3.y;
+        this.randPosZ = vec3.z;
+        return true;
     }
 
-    /**
-     * Execute a one shot task or start executing a continuous task
-     */
+    @Override
     public void startExecuting() {
-        tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, 2.0D);
+        entity.getNavigator().tryMoveToXYZ(this.randPosX, this.randPosY, this.randPosZ, 2.0D);
     }
 
-    /**
-     * Returns whether an in-progress EntityAIBase should continue executing
-     */
-    public boolean continueExecuting() {
+    @Override
+    public boolean shouldContinueExecuting() {
         return !this.entity.getNavigator().noPath();
-    }
-
-    /**
-     * Returns the path to the given coordinates
-     */
-    private PathEntity getPathToXYZ(double x, double y, double z) {
-        return getEntityPathToXYZ(CommonUtil.floorDouble(x), (int) y, CommonUtil.floorDouble(z),
-                entity.getNavigator().getPathSearchRange(), false, false, false);
-    }
-
-    /**
-     * Try to find and set a path to XYZ. Returns true if successful.
-     */
-    private boolean tryMoveToXYZ(double x, double y, double z, double speed) {
-        PathEntity pathentity = this.getPathToXYZ((double) CommonUtil.floorDouble(x), (double) ((int) y), (double) CommonUtil.floorDouble(z));
-        return entity.getNavigator().setPath(pathentity, speed);
-    }
-
-    private PathEntity getEntityPathToXYZ(int targetX, int targetY, int targetZ, float range, boolean canPassOpenDoor, boolean canPassClosedDoor, boolean canSwim) {
-        int x = CommonUtil.floorDouble(entity.posX);
-        int y = CommonUtil.floorDouble(entity.posY);
-        int z = CommonUtil.floorDouble(entity.posZ);
-        int r = (int) (range + 8.0F);
-        int xmin = x - r;
-        int ymin = y - r;
-        int zmin = z - r;
-        int xmax = x + r;
-        int ymax = y + r;
-        int zmax = z + r;
-        ChunkCache chunkcache = new ChunkCache(entity.getWorld(), xmin, ymin, zmin, xmax, ymax, zmax, 0);
-        return (new TCPathFinder(chunkcache, canPassOpenDoor, canPassClosedDoor, false, canSwim)).createEntityPathTo(entity, targetX, targetY, targetZ, range);
     }
 }

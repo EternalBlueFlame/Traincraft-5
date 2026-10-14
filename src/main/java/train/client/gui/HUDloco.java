@@ -27,9 +27,9 @@ public class HUDloco extends GuiScreen {
         {
             if (game.player.getRidingEntity() instanceof AbstractControlCar)
             {
-                if (game.world.getEntityByID(game.player.getRidingEntity().getDataWatcher().getWatchableObjectInt(29)) != null)
+                if (game.world.getEntityByID(((AbstractControlCar) game.player.getRidingEntity()).getDataWatcher().getWatchableObjectInt(29)) != null)
                 {
-                    renderSkillHUD(event, (Locomotive) game.world.getEntityByID(game.player.getRidingEntity().getDataWatcher().getWatchableObjectInt(29)));
+                    renderSkillHUD(event, (Locomotive) game.world.getEntityByID(((AbstractControlCar) game.player.getRidingEntity()).getDataWatcher().getWatchableObjectInt(29)));
                 }
                 else
                 {
@@ -60,7 +60,7 @@ public class HUDloco extends GuiScreen {
     public void renderSkillHUD(RenderGameOverlayEvent event, Locomotive rcCar) {
         windowWidth = event.getResolution().getScaledWidth();
         windowHeight = event.getResolution().getScaledHeight() - 100;
-        GL11.glColor4f(255, 255, 255, 255);
+        net.minecraft.client.renderer.GlStateManager.color(255, 255, 255, 255);
         renderBG(rcCar);
 
         // Render Water Bar because the steam train has water.

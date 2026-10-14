@@ -121,7 +121,7 @@ public class GuiTCTextField extends Gui {
      */
     public void writeText(String par1Str) {
         String s1 = "";
-        String s2 = ChatAllowedCharacters.filerAllowedCharacters(par1Str);
+        String s2 = ChatAllowedCharacters.filterAllowedCharacters(par1Str);
         int i = Math.min(this.cursorPosition, this.selectionEnd);
         int j = Math.max(this.cursorPosition, this.selectionEnd);
         int k = this.maxStringLength - this.text.length() - (i - this.selectionEnd);
@@ -469,16 +469,17 @@ public class GuiTCTextField extends Gui {
             par4 = i1;
         }
 
-        Tessellator tessellator = Tessellator.instance;
-        GL11.glColor4f(0.0F, 0.0F, 255.0F, 255.0F);
+        Tessellator tessellator = Tessellator.getInstance();
+        net.minecraft.client.renderer.GlStateManager.color(0.0F, 0.0F, 255.0F, 255.0F);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_COLOR_LOGIC_OP);
         GL11.glLogicOp(GL11.GL_OR_REVERSE);
-        tessellator.startDrawingQuads();
-        tessellator.addVertex((double) par1, (double) par4, 0.0D);
-        tessellator.addVertex((double) par3, (double) par4, 0.0D);
-        tessellator.addVertex((double) par3, (double) par2, 0.0D);
-        tessellator.addVertex((double) par1, (double) par2, 0.0D);
+        net.minecraft.client.renderer.BufferBuilder buf = tessellator.getBuffer();
+        buf.begin(GL11.GL_QUADS, net.minecraft.client.renderer.vertex.DefaultVertexFormats.POSITION);
+        buf.pos((double) par1, (double) par4, 0.0D).endVertex();
+        buf.pos((double) par3, (double) par4, 0.0D).endVertex();
+        buf.pos((double) par3, (double) par2, 0.0D).endVertex();
+        buf.pos((double) par1, (double) par2, 0.0D).endVertex();
         tessellator.draw();
         GL11.glDisable(GL11.GL_COLOR_LOGIC_OP);
         GL11.glEnable(GL11.GL_TEXTURE_2D);

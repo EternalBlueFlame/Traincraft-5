@@ -135,26 +135,26 @@ public class GuiTender extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRenderer.drawString(tender.getCommandSenderName(), 34, 1, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 36, 3, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 34, 3, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 36, 1, 0x000000);
+        fontRenderer.drawString(tender.getName(), 34, 1, 0x000000);
+        fontRenderer.drawString(tender.getName(), 36, 3, 0x000000);
+        fontRenderer.drawString(tender.getName(), 34, 3, 0x000000);
+        fontRenderer.drawString(tender.getName(), 36, 1, 0x000000);
 
-        fontRenderer.drawString(tender.getCommandSenderName(), 34, 2, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 36, 2, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 35, 3, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 35, 1, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 35, 2, 0xd3a900);
+        fontRenderer.drawString(tender.getName(), 34, 2, 0x000000);
+        fontRenderer.drawString(tender.getName(), 36, 2, 0x000000);
+        fontRenderer.drawString(tender.getName(), 35, 3, 0x000000);
+        fontRenderer.drawString(tender.getName(), 35, 1, 0x000000);
+        fontRenderer.drawString(tender.getName(), 35, 2, 0xd3a900);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
 
         if (intersectsWith(i, j)) {
-            drawCreativeTabHoveringText("When a tender is locked,", i, j);
+            drawHoveringText("When a tender is locked,", i, j);
         }
     }
 
-    protected void drawCreativeTabHoveringText(String str, int t, int g) {
+    public void drawHoveringText(String str, int t, int g) {
         //int liqui = (dieselInventory.getLiquidAmount() * 50) / dieselInventory.getTankCapacity();
 
         int textWidth = fontRenderer.getStringWidth("the GUI, change speed, destroy it.");
@@ -209,7 +209,7 @@ public class GuiTender extends GuiContainer {
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int t, int g) {
         String i = Info.guiPrefix + "gui_tender.png";
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, i));
 
         int j = (width - xSize) / 2;

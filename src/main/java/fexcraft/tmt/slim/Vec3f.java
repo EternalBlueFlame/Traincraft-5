@@ -1,6 +1,5 @@
 package fexcraft.tmt.slim;
 
-import net.minecraft.util.Vec3;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector3f;
 
@@ -30,10 +29,10 @@ public class Vec3f implements Serializable {
         this((float)xVec, (float)yVec, (float)zVec);
     }
 
-    public Vec3f(Vec3 v){
-        xCoord = (float)v.xCoord;
-        yCoord = (float)v.yCoord;
-        zCoord= (float)v.zCoord;
+    public Vec3f(net.minecraft.util.math.Vec3d v){
+        xCoord = (float)v.x;
+        yCoord = (float)v.y;
+        zCoord= (float)v.z;
     }
     public Vec3f(Vec3f v){
         xCoord = v.xCoord;

@@ -86,7 +86,7 @@ public class GuiCrafterTier extends GuiTraincraft {
         int k = (height - ySize) / 2;
 
         mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, tier1.getGUITexture()));
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         drawTexturedModalRect(j, k, 0, 0, this.xSize, this.ySize);
 
         borderSlots(recipeList, states);
@@ -116,14 +116,14 @@ public class GuiCrafterTier extends GuiTraincraft {
             }
             if (currentRenderTabY == 120) {
                 GL11.glPushMatrix();
-                GL11.glColor3f(1, 1, 1);
+                net.minecraft.client.renderer.GlStateManager.color(1, 1, 1);
                 GL11.glTranslatef(guiLeft - 70, this.guiTop + 170, 100);
 
                 RenderHelper.enableGUIStandardItemLighting();
                 TrainRecord train = Traincraft.instance.traincraftRegistry.findTrainRecordByItem(currentKnownItem);
-                renderEntity = train.getEntity(mc.theWorld);
+                renderEntity = train.getEntity(mc.world);
 
-                if (renderEntity != null && !Item.itemRegistry.getNameForObject(currentKnownItem).equals(Item.itemRegistry.getNameForObject(previousItem))) {
+                if (renderEntity != null && !Item.REGISTRY.getNameForObject(currentKnownItem).equals(Item.REGISTRY.getNameForObject(previousItem))) {
                     previousItem = currentKnownItem;
                 }
 
@@ -154,7 +154,7 @@ public class GuiCrafterTier extends GuiTraincraft {
                 GL11.glRotatef(yaw, 0, 1, 0);
 
                 if (renderEntity != null) {
-                    RenderManager.instance.renderEntityWithPosYaw(renderEntity, 0, 0, 0, 0, 0);
+                    net.minecraft.client.Minecraft.getMinecraft().getRenderManager().renderEntity(renderEntity, 0, 0, 0, 0, 0, false);
                 }
 
                 RenderHelper.disableStandardItemLighting();
@@ -200,7 +200,7 @@ public class GuiCrafterTier extends GuiTraincraft {
     }
 
     @Override
-    protected void mouseClicked(int x, int y, int button) {
+    protected void mouseClicked(int x, int y, int button) throws java.io.IOException {
         super.mouseClicked(x, y, button);
     }
 

@@ -1,5 +1,7 @@
 package train.common.inventory;
 
+import train.common.core.util.StackUtil;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.DebugUtil;
@@ -64,36 +66,36 @@ public class InventoryLoco extends Container {
 			ItemStack itemstack1 = slot.getStack();
 			if (i < inventorySize) {
 				if (!mergeItemStack(itemstack1, inventorySize, inventorySlots.size(), true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (i > inventorySize) {
 				if (FuelHandler.steamFuelLast(itemstack1) > 0 || LiquidManager.getInstance().isDieselLocoFuel(itemstack1) || (itemstack1.getItem() == Items.REDSTONE)) {
 					if (!mergeItemStack(itemstack1, 0, 1, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				}
 				else if (LiquidManager.getInstance().isContainer(itemstack1) && loco instanceof SteamTrain) {
 					if (!mergeItemStack(itemstack1, 1, 2, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				}
 				else if (!mergeItemStack(itemstack1, 2, inventorySize, false)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (!mergeItemStack(itemstack1, 2, inventorySize, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 			if (itemstack1.getCount() == 0) {
-				slot.putStack(null);
+				slot.putStack(ItemStack.EMPTY);
 			}
 			else {
 				slot.onSlotChanged();
 			}
-			return itemstack1;
+			return StackUtil.nn(itemstack1);
 		} else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 }

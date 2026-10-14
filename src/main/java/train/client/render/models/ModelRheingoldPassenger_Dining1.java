@@ -560,7 +560,7 @@ public class ModelRheingoldPassenger_Dining1 extends ModelConverter
 		}
 
 
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/Rheingold_Bogie.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/Rheingold_Bogie.png"));
 		GL11.glPushMatrix();
 		GL11.glTranslated(-4.55,0.20,-1.045);
 		bogie1.render(entity,f,f1,f2,f3,f4,f5);

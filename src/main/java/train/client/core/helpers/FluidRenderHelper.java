@@ -1,26 +1,25 @@
 package train.client.core.helpers;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 
-public class FluidRenderHelper {
-    private static final ResourceLocation BLOCK_TEXTURE = TextureMap.locationBlocksTexture;
+import javax.annotation.Nullable;
 
-    public static IIcon getFluidTexture(Fluid fluid, boolean flowing) {
+public class FluidRenderHelper {
+    private static final ResourceLocation BLOCK_TEXTURE = TextureMap.LOCATION_BLOCKS_TEXTURE;
+
+    /** The fluid's still or flowing sprite on the block atlas (missing texture if it has none). */
+    @Nullable
+    public static TextureAtlasSprite getFluidTexture(Fluid fluid, boolean flowing) {
         if (fluid == null) {
             return null;
         }
-
-        IIcon icon = flowing ? fluid.getFlowingIcon() : fluid.getStillIcon();
-
-        if (icon == null) {
-            icon = ((TextureMap) Minecraft.getMinecraft().getTextureManager().getTexture(TextureMap.locationBlocksTexture)).getTextureExtry("missingno");
-        }
-
-        return icon;
+        TextureMap map = Minecraft.getMinecraft().getTextureMapBlocks();
+        ResourceLocation location = flowing ? fluid.getFlowing() : fluid.getStill();
+        return location == null ? map.getMissingSprite() : map.getAtlasSprite(location.toString());
     }
 
     /**

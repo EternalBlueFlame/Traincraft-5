@@ -7,26 +7,35 @@
 
 package train.common.items;
 
+import net.minecraft.inventory.EntityEquipmentSlot;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.IIcon;
 import train.common.Traincraft;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
 
-public class ItemTCArmor extends ItemArmor {
+public class ItemTCArmor extends ItemArmor implements train.common.items.ILegacyIcon {
 	public int color;
-	private IIcon iconOverlay;
 	public int updateTicks=0;
 	private String iconName = "";
 	
+	/** 1.7.10 armor type (0 helmet .. 3 boots) to the 1.12 equipment slot. */
+	public static EntityEquipmentSlot slotFromType(int armorType) {
+		switch (armorType) {
+			case 0: return EntityEquipmentSlot.HEAD;
+			case 1: return EntityEquipmentSlot.CHEST;
+			case 2: return EntityEquipmentSlot.LEGS;
+			default: return EntityEquipmentSlot.FEET;
+		}
+	}
+
 	public ItemTCArmor(String iconName, ArmorMaterial material, int par3, int par4, int color) {
-		super(material, par3, par4);
+		super(material, par3, slotFromType(par4));
 		setCreativeTab(Traincraft.tcTab);
 		this.color = color;
 		this.iconName = iconName;
@@ -46,7 +55,8 @@ public class ItemTCArmor extends ItemArmor {
      * @return Path of texture to bind, or null to use default
      */
 	@Override
-	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type){
+	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slotType, String type) {
+		int slot = 3 - slotType.getIndex();
 		if (stack.getItem() == ItemIDs.overalls.item) {
 			return Info.resourceLocation+":"+Info.armorPrefix + "blue_overalls.png";
 		}
@@ -75,34 +85,18 @@ public class ItemTCArmor extends ItemArmor {
 			
 		}
 		else{
-			return super.getArmorTexture(stack, entity, slot, type);
+			return super.getArmorTexture(stack, entity, slotType, type);
 		}
 	}
 
-	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean requiresMultipleRenderPasses() {
 		return color!=0;
 	}
 
-	@SideOnly(Side.CLIENT)
-	@Override
-	public IIcon getIconFromDamageForRenderPass(int par1, int par2) {
-		return par2 == 1 ? this.iconOverlay : super.getIconFromDamageForRenderPass(par1, par2);
-	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":armour/" + this.iconName);
-		if(color!=0){
-			this.iconOverlay = iconRegister.registerIcon(Info.modID.toLowerCase() + ":armour/" + this.iconName + "_overlay");
-		}
-	}
 
-	@Override
-	public void func_82813_b(ItemStack par1ItemStack, int par2)
-	{
+	public void func_82813_b(ItemStack par1ItemStack, int par2) {
 		if (color==0)
 		{
 			throw new UnsupportedOperationException("Can\'t dye!");
@@ -185,9 +179,7 @@ public class ItemTCArmor extends ItemArmor {
 		}
 	}
 	@SideOnly(Side.CLIENT)
-	@Override
-    public int getColorFromItemStack(ItemStack par1ItemStack, int par2)
-    {
+    public int getColorFromItemStack(ItemStack par1ItemStack, int par2) {
 		if(color==0)return 16777215;
         if (par2 > 0)
         {
@@ -204,5 +196,10 @@ public class ItemTCArmor extends ItemArmor {
 
             return j;
         }
+    }
+
+    @Override
+    public String legacyIcon(int meta) {
+        return "tc:armour/" + this.iconName;
     }
 }

@@ -1,18 +1,26 @@
 package train.common.tile;
 
+import net.minecraft.util.ITickable;
+
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import train.common.blocks.tracks.BlockEnergyTrack;
 import train.common.core.handlers.OverheadLinesEnergyNetHandler;
 
 
 /**
  * @author Spitfire4466 <trains-and-zeppelin.wikispaces.com>
  */
-public class TileEntityOverheadLines extends TileEntity {
+public class TileEntityOverheadLines extends TileEntity implements ITickable {
+
+	// 1.12: modded tile entities are dropped on any block state change by default; only drop them when the block changes
+	@Override
+	public boolean shouldRefresh(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.state.IBlockState oldState, net.minecraft.block.state.IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
 
 	public double energy = 0;
 	public int maxEnergy=1024;
@@ -46,7 +54,7 @@ public class TileEntityOverheadLines extends TileEntity {
 	public void setFacing(int facing) { 
 		this.facing = facing; 
 	}
-	public void updateEntity() { 
+	public void update() { 
 		if (world.isRemote) {
 			return;
 		}
@@ -87,20 +95,20 @@ public class TileEntityOverheadLines extends TileEntity {
 */
 	}
 	public double getDistanceSq(double par1, double par3, double par5) {
-		double var7 = this.xCoord - par1;
-		double var9 = this.yCoord - par3;
+		double var7 = this.getPos().getX() - par1;
+		double var9 = this.getPos().getY() - par3;
 		if (Math.abs(var9) == 1)
 			var9 = 0;
-		double var11 = this.zCoord - par5;
+		double var11 = this.getPos().getZ() - par5;
 		return Math.sqrt(var7 * var7 + var11 * var11);
 	}
 	public int sendEnergy(double send) {
 		for (int i = 0; i < network.getNetwork().size(); i++) {
 			if (network.getNetwork().get(i) != null && !network.getNetwork().get(i).equals(this)) {
-				int x2 = ((BlockEnergyTrack) network.getNetwork().get(i)).getX();
-				int y2 = ((BlockEnergyTrack) network.getNetwork().get(i)).getY();
-				int z2 = ((BlockEnergyTrack) network.getNetwork().get(i)).getZ();
-				if (!((BlockEnergyTrack) network.getNetwork().get(i)).isProvider && this.isProvider && ((TileEntityOverheadLines) network.getNetwork().get(i)).getEnergy() < ((TileEntityOverheadLines) network.getNetwork().get(i)).getMaxEnergy()) {//if(isBeside(x2,y2,z2)){
+				int x2 = ((TileEntityOverheadLines) network.getNetwork().get(i)).getPos().getX();
+				int y2 = ((TileEntityOverheadLines) network.getNetwork().get(i)).getPos().getY();
+				int z2 = ((TileEntityOverheadLines) network.getNetwork().get(i)).getPos().getZ();
+				if (!((TileEntityOverheadLines) network.getNetwork().get(i)).isProvider && this.isProvider && ((TileEntityOverheadLines) network.getNetwork().get(i)).getEnergy() < ((TileEntityOverheadLines) network.getNetwork().get(i)).getMaxEnergy()) {//if(isBeside(x2,y2,z2)){
 					if (getDistanceSq(x2, y2, z2) <= 50){
 						double transfered = ((TileEntityOverheadLines) network.getNetwork().get(i)).getMaxEnergy() - ((TileEntityOverheadLines) network.getNetwork().get(i)).getEnergy();
 						transfered = Math.min(this.output, transfered);
@@ -122,7 +130,7 @@ public class TileEntityOverheadLines extends TileEntity {
 	 * Writes a tile entity to NBT.
 	 */
 	@Override
-	public void writeToNBT(NBTTagCompound par1NBTTagCompound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound par1NBTTagCompound) {
 		super.writeToNBT(par1NBTTagCompound); 
 		par1NBTTagCompound.setDouble("energy", energy); 
 		par1NBTTagCompound.setInteger("facing", facing); 
@@ -132,6 +140,7 @@ public class TileEntityOverheadLines extends TileEntity {
 		par1NBTTagCompound.setBoolean("Right",Right);
 		par1NBTTagCompound.setBoolean("Back",Back); 
 		par1NBTTagCompound.setBoolean("Front",Front);
+		return par1NBTTagCompound;
 	}
 	@Override
 	public void readFromNBT(NBTTagCompound par1NBTTagCompound) {
@@ -189,8 +198,14 @@ public class TileEntityOverheadLines extends TileEntity {
 		return direction.toSideValue() == getFacing(); 
 	}
 	/*/
+	/** 1.12 sends this with the chunk data (1.7.10 sent the description packet instead). */
 	@Override
-	public Packet getDescriptionPacket() {
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);

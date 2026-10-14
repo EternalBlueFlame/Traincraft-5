@@ -53,7 +53,7 @@ public class TextureManager {
      */
     public static int bindTexture(ResourceLocation textureURI) {
         if (textureURI == null){
-            GL11.glBindTexture(GL_TEXTURE_2D, TextureUtil.missingTexture.getGlTextureId());
+            net.minecraft.client.renderer.GlStateManager.bindTexture(TextureUtil.MISSING_TEXTURE.getGlTextureId());
             return 0;
         }
         //clean out the texture bind map when texturepacks are reloaded.
@@ -68,7 +68,7 @@ public class TextureManager {
                 object = new SimpleTexture(textureURI);
                 Minecraft.getMinecraft().getTextureManager().loadTexture(textureURI, object);
             }
-            GL11.glBindTexture(GL_TEXTURE_2D, object.getGlTextureId());
+            net.minecraft.client.renderer.GlStateManager.bindTexture(object.getGlTextureId());
             return object.getGlTextureId();
         } else {
             id= tmtMap.get(textureURI);
@@ -81,9 +81,7 @@ public class TextureManager {
                 id=object.getGlTextureId();
                 tmtMap.put(textureURI, id);
             }
-            if(GL11.glGetInteger(GL_TEXTURE_2D) !=id) {
-                GL11.glBindTexture(GL_TEXTURE_2D, id);
-            }
+            net.minecraft.client.renderer.GlStateManager.bindTexture(id);
         }
         return -1;
     }
@@ -100,10 +98,9 @@ public class TextureManager {
 
     /**Lighting fix*/
     public static void adjustLightFixture(World world, int i, int j, int k) {
-        skyLight = world.getSkyBlockTypeBrightness(EnumSkyBlock.Block, i, j, k);
-        skyLight=world.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, i, j, k) << 20 | (skyLight<0?0:skyLight) << 4;
+        skyLight = world.getCombinedLight(new net.minecraft.util.math.BlockPos(i, j, k), 0);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);
-        GL11.glColor4f(1, 1, 1, 1);//fixes alpha layering bugs with other mods that don't clear their GL cache
+        net.minecraft.client.renderer.GlStateManager.color(1, 1, 1, 1);//fixes alpha layering bugs with other mods that don't clear their GL cache
     }
 
     private static FloatBuffer colorBuffer = GLAllocation.createDirectFloatBuffer(16);
@@ -140,8 +137,8 @@ public class TextureManager {
     public static List<ItemStack> getAcceptedRailItems(){
         List<ItemStack> Ores=new ArrayList<>();
 
-        Ores.add(new ItemStack(Items.diamond));
-        Ores.add(new ItemStack(Items.blaze_rod));
+        Ores.add(new ItemStack(Items.DIAMOND));
+        Ores.add(new ItemStack(Items.BLAZE_ROD));
 
         for(String o: OreDictionary.getOreNames()) {
             if (o.contains("ingot") || o.contains("plank")) {
@@ -183,10 +180,8 @@ public class TextureManager {
 
 
     public static TextureAtlasSprite bindBlockTextureFromSide(int side, ItemStack b){
-        if (RenderBlocks.getInstance().hasOverrideBlockTexture()) {
-            return (TextureAtlasSprite)RenderBlocks.getInstance().overrideBlockTexture;
-        }
-        return (TextureAtlasSprite) RenderBlocks.getInstance().getBlockIconFromSideAndMetadata(Block.getBlockFromItem(b.getItem()), side,b.getItemDamage());
+        TextureAtlasSprite sprite = train.client.core.helpers.SpriteHelper.getSprite(Block.getBlockFromItem(b.getItem()), b.getItemDamage(), net.minecraft.util.EnumFacing.byIndex(side));
+        return sprite != null ? sprite : net.minecraft.client.Minecraft.getMinecraft().getTextureMapBlocks().getMissingSprite();
         //1.8.9+ version:
         //IBlockState state = Block.getBlockFromItem(b.getItem()).getDefaultState();
         //Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state).getQuads(state,side,0l).get(0).getSprite()
@@ -226,7 +221,7 @@ public class TextureManager {
             object = new SimpleTexture(textureURI);
             Minecraft.getMinecraft().getTextureManager().loadTexture(textureURI, object);
         }
-        return object.getGlTextureId()!=TextureUtil.missingTexture.getGlTextureId();
+        return object.getGlTextureId()!=TextureUtil.MISSING_TEXTURE.getGlTextureId();
     }
 
 
@@ -265,9 +260,7 @@ public class TextureManager {
             if (currentKey == null) {
                 bindTexture(textureURI);
             } else {
-                if (GL11.glGetInteger(GL_TEXTURE_2D) != currentKey) {
-                    GL11.glBindTexture(GL_TEXTURE_2D, currentKey);
-                }
+                net.minecraft.client.renderer.GlStateManager.bindTexture(currentKey);
             }
 
     }
@@ -418,9 +411,9 @@ public class TextureManager {
     }
 
     private static String resourceLocation(ResourceLocation res){
-        return (res.getResourceDomain() + "/"
-                +res.getResourcePath().
-                substring(0, res.getResourcePath().lastIndexOf(".")));
+        return (res.getNamespace() + "/"
+                +res.getPath().
+                substring(0, res.getPath().lastIndexOf(".")));
     }
 
     /*
@@ -434,15 +427,15 @@ public class TextureManager {
         GL11.glTranslatef(0,(Minecraft.getMinecraft().displayHeight*0.5f)-(scale*0.5f),500);
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glColor4f(0.75f,0.75f,0.75f,1);
+        net.minecraft.client.renderer.GlStateManager.color(0.75f,0.75f,0.75f,1);
         ClientUtil.drawTexturedRect(0,0,0,0,scale,scale);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
-        GL11.glColor4f(1,1,1,1);
+        net.minecraft.client.renderer.GlStateManager.color(1,1,1,1);
 
         GL11.glScalef(scale/32f,scale/32f,scale/32f);
         RenderHelper.enableGUIStandardItemLighting();
-        new RenderItem().renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer,
-                Minecraft.getMinecraft().getTextureManager(),stack, 0, 0);
+        net.minecraft.client.Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
+
         ByteBuffer buffer = BufferUtils.createByteBuffer(scale * scale * 4);
         GL11.glReadPixels(0, 0, scale, scale, GL11.GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 
@@ -486,16 +479,16 @@ public class TextureManager {
         GL11.glTranslatef(0,(Minecraft.getMinecraft().displayHeight*0.5f)-(scale*0.5f),500);
 
         GL11.glDisable(GL11.GL_TEXTURE_2D);
-        GL11.glColor4f(1,1,1,1);
+        net.minecraft.client.renderer.GlStateManager.color(1,1,1,1);
         ClientUtil.drawTexturedRect(0,0,0,0,scale,scale);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         GL11.glScalef(scale/32f,scale/32f,scale/32f);
         RenderHelper.enableGUIStandardItemLighting();
-        new RenderItem().renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer,
-                Minecraft.getMinecraft().getTextureManager(),stack, 0, 0);
-        new RenderItem().renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer,
-                Minecraft.getMinecraft().getTextureManager(), stack, 0, 0, "");
+        net.minecraft.client.Minecraft.getMinecraft().getRenderItem().renderItemAndEffectIntoGUI(stack, 0, 0);
+
+        net.minecraft.client.Minecraft.getMinecraft().getRenderItem().renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, stack, 0, 0, "");
+
         ByteBuffer buffer = BufferUtils.createByteBuffer(scale * scale * 4);
         GL11.glReadPixels(0, 0, scale, scale, GL11.GL_RGBA, GL_UNSIGNED_BYTE, buffer);
 

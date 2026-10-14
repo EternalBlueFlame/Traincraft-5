@@ -1,10 +1,9 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2020
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.carts;
 
@@ -13,11 +12,10 @@ import net.minecraft.item.ItemStack;
 
 /**
  * Some helper functions to make interacting with carts simpler.
- *
+ * <p/>
  * This interface is implemented by CartBase.
  *
  * @author CovertJaguar <http://www.railcraft.info>
- * @see CartBase
  */
 public interface IMinecart {
 
@@ -27,8 +25,8 @@ public interface IMinecart {
      * control (the Tank Cart for example).
      *
      * @param stack the Filter
-     * @param cart the Cart
+     * @param cart  the Cart
      * @return true if the item matches the cart
      */
-    public boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart);
+    boolean doesCartMatchFilter(ItemStack stack, EntityMinecart cart);
 }

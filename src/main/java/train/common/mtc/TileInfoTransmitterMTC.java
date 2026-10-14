@@ -1,14 +1,16 @@
 package train.common.mtc;
 
+import net.minecraft.util.ITickable;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
+
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.api.Locomotive;
@@ -16,7 +18,14 @@ import train.common.mtc.packets.PacketMTC;
 
 import java.util.List;
 
-public class TileInfoTransmitterMTC extends TileEntity implements IPeripheral {
+public class TileInfoTransmitterMTC extends TileEntity implements ITickable, IPeripheral {
+
+	// 1.12: modded tile entities are dropped on any block state change by default; only drop them when the block changes
+	@Override
+	public boolean shouldRefresh(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.state.IBlockState oldState, net.minecraft.block.state.IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
     public World world;
     public int MTCInfo = 0;
     //MTC Info Transmitter Statues:
@@ -46,7 +55,7 @@ public class TileInfoTransmitterMTC extends TileEntity implements IPeripheral {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
 
         nbttagcompound.setInteger("mtcInfo", this.MTCInfo);
@@ -55,16 +64,16 @@ public class TileInfoTransmitterMTC extends TileEntity implements IPeripheral {
         nbttagcompound.setString("stationName", this.stationName);
         nbttagcompound.setString("serverUUID", this.serverUUID);
         nbttagcompound.setString("signalBlock", this.signalBlock);
-
+    	return nbttagcompound;
     }
 
-    public void updateEntity() {
+    public void update() {
         if (getWorld() == null) {
             return;
         }
 
         if (world.isRemote) {return;}
-        List<Object> list = this.world.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
+        List<?> list = this.world.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
         if (list != null && list.size() > 0) {
             for (Object obj : list) {
                 if (obj instanceof Locomotive) {
@@ -79,7 +88,7 @@ public class TileInfoTransmitterMTC extends TileEntity implements IPeripheral {
 
 				 if (activated) {
                     //ExampleMod.msChannel.sendToAll(new PacketMTC(daTrain.getEntityId(), MTCInfo, 2));
-                    Traincraft.mscChannel.sendToAllAround(new PacketMTC(daTrain.getEntityId(), MTCInfo, 0) , new NetworkRegistry.TargetPoint(ebf.tim.utility.CommonUtil.getDimensionId(this.worldObj), daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
+                    Traincraft.mscChannel.sendToAllAround(new PacketMTC(daTrain.getEntityId(), MTCInfo, 0) , new NetworkRegistry.TargetPoint(ebf.tim.utility.CommonUtil.getDimensionId(this.world), daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
 
                     daTrain.mtcStatus =  MTCInfo;
                     daTrain.currentSignalBlock = this.signalBlock;
@@ -107,7 +116,7 @@ public class TileInfoTransmitterMTC extends TileEntity implements IPeripheral {
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         if (boundingBox == null) {
-            boundingBox = ebf.tim.utility.CommonUtil.createAABB(xCoord, yCoord, zCoord, xCoord + 2, yCoord + 2, zCoord + 2);
+            boundingBox = ebf.tim.utility.CommonUtil.createAABB(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX() + 2, getPos().getY() + 2, getPos().getZ() + 2);
         }
         return boundingBox;
     }

@@ -1,5 +1,7 @@
 package train.common.tile;
 
+import net.minecraft.util.ITickable;
+
 import cofh.api.energy.IEnergyProvider;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
@@ -11,7 +13,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import train.common.core.util.Energy;
 
-public class TileWaterWheel extends Energy implements IEnergyProvider {
+public class TileWaterWheel extends Energy implements ITickable, IEnergyProvider {
 
 	public TileWaterWheel() {
 		super(0, 80, 80);
@@ -23,46 +25,46 @@ public class TileWaterWheel extends Energy implements IEnergyProvider {
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		this.readFromNBT(pkt.func_148857_g());
+		this.readFromNBT(pkt.getNbtCompound());
 	}
 
 	@Override
-	public void updateEntity() {
-		super.updateEntity();
+	public void update() {
+		super.update();
 
 		if(!world.isRemote) {
 
-			Block blockXP = CommonUtil.getBlockAt(worldObj, xCoord+1, yCoord, zCoord);
-			Block blockXN = CommonUtil.getBlockAt(worldObj, xCoord-1, yCoord, zCoord);
-			Block blockZP = CommonUtil.getBlockAt(worldObj, xCoord, yCoord, zCoord+1);
-			Block blockZN = CommonUtil.getBlockAt(worldObj, xCoord, yCoord, zCoord-1);
-			Block blockTop = CommonUtil.getBlockAt(worldObj, xCoord, yCoord+1, zCoord);
-			Block blockBottom = CommonUtil.getBlockAt(worldObj, xCoord, yCoord-1, zCoord);
+			Block blockXP = CommonUtil.getBlockAt(world, getPos().getX()+1, getPos().getY(), getPos().getZ());
+			Block blockXN = CommonUtil.getBlockAt(world, getPos().getX()-1, getPos().getY(), getPos().getZ());
+			Block blockZP = CommonUtil.getBlockAt(world, getPos().getX(), getPos().getY(), getPos().getZ()+1);
+			Block blockZN = CommonUtil.getBlockAt(world, getPos().getX(), getPos().getY(), getPos().getZ()-1);
+			Block blockTop = CommonUtil.getBlockAt(world, getPos().getX(), getPos().getY()+1, getPos().getZ());
+			Block blockBottom = CommonUtil.getBlockAt(world, getPos().getX(), getPos().getY()-1, getPos().getZ());
 
 
 			if (blockXP instanceof BlockLiquid && CommonUtil.getMaterial(blockXP).isLiquid()
-					&& CommonUtil.getBlockFacing(worldObj, xCoord + 1, yCoord, zCoord) != 0
-					&& CommonUtil.getMaterial(blockXP) != Material.lava) {
+					&& CommonUtil.getBlockFacing(world, getPos().getX() + 1, getPos().getY(), getPos().getZ()) != 0
+					&& CommonUtil.getMaterial(blockXP) != Material.LAVA) {
 				this.energy.receiveEnergy(5, false);
-				CommonUtil.setBlockMeta(worldObj, xCoord, yCoord, zCoord, 2, 2);
+				CommonUtil.setBlockMeta(world, getPos().getX(), getPos().getY(), getPos().getZ(), 2, 2);
 			} else if (blockXN instanceof BlockLiquid && CommonUtil.getMaterial(blockXN).isLiquid()
-					&& CommonUtil.getBlockFacing(worldObj, xCoord - 1, yCoord, zCoord) != 0
-					&& CommonUtil.getMaterial(blockXN) != Material.lava) {
+					&& CommonUtil.getBlockFacing(world, getPos().getX() - 1, getPos().getY(), getPos().getZ()) != 0
+					&& CommonUtil.getMaterial(blockXN) != Material.LAVA) {
 				this.energy.receiveEnergy(5, false);
-				CommonUtil.setBlockMeta(worldObj, xCoord, yCoord, zCoord, 0, 2);
+				CommonUtil.setBlockMeta(world, getPos().getX(), getPos().getY(), getPos().getZ(), 0, 2);
 			} else if (blockZN instanceof BlockLiquid && CommonUtil.getMaterial(blockZN).isLiquid()
-					&& CommonUtil.getBlockFacing(worldObj, xCoord, yCoord, zCoord - 1) != 0
-					&& CommonUtil.getMaterial(blockZN) != Material.lava) {
+					&& CommonUtil.getBlockFacing(world, getPos().getX(), getPos().getY(), getPos().getZ() - 1) != 0
+					&& CommonUtil.getMaterial(blockZN) != Material.LAVA) {
 				this.energy.receiveEnergy(5, false);
-				CommonUtil.setBlockMeta(worldObj, xCoord, yCoord, zCoord, 1, 2);
+				CommonUtil.setBlockMeta(world, getPos().getX(), getPos().getY(), getPos().getZ(), 1, 2);
 			} else if (blockZP instanceof BlockLiquid && CommonUtil.getMaterial(blockZP).isLiquid()
-					&& CommonUtil.getBlockFacing(worldObj, xCoord, yCoord, zCoord + 1) != 0
-					&& CommonUtil.getMaterial(blockZP) != Material.lava) {
+					&& CommonUtil.getBlockFacing(world, getPos().getX(), getPos().getY(), getPos().getZ() + 1) != 0
+					&& CommonUtil.getMaterial(blockZP) != Material.LAVA) {
 				this.energy.receiveEnergy(5, false);
-				CommonUtil.setBlockMeta(worldObj, xCoord, yCoord, zCoord, 3, 2);
-			}else if(blockTop instanceof BlockLiquid && CommonUtil.getMaterial(blockTop).isLiquid()&&CommonUtil.getBlockFacing(worldObj, xCoord, yCoord+1, zCoord)!= 0 && CommonUtil.getMaterial(blockTop) != Material.lava){
+				CommonUtil.setBlockMeta(world, getPos().getX(), getPos().getY(), getPos().getZ(), 3, 2);
+			}else if(blockTop instanceof BlockLiquid && CommonUtil.getMaterial(blockTop).isLiquid()&&CommonUtil.getBlockFacing(world, getPos().getX(), getPos().getY()+1, getPos().getZ())!= 0 && CommonUtil.getMaterial(blockTop) != Material.LAVA){
 				this.energy.receiveEnergy(5, false);
-			}else if(blockBottom instanceof BlockLiquid && CommonUtil.getMaterial(blockBottom).isLiquid() &&CommonUtil.getBlockFacing(worldObj, xCoord, yCoord-1, zCoord)!= 0 && CommonUtil.getMaterial(blockBottom) != Material.lava){
+			}else if(blockBottom instanceof BlockLiquid && CommonUtil.getMaterial(blockBottom).isLiquid() &&CommonUtil.getBlockFacing(world, getPos().getX(), getPos().getY()-1, getPos().getZ())!= 0 && CommonUtil.getMaterial(blockBottom) != Material.LAVA){
 				this.energy.receiveEnergy(5, false);
 			} else {
 				setFacing(-1);

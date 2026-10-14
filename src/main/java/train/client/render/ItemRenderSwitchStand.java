@@ -1,14 +1,15 @@
 package train.client.render;
 
+import train.client.render.item.TCItemRenderer;
+
 import fexcraft.tmt.slim.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.models.ModelSwitchStandOn;
 import train.common.library.Info;
 
-public class ItemRenderSwitchStand implements IItemRenderer {
+public class ItemRenderSwitchStand extends TCItemRenderer {
     private static final ModelSwitchStandOn modeSwitch = new ModelSwitchStandOn();
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "switchStand_uv_draw_1.png");
 
@@ -47,7 +48,7 @@ public class ItemRenderSwitchStand implements IItemRenderer {
     }
 
     private void renderSwitch(float x, float y, float z, float scale) {
-        Tessellator.bindTexture(texture);
+        fexcraft.tmt.slim.Tessellator.bindTexture(texture);
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
 

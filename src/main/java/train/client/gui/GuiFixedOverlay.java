@@ -1,5 +1,7 @@
 package train.client.gui;
 
+import ebf.tim.utility.CommonUtil;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
@@ -77,7 +79,7 @@ public class GuiFixedOverlay extends GuiAbstractPaintbrush {
         // After the server recognizes that we changed it, it will send an update packet out to all clients.
         if (newOverlayNumber != 0) {
             rollingStock.getOverlayTextureContainer().getSpecificationFixed().setSelectedOverlay(newOverlayNumber);
-            Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.FIXED, rollingStock.getEntityId(), CommonUtil.getDimensionId(Minecraft.getMinecraft().thePlayer.worldObj), rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
+            Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.FIXED, rollingStock.getEntityId(), CommonUtil.getDimensionId(Minecraft.getMinecraft().player.world), rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
         }
     }
 

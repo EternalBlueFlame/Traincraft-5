@@ -1,4 +1,5 @@
 package train.common.entity.trains.steam;
+import train.client.render.models.ModelLocoBR80_DB;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -70,7 +71,7 @@ new ItemStack(ItemIDs.ironChimney.item, 1),
 new ItemStack(ItemIDs.ironCab.item, 1), 
 new ItemStack(ItemIDs.ironBoiler.item, 2), 
 new ItemStack(ItemIDs.ironFirebox.item, 1), 
-new ItemStack(Items.potionitem, 1),
+new ItemStack(Items.POTIONITEM, 1),
 new ItemStack(thisItem)
         };
     }
@@ -84,16 +85,16 @@ return 1;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelLocoBR80_DB()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelLocoBR80_DB()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.75f, -0.060000002f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.75f, -0.44f, 0f}};}
 @Override
-    public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
+    public float[][] modelRotations(){return new float[][]{{0f,0f,0f}};}  // 1.7.10 RenderEnum: no rotation (was {0,180,180}: rendered upside down)
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{0.8f,1.5f,0.45f}};}  // from the 1.7.10 class
     @Override
     public float[] getHitboxSize(){return new float[]{3.300000047683716f,2.1f,1.1f};}
     public TrainParticle[] getEffects(){

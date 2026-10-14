@@ -17,7 +17,7 @@ public class LinkHandler {
 	 * Attaching to colliding carts
 	 */
 	public static void addStake(EntityRollingStock cart1, EntityRollingStock cart2, boolean byPlayer) {
-		if (cart1.worldObj.isRemote) {
+		if (cart1.world.isRemote) {
 			return;
 		}
 			if (cart2.isAttaching && cart1.isAttaching) {
@@ -40,7 +40,7 @@ public class LinkHandler {
 				distancesZ[3] = cart1.bogieFront.posZ - cart2.bogieFront.posZ ;
 
 				for(int i = 0; i< distancesX.length;i++){
-					euclidian[i] = MathHelper.sqrt_double((distancesX[i] * distancesX[i]) + (distancesZ[i] * distancesZ[i]));
+					euclidian[i] = MathHelper.sqrt((distancesX[i] * distancesX[i]) + (distancesZ[i] * distancesZ[i]));
 				}
 
 				double minX = euclidian[0];
@@ -58,7 +58,7 @@ public class LinkHandler {
 
 
 				//System.out.println(d2);
-				if (MathHelper.sqrt_double((d * d) + (d1 * d1)) <= cart1.getLinkageDistance(cart1)) {
+				if (MathHelper.sqrt((d * d) + (d1 * d1)) <= cart1.getLinkageDistance(cart1)) {
 					/**
 					 * attach only if the link is free, each cart has two link obviously
 					 */

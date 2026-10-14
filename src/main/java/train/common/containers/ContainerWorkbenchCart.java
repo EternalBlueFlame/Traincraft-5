@@ -1,5 +1,7 @@
 package train.common.containers;
 
+import train.common.core.util.StackUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.*;
@@ -14,7 +16,7 @@ public class ContainerWorkbenchCart extends Container {
 	private World world;
 
 	public ContainerWorkbenchCart(InventoryPlayer par1InventoryPlayer, World par2World) {
-		this.getWorld() = par2World;
+		this.world = par2World;
 
 		this.addSlotToContainer(new SlotCrafting(par1InventoryPlayer.player, craftMatrix, craftResult, 0, 124, 35));
 		int var6;
@@ -44,7 +46,7 @@ public class ContainerWorkbenchCart extends Container {
 	 */
 	@Override
 	public void onCraftMatrixChanged(IInventory par1IInventory) {
-		this.craftResult.setInventorySlotContents(0, CraftingManager.getInstance().findMatchingRecipe(craftMatrix, getWorld()));
+		this.craftResult.setInventorySlotContents(0, CraftingManager.findMatchingResult(craftMatrix, world));
 	}
 
 	/**
@@ -56,7 +58,7 @@ public class ContainerWorkbenchCart extends Container {
 
 		if (!world.isRemote) {
 			for (int var2 = 0; var2 < 9; ++var2) {
-				ItemStack var3 = craftMatrix.getStackInSlotOnClosing(var2);
+				ItemStack var3 = craftMatrix.removeStackFromSlot(var2);
 
 				if (var3 != null) {
 					par1EntityPlayer.dropItem(var3.getItem(), var3.getCount());
@@ -83,39 +85,39 @@ public class ContainerWorkbenchCart extends Container {
 
 			if (par1 == 0) {
 				if (!this.mergeItemStack(var4, 10, 46, true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 
 				var3.onSlotChange(var4, var2);
 			}
 			else if (par1 >= 10 && par1 < 37) {
 				if (!this.mergeItemStack(var4, 37, 46, false)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (par1 >= 37 && par1 < 46) {
 				if (!this.mergeItemStack(var4, 10, 37, false)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (!this.mergeItemStack(var4, 10, 46, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 
 			if (var4.getCount() == 0) {
-				var3.putStack(null);
+				var3.putStack(ItemStack.EMPTY);
 			}
 			else {
 				var3.onSlotChanged();
 			}
 
 			if (var4.getCount() == var2.getCount()) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 
 			var3.onTake(player, var4);
 		}
 
-		return var2;
+		return StackUtil.nn(var2);
 	}
 }

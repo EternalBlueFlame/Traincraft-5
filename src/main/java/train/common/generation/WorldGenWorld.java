@@ -7,6 +7,8 @@
 
 package train.common.generation;
 
+import net.minecraft.world.gen.IChunkGenerator;
+
 import net.minecraftforge.fml.common.IWorldGenerator;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
@@ -23,9 +25,9 @@ import java.util.Random;
 public class WorldGenWorld implements IWorldGenerator {
 
 	@Override
-	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkProvider chunkGenerator, IChunkProvider chunkProvider) {
+	public void generate(Random random, int chunkX, int chunkZ, World world, IChunkGenerator chunkGenerator, IChunkProvider chunkProvider) {
 		RetrogenHandler.gennedChunks.add(new RetrogenHandler.ChunkData(chunkX, chunkZ, ebf.tim.utility.CommonUtil.getDimensionId(world)));
-		if(world.provider.terrainType != WorldType.FLAT){
+		if(world.getWorldType() != WorldType.FLAT){
 
 			if (ConfigHandler.ORE_GEN) {
 				addOreSpawn(BlockIDs.oreTC.block, 1, Blocks.SAND, world, random, chunkX * 16, chunkZ * 16, 10, 2, 25, 75);
@@ -44,7 +46,7 @@ public class WorldGenWorld implements IWorldGenerator {
 				int posX = blockXPos + random.nextInt(16);
 				int posY = minY + random.nextInt(yDiff);
 				int posZ = blockZPos + random.nextInt(16);
-				new WorldGenMinable(block, meta, maxVeinSize, blockIn).generate(world, random, posX, posY, posZ);
+				new WorldGenMinable(block.getStateFromMeta(meta), maxVeinSize, net.minecraft.block.state.pattern.BlockMatcher.forBlock(blockIn)).generate(world, random, new net.minecraft.util.math.BlockPos(posX, posY, posZ));
 			}
 		}
 	}

@@ -1,26 +1,22 @@
 package train.client.render.renderSwitch;
 
+import train.client.render.item.TCItemRenderer;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.MinecraftForgeClient;
 import org.lwjgl.opengl.GL11;
 import train.client.render.renderSwitch.models.ModelkSignal;
 import train.common.library.BlockIDs;
 import train.common.library.Info;
 
-public class ItemRenderkSignal implements IItemRenderer {
+public class ItemRenderkSignal extends TCItemRenderer {
     private static final ModelkSignal modeSwitch = new ModelkSignal();
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "kSignalGreen.png");
     private static final ResourceLocation iconTexture = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "texture.png");
-    private Object IIconRegister;
-    private Object IItemRenderer;
-    private IIcon itemIcon;
 
     public ItemRenderkSignal() {
     }
@@ -54,7 +50,7 @@ public class ItemRenderkSignal implements IItemRenderer {
             }
             case INVENTORY: {
                 //renderIcon();
-                MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(BlockIDs.signalSpanish.block), (net.minecraftforge.client.IItemRenderer) IItemRenderer);
+                // (1.7.10 re-registered a renderer here on every inventory render; not needed)
                 //renderSwitch(0f, 0f, 0f, 0.5f);
                 return;
             }
@@ -64,10 +60,6 @@ public class ItemRenderkSignal implements IItemRenderer {
     }
 
 
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":paintbrushThing");
-    }
 
     /*
     public static ResourceLocation getTexture(Entity entity) {
@@ -82,13 +74,9 @@ public class ItemRenderkSignal implements IItemRenderer {
 
      */
 
-    private void renderIcon() {
-        IIconRegister iconRegister = (net.minecraft.client.renderer.texture.IIconRegister) IIconRegister;
-        iconRegister.registerIcon(Info.modID.toLowerCase() + ":paintbrushThing");
-    }
 
     private void renderSwitch(float x, float y, float z, float scale) {
-        Tessellator.bindTexture(texture);
+        fexcraft.tmt.slim.Tessellator.bindTexture(texture);
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
 

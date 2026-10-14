@@ -11,8 +11,14 @@ import train.common.mtc.packets.PacketATOSetStopPoint;
 
 public class PacketATOSetStopPointHandler implements IMessageHandler<PacketATOSetStopPoint, IMessage> {
 
-   public IMessage onMessage(PacketATOSetStopPoint message, MessageContext ctx) {
-      Entity trainEntity = Minecraft.getMinecraft().thePlayer.getEntityWorld().getEntityByID(message.entity);
+   public IMessage onMessage(final PacketATOSetStopPoint message, final MessageContext ctx) {
+       // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+       net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(ctx.netHandler).addScheduledTask(() -> handleOnMainThread(message, ctx));
+       return null;
+   }
+
+   private IMessage handleOnMainThread(PacketATOSetStopPoint message, MessageContext ctx) {
+      Entity trainEntity = Minecraft.getMinecraft().player.getEntityWorld().getEntityByID(message.entity);
       if(trainEntity != null) {
          Locomotive theTrain = (Locomotive)trainEntity;
          theTrain.xFromStopPoint = message.xPos;

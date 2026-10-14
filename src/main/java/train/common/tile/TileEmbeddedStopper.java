@@ -15,6 +15,13 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEmbeddedStopper extends TileEntity {
 
+	// 1.12: modded tile entities are dropped on any block state change by default; only drop them when the block changes
+	@Override
+	public boolean shouldRefresh(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.state.IBlockState oldState, net.minecraft.block.state.IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
+
     private int facingMeta;
 
     public TileEmbeddedStopper() {
@@ -43,15 +50,22 @@ public class TileEmbeddedStopper extends TileEntity {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbtTag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbtTag) {
 
         super.writeToNBT(nbtTag);
 
         nbtTag.setByte("Orientation", (byte) facingMeta);
+    	return nbtTag;
+    }
+
+    /** 1.12 sends this with the chunk data (1.7.10 sent the description packet instead). */
+    @Override
+    public NBTTagCompound getUpdateTag() {
+    	return this.writeToNBT(new NBTTagCompound());
     }
 
     @Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
 
         NBTTagCompound nbt = new NBTTagCompound();
         this.writeToNBT(nbt);
@@ -61,7 +75,7 @@ public class TileEmbeddedStopper extends TileEntity {
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
-        this.readFromNBT(pkt.func_148857_g());
+        this.readFromNBT(pkt.getNbtCompound());
         super.onDataPacket(net, pkt);
     }
 }

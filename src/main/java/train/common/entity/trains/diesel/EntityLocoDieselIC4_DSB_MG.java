@@ -1,4 +1,5 @@
 package train.common.entity.trains.diesel;
+import train.client.render.models.ModelLocoDieselIC4_DSB_MG;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -73,16 +74,16 @@ return 3;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelLocoDieselIC4_DSB_MG()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelLocoDieselIC4_DSB_MG()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.8f, -0.060000002f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.8f, -0.44f, 0f}};}
 @Override
-    public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
+    public float[][] modelRotations(){return new float[][]{{0f,0f,0f}};}  // 1.7.10 RenderEnum: no rotation (was {0,180,180}: rendered upside down)
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{-3.0f,1.2f,0f},{2f,1.2f,-0.25f},{-0.4f,1.2f,-0.25f},{-1.2f,1.2f,0.25f}};}  // from the 1.7.10 class
     @Override
     public float[] getHitboxSize(){return new float[]{6.200000002980232f,2.1f,1.1f};}
     public TrainParticle[] getEffects(){

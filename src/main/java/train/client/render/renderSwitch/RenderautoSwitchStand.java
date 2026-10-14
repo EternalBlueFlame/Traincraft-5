@@ -1,5 +1,9 @@
 package train.client.render.renderSwitch;
 
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.util.EnumFacing;
+
 import fexcraft.tmt.slim.Tessellator;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -19,9 +23,9 @@ public class RenderautoSwitchStand extends TileEntitySpecialRenderer {
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "autoswitchoff.png");
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
-        boolean powered = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0;
-        Tessellator.bindTexture(powered?texture2:texture);
+    public void render(TileEntity tileEntity, double x, double y, double z, float tick, int destroyStage, float alpha) {
+        boolean powered = CommonUtil.getBlockAt(tileEntity.getWorld(), tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()).getWeakPower(tileEntity.getWorld().getBlockState(new BlockPos(tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ())), tileEntity.getWorld(), new BlockPos(tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()), EnumFacing.byIndex(0)) > 0;
+        fexcraft.tmt.slim.Tessellator.bindTexture(powered?texture2:texture);
 
         GL11.glPushMatrix();
         GL11.glTranslated(x+0.5,y+0.6,z+0.5);

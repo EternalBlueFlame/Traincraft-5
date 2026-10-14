@@ -7,19 +7,19 @@
 
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 
 public class ModelLights extends ModelBase {
-	private IModelCustom present;
+	private TCObjModel present;
 	
 	public ModelLights() {
-		present = new AdvancedModelLoader().loadModel(new ResourceLocation(Info.modelPrefix + "lights2.obj"));
+		present = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "lights2.obj"));
 	}
 	
 	public void render(String partname) {
@@ -36,10 +36,10 @@ public class ModelLights extends ModelBase {
 		GL11.glEnable(GL11.GL_BLEND);
 		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "lights.png"));
 		render("Bulb_1");
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 0.3f);
+		net.minecraft.client.renderer.GlStateManager.color(1.0f, 1.0f, 1.0f, 0.3f);
 		render("Plane_1");
 		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+		net.minecraft.client.renderer.GlStateManager.color(1.0f, 1.0f, 1.0f, 1.0f);
 		Minecraft.getMinecraft().entityRenderer.enableLightmap();
 		GL11.glPopMatrix();
 	}

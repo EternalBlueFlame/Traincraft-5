@@ -15,7 +15,8 @@ public class RenderRotativeWheel extends Render {
 
     private static final ModelBase modelRotaryExcavator_Wheel = new ModelRotaryExcavator_Wheel();
 
-    public RenderRotativeWheel() {
+    public RenderRotativeWheel(net.minecraft.client.renderer.entity.RenderManager renderManager) {
+        super(renderManager);
         //shadowSize = 0.5F;
         lastframe = System.nanoTime();
 

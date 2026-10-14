@@ -7,4 +7,8 @@ public class BlockBaseStairs extends BlockStairs {
     public BlockBaseStairs(Block block) {
         super(block.getDefaultState());
     }
+
+    public BlockBaseStairs(net.minecraft.block.state.IBlockState modelState) {
+        super(modelState);
+    }
 }

@@ -6,60 +6,79 @@
  ******************************************************************************/
 
 package train.common.blocks;
+import train.common.core.util.LegacyRender;
+
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.util.EnumBlockRenderType;
+
+import net.minecraft.block.state.IBlockState;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.library.Info;
 import train.common.tile.TileEmbeddedStopper;
 
-import static net.minecraftforge.common.util.EnumFacing.UP;
+import static net.minecraft.util.EnumFacing.UP;
 
 public class BlockEmbeddedStopper extends BlockContainer {
 
-    private IIcon texture;
+	// 1.12: keep the 1.7.10 metadata (facing/variant) in the block state, see LegacyMeta
+	@Override
+	protected net.minecraft.block.state.BlockStateContainer createBlockState() {
+		return new net.minecraft.block.state.BlockStateContainer(this, train.common.api.blocks.LegacyMeta.META);
+	}
+
+	@Override
+	public net.minecraft.block.state.IBlockState getStateFromMeta(int meta) {
+		return this.getDefaultState().withProperty(train.common.api.blocks.LegacyMeta.META, meta & 15);
+	}
+
+	@Override
+	public int getMetaFromState(net.minecraft.block.state.IBlockState state) {
+		return state.getValue(train.common.api.blocks.LegacyMeta.META);
+	}
+
+
 
     public BlockEmbeddedStopper() {
-        super(Material.iron);
+        super(Material.IRON);
         setCreativeTab(Traincraft.tcTab);
     }
 
     @Override
-    public boolean renderAsNormalBlock() {
+    public boolean isFullCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public boolean isOpaqueCube() {
+    public boolean isOpaqueCube(IBlockState state) {
         return false;
     }
 
     @Override
-    public int getRenderType() {
-        return -1; //RenderingRegistry.getNextAvailableRenderId();
+    public EnumBlockRenderType getRenderType(IBlockState state) {
+        return LegacyRender.renderType(-1); //RenderingRegistry.getNextAvailableRenderId();
+    }
+
+
+    @Override
+    public boolean canPlaceBlockAt(World world, BlockPos pos) {
+    	int x = pos.getX(), y = pos.getY(), z = pos.getZ();
+        return (world.isSideSolid(new BlockPos(x, y-1, z), UP));
     }
 
     @Override
-    public IIcon getIcon(int i, int j) {
-        return texture;
-    }
-
-    @Override
-    public boolean canPlaceBlockAt(World world, int x, int y, int z) {
-        return (world.isSideSolid(x, y-1, z, UP));
-    }
-
-    @Override
-    public void onBlockPlacedBy(World world, int par2, int par3, int par4, EntityLivingBase living, ItemStack stack) {
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase living, ItemStack stack) {
+    	int par2 = pos.getX(), par3 = pos.getY(), par4 = pos.getZ();
         TileEmbeddedStopper te = (TileEmbeddedStopper) CommonUtil.getTileEntity(world, par2, par3, par4);
         int var6 = CommonUtil.floorDouble(living.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         int var7 = CommonUtil.getBlockFacing(world, par2, par3, par4) >> 2;
@@ -96,9 +115,4 @@ public class BlockEmbeddedStopper extends BlockContainer {
         return new TileEmbeddedStopper(meta);
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerBlockIcons(IIconRegister iconRegister) {
-        texture = iconRegister.registerIcon(Info.modID.toLowerCase() + ":stopper");
-    }
 }

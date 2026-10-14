@@ -33,7 +33,7 @@ public class RailShapeCore {
                                      World dimension, ItemStack track,
                                      @Nullable ItemStack trackTies, @Nullable ItemStack trackBallast,
                                      @Nullable ItemStack overheadWires){
-        //if (dimension.getTileEntity(x,y,z) instanceof RailTileEntity) {
+        //if (dimension.getTileEntity(new net.minecraft.util.math.BlockPos(x, y, z)) instanceof RailTileEntity) {
             RailShapeCore shape = multiTriGenModel(coordList, mmFromCenter);
             shape.renderScale=renderScale;
             shape.rail=track;
@@ -41,13 +41,13 @@ public class RailShapeCore {
             shape.ballast=trackBallast;
             shape.wires=overheadWires;
 
-            //((RailTileEntity) dimension.getTileEntity(x, y, z)).setData(shape.toXML());
+            //((RailTileEntity) dimension.getTileEntity(new net.minecraft.util.math.BlockPos(x, y, z))).setData(shape.toXML());
        // }
 
     }
 
     public static void processPoints(int x, int y, int z, World dimension, RailSimpleShape coordList, XmlBuilder builder){
-        //if (dimension.getTileEntity(x,y,z) instanceof RailTileEntity && builder.containsFloat("scale")) {
+        //if (dimension.getTileEntity(new net.minecraft.util.math.BlockPos(x, y, z)) instanceof RailTileEntity && builder.containsFloat("scale")) {
             RailShapeCore shape = multiTriGenModel(coordList, builder.getIntArray("gauge"));
             shape.renderScale=builder.getFloat("scale");
             shape.rail=builder.getItemStack("rail");
@@ -55,7 +55,7 @@ public class RailShapeCore {
             shape.ballast=builder.getItemStack("ballast");
             shape.wires=builder.getItemStack("wires");
 
-            //((RailTileEntity) dimension.getTileEntity(x, y, z)).setData(shape.toXML());
+            //((RailTileEntity) dimension.getTileEntity(new net.minecraft.util.math.BlockPos(x, y, z))).setData(shape.toXML());
         //}
 
     }

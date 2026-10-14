@@ -38,7 +38,7 @@ public class ModelD51Tender extends ModelConverter //Same as Filename
 	@Override
 	public void render(Entity entity, float f0, float f1, float f2, float f3, float f4, float scale){
 		super.render(entity, f0, f1, f2, f3, f4, scale);
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation,Info.trainsPrefix +"c62_tender_bogie_Black.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation,Info.trainsPrefix +"c62_tender_bogie_Black.png"));
 		GL11.glPushMatrix();
 		GL11.glScalef(1,-1,1);
 		GL11.glTranslatef(5.25f,-0.8f,0);

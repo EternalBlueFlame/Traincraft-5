@@ -95,9 +95,15 @@ public class PacketSetTrainLockedToClient implements IMessage {
     public static class Handler implements IMessageHandler<PacketSetTrainLockedToClient, IMessage> {
 
         @Override
-        public IMessage onMessage(PacketSetTrainLockedToClient message, MessageContext context) {
+        public IMessage onMessage(final PacketSetTrainLockedToClient message, final MessageContext context) {
+            // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+            net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(context.netHandler).addScheduledTask(() -> handleOnMainThread(message, context));
+            return null;
+        }
+
+        private IMessage handleOnMainThread(PacketSetTrainLockedToClient message, MessageContext context) {
             if (context.side.isServer()) {
-                Entity TrainEntity = context.getServerHandler().playerEntity.worldObj.getEntityByID(message.entityID);
+                Entity TrainEntity = context.getServerHandler().player.world.getEntityByID(message.entityID);
                 if (!message.requestPacket) {
                     if (TrainEntity instanceof AbstractTrains) {
                         ((AbstractTrains) TrainEntity).setTrainLockedFromPacket(message.bool);
@@ -109,14 +115,14 @@ public class PacketSetTrainLockedToClient implements IMessage {
                     }
                 } else {
                     if (TrainEntity instanceof AbstractTrains) {
-                        if (context.getServerHandler().playerEntity.worldObj.getEntityByID(message.playerEntityID) != null) {
-                            Traincraft.lockChannel.sendTo(new PacketSetTrainLockedToClient(((AbstractTrains) TrainEntity).getTrainLockedFromPacket(), ((AbstractTrains) TrainEntity).getTrustedList(), message.entityID, false), ((EntityPlayerMP) context.getServerHandler().playerEntity.worldObj.getEntityByID(message.playerEntityID)));
+                        if (context.getServerHandler().player.world.getEntityByID(message.playerEntityID) != null) {
+                            Traincraft.lockChannel.sendTo(new PacketSetTrainLockedToClient(((AbstractTrains) TrainEntity).getTrainLockedFromPacket(), ((AbstractTrains) TrainEntity).getTrustedList(), message.entityID, false), ((EntityPlayerMP) context.getServerHandler().player.world.getEntityByID(message.playerEntityID)));
                         }
                     }
                 }
             } else {
                 if (!message.requestPacket) {
-                    Entity TrainEntity = Minecraft.getMinecraft().theWorld.getEntityByID(message.entityID);
+                    Entity TrainEntity = Minecraft.getMinecraft().world.getEntityByID(message.entityID);
                     if (TrainEntity instanceof AbstractTrains) {
                         ((AbstractTrains) TrainEntity).setTrustedList(message.trustedList);
                         ((AbstractTrains) TrainEntity).setTrainLockedFromPacket(message.bool);

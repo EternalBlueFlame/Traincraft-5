@@ -5,8 +5,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
 import train.common.api.blocks.TileRenderFacing;
 import train.common.blocks.blockSwitch.BlockSpeedSign;
 
@@ -21,7 +21,7 @@ public class TileSpeedSign extends TileRenderFacing {
 	}
 	public void setSkinstate(int skinstate) {
 		this.skinstate = skinstate;
-		CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
+		CommonUtil.markBlockForUpdate(world, getPos().getX(), getPos().getY(), getPos().getZ());
 
 	}
 
@@ -35,7 +35,7 @@ public class TileSpeedSign extends TileRenderFacing {
 		} else {
 			skinstate++;
 		}
-		CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
+		CommonUtil.markBlockForUpdate(world, getPos().getX(), getPos().getY(), getPos().getZ());
 	}
 
 
@@ -53,30 +53,30 @@ public class TileSpeedSign extends TileRenderFacing {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbtTag) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbtTag) {
 		super.writeToNBT(nbtTag);
 		nbtTag.setInteger("skinstate", this.skinstate);
-
-
+		return nbtTag;
 	}
 
-	public S35PacketUpdateTileEntity getDescriptionPacket() {
-
-		NBTTagCompound nbt = new NBTTagCompound();
-		this.writeToNBT(nbt);
-
-		return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
+	public SPacketUpdateTileEntity getUpdatePacket() {
+		return new SPacketUpdateTileEntity(getPos(), 1, getUpdateTag());
 	}
 
 	@Override
-	public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt){
-		this.readFromNBT(pkt.func_148857_g());
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
+		this.readFromNBT(pkt.getNbtCompound());
 		super.onDataPacket(net, pkt);
 	}
 
 	@SideOnly(Side.CLIENT)
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return CommonUtil.createAABB(xCoord - 1, yCoord - 1, zCoord - 1, xCoord + 2, yCoord + 2, zCoord + 2);
+		return CommonUtil.createAABB(getPos().getX() - 1, getPos().getY() - 1, getPos().getZ() - 1, getPos().getX() + 2, getPos().getY() + 2, getPos().getZ() + 2);
 	}
 }

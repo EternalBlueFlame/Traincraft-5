@@ -14,9 +14,9 @@ public class RendersignalSpanish extends TileEntitySpecialRenderer {
         private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "signalSpanishRed.png");
     private static final ResourceLocation texture2 = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "signalSpanishGreen.png");
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
+    public void render(TileEntity tileEntity, double x, double y, double z, float tick, int destroyStage, float alpha) {
         boolean state=((TilesignalSpanish) tileEntity).state == 1;
-        Tessellator.bindTexture(state?texture:texture2);
+        fexcraft.tmt.slim.Tessellator.bindTexture(state?texture:texture2);
         GL11.glPushMatrix();
         GL11.glTranslated(x+0.5,y+0.6,z+0.5);
         //GL11.glRotated(180,0,1,0);

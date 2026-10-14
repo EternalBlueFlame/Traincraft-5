@@ -238,10 +238,10 @@ public class ComponentVillageTrainstation extends StructureVillagePieces.Village
 				cart = new EntityFreightCartSmall(world);
 			cart.setLocationAndAngles(j2 + 0.5D, k2, l2 + 0.5D, 90.0F, 0.0F);
 			if (rD == 4) {
-				cart.setSkin("Blue");
+				cart.setColor("Blue");
 			}
 			if (rD == 5) {
-				cart.setSkin("Brown");
+				cart.setColor("Brown");
 			}
 			ebf.tim.utility.CommonUtil.spawnEntity(world, cart);
 		}

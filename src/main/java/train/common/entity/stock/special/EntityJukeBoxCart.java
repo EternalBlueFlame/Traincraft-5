@@ -1,4 +1,5 @@
 package train.common.entity.stock.special;
+import train.client.render.models.ModelJukeBox;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -69,7 +70,7 @@ null,
  null, 
 null, 
 null, 
-new ItemStack(Blocks.jukebox, 1),
+new ItemStack(Blocks.JUKEBOX, 1),
 new ItemStack(thisItem)
         };
     }
@@ -83,11 +84,11 @@ return 3;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelJukeBox()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelJukeBox()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.08000001f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0f, -0.42f, 0f}};}
 @Override
-    public float[][] modelRotations(){return new float[][]{{0f,180f,180f}};}
+    public float[][] modelRotations(){return new float[][]{{0f,0f,0f}};}  // 1.7.10 RenderEnum: no rotation (was {0,180,180}: rendered upside down)
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.

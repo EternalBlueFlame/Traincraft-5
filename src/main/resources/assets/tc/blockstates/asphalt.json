@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "normal": {
+      "model": "tc:asphalt"
+    },
+    "inventory": {
+      "model": "tc:asphalt"
+    }
+  }
+}

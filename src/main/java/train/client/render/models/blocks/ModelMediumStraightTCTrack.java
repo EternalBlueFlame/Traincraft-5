@@ -1,23 +1,23 @@
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
 @SideOnly(Side.CLIENT)
 public class ModelMediumStraightTCTrack extends ModelBase {
-	private IModelCustom modelMediumStraight;
-	private IModelCustom modelEmbeddedMediumStraight;
+	private TCObjModel modelMediumStraight;
+	private TCObjModel modelEmbeddedMediumStraight;
 
 	public ModelMediumStraightTCTrack() {
-		modelMediumStraight = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_normal.obj"));
+		modelMediumStraight = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_normal.obj"));
 	}
 
 	public void render(String type) {
@@ -34,9 +34,9 @@ public class ModelMediumStraightTCTrack extends ModelBase {
 
 		// Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
 		GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
-		GL11.glColor4f(1, 1, 1, 1);
+		net.minecraft.client.renderer.GlStateManager.color(1, 1, 1, 1);
 		//GL11.glScalef(0.5f, 0.5f, 0.5f);
-		int facing = CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord);
+		int facing = CommonUtil.getBlockFacing(tcRail.getWorld(), tcRail.getPos().getX(), tcRail.getPos().getY(), tcRail.getPos().getZ());
 
 		if (facing == 2) {
 			GL11.glRotatef(0, 0, 1, 0);

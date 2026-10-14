@@ -7,17 +7,20 @@
 
 package train.common.tile;
 
+import net.minecraft.util.ITickable;
+
 
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.api.LiquidManager;
 import train.common.core.util.Energy;
 
-public class TileGeneratorDiesel extends Energy implements IFluidHandler{
+public class TileGeneratorDiesel extends Energy implements ITickable, IFluidHandler{
 
     public boolean powered;
     public FluidTank theTank;
@@ -34,7 +37,7 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
     }
 
     @Override
-    public void updateEntity(){
+    public void update() {
         if(!world.isRemote){
             if(slots[0] != null){
                 ItemStack result = LiquidManager.getInstance().processContainer(this, 0, this, slots[0]);
@@ -148,19 +151,17 @@ public class TileGeneratorDiesel extends Energy implements IFluidHandler{
         return theTank.drain(maxDrain, doDrain);
     }
 
-    @Override
-    public boolean canfill(Fluid fluid){
+    public boolean canfill(Fluid fluid) {
         return true;
     }
 
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid){
+        public boolean canDrain(EnumFacing from, Fluid fluid){
         return false;
     }
 
     @Override
     public IFluidTankProperties[] getTankProperties(){
-        return new FluidTankInfo[]{theTank.getInfo()};
+        return theTank.getTankProperties();
     }
 
     @Override

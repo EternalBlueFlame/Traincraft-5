@@ -92,7 +92,7 @@ public class GuiJukebox extends GuiScreen {
         int var8 = (this.height) / 2 + gui_height / 2;
 
         drawRect(var5 + 2, var6 + 2, var7 + 2, var8 + 2, 0xffc6c6c6);
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.guiPrefix + "gui_jukebox.png"));
 
         drawSquareCorners(2, 2, var5, var6, var7, var8, 0, 0);
@@ -113,7 +113,7 @@ public class GuiJukebox extends GuiScreen {
 
         //fontRenderer.drawString("Date: " + Calendar.getInstance().get(Calendar.MONTH) + " " + Calendar.getInstance().get(Calendar.DATE), var5 - gui_width / 2, var6 - 30, 0xffffffff);
 
-        if (Minecraft.getMinecraft().thePlayer != null && (jukebox.player != null && !jukebox.isInvalid)) {
+        if (Minecraft.getMinecraft().player != null && (jukebox.player != null && !jukebox.isInvalid)) {
             fontRenderer.drawString("Volume: " + (int) Math.ceil(jukebox.volume * 100), width / 2 - 26, height / 2 + 18, 0xff0e0e0e);
         } else {
             fontRenderer.drawString("Volume: 0", width / 2 - 26, height / 2 + 18, 0xff0e0e0e);
@@ -124,7 +124,7 @@ public class GuiJukebox extends GuiScreen {
         streamTextBox.drawTextBox();
 
         if (intersectsWith(par1, par2)) {
-            drawCreativeTabHoveringText("When a jukebox is locked,", par1, par2);
+            drawHoveringText("When a jukebox is locked,", par1, par2);
         }
     }
 
@@ -181,7 +181,7 @@ public class GuiJukebox extends GuiScreen {
     }
 
     @Override
-    protected void keyTyped(char par1, int par2) {
+    protected void keyTyped(char par1, int par2) throws java.io.IOException {
         streamTextBox.textboxKeyTyped(par1, par2);
         if (par1 == 28) {
             actionPerformed((GuiButton) buttonList.get(1));
@@ -189,14 +189,14 @@ public class GuiJukebox extends GuiScreen {
 
         if (par2 == 1 || par2 == mc.gameSettings.keyBindInventory.getKeyCode()) {
             if (!streamTextBox.isFocused()) {
-                mc.thePlayer.closeScreen();
+                mc.player.closeScreen();
             }
         }
         super.keyTyped(par1, par2);
     }
 
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) {
+    protected void mouseClicked(int par1, int par2, int par3) throws java.io.IOException {
         streamTextBox.mouseClicked(par1, par2, par3);
         super.mouseClicked(par1, par2, par3);
     }
@@ -243,7 +243,7 @@ public class GuiJukebox extends GuiScreen {
         }
 
         if (button.id == 4) {
-            if (Minecraft.getMinecraft().thePlayer != null && (jukebox.player != null && !jukebox.isInvalid)) {
+            if (Minecraft.getMinecraft().player != null && (jukebox.player != null && !jukebox.isInvalid)) {
                 if (jukebox.volume < 1.0f) {
                     jukebox.volume += 0.1f;
                 }
@@ -251,7 +251,7 @@ public class GuiJukebox extends GuiScreen {
         }
 
         if (button.id == 5) {
-            if (Minecraft.getMinecraft().thePlayer != null && (jukebox.player != null && !jukebox.isInvalid)) {
+            if (Minecraft.getMinecraft().player != null && (jukebox.player != null && !jukebox.isInvalid)) {
                 if (jukebox.volume > 0.0f) {
                     jukebox.volume -= 0.1f;
                 }
@@ -261,7 +261,7 @@ public class GuiJukebox extends GuiScreen {
         if (button.id == 3) {
             if (player != null && player.getDisplayName().equals(((AbstractTrains) jukebox).getTrainOwner())) {
                 if ((!jukebox.locked)) {
-                    AxisAlignedBB box = jukebox.boundingBox.expand(5, 5, 5);
+                    AxisAlignedBB box = jukebox.getEntityBoundingBox().expand(5, 5, 5);
                     List lis3 = jukebox.world.getEntitiesWithinAABBExcludingEntity(jukebox, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object o : lis3) {
@@ -276,7 +276,7 @@ public class GuiJukebox extends GuiScreen {
                     button.displayString = "Locked";
                     this.initGui();
                 } else {
-                    AxisAlignedBB box = jukebox.boundingBox.expand(5, 5, 5);
+                    AxisAlignedBB box = jukebox.getEntityBoundingBox().expand(5, 5, 5);
                     List lis3 = jukebox.world.getEntitiesWithinAABBExcludingEntity(jukebox, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object o : lis3) {
@@ -307,8 +307,7 @@ public class GuiJukebox extends GuiScreen {
         return false;
     }
 
-    @Override
-    protected void drawCreativeTabHoveringText(String str, int t, int g) {
+    public void drawHoveringText(String str, int t, int g) {
         int textWidth = fontRenderer.getStringWidth("When a jukebox is unlocked,") + 2;
 
         int i4 = 0xf0100010;

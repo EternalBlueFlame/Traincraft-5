@@ -36,7 +36,7 @@ public class RenderAmericanStopper extends TileEntitySpecialRenderer {
     }
 
     @Override
-    public void renderTileEntityAt(TileEntity var1, double var2, double var4, double var6, float var8) {
+    public void render(TileEntity var1, double var2, double var4, double var6, float var8, int destroyStage, float alpha) {
         render(var1, var2, var4, var6);
     }
 }

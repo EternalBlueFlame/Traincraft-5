@@ -246,7 +246,7 @@ public class GuiDynamicOverlay extends GuiScreen {
                 int colorColumn = color.ordinal() % 5;
                 int colorRow = color.ordinal() / 5;
                 GL11.glPushMatrix();
-                GL11.glColor4f(1, 1, 1, 1);
+                net.minecraft.client.renderer.GlStateManager.color(1, 1, 1, 1);
                 GL11.glTranslatef(0, 0, 100);
                 mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.guiPrefix + "gui_dynamic_overlay.png"));
                 this.drawTexturedModalRect((colorColumn * 28) + COLORGRID_ANCHOR_X_TOPLEFT, (colorRow * 28) + COLORGRID_ANCHOR_Y_TOPLEFT, 0, 112, 28, 28);
@@ -268,14 +268,14 @@ public class GuiDynamicOverlay extends GuiScreen {
         this.fontRenderer.drawString(specificationDynamicList.get(dynamicOverlayNumber).getOverlayName(), (int) (GUI_ANCHOR_X + (MENU_TEXTURE_WIDTH * 0.5) - (fontRenderer.getStringWidth(specificationDynamicList.get(dynamicOverlayNumber).getOverlayName()) * 0.5)), GUI_ANCHOR_Y + 14, 0);
 
         // Draw Hovering Tooltips
-        if (mouseX > backgroundButton.xPosition && mouseX < backgroundButton.xPosition + backgroundButton.width && mouseY > backgroundButton.yPosition && mouseY < backgroundButton.yPosition + backgroundButton.height)
-            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Background Color.name")), mouseX, mouseY, fontRendererObj);
-        else if (mouseX > foregroundButton.xPosition && mouseX < foregroundButton.xPosition + foregroundButton.width && mouseY > foregroundButton.yPosition && mouseY < foregroundButton.yPosition + foregroundButton.height)
-            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Foreground Color.name")), mouseX, mouseY, fontRendererObj);
-        else if (mouseX > submitButton.xPosition && mouseX < submitButton.xPosition + submitButton.width && mouseY > submitButton.yPosition && mouseY < submitButton.yPosition + submitButton.height)
-            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Submit.name")), mouseX, mouseY, fontRendererObj);
-        else if (mouseX > cancelButton.xPosition && mouseX < cancelButton.xPosition + cancelButton.width && mouseY > cancelButton.yPosition && mouseY < cancelButton.yPosition + cancelButton.height)
-            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Back.name")), mouseX, mouseY, fontRendererObj);
+        if (mouseX > backgroundButton.x && mouseX < backgroundButton.x + backgroundButton.width && mouseY > backgroundButton.y && mouseY < backgroundButton.y + backgroundButton.height)
+            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Background Color.name")), mouseX, mouseY, fontRenderer);
+        else if (mouseX > foregroundButton.x && mouseX < foregroundButton.x + foregroundButton.width && mouseY > foregroundButton.y && mouseY < foregroundButton.y + foregroundButton.height)
+            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Foreground Color.name")), mouseX, mouseY, fontRenderer);
+        else if (mouseX > submitButton.x && mouseX < submitButton.x + submitButton.width && mouseY > submitButton.y && mouseY < submitButton.y + submitButton.height)
+            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Submit.name")), mouseX, mouseY, fontRenderer);
+        else if (mouseX > cancelButton.x && mouseX < cancelButton.x + cancelButton.width && mouseY > cancelButton.y && mouseY < cancelButton.y + cancelButton.height)
+            drawHoveringText(Collections.singletonList(CommonUtil.translate("dynamicoverlaymenu.Back.name")), mouseX, mouseY, fontRenderer);
     }
 
     @Override
@@ -319,8 +319,8 @@ public class GuiDynamicOverlay extends GuiScreen {
                         specificationDynamicList.get(dynamicOverlayNumber).setDisplayText(overlayTextBox.getText());
                         specificationDynamicList.get(dynamicOverlayNumber).setForegroundColor(foregroundColor);
                         specificationDynamicList.get(dynamicOverlayNumber).setBackgroundColor(backgroundColor);
-                        Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.DYNAMIC, rollingStock.getEntityId(), CommonUtil.getDimensionId(Minecraft.getMinecraft().thePlayer.worldObj), rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
-                        this.mc.thePlayer.closeScreen();
+                        Traincraft.overlayTextureChannel.sendToServer(new PacketTextureOverlayConfig(OverlayTextureManager.Type.DYNAMIC, rollingStock.getEntityId(), CommonUtil.getDimensionId(Minecraft.getMinecraft().player.world), rollingStock.getOverlayTextureContainer().getOverlayConfigTag()));
+                        this.mc.player.closeScreen();
                     }
                     break;
                 case 6: // Previous Overlay
@@ -356,14 +356,14 @@ public class GuiDynamicOverlay extends GuiScreen {
     }
 
     @Override
-    public void mouseClicked(int x, int y, int par3) {
+    public void mouseClicked(int x, int y, int par3) throws java.io.IOException {
         super.mouseClicked(x, y, par3);
         overlayTextBox.mouseClicked(x, y, par3);
         colorCodeTextBox.mouseClicked(x, y, par3);
     }
 
     @Override
-    protected void keyTyped(char eventChar, int eventKey) {
+    protected void keyTyped(char eventChar, int eventKey) throws java.io.IOException {
         if (eventKey == 1) { // If ESC...
             this.mc.player.closeScreen();
             editingPlayer.openGui(Traincraft.instance, GuiIDs.PAINTBRUSH, editingPlayer.getEntityWorld(), rollingStock.getEntityId(), -1, (int) editingPlayer.posZ);

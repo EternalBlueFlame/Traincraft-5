@@ -23,7 +23,7 @@ public class EntityStockCar extends EntityRollingStock implements IPassenger {
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
-		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
+		return !isDead && entityplayer.getDistanceSq(this) <= 64D;
 	}
 
 	@Override
@@ -49,10 +49,10 @@ public class EntityStockCar extends EntityRollingStock implements IPassenger {
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
 		super.writeEntityToNBT(nbttagcompound);
-		if (getPassengers().get(0) != null) {
+		if (ebf.tim.utility.CommonUtil.rider(this) != null) {
 
 			NBTTagCompound c = new NBTTagCompound();
-			if(getPassengers().get(0).writeMountToNBT(c)) {
+			if(ebf.tim.utility.CommonUtil.rider(this).writeToNBTOptional(c)) {
 				nbttagcompound.setTag("mob", c);
 			}
 		}

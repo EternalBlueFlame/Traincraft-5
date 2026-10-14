@@ -47,7 +47,7 @@ public class RecipeBookHandler {
         for (Object r : recipeList) {
             if (r instanceof ShapedTrainRecipes || r instanceof ShapelessTrainRecipe) {
                 ITCRecipe recipe = (ITCRecipe) r;
-                String output = Item.REGISTRY.getNameForObject(recipe.getRecipeOutput().getItem());
+                String output = String.valueOf(Item.REGISTRY.getNameForObject(recipe.getRecipeOutput().getItem()));
                 if (!outputs.contains(output)) {
                     cleaned.add(recipe);
                     outputs.add(output);
@@ -64,7 +64,7 @@ public class RecipeBookHandler {
         for (Object r : recipeList) {
             if (r instanceof TierRecipe) {
                 TierRecipe recipe = (TierRecipe) r;
-                String output = Item.REGISTRY.getNameForObject(recipe.getOutput().getItem());
+                String output = String.valueOf(Item.REGISTRY.getNameForObject(recipe.getOutput().getItem()));
                 if (!outputs.contains(output)) {
                     cleanedList.add(recipe);
                     outputs.add(output);

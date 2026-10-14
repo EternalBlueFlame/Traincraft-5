@@ -1,5 +1,7 @@
 package train.client.render;
 
+import net.minecraft.util.math.BlockPos;
+
 import fexcraft.tmt.slim.Tessellator;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -19,11 +21,11 @@ public class RenderSwitchStand extends TileEntitySpecialRenderer {
     private static final ResourceLocation texture2 = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "switchStand_uv_draw_2.png");
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
-        boolean skipRender = false, powered = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord).isProvidingWeakPower(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord, tileEntity.zCoord, 0) > 0;
+    public void render(TileEntity tileEntity, double x, double y, double z, float tick, int destroyStage, float alpha) {
+        boolean skipRender = false, powered = CommonUtil.getBlockAt(tileEntity.getWorld(), tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()).getWeakPower(tileEntity.getWorld().getBlockState(new BlockPos(tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ())), tileEntity.getWorld(), new BlockPos(tileEntity.getPos().getX(), tileEntity.getPos().getY(), tileEntity.getPos().getZ()), EnumFacing.byIndex(0)) > 0;
         TileSwitchStand tile = ((TileSwitchStand) tileEntity);
         if (tile.getFacing() != null) {
-            Tessellator.bindTexture(powered ? texture2 : texture);
+            fexcraft.tmt.slim.Tessellator.bindTexture(powered ? texture2 : texture);
         }
 
         GL11.glPushMatrix();

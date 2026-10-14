@@ -1,8 +1,10 @@
 package train.common.api;
 
+import train.common.core.util.StackUtil;
+
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -57,14 +59,14 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         numCargoSlots2 = 3;
         inventorySize = numCargoSlots + numCargoSlots2 + numCargoSlots1 + 1;
         controlCarInventory = new ItemStack[inventorySize];
-        dataWatcher.addObject(28, lightingDetailsJSONString());
+        getDataWatcher().addObject(28, lightingDetailsJSONString());
         if (connectedLocomotive == null)
         {
-            dataWatcher.addObject(29, 0);
+            getDataWatcher().addObject(29, 0);
         }
         else
         {
-            dataWatcher.addObject(29, connectedLocomotive.getEntityId());
+            getDataWatcher().addObject(29, connectedLocomotive.getEntityId());
         }
     }
 
@@ -117,7 +119,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         isBeaconEnabled = lightingDetailsJSONObject.get(DataMemberName.isBeaconEnabled.AsString()).getAsBoolean();
         ditchLightMode = lightingDetailsJSONObject.get(DataMemberName.ditchLightMode.AsString()).getAsByte();
         beaconCycleIndex = lightingDetailsJSONObject.get(DataMemberName.beaconCycleIndex.AsString()).getAsByte();
-        dataWatcher.updateObject(28, lightingDetailsJSONString());
+        getDataWatcher().updateObject(28, lightingDetailsJSONString());
     }
 
     private void readInventory(NBTTagCompound ntc)
@@ -175,7 +177,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
                 connectedLocomotive = null;
             }
 
-            dataWatcher.updateObject(29, connectedLocomotive == null ? 0 : connectedLocomotive.getEntityId());
+            getDataWatcher().updateObject(29, connectedLocomotive == null ? 0 : connectedLocomotive.getEntityId());
         }
         else
         {
@@ -190,7 +192,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         super.onUpdate();
         if (!world.isRemote)
         {
-            dataWatcher.updateObject(28, lightingDetailsJSONString());
+            getDataWatcher().updateObject(28, lightingDetailsJSONString());
         }
     }
 
@@ -204,7 +206,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
                 whistleDelay = 65;
             }
         }
-        List entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, ebf.tim.utility.CommonUtil.createAABB(
+        List entities = world.getEntitiesWithinAABB(EntityAnimal.class, ebf.tim.utility.CommonUtil.createAABB(
                 this.posX-20,this.posY-5,this.posZ-20,
                 this.posX+20,this.posY+5,this.posZ+20));
 
@@ -217,20 +219,19 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
             }
         }
     }
-    public void updateRiderPosition()
-    {
-        if(!getPassengers().isEmpty() && getPassengers().get(0)!=null)
+    public void updatePassenger(net.minecraft.entity.Entity passenger) {
+        if(!getPassengers().isEmpty() && ebf.tim.utility.CommonUtil.rider(this)!=null)
         {
-            getPassengers().get(0).setPosition(posX, posY + getMountedYOffset() + getPassengers().get(0).getYOffset() + 0.2, posZ);
+            ebf.tim.utility.CommonUtil.rider(this).setPosition(posX, posY + getMountedYOffset() + ebf.tim.utility.CommonUtil.rider(this).getYOffset() + 0.2, posZ);
         }
     }
 
     @Override
     public void pressKey(int i)
     {
-        if (i == 7 && !getPassengers().isEmpty() && getPassengers().get(0) instanceof EntityPlayer)
+        if (i == 7 && !getPassengers().isEmpty() && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer)
         {
-            ((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.CONTROL_CAR, world, (int) this.posX, (int) this.posY, (int) this.posZ);
+            ((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).openGui(Traincraft.instance, GuiIDs.CONTROL_CAR, world, (int) this.posX, (int) this.posY, (int) this.posZ);
         }
     }
 
@@ -242,7 +243,7 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     }
 
     public boolean isNotOwner() {
-        if (!this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof EntityPlayer && !((EntityPlayer) this.getPassengers().get(0)).getName().equalsIgnoreCase(this.getTrainOwner())) {
+        if (!this.getPassengers().isEmpty() && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer && !((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).getName().equalsIgnoreCase(this.getTrainOwner())) {
             return true;
         }
         if (this.seats.size() > 0 && this.seats.get(0).getPassenger() instanceof EntityPlayer && !((EntityPlayer) this.seats.get(0).getPassenger()).getName().equalsIgnoreCase(this.getTrainOwner())) {
@@ -313,16 +314,16 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
                     if (connectedLocomotive.getFuel() > 0 && connectedLocomotive.isLocoTurnedOn() && rand.nextInt(4) == 0 && !world.isRemote)
                     {
                         if (this.getTrainLockedFromPacket()
-                                && !(!this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof EntityPlayer
-                                        && !((EntityPlayer) this.getPassengers().get(0)).getName().toLowerCase()
+                                && !(!this.getPassengers().isEmpty() && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer
+                                        && !((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).getName().toLowerCase()
                                         .equals(this.getTrainOwner().toLowerCase())))
                         {
                             return;
                         }
-                        if (!this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof EntityPlayer)
+                        if (!this.getPassengers().isEmpty() && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer)
                         {
                             int dir = MathHelper
-                                    .floor((((EntityPlayer) this.getPassengers().get(0)).rotationYaw * 4F) / 360F + 0.5D) & 3;
+                                    .floor((((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).rotationYaw * 4F) / 360F + 0.5D) & 3;
                             //System.out.println(dir);
                             if (dir == 2)
                             {
@@ -393,8 +394,8 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
     {
         if (this.getTrainLockedFromPacket())
         {
-            if (!this.getPassengers().isEmpty() && this.getPassengers().get(0) instanceof EntityPlayer
-                    && !((EntityPlayer) this.getPassengers().get(0)).getName().toLowerCase()
+            if (!this.getPassengers().isEmpty() && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer
+                    && !((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).getName().toLowerCase()
                     .equals(this.getTrainOwner().toLowerCase()))
             {
                 return;
@@ -473,27 +474,27 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
 
     public int getLocomotiveBeingControlledEntityID()
     {
-        return dataWatcher.getWatchableObjectInt(29);
+        return getDataWatcher().getWatchableObjectInt(29);
     }
 
     public boolean isLightsEnabled()
     {
-        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.isLightsEnabled.AsString()).getAsBoolean();
+        return AsJsonObject(getDataWatcher().getWatchableObjectString(28)).get(DataMemberName.isLightsEnabled.AsString()).getAsBoolean();
     }
 
     public boolean isBeaconEnabled()
     {
-        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.isBeaconEnabled.AsString()).getAsBoolean();
+        return AsJsonObject(getDataWatcher().getWatchableObjectString(28)).get(DataMemberName.isBeaconEnabled.AsString()).getAsBoolean();
     }
 
     public byte getBeaconCycleIndex()
     {
-        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.beaconCycleIndex.AsString()).getAsByte();
+        return AsJsonObject(getDataWatcher().getWatchableObjectString(28)).get(DataMemberName.beaconCycleIndex.AsString()).getAsByte();
     }
 
     public boolean isDitchLightsEnabled()
     {
-        return AsJsonObject(dataWatcher.getWatchableObjectString(28)).get(DataMemberName.ditchLightMode.AsString()).getAsByte() > 0;
+        return AsJsonObject(getDataWatcher().getWatchableObjectString(28)).get(DataMemberName.ditchLightMode.AsString()).getAsByte() > 0;
     }
 
     private JsonObject AsJsonObject(String string)
@@ -522,10 +523,10 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
         return false;
     }
 
-    public void openInventory() {
+    public void openInventory(EntityPlayer player) {
     }
 
-    public void closeInventory() {
+    public void closeInventory(EntityPlayer player) {
     }
 
     @Override
@@ -540,17 +541,17 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        return controlCarInventory[i];
+        return StackUtil.nn(controlCarInventory[i]);
     }
 
     @Override
-    public ItemStack getStackInSlotOnClosing(int par1) {
+    public ItemStack removeStackFromSlot(int par1) {
         if (this.controlCarInventory[par1] != null) {
             ItemStack var2 = this.controlCarInventory[par1];
             this.controlCarInventory[par1] = null;
-            return var2;
+            return StackUtil.nn(var2);
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
@@ -560,21 +561,21 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
             if (controlCarInventory[i].getCount() <= j) {
                 ItemStack itemstack = controlCarInventory[i];
                 controlCarInventory[i] = null;
-                return itemstack;
+                return StackUtil.nn(itemstack);
             }
             ItemStack itemstack1 = controlCarInventory[i].splitStack(j);
             if (controlCarInventory[i].getCount() == 0) {
                 controlCarInventory[i] = null;
             }
-            return itemstack1;
+            return StackUtil.nn(itemstack1);
 
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemstack) {
+    public void setInventorySlotContents(int i, ItemStack itemstack) { if (itemstack != null && itemstack.isEmpty()) itemstack = null;
         controlCarInventory[i] = itemstack;
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit())
         {

@@ -34,7 +34,13 @@ public class PacketSetLocoTurnedOn implements IMessage {
 
     public static class Handler implements IMessageHandler<PacketSetLocoTurnedOn, IMessage> {
         @Override
-        public IMessage onMessage(PacketSetLocoTurnedOn message, MessageContext context) {
+        public IMessage onMessage(final PacketSetLocoTurnedOn message, final MessageContext context) {
+            // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+            net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(context.netHandler).addScheduledTask(() -> handleOnMainThread(message, context));
+            return null;
+        }
+
+        private IMessage handleOnMainThread(PacketSetLocoTurnedOn message, MessageContext context) {
             Entity trainEntity = context.getServerHandler().player.getRidingEntity();
             if (trainEntity instanceof EntitySeat) {
                 trainEntity = ((EntitySeat)context.getServerHandler().player.getRidingEntity()).parent;

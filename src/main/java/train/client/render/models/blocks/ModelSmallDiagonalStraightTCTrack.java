@@ -1,12 +1,12 @@
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
@@ -14,11 +14,11 @@ import train.common.tile.TileTCRail;
 @SideOnly(Side.CLIENT)
 public class ModelSmallDiagonalStraightTCTrack extends ModelBase {
 
-    private IModelCustom modelSmallDiagonalStraight;
+    private TCObjModel modelSmallDiagonalStraight;
 
 
     public ModelSmallDiagonalStraightTCTrack() {
-        modelSmallDiagonalStraight = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_straight_diagonal.obj"));
+        modelSmallDiagonalStraight = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_straight_diagonal.obj"));
     }
 
     public void render(String type) {
@@ -26,7 +26,7 @@ public class ModelSmallDiagonalStraightTCTrack extends ModelBase {
     }
 
     public void render(String type, TileTCRail tcRail, double x, double y, double z) {
-        render( type, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1 );
+        render( type, CommonUtil.getBlockFacing(tcRail.getWorld(), tcRail.getPos().getX(), tcRail.getPos().getY(), tcRail.getPos().getZ()), x, y, z, 1, 1, 1, 1 );
     }
 
     public void render( String type, int facing, double x, double y, double z, float r, float g, float b, float a )
@@ -40,7 +40,7 @@ public class ModelSmallDiagonalStraightTCTrack extends ModelBase {
 
         // Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
         GL11.glTranslatef((float) x + 0f, (float) y, (float) z + 0f);
-        GL11.glColor4f(r, g, b, a);
+        net.minecraft.client.renderer.GlStateManager.color(r, g, b, a);
 
 
         if (facing == 4 || facing == 6) {

@@ -1,5 +1,7 @@
 package train.common.entity.rollingStockOld.freight;
 
+import net.minecraft.util.EnumHand;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -80,8 +82,8 @@ public class EntityTankWagon extends LiquidTank {
     }
 
     @Override
-    public boolean interactFirst(EntityPlayer entityplayer) {
-        if (super.interactFirst(entityplayer)) {
+    public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
+        if (super.processInitialInteract(entityplayer, hand)) {
             return false;
         }
 
@@ -93,7 +95,7 @@ public class EntityTankWagon extends LiquidTank {
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer entityplayer) {
-        return (!isDead && entityplayer.getDistanceSqToEntity(this) <= 64D);
+        return (!isDead && entityplayer.getDistanceSq(this) <= 64D);
     }
 
     @Override

@@ -71,7 +71,7 @@ public class DebugUtil {
 				System.out.println(e);
 			}
 			System.out.println("------------------TiM Debug------------------");
-			System.exit(-1);
+			net.minecraftforge.fml.common.FMLCommonHandler.instance().exitJava(-1, false);
 		}
 	}
 

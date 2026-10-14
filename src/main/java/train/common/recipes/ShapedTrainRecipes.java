@@ -77,6 +77,9 @@ public class ShapedTrainRecipes implements ITCRecipe {
 		for (int i = 0; i < 9/* recipeItems.length */; i++) {
 			ItemStack var9 = recipeItems[i];
 			ItemStack var10 = inventory.getStackInSlot(i);
+			// 1.12: empty slots are ItemStack.EMPTY, not null
+			if (var9 != null && var9.isEmpty()) var9 = null;
+			if (var10 != null && var10.isEmpty()) var10 = null;
 
 			if (var10 != null || var9 != null) {
 				if (var10 == null || var9 == null) {

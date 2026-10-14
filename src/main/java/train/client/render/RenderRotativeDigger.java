@@ -13,7 +13,8 @@ public class RenderRotativeDigger extends Render {
 
     private static final ModelBase modelRotaryExcavator = new ModelRotaryExcavator();
 
-    public RenderRotativeDigger() {
+    public RenderRotativeDigger(net.minecraft.client.renderer.entity.RenderManager renderManager) {
+        super(renderManager);
         shadowSize = 0.5F;
     }
 

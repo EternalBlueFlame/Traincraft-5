@@ -14,11 +14,11 @@ public class GuiTextFieldDynamicOverlay extends GuiTextField {
     private final int[] inactiveColors = new int[]{ new Color(22, 22, 22).getRGB(), new Color(142, 142, 142).getRGB(), new Color(166, 166, 166).getRGB() };
     private final int[] activeColors = new int[]{ new Color(0, 130, 13).getRGB(), new Color(0, 89, 7).getRGB(), new Color(166, 166, 166).getRGB() };
     public GuiTextFieldDynamicOverlay(FontRenderer p_i1032_1_, int p_i1032_2_, int p_i1032_3_, int p_i1032_4_, int p_i1032_5_, String prefix) {
-        super(p_i1032_1_, p_i1032_2_, p_i1032_3_, p_i1032_4_, p_i1032_5_);
-        drawXPosition = xPosition - 8;
-        drawYPosition = yPosition - 7;
-        GUI_ANCHOR_Y_BOTTOM = yPosition + height;
-        GUI_ANCHOR_X_RIGHT = xPosition + width + 6;
+        super(0, p_i1032_1_, p_i1032_2_, p_i1032_3_, p_i1032_4_, p_i1032_5_);
+        drawXPosition = x - 8;
+        drawYPosition = y - 7;
+        GUI_ANCHOR_Y_BOTTOM = y + height;
+        GUI_ANCHOR_X_RIGHT = x + width + 6;
         this.prefix = prefix;
     }
 

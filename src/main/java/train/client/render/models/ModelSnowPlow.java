@@ -520,7 +520,7 @@ public class ModelSnowPlow extends ModelBase
 		{
 			snowplowModel[i].render(f5);
 		}
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/MILW_H1044_bogie.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/MILW_H1044_bogie.png"));
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(-1.5,0.6,0);

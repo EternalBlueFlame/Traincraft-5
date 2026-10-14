@@ -1,5 +1,9 @@
 package train.common.tile;
 
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.util.ITickable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -13,7 +17,7 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import train.common.Traincraft;
@@ -29,7 +33,14 @@ import train.common.library.TraincraftRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileTCRail extends TileEntity {
+public class TileTCRail extends TileEntity implements ITickable {
+
+	// 1.12: modded tile entities are dropped on any block state change by default; only drop them when the block changes
+	@Override
+	public boolean shouldRefresh(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.state.IBlockState oldState, net.minecraft.block.state.IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
 
 	public double r;
 	public double cx;
@@ -80,7 +91,7 @@ public class TileTCRail extends TileEntity {
 	}
 
 	public void setType(String type) {
-		CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
+		CommonUtil.markBlockForUpdate(world, getPos().getX(), getPos().getY(), getPos().getZ());
 		this.type = type;
 		for (EnumTracks rail : EnumTracks.values()) {
 			if (rail.getLabel().equals(type)) {
@@ -99,7 +110,7 @@ public class TileTCRail extends TileEntity {
 
 
 	public void setBallastMaterial(int  ballast) {
-		CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
+		CommonUtil.markBlockForUpdate(world, getPos().getX(), getPos().getY(), getPos().getZ());
 		this.ballastMaterial = ballast;
 	}
 
@@ -114,7 +125,7 @@ public class TileTCRail extends TileEntity {
 		Block type = getBlockType();
 		if (type == BlockIDs.tcRail.block )
 		{
-			bb = CommonUtil.createAABB(xCoord - 32, yCoord, zCoord - 32, xCoord + 32, yCoord , zCoord + 32);
+			bb = CommonUtil.createAABB(getPos().getX() - 32, getPos().getY() - 2, getPos().getZ() - 32, getPos().getX() + 33, getPos().getY() + 6, getPos().getZ() + 33); // slopes climb, the box was flat
 		}
 
 		return bb;
@@ -175,17 +186,17 @@ public class TileTCRail extends TileEntity {
 
 	private byte checkBlockXZ=0;
 	@Override
-	public void updateEntity() {
-		if (worldObj.isRemote || !TCRailTypes.isSwitchTrack(this)) {
+	public void update() {
+		if (world.isRemote || !TCRailTypes.isSwitchTrack(this)) {
 
 			return;
 		}
 
 		if (updateTicks % 11 == 0 || updateTicks==1) {
-			boolean flag = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+			boolean flag = world.isBlockPowered(new BlockPos(getPos().getX(), getPos().getY(), getPos().getZ()));
 
 			if(checkBlockXZ==0){
-				if(CommonUtil.getBlockAt(worldObj,xCoord,yCoord,zCoord+1) instanceof BlockTCRail){
+				if(CommonUtil.getBlockAt(world,getPos().getX(),getPos().getY(),getPos().getZ()+1) instanceof BlockTCRail){
 					checkBlockXZ=1;
 				} else {
 					checkBlockXZ=2;
@@ -193,14 +204,14 @@ public class TileTCRail extends TileEntity {
 			}
 			if(!flag){
 				if(checkBlockXZ==1){
-					flag = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord+1);
+					flag = world.isBlockPowered(new BlockPos(getPos().getX(), getPos().getY(), getPos().getZ()+1));
 					if(!flag){
-						flag = worldObj.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord-1);
+						flag = world.isBlockPowered(new BlockPos(getPos().getX(), getPos().getY(), getPos().getZ()-1));
 					}
 				} else if(checkBlockXZ==2){
-					flag = worldObj.isBlockIndirectlyGettingPowered(xCoord+1, yCoord, zCoord);
+					flag = world.isBlockPowered(new BlockPos(getPos().getX()+1, getPos().getY(), getPos().getZ()));
 					if(!flag){
-						flag = worldObj.isBlockIndirectlyGettingPowered(xCoord-1, yCoord, zCoord);
+						flag = world.isBlockPowered(new BlockPos(getPos().getX()-1, getPos().getY(), getPos().getZ()));
 					}
 				}
 			}
@@ -241,7 +252,7 @@ public class TileTCRail extends TileEntity {
 		int offsetY = b;
 		int offsetZ = c;
 		while (Math.abs(offsetX) < getTrack().getSwitchSize() && Math.abs(offsetY) < getTrack().getSwitchSize() && Math.abs(offsetZ) < getTrack().getSwitchSize()) {
-			te1 = CommonUtil.getTileEntity(worldObj, xCoord + offsetX, yCoord + offsetY, zCoord + offsetZ);
+			te1 = CommonUtil.getTileEntity(world, getPos().getX() + offsetX, getPos().getY() + offsetY, getPos().getZ() + offsetZ);
 			if (te1 instanceof TileTCRail) {
 				if (getSwitchState()) {
 					if (getType().contains("SWITCH") && getType().contains("LEFT")) {
@@ -262,7 +273,7 @@ public class TileTCRail extends TileEntity {
 		}
 
 		this.markDirty();
-		CommonUtil.markBlockForUpdate(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+		CommonUtil.markBlockForUpdate(this.world, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ());
 	}
 
 	@Override
@@ -331,7 +342,7 @@ public class TileTCRail extends TileEntity {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setByte("Orientation", (byte) facingMeta);
 		nbt.setDouble("r", r);
@@ -355,10 +366,17 @@ public class TileTCRail extends TileEntity {
 		nbt.setBoolean("hasModel", hasModel);
 		nbt.setBoolean("switchActive", switchActive);
 		nbt.setInteger("idDrop", Item.getIdFromItem(idDrop));
+		return nbt;
+	}
+
+	/** 1.12 sends this with the chunk data (1.7.10 sent the description packet instead). */
+	@Override
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
 	}
 
 	@Override
-	public Packet getDescriptionPacket() {
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
@@ -368,7 +386,7 @@ public class TileTCRail extends TileEntity {
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
-		this.readFromNBT(pkt.func_148857_g());
+		this.readFromNBT(pkt.getNbtCompound());
 		super.onDataPacket(net, pkt);
 	}
 

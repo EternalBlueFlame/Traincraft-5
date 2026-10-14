@@ -13,7 +13,8 @@ public class RenderBogie extends Render {
     };
     private static final ResourceLocation TEXTURE = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "robot.png");
 
-    public RenderBogie() {
+    public RenderBogie(net.minecraft.client.renderer.entity.RenderManager renderManager) {
+        super(renderManager);
     }
 
 

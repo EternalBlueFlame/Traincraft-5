@@ -1,11 +1,11 @@
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
@@ -14,20 +14,20 @@ import train.common.tile.TileTCRail;
 
 public class ModelLeft45DegreeTurnTCTrack {
 
-    private IModelCustom modelMediumLeft45DegreeTurn;
-    private IModelCustom modelLargeLeft45DegreeTurn;
-    private IModelCustom modelVeryLarge45DegreeTurn;
-    private IModelCustom modelSuperLarge45DegreeTurn;
-    private IModelCustom model9x2045DegreeTurn;
-    private IModelCustom model10x2245DegreeTurn;
+    private TCObjModel modelMediumLeft45DegreeTurn;
+    private TCObjModel modelLargeLeft45DegreeTurn;
+    private TCObjModel modelVeryLarge45DegreeTurn;
+    private TCObjModel modelSuperLarge45DegreeTurn;
+    private TCObjModel model9x2045DegreeTurn;
+    private TCObjModel model10x2245DegreeTurn;
 
     public ModelLeft45DegreeTurnTCTrack(){
-        modelMediumLeft45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_medium_left.obj"));
-        modelLargeLeft45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_large_left.obj"));
-        modelVeryLarge45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_very_large_left.obj"));
-        modelSuperLarge45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_super_large_left.obj"));
-        model9x2045DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_9x20_left.obj"));
-        model10x2245DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_10x22_left.obj"));
+        modelMediumLeft45DegreeTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_medium_left.obj"));
+        modelLargeLeft45DegreeTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_large_left.obj"));
+        modelVeryLarge45DegreeTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_very_large_left.obj"));
+        modelSuperLarge45DegreeTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_super_large_left.obj"));
+        model9x2045DegreeTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_9x20_left.obj"));
+        model10x2245DegreeTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_10x22_left.obj"));
 
     }
 
@@ -42,7 +42,7 @@ public class ModelLeft45DegreeTurnTCTrack {
 
 
     public void render(String type,String variant, TileTCRail tcRail, double x, double y, double z) {
-        render( type, variant, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1);
+        render( type, variant, CommonUtil.getBlockFacing(tcRail.getWorld(), tcRail.getPos().getX(), tcRail.getPos().getY(), tcRail.getPos().getZ()), x, y, z, 1, 1, 1, 1);
     }
 
     public void render(String type, String variant ,int facing, double x, double y, double z, float r, float g, float b, float a) {
@@ -58,7 +58,7 @@ public class ModelLeft45DegreeTurnTCTrack {
         // Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
         GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
 
-        GL11.glColor4f(r, g, b, a);
+        net.minecraft.client.renderer.GlStateManager.color(r, g, b, a);
         //GL11.glScalef(0.5f, 0.5f, 0.5f);
 
         if (facing == 0) {

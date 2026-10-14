@@ -1,5 +1,7 @@
 package train.common.entity.rollingStockOld.special;
 
+import net.minecraft.util.EnumHand;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -7,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
@@ -41,20 +43,20 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
     public void onUpdate() {
         super.onUpdate();
         checkInvent(cargoItems[0]);
-        if (worldObj.isRemote) {
+        if (world.isRemote) {
             return;
         }
 
         if (theTank != null && theTank.getFluid() != null) {
-            this.dataWatcher.updateObject(18, theTank.getFluidAmount());
-            this.dataWatcher.updateObject(4, theTank.getFluid().getFluidID());
+            getDataWatcher().updateObject(18, theTank.getFluidAmount());
+            getDataWatcher().updateObject(4, theTank.getFluid().getFluid().getName());
             if (theTank.getFluid().amount <= 1) {
                 motionX *= 0.94;
                 motionZ *= 0.94;
             }
         } else if (theTank != null && theTank.getFluid() == null) {
-            this.dataWatcher.updateObject(18, 0);
-            this.dataWatcher.updateObject(4, 0);
+            getDataWatcher().updateObject(18, 0);
+            getDataWatcher().updateObject(4, 0);
         }
 
         if (getAmount() > 0) {
@@ -71,7 +73,7 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
     }
 
     public int getDiesel() {
-        return (this.dataWatcher.getWatchableObjectInt(18));
+        return (getDataWatcher().getWatchableObjectInt(18));
     }
 
     public LiquidManager.StandardTank getTank() {
@@ -94,7 +96,7 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
 
         nbttagcompound.setTag("Items", nbttaglist);
         if (theTank != null && theTank.getFluid() != null) {
-            new FluidStack(theTank.getFluid(), this.dataWatcher.getWatchableObjectInt(18)).writeToNBT(nbttagcompound);
+            new FluidStack(theTank.getFluid(), getDataWatcher().getWatchableObjectInt(18)).writeToNBT(nbttagcompound);
         }
     }
 
@@ -107,7 +109,7 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
             NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
             int j = nbttagcompound1.getByte("Slot") & 0xff;
             if (j < cargoItems.length) {
-                cargoItems[j] = ItemStack.loadItemStackFromNBT(nbttagcompound1);
+                cargoItems[j] = new ItemStack(nbttagcompound1);
             }
         }
         if (nbttagcompound.hasKey("FluidName")) {
@@ -138,7 +140,7 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
     }
 
     public void liquidInSlot(ItemStack itemstack) {
-        if (worldObj.isRemote)
+        if (world.isRemote)
             return;
         this.update += 1;
         if (this.update % 8 == 0 && itemstack != null) {
@@ -171,7 +173,7 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
     }
 
     @Override
-    public String getInventoryName() {
+    public String getName() {
         return "DD35 B-Unit";
     }
 
@@ -181,12 +183,12 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
     }
 
     @Override
-    public boolean interactFirst(EntityPlayer entityplayer) {
-        if ((super.interactFirst(entityplayer))) {
+    public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
+        if ((super.processInitialInteract(entityplayer, hand))) {
             return false;
         }
-        if (!this.worldObj.isRemote) {
-            entityplayer.openGui(Traincraft.instance, GuiIDs.LIQUID, worldObj, this.getEntityId(), -1, (int) this.posZ);
+        if (!this.world.isRemote) {
+            entityplayer.openGui(Traincraft.instance, GuiIDs.LIQUID, world, this.getEntityId(), -1, (int) this.posZ);
         }
         return true;
     }
@@ -220,21 +222,17 @@ public class EntityBUnitDD35 extends LiquidTank implements IFluidHandler {
         return theTank.drain(maxDrain, doDrain);
     }
 
-    @Override
-    public FluidTankInfo[] getTankInfo(ForgeDirection from) {
-        return new FluidTankInfo[]{theTank.getInfo()};
-    }
 
     public FluidStack getFluid() {
         return theTank.getFluid();
     }
 
     public int getFluidAmount() {
-        return dataWatcher.getWatchableObjectInt(18);
+        return getDataWatcher().getWatchableObjectInt(18);
     }
 
     @Override
     public String getLiquidName() {
-        return FluidRegistry.getFluid(this.dataWatcher.getWatchableObjectInt(4)) != null ? FluidRegistry.getFluid(this.dataWatcher.getWatchableObjectInt(4)).getUnlocalizedName() : null;
+        return LiquidManager.fluidById(getDataWatcher().getWatchableObjectInt(4)) != null ? LiquidManager.fluidById(getDataWatcher().getWatchableObjectInt(4)).getUnlocalizedName() : null;
     }
 }

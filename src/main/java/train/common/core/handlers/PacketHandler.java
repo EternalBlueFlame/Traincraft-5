@@ -98,7 +98,7 @@ public class PacketHandler {
 		Traincraft.rollingStockDitchLightsChannel.registerMessage(PacketRollingStockDitchLights.Handler.class, PacketRollingStockDitchLights.class,
 				21, Side.SERVER);
 
-		if (Loader.isModLoaded("ComputerCraft")) {
+		if (Loader.isModLoaded("computercraft")) {
 			Traincraft.itsChannel.registerMessage(PacketSetSpeedHandler.class, PacketSetSpeed.class, 200, Side.CLIENT);
 			Traincraft.itsChannel.registerMessage(PacketSetSpeedHandler.class, PacketSetSpeed.class, 212, Side.SERVER);
 			Traincraft.updateTrainIDChannel.registerMessage(PacketUpdateTrainID.Handler.class, PacketUpdateTrainID.class, 11, Side.SERVER);

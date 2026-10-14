@@ -206,7 +206,7 @@ public class ModelFreightCarL extends ModelBase
 	{
 		super.render(entity, f, f1, f2, f3, f4, f5);
 
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/wellcar_bogie.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/wellcar_bogie.png"));
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(-2,0.3,0.45);

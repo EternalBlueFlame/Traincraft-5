@@ -7,14 +7,15 @@
 
 package train.client.render;
 
+import train.client.render.item.TCItemRenderer;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.models.blocks.ModelStopper;
 import train.common.library.Info;
 
-public class ItemRenderStopper implements IItemRenderer {
+public class ItemRenderStopper extends TCItemRenderer {
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "buffer.png");
     private static final ModelStopper stopper = new ModelStopper(1F);
 

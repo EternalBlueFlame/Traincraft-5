@@ -1,4 +1,5 @@
 package train.common.entity.rollingStock;
+import train.client.render.models.ModelPassenger6;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -182,7 +183,7 @@ public class EntityPassengerCar1 extends EntityRollingStock implements IPassenge
     }
 
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelPassenger6()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelPassenger6()};}
     @Override
     public float[][] modelRotations() {
         return new float[][] {{0.0f,180.0f,0.0f}};

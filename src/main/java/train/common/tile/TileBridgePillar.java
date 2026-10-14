@@ -1,4 +1,5 @@
 package train.common.tile;
+import train.client.render.models.blocks.ModelBridgePillar;
 
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -26,13 +27,12 @@ public class TileBridgePillar extends TileRenderFacing {
 			return 4096.0;
 		}
 	}
-	public boolean canUpdate()
-	{
+	public boolean canUpdateLegacy() {
 		return false;
 	}
 
 
-	static final train.client.render.models.blocks.ModelBridgePillar modelBridgePillar = new train.client.render.models.blocks.ModelBridgePillar();
+	static final ModelBridgePillar modelBridgePillar = new ModelBridgePillar();
 
 	static final ResourceLocation texture = new ResourceLocation(Info.modID, Info.modelTexPrefix + "bridgePillar.png");
 

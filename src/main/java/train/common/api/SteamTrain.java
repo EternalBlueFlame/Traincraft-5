@@ -1,5 +1,7 @@
 package train.common.api;
 
+import train.common.core.util.FluidContainers;
+
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -38,8 +40,8 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			this.theTank = LiquidManager.getInstance().new FilteredTank(maxTank, filter);
 		}
 		tankArray[0] = theTank;
-		dataWatcher.addObject(4, 0);
-		this.dataWatcher.addObject(27, 0);
+		getDataWatcher().addObject(4, 0);
+		getDataWatcher().addObject(27, 0);
 	}
 
 	@Override
@@ -66,8 +68,8 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			return;
 		}
 		if (theTank != null && theTank.getFluid() != null) {
-			this.dataWatcher.updateObject(27, theTank.getFluid().amount);
-			this.dataWatcher.updateObject(4, theTank.getFluid().getFluidID());
+			getDataWatcher().updateObject(27, theTank.getFluid().amount);
+			getDataWatcher().updateObject(4, LiquidManager.fluidId(theTank.getFluid().getFluid()));
 		}
 
 		if (theTank != null && theTank.getFluid() != null && getIsFuelled()) {
@@ -77,8 +79,8 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 			}
 		}
 		else if (theTank != null && theTank.getFluid() == null) {
-			this.dataWatcher.updateObject(27, 0);
-			this.dataWatcher.updateObject(4, 0);
+			getDataWatcher().updateObject(27, 0);
+			getDataWatcher().updateObject(4, 0);
 		}
 		if (rand.nextInt(100) == 0 && getWater() > 0 && getIsFuelled()) {
 			drain(getWaterConsumption() / 5, true);
@@ -93,7 +95,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	 * @return
 	 */
 	public int getWater() {
-		return (this.dataWatcher.getWatchableObjectInt(27));
+		return (getDataWatcher().getWatchableObjectInt(27));
 	}
 
 	/**
@@ -102,7 +104,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	 * @return int
 	 */
 	public int getLiquidItemID() {
-		return (this.dataWatcher.getWatchableObjectInt(4));
+		return (getDataWatcher().getWatchableObjectInt(4));
 	}
 
 	public StandardTank getTank() {
@@ -172,22 +174,21 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 		if (isLocoTurnedOn() && ticksExisted%10==0) {
 			FluidStack drain = null;
 
-			if(fill(ForgeDirection.UNKNOWN,new FluidStack(FluidRegistry.WATER, 100), false)==100) {
-				blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(worldObj, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY - 1), CommonUtil.floorDouble(posZ)),
-						CommonUtil.getTileEntity(worldObj, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 2), CommonUtil.floorDouble(posZ)),
-						CommonUtil.getTileEntity(worldObj, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 3), CommonUtil.floorDouble(posZ)),
-						CommonUtil.getTileEntity(worldObj, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 4), CommonUtil.floorDouble(posZ))
+			if(fill(new FluidStack(FluidRegistry.WATER, 100), false)==100) {
+				blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(world, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY - 1), CommonUtil.floorDouble(posZ)),
+						CommonUtil.getTileEntity(world, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 2), CommonUtil.floorDouble(posZ)),
+						CommonUtil.getTileEntity(world, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 3), CommonUtil.floorDouble(posZ)),
+						CommonUtil.getTileEntity(world, CommonUtil.floorDouble(posX), CommonUtil.floorDouble(posY + 4), CommonUtil.floorDouble(posZ))
 				};
 
 				for (TileEntity block : blocksToCheck) {
-					if (drain == null && block instanceof IFluidHandler) {
+					if (drain == null && FluidContainers.hasHandler(block)) {
 						for (EnumFacing direction : EnumFacing.VALUES) {
-							if(((IFluidHandler) block).drain(direction,100,false)!=null &&
-									((IFluidHandler) block).drain(direction, 100, false).fluid==FluidRegistry.WATER &&
-									((IFluidHandler) block).drain(direction, 100, false).amount ==100
+							if(FluidContainers.drain(block, direction, 100,false)!=null &&
+									FluidContainers.drain(block, direction, 100, false).getFluid()==FluidRegistry.WATER &&
+									FluidContainers.drain(block, direction, 100, false).amount ==100
 							) {
-								drain = ((IFluidHandler) block).drain(
-										direction, 100, true);
+								drain = FluidContainers.drain(block, direction, 100, true);
 							}
 						}
 					}
@@ -258,7 +259,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	@Override
 	public int getFuelDiv(int i) {
 		if (world.isRemote) {
-			return ((this.dataWatcher.getWatchableObjectInt(24) * i) / maxFuel);
+			return ((getDataWatcher().getWatchableObjectInt(24) * i) / maxFuel);
 		}
 		return (this.fuelTrain * i) / maxFuel;
 	}
@@ -295,7 +296,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
-		return new FluidTankInfo[] { theTank.getInfo() };
+		return theTank.getTankProperties();
 	}
 
 	public FluidStack getFluid() {

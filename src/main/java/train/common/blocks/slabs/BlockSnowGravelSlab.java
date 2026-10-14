@@ -1,5 +1,13 @@
 package train.common.blocks.slabs;
 
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.util.NonNullList;
+
+import net.minecraft.block.state.IBlockState;
+
+import net.minecraft.block.SoundType;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -8,26 +16,23 @@ import net.minecraft.block.material.Material;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import train.common.Traincraft;
 import train.common.library.BlockIDs;
 
 import java.util.List;
 import java.util.Random;
 
-public class BlockSnowGravelSlab extends BlockSlab
+public class BlockSnowGravelSlab extends BlockTCSlab
 {
     public BlockSnowGravelSlab(boolean par2)
     {
-        super(par2, Material.rock);
+        super(par2, Material.ROCK);
         this.useNeighborBrightness = true;
-        this.setStepSound(soundTypeStone);
+        this.setSoundType(SoundType.STONE);
         this.setResistance(5.0F);
         this.setHardness(2.0F);
-        this.setBlockName("snow gravel slab");
+        this.setTranslationKey("snow gravel slab");
     }
 
     /************
@@ -35,18 +40,12 @@ public class BlockSnowGravelSlab extends BlockSlab
      ************/
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item item, CreativeTabs tab, List list)
-    {
+    public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> list) {
+    	Item item = Item.getItemFromBlock(this);
         if (item != Item.getItemFromBlock(BlockIDs.snowGravelDoubleSlab.block))
         {
             list.add(new ItemStack(item, 1, 0));
         }
-    }
-
-    @Override
-    public String func_150002_b(int par1)
-    {
-        return super.getUnlocalizedName();
     }
 
     @SideOnly(Side.CLIENT)
@@ -57,17 +56,17 @@ public class BlockSnowGravelSlab extends BlockSlab
 
     @Override
     @SideOnly(Side.CLIENT)
-    public Item getItem(World par1World, int par2, int par3, int par4)
-    {
-        return isBlockSingleSlab(this) ? Item.getItemFromBlock(this) : (this == BlockIDs.snowGravelDoubleSlab.block ? Item.getItemFromBlock(BlockIDs.snowGravelSlab.block) : Item.getItemFromBlock(BlockIDs.snowGravel.block));
+    public ItemStack getItem(World par1World, BlockPos pos, IBlockState state) {
+    	int par2 = pos.getX(), par3 = pos.getY(), par4 = pos.getZ();
+        return new ItemStack(isBlockSingleSlab(this) ? Item.getItemFromBlock(this) : (this == BlockIDs.snowGravelDoubleSlab.block ? Item.getItemFromBlock(BlockIDs.snowGravelSlab.block) : Item.getItemFromBlock(BlockIDs.snowGravel.block)));
     }
 
     /************
      * DROPS
      ************/
     @Override
-    public Item getItemDropped(int par1, Random par2Random, int par3)
-    {
+    public Item getItemDropped(IBlockState state, Random par2Random, int par3) {
+    	int par1 = getMetaFromState(state);
         return Item.getItemFromBlock(BlockIDs.snowGravelSlab.block);
     }
 
@@ -76,13 +75,4 @@ public class BlockSnowGravelSlab extends BlockSlab
         return new ItemStack(BlockIDs.snowGravelSlab.block, 2, 0);
     }
 
-    /************
-     * TEXTURES
-     ************/
-    @Override
-    @SideOnly(Side.CLIENT)
-    public IIcon getIcon(int side, int meta)
-    {
-        return BlockIDs.snowGravel.block.getIcon(side, 2);
-    }
 }

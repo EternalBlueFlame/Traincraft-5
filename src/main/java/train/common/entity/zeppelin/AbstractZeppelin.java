@@ -1,5 +1,14 @@
 package train.common.entity.zeppelin;
 
+import train.common.core.util.StackUtil;
+
+import train.common.core.util.LegacyDataWatcher;
+
+import net.minecraft.util.EnumParticleTypes;
+
+import net.minecraft.util.EnumHand;
+
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -17,10 +26,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import train.common.Traincraft;
@@ -32,6 +40,29 @@ import train.common.library.GuiIDs;
 import java.util.List;
 
 public abstract class AbstractZeppelin extends Entity implements IInventory {
+
+	/** 1.7.10 Entity.yOffset (removed in 1.9; Minecraft now asks getYOffset()) */
+	protected double yOffsetLegacy = 0;
+
+	@Override
+	public double getYOffset() {
+		return this.yOffsetLegacy;
+	}
+
+
+	/* 1.7.10 DataWatcher slots on top of 1.12 EntityDataManager, see LegacyDataWatcher */
+	static {
+		LegacyDataWatcher.registerFamily(AbstractZeppelin.class);
+	}
+	private LegacyDataWatcher legacyDataWatcher;
+
+	public LegacyDataWatcher getDataWatcher() {
+		if (legacyDataWatcher == null) {
+			legacyDataWatcher = new LegacyDataWatcher(this, AbstractZeppelin.class);
+		}
+		return legacyDataWatcher;
+	}
+
 	protected ItemStack zeppInvent[];
 	public int numCargoSlots;
 	public int numCargoSlots1;
@@ -74,7 +105,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		boatRockDirection = 1;
 		preventEntitySpawning = true;
 		setSize(2F, 0.8F);
-		yOffset = height / 2.0F;
+		this.yOffsetLegacy = height / 2.0F;
 		numCargoSlots = 3;
 		numCargoSlots1 = 3;
 		numCargoSlots2 = 3;
@@ -84,7 +115,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		if (ConfigHandler.FLICKERING) {
 			this.ignoreFrustumCheck = true;
 		}
-		this.dataWatcher.addObject(20, fuel);
+		getDataWatcher().addObject(20, fuel);
 		this.field_70279_a = true;
 	}
 
@@ -98,12 +129,12 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 
 	@Override
 	public AxisAlignedBB getCollisionBox(Entity entity) {
-		return entity.boundingBox;
+		return entity.getEntityBoundingBox();
 	}
 
 	@Override
-	public AxisAlignedBB getBoundingBox() {
-		return boundingBox;
+	public AxisAlignedBB getCollisionBoundingBox() {
+		return getEntityBoundingBox();
 	}
 
 	@Override
@@ -113,13 +144,13 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 
 	@Override
 	public void applyEntityCollision(Entity entity) {
-		if (entity != entity.getPassengers().get(0)) {
+		if (entity != ebf.tim.utility.CommonUtil.rider(entity)) {
 			double var2 = entity.posX - this.posX;
 			double var4 = entity.posZ - this.posZ;
-			double var6 = MathHelper.abs_max(var2, var4);
+			double var6 = MathHelper.absMax(var2, var4);
 
 			if (var6 >= 0.009999999776482582D) {
-				var6 = MathHelper.sqrt_double(var6);
+				var6 = MathHelper.sqrt(var6);
 				var2 /= var6;
 				var4 /= var6;
 				double var8 = 1.0D / var6;
@@ -142,7 +173,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 
 	public AbstractZeppelin(World world, double d, double d1, double d2) {
 		this(world);
-		setPosition(d, d1 + yOffset, d2);
+		setPosition(d, d1 + getYOffset(), d2);
 		motionX = 0.0D;
 		motionY = 0.0D;
 		motionZ = 0.0D;
@@ -194,18 +225,18 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		}
 
 		if (i == 7 && !world.isRemote) {
-			((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.ZEPPELIN, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+			((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).openGui(Traincraft.instance, GuiIDs.ZEPPELIN, getEntityWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 		if (i == 9) {
-			if (this.getPassengers().get(0) != null && (this.getPassengers().get(0) instanceof EntityLivingBase)&&bombTimer<=0) {
+			if (ebf.tim.utility.CommonUtil.rider(this) != null && (ebf.tim.utility.CommonUtil.rider(this) instanceof EntityLivingBase)&&bombTimer<=0) {
 				if(this.zeppInvent!=null && this.zeppInvent.length>0){
 					for(int t=0;t<this.zeppInvent.length;t++){
-						if(this.zeppInvent[t]!=null && this.zeppInvent[t].getItem()!=null && this.zeppInvent[t].getItem() == Item.getItemFromBlock(Blocks.tnt)){
-							EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.worldObj, (double) ((float) posX), (double) ((float) posY -1F), (double) ((float) posZ), (EntityLivingBase) this.riddenByEntity);
-							CommonUtil.spawnEntity(this.worldObj, entitytntprimed);
+						if(this.zeppInvent[t]!=null && this.zeppInvent[t].getItem()!=null && this.zeppInvent[t].getItem() == Item.getItemFromBlock(Blocks.TNT)){
+							EntityTNTPrimed entitytntprimed = new EntityTNTPrimed(this.world, (double) ((float) posX), (double) ((float) posY -1F), (double) ((float) posZ), (EntityLivingBase) this.getControllingPassenger());
+							CommonUtil.spawnEntity(this.world, entitytntprimed);
 							CommonUtil.playSound(entitytntprimed, "random.fuse", 1.0F, 1.0F);
 							bombTimer=100;
-							if(--this.zeppInvent[t].stackSize==0)this.zeppInvent[t]=null;
+							this.zeppInvent[t].shrink(1);if(this.zeppInvent[t].isEmpty())this.zeppInvent[t]=ItemStack.EMPTY;
 							return;
 						}
 					}
@@ -249,7 +280,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	 * posY, posZ, yaw, pitch
 	 */
 	@Override
-	public void setPositionAndRotation2(double par1, double par3, double par5, float par7, float par8, int par9, boolean teleport) {
+	public void setPositionAndRotationDirect(double par1, double par3, double par5, float par7, float par8, int par9, boolean teleport) {
 		if (this.field_70279_a) {
 			this.boatPosRotationIncrements = par9 + 5;
 		}
@@ -292,7 +323,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	 * @param z
 	 * @return
 	 */
-	public Vec3 rotate(double x, double y, double z) {
+	public Vec3d rotate(double x, double y, double z) {
 		double cosYaw = Math.cos(this.getYaw() * 3.141593F / 180.0F);
 		double sinYaw = Math.sin(this.getYaw() * 3.141593F / 180.0F);
 		double cosPitch = Math.cos((this.getPitch()) * 3.141593F / 180.0F);
@@ -304,7 +335,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		double newY = -(((cosPitch - x) * -sinPitch));
 		double newZ = (y * sinRoll - x * cosRoll) * sinYaw + ((-x * sinRoll + y * cosRoll) * 0 + z * 0.01745) * cosYaw;
 
-		return Vec3.createVectorHelper(newX, newY, newZ);
+		return new Vec3d(newX, newY, newZ);
 	}
 
 	public float getYaw() {
@@ -328,7 +359,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			boatCurrentDamage--;
 		}
 
-		if (getPassengers().get(0) == null) {
+		if (ebf.tim.utility.CommonUtil.rider(this) == null) {
 			pitch = 0F;
 		}
 
@@ -338,10 +369,10 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		int i = 5;
 		double d = 0.0D;
 		for (int j = 0; j < i; j++) {
-			double d4 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j)) / i) - 0.125D;
-			double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j + 1)) / i) - 0.125D;
-			AxisAlignedBB axisalignedbb = CommonUtil.createAABB(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
-			if (worldObj.isAABBInMaterial(axisalignedbb, Material.water)) {
+			double d4 = (getEntityBoundingBox().minY + ((getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (j)) / i) - 0.125D;
+			double d8 = (getEntityBoundingBox().minY + ((getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (j + 1)) / i) - 0.125D;
+			AxisAlignedBB axisalignedbb = CommonUtil.createAABB(getEntityBoundingBox().minX, d4, getEntityBoundingBox().minZ, getEntityBoundingBox().maxX, d8, getEntityBoundingBox().maxZ);
+			if (world.isMaterialInBB(axisalignedbb, Material.WATER)) {
 				d += 1.0D / i;
 			}
 		}
@@ -355,19 +386,19 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			if (rand.nextBoolean()) {
 				double d21 = (posX - d13 * d18 * 0.80000000000000004D) + d15 * d20;
 				double d23 = posZ - d15 * d18 * 0.80000000000000004D - d13 * d20;
-				world.spawnParticle("largesmoke", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
+				world.spawnParticle(EnumParticleTypes.getByName("largesmoke"), d21, posY - 0.125D, d23, motionX, motionY, motionZ);
 			}
 			else {
 				double d22 = posX + d13 + d15 * d18 * 0.69999999999999996D;
 				double d24 = (posZ + d15) - d13 * d18 * 0.69999999999999996D;
-				world.spawnParticle("largesmoke", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
+				world.spawnParticle(EnumParticleTypes.getByName("largesmoke"), d22, posY - 0.125D, d24, motionX, motionY, motionZ);
 			}
 		}
 		float burn = FuelHandler.steamFuelLast(zeppInvent[0])*0.05f;
 
 		if (zeppInvent[0] != null && burn >0 && burn + fuel < 1000) {
 			fuel += TileEntityFurnace.getItemBurnTime(zeppInvent[0]);
-			this.dataWatcher.updateObject(20, fuel);
+			getDataWatcher().updateObject(20, fuel);
 			decrStackSize(0, 1);
 		}
 
@@ -383,7 +414,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 				var6 = this.posX + (this.boatX - this.posX) / this.boatPosRotationIncrements;
 				var8 = this.posY + (this.boatY - this.posY) / this.boatPosRotationIncrements;
 				var26 = this.posZ + (this.boatZ - this.posZ) / this.boatPosRotationIncrements;
-				var12 = MathHelper.wrapAngleTo180_double(this.boatYaw - this.rotationYaw);
+				var12 = MathHelper.wrapDegrees(this.boatYaw - this.rotationYaw);
 				this.rotationYaw = (float)(this.rotationYaw + var12 / this.boatPosRotationIncrements);
 				this.rotationPitch = (float) (this.rotationPitch + (this.boatPitch - this.rotationPitch) / this.boatPosRotationIncrements);
 				--this.boatPosRotationIncrements;
@@ -410,21 +441,21 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		}
 		double d5;
 		double speedMultiplier = 0.07;
-		if (this.getPassengers().get(0) != null && this.getPassengers().get(0) instanceof EntityLivingBase) {
-			d13 = ((EntityLivingBase) this.getPassengers().get(0)).moveForward;
+		if (ebf.tim.utility.CommonUtil.rider(this) != null && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityLivingBase) {
+			d13 = ((EntityLivingBase) ebf.tim.utility.CommonUtil.rider(this)).moveForward;
 
 			if (d13 > 0.0D) {
-				d5 = -Math.sin(this.riddenByEntity.rotationYaw * CommonUtil.radianF);
-				d11 = Math.cos(this.riddenByEntity.rotationYaw * CommonUtil.radianF);
+				d5 = -Math.sin(this.getControllingPassenger().rotationYaw * CommonUtil.radianF);
+				d11 = Math.cos(this.getControllingPassenger().rotationYaw * CommonUtil.radianF);
 				this.motionX += d5 * speedMultiplier * 0.05000000074505806D;
 				this.motionZ += d11 * speedMultiplier * 0.05000000074505806D;
 			}
 		}
 
 		if (rand.nextInt(4) == 0 && fuel > 0) {
-			fuel = this.dataWatcher.getWatchableObjectInt(20);
+			fuel = getDataWatcher().getWatchableObjectInt(20);
 			fuel--;
-			this.dataWatcher.updateObject(20, fuel);
+			getDataWatcher().updateObject(20, fuel);
 		}
 		double d3 = d * 2D - 1.0D;
 		motionY += 0.039999999105930328D * d3;
@@ -459,25 +490,25 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			motionZ *= 0.5D;
 		}
 
-		moveEntity(motionX, motionY, motionZ);
+		move(net.minecraft.entity.MoverType.SELF, motionX, motionY, motionZ);
 
-		if (!isCollidedHorizontally && d11 < 0.24999999999999999D) {
+		if (!collidedHorizontally && d11 < 0.24999999999999999D) {
 			motionX *= 0.99000000953674316D;
 			motionY *= 0.94999998807907104D;
 			motionZ *= 0.99000000953674316D;
 		}
 
-		List list = world.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+		List list = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
 		if (list != null && list.size() > 0) {
 			for (int j1 = 0; j1 < list.size(); j1++) {
 				Entity entity = (Entity) list.get(j1);
-				if (entity != getPassengers().get(0) && entity.canBePushed() && (entity instanceof AbstractZeppelin)) {
+				if (entity != ebf.tim.utility.CommonUtil.rider(this) && entity.canBePushed() && (entity instanceof AbstractZeppelin)) {
 					entity.applyEntityCollision(this);
 				}
 			}
 		}
-		if (getPassengers().get(0) != null && getPassengers().get(0).isDead) {
-			getPassengers().get(0) = null;
+		if (ebf.tim.utility.CommonUtil.rider(this) != null && ebf.tim.utility.CommonUtil.rider(this).isDead) {
+			removePassengers();
 		}
 
 		double rot = this.rotationYaw;
@@ -488,7 +519,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			rot = CommonUtil.atan2degreesf(div10, div11);
 		}
 
-		double d12 = MathHelper.wrapAngleTo180_double(rot - this.rotationYaw);
+		double d12 = MathHelper.wrapDegrees(rot - this.rotationYaw);
 
 		if (d12 > 40.0D) {
 			d12 = 40.0D;
@@ -507,13 +538,13 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 
 	@Override
 	public void updatePassenger(Entity passenger) {
-		if (getPassengers().get(0) != null) {
+		if (ebf.tim.utility.CommonUtil.rider(this) != null) {
 			double d = Math.cos((rotationYaw * 3.1415926535897931D) / 180D) * 0.60000000000000002D;
 			double d1 = Math.sin((rotationYaw * 3.1415926535897931D) / 180D) * 0.60000000000000002D;
-			getPassengers().get(0).setPosition(posX + d, posY + getMountedYOffset() + passenger.getYOffset(), posZ + d1);
-			getPassengers().get(0).fallDistance = 0F;//no more damages on landing
-			if (getPassengers().get(0) instanceof EntityLiving) {
-				pitch = ((EntityPlayer) getPassengers().get(0)).rotationPitch * -1;
+			ebf.tim.utility.CommonUtil.rider(this).setPosition(posX + d, posY + getMountedYOffset() + passenger.getYOffset(), posZ + d1);
+			ebf.tim.utility.CommonUtil.rider(this).fallDistance = 0F;//no more damages on landing
+			if (ebf.tim.utility.CommonUtil.rider(this) instanceof EntityLiving) {
+				pitch = ((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).rotationPitch * -1;
 			}
 		}
 	}
@@ -538,7 +569,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
-		this.dataWatcher.updateObject(20, nbttagcompound.getInteger("Fuel"));
+		getDataWatcher().updateObject(20, nbttagcompound.getInteger("Fuel"));
 		this.altitude = nbttagcompound.getBoolean("altitude");
 		this.idle = nbttagcompound.getBoolean("idle");
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items", Constants.NBT.TAG_COMPOUND);
@@ -552,7 +583,6 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		}
 	}
 
-	@Override
 	public float getShadowSize() {
 		return 0.0F;
 	}
@@ -564,7 +594,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return zeppInvent[i];
+		return StackUtil.nn(zeppInvent[i]);
 	}
 
 	/**
@@ -575,44 +605,40 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		if (this.zeppInvent[par1] != null) {
 			ItemStack var2 = this.zeppInvent[par1];
 			this.zeppInvent[par1] = null;
-			return var2;
+			return StackUtil.nn(var2);
 		}
 		else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
 		if (zeppInvent[i] != null) {
-			if (zeppInvent[i].stackSize <= j) {
+			if (zeppInvent[i].getCount() <= j) {
 				ItemStack itemstack = zeppInvent[i];
 				zeppInvent[i] = null;
-				return itemstack;
+				return StackUtil.nn(itemstack);
 			}
 			ItemStack itemstack1 = zeppInvent[i].splitStack(j);
-			if (zeppInvent[i].stackSize == 0) {
+			if (zeppInvent[i].getCount() == 0) {
 				zeppInvent[i] = null;
 			}
-			return itemstack1;
+			return StackUtil.nn(itemstack1);
 		}
 		else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
+	public void setInventorySlotContents(int i, ItemStack itemstack) { if (itemstack != null && itemstack.isEmpty()) itemstack = null;
 		zeppInvent[i] = itemstack;
 		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-			itemstack.getCount() = getInventoryStackLimit();
+			itemstack.setCount(getInventoryStackLimit());
 		}
 	}
 
-	@Override
-	public String getName() {
-		return "Zeppelin";
-	}
 
 	@Override
 	public int getInventoryStackLimit() {
@@ -632,9 +658,9 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 
 
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
+	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
 
-		if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) { return true; }
+		if (ebf.tim.utility.CommonUtil.rider(this) != null && (ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer) && ebf.tim.utility.CommonUtil.rider(this) != entityplayer) { return true; }
 		if (!world.isRemote) {
 			addPassenger(entityplayer);
 		}
@@ -649,11 +675,11 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
-		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
+		return !isDead && entityplayer.getDistanceSq(this) <= 64D;
 	}
 
 	public int getFuel() {
-		return (this.dataWatcher.getWatchableObjectInt(20));
+		return (getDataWatcher().getWatchableObjectInt(20));
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -662,7 +688,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 
@@ -671,7 +697,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		return true;
 	}
 	@Override
-	public String getCommandSenderName(){
+	public String getName() {
 		String s = EntityList.getEntityString(this);
 		if (s == null) {
 			s = "generic";

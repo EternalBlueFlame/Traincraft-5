@@ -33,8 +33,8 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 
 	@Override
 	public void pressKey(int i) {
-		if (i == 7 && getPassengers().get(0) instanceof EntityPlayer) {
-			((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.FORNEY, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+		if (i == 7 && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer) {
+			((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).openGui(Traincraft.instance, GuiIDs.FORNEY, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
@@ -44,19 +44,19 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 		if (world.isRemote) {
 			return;
 		}
-		checkInvent(locoInvent[0], locoInvent[1], this);
-		for (int h = 0; h < this.locoInvent.length; h++) {
-			if (this.locoInvent[h] != null && steamFuelLast(this.locoInvent[h]) != 0) {
+		checkInvent(cargoItems[0], cargoItems[1], this);
+		for (int h = 0; h < this.cargoItems.length; h++) {
+			if (this.cargoItems[h] != null && steamFuelLast(this.cargoItems[h]) != 0) {
 				if (fuelTrain <= 0 && !world.isRemote) {
-					fuelTrain = steamFuelLast(this.locoInvent[h]);
+					fuelTrain = steamFuelLast(this.cargoItems[h]);
 					if (!world.isRemote) {
 						this.decrStackSize(h, 1);
 					}
 				}
 			}
-			else if (this.locoInvent[h] != null && steamFuelLast(this.locoInvent[h]) != 0) {
+			else if (this.cargoItems[h] != null && steamFuelLast(this.cargoItems[h]) != 0) {
 				if (fuelTrain <= 0 && !world.isRemote) {
-					fuelTrain = steamFuelLast(this.locoInvent[h]);
+					fuelTrain = steamFuelLast(this.cargoItems[h]);
 					if (!world.isRemote) {
 						this.decrStackSize(h, 1);
 					}
@@ -91,12 +91,12 @@ public class EntityLocoSteamForneyRed extends SteamTrain {
 
 	@Override
 	public float transportTopSpeed() {
-		return super.transportTopSpeed()*(getPassengers().get(0) instanceof EntityPlayerMP &&(((EntityPlayerMP) getPassengers().get(0)).getDisplayName().equals("EternalBlueFlame") || ((EntityPlayerMP) getPassengers().get(0)).getDisplayName().equals("minecarftmano9"))?3:1);
+		return super.transportTopSpeed()*(ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayerMP &&(((EntityPlayerMP) ebf.tim.utility.CommonUtil.rider(this)).getDisplayName().equals("EternalBlueFlame") || ((EntityPlayerMP) ebf.tim.utility.CommonUtil.rider(this)).getDisplayName().equals("minecarftmano9"))?3:1);
 	}
 
 	@Override
 	public float transportMetricHorsePower() {
-		return super.transportMetricHorsePower()*(getPassengers().get(0) instanceof EntityPlayerMP &&(((EntityPlayerMP) getPassengers().get(0)).getDisplayName().equals("EternalBlueFlame") || ((EntityPlayerMP) getPassengers().get(0)).getDisplayName().equals("minecarftmano9"))?3:1);
+		return super.transportMetricHorsePower()*(ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayerMP &&(((EntityPlayerMP) ebf.tim.utility.CommonUtil.rider(this)).getDisplayName().equals("EternalBlueFlame") || ((EntityPlayerMP) ebf.tim.utility.CommonUtil.rider(this)).getDisplayName().equals("minecarftmano9"))?3:1);
 	}
 	@Override
 	public float[][] getRiderOffsets(){return new float[][]{{0.4f,1.6f, 0f}};}

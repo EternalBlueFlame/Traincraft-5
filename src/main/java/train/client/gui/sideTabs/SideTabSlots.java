@@ -55,7 +55,7 @@ public class SideTabSlots extends SideTab {
         drawRect(x - 91, y + 30, -4, 135, 0xff02142d);
         drawRect(x - 90, y + 29, -5, 136, 0xff02142d);
 
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
         for (int i = 0; i < 4; i++) {
             if (array[i] == 0) {
@@ -85,42 +85,42 @@ public class SideTabSlots extends SideTab {
 		}
 
 		if ((x > -110 && x < -94) && (y < 49 && y > 33)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[0];
 			array[0] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -82 && x < -66) && (y < 49 && y > 33)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[1];
 			array[1] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -54 && x < -38) && (y < 49 && y > 33)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[2];
 			array[2] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -26 && x < -10) && (y < 49 && y > 33)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[3];
 			array[3] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -110 && x < -94) && (y < 72 && y > 58)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[4];
 			array[4] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -82 && x < -66) && (y < 72 && y > 58)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[5];
 			array[5] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -54 && x < -38) && (y < 72 && y > 58)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[6];
 			array[6] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -26 && x < -10) && (y < 72 && y > 58)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(net.minecraft.init.SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[7];
 			array[7] = current == 0 ? 1 : 0;
 			return true;

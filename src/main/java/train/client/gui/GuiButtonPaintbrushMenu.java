@@ -60,10 +60,10 @@ class GuiButtonPaintbrushMenu extends GuiButton {
      * Draws this button to the screen.
      */
     @Override
-    public void drawButton(Minecraft mc, int par2, int par3) {
+    public void drawButton(Minecraft mc, int par2, int par3, float partialTicks) {
         if (this.visible && showButton) {
             if (type != Type.SELECTIONBOX) {
-                if (par2 >= this.xPosition && par3 >= this.yPosition && par2 < this.xPosition + this.width && par3 < this.yPosition + this.height) { // If mouse is hovering over...
+                if (par2 >= this.x && par3 >= this.y && par2 < this.x + this.width && par3 < this.y + this.height) { // If mouse is hovering over...
                     this.setType(this.type, Texture.ACTIVE);
                     GuiPaintbrushMenu.setActiveButtonID(this.id);
                 } else {
@@ -73,14 +73,14 @@ class GuiButtonPaintbrushMenu extends GuiButton {
                     }
                 }
             }
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
             RenderHelper.enableGUIStandardItemLighting();
             GL11.glPushMatrix();
             mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.guiPrefix + "gui_paintbrush_menu_buttons.png"));
             if(this.type == Type.SKINS) {
                 mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.guiPrefix + "gui_paintbrush_menu_outlines.png"));
             }
-            this.drawTexturedModalRect(this.xPosition, this.yPosition, u, v, TEXTURE_WIDTH, TEXTURE_HEIGHT);
+            this.drawTexturedModalRect(this.x, this.y, u, v, TEXTURE_WIDTH, TEXTURE_HEIGHT);
             RenderHelper.disableStandardItemLighting();
             GL11.glPopMatrix();
         } else {

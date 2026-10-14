@@ -1,5 +1,9 @@
 package train.common.core;
 
+import train.common.library.Info;
+
+import ebf.tim.utility.CommonUtil;
+
 import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
@@ -58,6 +62,9 @@ public class CommonProxy implements IGuiHandler {
 
     public void registerPlayerScaler(){}
 
+    /** Client: register entity renderer factories (must happen in preInit). */
+    public void registerEntityRenderers(){}
+
     public void registerRenderInformation() {
     }
 
@@ -77,76 +84,65 @@ public class CommonProxy implements IGuiHandler {
     }
 
     public void registerTileEntities() {
-        GameRegistry.registerTileEntity(TileCrafterTierI.class, "TileCrafterTierI");
-        GameRegistry.registerTileEntity(TileCrafterTierII.class, "TileCrafterTierII");
-        GameRegistry.registerTileEntity(TileCrafterTierIII.class, "TileCrafterTierIII");
-        GameRegistry.registerTileEntity(TileTrainWbench.class, "TileTrainWbench");
-        GameRegistry.registerTileEntity(TileEntityDistil.class, "Tile Distil");
-        GameRegistry.registerTileEntity(TileEntityOpenHearthFurnace.class, "Tile OpenHearthFurnace");
-        GameRegistry.registerTileEntity(TileStopper.class, "TileStopper");
-        GameRegistry.registerTileEntity(TileEmbeddedStopper.class, "TileEmbeddedStopper");
-        GameRegistry.registerTileEntity(TileAmericanStopper.class, "TileAmericanStopper");
-        GameRegistry.registerTileEntity(TileSignal.class, "TileTrainSignal");
-        GameRegistry.registerTileEntity(TileLantern.class, "tileLantern");
-        GameRegistry.registerTileEntity(TileMFPBWigWag.class, "tileMFPBWigWag");
-        GameRegistry.registerTileEntity(TileWaterWheel.class, "tileWaterWheel");
-        GameRegistry.registerTileEntity(TileWindMill.class, "tileWindMill");
-        GameRegistry.registerTileEntity(TileGeneratorDiesel.class, "tileGeneratorDiesel");
-        GameRegistry.registerTileEntity(TileBook.class, "tileBook");
-        GameRegistry.registerTileEntity(TileTCRailGag.class, "tileTCRailGag");
-        GameRegistry.registerTileEntity(TileTCRail.class, "tileTCRail");
-        GameRegistry.registerTileEntity(TileBridgePillar.class, "tileTCBridgePillar");
-        GameRegistry.registerTileEntity(TileMetroMadridPole.class, "tileMetroMadridPole");
+        registerTile(TileCrafterTierI.class, "TileCrafterTierI");
+        registerTile(TileCrafterTierII.class, "TileCrafterTierII");
+        registerTile(TileCrafterTierIII.class, "TileCrafterTierIII");
+        registerTile(TileTrainWbench.class, "TileTrainWbench");
+        registerTile(TileEntityDistil.class, "Tile Distil");
+        registerTile(TileEntityOpenHearthFurnace.class, "Tile OpenHearthFurnace");
+        registerTile(TileStopper.class, "TileStopper");
+        registerTile(TileEmbeddedStopper.class, "TileEmbeddedStopper");
+        registerTile(TileAmericanStopper.class, "TileAmericanStopper");
+        registerTile(TileSignal.class, "TileTrainSignal");
+        registerTile(TileLantern.class, "tileLantern");
+        registerTile(TileMFPBWigWag.class, "tileMFPBWigWag");
+        registerTile(TileWaterWheel.class, "tileWaterWheel");
+        registerTile(TileWindMill.class, "tileWindMill");
+        registerTile(TileGeneratorDiesel.class, "tileGeneratorDiesel");
+        registerTile(TileBook.class, "tileBook");
+        registerTile(TileTCRailGag.class, "tileTCRailGag");
+        registerTile(TileTCRail.class, "tileTCRail");
+        registerTile(TileBridgePillar.class, "tileTCBridgePillar");
+        registerTile(TileMetroMadridPole.class, "tileMetroMadridPole");
 
         /**SwitchStands*/
-        GameRegistry.registerTileEntity(TileSwitchStand.class, "tileSwitchStand");
+        registerTile(TileSwitchStand.class, "tileSwitchStand");
 
-        GameRegistry.registerTileEntity(TileOWOSwitchStand.class, "tileowoswitchstand");
-        GameRegistry.registerTileEntity(TileCircleSwitchStand.class, "tilecircleswitchstand");
-        GameRegistry.registerTileEntity(TileMILWSwitchStand.class, "tileMILWSwitchStand");
-        GameRegistry.registerTileEntity(TileAutoSwitchStand.class, "tileautoSwitchStand");
-        GameRegistry.registerTileEntity(TileOWOYardSwitchStand.class, "tileowoYardSwitchStand");
+        registerTile(TileOWOSwitchStand.class, "tileowoswitchstand");
+        registerTile(TileCircleSwitchStand.class, "tilecircleswitchstand");
+        registerTile(TileMILWSwitchStand.class, "tileMILWSwitchStand");
+        registerTile(TileAutoSwitchStand.class, "tileautoSwitchStand");
+        registerTile(TileOWOYardSwitchStand.class, "tileowoYardSwitchStand");
 
-        GameRegistry.registerTileEntity(TileoverheadWire.class, "tileoverheadwire");
-        GameRegistry.registerTileEntity(TileoverheadWireDouble.class, "tileoverheadwiredouble");
-        GameRegistry.registerTileEntity(TilesignalSpanish.class, "tilesignalspanish");
-        GameRegistry.registerTileEntity(TilekSignal.class, "tileksignal");
-        GameRegistry.registerTileEntity(TileSpeedSign.class, "tilespeedsign");
+        registerTile(TileoverheadWire.class, "tileoverheadwire");
+        registerTile(TileoverheadWireDouble.class, "tileoverheadwiredouble");
+        registerTile(TilesignalSpanish.class, "tilesignalspanish");
+        registerTile(TilekSignal.class, "tileksignal");
+        registerTile(TileSpeedSign.class, "tilespeedsign");
 
         if (Traincraft.hasComputerCraft()) {
-            GameRegistry.registerTileEntity(TileInfoTransmitterSpeed.class, "tileInfoTransmitterSpeed");
-            GameRegistry.registerTileEntity(TileInfoTransmitterMTC.class, "tileInfoTransmitterMTC");
-            GameRegistry.registerTileEntity(TileInfoGrabberMTC.class, "tileInfoReceiverMTC");
-            GameRegistry.registerTileEntity(TileInfoGrabberDestination.class, "tileInfoReceiverDestination");
-            GameRegistry.registerTileEntity(TileATOTransmitterStopPoint.class, "tileATOTransmitterStopPoint");
-            GameRegistry.registerTileEntity(TilePDMInstructionRadio.class, "tilePDMInstructionRadio");
+            registerTile(TileInfoTransmitterSpeed.class, "tileInfoTransmitterSpeed");
+            registerTile(TileInfoTransmitterMTC.class, "tileInfoTransmitterMTC");
+            registerTile(TileInfoGrabberMTC.class, "tileInfoReceiverMTC");
+            registerTile(TileInfoGrabberDestination.class, "tileInfoReceiverDestination");
+            registerTile(TileATOTransmitterStopPoint.class, "tileATOTransmitterStopPoint");
+            registerTile(TilePDMInstructionRadio.class, "tilePDMInstructionRadio");
         }
 
-        //GameRegistry.registerTileEntity(TileFortyFootContainer.class, "tileFortyFootContainer");
+        //registerTile(TileFortyFootContainer.class, "tileFortyFootContainer");
     }
 
     public void registerComputerCraftPeripherals() throws ClassNotFoundException {
-        Class<?> computerCraft = Class.forName("dan200.computercraft.ComputerCraft");
-        try {
-            Method computerCraft_registerPeripheralProvider = computerCraft.getMethod("registerPeripheralProvider", Class.forName("dan200.computercraft.api.peripheral.IPeripheralProvider"));
-
-            //Register all CC required blocks
-            computerCraft_registerPeripheralProvider.invoke(null, BlockInfoTransmitterSpeed.instance);
-            computerCraft_registerPeripheralProvider.invoke(null, BlockInfoGrabberMTC.instance);
-            computerCraft_registerPeripheralProvider.invoke(null, BlockInfoTransmitterMTC.instance);
-            computerCraft_registerPeripheralProvider.invoke(null, BlockATOTransmitterStopPoint.instance);
-
-        } catch (NoSuchMethodException | ClassNotFoundException | IllegalAccessException | InvocationTargetException e) {
-            e.printStackTrace();
-        }
+        //Register all CC required blocks (no-op when ComputerCraft is not installed)
+        dan200.computercraft.api.ComputerCraftAPI.registerPeripheralProvider(BlockInfoTransmitterSpeed.instance);
+        dan200.computercraft.api.ComputerCraftAPI.registerPeripheralProvider(BlockInfoGrabberMTC.instance);
+        dan200.computercraft.api.ComputerCraftAPI.registerPeripheralProvider(BlockInfoTransmitterMTC.instance);
+        dan200.computercraft.api.ComputerCraftAPI.registerPeripheralProvider(BlockATOTransmitterStopPoint.instance);
     }
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
         TileEntity te = CommonUtil.getTileEntity(world, x, y, z);
-        EntityPlayer riddenByEntity = null;
-        Entity entity = null;
-
     Entity entity = null;
     EntityPlayer passenger = null;
 
@@ -154,8 +150,8 @@ public class CommonProxy implements IGuiHandler {
 
     if (riding instanceof EntityRollingStock || riding instanceof AbstractZeppelin || riding instanceof EntityRotativeDigger) {
         entity = riding;
-        if (!entity.getPassengers().isEmpty() && entity.getPassengers().get(0) instanceof EntityPlayer) {
-            passenger = (EntityPlayer) entity.getPassengers().get(0);
+        if (!entity.getPassengers().isEmpty() && ebf.tim.utility.CommonUtil.rider(entity) instanceof EntityPlayer) {
+            passenger = (EntityPlayer) ebf.tim.utility.CommonUtil.rider(entity);
         }
     }
 
@@ -188,7 +184,7 @@ public class CommonProxy implements IGuiHandler {
             case (GuiIDs.OPEN_HEARTH_FURNACE):
                 return te instanceof TileEntityOpenHearthFurnace ? new ContainerOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
             case (GuiIDs.TRAIN_WORKBENCH):
-                return te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
+                return te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, player.world, (TileTrainWbench) te) : null;
 
             case (GuiIDs.LOCO):
                 if (entity instanceof EntityRollingStock && passenger != null) {
@@ -209,7 +205,7 @@ public class CommonProxy implements IGuiHandler {
                 return null;
 
             case (GuiIDs.CRAFTING_CART):
-                return new ContainerWorkbenchCart(player.inventory, player.worldObj);
+                return new ContainerWorkbenchCart(player.inventory, player.world);
 
             case (GuiIDs.FURNACE_CART):
                 return passenger != null ? new InventoryWorkCart(player.inventory, entity) : null;
@@ -286,8 +282,6 @@ public class CommonProxy implements IGuiHandler {
         return null;
     }
 
-    public void registerVillagerSkin(int villagerId, String textureName) {
-    }
 
     public static void killAllStreams() {
         for (MP3Player p : playerList) {
@@ -323,7 +317,26 @@ public class CommonProxy implements IGuiHandler {
     public void seatGUI(EntityPlayer player, EntityRollingStock transport) {    }
 
 
+    /** Registers a tile entity class under {@code tc:<name>}, skipping classes that are already registered. */
+    public static void registerTile(Class<? extends TileEntity> tile, String name) {
+        if (TileEntity.getKey(tile) == null) {
+            GameRegistry.registerTileEntity(tile, new net.minecraft.util.ResourceLocation(Info.modID, name.toLowerCase()));
+        }
+    }
+
     public Object getTESR(){return null;}
+
+    /** Client: the shared item renderer for TiM blocks ({@code CustomItemModel.instance}); null on a server. */
+    public Object getCustomItemModel(){return null;}
+
+    /** client: attaches a 1.7.10-style item renderer (TCItemRenderer) to the item. */
+    public void registerItemRenderer(net.minecraft.item.Item item, Object renderer){}
+
+    /** client: lets {@code CustomItemModel} draw a TESR block's item from a template tile entity. */
+    public void registerBlockItemRenderer(net.minecraft.block.Block block, net.minecraft.tileentity.TileEntity template){}
+
+    /** Client: a new {@code BlockTESR}; null on a server. */
+    public Object newBlockTESR(){return null;}
     public Object getEntityRender(){return null;}
     public Object getNullRender(){return null;}
 

@@ -1,6 +1,6 @@
 package train.common.tile;
 
-import cpw.mods.fml.client.FMLClientHandler;
+import net.minecraftforge.fml.client.FMLClientHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -12,6 +12,13 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 
 public class TileMetroMadridPole extends TileEntity {
+
+	// 1.12: modded tile entities are dropped on any block state change by default; only drop them when the block changes
+	@Override
+	public boolean shouldRefresh(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.state.IBlockState oldState, net.minecraft.block.state.IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
 
     private EnumFacing facing;
 
@@ -39,11 +46,11 @@ public class TileMetroMadridPole extends TileEntity {
         if(facing != null){
             return this.facing;
         }
-        return EnumFacing.UNKNOWN;
+        return null;
     }
 
-    public void setFacing(ForgeDirection face) {
-        CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
+    public void setFacing(EnumFacing face) {
+        CommonUtil.markBlockForUpdate(world, getPos().getX(), getPos().getY(), getPos().getZ());
         this.facing = face;
     }
 
@@ -51,22 +58,27 @@ public class TileMetroMadridPole extends TileEntity {
     public void readFromNBT(NBTTagCompound nbtTag) {
 
         if(nbtTag.hasKey("Orientation")) {
-            facing = CommonUtil.getOrientation(nbtTag.getByte("Orientation"));
+            facing = EnumFacing.byIndex(nbtTag.getByte("Orientation"));
         }
 
         super.readFromNBT(nbtTag);
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbtTag) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbtTag) {
         nbtTag.setByte("Orientation", (byte) facing.ordinal());
         super.writeToNBT(nbtTag);
+    	return nbtTag;
+    }
 
-
+    /** 1.12 sends this with the chunk data (1.7.10 sent the description packet instead). */
+    @Override
+    public NBTTagCompound getUpdateTag() {
+    	return this.writeToNBT(new NBTTagCompound());
     }
 
     @Override
-    public Packet getDescriptionPacket() {
+    public SPacketUpdateTileEntity getUpdatePacket() {
 
         NBTTagCompound nbt = new NBTTagCompound();
         this.writeToNBT(nbt);
@@ -76,11 +88,10 @@ public class TileMetroMadridPole extends TileEntity {
 
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
-        this.readFromNBT(pkt.func_148857_g());
+        this.readFromNBT(pkt.getNbtCompound());
         super.onDataPacket(net, pkt);
     }
-    public boolean canUpdate()
-    {
+    public boolean canUpdateLegacy() {
         return false;
     }
 }

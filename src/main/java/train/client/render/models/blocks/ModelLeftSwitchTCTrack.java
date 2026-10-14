@@ -1,49 +1,49 @@
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
 @SideOnly(Side.CLIENT)
 public class ModelLeftSwitchTCTrack extends ModelBase {
-	private IModelCustom modelMediumLeftSwitchActive;
-	private IModelCustom modelMediumLeftSwitchInactive;
-	private IModelCustom modelMediumLeftParallelSwitchInactive;
-	private IModelCustom modelMediumLeftParallelSwitchActive;
-	private IModelCustom modelLargeLeftParallelSwitchInactive;
-	private IModelCustom modelLargeLeftParallelSwitchActive;
-	private IModelCustom modelLargeLeftSwitchActive;
-	private IModelCustom modelLargeLeftSwitchInactive;
+	private TCObjModel modelMediumLeftSwitchActive;
+	private TCObjModel modelMediumLeftSwitchInactive;
+	private TCObjModel modelMediumLeftParallelSwitchInactive;
+	private TCObjModel modelMediumLeftParallelSwitchActive;
+	private TCObjModel modelLargeLeftParallelSwitchInactive;
+	private TCObjModel modelLargeLeftParallelSwitchActive;
+	private TCObjModel modelLargeLeftSwitchActive;
+	private TCObjModel modelLargeLeftSwitchInactive;
 
-	private IModelCustom modelVeryLargeLeftSwitchActive;
-	private IModelCustom modelVeryLargeLeftSwitchInactive;
-	private IModelCustom modelMediumLeft45degreeSwitchActive;
-	private IModelCustom modelMediumLeft45degreeSwitchInActive;
-	private IModelCustom modelLargeLeft45degreeSwitchActive;
-	private IModelCustom modelLargeLeft45degreeSwitchInActive;
+	private TCObjModel modelVeryLargeLeftSwitchActive;
+	private TCObjModel modelVeryLargeLeftSwitchInactive;
+	private TCObjModel modelMediumLeft45degreeSwitchActive;
+	private TCObjModel modelMediumLeft45degreeSwitchInActive;
+	private TCObjModel modelLargeLeft45degreeSwitchActive;
+	private TCObjModel modelLargeLeft45degreeSwitchInActive;
 
 	public ModelLeftSwitchTCTrack() {
-		modelMediumLeftSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_small_active_left.obj"));
-		modelMediumLeftSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_small_inactive_left.obj"));
-		modelMediumLeftParallelSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_inactive_left.obj"));
-		modelMediumLeftParallelSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_active_left.obj"));
-		modelLargeLeftParallelSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_large_inactive_left.obj"));
-		modelLargeLeftParallelSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_large_active_left.obj"));
-		modelLargeLeftSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_medium_active_left.obj"));
-		modelLargeLeftSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_medium_inactive_left.obj"));
-		modelMediumLeft45degreeSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_medium_45degree_active_left.obj"));
-		modelMediumLeft45degreeSwitchInActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_medium_45degree_inactive_left.obj"));
-		modelLargeLeft45degreeSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_large_45degree_active_left.obj"));
-		modelLargeLeft45degreeSwitchInActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_large_45degree_inactive_left.obj"));
-		modelVeryLargeLeftSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_very_large_active_left.obj"));
-		modelVeryLargeLeftSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_very_large_left.obj"));
+		modelMediumLeftSwitchActive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_small_active_left.obj"));
+		modelMediumLeftSwitchInactive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_small_inactive_left.obj"));
+		modelMediumLeftParallelSwitchInactive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_inactive_left.obj"));
+		modelMediumLeftParallelSwitchActive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_active_left.obj"));
+		modelLargeLeftParallelSwitchInactive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_large_inactive_left.obj"));
+		modelLargeLeftParallelSwitchActive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_large_active_left.obj"));
+		modelLargeLeftSwitchActive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_medium_active_left.obj"));
+		modelLargeLeftSwitchInactive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_medium_inactive_left.obj"));
+		modelMediumLeft45degreeSwitchActive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_medium_45degree_active_left.obj"));
+		modelMediumLeft45degreeSwitchInActive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_medium_45degree_inactive_left.obj"));
+		modelLargeLeft45degreeSwitchActive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_large_45degree_active_left.obj"));
+		modelLargeLeft45degreeSwitchInActive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_large_45degree_inactive_left.obj"));
+		modelVeryLargeLeftSwitchActive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_very_large_active_left.obj"));
+		modelVeryLargeLeftSwitchInactive = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_switch_very_large_left.obj"));
 
 	}
 
@@ -86,7 +86,7 @@ public class ModelLeftSwitchTCTrack extends ModelBase {
 	public void renderLarge45degreeInActive() {modelLargeLeft45degreeSwitchInActive.renderAll();}
 
 	public void render(String type, String variant, TileTCRail tcRail, double x, double y, double z) {
-		render( type, variant, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), tcRail.getSwitchState(), x, y, z, 1, 1, 1, 1);
+		render( type, variant, CommonUtil.getBlockFacing(tcRail.getWorld(), tcRail.getPos().getX(), tcRail.getPos().getY(), tcRail.getPos().getZ()), tcRail.getSwitchState(), x, y, z, 1, 1, 1, 1);
 	}
 
 	public void render(String type, String variant, int facing, boolean active, double x, double y, double z, float r, float g, float b, float a) {
@@ -101,7 +101,7 @@ public class ModelLeftSwitchTCTrack extends ModelBase {
 		// Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
 		GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
 
-		GL11.glColor4f(r, g, b, a);
+		net.minecraft.client.renderer.GlStateManager.color(r, g, b, a);
 		//GL11.glScalef(0.5f, 0.5f, 0.5f);
 
 		if (facing == 3) {

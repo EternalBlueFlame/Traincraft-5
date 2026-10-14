@@ -1,5 +1,7 @@
 package train.common.entity.rollingStockOld.freight;
 
+import net.minecraft.util.EnumHand;
+
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -7,7 +9,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import train.common.Traincraft;
@@ -88,8 +90,8 @@ public class EntityTankLava extends LiquidTank {
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
-		if ((super.interactFirst(entityplayer))) {
+	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
+		if ((super.processInitialInteract(entityplayer, hand))) {
 			return false;
 		}
 		if (!this.world.isRemote) {
@@ -108,8 +110,7 @@ public class EntityTankLava extends LiquidTank {
 		return 1.85F;
 	}
 
-	@Override
-	public boolean canFill(ForgeDirection from, Fluid fluid) {
+		public boolean canFill(EnumFacing from, Fluid fluid) {
 		return fluid==null || fluid == FluidRegistry.LAVA;
 	}
 }

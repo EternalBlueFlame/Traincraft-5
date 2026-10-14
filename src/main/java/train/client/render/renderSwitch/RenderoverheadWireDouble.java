@@ -14,8 +14,8 @@ public class RenderoverheadWireDouble extends TileEntitySpecialRenderer {
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "overheadWireDouble.png");
 
     @Override
-    public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float tick) {
-        Tessellator.bindTexture(texture);
+    public void render(TileEntity tileEntity, double x, double y, double z, float tick, int destroyStage, float alpha) {
+        fexcraft.tmt.slim.Tessellator.bindTexture(texture);
         GL11.glPushMatrix();
         GL11.glTranslated(x+0.5,y+0.6,z+0.5);
         GL11.glRotated(180,0,1,0);

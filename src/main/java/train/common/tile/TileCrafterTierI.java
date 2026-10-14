@@ -1,5 +1,7 @@
 package train.common.tile;
 
+import train.common.core.util.StackUtil;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -45,7 +47,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 
 	@Override
 	public ItemStack getStackInSlot(int i) {
-		return crafterInventory[i];
+		return StackUtil.nn(crafterInventory[i]);
 	}
 
 	@Override
@@ -56,19 +58,19 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 	@Override
 	public ItemStack decrStackSize(int i, int j) {
 		if (crafterInventory[i] != null) {
-			if (crafterInventory[i].stackSize <= j) {
+			if (crafterInventory[i].getCount() <= j) {
 				ItemStack itemstack = crafterInventory[i];
 				crafterInventory[i] = null;
-				return itemstack;
+				return StackUtil.nn(itemstack);
 			}
 			ItemStack itemstack1 = crafterInventory[i].splitStack(j);
-			if (crafterInventory[i].stackSize == 0) {
+			if (crafterInventory[i].getCount() == 0) {
 				crafterInventory[i] = null;
 			}
-			return itemstack1;
+			return StackUtil.nn(itemstack1);
 		}
 		else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
@@ -77,18 +79,18 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 		if (crafterInventory[i] != null) {
 			ItemStack stack = this.crafterInventory[i];
 			crafterInventory[i] = null;
-			return stack;
+			return StackUtil.nn(stack);
 		}
 		else {
-			return null;
+			return ItemStack.EMPTY;
 		}
 	}
 
 	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
+	public void setInventorySlotContents(int i, ItemStack itemstack) { if (itemstack != null && itemstack.isEmpty()) itemstack = null;
 		crafterInventory[i] = itemstack;
 		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-			itemstack.getCount() = getInventoryStackLimit();
+			itemstack.setCount(getInventoryStackLimit());
 		}
 	}
 
@@ -102,7 +104,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 
 		super.readFromNBT(nbtTag);
 
-		facing = CommonUtil.getOrientation(nbtTag.getByte("Orientation"));
+		facing = EnumFacing.byIndex(nbtTag.getByte("Orientation"));
 		slotSelected = nbtTag.getIntArray("Selected");
 		NBTTagList nbttaglist = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
 
@@ -138,7 +140,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbtTag) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbtTag) {
 
 		super.writeToNBT(nbtTag);
 
@@ -180,6 +182,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 
 			nbtTag.setTag("Known", nbttaglist2);
 		}
+		return nbtTag;
 	}
 
 	@Override
@@ -217,10 +220,10 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 		if (getWorld() == null) {
 			return true;
 		}
-		if (CommonUtil.getTileEntity(worldObj, xCoord, yCoord, zCoord) != this) {
+		if (CommonUtil.getTileEntity(world, getPos().getX(), getPos().getY(), getPos().getZ()) != this) {
 			return false;
 		}
-		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
+		return entityplayer.getDistanceSq(getPos().getX() + 0.5D, getPos().getY() + 0.5D, getPos().getZ() + 0.5D) <= 64D;
 	}
 
 
@@ -230,8 +233,14 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 	@Override
 	public void closeInventory(EntityPlayer p) {}
 
+	/** 1.12 sends this with the chunk data (1.7.10 sent the description packet instead). */
 	@Override
-	public SPacketUpdateTileEntity getDescriptionPacket() {
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
@@ -279,7 +288,7 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 	}
 
 	@Override
-	public boolean hasCustomInventoryName() {
+	public boolean hasCustomName() {
 		return false;
 	}
 
@@ -310,4 +319,39 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 
 	static final ResourceLocation texture = new ResourceLocation(Info.modID, "textures/blocks/assembly_1.png");
 
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void clear() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			setInventorySlotContents(i, ItemStack.EMPTY);
+		}
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public boolean isEmpty() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			ItemStack s = getStackInSlot(i);
+			if (s != null && !s.isEmpty()) return false;
+		}
+		return true;
+	}
 }

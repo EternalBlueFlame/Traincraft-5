@@ -1,5 +1,7 @@
 package train.common.containers;
 
+import train.common.core.util.StackUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -27,7 +29,7 @@ public class ContainerGeneratorDiesel extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return generator.isUseableByPlayer(entityplayer);
+		return generator.isUsableByPlayer(entityplayer);
 	}
 
 	@Override
@@ -39,19 +41,19 @@ public class ContainerGeneratorDiesel extends Container {
 			itemstack = itemstack1.copy();
 			if (i < 1) {
 				if (!mergeItemStack(itemstack1, 1, inventorySlots.size(), true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (!mergeItemStack(itemstack1, 1, 1, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 			if (itemstack1.getCount() == 0) {
-				slot.putStack(null);
+				slot.putStack(ItemStack.EMPTY);
 			}
 			else {
 				slot.onSlotChanged();
 			}
 		}
-		return itemstack;
+		return StackUtil.nn(itemstack);
 	}
 }

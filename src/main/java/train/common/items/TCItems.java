@@ -31,6 +31,8 @@ public class TCItems {
 				}
 				else if (items.className.equals("ItemRollingStock")) {
 					items.item = new ItemRollingStock(Info.modID.toLowerCase() + ":trains/" + items.iconName);
+					// legacy duplicate of a registered transport item (same train, spawns the same entity): keep it for old saves/recipes, hide it from the creative tabs
+					items.item.setCreativeTab(null);
 				}
 				else if (items.className.equals("ItemRotativeDigger")) {
 					items.item = new ItemRotativeDigger();
@@ -220,10 +222,19 @@ public class TCItems {
 		ItemIDs.bolt.item = new ItemBolt(); //this is the spike for crafting
 	}
 	
+	/** 1.7.10 {@code GameRegistry.registerItem(item, name)}. Items already registered elsewhere are skipped. */
+	private static void register(net.minecraft.item.Item item, String name) {
+		item.setTranslationKey(Info.modID + ":" + name);
+		if (item.getRegistryName() == null) {
+			item.setRegistryName(Info.modID, name);
+			net.minecraftforge.fml.common.registry.ForgeRegistries.ITEMS.register(item);
+		}
+	}
+
 	private static void registerItems() {
 		for (ItemIDs items : ItemIDs.values()) {
 			if (items.item != null) {
-				GameRegistry.registerItem(items.item, items.name());
+				register(items.item, items.name());
 			}
 		}
 	}
@@ -242,7 +253,7 @@ public class TCItems {
 
 		for (TCCEItemIDs tcceItems : TCCEItemIDs.values()) {
 			if (tcceItems.item != null){
-				GameRegistry.registerItem(tcceItems.item, tcceItems.name());
+				register(tcceItems.item, tcceItems.name());
 			}
 		}
 

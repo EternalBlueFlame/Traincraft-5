@@ -29,7 +29,7 @@ public class GuiFortyFootContainer extends GuiContainer {
     {
        // Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("textures/gui/container/generic_54.png"));
          Minecraft.getMinecraft().renderEngine.bindTexture(new ResourceLocation("tc:/textures/gui/container40.png"));
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         int k = (this.width - this.xSize) / 2;
         int l = (this.height - this.ySize) / 2;
     // this.drawTexturedModalRect(k, l, 0, 0, this.xSize, this.inventoryRows * 9 + 61);

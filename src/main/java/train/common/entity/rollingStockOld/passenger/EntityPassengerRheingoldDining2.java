@@ -32,15 +32,15 @@ public class EntityPassengerRheingoldDining2  extends AbstractWorkCart implement
 
 	@Override
 	public void pressKey(int i) {
-		if (getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
-			if (locked && !((EntityPlayer) getPassengers().get(0)).getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
+		if (ebf.tim.utility.CommonUtil.rider(this) != null && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer) {
+			if (locked && !((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).getName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
 				return;
 			}
 			if (i == 7) {
-				((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+				((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 			}
 			if (i == 9) {
-				((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+				((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 			}
 		}
 	}
@@ -60,7 +60,7 @@ public class EntityPassengerRheingoldDining2  extends AbstractWorkCart implement
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
-		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
+		return !isDead && entityplayer.getDistanceSq(this) <= 64D;
 	}
 
 	@Override

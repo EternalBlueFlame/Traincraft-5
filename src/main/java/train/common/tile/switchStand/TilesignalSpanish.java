@@ -1,5 +1,9 @@
 package train.common.tile.switchStand;
 
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.util.ITickable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -14,7 +18,7 @@ import train.common.library.BlockIDs;
 
 import java.util.Random;
 
-public class TilesignalSpanish extends TileSwitch {
+public class TilesignalSpanish extends TileSwitch implements ITickable {
 
     public int state = 1;// 0=red 1=green
     private int updateTicks = 0;
@@ -23,7 +27,7 @@ public class TilesignalSpanish extends TileSwitch {
 
     public void setState(int st){
         state = st;
-        CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
+        CommonUtil.markBlockForUpdate(world, getPos().getX(), getPos().getY(), getPos().getZ());
     }
 
     public int getState(){
@@ -32,9 +36,10 @@ public class TilesignalSpanish extends TileSwitch {
 
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setInteger("state", state);
+    	return tag;
     }
 
     @Override
@@ -48,26 +53,26 @@ public class TilesignalSpanish extends TileSwitch {
 
 
     @Override
-    public void updateEntity() {
-        super.updateEntity();
+    public void update() {
+        super.update();
         updateTicks++;
 
         /**
          * Remove any block on top of the wind mill
          */
-        if (!worldObj.isRemote) {
+        if (!world.isRemote) {
             if (updateTicks % 20 == 0) {
-                if (!this.worldObj.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
-                    Block block = CommonUtil.getBlockAt(this.worldObj, this.xCoord, this.yCoord + 1, this.zCoord);
+                if (!this.world.isAirBlock(new BlockPos(this.getPos().getX(), this.getPos().getY() + 1, this.getPos().getZ()))) {
+                    Block block = CommonUtil.getBlockAt(this.world, this.getPos().getX(), this.getPos().getY() + 1, this.getPos().getZ());
                     if (block != null) {
-                        EntityItem entityitem = new EntityItem(worldObj, this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(BlockIDs.signalSpanish.block), 1));
+                        EntityItem entityitem = new EntityItem(world, this.getPos().getX(), this.getPos().getY() + 1, this.getPos().getZ(), new ItemStack(Item.getItemFromBlock(BlockIDs.signalSpanish.block), 1));
                         float f3 = 0.05F;
                         entityitem.motionX = (float) rand.nextGaussian() * f3;
                         entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
                         entityitem.motionZ = (float) rand.nextGaussian() * f3;
-                        CommonUtil.spawnEntity(worldObj, entityitem);
+                        CommonUtil.spawnEntity(world, entityitem);
                     }
-                    this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
+                    this.world.setBlockToAir(new BlockPos(this.getPos().getX(), this.getPos().getY(), this.getPos().getZ()));
                 }
                 syncTileEntity();
             }
@@ -77,6 +82,6 @@ public class TilesignalSpanish extends TileSwitch {
     @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return CommonUtil.createAABB(xCoord - 1, yCoord - 1, zCoord - 1, xCoord + 2, yCoord + 2, zCoord + 2);
+        return CommonUtil.createAABB(getPos().getX() - 1, getPos().getY() - 1, getPos().getZ() - 1, getPos().getX() + 2, getPos().getY() + 2, getPos().getZ() + 2);
     }
 }

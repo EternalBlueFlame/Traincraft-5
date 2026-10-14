@@ -1,5 +1,7 @@
 package train.common.inventory;
 
+import train.common.core.util.StackUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -50,24 +52,24 @@ public class InventoryFreight extends Container {
 			if (this.getSlot(0) instanceof SlotFreight && this.getSlot(0) != null && this.getSlot(0).isItemValid(itemstack)) {
     			if (i < height * 9) {
     				if (!mergeItemStack(itemstack1, height * 9, inventorySlots.size(), true)) {
-    					return null;
+    					return ItemStack.EMPTY;
     				}
     			}
     			else if (!mergeItemStack(itemstack1, 0, height * 9, false)) {
-    				return null;
+    				return ItemStack.EMPTY;
     			}
     			if (itemstack1.getCount() == 0) {
-    				slot.putStack(null);
+    				slot.putStack(ItemStack.EMPTY);
     			}
     			else {
     				slot.onSlotChanged();
     			}
 			}
 			else {
-				return null;
+				return ItemStack.EMPTY;
 			}
 		}
-		return itemstack;
+		return StackUtil.nn(itemstack);
 	}
 
 	@Override

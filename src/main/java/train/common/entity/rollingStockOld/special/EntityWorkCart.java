@@ -49,7 +49,7 @@ public class EntityWorkCart extends AbstractWorkCart implements IInventory {
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
-		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
+		return !isDead && entityplayer.getDistanceSq(this) <= 64D;
 	}
 
 	@Override

@@ -426,7 +426,7 @@ public class ModelEMDF3B extends ModelBase
 		{
 			emdf3bModel[i].render(f5);
 		}
-		Tessellator.bindTexture(new ResourceLocation(Info.modID, "textures/trains/Blomberg_b_trucks.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.modID, "textures/trains/Blomberg_b_trucks.png"));
 		GL11.glPushMatrix();
 		GL11.glTranslated(-1.8,0,0);
 		GL11.glScalef(0.9F, 0.9F, 0.9F);

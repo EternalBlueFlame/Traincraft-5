@@ -1,5 +1,7 @@
 package train.client.gui;
 
+import ebf.tim.utility.CommonUtil;
+
 
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -19,6 +21,6 @@ public class GuiHandler implements IGuiHandler {
             return null;
         }
 
-        return ID == 1 ? new GuiMTCInfo(player.ridingEntity) : new GuiSpeedTransmitter(CommonUtil.getTileEntity(world, x, y, z));
+        return ID == 1 ? new GuiMTCInfo(player.getRidingEntity()) : new GuiSpeedTransmitter(CommonUtil.getTileEntity(world, x, y, z));
     }
 }

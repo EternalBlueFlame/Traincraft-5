@@ -34,8 +34,14 @@ public class PacketUpdateTrainID implements IMessage {
 
     public static class Handler implements IMessageHandler<PacketUpdateTrainID, IMessage> {
         @Override
-        public IMessage onMessage(PacketUpdateTrainID message, MessageContext context) {
-            Entity TrainEntity = context.getServerHandler().playerEntity.world.getEntityByID(message.entityID);
+        public IMessage onMessage(final PacketUpdateTrainID message, final MessageContext context) {
+            // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+            net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(context.netHandler).addScheduledTask(() -> handleOnMainThread(message, context));
+            return null;
+        }
+
+        private IMessage handleOnMainThread(PacketUpdateTrainID message, MessageContext context) {
+            Entity TrainEntity = context.getServerHandler().player.world.getEntityByID(message.entityID);
             if (TrainEntity instanceof Locomotive) {
                 ((Locomotive) TrainEntity).trainID = message.trainID;
             }

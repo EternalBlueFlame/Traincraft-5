@@ -7,14 +7,15 @@
 
 package train.client.render;
 
+import train.client.render.item.TCItemRenderer;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.models.blocks.ModelGeneratorDiesel;
 import train.common.library.Info;
 
-public class ItemRenderGeneratorDiesel implements IItemRenderer {
+public class ItemRenderGeneratorDiesel extends TCItemRenderer {
 
     private static final ModelGeneratorDiesel generator = new ModelGeneratorDiesel(1F);
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "generator_diesel.png");

@@ -1,12 +1,12 @@
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
@@ -14,16 +14,16 @@ import train.common.tile.TileTCRail;
 @SideOnly(Side.CLIENT)
 public class ModelRightParallelCurveTCTrack extends ModelBase {
 
-    private IModelCustom modelSmallRightParallelCurve;
-    private IModelCustom modelMediumRightParallelCurve;
-    private IModelCustom modelLargeRightParallelCurve;
-    private IModelCustom model20x2SCurveRight;
+    private TCObjModel modelSmallRightParallelCurve;
+    private TCObjModel modelMediumRightParallelCurve;
+    private TCObjModel modelLargeRightParallelCurve;
+    private TCObjModel model20x2SCurveRight;
 
     public ModelRightParallelCurveTCTrack() {
-        modelSmallRightParallelCurve = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_s.obj"));
-        modelMediumRightParallelCurve = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_m.obj"));
-        modelLargeRightParallelCurve = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_l.obj"));
-        model20x2SCurveRight = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "20x2_s_curve_right.obj"));
+        modelSmallRightParallelCurve = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_s.obj"));
+        modelMediumRightParallelCurve = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_m.obj"));
+        modelLargeRightParallelCurve = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_l.obj"));
+        model20x2SCurveRight = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "20x2_s_curve_right.obj"));
     }
 
     public void renderSmall() {modelSmallRightParallelCurve.renderAll();}
@@ -33,7 +33,7 @@ public class ModelRightParallelCurveTCTrack extends ModelBase {
     public void render20x2() {model20x2SCurveRight.renderAll();}
 
     public void render(String type, String variant, TileTCRail tcRail, double x, double y, double z) {
-        render( type, variant, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1 );
+        render( type, variant, CommonUtil.getBlockFacing(tcRail.getWorld(), tcRail.getPos().getX(), tcRail.getPos().getY(), tcRail.getPos().getZ()), x, y, z, 1, 1, 1, 1 );
     }
 
     public void render(String type, String variant, int facing, double x, double y, double z, float r, float g, float b, float a) {
@@ -47,7 +47,7 @@ public class ModelRightParallelCurveTCTrack extends ModelBase {
         // Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
         GL11.glTranslatef((float) x + 1.5f, (float) y, (float) z + 5.5f);
 
-        GL11.glColor4f(r, g, b, a);
+        net.minecraft.client.renderer.GlStateManager.color(r, g, b, a);
         //GL11.glScalef(0.5f, 0.5f, 0.5f);
         /** where l = 0 is SOUTH
          *        l = 1 is WEST

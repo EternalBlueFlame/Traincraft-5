@@ -1,13 +1,14 @@
 package train.client.render;
 
+import train.client.render.item.TCItemRenderer;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.models.blocks.ModelLantern;
 import train.common.library.Info;
 
-public class ItemRenderLantern implements IItemRenderer {
+public class ItemRenderLantern extends TCItemRenderer {
     private static final ModelLantern modelLantern = new ModelLantern();
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "lantern_uv_draw_2.png");
 
@@ -56,7 +57,7 @@ public class ItemRenderLantern implements IItemRenderer {
         float f2 = (float) (0x4f4e4a >> 16 & 255) / 255.0F;
         float f3 = (float) (0x4f4e4a >> 8 & 255) / 255.0F;
         float f4 = (float) (0x4f4e4a & 255) / 255.0F;
-        GL11.glColor3f(f2, f3, f4);
+        net.minecraft.client.renderer.GlStateManager.color(f2, f3, f4);
 
         modelLantern.render();
 

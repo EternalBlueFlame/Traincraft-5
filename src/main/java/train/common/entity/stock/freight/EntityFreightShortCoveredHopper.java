@@ -1,4 +1,5 @@
 package train.common.entity.stock.freight;
+import train.client.render.models.ModelShortCoveredHopper;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -74,7 +75,7 @@ null,
  null, 
 null, 
 null, 
-new ItemStack(Items.dye, 1),
+new ItemStack(Items.DYE, 1),
 new ItemStack(thisItem)
         };
     }
@@ -88,7 +89,7 @@ return 2;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelShortCoveredHopper()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelShortCoveredHopper()};}
     @Override
     public float[][] modelOffsets(){return new float[][]{{-2.2f, -0.25f, 0.7f}};}
     @Override

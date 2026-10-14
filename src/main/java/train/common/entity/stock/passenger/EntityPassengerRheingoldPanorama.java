@@ -1,4 +1,5 @@
 package train.common.entity.stock.passenger;
+import train.client.render.models.ModelRheingoldPassenger_Panorama;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -62,7 +63,7 @@ public class EntityPassengerRheingoldPanorama extends EntityRollingStock impleme
     @Override
     public ItemStack[] getRecipe() {
         return new ItemStack[]{
-                new ItemStack(Blocks.glass, 1), 
+                new ItemStack(Blocks.GLASS, 1), 
 new ItemStack(ItemIDs.bogie.item, 2), 
 new ItemStack(ItemIDs.steelframe.item, 1), 
 null, 
@@ -84,16 +85,16 @@ return 3;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelRheingoldPassenger_Panorama()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelRheingoldPassenger_Panorama()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.1f, -0.65f, 0.1f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.1f, 0.15f, 0.1f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{{0.9f, 1.0f, 0.9f}};}
     //these are separated for being fiddly.
     @Override
-    public float[][] getRiderOffsets(){return new float[][]{{0,1.2f, 0f}};}
+    public float[][] getRiderOffsets(){return new float[][]{{1.0f,0.4f,0f},{-1.0f,0.4f,0f},{-3.05f,-0.25f,0f},{3.05f,-0.25f,0f}};}  // from the 1.7.10 class
     @Override
     public float[] getHitboxSize(){return new float[]{7.900000095367432f,2.1f,1.1f};}
     public TrainParticle[] getEffects(){

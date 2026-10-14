@@ -20,7 +20,8 @@ public class RenderZeppelins extends Render {
     private static final ResourceLocation oneBalloon = new ResourceLocation(Info.resourceLocation, Info.zeppelinTexturePrefix + "zeppelin_one_balloon.png");
     private static final ResourceLocation twoBalloon = new ResourceLocation(Info.resourceLocation, Info.zeppelinTexturePrefix + "zeppelin_two_balloons.png");
 
-    public RenderZeppelins() {
+    public RenderZeppelins(net.minecraft.client.renderer.entity.RenderManager renderManager) {
+        super(renderManager);
         shadowSize = 0.5F;
     }
 

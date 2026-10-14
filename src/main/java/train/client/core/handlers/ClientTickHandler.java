@@ -32,30 +32,29 @@ public class ClientTickHandler {
     }
 
     private void tickStart(TickEvent event) {
-        if (mc.theWorld == null) { // fixes streaming after exiting a world
+        if (mc.world == null) { // fixes streaming after exiting a world
             for (MP3Player player : CommonProxy.playerList) if (player != null) player.stop();
             CommonProxy.playerList.clear();
         }
-        if (mc.theWorld != null && mc.theWorld.playerEntities != null) {
-            for (Object p : mc.theWorld.playerEntities) {
+        if (mc.world != null && mc.world.playerEntities != null) {
+            for (Object p : mc.world.playerEntities) {
                 AbstractClientPlayer player = (AbstractClientPlayer) p;
-                CapesHelper user = CapesHelper.users.get(player.getDisplayName());
+                CapesHelper user = CapesHelper.users.get(player.getName());
 
                 if (user == null) {
-                    user = new CapesHelper(player.getDisplayName());
-                    CapesHelper.users.put(player.getDisplayName(), user);
+                    user = new CapesHelper(player.getName());
+                    CapesHelper.users.put(player.getName(), user);
                     user.setDaemon(true);
-                    user.setName("Cape for " + player.getDisplayName());
+                    user.setName("Cape for " + player.getName());
                     user.start();
                 } else if (CapesHelper.isLoaded && user.MCCape) {
-                    // NOTE: func_152121_a = switchTexture
-                    player.func_152121_a(MinecraftProfileTexture.Type.CAPE, user.getCurrentRL());
+                    setCape(player, user.getCurrentRL());
                 }
             }
         }
 
         if (!isHidden && Traincraft.hasNotEnoughItems()) {
-            if (mc.theWorld != null && mc.theWorld.playerEntities != null) {
+            if (mc.world != null && mc.world.playerEntities != null) {
                 Traincraft.proxy.doNEICheck(new ItemStack(Block.getBlockFromName(Info.modID + ":tcRail")));
                 Traincraft.proxy.doNEICheck(new ItemStack(Block.getBlockFromName(Info.modID + ":tcRailGag")));
                 isHidden = true;
@@ -63,4 +62,19 @@ public class ClientTickHandler {
         }
     }
 
+
+    /** 1.7.10 {@code AbstractClientPlayer.func_152121_a(CAPE, location)}: swap the player's cape texture. */
+    private static void setCape(AbstractClientPlayer player, net.minecraft.util.ResourceLocation location) {
+        try {
+            net.minecraft.client.network.NetworkPlayerInfo info = net.minecraftforge.fml.common.ObfuscationReflectionHelper
+                    .getPrivateValue(AbstractClientPlayer.class, player, "playerInfo", "field_175157_a");
+            if (info != null) {
+                java.util.Map<MinecraftProfileTexture.Type, net.minecraft.util.ResourceLocation> textures = net.minecraftforge.fml.common.ObfuscationReflectionHelper
+                        .getPrivateValue(net.minecraft.client.network.NetworkPlayerInfo.class, info, "playerTextures", "field_187107_a");
+                textures.put(MinecraftProfileTexture.Type.CAPE, location);
+            }
+        } catch (RuntimeException e) {
+            // cape support is cosmetic, never crash the client over it
+        }
+    }
 }

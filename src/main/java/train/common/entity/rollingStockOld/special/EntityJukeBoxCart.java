@@ -1,5 +1,9 @@
 package train.common.entity.rollingStockOld.special;
 
+import net.minecraft.util.EnumParticleTypes;
+
+import net.minecraft.util.EnumHand;
+
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -7,7 +11,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import train.common.Traincraft;
@@ -27,8 +31,8 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 
 	public EntityJukeBoxCart(World world) {
 		super(world);
-		dataWatcher.addObject(22, streamURL);
-		dataWatcher.addObject(23, 0);
+		getDataWatcher().addObject(22, streamURL);
+		getDataWatcher().addObject(23, 0);
 		side = FMLCommonHandler.instance().getEffectiveSide();
 	}
 
@@ -43,11 +47,11 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 		super.attackEntityFrom(damagesource, i);
 		setRollingDirection(-getRollingDirection());
 		setRollingAmplitude(10);
-		setBeenAttacked();
+		markVelocityChanged();
 		setDamage(getDamage() + i * 10);
 		if (getDamage() > 40) {
-			if (getPassengers().get(0) != null) {
-				getPassengers().get(0).mountEntity(this);
+			if (ebf.tim.utility.CommonUtil.rider(this) != null) {
+				this.removePassengers(); // 1.7.10 mountEntity(this) dismounted, 1.12 startRiding would mount
 			}
 			this.setDead();
 			ServerLogger.deleteWagon(this);
@@ -69,23 +73,23 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 	public void onUpdate() {
 		super.onUpdate();
 		if (!world.isRemote && this.ticksExisted % 10 == 0) {
-			this.dataWatcher.updateObject(22, streamURL);
+			getDataWatcher().updateObject(22, streamURL);
 			if (isPlaying) {
-				this.dataWatcher.updateObject(23, 1);
+				getDataWatcher().updateObject(23, 1);
 			}
 			else {
-				this.dataWatcher.updateObject(23, 0);
+				getDataWatcher().updateObject(23, 0);
 			}
 		}
 		if (side == Side.CLIENT) {
 			
-			if (this.ticksExisted % 10 == 0 && !this.isPlaying() && this.dataWatcher.getWatchableObjectInt(23) != 0) {
-				this.streamURL = this.dataWatcher.getWatchableObjectString(22);
+			if (this.ticksExisted % 10 == 0 && !this.isPlaying() && getDataWatcher().getWatchableObjectInt(23) != 0) {
+				this.streamURL = getDataWatcher().getWatchableObjectString(22);
 				this.startStream();
 			}
-			if ((Minecraft.getMinecraft().thePlayer != null) && (this.player != null) && (!isInvalid)) {
-				float vol = (float) getDistanceSq(Minecraft.getMinecraft().thePlayer.posX,
-						Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ);
+			if ((Minecraft.getMinecraft().player != null) && (this.player != null) && (!isInvalid)) {
+				float vol = (float) getDistanceSq(Minecraft.getMinecraft().player.posX,
+						Minecraft.getMinecraft().player.posY, Minecraft.getMinecraft().player.posZ);
 				if (vol >= (volume * 1000.0F)) {
 					this.player.setVolume(0.0F);
 				} else {
@@ -108,7 +112,7 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 				}
 				if (this.isPlaying && rand.nextInt(5) == 0 && (this.player != null && this.player.isPlaying())) {
 					int random2 = rand.nextInt(24) + 1;
-					world.spawnParticle("note", posX, posY + 1.2D, posZ, random2 / 24.0D, 0.0D, 0.0D);
+					world.spawnParticle(EnumParticleTypes.getByName("note"), posX, posY + 1.2D, posZ, random2 / 24.0D, 0.0D, 0.0D);
 				}
 			}
 			
@@ -164,14 +168,14 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 	}
 
 	@Override
-	public boolean interactFirst(EntityPlayer entityplayer) {
+	public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
 		//ItemStack var2 = entityplayer.inventory.getCurrentItem();
 		playerEntity = entityplayer;
-		if ((super.interactFirst(entityplayer))) {
+		if ((super.processInitialInteract(entityplayer, hand))) {
 			return false;
 		}
-		if (locked && !entityplayer.getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
-			if (!worldObj.isRemote)
+		if (locked && !entityplayer.getName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
+			if (!world.isRemote)
 				ebf.tim.utility.CommonUtil.sendChat(entityplayer, "this train is locked");
 			return true;
 		}
@@ -207,11 +211,11 @@ public class EntityJukeBoxCart extends EntityRollingStock {
 		super.readEntityFromNBT(nbttagcompound);
 		this.streamURL = nbttagcompound.getString("StreamUrl");
 		this.isPlaying = nbttagcompound.getBoolean("isPlaying");
-		this.dataWatcher.updateObject(22, streamURL);
+		getDataWatcher().updateObject(22, streamURL);
 		if (isPlaying) {
-			this.dataWatcher.updateObject(23, 1);
+			getDataWatcher().updateObject(23, 1);
 		} else {
-			this.dataWatcher.updateObject(23, 0);
+			getDataWatcher().updateObject(23, 0);
 		}
 	}
 }

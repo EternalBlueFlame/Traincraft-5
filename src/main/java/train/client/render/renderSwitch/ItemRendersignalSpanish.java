@@ -1,22 +1,18 @@
 package train.client.render.renderSwitch;
 
+import train.client.render.item.TCItemRenderer;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.renderSwitch.models.ModelsignalSpanish;
 import train.common.library.Info;
 
-public class ItemRendersignalSpanish implements IItemRenderer {
+public class ItemRendersignalSpanish extends TCItemRenderer {
     private static final ModelsignalSpanish modelSwitch = new ModelsignalSpanish();
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "signalSpanishGreen.png");
-    private Object IIconRegister;
-    private Object IItemRenderer;
-    private IIcon itemIcon;
 
     public ItemRendersignalSpanish() {
     }
@@ -59,10 +55,6 @@ public class ItemRendersignalSpanish implements IItemRenderer {
     }
 
 
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":paintbrushThing");
-    }
 
     /*
     public static ResourceLocation getTexture(Entity entity) {
@@ -78,7 +70,7 @@ public class ItemRendersignalSpanish implements IItemRenderer {
      */
 
     private void renderSwitch(float x, float y, float z, float scale) {
-        Tessellator.bindTexture(texture);
+        fexcraft.tmt.slim.Tessellator.bindTexture(texture);
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
 

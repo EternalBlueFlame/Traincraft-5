@@ -30,14 +30,14 @@ public class EntityCabooseLogging extends AbstractWorkCart implements IInventory
 
 	@Override
 	public void pressKey(int i) {
-		if(locked && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer&& !((EntityPlayer)getPassengers().get(0)).getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())){
+		if(locked && ebf.tim.utility.CommonUtil.rider(this) != null && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer&& !((EntityPlayer)ebf.tim.utility.CommonUtil.rider(this)).getName().toLowerCase().equals(this.trainOwner.toLowerCase())){
 			return;
 		}
-		if (i == 7 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
-			((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+		if (i == 7 && ebf.tim.utility.CommonUtil.rider(this) != null && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer) {
+			((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
-		if (i == 9 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
-			((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+		if (i == 9 && ebf.tim.utility.CommonUtil.rider(this) != null && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer) {
+			((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
 		}
 	}
 
@@ -69,7 +69,7 @@ public class EntityCabooseLogging extends AbstractWorkCart implements IInventory
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
-		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 124D;
+		return !isDead && entityplayer.getDistanceSq(this) <= 124D;
 	}
 
 	@Override

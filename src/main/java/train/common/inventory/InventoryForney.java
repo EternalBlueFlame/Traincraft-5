@@ -1,5 +1,7 @@
 package train.common.inventory;
 
+import train.common.core.util.StackUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Items;
@@ -60,35 +62,35 @@ public class InventoryForney extends Container {
 			itemstack = itemstack1.copy();
 			if (i < inventorySize) {
 				if (!mergeItemStack(itemstack1, inventorySize, inventorySlots.size(), true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (i > inventorySize) {
 				if (FuelHandler.steamFuelLast(itemstack) > 0 || LiquidManager.getInstance().isDieselLocoFuel(itemstack) || (itemstack.getItem() == Items.REDSTONE)) {
 					if (!mergeItemStack(itemstack1, 0, 1, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				}
 				else if (LiquidManager.getInstance().isContainer(itemstack1) && loco instanceof SteamTrain) {
 					if (!mergeItemStack(itemstack1, 1, 2, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				}
 				else if (!mergeItemStack(itemstack1, 2, inventorySize, false)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (!mergeItemStack(itemstack1, 2, inventorySize, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 			if (itemstack1.getCount() == 0) {
-				slot.putStack(null);
+				slot.putStack(ItemStack.EMPTY);
 			}
 			else {
 				slot.onSlotChanged();
 			}
 		}
-		return itemstack;
+		return StackUtil.nn(itemstack);
 	}
 
 	@Override

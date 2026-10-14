@@ -1,4 +1,5 @@
 package train.common.entity.stock.passenger;
+import train.client.render.models.ModelStockCar;
 
 import fexcraft.tmt.slim.ModelBase;
 import ebf.tim.api.SkinRegistry;
@@ -72,7 +73,7 @@ null,
  null, 
 null, 
 null, 
-new ItemStack(Items.leather, 1),
+new ItemStack(Items.LEATHER, 1),
 new ItemStack(thisItem)
         };
     }
@@ -86,9 +87,9 @@ return 2;
 }
     //Model stuff
     @Override
-    public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelStockCar()};}
+    public ModelBase[] getModel(){return new ModelBase[]{new ModelStockCar()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-0.0f, -0.18f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0f, -0.32f, 0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 0.0f, 0.0f}};}
     @Override

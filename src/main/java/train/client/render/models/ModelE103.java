@@ -51,7 +51,7 @@ public class ModelE103 extends ModelConverter //Same as Filename
 			}
 		}
 
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/e103bogie.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/e103bogie.png"));
 		GL11.glPushMatrix();
 		GL11.glTranslated(-1.35,0.1,0.06);
 		bogie.render(entity,f,f1,f2,f3,f4,f5);

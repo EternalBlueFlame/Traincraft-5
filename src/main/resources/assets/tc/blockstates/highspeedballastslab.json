@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "half=bottom,variant=default": {
+      "model": "tc:highspeedballastslab_bottom"
+    },
+    "half=top,variant=default": {
+      "model": "tc:highspeedballastslab_top"
+    },
+    "inventory": {
+      "model": "tc:highspeedballastslab_bottom"
+    }
+  }
+}

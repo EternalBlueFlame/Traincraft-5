@@ -1,5 +1,7 @@
 package train.client.render;
 
+import net.minecraft.util.EnumParticleTypes;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
@@ -29,7 +31,8 @@ public class RenderRollingStock extends Render {
     private static final Random random = new Random();
 	private static boolean renderModeGUI = false;
 	private static boolean renderGUIFullBright = false;
-    public RenderRollingStock() {
+    public RenderRollingStock(net.minecraft.client.renderer.entity.RenderManager renderManager) {
+        super(renderManager);
         this.shadowSize = 0.5F;
     }
 
@@ -45,12 +48,12 @@ public class RenderRollingStock extends Render {
         }
 
         if (!cart.acceptsOverlayTextures() || cart.getOverlayTextureContainer().getType() == OverlayTextureManager.Type.NONE) {
-			Tessellator.bindTexture(getTexture(cart));
+			fexcraft.tmt.slim.Tessellator.bindTexture(getTexture(cart));
 		} else {
 			if (cart.getOverlayTextureContainer().markedForUpdate) {
 				cart.getOverlayTextureContainer().renderTexture();
 			}
-			Tessellator.bindTexture(cart.getOverlayTextureContainer().getOverlaidTextureResource());
+			fexcraft.tmt.slim.Tessellator.bindTexture(cart.getOverlayTextureContainer().getOverlaidTextureResource());
 		}
         GL11.glPushMatrix();
         GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -74,9 +77,10 @@ public class RenderRollingStock extends Render {
         int j = CommonUtil.floorDouble(cart.posY);
         int k = CommonUtil.floorDouble(cart.posZ);
 
-        if (cart.worldObj != null && (CommonUtil.getBlockAt(cart.worldObj,i,j,k) instanceof BlockTCRail || CommonUtil.getBlockAt(cart.worldObj,i,j,k) instanceof BlockTCRailGag)) {
-            GL11.glTranslatef(0f, 0.15f, 0f);
-        }
+        // bogies keep posY at rail level + 0.625 on every kind of track (EntityBogie.RAIL_HEIGHT), so the model
+        // base is constant; the old "+0.15 only when the block under the centre is a TC rail" made long cars
+        // drop 0.15 whenever their centre was over a non-rail block (curves, gag-less spots, vanilla rails)
+        GL11.glTranslatef(0f, 0.15f, 0f);
 
         GL11.glRotatef(180-cart.rotationYaw, 0.0F, 1.0F, 0.0F);
         GL11.glRotatef(cart.rotationPitch, 0.0F, 0.0F, 1.0F);
@@ -91,7 +95,7 @@ public class RenderRollingStock extends Render {
         }
 
         GL11.glEnable(GL11.GL_LIGHTING);
-        int skyLight = cart.world.getLightBrightnessForSkyBlocks(i, j, k, 0);
+        int skyLight = cart.world.getCombinedLight(new net.minecraft.util.math.BlockPos(i, j, k), 0);
         if (!renderModeGUI) {
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, skyLight % 65536,
                     skyLight / 65536f);
@@ -138,7 +142,7 @@ public class RenderRollingStock extends Render {
             DebugUtil.println(cart.render_cache.bogies.length);
             for (m=0;m<cart.render_cache.bogies.length;m++){
                 if(cart.render_cache.skin.bogieSkins.size()>m) {
-                    Tessellator.bindTexture(new ResourceLocation(cart.render_cache.skin.bogieSkins.get(m)));
+                    fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(cart.render_cache.skin.bogieSkins.get(m)));
                 }
                 cart.render_cache.bogies[m].render(cart);
             }
@@ -198,9 +202,9 @@ public class RenderRollingStock extends Render {
                 for (int j = 0; j < smokeIterations; j++) {
                     for (double[] explosion : smokeFX) {
                         rotatedvec = rotatePointF(explosion[0], explosion[1], explosion[2], pitch, yaw);
-                        cart.world.spawnParticle(smokeType,
-                                cart.posX + rotatedvec[0], cart.posY + rotatedvec[1], cart.posZ + rotatedvec[2],
-                                0, 0, 0);
+                        cart.world.spawnParticle(EnumParticleTypes.getByName(smokeType), cart.posX + rotatedvec[0], cart.posY + rotatedvec[1], cart.posZ + rotatedvec[2], 0, 0, 0);
+
+
                     }
                 }
             }
@@ -247,23 +251,23 @@ public class RenderRollingStock extends Render {
                 for (int j = 0; j < explosionFXIterations; j++) {
                     if (yawMod == 180) {
                         for (double[] explosion : explosionFX) {
-                            cart.world.spawnParticle(explosionType, cart.posX - explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[2], 0.0D, 0.0D, 0.0D);
-                            cart.world.spawnParticle(explosionType, cart.posX - explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[2], 0.0D, 0.0D, 0.0D);
+                            cart.world.spawnParticle(EnumParticleTypes.getByName(explosionType), cart.posX - explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[2], 0.0D, 0.0D, 0.0D);
+                            cart.world.spawnParticle(EnumParticleTypes.getByName(explosionType), cart.posX - explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[2], 0.0D, 0.0D, 0.0D);
                         }
                     } else if (yawMod == 90) {
                         for (double[] explosion : explosionFX) {
-                            cart.world.spawnParticle(explosionType, cart.posX + explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[0], 0.0D, 0.0D, 0.0D);
-                            cart.world.spawnParticle(explosionType, cart.posX - explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[0], 0.0D, 0.0D, 0.0D);
+                            cart.world.spawnParticle(EnumParticleTypes.getByName(explosionType), cart.posX + explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[0], 0.0D, 0.0D, 0.0D);
+                            cart.world.spawnParticle(EnumParticleTypes.getByName(explosionType), cart.posX - explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[0], 0.0D, 0.0D, 0.0D);
                         }
                     } else if (yawMod == 0) {
                         for (double[] explosion : explosionFX) {
-                            cart.world.spawnParticle(explosionType, cart.posX + explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[2], 0.0D, 0.0D, 0.0D);
-                            cart.world.spawnParticle(explosionType, cart.posX + explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[2], 0.0D, 0.0D, 0.0D);
+                            cart.world.spawnParticle(EnumParticleTypes.getByName(explosionType), cart.posX + explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ + explosion[2], 0.0D, 0.0D, 0.0D);
+                            cart.world.spawnParticle(EnumParticleTypes.getByName(explosionType), cart.posX + explosion[0], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[2], 0.0D, 0.0D, 0.0D);
                         }
                     } else if (yawMod == -90) {
                         for (double[] explosion : explosionFX) {
-                            cart.world.spawnParticle(explosionType, cart.posX + explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[0], 0.0D, 0.0D, 0.0D);
-                            cart.world.spawnParticle(explosionType, cart.posX - explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[0], 0.0D, 0.0D, 0.0D);
+                            cart.world.spawnParticle(EnumParticleTypes.getByName(explosionType), cart.posX + explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[0], 0.0D, 0.0D, 0.0D);
+                            cart.world.spawnParticle(EnumParticleTypes.getByName(explosionType), cart.posX - explosion[2], cart.posY + explosion[1] + ((Math.tan(pitchRads) * 4 * -explosion[1])), cart.posZ - explosion[0], 0.0D, 0.0D, 0.0D);
                         }
                     }
                 }

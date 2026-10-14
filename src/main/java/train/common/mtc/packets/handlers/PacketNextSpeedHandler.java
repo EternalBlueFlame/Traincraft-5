@@ -1,5 +1,7 @@
 package train.common.mtc.packets.handlers;
 
+import ebf.tim.utility.CommonUtil;
+
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -13,7 +15,13 @@ import train.common.mtc.packets.PacketNextSpeed;
 public  class PacketNextSpeedHandler implements IMessageHandler<PacketNextSpeed, IMessage> {
 
     @Override
-    public IMessage onMessage(PacketNextSpeed message, MessageContext context) {
+    public IMessage onMessage(final PacketNextSpeed message, final MessageContext context) {
+        // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+        net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(context.netHandler).addScheduledTask(() -> handleOnMainThread(message, context));
+        return null;
+    }
+
+    private IMessage handleOnMainThread(PacketNextSpeed message, MessageContext context) {
 
         Entity theTrain = Minecraft.getMinecraft().world.getEntityByID(message.entity);
         //if (message.x == 0 && message.y == 0 && message.z == 0) {
@@ -23,7 +31,7 @@ public  class PacketNextSpeedHandler implements IMessageHandler<PacketNextSpeed,
        //     return null;
       //  }
 
-        TileEntity its =  CommonUtil.getTileEntity(Minecraft.getMinecraft().theWorld, message.x, message.y, message.z);
+        TileEntity its =  CommonUtil.getTileEntity(Minecraft.getMinecraft().world, message.x, message.y, message.z);
 
 
         /* "instanceof" is null-safe, but we check to avoid four unnecessary instanceof checks for when the value is null anyways. */

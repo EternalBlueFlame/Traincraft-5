@@ -1,5 +1,7 @@
 package train.client.gui;
 
+import train.common.api.LiquidManager;
+
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -41,9 +43,9 @@ public class GuiLiquid extends GuiContainer {
 
         if (intersectsWith(t, g)) {
             if (liquid.getLiquidName() != null && !liquid.getLiquidName().isEmpty()) {
-                drawCreativeTabHoveringText(CommonUtil.translate(liquid.getLiquidName()) + ": " + liquid.getAmount() + "mb/" + liquid.getCapacity() + "mb", t, g);
+                drawHoveringText(CommonUtil.translate(liquid.getLiquidName()) + ": " + liquid.getAmount() + "mb/" + liquid.getCapacity() + "mb", t, g);
             } else {
-                drawCreativeTabHoveringText("0mb/" + liquid.getCapacity() + "mb", t, g);
+                drawHoveringText("0mb/" + liquid.getCapacity() + "mb", t, g);
             }
         }
 
@@ -67,9 +69,9 @@ public class GuiLiquid extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 3) {
-            if (player != null && player.getCommandSenderName().equalsIgnoreCase(((AbstractTrains) liquid).getTrainOwner())) {
+            if (player != null && player.getName().equalsIgnoreCase(((AbstractTrains) liquid).getTrainOwner())) {
                 if (!liquid.getTrainLockedFromPacket()) {
-                    AxisAlignedBB box = liquid.boundingBox.expand(5, 5, 5);
+                    AxisAlignedBB box = liquid.getEntityBoundingBox().expand(5, 5, 5);
                     List lis3 = liquid.world.getEntitiesWithinAABBExcludingEntity(liquid, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
@@ -84,7 +86,7 @@ public class GuiLiquid extends GuiContainer {
                     guibutton.displayString = "Locked";
                     this.initGui();
                 } else {
-                    AxisAlignedBB box = liquid.boundingBox.expand(5, 5, 5);
+                    AxisAlignedBB box = liquid.getEntityBoundingBox().expand(5, 5, 5);
                     List lis3 = liquid.world.getEntitiesWithinAABBExcludingEntity(liquid, box);
                     if (lis3 != null && !lis3.isEmpty()) {
                         for (Object entity : lis3) {
@@ -110,16 +112,16 @@ public class GuiLiquid extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRenderer.drawString(liquid.getCommandSenderName(), 65, 1, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 65, 3, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 63, 1, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 63, 3, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 65, 1, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 65, 3, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 63, 1, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 63, 3, 0x000000);
 
-        fontRenderer.drawString(liquid.getCommandSenderName(), 65, 2, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 63, 2, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 64, 1, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 64, 3, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 64, 2, 0xd3a900);
+        fontRenderer.drawString(liquid.getName(), 65, 2, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 63, 2, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 64, 1, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 64, 3, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 64, 2, 0xd3a900);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
@@ -159,7 +161,7 @@ public class GuiLiquid extends GuiContainer {
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int t, int g) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.guiPrefix + "gui_liquid.png"));
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
@@ -171,11 +173,11 @@ public class GuiLiquid extends GuiContainer {
             l = (liquid.getAmount() * 50) / liquid.getCapacity();
         }
 
-        Fluid theLiquid = FluidRegistry.getFluid(liquid.getLiquidItemID());
+        Fluid theLiquid = LiquidManager.fluidById(liquid.getLiquidItemID());
         // Don't render anything if the cart is empty.
         if (theLiquid != null) {
             // Protection against missing rendering icon, to avoid NPE.
-            if (theLiquid.getIcon() == null) {
+            if (theLiquid.getStill() == null) {
                 return;
             }
 
@@ -188,7 +190,7 @@ public class GuiLiquid extends GuiContainer {
             for (int col = 0; col < 66 / 16; col++) {
                 for (int row = 0; row <= (l) / 16; row++) {
                     //System.out.println(ItemIDs.bogie.item.getIconFromDamage(0));
-                    drawTexturedModelRectFromIcon(j + 58 + col * 16, k + 52 + -row * 16, FluidRenderHelper.getFluidTexture(theLiquid, false), 16, 16);
+                    drawTexturedModalRect(j + 58 + col * 16, k + 52 + -row * 16, FluidRenderHelper.getFluidTexture(theLiquid, false), 16, 16);
                 }
             }
 

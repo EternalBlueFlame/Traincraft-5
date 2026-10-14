@@ -1,5 +1,9 @@
 package train.common.inventory;
 
+import train.common.core.util.StackUtil;
+
+import net.minecraft.inventory.IContainerListener;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.entity.Entity;
@@ -21,7 +25,7 @@ public class InventoryWorkCart extends Container {
 		this.furnace = (AbstractWorkCart) entity;
 		this.addSlotToContainer(new Slot((IInventory) entity, 0, 56, 17));
 		this.addSlotToContainer(new Slot((IInventory) entity, 1, 56, 53));
-		this.addSlotToContainer(new SlotFurnace(par1InventoryPlayer.player, (IInventory) entity, 2, 116, 35));
+		this.addSlotToContainer(new net.minecraft.inventory.SlotFurnaceOutput(par1InventoryPlayer.player, (IInventory) entity, 2, 116, 35));
 		int var3;
 
 		for (var3 = 0; var3 < 3; ++var3) {
@@ -35,29 +39,29 @@ public class InventoryWorkCart extends Container {
 	}
 
 	@Override
-	public void addCraftingToCrafters(ICrafting par1ICrafting) {
-		super.addCraftingToCrafters(par1ICrafting);
-		par1ICrafting.sendProgressBarUpdate(this, 0, this.furnace.furnaceCookTime);
-		par1ICrafting.sendProgressBarUpdate(this, 1, this.furnace.furnaceBurnTime);
-		par1ICrafting.sendProgressBarUpdate(this, 2, this.furnace.currentItemBurnTime);
+	public void addListener(IContainerListener par1ICrafting) {
+		super.addListener(par1ICrafting);
+		par1ICrafting.sendWindowProperty(this, 0, this.furnace.furnaceCookTime);
+		par1ICrafting.sendWindowProperty(this, 1, this.furnace.furnaceBurnTime);
+		par1ICrafting.sendWindowProperty(this, 2, this.furnace.currentItemBurnTime);
 	}
 
 	@Override
 	public void detectAndSendChanges() {
 		super.detectAndSendChanges();
-		for (int var1 = 0; var1 < this.crafters.size(); ++var1) {
-			ICrafting var2 = (ICrafting) this.crafters.get(var1);
+		for (int var1 = 0; var1 < this.listeners.size(); ++var1) {
+			net.minecraft.inventory.IContainerListener var2 = (net.minecraft.inventory.IContainerListener) this.listeners.get(var1);
 
 			if (this.lastCookTime != this.furnace.furnaceCookTime) {
-				var2.sendProgressBarUpdate(this, 0, this.furnace.furnaceCookTime);
+				var2.sendWindowProperty(this, 0, this.furnace.furnaceCookTime);
 			}
 
 			if (this.lastBurnTime != this.furnace.furnaceBurnTime) {
-				var2.sendProgressBarUpdate(this, 1, this.furnace.furnaceBurnTime);
+				var2.sendWindowProperty(this, 1, this.furnace.furnaceBurnTime);
 			}
 
 			if (this.lastItemBurnTime != this.furnace.currentItemBurnTime) {
-				var2.sendProgressBarUpdate(this, 2, this.furnace.currentItemBurnTime);
+				var2.sendWindowProperty(this, 2, this.furnace.currentItemBurnTime);
 			}
 		}
 		this.lastCookTime = this.furnace.furnaceCookTime;
@@ -94,46 +98,46 @@ public class InventoryWorkCart extends Container {
 
 			if (par1 == 2) {
 				if (!this.mergeItemStack(var5, 3, 39, true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 
 				var4.onSlotChange(var5, var3);
 			}
 			else if (par1 != 1 && par1 != 0) {
-				if (FurnaceRecipes.smelting().getSmeltingResult(var5) != null) {
+				if (FurnaceRecipes.instance().getSmeltingResult(var5) != null) {
 					if (!this.mergeItemStack(var5, 0, 1, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				}
 				else if (TileEntityFurnace.isItemFuel(var5)) {
 					if (!this.mergeItemStack(var5, 1, 2, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				}
 				else if (par1 >= 3 && par1 < 30) {
 					if (!this.mergeItemStack(var5, 30, 39, false)) {
-						return null;
+						return ItemStack.EMPTY;
 					}
 				}
 				else if (par1 >= 30 && par1 < 39 && !this.mergeItemStack(var5, 3, 30, false)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (!this.mergeItemStack(var5, 3, 39, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
-			if (var5.stackSize == 0) {
-				var4.putStack(null);
+			if (var5.getCount() == 0) {
+				var4.putStack(ItemStack.EMPTY);
 			}
 			else {
 				var4.onSlotChanged();
 			}
-			if (var5.stackSize == var3.stackSize) {
-				return null;
+			if (var5.getCount() == var3.getCount()) {
+				return ItemStack.EMPTY;
 			}
-			var4.onPickupFromSlot(player, var5);
+			var4.onTake(player, var5);
 		}
 
-		return var3;
+		return StackUtil.nn(var3);
 	}
 }

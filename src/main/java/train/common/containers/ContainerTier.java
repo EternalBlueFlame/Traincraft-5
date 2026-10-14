@@ -1,5 +1,7 @@
 package train.common.containers;
 
+import train.common.core.util.StackUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.IInventory;
@@ -81,11 +83,11 @@ public class ContainerTier extends ContainerTraincraft {
 	
 	@Override
 	public ItemStack transferStackInSlot(EntityPlayer player, int i) {
-		return super.transferStackInSlot(player, i);
+		return StackUtil.nn(super.transferStackInSlot(player, i));
 	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return tier.isUseableByPlayer(entityplayer);
+		return tier.isUsableByPlayer(entityplayer);
 	}
 }

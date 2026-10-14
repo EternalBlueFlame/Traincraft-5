@@ -7,14 +7,15 @@
 
 package train.client.render;
 
+import train.client.render.item.TCItemRenderer;
+
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.models.blocks.ModelAmericanStopper;
 import train.common.library.Info;
 
-public class ItemRenderAmericanStopper implements IItemRenderer {
+public class ItemRenderAmericanStopper extends TCItemRenderer {
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "buffer.png");
     private static final ModelAmericanStopper americanStopper = new ModelAmericanStopper(1F);
 

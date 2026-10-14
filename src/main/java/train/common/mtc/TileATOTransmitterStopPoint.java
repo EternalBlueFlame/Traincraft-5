@@ -1,14 +1,16 @@
 package train.common.mtc;
 
+import net.minecraft.util.ITickable;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
+
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import train.common.Traincraft;
 import train.common.api.Locomotive;
 import train.common.mtc.packets.PacketATOSetStopPoint;
@@ -16,7 +18,14 @@ import train.common.mtc.packets.PacketATOSetStopPoint;
 import java.util.Iterator;
 import java.util.List;
 
-public class TileATOTransmitterStopPoint extends TileEntity implements IPeripheral {
+public class TileATOTransmitterStopPoint extends TileEntity implements ITickable, IPeripheral {
+
+	// 1.12: modded tile entities are dropped on any block state change by default; only drop them when the block changes
+	@Override
+	public boolean shouldRefresh(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.state.IBlockState oldState, net.minecraft.block.state.IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
 
    public Boolean isActivated = Boolean.valueOf(false);
    public double stopX = 0.0;
@@ -25,10 +34,10 @@ public class TileATOTransmitterStopPoint extends TileEntity implements IPeripher
    public AxisAlignedBB boundingBox = null;
 
 
-   public void updateEntity() {
+   public void update() {
       if(getWorld() != null) {
          if(this.isActivated) {
-            List<Object> list = this.world.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
+            List<?> list = this.world.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
             Iterator var2 = list.iterator();
 
             while(var2.hasNext()) {
@@ -44,7 +53,7 @@ public class TileATOTransmitterStopPoint extends TileEntity implements IPeripher
                      daTrain.xFromStopPoint = this.stopX;
                      daTrain.yFromStopPoint = this.stopY;
                      daTrain.zFromStopPoint = this.stopZ;
-                     Traincraft.atoSetStopPoint.sendToAllAround(new PacketATOSetStopPoint(daTrain.getEntityId(), Double.valueOf(this.stopX), Double.valueOf(this.stopY), Double.valueOf(this.stopZ), daTrain.xStationStop, daTrain.yStationStop, daTrain.zStationStop) , new NetworkRegistry.TargetPoint(ebf.tim.utility.CommonUtil.getDimensionId(this.worldObj), daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
+                     Traincraft.atoSetStopPoint.sendToAllAround(new PacketATOSetStopPoint(daTrain.getEntityId(), Double.valueOf(this.stopX), Double.valueOf(this.stopY), Double.valueOf(this.stopZ), daTrain.xStationStop, daTrain.yStationStop, daTrain.zStationStop) , new NetworkRegistry.TargetPoint(ebf.tim.utility.CommonUtil.getDimensionId(this.world), daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
                   }
                }
             }
@@ -94,7 +103,7 @@ public class TileATOTransmitterStopPoint extends TileEntity implements IPeripher
    @Override
    public AxisAlignedBB getRenderBoundingBox() {
       if (boundingBox == null) {
-         boundingBox = ebf.tim.utility.CommonUtil.createAABB(xCoord, yCoord, zCoord, xCoord + 2, yCoord + 2, zCoord + 2);
+         boundingBox = ebf.tim.utility.CommonUtil.createAABB(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX() + 2, getPos().getY() + 2, getPos().getZ() + 2);
       }
       return boundingBox;
    }
@@ -109,12 +118,13 @@ public class TileATOTransmitterStopPoint extends TileEntity implements IPeripher
    }
 
    @Override
-   public void writeToNBT(NBTTagCompound nbttagcompound) {
+   public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
       super.writeToNBT(nbttagcompound);
       nbttagcompound.setBoolean("isActivated", this.isActivated);
       nbttagcompound.setDouble("stopX", this.stopX);
       nbttagcompound.setDouble("stopY", this.stopY);
       nbttagcompound.setDouble("stopZ", this.stopZ);
+   	return nbttagcompound;
    }
 
 }

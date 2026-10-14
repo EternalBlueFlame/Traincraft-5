@@ -7,7 +7,7 @@ public class GuiLockMenuTextField extends GuiTextField {
     private final GuiLockMenuAbstract guiClass;
     private final int textFieldID;
     public GuiLockMenuTextField(int textFieldID, FontRenderer p_i1032_1_, int p_i1032_2_, int p_i1032_3_, int p_i1032_4_, int p_i1032_5_, GuiLockMenuAbstract guiClass) {
-        super(p_i1032_1_, p_i1032_2_, p_i1032_3_, p_i1032_4_, p_i1032_5_);
+        super(textFieldID, p_i1032_1_, p_i1032_2_, p_i1032_3_, p_i1032_4_, p_i1032_5_);
         this.textFieldID = textFieldID;
         this.guiClass = guiClass;
     }

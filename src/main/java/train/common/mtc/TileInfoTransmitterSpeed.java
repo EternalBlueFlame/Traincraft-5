@@ -1,7 +1,9 @@
 package train.common.mtc;
 
+import net.minecraft.util.ITickable;
 
-import cpw.mods.fml.common.network.NetworkRegistry;
+
+import net.minecraftforge.fml.common.network.NetworkRegistry;
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
@@ -9,7 +11,7 @@ import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import train.common.Traincraft;
 import train.common.api.Locomotive;
 import train.common.mtc.packets.PacketMTC;
@@ -18,7 +20,7 @@ import train.common.mtc.packets.PacketSetSpeed;
 
 import java.util.List;
 
-public class TileInfoTransmitterSpeed  extends TileEntity implements IPeripheral {
+public class TileInfoTransmitterSpeed  extends TileEntity implements ITickable, IPeripheral {
     public Boolean isActivated = false;
     public int setSpeed = 0;
     public int nextSpeedLimit = 0;
@@ -47,7 +49,7 @@ public class TileInfoTransmitterSpeed  extends TileEntity implements IPeripheral
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
         nbttagcompound.setBoolean("isActivated", this.isActivated);
         nbttagcompound.setInteger("setSpeed", this.setSpeed);
@@ -55,17 +57,17 @@ public class TileInfoTransmitterSpeed  extends TileEntity implements IPeripheral
         nbttagcompound.setDouble("xFromSpeedChange", this.xFromSpeedChange);
         nbttagcompound.setDouble("yFromSpeedChange",  this.yFromSpeedChange);
         nbttagcompound.setDouble("zFromSpeedChange",  this.zFromSpeedChange);
-
+    	return nbttagcompound;
     }
     @Override
 
-    public void updateEntity() {
+    public void update() {
 
         if (getWorld() == null) {
             return;
         }
         if (isActivated) {
-            List<Object> list = this.world.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
+            List<?> list = this.world.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
 			if (list.size() == 0 ) {
 				hadSentPacket = false;
 				hadSentMTCPacket = false;
@@ -81,7 +83,7 @@ public class TileInfoTransmitterSpeed  extends TileEntity implements IPeripheral
                         if (daTrain.mtcOverridePressed) { return;}
                          if (daTrain.mtcStatus == 0  && hadSentMTCPacket == false) {
                              daTrain.mtcStatus = 1;
-                            Traincraft.mscChannel.sendToAllAround(new PacketMTC(daTrain.getEntityId(),   daTrain.mtcStatus, 1)  , new NetworkRegistry.TargetPoint(ebf.tim.utility.CommonUtil.getDimensionId(this.worldObj), daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
+                            Traincraft.mscChannel.sendToAllAround(new PacketMTC(daTrain.getEntityId(),   daTrain.mtcStatus, 1)  , new NetworkRegistry.TargetPoint(ebf.tim.utility.CommonUtil.getDimensionId(this.world), daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
 							 hadSentMTCPacket = true;
                          }
 
@@ -92,7 +94,7 @@ public class TileInfoTransmitterSpeed  extends TileEntity implements IPeripheral
 
                             trainNumber = daTrain.getEntityId();
 							hadSentPacket = true;
-                            Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(setSpeed, this.xCoord, this.yCoord, this.zCoord, daTrain.getEntityId()) , new NetworkRegistry.TargetPoint(ebf.tim.utility.CommonUtil.getDimensionId(this.worldObj), daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
+                            Traincraft.itsChannel.sendToAllAround(new PacketSetSpeed(setSpeed, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), daTrain.getEntityId()) , new NetworkRegistry.TargetPoint(ebf.tim.utility.CommonUtil.getDimensionId(this.world), daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
 
 
                                 daTrain.nextSpeedLimit = this.nextSpeedLimit;
@@ -100,7 +102,7 @@ public class TileInfoTransmitterSpeed  extends TileEntity implements IPeripheral
                                 daTrain.ySpeedLimitChange = this.yFromSpeedChange;
                                 daTrain.zSpeedLimitChange = this.zFromSpeedChange;
 
-                                Traincraft.itnsChannel.sendToAllAround(new PacketNextSpeed(this.nextSpeedLimit, this.xCoord, this.yCoord, this.zCoord, this.xFromSpeedChange, this.yFromSpeedChange,this.zFromSpeedChange, daTrain.getEntityId()) , new NetworkRegistry.TargetPoint(ebf.tim.utility.CommonUtil.getDimensionId(this.worldObj), daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
+                                Traincraft.itnsChannel.sendToAllAround(new PacketNextSpeed(this.nextSpeedLimit, this.getPos().getX(), this.getPos().getY(), this.getPos().getZ(), this.xFromSpeedChange, this.yFromSpeedChange,this.zFromSpeedChange, daTrain.getEntityId()) , new NetworkRegistry.TargetPoint(ebf.tim.utility.CommonUtil.getDimensionId(this.world), daTrain.posX, daTrain.posY, daTrain.posZ, 150.0D));
 
 
                         }
@@ -114,7 +116,7 @@ public class TileInfoTransmitterSpeed  extends TileEntity implements IPeripheral
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         if (boundingBox == null) {
-            boundingBox = ebf.tim.utility.CommonUtil.createAABB(xCoord, yCoord, zCoord, xCoord + 2, yCoord + 2, zCoord + 2);
+            boundingBox = ebf.tim.utility.CommonUtil.createAABB(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX() + 2, getPos().getY() + 2, getPos().getZ() + 2);
         }
         return boundingBox;
     }

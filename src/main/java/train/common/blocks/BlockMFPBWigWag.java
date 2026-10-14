@@ -1,4 +1,11 @@
 package train.common.blocks;
+import train.common.core.util.LegacyRender;
+
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.util.EnumBlockRenderType;
+
+import net.minecraft.block.state.IBlockState;
 
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.material.Material;
@@ -14,7 +21,7 @@ import train.common.tile.TileMFPBWigWag;
 public class BlockMFPBWigWag extends BlockSignal {
 
 	public BlockMFPBWigWag() {
-		super(Material.rock,0);
+		super(Material.ROCK,0);
 		setCreativeTab(Traincraft.tcTab);
 		this.setTickRandomly(true);
 	}
@@ -23,22 +30,24 @@ public class BlockMFPBWigWag extends BlockSignal {
 	public float[] hitboxShape(){return new float[]{0,0,0,1,2,1};}
 
 	@Override
-	public boolean hasTileEntity(int metadata) {
+	public boolean hasTileEntity(IBlockState state) {
+		int metadata = getMetaFromState(state);
 		return true;
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
+	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		int metadata = getMetaFromState(state);
 		return new TileMFPBWigWag(this);
 	}
 
@@ -49,15 +58,16 @@ public class BlockMFPBWigWag extends BlockSignal {
 
 
 	@Override
-	public int getRenderType() {
-		return -1;
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return LegacyRender.renderType(-1);
 	}
 
 
 
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
-		super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ();
+		super.onBlockPlacedBy(world, new BlockPos(i, j, k), world.getBlockState(new BlockPos(i, j, k)), entityliving, stack);
 		TileMFPBWigWag te = null;
 		if (CommonUtil.getTileEntity(world, i,j,k) instanceof TileMFPBWigWag) {
 			te = (TileMFPBWigWag) CommonUtil.getTileEntity(world, i, j, k);

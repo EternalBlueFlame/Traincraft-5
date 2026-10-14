@@ -1,5 +1,7 @@
 package train.common.inventory;
 
+import train.common.core.util.StackUtil;
+
 // Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
 // Jad home page: http://www.kpdus.com/jad.html
 // Decompiler options: packimports(3) braces deadcode 
@@ -98,20 +100,20 @@ public class InventoryBuilder extends Container {
 			itemstack = itemstack1.copy();
 			if (i <= inventorySize) {
 				if (!mergeItemStack(itemstack1, inventorySize, inventorySlots.size(), true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (!mergeItemStack(itemstack1, 0, 20, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 			if (itemstack1.getCount() == 0) {
-				slot.putStack(null);
+				slot.putStack(ItemStack.EMPTY);
 			}
 			else {
 				slot.onSlotChanged();
 			}
 		}
-		return itemstack;
+		return StackUtil.nn(itemstack);
 	}
 
 	private EntityTracksBuilder loco;

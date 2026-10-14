@@ -2,7 +2,6 @@ package train.common.items;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.item.Item;
 import train.common.Traincraft;
 import train.common.library.Info;
@@ -10,7 +9,7 @@ import train.common.library.Info;
 /**
  * @author canitzp
  */
-public class ItemPart extends Item{
+public class ItemPart extends Item implements train.common.items.ILegacyIcon {
 
     protected String iconName = "";
     protected String folder = "parts";
@@ -26,10 +25,10 @@ public class ItemPart extends Item{
         return this;
     }
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":" + this.folder + "/" + this.iconName);
-    }
 
+
+    @Override
+    public String legacyIcon(int meta) {
+        return "tc:" + this.folder + "/" + this.iconName;
+    }
 }

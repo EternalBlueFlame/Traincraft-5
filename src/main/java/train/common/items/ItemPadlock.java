@@ -1,8 +1,21 @@
 package train.common.items;
 
+import net.minecraft.world.IBlockAccess;
+
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.util.EnumHand;
+
+import net.minecraft.util.EnumFacing;
+
+import net.minecraft.util.EnumActionResult;
+
+import net.minecraft.client.util.ITooltipFlag;
+
+import javax.annotation.Nullable;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
@@ -20,26 +33,29 @@ public class ItemPadlock extends ItemPart {
 		setCreativeTab(Traincraft.tcTab);
 	}
 
-	@Override
-	@SideOnly(Side.CLIENT)
-	public void registerIcons(IIconRegister iconRegister) {
-		this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":padlock");
-	}
 
 	@Override
-	public boolean onItemUseFirst(ItemStack stack, EntityPlayer player, World world, int x, int y, int z, int side, float hitX, float hitY, float hitZ) {
-		return false;
+	public EnumActionResult onItemUseFirst(EntityPlayer player, World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, EnumHand hand) {
+		ItemStack stack = player.getHeldItem(hand); int x = pos.getX(), y = pos.getY(), z = pos.getZ(); int side = facing.getIndex();
+		return EnumActionResult.PASS;
 	}
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	public void addInformation(ItemStack par1ItemStack, @Nullable World world, List<String> par3List, ITooltipFlag flag) {
+		boolean par4 = flag.isAdvanced(); EntityPlayer par2EntityPlayer = Traincraft.proxy.getPlayer();
 		par3List.add("\u00a77" + "Use it to lock/unlock train cars.");
 		par3List.add("\u00a77" + "Use it to trust players to locked train cars.");
 		par3List.add("\u00a77" + "Use it to lock & unlock switches.");
 	}
 
 	@Override
-	public boolean doesSneakBypassUse(World world, int x, int y, int z, EntityPlayer player) {
+	public boolean doesSneakBypassUse(ItemStack stack, IBlockAccess world, BlockPos pos, EntityPlayer player) {
+		int x = pos.getX(), y = pos.getY(), z = pos.getZ();
 		return true;
 	}
+
+    @Override
+    public String legacyIcon(int meta) {
+        return "tc:padlock";
+    }
 }

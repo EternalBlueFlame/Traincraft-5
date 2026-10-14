@@ -1,5 +1,7 @@
 package train.common.tile;
 
+import net.minecraft.util.ITickable;
+
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
@@ -9,7 +11,14 @@ import net.minecraft.tileentity.TileEntity;
 
 import java.util.Random;
 
-public class TileLantern extends TileEntity {
+public class TileLantern extends TileEntity implements ITickable {
+
+	// 1.12: modded tile entities are dropped on any block state change by default; only drop them when the block changes
+	@Override
+	public boolean shouldRefresh(net.minecraft.world.World world, net.minecraft.util.math.BlockPos pos, net.minecraft.block.state.IBlockState oldState, net.minecraft.block.state.IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
+	}
+
 
 	/** Static instance used to access random number generation to create random colors. */
 	protected static final Random rand = new Random();
@@ -34,8 +43,14 @@ public class TileLantern extends TileEntity {
 		return nbt;
 	}
 
+	/** 1.12 sends this with the chunk data (1.7.10 sent the description packet instead). */
 	@Override
-	public Packet getDescriptionPacket() {
+	public NBTTagCompound getUpdateTag() {
+		return this.writeToNBT(new NBTTagCompound());
+	}
+
+	@Override
+	public SPacketUpdateTileEntity getUpdatePacket() {
 
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
@@ -58,12 +73,12 @@ public class TileLantern extends TileEntity {
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-		readFromNBT(pkt.func_148857_g());
+		readFromNBT(pkt.getNbtCompound());
 	}
 
 	@Override
-	public void updateEntity(){
-		if (oldColor != randomColor && xCoord!=0 && yCoord!=0 && zCoord!=0){
+	public void update() {
+		if (oldColor != randomColor && getPos().getX()!=0 && getPos().getY()!=0 && getPos().getZ()!=0){
 			oldColor = randomColor;
 			this.markDirty();
 			this.syncTileEntity();
@@ -74,8 +89,8 @@ public class TileLantern extends TileEntity {
 		for (Object o : this.world.playerEntities) {
 			if (o instanceof EntityPlayerMP) {
 				EntityPlayerMP player = (EntityPlayerMP) o;
-				if (player.getDistance(xCoord, yCoord, zCoord) <= 64) {
-					player.playerNetServerHandler.sendPacket(this.getDescriptionPacket());
+				if (player.getDistance(getPos().getX(), getPos().getY(), getPos().getZ()) <= 64) {
+					player.connection.sendPacket(this.getUpdatePacket());
 				}
 			}
 		}

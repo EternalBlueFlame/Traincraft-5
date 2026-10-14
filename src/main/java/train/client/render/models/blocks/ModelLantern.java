@@ -1,5 +1,7 @@
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.model.ModelBase;
@@ -9,29 +11,18 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileLantern;
 
 @SideOnly(Side.CLIENT)
 public class ModelLantern extends ModelBase {
-	private IModelCustom modelLantern;
+	private TCObjModel modelLantern;
 	private final RenderItem renderItem;
 
 	public ModelLantern() {
-		modelLantern = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "lantern.obj"));
-		renderItem = new RenderItem() {
-
-			@Override
-			public boolean shouldBob() {
-
-				return false;
-			};
-		};
-
-		renderItem.setRenderManager(RenderManager.instance);
+		modelLantern = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "lantern.obj"));
+		renderItem = net.minecraft.client.Minecraft.getMinecraft().getRenderItem();
 	}
 
 	public void render() {
@@ -56,22 +47,19 @@ public class ModelLantern extends ModelBase {
 		float f2 = (float) (j >> 16 & 255) / 255.0F;
 		float f3 = (float) (j >> 8 & 255) / 255.0F;
 		float f4 = (float) (j & 255) / 255.0F;
-		GL11.glColor4f(f1 * f2, f1 * f3, f1 * f4,1);
+		net.minecraft.client.renderer.GlStateManager.color(f1 * f2, f1 * f3, f1 * f4,1);
 		// Render the object, using modelTutBox.renderAll();
 
 		this.render();
-		GL11.glColor4f(1, 1, 1,1);
+		net.minecraft.client.renderer.GlStateManager.color(1, 1, 1,1);
 
 		// Pop this matrix from the stack.
 		GL11.glPopMatrix();
 		GL11.glPushMatrix();
-		EntityItem ghostEntityItem = new EntityItem(lantern.getWorld());
-		ghostEntityItem.setEntityItemStack(new ItemStack(Blocks.torch, 1));
-		ghostEntityItem.hoverStart = 0.0F;
 
 		GL11.glTranslatef((float) x + 0.5F, (float) y + 0.1F, (float) z + 0.5F);
 		GL11.glScalef(0.5F, 0.5F, 0.5F);
-		renderItem.doRender(ghostEntityItem, 0, 0, 0, 0, 0);
+		renderItem.renderItem(new ItemStack(Blocks.TORCH, 1), net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType.GROUND);
 
 		GL11.glPopMatrix();
 	}

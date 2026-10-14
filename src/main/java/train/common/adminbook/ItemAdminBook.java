@@ -1,12 +1,21 @@
 package train.common.adminbook;
 
+import net.minecraft.util.EnumHand;
+
+import net.minecraft.util.EnumActionResult;
+
+import net.minecraft.util.ActionResult;
+
+import net.minecraft.client.util.ITooltipFlag;
+
+import javax.annotation.Nullable;
+
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import io.netty.buffer.ByteBuf;
-import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -32,11 +41,11 @@ import java.util.Objects;
  * the key used to allow people other than the owner to interact with a locked train or rollingstock.
  * @author Eternal Blue Flame
  */
-public class ItemAdminBook extends Item {
+public class ItemAdminBook extends Item implements train.common.items.ILegacyIcon {
 
     public ItemAdminBook() {
         setCreativeTab(Traincraft.tcTab);
-        setUnlocalizedName("adminbook");
+        setTranslationKey("adminbook");
     }
 
     /**
@@ -46,19 +55,21 @@ public class ItemAdminBook extends Item {
      * We can cover the key and ticket description here, to simplify other classes.
      */
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack thisStack, EntityPlayer player, List stringList, boolean p_77624_4_) {
+    public void addInformation(ItemStack thisStack, @Nullable World world, List<String> stringList, ITooltipFlag flag) {
+    	boolean p_77624_4_ = flag.isAdvanced(); EntityPlayer player = Traincraft.proxy.getPlayer();
         stringList.add("This book is for Operators ONLY, and allows the following:");
         stringList.add("- drop trains/rollingstock and their inventory lost during a crash");
         stringList.add("- Lock or unlock trains/rollingstock");
     }
 
     @Override
-    public ItemStack onItemRightClick(ItemStack stack, World world, EntityPlayer player) {
+    public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
+    	ItemStack stack = player.getHeldItem(hand);
         try {
             if (world.isRemote) {
-                return stack;
-            } else if (!player.canCommandSenderUseCommand(2, "")) {
-                return stack;
+                return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
+            } else if (!player.canUseCommand(2, "")) {
+                return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
             }
 
             if (new File(Traincraft.configDirectory.getAbsolutePath() + "/traincraft/").exists()) {
@@ -76,14 +87,14 @@ public class ItemAdminBook extends Item {
                     //wrong player or something....?
                     Traincraft.keyChannel.sendTo(new PacketAdminBook(1, -1, sb.toString()), (EntityPlayerMP) player);
                 }
-                return stack;
+                return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
             } else {
-                return stack;
+                return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return super.onItemRightClick(stack, world, player);
+        return new ActionResult<ItemStack>(EnumActionResult.SUCCESS, stack);
     }
 
 
@@ -95,11 +106,6 @@ public class ItemAdminBook extends Item {
     }
 
 
-    @Override
-    @SideOnly(Side.CLIENT)
-    public void registerIcons(IIconRegister iconRegister) {
-        this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":parts/item_book_blue");
-    }
 
 
     public static class PacketAdminBookClient implements IMessage {
@@ -133,7 +139,13 @@ public class ItemAdminBook extends Item {
 
         public static class Handler implements IMessageHandler<PacketAdminBookClient, IMessage> {
             @Override
-            public IMessage onMessage(PacketAdminBookClient message, MessageContext context) {
+            public IMessage onMessage(final PacketAdminBookClient message, final MessageContext context) {
+                // 1.12 handles packets on the netty thread; touching the world/GUIs there races with the game thread
+                net.minecraftforge.fml.common.FMLCommonHandler.instance().getWorldThread(context.netHandler).addScheduledTask(() -> handleOnMainThread(message, context));
+                return null;
+            }
+
+            private IMessage handleOnMainThread(PacketAdminBookClient message, MessageContext context) {
                 int event = 0;
                 if (message.id.length() > 2 && message.id.startsWith("0:")) {
                     message.id = message.id.substring(2);
@@ -186,7 +198,7 @@ public class ItemAdminBook extends Item {
                                         for (ItemStack i : items) {
                                             if (i.getCount() != 0 && i.getItem() != null) {
                                                 EntityItem entityitem = new EntityItem(world, p.posX, p.posY + 3, p.posZ, i);
-                                                entityitem.delayBeforeCanPickup = 120;
+                                                entityitem.setPickupDelay(120);
                                                 if (p.captureDrops) {
                                                     p.capturedDrops.add(entityitem);
                                                 } else {
@@ -292,4 +304,9 @@ public class ItemAdminBook extends Item {
         }
     }
 
+
+    @Override
+    public String legacyIcon(int meta) {
+        return "tc:parts/item_book_blue";
+    }
 }

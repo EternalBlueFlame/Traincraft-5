@@ -405,7 +405,7 @@ public class ModelMILW_H1044 extends ModelBase
         }
         GL11.glPopMatrix();
 
-        Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/MILW_H1044_bogie.png"));
+        fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/MILW_H1044_bogie.png"));
 
         GL11.glPushMatrix();
         GL11.glTranslated(-4.3,0.55,0);

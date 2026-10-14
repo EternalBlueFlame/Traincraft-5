@@ -1,33 +1,33 @@
 package train.client.render.models.blocks;
 
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import train.client.core.helpers.SpriteHelper;
+
+import train.client.render.obj.TCObjModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
 @SideOnly(Side.CLIENT)
 public class ModelLargeSlopeTCTrack extends ModelBase {
-	private IModelCustom modeltrack;
+	private TCObjModel modeltrack;
 
-	private IModelCustom modelLargeSlopeWood;
-	private IModelCustom modelLargeSlopeBallast;
+	private TCObjModel modelLargeSlopeWood;
+	private TCObjModel modelLargeSlopeBallast;
 	private String[] ballastTexture = new String[2];
 
 
 	public ModelLargeSlopeTCTrack() {
-		modeltrack = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_slope_long.obj"));
-		modelLargeSlopeWood = AdvancedModelLoader
-				.loadModel(new ResourceLocation(Info.modelPrefix + "supports_wood_long.obj"));
-		modelLargeSlopeBallast = AdvancedModelLoader
-				.loadModel(new ResourceLocation(Info.modelPrefix + "supports_ballast_long.obj"));
+		modeltrack = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_slope_long.obj"));
+		modelLargeSlopeWood = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "supports_wood_long.obj"));
+		modelLargeSlopeBallast = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "supports_ballast_long.obj"));
 	}
 
 
@@ -71,21 +71,21 @@ public class ModelLargeSlopeTCTrack extends ModelBase {
 		if (type.equals("dynamic")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
 			modeltrack.renderAll();
-			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(ballastTexture[0],  "textures/blocks/" + ballastTexture[1] +".png"));
+			fexcraft.tmt.slim.Tessellator.bindTexture(train.client.core.helpers.SpriteHelper.blockTexture(ballastTexture[0], ballastTexture[1]));
 			float r = (float)(ballastColour >> 16 & 255) / 255.0F;
 			float g = (float)(ballastColour >> 8 & 255) / 255.0F;
 			float b = (float)(ballastColour & 255) / 255.0F;
-			GL11.glColor4f(r,g,b,1);
+			net.minecraft.client.renderer.GlStateManager.color(r,g,b,1);
 			modelLargeSlopeBallast.renderAll();
 		}
 		if (type.equals("embedded_dynamic")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
 			modeltrack.renderAll();
-			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(ballastTexture[0],  "textures/blocks/" + ballastTexture[1] +".png"));
+			fexcraft.tmt.slim.Tessellator.bindTexture(train.client.core.helpers.SpriteHelper.blockTexture(ballastTexture[0], ballastTexture[1]));
 			float r = (float)(ballastColour >> 16 & 255) / 255.0F;
 			float g = (float)(ballastColour >> 8 & 255) / 255.0F;
 			float b = (float)(ballastColour & 255) / 255.0F;
-			GL11.glColor4f(r,g,b,1);
+			net.minecraft.client.renderer.GlStateManager.color(r,g,b,1);
 			modelLargeSlopeBallast.renderAll();
 		}
 	}
@@ -93,8 +93,8 @@ public class ModelLargeSlopeTCTrack extends ModelBase {
 	public void render(String type, TileTCRail tcRail, double x, double y, double z) {
 		String iconName;
 		Block block = Block.getBlockById(tcRail.getBallastMaterial());
-		IIcon icon = block.getIcon(1, tcRail.ballastMetadata);
-		int colour = block.colorMultiplier(tcRail.getWorld(), tcRail.xCoord, tcRail.yCoord - 1, tcRail.zCoord);
+		TextureAtlasSprite icon = SpriteHelper.getTopSprite(block, tcRail.ballastMetadata);
+		int colour = ebf.tim.utility.ClientUtil.colorMultiplier(tcRail.getWorld(), tcRail.getPos().getX(), tcRail.getPos().getY() - 1, tcRail.getPos().getZ());
 		if (icon != null) {
 			iconName = icon.getIconName();
 		}
@@ -103,7 +103,7 @@ public class ModelLargeSlopeTCTrack extends ModelBase {
 			colour = 16777215;
 		}
 
-		render( type, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1, iconName, colour);
+		render( type, CommonUtil.getBlockFacing(tcRail.getWorld(), tcRail.getPos().getX(), tcRail.getPos().getY(), tcRail.getPos().getZ()), x, y, z, 1, 1, 1, 1, iconName, colour);
 	}
 
 	public void render(String type, int facing, double x, double y, double z, float r, float g, float b, float a, String ballastTexture, int colour)
@@ -114,7 +114,7 @@ public class ModelLargeSlopeTCTrack extends ModelBase {
 		// Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
 		GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
 
-		GL11.glColor4f(r, g, b, a);
+		net.minecraft.client.renderer.GlStateManager.color(r, g, b, a);
 		//GL11.glScalef(0.5f, 0.5f, 0.5f);
 
 		if (facing == 3) {

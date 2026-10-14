@@ -1,5 +1,11 @@
 package train.common.api;
 
+import train.common.core.util.StackUtil;
+
+import train.common.core.util.FluidContainers;
+
+import net.minecraft.util.math.MathHelper;
+
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.ISidedInventory;
@@ -10,6 +16,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.adminbook.ServerLogger;
 import train.common.entity.rollingStockOld.freight.EntityTankLava;
 import train.common.library.ItemIDs;
@@ -40,21 +48,24 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
         super(world);
         this.capacity = getTankCapacity()[0];
         this.theTank = new FluidTank(liquid, capacity);
-        dataWatcher.addObject(4, 0);
-        dataWatcher.addObject(22, "");
+        // slot 0: container to fill/empty, slot 1: output. The 1.7.10 subclasses allocated this themselves; the
+        // generated ones don't, and the tank GUI crashed the server (NPE in getStackInSlot)
+        this.cargoItems = new ItemStack[2];
+        getDataWatcher().addObject(4, 0);
+        getDataWatcher().addObject(22, "");
 
     }
 
     public int getAmount() {
-        return (this.dataWatcher.getWatchableObjectInt(18));
+        return (getDataWatcher().getWatchableObjectInt(18));
     }
 
     public int getLiquidItemID() {
-        return (this.dataWatcher.getWatchableObjectInt(4));
+        return (getDataWatcher().getWatchableObjectInt(4));
     }
 
     public String getLiquidName() {
-        return (this.dataWatcher.getWatchableObjectString(22));
+        return (getDataWatcher().getWatchableObjectString(22));
     }
 
     public FluidTank getTank() {
@@ -65,12 +76,31 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
     protected void writeEntityToNBT(NBTTagCompound nbttagcompound) {
         super.writeEntityToNBT(nbttagcompound);
         this.theTank.writeToNBT(nbttagcompound);
+        net.minecraft.nbt.NBTTagList items = new net.minecraft.nbt.NBTTagList();
+        for (int i = 0; i < cargoItems.length; i++) {
+            if (cargoItems[i] != null && !cargoItems[i].isEmpty()) {
+                NBTTagCompound slot = new NBTTagCompound();
+                slot.setByte("Slot", (byte) i);
+                cargoItems[i].writeToNBT(slot);
+                items.appendTag(slot);
+            }
+        }
+        nbttagcompound.setTag("Items", items);
     }
 
     @Override
     protected void readEntityFromNBT(NBTTagCompound nbttagcompound) {
         super.readEntityFromNBT(nbttagcompound);
         this.theTank.readFromNBT(nbttagcompound);
+        net.minecraft.nbt.NBTTagList items = nbttagcompound.getTagList("Items", net.minecraftforge.common.util.Constants.NBT.TAG_COMPOUND);
+        for (int i = 0; i < items.tagCount(); i++) {
+            NBTTagCompound slot = items.getCompoundTagAt(i);
+            int j = slot.getByte("Slot") & 0xff;
+            if (j < cargoItems.length) {
+                ItemStack stack = new ItemStack(slot);
+                cargoItems[j] = stack.isEmpty() ? null : stack;
+            }
+        }
     }
 
     @Override
@@ -79,45 +109,45 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
         if (world.isRemote) {
             return;
         }
+        checkInvent(cargoItems[0]); // was in every 1.7.10 tank subclass
 
-        if (ticksExisted % 5 == 0 && fill(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
+        if (ticksExisted % 5 == 0 && fill(new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
             FluidStack drain = null;
-            blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(worldObj, posX, posY - 1, posZ),
-                    CommonUtil.getTileEntity(worldObj, posX, posY + 2, posZ),
-                    CommonUtil.getTileEntity(worldObj, posX, posY + 3, posZ),
-                    CommonUtil.getTileEntity(worldObj, posX, posY + 4, posZ)
+            blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
+                    CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
+                    CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
+                    CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
             };
 
             for (TileEntity block : blocksToCheck) {
-                if (drain == null && block instanceof IFluidHandler) {
-                    for (EnumFacing direction : EnumFacing.VALID_DIRECTIONS) {
-                        if (((IFluidHandler) block).drain(direction, 100, false) != null &&
-                                ((IFluidHandler) block).drain(direction, 100, false).fluid == FluidRegistry.WATER &&
-                                ((IFluidHandler) block).drain(direction, 100, false).amount == 100
+                if (drain == null && FluidContainers.hasHandler(block)) {
+                    for (EnumFacing direction : EnumFacing.VALUES) {
+                        if (FluidContainers.drain(block, direction, 100, false) != null &&
+                                FluidContainers.drain(block, direction, 100, false).getFluid() == FluidRegistry.WATER &&
+                                FluidContainers.drain(block, direction, 100, false).amount == 100
                         ) {
-                            drain = ((IFluidHandler) block).drain(
-                                    direction, 100, true);
+                            drain = FluidContainers.drain(block, direction, 100, true);
                         }
                     }
                 }
             }
 
             if (drain != null) {
-                fill(EnumFacing.UNKNOWN, drain, true);
+                fill(drain, true);
             }
         }
 
 
         if (theTank != null && theTank.getFluid() != null) {
-            this.dataWatcher.updateObject(18, theTank.getFluid().amount);
-            this.dataWatcher.updateObject(4, theTank.getFluid().getFluidID());
+            getDataWatcher().updateObject(18, theTank.getFluid().amount);
+            getDataWatcher().updateObject(4, LiquidManager.fluidId(theTank.getFluid().getFluid()));
             if (theTank.getFluid().getFluid() != null)
-                this.dataWatcher.updateObject(22, theTank.getFluid().getFluid().getUnlocalizedName());
+                getDataWatcher().updateObject(22, theTank.getFluid().getFluid().getUnlocalizedName());
             handleMass();
         } else if (theTank != null && theTank.getFluid() == null) {
-            this.dataWatcher.updateObject(18, 0);
-            this.dataWatcher.updateObject(4, 0);
-            this.dataWatcher.updateObject(22, "");
+            getDataWatcher().updateObject(18, 0);
+            getDataWatcher().updateObject(4, 0);
+            getDataWatcher().updateObject(22, "");
         }
     }
 
@@ -132,6 +162,11 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
         }
     }
 
+    /** lava/molten tanks; the check only knew the 1.7.10 class, so the registered lava tank refused lava */
+    protected boolean isHotFluidTank() {
+        return this instanceof EntityTankLava || this instanceof train.common.entity.stock.tanker.EntityTankLava;
+    }
+
     public ItemStack checkInvent(ItemStack itemstack) {
         ItemStack result = null;
         if (world.isRemote) {
@@ -140,18 +175,21 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
         this.update += 1;
         if (this.update % 8 == 0 && itemstack != null) {
             ItemStack emptyItem = itemstack.getItem().getContainerItem(itemstack);
+            if (emptyItem != null && emptyItem.isEmpty()) {
+                emptyItem = null; // 1.12 returns EMPTY instead of null
+            }
             if (cargoItems[1] == null) {// If the output slot is empty...
                 if (theTank.getFluidAmount() == 0) {// Adding the first fluid to the tank...
                     for (Fluid fluid : FluidRegistry.getRegisteredFluids().values()) {
                         if (LiquidManager.getInstance().containsFluid(itemstack,
                                 FluidRegistry.getFluidStack(FluidRegistry.getFluidName(fluid), 0))) {
                             if (fluid.getTemperature() < 1000) {
-                                if (!(this instanceof EntityTankLava)) {// Input fluid from itemstack (not lava or molten liquids).
+                                if (!isHotFluidTank()) {// Input fluid from itemstack (not lava or molten liquids).
                                     result = LiquidManager.getInstance().processContainer(this, 0, this, itemstack);
                                     break;
                                 }
                             } else {
-                                if (this instanceof EntityTankLava) {// Input fluid from itemstack (lava or molten liquids).
+                                if (isHotFluidTank()) {// Input fluid from itemstack (lava or molten liquids).
                                     result = LiquidManager.getInstance().processContainer(this, 0, this, itemstack);
                                     break;
                                 }
@@ -163,23 +201,26 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
                 }
             } else if (emptyItem != null) {// Adding or removing fluid to or from the tank (if the tank already has something in it).
                 if (emptyItem.getItem() == cargoItems[1].getItem()|| emptyItem.getItem().equals(ItemIDs.emptyCanister.item) && cargoItems[1].getItem().equals(ItemIDs.diesel.item)) {
-                    if (cargoItems[1].stackSize + 1 <= cargoItems[1].getMaxStackSize()) {
+                    if (cargoItems[1].getCount() + 1 <= cargoItems[1].getMaxStackSize()) {
                         result = LiquidManager.getInstance().processContainer(this, 0, this, itemstack);
                     }
                 }
             } else {
                 if (itemstack.getItem() == cargoItems[1].getItem()) {
-                    if (cargoItems[1].stackSize + 1 <= cargoItems[1].getMaxStackSize()) {
+                    if (cargoItems[1].getCount() + 1 <= cargoItems[1].getMaxStackSize()) {
                         result = LiquidManager.getInstance().processContainer(this, 0, this, itemstack);
                     }
                 }
             }
 
+            if (result != null && result.isEmpty()) {
+                result = null; // 1.12: containers without a container item give EMPTY
+            }
             if (result != null) {
                 if (cargoItems[1] == null) {
                     cargoItems[1] = result;
                 } else if (cargoItems[1].getItem() == result.getItem()) {
-                    cargoItems[1].stackSize += 1;
+                    cargoItems[1].grow(1);
                 }
             }
         }
@@ -263,23 +304,26 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
 	*/
 
     @Override
-    public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, int p_102008_3_) {
+    public boolean canExtractItem(int p_102008_1_, ItemStack p_102008_2_, EnumFacing face) {
+    	int p_102008_3_ = face.getIndex();
         return false;
     }
 
     @Override
-    public int[] getAccessibleSlotsFromSide(int p_94128_1_) {
+    public int[] getSlotsForFace(EnumFacing face) {
+    	int p_94128_1_ = face.getIndex();
         return new int[0];
     }
 
     @Override
-    public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, int p_102007_3_) {
+    public boolean canInsertItem(int p_102007_1_, ItemStack p_102007_2_, EnumFacing face) {
+    	int p_102007_3_ = face.getIndex();
         return false;
     }
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        return cargoItems[i];
+        return StackUtil.nn(cargoItems[i]);
     }
 
     @Override
@@ -287,35 +331,35 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
         if (this.cargoItems[par1] != null) {
             ItemStack var2 = this.cargoItems[par1];
             this.cargoItems[par1] = null;
-            return var2;
+            return StackUtil.nn(var2);
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
         if (cargoItems[i] != null) {
-            if (cargoItems[i].stackSize <= j) {
+            if (cargoItems[i].getCount() <= j) {
                 ItemStack itemstack = cargoItems[i];
                 cargoItems[i] = null;
-                return itemstack;
+                return StackUtil.nn(itemstack);
             }
             ItemStack itemstack1 = cargoItems[i].splitStack(j);
-            if (cargoItems[i].stackSize == 0) {
+            if (cargoItems[i].getCount() == 0) {
                 cargoItems[i] = null;
             }
-            return itemstack1;
+            return StackUtil.nn(itemstack1);
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemstack) {
+    public void setInventorySlotContents(int i, ItemStack itemstack) { if (itemstack != null && itemstack.isEmpty()) itemstack = null;
         cargoItems[i] = itemstack;
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-            itemstack.getCount() = getInventoryStackLimit();
+            itemstack.setCount(getInventoryStackLimit());
         }
     }
 
@@ -357,11 +401,11 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
         super.attackEntityFrom(damagesource, i);
         setRollingDirection(-getRollingDirection());
         setRollingAmplitude(10);
-        setBeenAttacked();
+        markVelocityChanged();
         setDamage(getDamage() + i * 10);
         if (getDamage() > 40) {
-            if (getPassengers().get(0) != null) {
-                getPassengers().get(0).mountEntity(this);
+            if (ebf.tim.utility.CommonUtil.rider(this) != null) {
+                this.removePassengers(); // 1.7.10 mountEntity(this) dismounted, 1.12 startRiding would mount
             }
             this.setDead();
             ServerLogger.deleteWagon(this);
@@ -403,18 +447,16 @@ public class LiquidTank extends EntityRollingStock implements ISidedInventory {
         return theTank.drain(maxDrain, doDrain);
     }
 
-    @Override
     public boolean canfill(Fluid fluid) {
         return true;
     }
 
-    @Override
-    public boolean canDrain(EnumFacing from, Fluid fluid) {
+        public boolean canDrain(EnumFacing from, Fluid fluid) {
         return true;
     }
 
     @Override
     public IFluidTankProperties[] getTankProperties() {
-        return new FluidTankInfo[]{theTank.getInfo()};
+        return theTank.getTankProperties();
     }
 }

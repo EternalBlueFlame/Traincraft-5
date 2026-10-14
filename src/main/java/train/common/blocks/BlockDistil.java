@@ -1,5 +1,12 @@
 package train.common.blocks;
 
+import net.minecraft.util.EnumParticleTypes;
+
+import net.minecraft.util.EnumHand;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -29,20 +36,22 @@ public class BlockDistil extends BlockDynamic {
 	private static boolean keepDistilInventory = false;
 	private Random distilRand;
 	public BlockDistil(int j, boolean flag) {
-		super(Material.anvil,j);
+		super(Material.ANVIL,j);
 		isActive = flag;
 		distilRand = new Random();
 		//setRequiresSelfNotify();
 	}
 
 	@Override
-	public Item getItemDropped(int i, Random random, int j) {
+	public Item getItemDropped(IBlockState state, Random random, int j) {
+		int i = getMetaFromState(state);
 		return Item.getItemFromBlock(TCBlocks.distilIdle);
 	}
 
 
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float par7, float par8, float par9) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ(); int par6 = facing.getIndex();
 		TileEntity te = CommonUtil.getTileEntity(world, i, j, k);
 		if (player.isSneaking()) {
 			return false;
@@ -57,9 +66,10 @@ public class BlockDistil extends BlockDynamic {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void randomDisplayTick(World world, int i, int j, int k, Random random) {
+	public void randomDisplayTick(IBlockState state, World world, BlockPos pos, Random random) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ();
 		if (this.isActive) {
-			ForgeDirection side = ((TileEntityDistil) CommonUtil.getTileEntity(world, i, j, k)).getFacing();
+			EnumFacing side = ((TileEntityDistil) CommonUtil.getTileEntity(world, i, j, k)).getFacing();
 			float var7 = (float) i + 0.5F;
 			float var8 = (float) j + 0.0F + random.nextFloat() * 6.0F / 16.0F;
 			float var9 = (float) k + 0.5F;
@@ -67,23 +77,23 @@ public class BlockDistil extends BlockDynamic {
 			float var11 = random.nextFloat() * 0.6F - 0.3F;
 			for (int t = 0; t < 10; t++) {
 
-				world.spawnParticle("mobSpellAmbient", var7, (double) j + 1F, var9, 0, 0, 0);
+				world.spawnParticle(EnumParticleTypes.getByName("mobSpellAmbient"), var7, (double) j + 1F, var9, 0, 0, 0);
 			}
 			if (side == EnumFacing.WEST) {
-				world.spawnParticle("smoke", (double) (var7 - var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
-				world.spawnParticle("flame", (double) (var7 - var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.getByName("smoke"), (double) (var7 - var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.getByName("flame"), (double) (var7 - var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
 			}
 			else if (side == EnumFacing.EAST) {
-				world.spawnParticle("smoke", (double) (var7 + var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
-				world.spawnParticle("flame", (double) (var7 + var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.getByName("smoke"), (double) (var7 + var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.getByName("flame"), (double) (var7 + var10), (double) var8, (double) (var9 + var11), 0.0D, 0.0D, 0.0D);
 			}
 			else if (side == EnumFacing.NORTH) {
-				world.spawnParticle("smoke", (double) (var7 + var11), (double) var8, (double) (var9 - var10), 0.0D, 0.0D, 0.0D);
-				world.spawnParticle("flame", (double) (var7 + var11), (double) var8, (double) (var9 - var10), 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.getByName("smoke"), (double) (var7 + var11), (double) var8, (double) (var9 - var10), 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.getByName("flame"), (double) (var7 + var11), (double) var8, (double) (var9 - var10), 0.0D, 0.0D, 0.0D);
 			}
 			else if (side == EnumFacing.SOUTH) {
-				world.spawnParticle("smoke", (double) (var7 + var11), (double) var8, (double) (var9 + var10), 0.0D, 0.0D, 0.0D);
-				world.spawnParticle("flame", (double) (var7 + var11), (double) var8, (double) (var9 + var10), 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.getByName("smoke"), (double) (var7 + var11), (double) var8, (double) (var9 + var10), 0.0D, 0.0D, 0.0D);
+				world.spawnParticle(EnumParticleTypes.getByName("flame"), (double) (var7 + var11), (double) var8, (double) (var9 + var10), 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}
@@ -107,7 +117,8 @@ public class BlockDistil extends BlockDynamic {
 	}
 
 	@Override
-	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ(); Block par5 = state.getBlock(); int par6 = getMetaFromState(state);
 		if (!keepDistilInventory) {
 			TileEntityDistil tileentitydistil = (TileEntityDistil) CommonUtil.getTileEntity(world, i, j, k);
 			if (tileentitydistil != null) {
@@ -127,7 +138,7 @@ public class BlockDistil extends BlockDynamic {
 						if (i1 > itemstack.getCount()) {
 							i1 = itemstack.getCount();
 						}
-						itemstack.getCount() -= i1;
+						// splitStack already takes the items out of the stack (1.7.10 did stackSize -= i1 + new ItemStack)
 						EntityItem entityitem = new EntityItem(world, (float) i + f, (float) j + f1, (float) k + f2, itemstack.splitStack(i1));
 						float f3 = 0.05F;
 						entityitem.motionX = (float) distilRand.nextGaussian() * f3;
@@ -138,17 +149,19 @@ public class BlockDistil extends BlockDynamic {
 				}
 			}
 		}
-		super.breakBlock(world, i, j, k, par5, par6);
+		super.breakBlock(world, pos, state);
 	}
 
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ();
 		super.onBlockAdded(world, pos, state);
 		CommonUtil.markBlockForUpdate(world, i, j, k);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ();
 		TileEntityDistil te = (TileEntityDistil) CommonUtil.getTileEntity(world, i, j, k);
 		if (te != null) {
 			int dir = CommonUtil.floorDouble((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
@@ -169,7 +182,8 @@ public class BlockDistil extends BlockDynamic {
 		return new TileEntityDistil();
 	}
 	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		int metadata = getMetaFromState(state);
 		return new TileEntityDistil();
 	}
 

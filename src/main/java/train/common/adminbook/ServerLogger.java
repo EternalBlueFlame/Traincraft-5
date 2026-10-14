@@ -1,11 +1,12 @@
 package train.common.adminbook;
 
+import train.common.core.util.FluidContainers;
+
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
-import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import train.common.Traincraft;
@@ -49,7 +50,7 @@ public class ServerLogger {
             if (!new File(sb.toString()).exists()) {
                 new File(sb.toString()).mkdir();
             }
-            sb.append(wagon.getCartItem().getItem().delegate.name().replace(":", "~").toLowerCase());
+            sb.append(wagon.getCartItem().getItem().delegate.name().toString().replace(":", "~").toLowerCase());
             sb.append("_");
             sb.append(wagon.getUniqueID().toString().toLowerCase());
             sb.append(".txt");
@@ -107,7 +108,7 @@ public class ServerLogger {
         }
 
         sb.append("/");
-        sb.append(wagon.getCartItem().getItem().delegate.name().replace(":", "~").toLowerCase());
+        sb.append(wagon.getCartItem().getItem().delegate.name().toString().replace(":", "~").toLowerCase());
         sb.append("_");
         sb.append(wagon.getUniqueID().toString().toLowerCase());
         sb.append(".txt");
@@ -144,7 +145,7 @@ public class ServerLogger {
 
         int fill = 1000;
         while (fill < item.amount) {
-            addItemXML(string, FluidContainerRegistry.fillFluidContainer(item, new ItemStack(Items.BUCKET)));
+            addItemXML(string, FluidContainers.fillFluidContainer(item, new ItemStack(Items.BUCKET)));
             fill += 1000;
         }
     }

@@ -1,5 +1,13 @@
 package train.common.api.blocks;
 
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.block.state.IBlockState;
+
+import net.minecraft.util.ITickable;
+
+import train.client.render.item.TCItemRenderer;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.ClientUtil;
@@ -13,13 +21,13 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
 
-public class TileRenderFacing extends TileEntity {
+public class TileRenderFacing extends TileEntity implements ITickable {
     public int facing =-1;
     private Integer blockGLID =null;
     private int uiTexture=0;
@@ -80,12 +88,12 @@ public class TileRenderFacing extends TileEntity {
     }
 
     @Override
-    public void func_145828_a(CrashReportCategory r){
+    public void addInfoToCrashReport(CrashReportCategory r) {
         if(r==null){
             uiTexture =  org.lwjgl.opengl.GL11.glGetInteger( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
-            if(getTexture(xCoord,yCoord,zCoord)!=null) {
+            if(getTexture(getPos().getX(),getPos().getY(),getPos().getZ())!=null) {
                 org.lwjgl.opengl.GL11.glEnable( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
-                TextureManager.bindTexture(getTexture(xCoord,yCoord,zCoord));
+                TextureManager.bindTexture(getTexture(getPos().getX(),getPos().getY(),getPos().getZ()));
             } else {
                 org.lwjgl.opengl.GL11.glDisable( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
             }
@@ -94,10 +102,10 @@ public class TileRenderFacing extends TileEntity {
             if(blockGLID ==null) {
                 blockGLID = net.minecraft.client.renderer.GLAllocation.generateDisplayLists(1);
                 org.lwjgl.opengl.GL11.glNewList(blockGLID, org.lwjgl.opengl.GL11.GL_COMPILE);
-                if (worldObj == null) {
-                    ClientUtil.fixItemLighting(worldObj);
+                if (world == null) {
+                    ClientUtil.fixItemLighting(world);
                 } else {
-                    Minecraft.getMinecraft().entityRenderer.enableLightmap(1);
+                    Minecraft.getMinecraft().entityRenderer.enableLightmap();
                 }
                 org.lwjgl.opengl.GL11.glTranslatef(0.5f, 0.5f, 0.5f);
                 switch (facing) {
@@ -124,8 +132,8 @@ public class TileRenderFacing extends TileEntity {
                 org.lwjgl.opengl.GL11.glRotatef(180, 1, 0, 0);
 
                 renderModel();
-                if (worldObj == null) {
-                    ClientUtil.fixItemLighting(worldObj);
+                if (world == null) {
+                    ClientUtil.fixItemLighting(world);
                 }
                 org.lwjgl.opengl.GL11.glEndList();
             }
@@ -139,9 +147,9 @@ public class TileRenderFacing extends TileEntity {
             }
             //be sure to re-enable the texture biding, because the UI wont
             org.lwjgl.opengl.GL11.glEnable( org.lwjgl.opengl.GL11.GL_TEXTURE_2D);
-            org.lwjgl.opengl.GL11.glBindTexture( org.lwjgl.opengl.GL11.GL_TEXTURE_2D,uiTexture);
+            net.minecraft.client.renderer.GlStateManager.bindTexture(uiTexture);
         } else{
-            super.func_145828_a(r);
+            super.addInfoToCrashReport(r);
         }
     }
 
@@ -161,14 +169,14 @@ public class TileRenderFacing extends TileEntity {
         return host.getTexture(x,y,z);
     }
 
-    @Override
-    public boolean canUpdate(){return false;}
+    public boolean canUpdateLegacy() {return false;}
 
     @Override
-    public void updateEntity(){}
+    public void update() {}
 
     @Override
-    public boolean shouldRefresh(Block oldBlock, Block newBlock, int oldMeta, int newMeta, World world, int x, int y, int z) {
+    public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+    	Block oldBlock = oldState.getBlock(), newBlock = newState.getBlock(); int oldMeta = oldBlock.getMetaFromState(oldState), newMeta = newBlock.getMetaFromState(newState); int x = pos.getX(), y = pos.getY(), z = pos.getZ();
         return (newBlock != oldBlock);
     }
 
@@ -176,9 +184,9 @@ public class TileRenderFacing extends TileEntity {
     public void markDirty() {
         super.markDirty();
         if(this.getWorld() != null) {
-            CommonUtil.markBlockForUpdate(getWorld(), xCoord, yCoord, zCoord);
-            world.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
-            this.world.func_147453_f(getPos(), host);
+            CommonUtil.markBlockForUpdate(getWorld(), getPos().getX(), getPos().getY(), getPos().getZ());
+            world.markChunkDirty(getPos(), this);
+            if (host != null) this.world.updateComparatorOutputLevel(getPos(), host);
             if (world.isRemote && blockGLID != null) {
             //    org.lwjgl.opengl.GL11.glDeleteLists(blockGLID, 1);
             //    blockGLID = null;
@@ -194,8 +202,14 @@ public class TileRenderFacing extends TileEntity {
         }
     }
 
+    /** 1.12 sends this with the chunk data (1.7.10 sent the description packet instead). */
     @Override
-    public SPacketUpdateTileEntity getDescriptionPacket() {
+    public NBTTagCompound getUpdateTag() {
+    	return this.writeToNBT(new NBTTagCompound());
+    }
+
+    @Override
+    public SPacketUpdateTileEntity getUpdatePacket() {
         NBTTagCompound nbttagcompound = new NBTTagCompound();
         writeToNBT(nbttagcompound);
         return new SPacketUpdateTileEntity(getPos(), 0, nbttagcompound);
@@ -204,15 +218,16 @@ public class TileRenderFacing extends TileEntity {
     @Override
     public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
         if(pkt ==null){return;}
-        readFromNBT(pkt.func_148857_g());
+        readFromNBT(pkt.getNbtCompound());
         markDirty();
     }
 
 
     @Override
-    public void writeToNBT(NBTTagCompound tag){
+    public NBTTagCompound writeToNBT(NBTTagCompound tag) {
         super.writeToNBT(tag);
         tag.setInteger("f", facing);
+    	return tag;
     }
 
     @Override
@@ -228,8 +243,8 @@ public class TileRenderFacing extends TileEntity {
         for(Object o : this.world.playerEntities){
             if(o instanceof EntityPlayerMP){
                 EntityPlayerMP player = (EntityPlayerMP) o;
-                if(player.getDistance(xCoord, yCoord, zCoord) <= 64) {
-                    player.playerNetServerHandler.sendPacket(this.getDescriptionPacket());
+                if(player.getDistance(getPos().getX(), getPos().getY(), getPos().getZ()) <= 64) {
+                    player.connection.sendPacket(this.getUpdatePacket());
                 }
             }
         }
@@ -247,7 +262,7 @@ public class TileRenderFacing extends TileEntity {
         return null;
     }
     @SideOnly(Side.CLIENT)
-    public boolean force2dItem(net.minecraftforge.client.IItemRenderer.ItemRenderType type){return false;}
+    public boolean force2dItem(TCItemRenderer.ItemRenderType type){return false;}
 
     public static final ModelRendererTurbo cube = new ModelRendererTurbo((ModelBase) null, 0,0,64,32).addBox(-8,-8,-8,16,16,16);
 

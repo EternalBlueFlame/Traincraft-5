@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "normal": {
+      "model": "tc:dirtierballast"
+    },
+    "inventory": {
+      "model": "tc:dirtierballast"
+    }
+  }
+}

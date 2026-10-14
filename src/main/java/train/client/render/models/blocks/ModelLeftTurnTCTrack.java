@@ -1,12 +1,12 @@
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
@@ -14,22 +14,22 @@ import train.common.tile.TileTCRail;
 @SideOnly(Side.CLIENT)
 public class ModelLeftTurnTCTrack extends ModelBase {
 
-	private IModelCustom model1XLeftTurn;
-	private IModelCustom modelMediumLeftTurn;
-	private IModelCustom modelLargeLeftTurn;
-	private IModelCustom modelVeryLargeLeftTurn;
-	private IModelCustom modelSuperLargeLeftTurn;
-	private IModelCustom model29XLeftTurn;
-	private IModelCustom model32XLeftTurn;
+	private TCObjModel model1XLeftTurn;
+	private TCObjModel modelMediumLeftTurn;
+	private TCObjModel modelLargeLeftTurn;
+	private TCObjModel modelVeryLargeLeftTurn;
+	private TCObjModel modelSuperLargeLeftTurn;
+	private TCObjModel model29XLeftTurn;
+	private TCObjModel model32XLeftTurn;
 
 	public ModelLeftTurnTCTrack() {
-		model1XLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_1x.obj"));
-		modelMediumLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_medium.obj"));
-		modelLargeLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_big.obj"));
-		modelVeryLargeLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_very_big.obj"));
-		modelSuperLargeLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_super_big.obj"));
-		model29XLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_29x.obj"));
-		model32XLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_32x.obj"));
+		model1XLeftTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_1x.obj"));
+		modelMediumLeftTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_medium.obj"));
+		modelLargeLeftTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_big.obj"));
+		modelVeryLargeLeftTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_very_big.obj"));
+		modelSuperLargeLeftTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_super_big.obj"));
+		model29XLeftTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_29x.obj"));
+		model32XLeftTurn = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "track_curve_32x.obj"));
 	}
 
 	public void render1X() {model1XLeftTurn.renderAll();}
@@ -48,7 +48,7 @@ public class ModelLeftTurnTCTrack extends ModelBase {
 	public void render32X() {model32XLeftTurn.renderAll();}
 
 	public void render(String type, TileTCRail tcRail, double x, double y, double z) {
-		render( type, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1);
+		render( type, CommonUtil.getBlockFacing(tcRail.getWorld(), tcRail.getPos().getX(), tcRail.getPos().getY(), tcRail.getPos().getZ()), x, y, z, 1, 1, 1, 1);
 	}
 
 	public void render(String type, int facing, double x, double y, double z, float r, float g, float b, float a) {
@@ -62,7 +62,7 @@ public class ModelLeftTurnTCTrack extends ModelBase {
 		// Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
 		GL11.glTranslatef((float) x + 1.5f, (float) y, (float) z + 5.5f);
 
-		GL11.glColor4f(r, g, b, a);
+		net.minecraft.client.renderer.GlStateManager.color(r, g, b, a);
 		//GL11.glScalef(0.5f, 0.5f, 0.5f);
 
 		if (facing == 3) {

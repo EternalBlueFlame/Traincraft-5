@@ -1,10 +1,12 @@
 package train.common.library;
 
 import net.minecraft.item.Item;
-import net.minecraft.stats.Achievement;
 import train.common.blocks.TCBlocks;
 import train.common.entity.rollingStock.EntityPassengerCar1;
 
+/**
+ * Former achievements (removed from Minecraft in 1.12). Kept as a list of milestones/items so they can become advancements.
+ */
 public enum AchievementIDs {
 	steel(new Item[] { ItemIDs.steel.item }),
 	stake(new Item[] { ItemIDs.stake.item }),
@@ -83,7 +85,6 @@ public enum AchievementIDs {
 	heavySteam(new Item[]{ItemIDs.minecartHeavySteam.item}),
 	;
 
-	public Achievement	achievement;
 	protected Item[]	items;
 	
 	public Item[] getItems() {

@@ -12,7 +12,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraft.item.Item;
 import train.common.items.ItemRollingStock;
-import train.common.library.AchievementIDs;
 
 public class CraftingHandler
 {
@@ -20,11 +19,6 @@ public class CraftingHandler
   @SubscribeEvent
   public void onCrafting(PlayerEvent.ItemCraftedEvent event)
   {
-	  for (AchievementIDs ach : AchievementIDs.values())
-	  {
-		  Item[] items = ach.getItems();
-		  if (items != null) for (Item item: items) if (item == event.crafting.getItem()) event.player.addStat(ach.achievement, 1);
-      }
 		if ((event.crafting.getItem() instanceof ItemRollingStock)) {
 			if (!event.player.world.isRemote) {
         if (FMLCommonHandler.instance().getMinecraftServerInstance() != null) {
@@ -42,16 +36,6 @@ public class CraftingHandler
   @SubscribeEvent
 	public void onSmelting(PlayerEvent.ItemSmeltedEvent event)
   {
-		for (AchievementIDs ach : AchievementIDs.values())
-    {
-      Item[] items = ach.getItems();
-      if (items != null) {
-        for (int i = 0; i < items.length; i++) {
-					if (items[i] == event.smelting.getItem()) {
-						event.player.addStat(ach.achievement, 1);
-          }
-        }
-      }
-    }
+		// achievements were removed in 1.12 (see AchievementIDs)
   }
 }

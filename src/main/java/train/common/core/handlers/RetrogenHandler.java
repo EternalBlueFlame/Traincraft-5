@@ -49,9 +49,9 @@ public class RetrogenHandler {
                 for (Chunk chunk : chunksToRetroGen) {
                     if (chunk.getWorld() instanceof WorldServer) {
                         world = (WorldServer) chunk.getWorld();
-                        rand.setSeed((long) chunk.xPosition * 341873128712L + (long) chunk.zPosition * 132897987541L);
-                        Traincraft.tcLog.info("Retrogen chunk at " + chunk.xPosition + ", " + chunk.zPosition + " for dimension " + ebf.tim.utility.CommonUtil.getDimensionId(world) + ", Version " + VERSION);
-                        Traincraft.worldGen.generate(rand, chunk.xPosition, chunk.zPosition, world, world.theChunkProviderServer.currentChunkProvider, world.theChunkProviderServer.currentChunkProvider);
+                        rand.setSeed((long) chunk.x * 341873128712L + (long) chunk.z * 132897987541L);
+                        Traincraft.tcLog.info("Retrogen chunk at " + chunk.x + ", " + chunk.z + " for dimension " + ebf.tim.utility.CommonUtil.getDimensionId(world) + ", Version " + VERSION);
+                        Traincraft.worldGen.generate(rand, chunk.x, chunk.z, world, world.getChunkProvider().chunkGenerator, world.getChunkProvider());
                     }
                 }
 
@@ -65,9 +65,9 @@ public class RetrogenHandler {
         private final int chunkX, chunkZ, dimension;
 
         private ChunkData(Chunk chunk) {
-            this.chunkX = chunk.xPosition;
-            this.chunkZ = chunk.zPosition;
-            this.dimension = ebf.tim.utility.CommonUtil.getDimensionId(chunk.worldObj);
+            this.chunkX = chunk.x;
+            this.chunkZ = chunk.z;
+            this.dimension = ebf.tim.utility.CommonUtil.getDimensionId(chunk.getWorld());
         }
 
         public ChunkData(int chunkX, int chunkZ, int dimension) {

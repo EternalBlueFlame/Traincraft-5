@@ -7,16 +7,17 @@
 
 package train.client.render;
 
+import train.client.render.item.TCItemRenderer;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
 import train.client.render.models.blocks.ModelTCBook;
 import train.common.library.Info;
 
-public class ItemRenderBook implements IItemRenderer {
+public class ItemRenderBook extends TCItemRenderer {
 
     ModelTCBook book1;
     ModelTCBook book2;
@@ -67,7 +68,7 @@ public class ItemRenderBook implements IItemRenderer {
     }
 
     private void renderBook(float left, float up, float right, float rotation, float x, float y, float z, float scale) {
-        Tessellator tesselator = Tessellator.instance;
+        Tessellator tesselator = Tessellator.getInstance();
         fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "book2.png"));
         GL11.glPushMatrix();
         GL11.glTranslatef(left, up, right);

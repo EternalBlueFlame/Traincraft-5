@@ -23,8 +23,8 @@ public class ChunkEvents implements ForgeChunkManager.LoadingCallback, ForgeChun
 	@SuppressWarnings("unused")
 	@SubscribeEvent
 	public void entityEnteredChunk(EntityEvent.EnteringChunk event) {
-		if(event.entity instanceof AbstractTrains && !event.entity.world.isRemote) {
-			forceChunkLoading(((AbstractTrains) event.entity), event.newChunkX, event.newChunkZ);
+		if(event.getEntity() instanceof AbstractTrains && !event.getEntity().world.isRemote) {
+			forceChunkLoading(((AbstractTrains) event.getEntity()), event.getNewChunkX(), event.getNewChunkZ());
 		}
 	}
 

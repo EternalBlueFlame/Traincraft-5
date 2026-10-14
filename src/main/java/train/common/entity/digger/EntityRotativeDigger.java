@@ -1,5 +1,18 @@
 package train.common.entity.digger;
 
+import train.common.core.util.StackUtil;
+
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.util.EnumFacing;
+
+import train.common.core.util.LegacyDataWatcher;
+
+import net.minecraft.util.EnumParticleTypes;
+
+import net.minecraft.util.EnumHand;
+
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -15,10 +28,9 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import train.common.Traincraft;
@@ -29,6 +41,29 @@ import train.common.library.ItemIDs;
 import java.util.List;
 
 public class EntityRotativeDigger extends Entity implements IInventory {
+
+	/** 1.7.10 Entity.yOffset (removed in 1.9; Minecraft now asks getYOffset()) */
+	protected double yOffsetLegacy = 0;
+
+	@Override
+	public double getYOffset() {
+		return this.yOffsetLegacy;
+	}
+
+
+	/* 1.7.10 DataWatcher slots on top of 1.12 EntityDataManager, see LegacyDataWatcher */
+	static {
+		LegacyDataWatcher.registerFamily(EntityRotativeDigger.class);
+	}
+	private LegacyDataWatcher legacyDataWatcher;
+
+	public LegacyDataWatcher getDataWatcher() {
+		if (legacyDataWatcher == null) {
+			legacyDataWatcher = new LegacyDataWatcher(this, EntityRotativeDigger.class);
+		}
+		return legacyDataWatcher;
+	}
+
 
     public int start;
     private ItemStack[] cargoItems;// added
@@ -78,7 +113,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         boatRockDirection = 1;
         preventEntitySpawning = true;
         setSize(1.5F, 0.8F);
-        yOffset = height / 2.0F;
+        this.yOffsetLegacy = height / 2.0F;
         numCargoSlots = 3;
         numCargoSlots1 = 3;
         numCargoSlots2 = 3;
@@ -97,12 +132,12 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         if (world.isRemote) {
             this.wheels = new EntityRotativeWheel[1];
-            this.wheels[0] = new EntityRotativeWheel(this.worldObj, this, 0, 5.4D, 0, 0, 0.0D);
-            CommonUtil.spawnEntity(worldObj, this.wheels[0]);
+            this.wheels[0] = new EntityRotativeWheel(this.world, this, 0, 5.4D, 0, 0, 0.0D);
+            CommonUtil.spawnEntity(world, this.wheels[0]);
         }
 
-        this.dataWatcher.addObject(20, fuel);
-        this.dataWatcher.addObject(21, start);
+        getDataWatcher().addObject(20, fuel);
+        getDataWatcher().addObject(21, start);
 
     }
 
@@ -117,12 +152,12 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
     @Override
     public AxisAlignedBB getCollisionBox(Entity entity) {
-        return entity.boundingBox;
+        return entity.getEntityBoundingBox();
     }
 
     @Override
-    public AxisAlignedBB getBoundingBox() {
-        return boundingBox;
+    public AxisAlignedBB getCollisionBoundingBox() {
+        return getEntityBoundingBox();
     }
 
     @Override
@@ -135,13 +170,13 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             return;
         }
 
-        if (entity != entity.getPassengers().get(0)) {
+        if (entity != ebf.tim.utility.CommonUtil.rider(entity)) {
             double var2 = entity.posX - this.posX;
             double var4 = entity.posZ - this.posZ;
-            double var6 = MathHelper.abs_max(var2, var4);
+            double var6 = MathHelper.absMax(var2, var4);
 
             if (var6 >= 0.009999999776482582D) {
-                var6 = MathHelper.sqrt_double(var6);
+                var6 = MathHelper.sqrt(var6);
                 var2 /= var6;
                 var4 /= var6;
                 double var8 = 1.0D / var6;
@@ -164,7 +199,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
     public EntityRotativeDigger(World world, double d, double d1, double d2) {
         this(world);
-        setPosition(d, d1 + yOffset, d2);
+        setPosition(d, d1 + getYOffset(), d2);
         motionX = 0.0D;
         motionY = 0.0D;
         motionZ = 0.0D;
@@ -187,7 +222,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         boatRockDirection = -boatRockDirection;
         boatTimeSinceHit = 10;
         boatCurrentDamage += (int) (i * 10);
-        setBeenAttacked();
+        markVelocityChanged();
         if (boatCurrentDamage > 40) {
             setDead();
         }
@@ -217,12 +252,12 @@ public class EntityRotativeDigger extends Entity implements IInventory {
                     k = itemstack.getCount();
                 }
 
-                EntityItem entityitem = new EntityItem(getWorld(), posX + f, posY + f1, posZ + f2, itemstack.splitStack(k));
+                EntityItem entityitem = new EntityItem(getEntityWorld(), posX + f, posY + f1, posZ + f2, itemstack.splitStack(k));
                 float f3 = 0.05F;
                 entityitem.motionX = (float) rand.nextGaussian() * f3;
                 entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
                 entityitem.motionZ = (float) rand.nextGaussian() * f3;
-                CommonUtil.spawnEntity(worldObj, entityitem);
+                CommonUtil.spawnEntity(world, entityitem);
             } while (true);
         }
         if (wheels != null) {
@@ -239,9 +274,9 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
     public void pressKey(int i) {
 
-        if (i == 7 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
+        if (i == 7 && ebf.tim.utility.CommonUtil.rider(this) != null && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer) {
             //TODO there is no GUI for it currently
-            //((EntityPlayer) getPassengers().get(0)).openGui(Traincraft.instance, GuiIDs.DIGGER, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
+            //((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).openGui(Traincraft.instance, GuiIDs.DIGGER, getWorld(), (int) this.posX, (int) this.posY, (int) this.posZ);
         }
 
         if (i == 9) {
@@ -269,7 +304,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void setPositionAndRotation2(double d, double d1, double d2, float f, float f1, int i) {
+    public void setPositionAndRotationDirect(double d, double d1, double d2, float f, float f1, int i, boolean teleport) {
         field_9393_e = d;
         field_9392_f = d1;
         field_9391_g = d2;
@@ -295,9 +330,9 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      * @param x x position of the wheel
      * @param y y position of the wheel
      * @param z  z position of the wheel
-     * @return Vec3 with the position of the wheel
+     * @return Vec3d with the position of the wheel
      */
-    public Vec3 rotate(double x, double y, double z) {
+    public Vec3d rotate(double x, double y, double z) {
 
         double cosYaw = Math.cos(this.getYaw() * 3.141593F / 180.0F);
         double sinYaw = Math.sin(this.getYaw() * 3.141593F / 180.0F);
@@ -311,7 +346,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         double newY = -(((cosPitch - x) * -sinPitch));
         double newZ = (y * sinRoll - x * cosRoll) * sinYaw + v * cosYaw;
 
-        return Vec3.createVectorHelper(newX, newY, newZ);
+        return new Vec3d(newX, newY, newZ);
     }
 
     public float getYaw() {
@@ -333,14 +368,14 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (fuel > 0 && getPassengers().get(0) instanceof EntityPlayer) {
-            EntityPlayer player = (EntityPlayer) getPassengers().get(0);
+        if (fuel > 0 && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer) {
+            EntityPlayer player = (EntityPlayer) ebf.tim.utility.CommonUtil.rider(this);
             motionX = motionX + player.moveForward * speedXFromPitch(player, 0.2) * 0.1;
             motionZ = motionZ + player.moveForward * speedZFromPitch(player, 0.2) * 0.1;
             rotationYaw += (float) (player.moveStrafing * .5);
         }
 
-        if (getPassengers().get(0) == null) {
+        if (ebf.tim.utility.CommonUtil.rider(this) == null) {
             pitch = 0F;
         }
 
@@ -349,15 +384,15 @@ public class EntityRotativeDigger extends Entity implements IInventory {
          */
         if (wheels != null) {
             for (EntityRotativeWheel wheel : wheels) {
-                Vec3 posVec = this.rotate(wheel.seatX, wheel.seatY, wheel.seatZ).addVector(this.posX, this.posY + 0.7, this.posZ);
-                //wheels[seatNum].setPosition(posVec.xCoord, posVec.yCoord, posVec.zCoord);
+                Vec3d posVec = this.rotate(wheel.seatX, wheel.seatY, wheel.seatZ).add(this.posX, this.posY + 0.7, this.posZ);
+                //wheels[seatNum].setPosition(posVec.x, posVec.y, posVec.z);
 
-                wheel.setPositionAndRotation(posVec.xCoord, posVec.yCoord, posVec.zCoord, this.rotationYaw, pitch);
+                wheel.setPositionAndRotation(posVec.x, posVec.y, posVec.z, this.rotationYaw, pitch);
             }
         }
 
         //It hasn't any GUI for now
-        /*if (fuel <= 0) { if (zeppInvent[0] != null && zeppInvent[0].itemID == ItemIDs.refinedFuel.item.shiftedIndex) { fuel = ConfigHandler2.ZeppelinCoal; this.dataWatcher.updateObject(20, fuel); decrStackSize(0, 1); } } */
+        /*if (fuel <= 0) { if (zeppInvent[0] != null && zeppInvent[0].itemID == ItemIDs.refinedFuel.item.shiftedIndex) { fuel = ConfigHandler2.ZeppelinCoal; getDataWatcher().updateObject(20, fuel); decrStackSize(0, 1); } } */
 
         if (boatTimeSinceHit > 0) {
             boatTimeSinceHit--;
@@ -373,11 +408,11 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         int i = 5;
         double d = 0.0D;
         for (int j = 0; j < i; j++) {
-            double d4 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j)) / i) - 0.125D;
-            double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j + 1)) / i) - 0.125D;
-            AxisAlignedBB axisalignedbb = CommonUtil.createAABB(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
+            double d4 = (getEntityBoundingBox().minY + ((getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (j)) / i) - 0.125D;
+            double d8 = (getEntityBoundingBox().minY + ((getEntityBoundingBox().maxY - getEntityBoundingBox().minY) * (j + 1)) / i) - 0.125D;
+            AxisAlignedBB axisalignedbb = CommonUtil.createAABB(getEntityBoundingBox().minX, d4, getEntityBoundingBox().minZ, getEntityBoundingBox().maxX, d8, getEntityBoundingBox().maxZ);
 
-            if (world.isAABBInMaterial(axisalignedbb, Material.water)) {
+            if (world.isMaterialInBB(axisalignedbb, Material.WATER)) {
                 d += 1.0D / i;
             }
         }
@@ -396,12 +431,12 @@ public class EntityRotativeDigger extends Entity implements IInventory {
                 double d21 = (posX - d13 * d18 * 0.80000000000000004D) + d15 * d20;
                 double d23 = posZ - d15 * d18 * 0.80000000000000004D - d13 * d20;
                 // world.spawnParticle("splash", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
-                world.spawnParticle("largesmoke", d21, posY - 0.125D, d23, motionX, motionY, motionZ);
+                world.spawnParticle(EnumParticleTypes.getByName("largesmoke"), d21, posY - 0.125D, d23, motionX, motionY, motionZ);
             } else {
                 double d22 = posX + d13 + d15 * d18 * 0.69999999999999996D;
                 double d24 = (posZ + d15) - d13 * d18 * 0.69999999999999996D;
                 // world.spawnParticle("splash", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
-                world.spawnParticle("largesmoke", d22, posY - 0.125D, d24, motionX, motionY, motionZ);
+                world.spawnParticle(EnumParticleTypes.getByName("largesmoke"), d22, posY - 0.125D, d24, motionX, motionY, motionZ);
             }
         }
         if (world.isRemote) {
@@ -449,7 +484,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         if (rand.nextInt(4) == 0 && fuel > 0) {
             fuel--;
-            this.dataWatcher.updateObject(20, fuel);
+            getDataWatcher().updateObject(20, fuel);
         }
 
         if (fuel <= 0) {
@@ -458,7 +493,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         }
 
         //TODO This is what allows the entity to climb any height, a better system should be created...
-        if (this.isCollidedHorizontally) {
+        if (this.collidedHorizontally) {
             motionY = 0.051;
         } else {
             double d3 = d * 2D - 1.0D;
@@ -469,14 +504,14 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         motionY *= 0.94999998807907104D;
         motionZ *= 0.7400000953674316D;
 
-        moveEntity(motionX, motionY, motionZ);
+        move(net.minecraft.entity.MoverType.SELF, motionX, motionY, motionZ);
 
         /* This is how the entity rotates with the look of the player */
-        if (getFuel() > 0 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
-            Vec3 vecLook = ((EntityPlayer) getPassengers().get(0)).getLook(2);// .addVector(posX, posY, posZ);
+        if (getFuel() > 0 && ebf.tim.utility.CommonUtil.rider(this) != null && ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer) {
+            Vec3d vecLook = ((EntityPlayer) ebf.tim.utility.CommonUtil.rider(this)).getLook(2);// .addVector(posX, posY, posZ);
             double da = rotationYaw;
-            double db = 0 - vecLook.xCoord;
-            double dc = 0 - vecLook.zCoord;
+            double db = 0 - vecLook.x;
+            double dc = 0 - vecLook.z;
             if (db * db + dc * dc > 0.0000001D) {
                 da = CommonUtil.atan2degreesf(dc, db);
             }
@@ -504,23 +539,23 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         }
 
         setRotation(rotationYaw, rotationPitch);
-        List<?> list = world.getEntitiesWithinAABBExcludingEntity(this, boundingBox.expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
+        List<?> list = world.getEntitiesWithinAABBExcludingEntity(this, getEntityBoundingBox().expand(0.20000000298023224D, 0.0D, 0.20000000298023224D));
         if (list != null && !list.isEmpty()) {
             for (Object o : list) {
                 Entity entity = (Entity) o;
-                if (entity != getPassengers().get(0) && entity.canBePushed() && !(entity instanceof EntityRotativeWheel)) {
+                if (entity != ebf.tim.utility.CommonUtil.rider(this) && entity.canBePushed() && !(entity instanceof EntityRotativeWheel)) {
                     entity.applyEntityCollision(this);
                 }
             }
 
         }
-        if (getPassengers().get(0) != null && getPassengers().get(0).isDead) {
-            getPassengers().get(0) = null;
+        if (ebf.tim.utility.CommonUtil.rider(this) != null && ebf.tim.utility.CommonUtil.rider(this).isDead) {
+            removePassengers();
         }
 
         if (Math.sqrt((motionX * motionX) + (motionZ * motionZ)) > 0.01) {
-            Vec3 pos = Vec3.createVectorHelper(posX, posY - 1, posZ);
-            Block id = CommonUtil.getBlockAt(worldObj, (int) posX, (int) posY - 1, (int) posZ);
+            Vec3d pos = new Vec3d(posX, posY - 1, posZ);
+            Block id = CommonUtil.getBlockAt(world, (int) posX, (int) posY - 1, (int) posZ);
 
             if (id != null) {
                 this.playMiningEffect(pos, Block.getIdFromBlock(id));
@@ -535,10 +570,10 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      * @param block_index index of the block in mining list
      */
 
-    private void playMiningEffect(Vec3 pos, int block_index) {
-        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+    private void playMiningEffect(Vec3d pos, int block_index) {
+        Block id = CommonUtil.getBlockAt(world, (int) pos.x, (int) pos.y, (int) pos.z);
         if (id != null) {
-            Minecraft.getMinecraft().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
+            Minecraft.getMinecraft().effectRenderer.addBlockHitEffects(new BlockPos((int) pos.x, (int) pos.y, (int) pos.z), EnumFacing.byIndex(block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0)));
         }
     }
 
@@ -574,13 +609,13 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
     @Override
     public void updatePassenger(Entity passenger) {
-        if (getPassengers().get(0) == null) {
+        if (ebf.tim.utility.CommonUtil.rider(this) == null) {
             return;
         }
 
-        riddenByEntity.setPosition(posX, posY + getMountedYOffset() + riddenByEntity.getYOffset() + 1.1F, posZ);
-        if (riddenByEntity instanceof EntityLiving) {
-            pitch = riddenByEntity.rotationPitch;
+        getControllingPassenger().setPosition(posX, posY + getMountedYOffset() + getControllingPassenger().getYOffset() + 1.1F, posZ);
+        if (getControllingPassenger() instanceof EntityLiving) {
+            pitch = getControllingPassenger().rotationPitch;
             if (pitch > pitchLimits * CommonUtil.degreesF)
                 pitch = pitchLimits * CommonUtil.degreesF;
             if (pitch < -pitchLimits * CommonUtil.degreesF)
@@ -617,7 +652,6 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         }
     }
 
-    @Override
     public float getShadowSize() {
         return 0.0F;
     }
@@ -629,7 +663,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
     @Override
     public ItemStack getStackInSlot(int i) {
-        return zeppInvent[i];
+        return StackUtil.nn(zeppInvent[i]);
     }
 
     /**
@@ -640,40 +674,40 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         if (this.zeppInvent[par1] != null) {
             ItemStack var2 = this.zeppInvent[par1];
             this.zeppInvent[par1] = null;
-            return var2;
+            return StackUtil.nn(var2);
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
     }
 
     @Override
     public ItemStack decrStackSize(int i, int j) {
         if (zeppInvent[i] != null) {
-            if (zeppInvent[i].stackSize <= j) {
+            if (zeppInvent[i].getCount() <= j) {
                 ItemStack itemstack = zeppInvent[i];
                 zeppInvent[i] = null;
-                return itemstack;
+                return StackUtil.nn(itemstack);
             }
             ItemStack itemstack1 = zeppInvent[i].splitStack(j);
-            if (zeppInvent[i].stackSize == 0) {
+            if (zeppInvent[i].getCount() == 0) {
                 zeppInvent[i] = null;
             }
-            return itemstack1;
+            return StackUtil.nn(itemstack1);
         } else {
-            return null;
+            return ItemStack.EMPTY;
         }
 
     }
 
     @Override
-    public void setInventorySlotContents(int i, ItemStack itemstack) {
+    public void setInventorySlotContents(int i, ItemStack itemstack) { if (itemstack != null && itemstack.isEmpty()) itemstack = null;
 
         zeppInvent[i] = itemstack;
         if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-            itemstack.getCount() = getInventoryStackLimit();
+            itemstack.setCount(getInventoryStackLimit());
         }
-        if (itemstack != null && itemstack.getItem() == Items.COAL && i == 0 && getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer)) {
-            // ((EntityPlayer)getPassengers().get(0)).func_25046_a(Train.field_27542_startTrain, 1);
+        if (itemstack != null && itemstack.getItem() == Items.COAL && i == 0 && ebf.tim.utility.CommonUtil.rider(this) != null && (ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer)) {
+            // ((EntityPlayer)ebf.tim.utility.CommonUtil.rider(this)).func_25046_a(Train.field_27542_startTrain, 1);
         }
 
     }
@@ -701,21 +735,21 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     }
 
     public int getFuel() {
-        return (this.dataWatcher.getWatchableObjectInt(20));
+        return (getDataWatcher().getWatchableObjectInt(20));
     }
 
     public int getStart() {
-        return (this.dataWatcher.getWatchableObjectInt(21));
+        return (getDataWatcher().getWatchableObjectInt(21));
     }
 
     boolean ImIn = false;// changed
     ItemStack itemstack;
 
     @Override
-    public boolean interactFirst(EntityPlayer entityplayer) {
+    public boolean processInitialInteract(EntityPlayer entityplayer, EnumHand hand) {
         itemstack = entityplayer.inventory.getCurrentItem();
 
-        if (getPassengers().get(0) != null && (getPassengers().get(0) instanceof EntityPlayer) && getPassengers().get(0) != entityplayer) {
+        if (ebf.tim.utility.CommonUtil.rider(this) != null && (ebf.tim.utility.CommonUtil.rider(this) instanceof EntityPlayer) && ebf.tim.utility.CommonUtil.rider(this) != entityplayer) {
 
             return true;
         }
@@ -724,12 +758,13 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         ItemStack var2 = entityplayer.inventory.getCurrentItem();
 
         if (var2 != null && var2.getItem() == ItemIDs.refinedFuel.item) {
-            if (--var2.stackSize == 0) {
-                entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, (ItemStack) null);
+            var2.shrink(1);
+            if (var2.isEmpty()) {
+                entityplayer.inventory.setInventorySlotContents(entityplayer.inventory.currentItem, ItemStack.EMPTY);
             }
 
             this.fuel += 3600;
-            this.dataWatcher.updateObject(20, fuel);
+            getDataWatcher().updateObject(20, fuel);
             return true;
         }
 
@@ -753,11 +788,11 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         if (isDead) {
             return false;
         }
-        return entityplayer.getDistanceSqToEntity(this) <= 64D;
+        return entityplayer.getDistanceSq(this) <= 64D;
     }
 
     @Override
-    public boolean hasCustomInventoryName() {
+    public boolean hasCustomName() {
         return false;
     }
 
@@ -765,4 +800,39 @@ public class EntityRotativeDigger extends Entity implements IInventory {
     public boolean isItemValidForSlot(int i, ItemStack itemstack) {
         return true;
     }
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void clear() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			setInventorySlotContents(i, ItemStack.EMPTY);
+		}
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getFieldCount() {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public void setField(int id, int value) {
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public int getField(int id) {
+		return 0;
+	}
+
+	/* 1.12 IInventory methods */
+	@Override
+	public boolean isEmpty() {
+		for (int i = 0; i < getSizeInventory(); i++) {
+			ItemStack s = getStackInSlot(i);
+			if (s != null && !s.isEmpty()) return false;
+		}
+		return true;
+	}
 }

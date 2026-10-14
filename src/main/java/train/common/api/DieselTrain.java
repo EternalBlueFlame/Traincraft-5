@@ -1,5 +1,9 @@
 package train.common.api;
 
+import train.common.core.util.FluidContainers;
+
+import net.minecraft.util.math.MathHelper;
+
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -44,9 +48,9 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 		}if (multiFilter != null) {
 			this.theTank = LiquidManager.getInstance().new FilteredTank(maxTank, multiFilter);
 		}
-		dataWatcher.addObject(4, 0);
-		this.dataWatcher.addObject(27, 0);
-		this.dataWatcher.addObject(5, "");
+		getDataWatcher().addObject(4, 0);
+		getDataWatcher().addObject(27, 0);
+		getDataWatcher().addObject(5, "");
 	}
 
 	@Override
@@ -58,11 +62,11 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	public void onUpdate() {
 		super.onUpdate();
 		if (!world.isRemote) {
-			if (theTank.getFluidAmount() != this.dataWatcher.getWatchableObjectInt(23)){
-				this.dataWatcher.updateObject(23, theTank.getFluidAmount());
+			if (theTank.getFluidAmount() != getDataWatcher().getWatchableObjectInt(23)){
+				getDataWatcher().updateObject(23, theTank.getFluidAmount());
 				fuelTrain = theTank.getFluidAmount();
-				this.dataWatcher.updateObject(4, theTank.getFluid()!=null?theTank.getFluid().getFluidID():0);
-				this.dataWatcher.updateObject(5, theTank.getFluid()!=null?theTank.getFluid().getUnlocalizedName():"");
+				getDataWatcher().updateObject(4, LiquidManager.fluidId(theTank.getFluid()!=null?theTank.getFluid().getFluid():null));
+				getDataWatcher().updateObject(5, theTank.getFluid()!=null?theTank.getFluid().getUnlocalizedName():"");
 			}
 			if (isLocoTurnedOn() && theTank.getFluidAmount() >0) {
 				if (theTank.getFluid().amount <= 1) {
@@ -75,12 +79,12 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 	}
 
 	public int getDiesel() {
-		return getFuel()==0?(this.dataWatcher.getWatchableObjectInt(27)):getFuel();
+		return getFuel()==0?(getDataWatcher().getWatchableObjectInt(27)):getFuel();
 	}
-	public String getLiquidName(){ return  this.dataWatcher.getWatchableObjectString(5);}
+	public String getLiquidName(){ return  getDataWatcher().getWatchableObjectString(5);}
 
 	public int getLiquidItemID() {
-		return (this.dataWatcher.getWatchableObjectInt(4));
+		return (getDataWatcher().getWatchableObjectInt(4));
 	}
 
 	public StandardTank getTank() {
@@ -163,21 +167,20 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 			motionZ *= 0.8;
 		} else if (ticksExisted%5==0 &&getTank().getFluidAmount()+100 < maxTank) {
 			FluidStack drain = null;
-			blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(worldObj, posX, posY - 1, posZ),
-					CommonUtil.getTileEntity(worldObj, posX, posY + 2, posZ),
-					CommonUtil.getTileEntity(worldObj, posX, posY + 3, posZ),
-					CommonUtil.getTileEntity(worldObj, posX, posY + 4, posZ)
+			blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY - 1), MathHelper.floor(posZ)),
+					CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY + 2), MathHelper.floor(posZ)),
+					CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY + 3), MathHelper.floor(posZ)),
+					CommonUtil.getTileEntity(world, MathHelper.floor(posX), MathHelper.floor(posY + 4), MathHelper.floor(posZ))
 			};
 
 			for (TileEntity block : blocksToCheck) {
-				if (drain == null && block instanceof IFluidHandler) {
+				if (drain == null && FluidContainers.hasHandler(block)) {
 					for (EnumFacing direction : EnumFacing.VALUES) {
-						if (((IFluidHandler) block).drain(direction, 100, false) != null &&
-								(getFluid()==null || ((IFluidHandler) block).drain(direction, 100, false).fluid==getTank().getFluid().fluid) &&
-								((IFluidHandler) block).drain(direction, 100, false).amount == 100
+						if (FluidContainers.drain(block, direction, 100, false) != null &&
+								(getFluid()==null || FluidContainers.drain(block, direction, 100, false).getFluid()==getTank().getFluid().getFluid()) &&
+								FluidContainers.drain(block, direction, 100, false).amount == 100
 						) {
-							drain = ((IFluidHandler) block).drain(
-									direction, 100, true);
+							drain = FluidContainers.drain(block, direction, 100, true);
 						}
 					}
 				}
@@ -255,7 +258,7 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
-		return new FluidTankInfo[] { theTank.getInfo() };
+		return theTank.getTankProperties();
 	}
 
 	public FluidStack getFluid() {

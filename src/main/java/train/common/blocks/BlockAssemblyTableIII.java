@@ -1,5 +1,10 @@
 package train.common.blocks;
 
+import net.minecraft.util.EnumHand;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -27,7 +32,7 @@ public class BlockAssemblyTableIII extends BlockDynamic {
 
 	@Override
 	public int damageDropped(IBlockState i) {
-		return i;
+		return getMetaFromState(i);
 	}
 
 	@Override
@@ -36,7 +41,8 @@ public class BlockAssemblyTableIII extends BlockDynamic {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float par7, float par8, float par9) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ(); int par6 = facing.getIndex();
 		TileEntity te = CommonUtil.getTileEntity(world, i, j, k);
 		if (player.isSneaking()) {
 			return false;
@@ -51,7 +57,8 @@ public class BlockAssemblyTableIII extends BlockDynamic {
 
 
 	@Override
-	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ(); Block par5 = state.getBlock(); int par6 = getMetaFromState(state);
 		Random distilRand = new Random();
 		TileCrafterTierIII tileentitytierIII = (TileCrafterTierIII) CommonUtil.getTileEntity(world, i, j, k);
 		if (tileentitytierIII != null) {
@@ -71,7 +78,7 @@ public class BlockAssemblyTableIII extends BlockDynamic {
 					if (i1 > itemstack.getCount()) {
 						i1 = itemstack.getCount();
 					}
-					itemstack.getCount() -= i1;
+					// splitStack already takes the items out of the stack (1.7.10 did stackSize -= i1 + new ItemStack)
 					EntityItem entityitem = new EntityItem(world, (float) i + f, (float) j + f1, (float) k + f2, itemstack.splitStack(i1));
 					float f3 = 0.05F;
 					entityitem.motionX = (float) distilRand.nextGaussian() * f3;
@@ -81,17 +88,19 @@ public class BlockAssemblyTableIII extends BlockDynamic {
 				} while (true);
 			}
 		}
-		super.breakBlock(world, i, j, k, par5, par6);
+		super.breakBlock(world, pos, state);
 	}
 
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ();
 		super.onBlockAdded(world, pos, state);
 		CommonUtil.markBlockForUpdate(world, i, j, k);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ();
 		TileCrafterTierIII te = (TileCrafterTierIII) CommonUtil.getTileEntity(world, i, j, k);
 		if (te != null) {
 			int dir = CommonUtil.floorDouble((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
@@ -105,7 +114,8 @@ public class BlockAssemblyTableIII extends BlockDynamic {
 		return new TileCrafterTierIII();
 	}
 	@Override
-	public TileEntity createTileEntity(World var1, int meta) {
+	public TileEntity createTileEntity(World var1, IBlockState state) {
+		int meta = getMetaFromState(state);
 		return new TileCrafterTierIII();
 	}
 

@@ -1,5 +1,7 @@
 package train.common;
 
+import net.minecraft.util.ResourceLocation;
+
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Mod;
@@ -23,7 +25,6 @@ import fexcraft.tmt.slim.TextureManager;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
 import net.minecraft.launchwrapper.Launch;
 import net.minecraft.world.gen.structure.MapGenStructureIO;
-import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.util.EnumHelper;
 import org.apache.logging.log4j.LogManager;
@@ -59,7 +60,8 @@ import train.common.recipes.AssemblyTableRecipes;
 
 import java.io.File;
 
-@Mod(modid = Info.modID, name = Info.modName, version = Info.modVersion)
+@Mod(modid = Info.modID, name = Info.modName, version = Info.modVersion, acceptedMinecraftVersions = "[1.12.2]",
+        dependencies = "required-after:forge@[14.23.5.2847,);after:railcraft;after:computercraft")
 public class Traincraft {
 
     /* TrainCraft instance */
@@ -119,9 +121,9 @@ public class Traincraft {
     /* Creative tab for Traincraft */
     public static CreativeTabTraincraft tcTab, tcTrainTab, tcCommunityTab ;
 
-    public ArmorMaterial armor = EnumHelper.addArmorMaterial("Armor", 5, new int[]{1, 2, 2, 1}, 25);
-    public ArmorMaterial armorCloth = EnumHelper.addArmorMaterial("TCcloth", 5, new int[]{1, 2, 2, 1}, 25);
-    public ArmorMaterial armorCompositeSuit = EnumHelper.addArmorMaterial("TCsuit", 70, new int[]{2, 6, 5, 2}, 50);
+    public ArmorMaterial armor = EnumHelper.addArmorMaterial("TC_ARMOR", "tc:armor", 5, new int[]{1, 2, 2, 1}, 25, net.minecraft.init.SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0F);
+    public ArmorMaterial armorCloth = EnumHelper.addArmorMaterial("TC_CLOTH", "tc:cloth", 5, new int[]{1, 2, 2, 1}, 25, net.minecraft.init.SoundEvents.ITEM_ARMOR_EQUIP_LEATHER, 0F);
+    public ArmorMaterial armorCompositeSuit = EnumHelper.addArmorMaterial("TC_SUIT", "tc:suit", 70, new int[]{2, 6, 5, 2}, 50, net.minecraft.init.SoundEvents.ITEM_ARMOR_EQUIP_IRON, 0F);
     public static int trainArmor;
     public static int trainCloth;
     public static int trainCompositeSuit;
@@ -140,6 +142,7 @@ public class Traincraft {
         proxy.configDirectory = event.getModConfigurationDirectory().getAbsolutePath();
         /* Register the KeyBinding Handler */
         proxy.registerKeyBindingHandler();
+        proxy.registerEntityRenderers();
 
         /* Register Items, Blocks, ... */
         tcLog.info("Initialize Blocks, Items, ...");
@@ -151,7 +154,7 @@ public class Traincraft {
         trainCloth = proxy.addArmor("Paintable");
         trainCompositeSuit = proxy.addArmor("CompositeSuit");
 
-        if (Loader.isModLoaded("ComputerCraft")) {
+        if (Loader.isModLoaded("computercraft")) {
             try {
                 proxy.registerComputerCraftPeripherals();
             } catch (ClassNotFoundException e) {
@@ -167,18 +170,13 @@ public class Traincraft {
         proxy.registerEvents(event);
 
 
-        tcLog.info("Finished PreInitialization");
-    }
-
-    @EventHandler
-    public void init(FMLInitializationEvent event) {
-        tcLog.info("Start Initialization");
+        /* 1.12: blocks, items, fluids, entities and villagers must be registered during preInit */
         TCBlocks.init();
 
         // if (Loader.isModLoaded("ForgeMultipart"))
         // {
         //     tcLog.info("ForgeMultipart detected. Registering Traincraft Blocks");
-        //     train.common.core.plugins.ForgeMultiPart.registerBlocks();
+        //     ForgeMultiPart.registerBlocks();
         // }
 
         TCItems.init();
@@ -193,12 +191,43 @@ public class Traincraft {
         tcLog.info("Initialize Fluids");
         LiquidManager.getInstance().registerLiquids();
 
+        EntityRegistry.registerModEntity(new ResourceLocation(Info.resourceLocation, "zeppelin"), EntityZeppelinTwoBalloons.class, "zeppelin", EntityIds.ZEPPELIN, Traincraft.instance, 512, 1, true);//zepplin
+        EntityRegistry.registerModEntity(new ResourceLocation(Info.resourceLocation, "entity_front_bogie"), EntityBogie.class, "Entity Front Bogie", EntityIds.LOCOMOTIVE_BOGIE, Traincraft.instance, 512, 3, true);//front bogie
+        EntityRegistry.registerModEntity(new ResourceLocation(Info.resourceLocation, "zeppelin_big"), EntityZeppelinOneBalloon.class, "zeppelin big", EntityIds.ZEPPELIN_BIG, Traincraft.instance, 512, 1, true);//zepplin big
+        EntityRegistry.registerModEntity(new ResourceLocation(Info.resourceLocation, "seat"), EntitySeat.class, "Seat", 16, Traincraft.instance,512,3,true);//seat
+        for(TrainRecord trains : EnumTrains.trains()){
+            //TraincraftRegistry.registerTransport(trains);
+        }
+
+
+        // 1.12: SoundEvents must be registered before the server can send them
+        train.common.core.TCSounds.registerAll();
+
+        TraincraftRegistry.registerTransports("", listspecial());
+        TraincraftRegistry.registerTransports("", listfreight());
+        TraincraftRegistry.registerTransports("", listpassenger());
+        TraincraftRegistry.registerTransports("", listtanker());
+        TraincraftRegistry.registerTransports("", listtender());
+        TraincraftRegistry.registerTransports("", liststeam());
+        TraincraftRegistry.registerTransports("", listdiesel());
+        TraincraftRegistry.registerTransports("", listelectric());
+        // was never called (also on 1.7.10): these 8 carts were unregistered and showed up as vanilla minecarts on the client
+        TraincraftRegistry.registerTransports("", listwork());
+
+
+
+        VillagerTraincraftHandler.register();
+
+        tcLog.info("Finished PreInitialization");
+    }
+
+    @EventHandler
+    public void init(FMLInitializationEvent event) {
+        tcLog.info("Start Initialization");
         proxy.registerSounds();
         proxy.setHook(); // Moved file needed to run JLayer, we need to set a hook in order to retrieve it
 
         GameRegistry.registerFuelHandler(new FuelHandler());
-        AchievementHandler.load();
-        AchievementPage.registerAchievementPage(AchievementHandler.tmPage);
         GameRegistry.registerWorldGenerator(worldGen = new WorldGenWorld(), 5);
 
         //Retrogen Handling
@@ -206,7 +235,7 @@ public class Traincraft {
         MinecraftForge.EVENT_BUS.register(retroGen);
         FMLCommonHandler.instance().bus().register(retroGen);
 
-        MapGenStructureIO.func_143031_a(ComponentVillageTrainstation.class, "Trainstation");
+        MapGenStructureIO.registerStructureComponent(ComponentVillageTrainstation.class, "Trainstation");
 
         //proxy.getCape();
 
@@ -225,35 +254,11 @@ public class Traincraft {
         RecipeHandler.initSmeltingRecipes();
         AssemblyTableRecipes.recipes();
 
-        EntityRegistry.registerModEntity(EntityZeppelinTwoBalloons.class, "zeppelin", EntityIds.ZEPPELIN, Traincraft.instance, 512, 1, true);//zepplin
-        EntityRegistry.registerModEntity(EntityBogie.class, "Entity Front Bogie", EntityIds.LOCOMOTIVE_BOGIE, Traincraft.instance, 512, 3, true);//front bogie
-        EntityRegistry.registerModEntity(EntityZeppelinOneBalloon.class, "zeppelin big", EntityIds.ZEPPELIN_BIG, Traincraft.instance, 512, 1, true);//zepplin big
-        EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 16, Traincraft.instance,512,3,true);//seat
-        for(TrainRecord trains : EnumTrains.trains()){
-            //TraincraftRegistry.registerTransport(trains);
-        }
-
-
-        TraincraftRegistry.registerTransports("", listspecial());
-        TraincraftRegistry.registerTransports("", listfreight());
-        TraincraftRegistry.registerTransports("", listpassenger());
-        TraincraftRegistry.registerTransports("", listtanker());
-        TraincraftRegistry.registerTransports("", listtender());
-        TraincraftRegistry.registerTransports("", liststeam());
-        TraincraftRegistry.registerTransports("", listdiesel());
-        TraincraftRegistry.registerTransports("", listelectric());
-
-
-
         /* Liquid FX */
         proxy.registerTextureFX();
 
         /*Trainman Villager*/
         tcLog.info("Initialize Station Chief Villager");
-        VillagerRegistry.instance().registerVillagerId(ConfigHandler.TRAINCRAFT_VILLAGER_ID);
-        VillagerTraincraftHandler villageHandler = new VillagerTraincraftHandler();
-        VillagerRegistry.instance().registerVillageCreationHandler(villageHandler);
-        proxy.registerVillagerSkin(ConfigHandler.TRAINCRAFT_VILLAGER_ID, "station_chief.png");
         // VillagerRegistry.instance().registerVillageTradeHandler(ConfigHandler.TRAINCRAFT_VILLAGER_ID, villageHandler);
         Traincraft.updateChannel.registerMessage(PacketSeatUpdate.Handler.class, PacketSeatUpdate.class, 8, Side.CLIENT);
         Traincraft.updateChannel.registerMessage(PacketSeatUpdate.Handler.class, PacketSeatUpdate.class, 9, Side.SERVER);
@@ -297,15 +302,15 @@ public class Traincraft {
     }
 
     public static boolean hasComputerCraft() {
-        return Loader.isModLoaded("ComputerCraft");
+        return Loader.isModLoaded("computercraft");
     }
 
     public static boolean hasNotEnoughItems() {
-        return Loader.isModLoaded("NotEnoughItems");
+        return Loader.isModLoaded("jei");
     }
 
     public static boolean hasRailcraft() {
-        return Loader.isModLoaded("Railcraft");
+        return Loader.isModLoaded("railcraft");
     }
 
     public static boolean hasTCCEAddon() {return Loader.isModLoaded("tcce");}

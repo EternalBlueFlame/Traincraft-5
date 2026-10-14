@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "variant=default": {
+      "model": "tc:asphaltslab_double"
+    },
+    "inventory": {
+      "model": "tc:asphaltslab_double"
+    }
+  }
+}

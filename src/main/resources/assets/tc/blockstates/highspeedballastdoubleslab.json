@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "variant=default": {
+      "model": "tc:highspeedballastslab_double"
+    },
+    "inventory": {
+      "model": "tc:highspeedballastslab_double"
+    }
+  }
+}

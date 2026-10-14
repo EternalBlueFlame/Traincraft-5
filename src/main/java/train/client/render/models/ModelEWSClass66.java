@@ -655,7 +655,7 @@ public class ModelEWSClass66 extends ModelBase
 	{
 		super.render(entity, f, f1, f2, f3, f4, f5);
 
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/Class66Bogie.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/Class66Bogie.png"));
 		GL11.glPushMatrix();
 		GL11.glTranslated(0,0.3,-2.6);
 		GL11.glScalef(0.8f,0.8f,0.8f);

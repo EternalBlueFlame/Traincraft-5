@@ -250,7 +250,7 @@ public class ModelKClassRailBox extends ModelBase
 			kclassrailboxModel[i].render(f5);
 		}
 
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/AmericanFreightTrucks.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/AmericanFreightTrucks.png"));
 
 		GL11.glPushMatrix();
 		GL11.glScalef(1,1,0.9f);

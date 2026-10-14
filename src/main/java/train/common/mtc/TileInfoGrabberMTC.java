@@ -1,17 +1,19 @@
 package train.common.mtc;
 
+import net.minecraft.util.ITickable;
+
 import dan200.computercraft.api.lua.ILuaContext;
 import dan200.computercraft.api.lua.LuaException;
 import dan200.computercraft.api.peripheral.IComputerAccess;
 import dan200.computercraft.api.peripheral.IPeripheral;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import train.common.api.Locomotive;
 
 import java.util.List;
 
-public class TileInfoGrabberMTC  extends TileEntity implements IPeripheral {
+public class TileInfoGrabberMTC  extends TileEntity implements ITickable, IPeripheral {
     public Boolean isActivated = false;
     public String trainID = "0";
     public String trainLevel = "0";
@@ -32,7 +34,7 @@ public class TileInfoGrabberMTC  extends TileEntity implements IPeripheral {
     }
 
     @Override
-    public void writeToNBT(NBTTagCompound nbttagcompound) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbttagcompound) {
         super.writeToNBT(nbttagcompound);
     //    nbttagcompound.setBoolean("isActivated", this.isActivated);
      //   nbttagcompound.setInteger("setSpeed", this.setSpeed);
@@ -42,25 +44,25 @@ public class TileInfoGrabberMTC  extends TileEntity implements IPeripheral {
         nbttagcompound.setString("trainLevel", this.trainLevel);
         nbttagcompound.setString("trainName", this.trainName);
         nbttagcompound.setString("trainType", this.trainType);
-
+    	return nbttagcompound;
     }
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
         if (boundingBox == null) {
-            boundingBox = ebf.tim.utility.CommonUtil.createAABB(xCoord, yCoord, zCoord, xCoord + 2, yCoord + 2, zCoord + 2);
+            boundingBox = ebf.tim.utility.CommonUtil.createAABB(getPos().getX(), getPos().getY(), getPos().getZ(), getPos().getX() + 2, getPos().getY() + 2, getPos().getZ() + 2);
         }
         return boundingBox;
     }
 
 
         @Override
-        public void updateEntity() {
+        public void update() {
             if (getWorld() == null) {
                 return;
             }
             if (isActivated) {
-                List<Object> list = this.world.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
+                List<?> list = this.world.getEntitiesWithinAABBExcludingEntity(null, this.getRenderBoundingBox());
                 if (list != null && list.size() > 0) {
                     for (Object obj : list) {
 

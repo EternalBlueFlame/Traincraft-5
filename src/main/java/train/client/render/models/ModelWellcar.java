@@ -86,7 +86,7 @@ public class ModelWellcar extends ModelBase
 		{
 			wellcarModel[i].render(f5);
 		}
-		Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/wellcar_bogie.png"));
+		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/trains/wellcar_bogie.png"));
 
 		GL11.glPushMatrix();
 		GL11.glScalef(1,1,0.9f);

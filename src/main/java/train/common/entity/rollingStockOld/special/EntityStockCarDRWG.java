@@ -22,7 +22,7 @@ public class EntityStockCarDRWG extends EntityRollingStock implements IPassenger
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
-		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
+		return !isDead && entityplayer.getDistanceSq(this) <= 64D;
 	}
 
 	@Override

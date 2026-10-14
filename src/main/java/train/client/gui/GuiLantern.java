@@ -47,7 +47,7 @@ public class GuiLantern extends GuiScreen {
         this.buttonList.add(this.doneBtn = new GuiButton(0, this.width / 2 - 100, this.height / 4 + 96 + 12, "Done"));
         this.buttonList.add(this.cancelBtn = new GuiButton(1, this.width / 2 - 100, this.height / 4 + 120 + 12, "Cancel"));
 
-        this.colorTextField = new GuiTextField(this.fontRenderer, this.width / 2 - 150, 60, 300, 20);
+        this.colorTextField = new GuiTextField(0, this.fontRenderer, this.width / 2 - 150, 60, 300, 20);
         this.colorTextField.setMaxStringLength(32767);
         this.colorTextField.setFocused(true);
         this.colorTextField.setText(this.lanternBlock.getColor());
@@ -77,10 +77,10 @@ public class GuiLantern extends GuiScreen {
                     if (parsedColor != null) {
 						// Parse the Integer as an 16 int
                         int color = parsedColor;
-                        Traincraft.modChannel.sendToServer(new PacketLantern(color, lanternBlock.xCoord,
-                                lanternBlock.yCoord, lanternBlock.zCoord));
+                        Traincraft.modChannel.sendToServer(new PacketLantern(color, lanternBlock.getPos().getX(),
+                                lanternBlock.getPos().getY(), lanternBlock.getPos().getZ()));
 						// TODO: marks block as dirty, but it's only actually re-renders when chunk is loaded, but we need the re-render after it has been changed.
-                        Minecraft.getMinecraft().renderGlobal.markBlockForRenderUpdate(lanternBlock.xCoord, lanternBlock.yCoord, lanternBlock.zCoord);
+                        Minecraft.getMinecraft().world.markBlockRangeForRenderUpdate(lanternBlock.getPos(), lanternBlock.getPos());
                     }
                 }
 
@@ -108,7 +108,7 @@ public class GuiLantern extends GuiScreen {
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
     @Override
-    protected void keyTyped(char par1, int par2) {
+    protected void keyTyped(char par1, int par2) throws java.io.IOException {
         this.colorTextField.textboxKeyTyped(par1, par2);
         this.doneBtn.enabled = !this.colorTextField.getText().trim().isEmpty();
 
@@ -125,7 +125,7 @@ public class GuiLantern extends GuiScreen {
      * Called when the mouse is clicked.
      */
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) {
+    protected void mouseClicked(int par1, int par2, int par3) throws java.io.IOException {
         super.mouseClicked(par1, par2, par3);
         this.colorTextField.mouseClicked(par1, par2, par3);
     }

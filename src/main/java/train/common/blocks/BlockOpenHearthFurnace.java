@@ -7,6 +7,11 @@
 
 package train.common.blocks;
 
+import net.minecraft.util.EnumHand;
+
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -43,7 +48,8 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 	}
 
 	@Override
-	public Item getItemDropped(int i, Random random, int j) {
+	public Item getItemDropped(IBlockState state, Random random, int j) {
+		int i = getMetaFromState(state);
 		return Item.getItemFromBlock(TCBlocks.openFurnaceIdle);
 	}
 
@@ -69,7 +75,8 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 	}
 
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9) {
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float par7, float par8, float par9) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ(); int par6 = facing.getIndex();
 		TileEntity te = CommonUtil.getTileEntity(world, i, j, k);
 		if (player.isSneaking()) {
 			return false;
@@ -84,12 +91,14 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ();
 		super.onBlockAdded(world, pos, state);
 		CommonUtil.markBlockForUpdate(world, i, j, k);
 	}
 
 	@Override
-	public void breakBlock(World world, int i, int j, int k, Block par5, int par6) {
+	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ(); Block par5 = state.getBlock(); int par6 = getMetaFromState(state);
 		if (!keepFurnaceInventory) {
 			TileEntityOpenHearthFurnace tileentityfurnace = (TileEntityOpenHearthFurnace) CommonUtil.getTileEntity(world, i, j, k);
 			if (tileentityfurnace != null) {
@@ -120,11 +129,12 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 				}
 			}
 		}
-		super.breakBlock(world, i, j, k, par5, par6);
+		super.breakBlock(world, pos, state);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ();
 		TileEntityOpenHearthFurnace te = (TileEntityOpenHearthFurnace) CommonUtil.getTileEntity(world, i, j, k);
 		if (te != null) {
 			int dir = CommonUtil.floorDouble((entityliving.rotationYaw * 4F) / 360F + 0.5D) & 3;
@@ -139,7 +149,8 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 	}
 
 	@Override
-	public TileEntity createTileEntity(World var1, int i) {
+	public TileEntity createTileEntity(World var1, IBlockState state) {
+		int i = getMetaFromState(state);
 		return new TileEntityOpenHearthFurnace();
 	}
 	@Override

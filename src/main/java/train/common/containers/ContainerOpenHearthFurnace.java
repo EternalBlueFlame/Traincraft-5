@@ -1,5 +1,7 @@
 package train.common.containers;
 
+import train.common.core.util.StackUtil;
+
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -30,7 +32,7 @@ public class ContainerOpenHearthFurnace extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return furnace.isUseableByPlayer(entityplayer);
+		return furnace.isUsableByPlayer(entityplayer);
 	}
 
 	@Override
@@ -42,19 +44,19 @@ public class ContainerOpenHearthFurnace extends Container {
 			itemstack = itemstack1.copy();
 			if (i < 4) {//TODO probably have to set this to 3
 				if (!mergeItemStack(itemstack1, 4, inventorySlots.size(), true)) {
-					return null;
+					return ItemStack.EMPTY;
 				}
 			}
 			else if (!mergeItemStack(itemstack1, 0, 4, false)) {
-				return null;
+				return ItemStack.EMPTY;
 			}
 			if (itemstack1.getCount() == 0) {
-				slot.putStack(null);
+				slot.putStack(ItemStack.EMPTY);
 			}
 			else {
 				slot.onSlotChanged();
 			}
 		}
-		return itemstack;
+		return StackUtil.nn(itemstack);
 	}
 }

@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "half=bottom,variant=default": {
+      "model": "tc:ballastslab_bottom"
+    },
+    "half=top,variant=default": {
+      "model": "tc:ballastslab_top"
+    },
+    "inventory": {
+      "model": "tc:ballastslab_bottom"
+    }
+  }
+}

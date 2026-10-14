@@ -125,7 +125,7 @@ public class TrainCraftingManager {
 		for (var5 = 0; var5 < inv.getSizeInventory(); ++var5) {
 			ItemStack var6 = inv.getStackInSlot(var5);
 
-			if (var6 != null) {
+			if (var6 != null && !var6.isEmpty()) {
 				if (occupedSlot == 0) {
 					var3 = var6;
 				}
@@ -153,10 +153,12 @@ public class TrainCraftingManager {
 			for (var5 = 0; var5 < this.recipes.size(); ++var5) {
 				ITCRecipe recipe = (ITCRecipe) this.recipes.get(var5);
 				if (recipe.matches(inv, world)) {
-					return recipe.getCraftingResult(inv);
+					ItemStack result = recipe.getCraftingResult(inv);
+					return result == null ? ItemStack.EMPTY : result;
 				}
 			}
-			return null;
+			// 1.12: never null, InventoryCraftResult rejects it
+			return ItemStack.EMPTY;
 		}
 	}
 

@@ -1,12 +1,12 @@
 package train.client.render.models.blocks;
 
+import train.client.render.obj.TCObjModel;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import net.minecraft.util.EnumFacing;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
@@ -14,13 +14,13 @@ import train.common.tile.TileWaterWheel;
 
 @SideOnly(Side.CLIENT)
 public class ModelWaterWheel extends ModelBase {
-	private IModelCustom modelWaterWheel;
+	private TCObjModel modelWaterWheel;
 	private long lastframe;
 	private float wheel;
 	public float wheel1 = 0.4188790204786391F;
 
 	public ModelWaterWheel() {
-		modelWaterWheel = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "water_wheel.obj"));
+		modelWaterWheel = TCObjModel.load(new ResourceLocation(Info.modelPrefix + "water_wheel.obj"));
 	}
 
 	public void render() {
@@ -42,9 +42,9 @@ public class ModelWaterWheel extends ModelBase {
 		float f2 = (float) (j >> 16 & 255) / 255.0F;
 		float f3 = (float) (j >> 8 & 255) / 255.0F;
 		float f4 = (float) (j & 255) / 255.0F;
-		GL11.glColor4f(f1 * f2, f1 * f3, f1 * f4, 1);
+		net.minecraft.client.renderer.GlStateManager.color(f1 * f2, f1 * f3, f1 * f4, 1);
 		// Render the object, using modelTutBox.renderAll();
-		int facing = CommonUtil.getBlockFacing(waterWheel.getWorldObj(), (int) waterWheel.xCoord, (int) waterWheel.yCoord, (int) waterWheel.zCoord);
+		int facing = CommonUtil.getBlockFacing(waterWheel.getWorld(), (int) waterWheel.getPos().getX(), (int) waterWheel.getPos().getY(), (int) waterWheel.getPos().getZ());
 		if (facing == 3) {
 			GL11.glScalef(0.7f, 0.5f, 0.5f);
 			GL11.glScalef(1f, 0.36f, 0.36f);
@@ -75,7 +75,7 @@ public class ModelWaterWheel extends ModelBase {
 			}
 		}
 		this.render();
-		//GL11.glColor3f(1, 1, 1);
+		//net.minecraft.client.renderer.GlStateManager.color(1, 1, 1);
 
 		// Pop this matrix from the stack.
 		GL11.glPopMatrix();

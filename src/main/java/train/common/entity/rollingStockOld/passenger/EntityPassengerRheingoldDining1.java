@@ -43,15 +43,15 @@ public class EntityPassengerRheingoldDining1 extends AbstractWorkCart implements
 
 	@Override
 	public void pressKey(int i) {
-		if (riddenByEntity != null && riddenByEntity instanceof EntityPlayer) {
-			if (locked && !((EntityPlayer) riddenByEntity).getDisplayName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
+		if (getControllingPassenger() != null && getControllingPassenger() instanceof EntityPlayer) {
+			if (locked && !((EntityPlayer) getControllingPassenger()).getName().toLowerCase().equals(this.trainOwner.toLowerCase())) {
 				return;
 			}
 			if (i == 7) {
-				((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+				((EntityPlayer) getControllingPassenger()).openGui(Traincraft.instance, GuiIDs.CRAFTING_CART, world, (int) this.posX, (int) this.posY, (int) this.posZ);
 			}
 			if (i == 9) {
-				((EntityPlayer) riddenByEntity).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, worldObj, (int) this.posX, (int) this.posY, (int) this.posZ);
+				((EntityPlayer) getControllingPassenger()).openGui(Traincraft.instance, GuiIDs.FURNACE_CART, world, (int) this.posX, (int) this.posY, (int) this.posZ);
 			}
 		}
 	}
@@ -69,7 +69,7 @@ public class EntityPassengerRheingoldDining1 extends AbstractWorkCart implements
 
 	@Override
 	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
-		return !isDead && entityplayer.getDistanceSqToEntity(this) <= 64D;
+		return !isDead && entityplayer.getDistanceSq(this) <= 64D;
 	}
 
 	@Override

@@ -1,4 +1,13 @@
 package train.common.blocks.switchStand;
+import train.common.core.util.LegacyRender;
+
+import net.minecraft.util.math.BlockPos;
+
+import net.minecraft.util.EnumBlockRenderType;
+
+import net.minecraft.block.state.IBlockState;
+
+import net.minecraft.block.SoundType;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -8,7 +17,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
+import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
 import train.common.api.blocks.BlockSwitch;
 import train.common.tile.switchStand.TileSwitchStand;
@@ -16,12 +25,12 @@ import train.common.tile.switchStand.TileSwitchStand;
 public class BlockSwitchStand extends BlockSwitch {
 
 	public BlockSwitchStand() {
-		super(Material.wood, 0);
+		super(Material.WOOD, 0);
 		setCreativeTab(Traincraft.tcTab);
 		this.setTickRandomly(true);
 		setHardness(1.75F);
 		setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.75F, 0.8F);
-		setStepSound(soundTypeMetal);
+		setSoundType(SoundType.METAL);
 	}
 
 	@Override
@@ -29,22 +38,24 @@ public class BlockSwitchStand extends BlockSwitch {
 
 
 	@Override
-	public boolean hasTileEntity(int metadata) {
+	public boolean hasTileEntity(IBlockState state) {
+		int metadata = getMetaFromState(state);
 		return true;
 	}
 
 	@Override
-	public boolean renderAsNormalBlock() {
+	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public boolean isOpaqueCube() {
+	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
 
 	@Override
-	public TileEntity createTileEntity(World world, int metadata) {
+	public TileEntity createTileEntity(World world, IBlockState state) {
+		int metadata = getMetaFromState(state);
 		return new TileSwitchStand(this);
 	}
 	@Override
@@ -53,8 +64,8 @@ public class BlockSwitchStand extends BlockSwitch {
 	}
 
 	@Override
-	public int getRenderType() {
-		return -1;
+	public EnumBlockRenderType getRenderType(IBlockState state) {
+		return LegacyRender.renderType(-1);
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -62,8 +73,9 @@ public class BlockSwitchStand extends BlockSwitch {
 
 
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityliving, ItemStack stack) {
-		super.onBlockPlacedBy(world, i, j, k, entityliving, stack);
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityliving, ItemStack stack) {
+		int i = pos.getX(), j = pos.getY(), k = pos.getZ();
+		super.onBlockPlacedBy(world, new BlockPos(i, j, k), world.getBlockState(new BlockPos(i, j, k)), entityliving, stack);
 		TileSwitchStand te = (TileSwitchStand) CommonUtil.getTileEntity(world, i, j, k);
 		if (te != null) {
 			int dir = CommonUtil.floorDouble((double) ((entityliving.rotationYaw * 4F) / 360F) + 0.5D) & 3;
@@ -75,8 +87,7 @@ public class BlockSwitchStand extends BlockSwitch {
 	/**
 	 * Can this block provide power. Only wire currently seems to have this change based on its state.
 	 */
-	public boolean canProvidePower()
-	{
+	public boolean canProvidePower(IBlockState state) {
 		return true;
 	}
 

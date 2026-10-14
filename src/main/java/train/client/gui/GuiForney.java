@@ -139,10 +139,10 @@ public class GuiForney extends GuiContainer {
 
         if (guibutton.id == 3) {
             //System.out.println("1 "+loco.getTrainOwner());
-            //System.out.println("2 "+((EntityPlayer)loco.getPassengers().get(0)).getDisplayName());
-            //System.out.println(((EntityPlayer)loco.getPassengers().get(0)).getDisplayName().equals(loco.getTrainOwner().trim()));
+            //System.out.println("2 "+((EntityPlayer)ebf.tim.utility.CommonUtil.rider(loco)).getDisplayName());
+            //System.out.println(((EntityPlayer)ebf.tim.utility.CommonUtil.rider(loco)).getDisplayName().equals(loco.getTrainOwner().trim()));
 
-            if (loco.getPassengers().get(0) != null && loco.getPassengers().get(0) instanceof EntityPlayer && ((EntityPlayer) loco.getPassengers().get(0)).getDisplayName().equals(loco.getTrainOwner())) {
+            if (ebf.tim.utility.CommonUtil.rider(loco) != null && ebf.tim.utility.CommonUtil.rider(loco) instanceof EntityPlayer && ((EntityPlayer) ebf.tim.utility.CommonUtil.rider(loco)).getDisplayName().equals(loco.getTrainOwner())) {
                 if (!loco.getTrainLockedFromPacket()) {
                     Traincraft.lockChannel.sendToServer(new PacketSetTrainLockedToClient(true, loco.getEntityId()));
                     loco.locked = true;
@@ -154,16 +154,15 @@ public class GuiForney extends GuiContainer {
                     guibutton.displayString = "Unlocked";
                     this.initGui();
                 }
-            } else if (loco.riddenByEntity != null && loco.riddenByEntity instanceof EntityPlayer) {
-                ebf.tim.utility.CommonUtil.sendChat((EntityPlayer) loco.riddenByEntity, "You are not the owner");
+            } else if (loco.getControllingPassenger() != null && loco.getControllingPassenger() instanceof EntityPlayer) {
+                ebf.tim.utility.CommonUtil.sendChat((EntityPlayer) loco.getControllingPassenger(), "You are not the owner");
             }
         } else if (guibutton instanceof GUIButton) {
             ((GUIButton)guibutton).onClick();
         }
     }
 
-    @Override
-    protected void drawCreativeTabHoveringText(String str, int t, int g) {
+    public void drawHoveringText(String str, int t, int g) {
 
         //int liqui = (dieselInventory.getLiquidAmount() * 50) / dieselInventory.getTankCapacity();
         String state = "";
@@ -203,28 +202,28 @@ public class GuiForney extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRenderer.drawString(loco.getCommandSenderName(), 37, 3, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 39, 1, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 37, 1, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 39, 3, 0x000000);
+        fontRenderer.drawString(loco.getName(), 37, 3, 0x000000);
+        fontRenderer.drawString(loco.getName(), 39, 1, 0x000000);
+        fontRenderer.drawString(loco.getName(), 37, 1, 0x000000);
+        fontRenderer.drawString(loco.getName(), 39, 3, 0x000000);
 
-        fontRenderer.drawString(loco.getCommandSenderName(), 38, 3, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 38, 1, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 37, 2, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 39, 2, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 38, 2, 0xd3a900);
+        fontRenderer.drawString(loco.getName(), 38, 3, 0x000000);
+        fontRenderer.drawString(loco.getName(), 38, 1, 0x000000);
+        fontRenderer.drawString(loco.getName(), 37, 2, 0x000000);
+        fontRenderer.drawString(loco.getName(), 39, 2, 0x000000);
+        fontRenderer.drawString(loco.getName(), 38, 2, 0xd3a900);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);
 
         if (intersectsWith(i, j)) {
-            drawCreativeTabHoveringText("When a locomotive is locked,", i, j);
+            drawHoveringText("When a locomotive is locked,", i, j);
         }
     }
 
     @Override
     protected void drawGuiContainerBackgroundLayer(float f, int t, int g) {
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        net.minecraft.client.renderer.GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(new ResourceLocation(Info.resourceLocation, Info.guiPrefix + "gui_forney.png"));
         int j = (width - xSize) / 2;
         int k = (height - ySize) / 2;
@@ -239,7 +238,7 @@ public class GuiForney extends GuiContainer {
             int load = (((SteamTrain) loco).getWater());
             int lo = Math.abs(((load * 50) / (((SteamTrain) loco).getCartTankCapacity())));
 
-            if (((SteamTrain) loco).getLiquidItemID() == LiquidManager.WATER_FILTER.getFluidID()) {
+            if (((SteamTrain) loco).getLiquidItemID() == LiquidManager.WATER_FILTER.getFluid().getName().hashCode()) {
                 drawTexturedModalRect(j + 143, (k + 68) - lo, 190, 69 - lo, 18, lo + 1);
             }
         }
