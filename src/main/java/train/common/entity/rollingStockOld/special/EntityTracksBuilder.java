@@ -23,7 +23,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -623,16 +623,16 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 	 * @param pos position
 	 * @param block_index index of the block in mining list
 	 */
-	private void playMiningEffect(Vec3 pos, int block_index) {
+	private void playMiningEffect(Vec3d pos, int block_index) {
 		miningTickCounter++;
 
 		if (!FMLCommonHandler.instance().getMinecraftServerInstance().isDedicatedServer() && pos != null && worldObj !=null) {
-			Block block = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+			Block block = CommonUtil.getBlockAt(worldObj, (int) pos.x, (int) pos.y, (int) pos.z);
 			if (miningTickCounter % 8 == 0 && block != null && !worldObj.isRemote && Minecraft.getMinecraft() != null) {
-				CommonUtil.playSound(this.worldObj, (int) pos.xCoord + 0.5F, (int) pos.yCoord + 0.5F, (int) pos.zCoord + 0.5F, block.stepSound.getBreakSound(), 1.0F, block.stepSound.getPitch() * 0.5F, 0);
+				CommonUtil.playSound(this.worldObj, (int) pos.x + 0.5F, (int) pos.y + 0.5F, (int) pos.z + 0.5F, block.stepSound.getBreakSound(), 1.0F, block.stepSound.getPitch() * 0.5F, 0);
 			}
 			if (miningTickCounter % 8 == 0 && block_index != 0 && block != null && FMLClientHandler.instance().getClient() != null ) {
-				FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
+				FMLClientHandler.instance().getClient().effectRenderer.addBlockHitEffects((int) pos.x, (int) pos.y, (int) pos.z, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
 			}
 		}
 	}
@@ -816,7 +816,7 @@ public class EntityTracksBuilder extends EntityRollingStock implements IInventor
 		// mining effect
 		if (!world.isRemote) {
 			int id= Block.getIdFromBlock(block);
-			this.playMiningEffect(Vec3.createVectorHelper(i, j, k), id);
+			this.playMiningEffect(new Vec3d(i, j, k), id);
 			world.playAuxSFX(2001, i, j, k, id + (meta << 12));
 		}
 

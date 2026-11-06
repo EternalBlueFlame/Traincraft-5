@@ -3,7 +3,7 @@ package train.common.core.util;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.oredict.OreDictionary;
 import train.common.Traincraft;
 import train.common.api.EntityRollingStock;
@@ -72,7 +72,7 @@ public class TraincraftUtil {
         }
     }
 
-    public static Vec3 func_514_g(double d, double d1, double d2) {
-        return Vec3.createVectorHelper(CommonUtil.floorDouble(d), CommonUtil.floorDouble(d1), CommonUtil.floorDouble(d2));
+    public static Vec3d func_514_g(double d, double d1, double d2) {
+        return new Vec3d(CommonUtil.floorDouble(d), CommonUtil.floorDouble(d1), CommonUtil.floorDouble(d2));
     }
 }

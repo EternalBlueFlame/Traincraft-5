@@ -20,7 +20,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import train.common.Traincraft;
@@ -292,7 +292,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 	 * @param z
 	 * @return
 	 */
-	public Vec3 rotate(double x, double y, double z) {
+	public Vec3d rotate(double x, double y, double z) {
 		double cosYaw = Math.cos(this.getYaw() * 3.141593F / 180.0F);
 		double sinYaw = Math.sin(this.getYaw() * 3.141593F / 180.0F);
 		double cosPitch = Math.cos((this.getPitch()) * 3.141593F / 180.0F);
@@ -304,7 +304,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		double newY = -(((cosPitch - x) * -sinPitch));
 		double newZ = (y * sinRoll - x * cosRoll) * sinYaw + ((-x * sinRoll + y * cosRoll) * 0 + z * 0.01745) * cosYaw;
 
-		return Vec3.createVectorHelper(newX, newY, newZ);
+		return new Vec3d(newX, newY, newZ);
 	}
 
 	public float getYaw() {

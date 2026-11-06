@@ -1,16 +1,14 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2020
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 package mods.railcraft.api.signals;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
-import javax.annotation.Nonnull;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -20,24 +18,34 @@ import java.io.IOException;
  */
 public class SimpleSignalReceiver extends SignalReceiver {
 
-    @Nonnull
     private SignalAspect aspect = SignalAspect.BLINK_RED;
 
     public SimpleSignalReceiver(String locTag, TileEntity tile) {
         super(locTag, tile, 1);
     }
 
-    @Nonnull
+    @Override
+    public void tickServer() {
+        super.tickServer();
+        SignalAspect prevAspect = getAspect();
+        if (!isPaired()) {
+            setAspect(SignalAspect.BLINK_RED);
+        }
+        if (prevAspect != getAspect()) {
+            sendUpdateToClient();
+        }
+    }
+
     public SignalAspect getAspect() {
         return aspect;
     }
 
-    public void setAspect(@Nonnull SignalAspect aspect) {
+    public void setAspect(SignalAspect aspect) {
         this.aspect = aspect;
     }
 
     @Override
-    public void onControllerAspectChange(SignalController con, @Nonnull SignalAspect aspect) {
+    public void onControllerAspectChange(SignalController con, SignalAspect aspect) {
         if (this.aspect != aspect) {
             this.aspect = aspect;
             super.onControllerAspectChange(con, aspect);

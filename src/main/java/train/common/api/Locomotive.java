@@ -18,6 +18,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.*;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.adminbook.ServerLogger;
@@ -1266,8 +1267,8 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         }
     }
 
-    public void stop(Vec3 signalPosition) {
-        double currentDistance = Math.copySign(Vec3.createVectorHelper(this.posX, this.posY, this.posZ).distanceTo(signalPosition), 1.0D);
+    public void stop(Vec3d signalPosition) {
+        double currentDistance = Math.copySign(new Vec3d(this.posX, this.posY, this.posZ).distanceTo(signalPosition), 1.0D);
         if (1.0D - currentDistance != 0.0D && currentDistance != 0.0D) {
             multiplyVelocity(currentDistance / this.getSpeed());
         } else {

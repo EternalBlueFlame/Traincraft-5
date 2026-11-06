@@ -1,24 +1,22 @@
-/*
- * ******************************************************************************
- *  Copyright 2011-2015 CovertJaguar
- *
- *  This work (the API) is licensed under the "MIT" License, see LICENSE.md for details.
- * ***************************************************************************
- */
+/*------------------------------------------------------------------------------
+ Copyright (c) CovertJaguar, 2011-2020
+
+ This work (the API) is licensed under the "MIT" License,
+ see LICENSE.md for details.
+ -----------------------------------------------------------------------------*/
 
 package mods.railcraft.api.core;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import net.minecraft.world.World;
 
-public interface INetworkedObject
-{
+public interface INetworkedObject<I extends DataInputStream, O extends DataOutputStream> extends IWorldSupplier {
 
-    public World getWorld();
+    default void readPacketData(I data) throws IOException { }
 
-    public void writePacketData(DataOutputStream data) throws IOException;
+    default void writePacketData(O data) throws IOException { }
 
-    public void readPacketData(DataInputStream data) throws IOException;
+    void sendUpdateToClient();
+
 }

@@ -5,12 +5,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.world.IBlockAccess;
@@ -172,10 +174,10 @@ public class BlockTCRailGag extends Block {
 	 * Returns a bounding box from the pool of bounding boxes (this means this box can change after the pool has been cleared to be reused)
 	 */
 	@Override
-	public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int i, int j, int k) {
-		TileEntity tileEntity = CommonUtil.getTileEntity(world, i, j, k);
+	public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+		TileEntity tileEntity = CommonUtil.getTileEntity(world, pos.getX(), pos.getY(), pos.getZ());
 		if (tileEntity instanceof TileTCRailGag && !((TileTCRailGag)tileEntity).type.equals("null")) {
-			return CommonUtil.createAABB(i, j, k, i + 1, j + ((TileTCRailGag)tileEntity).bbHeight, k + 1);
+			return CommonUtil.createAABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + ((TileTCRailGag)tileEntity).bbHeight, pos.getZ() + 1);
 		}
 		return null;
 	}

@@ -8,13 +8,15 @@ import fexcraft.tmt.slim.ModelBase;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.IBlockAccess;
@@ -113,15 +115,15 @@ public class BlockDynamic extends BlockContainer {
     public float[] hitboxShape(){return new float[]{0,0,0,1,1,1};}
 
     @Override
-    public AxisAlignedBB getCollisionBoundingBoxFromPool(World world, int x, int y, int z) {
-        return CommonUtil.createAABB((double)x + this.minX, (double)y + this.minY, (double)z + this.minZ, (double)x + this.maxX, (double)y + this.maxY, (double)z + this.maxZ);
+    public AxisAlignedBB getCollisionBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+        return CommonUtil.createAABB((double)pos.getX() + this.minX, (double)pos.getY() + this.minY, (double)pos.getZ() + this.minZ, (double)pos.getX() + this.maxX, (double)pos.getY() + this.maxY, (double)pos.getZ() + this.maxZ);
     }
     @Override
     public void addCollisionBoxesToList(World world, int x, int y, int z, AxisAlignedBB hitboxSelf, List p_149743_6_, Entity collidingEntity) {
         this.setBlockBoundsBasedOnState(world, x, y, z);
         //if there's multiple hitboxes, ex stairs, this needs to be done for each
-        if(hitboxSelf.intersectsWith(this.getCollisionBoundingBoxFromPool(world, x, y, z))) {
-            p_149743_6_.add(this.getCollisionBoundingBoxFromPool(world, x, y, z));
+        if(hitboxSelf.intersectsWith(this.getCollisionBoundingBox(world.getBlockState(new BlockPos(x, y, z)), world, new BlockPos(x, y, z)))) {
+            p_149743_6_.add(this.getCollisionBoundingBox(world.getBlockState(new BlockPos(x, y, z)), world, new BlockPos(x, y, z)));
         }
     }
     @Override

@@ -18,7 +18,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.Constants;
 import train.common.Traincraft;
@@ -295,9 +295,9 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      * @param x x position of the wheel
      * @param y y position of the wheel
      * @param z  z position of the wheel
-     * @return Vec3 with the position of the wheel
+     * @return Vec3d with the position of the wheel
      */
-    public Vec3 rotate(double x, double y, double z) {
+    public Vec3d rotate(double x, double y, double z) {
 
         double cosYaw = Math.cos(this.getYaw() * 3.141593F / 180.0F);
         double sinYaw = Math.sin(this.getYaw() * 3.141593F / 180.0F);
@@ -311,7 +311,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         double newY = -(((cosPitch - x) * -sinPitch));
         double newZ = (y * sinRoll - x * cosRoll) * sinYaw + v * cosYaw;
 
-        return Vec3.createVectorHelper(newX, newY, newZ);
+        return new Vec3d(newX, newY, newZ);
     }
 
     public float getYaw() {
@@ -349,10 +349,10 @@ public class EntityRotativeDigger extends Entity implements IInventory {
          */
         if (wheels != null) {
             for (EntityRotativeWheel wheel : wheels) {
-                Vec3 posVec = this.rotate(wheel.seatX, wheel.seatY, wheel.seatZ).addVector(this.posX, this.posY + 0.7, this.posZ);
+                Vec3d posVec = this.rotate(wheel.seatX, wheel.seatY, wheel.seatZ).add(this.posX, this.posY + 0.7, this.posZ);
                 //wheels[seatNum].setPosition(posVec.xCoord, posVec.yCoord, posVec.zCoord);
 
-                wheel.setPositionAndRotation(posVec.xCoord, posVec.yCoord, posVec.zCoord, this.rotationYaw, pitch);
+                wheel.setPositionAndRotation(posVec.x, posVec.y, posVec.z, this.rotationYaw, pitch);
             }
         }
 
@@ -473,10 +473,10 @@ public class EntityRotativeDigger extends Entity implements IInventory {
 
         /* This is how the entity rotates with the look of the player */
         if (getFuel() > 0 && getPassengers().get(0) != null && getPassengers().get(0) instanceof EntityPlayer) {
-            Vec3 vecLook = ((EntityPlayer) getPassengers().get(0)).getLook(2);// .addVector(posX, posY, posZ);
+            Vec3d vecLook = ((EntityPlayer) getPassengers().get(0)).getLook(2);// .addVector(posX, posY, posZ);
             double da = rotationYaw;
-            double db = 0 - vecLook.xCoord;
-            double dc = 0 - vecLook.zCoord;
+            double db = 0 - vecLook.x;
+            double dc = 0 - vecLook.z;
             if (db * db + dc * dc > 0.0000001D) {
                 da = CommonUtil.atan2degreesf(dc, db);
             }
@@ -519,7 +519,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
         }
 
         if (Math.sqrt((motionX * motionX) + (motionZ * motionZ)) > 0.01) {
-            Vec3 pos = Vec3.createVectorHelper(posX, posY - 1, posZ);
+            Vec3d pos = new Vec3d(posX, posY - 1, posZ);
             Block id = CommonUtil.getBlockAt(worldObj, (int) posX, (int) posY - 1, (int) posZ);
 
             if (id != null) {
@@ -535,10 +535,10 @@ public class EntityRotativeDigger extends Entity implements IInventory {
      * @param block_index index of the block in mining list
      */
 
-    private void playMiningEffect(Vec3 pos, int block_index) {
-        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord);
+    private void playMiningEffect(Vec3d pos, int block_index) {
+        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.x, (int) pos.y, (int) pos.z);
         if (id != null) {
-            Minecraft.getMinecraft().effectRenderer.addBlockHitEffects((int) pos.xCoord, (int) pos.yCoord, (int) pos.zCoord, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
+            Minecraft.getMinecraft().effectRenderer.addBlockHitEffects((int) pos.x, (int) pos.y, (int) pos.z, block_index < 4 ? getSideFromYaw() : (block_index < 6 ? 1 : 0));
         }
     }
 

@@ -19,6 +19,12 @@ apply plugin: 'idea'
 apply plugin: 'java'
 apply plugin: 'eclipse'
 
+tasks.withType(JavaCompile) {
+    options.fork = true
+    options.forkOptions.jvmArgs << '-Xmx2g'
+    options.compilerArgs << '-Xmaxerrs' << '10000' << '-Xmaxwarns' << '10000'
+}
+
 repositories {
     removeIf { it.url.host == 'files.minecraftforge.net' }
     maven {
