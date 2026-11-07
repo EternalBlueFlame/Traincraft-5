@@ -22,6 +22,7 @@ import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
 import train.common.library.Info;
 
+import java.io.IOException;
 import java.util.List;
 
 public abstract class GuiTraincraft extends GuiContainer {
@@ -67,7 +68,7 @@ public abstract class GuiTraincraft extends GuiContainer {
     }
 
     @Override
-    protected void mouseClicked(int par1, int par2, int mouseButton) {
+    protected void mouseClicked(int par1, int par2, int mouseButton) throws IOException {
         super.mouseClicked(par1, par2, mouseButton);
 
         // Handle ledger clicks

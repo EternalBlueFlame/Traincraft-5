@@ -211,9 +211,9 @@ public class ClientUtil {
 
         if(overlay!=null && overlay.getItem()!=null) {
             //render the item and the overlay
-            itemRender.renderItemAndEffectIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(),
+            itemRender.renderItemAndEffectIntoGUI(
                     overlay, (int)x, (int)y);
-            itemRender.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer, Minecraft.getMinecraft().getTextureManager(),
+            itemRender.renderItemOverlayIntoGUI(Minecraft.getMinecraft().fontRenderer,
                     overlay, (int)x, (int)y, null);
 
             if(mouseX>x && mouseX<x+18 && mouseY>y && mouseY<y+18){
