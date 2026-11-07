@@ -188,7 +188,8 @@ public class GuiLiquid extends GuiContainer {
             for (int col = 0; col < 66 / 16; col++) {
                 for (int row = 0; row <= (l) / 16; row++) {
                     //System.out.println(ItemIDs.bogie.item.getIconFromDamage(0));
-                    drawTexturedModelRectFromIcon(j + 58 + col * 16, k + 52 + -row * 16, FluidRenderHelper.getFluidTexture(theLiquid, false), 16, 16);
+                        FluidRenderHelper.drawFluidTexture(j + 58 + col * 16, k + 52 - row * 16, zLevel,
+                            FluidRenderHelper.getFluidTexture(theLiquid, false), 16, 16);
                 }
             }
 

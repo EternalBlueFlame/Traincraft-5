@@ -2,15 +2,16 @@ package train.client.render.models.blocks;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import ebf.tim.utility.ClientUtil;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.model.AdvancedModelLoader;
 import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
+import train.common.core.util.TextureReference;
 import train.common.tile.TileTCRail;
 
 @SideOnly(Side.CLIENT)
@@ -108,10 +109,10 @@ public class ModelSlopeTCTrack extends ModelBase {
 
 		String iconName;
 		Block block = Block.getBlockById(tcRail.getBallastMaterial());
-		IIcon icon = block.getIcon(1, tcRail.ballastMetadata);
+		TextureReference icon = ClientUtil.getBlockTexture(block, tcRail.ballastMetadata, 1);
 		int colour = block.colorMultiplier(tcRail.getWorld(), tcRail.xCoord, tcRail.yCoord- 1, tcRail.zCoord);
 		if (icon != null) {
-			iconName = icon.getIconName();
+			iconName = icon.getResourceName();
 		}
 		else {
 			iconName = "tc:ballast_test";

@@ -1,6 +1,7 @@
 package train.client.core.handlers;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import ebf.tim.utility.ClientUtil;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -8,7 +9,6 @@ import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
@@ -18,6 +18,7 @@ import train.client.render.RenderTCRail;
 import train.common.items.ItemTCRail;
 import train.common.items.TCRailTypes;
 import train.common.library.EnumTracks;
+import train.common.core.util.TextureReference;
 
 public class CustomRenderHandler {
     String ballastMaterial;
@@ -426,9 +427,9 @@ public class CustomRenderHandler {
         int metadata = CommonUtil.getBlockFacing(world, x, y, z);
 
         blockColour = block.colorMultiplier(world, x, y, z);
-        IIcon icon = block.getIcon(1, metadata);
-        if (icon != null && icon.getIconName() != null) {
-            ballastMaterial = icon.getIconName();
+        TextureReference icon = ClientUtil.getBlockTexture(block, metadata, 1);
+        if (icon != null && icon.getResourceName() != null) {
+            ballastMaterial = icon.getResourceName();
         }
     }
 }

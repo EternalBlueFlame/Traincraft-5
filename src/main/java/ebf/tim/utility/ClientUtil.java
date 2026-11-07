@@ -2,13 +2,19 @@ package ebf.tim.utility;
 
 import fexcraft.tmt.slim.Tessellator;
 import fexcraft.tmt.slim.TextureManager;
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.RenderItem;
+import net.minecraft.client.renderer.block.model.BakedQuad;
+import net.minecraft.client.renderer.block.model.IBakedModel;
+import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.world.World;
@@ -18,7 +24,11 @@ import train.client.core.ClientProxy;
 import train.common.library.Info;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import train.common.core.util.TextureReference;
 
 public class ClientUtil {
 
@@ -36,8 +46,100 @@ public class ClientUtil {
                     new ResourceLocation(Info.modID, "textures/gui/chest.png");
 
     private static List<String> loggedLangChecks = new ArrayList<>();
+    private static final Map<String, AtlasTextureReference> atlasTextureReferences = new HashMap<>();
 
     private static Minecraft getMC(){return Minecraft.getMinecraft();}
+
+    /** Gets a block face's baked texture without exposing Minecraft's sprite type to renderer code. */
+    public static TextureReference getBlockTexture(Block block, int metadata, int side) {
+        if (block == null) {
+            return null;
+        }
+
+        Minecraft minecraft = getMC();
+        IBlockState state = block.getStateFromMeta(metadata);
+        IBakedModel model = minecraft.getBlockRendererDispatcher().getModelForState(state);
+        TextureAtlasSprite sprite = null;
+        if (model != null) {
+            List<BakedQuad> quads = model.getQuads(state, EnumFacing.byIndex(side), 0L);
+            if (quads.isEmpty()) {
+                quads = model.getQuads(state, null, 0L);
+            }
+            if (!quads.isEmpty()) {
+                sprite = quads.get(0).getSprite();
+            }
+        }
+
+        if (sprite == null) {
+            sprite = minecraft.getBlockRendererDispatcher().getBlockModelShapes().getTexture(state);
+        }
+        return referenceFor(sprite);
+    }
+
+    /** Gets a block item's face texture through the same version-neutral rendering seam. */
+    public static TextureReference getBlockTexture(ItemStack stack, int side) {
+        if (stack == null || stack.isEmpty()) {
+            return null;
+        }
+        Block block = Block.getBlockFromItem(stack.getItem());
+        return getBlockTexture(block, stack.getItemDamage(), side);
+    }
+
+    private static TextureReference referenceFor(TextureAtlasSprite sprite) {
+        if (sprite == null) {
+            return null;
+        }
+
+        String iconName = sprite.getIconName();
+        AtlasTextureReference reference = atlasTextureReferences.get(iconName);
+        if (reference == null || reference.sprite != sprite) {
+            reference = new AtlasTextureReference(sprite);
+            atlasTextureReferences.put(iconName, reference);
+        }
+        return reference;
+    }
+
+    private static final class AtlasTextureReference implements TextureReference {
+        private final TextureAtlasSprite sprite;
+        private final String resourceName;
+
+        private AtlasTextureReference(TextureAtlasSprite sprite) {
+            this.sprite = sprite;
+            String iconName = sprite.getIconName();
+            int separator = iconName.indexOf(':');
+            String domain = separator >= 0 ? iconName.substring(0, separator) : "minecraft";
+            String path = separator >= 0 ? iconName.substring(separator + 1) : iconName;
+            if (path.startsWith("blocks/")) {
+                path = path.substring("blocks/".length());
+            }
+            this.resourceName = domain + ":" + path;
+        }
+
+        @Override
+        public float getMinU() {
+            return sprite.getMinU();
+        }
+
+        @Override
+        public float getMaxU() {
+            return sprite.getMaxU();
+        }
+
+        @Override
+        public float getMinV() {
+            return sprite.getMinV();
+        }
+
+        @Override
+        public float getMaxV() {
+            return sprite.getMaxV();
+        }
+
+        @Override
+        public String getResourceName() {
+            return resourceName;
+        }
+    }
 
     public static int percentTop(int value, float guiTop){return (int)(guiTop*(value*0.01f));}
     public static int percentLeft(int value, float guiLeft){return (int)(guiLeft*(value*0.01f));}

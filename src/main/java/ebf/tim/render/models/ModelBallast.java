@@ -1,23 +1,23 @@
 package ebf.tim.render.models;
 
 import ebf.tim.blocks.rails.RailShapeCore;
+import ebf.tim.utility.ClientUtil;
 import ebf.tim.utility.Vec5f;
 import fexcraft.tmt.slim.Tessellator;
-import fexcraft.tmt.slim.TextureManager;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
+import train.common.core.util.TextureReference;
 
 import static ebf.tim.render.models.Model1x1Rail.addVertexWithOffsetAndUV;
 
 public class ModelBallast {
-    public static IIcon iicon;
+    public static TextureReference iicon;
 
     public static void modelPotatoBallast(RailShapeCore shape, float maxWidth, float minWidth, float scale, ItemStack b){
         GL11.glTranslated(0, 0.1*scale, 0);
 
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.UP.ordinal(), b);
+        iicon = ClientUtil.getBlockTexture(b, ForgeDirection.UP.ordinal());
 
         Tessellator.getInstance().startDrawing(GL11.GL_QUAD_STRIP);
         float ballastloop=0;
@@ -39,7 +39,7 @@ public class ModelBallast {
 
         float d0;
         //west side
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.WEST.ordinal(), b);
+        iicon = ClientUtil.getBlockTexture(b, ForgeDirection.WEST.ordinal());
 
         Tessellator.getInstance().startDrawing(GL11.GL_QUAD_STRIP);
         float ballastloop=0;
@@ -58,7 +58,7 @@ public class ModelBallast {
         GL11.glTranslated(0, 0.1*scale, 0);
 
         //east side
-        TextureManager.bindBlockTextureFromSide(ForgeDirection.EAST.ordinal(), b);
+        iicon = ClientUtil.getBlockTexture(b, ForgeDirection.EAST.ordinal());
         Tessellator.getInstance().startDrawing(GL11.GL_QUAD_STRIP);
         ballastloop=0;
         for (Vec5f p : shape.activePath) {
@@ -79,7 +79,7 @@ public class ModelBallast {
 
         float d0;
         //west side
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.WEST.ordinal(), b);
+        iicon = ClientUtil.getBlockTexture(b, ForgeDirection.WEST.ordinal());
 
         Tessellator.getInstance().startDrawing(GL11.GL_QUAD_STRIP);
         float ballastloop=0;
@@ -95,7 +95,7 @@ public class ModelBallast {
 
 
         //east side
-        TextureManager.bindBlockTextureFromSide(ForgeDirection.EAST.ordinal(), b);
+        iicon = ClientUtil.getBlockTexture(b, ForgeDirection.EAST.ordinal());
         Tessellator.getInstance().startDrawing(GL11.GL_QUAD_STRIP);
         ballastloop=0;
         for (Vec5f p : shape.activePath) {

@@ -2,7 +2,6 @@ package fexcraft.tmt.slim;
 
 import ebf.tim.utility.ClientUtil;
 import ebf.tim.utility.DebugUtil;
-import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.RenderItem;
@@ -181,16 +180,6 @@ public class TextureManager {
         }
     }
 
-
-    public static TextureAtlasSprite bindBlockTextureFromSide(int side, ItemStack b){
-        if (RenderBlocks.getInstance().hasOverrideBlockTexture()) {
-            return (TextureAtlasSprite)RenderBlocks.getInstance().overrideBlockTexture;
-        }
-        return (TextureAtlasSprite) RenderBlocks.getInstance().getBlockIconFromSideAndMetadata(Block.getBlockFromItem(b.getItem()), side,b.getItemDamage());
-        //1.8.9+ version:
-        //IBlockState state = Block.getBlockFromItem(b.getItem()).getDefaultState();
-        //Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(state).getQuads(state,side,0l).get(0).getSprite()
-    }
 
     public static int[] hexTorgba(int hex){
         return new int[]{hex&0xFF, (hex>>8)&0xFF, (hex>>16)&0xFF, (hex>>24)&0xFF};

@@ -3,13 +3,13 @@ package ebf.tim.render.models;
 import ebf.tim.blocks.rails.RailShapeCore;
 import ebf.tim.blocks.rails.RailSimpleShape;
 import ebf.tim.utility.CommonUtil;
+import ebf.tim.utility.ClientUtil;
 import ebf.tim.utility.Vec5f;
 import fexcraft.tmt.slim.Tessellator;
-import fexcraft.tmt.slim.TextureManager;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.IIcon;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
+import train.common.core.util.TextureReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import static ebf.tim.render.models.Model1x1Rail.addVertexWithOffsetAndUV;
 public class ModelTies {
 
 
-    public static IIcon iicon;
+    public static TextureReference iicon;
     @Deprecated //we really shouldn't need d0 and d1 with the added simplification of the texturePixel value
     public static float d0, d1;
     //this is the size of a single pixel in vanilla texturepack resolution. Scales with higher resolution texturepacks.
@@ -61,7 +61,7 @@ public class ModelTies {
 
         GL11.glTranslated(0, 0.125*scale, 0);
         //top side
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.WEST.ordinal(), block);
+        iicon = ClientUtil.getBlockTexture(block, ForgeDirection.WEST.ordinal());
         d0 = iicon.getMinU()+(texturePixel*9);
         d1 = d0 -(texturePixel*3);
 
@@ -86,7 +86,7 @@ public class ModelTies {
     public static void model3DTies(RailShapeCore shape, float maxWidth, float minWidth, float scale, ItemStack block){
         List<Vec5f> points= modelPotatoTies(shape, maxWidth, minWidth, scale, block);
 
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.NORTH.ordinal(),block);
+        iicon = ClientUtil.getBlockTexture(block, ForgeDirection.NORTH.ordinal());
         d1 = iicon.getMinU()+ ((iicon.getMaxU()-iicon.getMinU())*0.09f);
         for (Vec5f p :points) {
 
@@ -104,7 +104,7 @@ public class ModelTies {
             GL11.glPopMatrix();
         }
 
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.SOUTH.ordinal(), block);
+        iicon = ClientUtil.getBlockTexture(block, ForgeDirection.SOUTH.ordinal());
         for (Vec5f p :points) {
 
             GL11.glPushMatrix();
@@ -122,7 +122,7 @@ public class ModelTies {
         }
 
 
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.UP.ordinal(), block);
+        iicon = ClientUtil.getBlockTexture(block, ForgeDirection.UP.ordinal());
         for (Vec5f p :points) {
 
             GL11.glPushMatrix();
@@ -138,7 +138,7 @@ public class ModelTies {
             GL11.glPopMatrix();
         }
 
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.DOWN.ordinal(), block);
+        iicon = ClientUtil.getBlockTexture(block, ForgeDirection.DOWN.ordinal());
         for (Vec5f p :points) {
 
 
@@ -162,7 +162,7 @@ public class ModelTies {
         minWidth -= 0.03125f;
         GL11.glTranslatef(0,-0.075f,0);
         List<Vec5f> points= modelPotatoTies(shape,maxWidth,minWidth,scale,block);
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.NORTH.ordinal(),block);
+        iicon = ClientUtil.getBlockTexture(block, ForgeDirection.NORTH.ordinal());
         for (Vec5f p :points) {
 
             GL11.glPushMatrix();
@@ -179,7 +179,7 @@ public class ModelTies {
             GL11.glPopMatrix();
         }
 
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.SOUTH.ordinal(),block);
+        iicon = ClientUtil.getBlockTexture(block, ForgeDirection.SOUTH.ordinal());
         for (Vec5f p :points) {
 
             GL11.glPushMatrix();
@@ -197,7 +197,7 @@ public class ModelTies {
 
 
 
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.UP.ordinal(), block);
+        iicon = ClientUtil.getBlockTexture(block, ForgeDirection.UP.ordinal());
         d1 = iicon.getMinU()+ ((iicon.getMaxU()-iicon.getMinU())*0.09f);
         for (Vec5f p :points) {
 
@@ -214,7 +214,7 @@ public class ModelTies {
             GL11.glPopMatrix();
         }
 
-        iicon=  TextureManager.bindBlockTextureFromSide(ForgeDirection.DOWN.ordinal(), block);
+        iicon = ClientUtil.getBlockTexture(block, ForgeDirection.DOWN.ordinal());
         for (Vec5f p :points) {
 
             GL11.glPushMatrix();
