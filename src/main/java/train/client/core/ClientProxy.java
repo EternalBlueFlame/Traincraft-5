@@ -9,6 +9,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.gui.GUISeatManager;
+import ebf.tim.utility.CommonUtil;
 import javazoom.jl.decoder.JavaLayerUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.SoundCategory;

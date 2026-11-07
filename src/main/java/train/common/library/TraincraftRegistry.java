@@ -202,7 +202,11 @@ public class TraincraftRegistry {
         for(final AbstractTrains trains : entities){
             EntityRegistry.registerModEntity(trains.getClass(), MODID+":"+trains.transportName(), trainID, Traincraft.instance, 512, 1, true);
             trains.registerSkins();
-            GameRegistry.registerItem(trains.getItem(), "entity/"+trains.transportName());
+            Item item = trains.getItem();
+            GameRegistry.registerItem(item, "entity/"+trains.transportName());
+            if (Traincraft.proxy.isClient() && item instanceof ItemRollingStock) {
+                net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(item, ebf.tim.render.CustomItemModel.instance);
+            }
             trainID+=1;
             if(trains.getRecipe()!=null){
                 TierRecipeManager.getInstance().addRecipe(trains.getTier(),

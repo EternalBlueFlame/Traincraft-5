@@ -7,6 +7,7 @@
 
 package train.common.core.handlers;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.material.Material;

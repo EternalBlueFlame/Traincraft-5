@@ -7,6 +7,7 @@ import cpw.mods.fml.common.network.IGuiHandler;
 import cpw.mods.fml.common.registry.GameRegistry;
 import ebf.tim.entities.EntitySeat;
 import ebf.tim.gui.GUISeatManager;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
