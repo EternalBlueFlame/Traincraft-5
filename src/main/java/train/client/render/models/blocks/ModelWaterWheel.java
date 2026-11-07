@@ -3,10 +3,9 @@ package train.client.render.models.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
-import net.minecraft.client.model.ModelBase;
+import fexcraft.tmt.slim.ModelBase;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import net.minecraftforge.common.util.ForgeDirection;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
@@ -14,17 +13,20 @@ import train.common.tile.TileWaterWheel;
 
 @SideOnly(Side.CLIENT)
 public class ModelWaterWheel extends ModelBase {
-	private IModelCustom modelWaterWheel;
+	private ModelRendererTurbo modelWaterWheel;
 	private long lastframe;
 	private float wheel;
 	public float wheel1 = 0.4188790204786391F;
 
 	public ModelWaterWheel() {
-		modelWaterWheel = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "water_wheel.obj"));
+		modelWaterWheel = new ModelRendererTurbo(this);
+		modelWaterWheel.addObj(Info.modelPrefix + "water_wheel.obj");
 	}
 
 	public void render() {
-		modelWaterWheel.renderAll();
+		GL11.glPushMatrix();
+		modelWaterWheel.render();
+		GL11.glPopMatrix();
 	}
 
 	public void render(TileWaterWheel waterWheel, double x, double y, double z) {
