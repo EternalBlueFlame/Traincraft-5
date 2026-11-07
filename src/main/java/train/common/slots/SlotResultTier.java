@@ -1,6 +1,7 @@
 package train.common.slots;
 
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.inventory.Slot;

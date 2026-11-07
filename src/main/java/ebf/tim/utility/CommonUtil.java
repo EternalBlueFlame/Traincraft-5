@@ -87,6 +87,12 @@ public class CommonUtil {
     }
 
     /** Gets a tile entity at integer world coordinates. */
+    public static TileEntity getTileEntity(World world, double x, double y, double z){
+        return getTileEntity(world,(int)x, (int)y, (int)z);
+    }
+    public static TileEntity getTileEntity(IBlockAccess world, int x, int y, int z){
+        return world.getTileEntity(x, y, z);
+    }
     public static TileEntity getTileEntity(World world, int x, int y, int z){
         return world.getTileEntity(x, y, z);
     }
@@ -123,6 +129,9 @@ public class CommonUtil {
         return world.getBlockState(new BlockPos(floorDouble(x), floorDouble(y),floorDouble(z))).getBlock();
     }
 
+    public static Block getBlockAt(IBlockAccess world, int x, int y, int z){
+        return world.getBlock(x,y,z);
+    }
     public static Block getBlockAt(World world, int x, int y, int z){
         return world.getBlockState(new BlockPos(x,y,z)).getBlock();
     }

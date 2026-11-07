@@ -1,5 +1,6 @@
 package train.common.api.blocks;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.player.EntityPlayer;
@@ -45,7 +46,7 @@ public class BlockSwitch extends BlockDynamic {
             return true;
         } else {
 
-            TileSwitch t = (TileSwitch)CommonUtil.getTileEntity(world, x,y,z);
+            TileSwitch t = (TileSwitch) CommonUtil.getTileEntity(world, x,y,z);
             if(t!=null){
                 t.toggleEnabled(0);
                 world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, "random.click", 0.3F, t.getStrength(0)>0 ? 0.6F : 0.5F);

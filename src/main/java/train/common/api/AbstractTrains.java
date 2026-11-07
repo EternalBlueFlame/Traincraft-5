@@ -11,6 +11,7 @@ import ebf.XmlBuilder;
 import ebf.tim.api.SkinRegistry;
 import ebf.tim.api.TransportSkin;
 import ebf.tim.entities.EntitySeat;
+import ebf.tim.utility.CommonUtil;
 import ebf.tim.utility.DebugUtil;
 import fexcraft.tmt.slim.ModelBase;
 import io.netty.buffer.ByteBuf;

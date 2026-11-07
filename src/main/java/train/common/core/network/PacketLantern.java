@@ -3,6 +3,7 @@ package train.common.core.network;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import ebf.tim.utility.CommonUtil;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.tileentity.TileEntity;
 import train.common.tile.TileLantern;

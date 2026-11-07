@@ -2,6 +2,7 @@ package train.common.blocks;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -57,7 +58,7 @@ public class BlockBridgePillar extends Block implements ITileEntityProvider {
 
 	public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_) {
 		super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
-		if(CommonUtil.getTileEntity(p_149749_1_, p_149749_2_, p_149749_3_)!=null){
+		if(CommonUtil.getTileEntity(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_)!=null){
 			p_149749_1_.removeTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
 		}
 	}

@@ -51,8 +51,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	public ItemRollingStock(String iconName) {
 		super(1);
-		this.iconName = iconName;
-		itemTexture=new ResourceLocation(iconName);
+		setIconLocation(iconName);
 		maxStackSize = 1;
 		if(!ConfigHandler.SPLIT_CREATIVE) {
 			setCreativeTab(Traincraft.tcTab);
@@ -67,13 +66,33 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	public ItemRollingStock(String iconName, CreativeTabs tab) {
 		super(1);
-		this.iconName = iconName;
+		setIconLocation(iconName);
 		maxStackSize = 1;
 		setCreativeTab(tab);
 	}
 
+	private void setIconLocation(String iconName) {
+		this.iconName = iconName;
+		ResourceLocation icon = new ResourceLocation(iconName);
+		itemTexture = new ResourceLocation(icon.getResourceDomain(), "textures/items/" + icon.getResourcePath() + ".png");
+	}
+
+	/** if the modid string contains a colon it will get treated as an explicit address, otherwise fall back to generic address mapping */
+	private static String trainIconLocation(AbstractTrains train, String modid) {
+		int separator = modid.indexOf(':');
+		if (separator >= 0) {
+			String icon = modid.substring(separator + 1);
+			if (icon.startsWith("+")) {
+				icon = icon.substring(1);
+			}
+			return modid.substring(0, separator) + ":trains/" + icon;
+		}
+		return modid + ":trains/" + train.transportName().replace(' ', '_');
+	}
+
 	public ItemRollingStock(AbstractTrains train, String modid, CreativeTabs tab){
-		this(modid+":trains/"+train.transportName().replace(' ','_'),tab);
+		this(trainIconLocation(train, modid),tab);
+		setUnlocalizedName(train.transportName());
 		entity=train;
 		if(tab ==Traincraft.tcTab && ConfigHandler.SPLIT_CREATIVE) {
 			setCreativeTab(Traincraft.tcTrainTab);
