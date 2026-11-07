@@ -26,7 +26,7 @@ public class ModelPool {
 			System.out.println(e.getMessage());
 			return null;
 		}
-		InputStream modelFile = entry.checkValidPath(file.substring(5));
+		InputStream modelFile = entry.checkValidPath(file);
 		if(modelFile == null){
 			System.out.println("The model with the name " + file + " does not exist.");
 			return null;
@@ -34,7 +34,12 @@ public class ModelPool {
 		entry.textures = new HashMap<String, TextureGroup>();
 		entry.name = file;
 		entry.setTextureGroup("0");
-		entry.getModel(modelFile);
+		try{
+			entry.getModel(modelFile);
+		}
+		finally{
+			IOUtils.closeQuietly(modelFile);
+		}
 		modelMap.put(file, entry);
 		return entry;
 	}

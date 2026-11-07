@@ -1,9 +1,9 @@
 package fexcraft.tmt.slim;
 
-import java.io.File;
+import ebf.tim.utility.ClientUtil;
+
+import java.io.IOException;
 import java.io.InputStream;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.Map;
 
 public abstract class ModelPoolEntry {
@@ -15,7 +15,13 @@ public abstract class ModelPoolEntry {
 	protected TextureGroup texture;
 
 	public InputStream checkValidPath(String path){
-		return getClass().getResourceAsStream(path);
+		try{
+			return ClientUtil.openResource(path);
+		}
+		catch(IOException e){
+			System.out.println("Could not load model resource " + path + ": " + e.getMessage());
+			return null;
+		}
 	}
 
 	public abstract void getModel(InputStream file);

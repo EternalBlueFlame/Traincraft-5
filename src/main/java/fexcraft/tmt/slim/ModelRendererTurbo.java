@@ -1217,10 +1217,9 @@ public class ModelRendererTurbo {
     }
 
     /**
-     * Adds a Waveform .obj file as a model. Model files use the entire texture file.
-     * @param file the location of the .obj file. The location is relative to the base directories,
-     * which are either resources/models or resources/mods/models.
-     */
+    * Adds a Waveform .obj file as a model. Model files use the entire texture file.
+    * @param file the resource location of the .obj file, including its extension.
+    */
     public ModelRendererTurbo addObj(String file){
         addModel(file, ModelPool.OBJ);
         return this;
@@ -1237,8 +1236,7 @@ public class ModelRendererTurbo {
 
     /**
      * Adds model format support. Model files use the entire texture file.
-     * @param file the location of the model file. The location is relative to the base directories,
-     * which are either resources/models or resources/mods/models.
+     * @param file the resource location of the model file, including its extension.
      * @param modelFormat the class of the model format interpreter
      */
     public void addModel(String file, Class<?> modelFormat){

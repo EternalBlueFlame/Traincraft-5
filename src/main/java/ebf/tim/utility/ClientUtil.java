@@ -23,6 +23,8 @@ import org.lwjgl.opengl.GL12;
 import train.client.core.ClientProxy;
 import train.common.library.Info;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -139,6 +141,11 @@ public class ClientUtil {
         public String getResourceName() {
             return resourceName;
         }
+    }
+
+    /** loads files as InputStream using Minecraft resource location. */
+    public static InputStream openResource(String location) throws IOException {
+        return getMC().getResourceManager().getResource(new ResourceLocation(location)).getInputStream();
     }
 
     public static int percentTop(int value, float guiTop){return (int)(guiTop*(value*0.01f));}
@@ -355,12 +362,12 @@ public class ClientUtil {
         GL11.glDisable(GL11.GL_ALPHA_TEST);
         OpenGlHelper.glBlendFunc(770, 771, 1, 0);
         GL11.glShadeModel(GL11.GL_SMOOTH);
-        net.minecraft.client.renderer.Tessellator tessellator = net.minecraft.client.renderer.Tessellator.instance;
-        tessellator.startDrawingQuads();
-        tessellator.setColorRGBA_F(f1, f2, f3, f);
+        fexcraft.tmt.slim.Tessellator tessellator = fexcraft.tmt.slim.Tessellator.getInstance();
+        tessellator.startDrawing(GL11.GL_QUADS);
+        GL11.glColor4f(f1, f2, f3, f);
         tessellator.addVertex(p_73733_3_, p_73733_2_, 300);
         tessellator.addVertex(p_73733_1_, p_73733_2_, 300);
-        tessellator.setColorRGBA_F(f5, f6, f7, f4);
+        GL11.glColor4f(f5, f6, f7, f4);
         tessellator.addVertex(p_73733_1_, p_73733_4_, 300);
         tessellator.addVertex(p_73733_3_, p_73733_4_, 300);
         tessellator.draw();
