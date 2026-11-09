@@ -1,8 +1,11 @@
 package train.common.api;
 
+/**
+ * Optional sound configuration for an entity class.
+ */
 public interface TrainSoundRecord {
 
-    Class<?> getEntityClass();
+    Class getEntityClass();
 
     String getHornString();
 

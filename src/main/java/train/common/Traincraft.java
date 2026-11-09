@@ -31,7 +31,6 @@ import org.apache.logging.log4j.Logger;
 import train.common.api.AbstractTrains;
 import train.common.api.EntityBogie;
 import train.common.api.LiquidManager;
-import train.common.api.TrainRecord;
 import train.common.blocks.TCBlocks;
 import train.common.core.CommonProxy;
 import train.common.core.CreativeTabTraincraft;
@@ -52,7 +51,6 @@ import train.common.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.common.generation.ComponentVillageTrainstation;
 import train.common.generation.WorldGenWorld;
 import train.common.items.TCItems;
-import train.common.library.EnumTrains;
 import train.common.library.Info;
 import train.common.library.TraincraftRegistry;
 import train.common.recipes.AssemblyTableRecipes;
@@ -229,11 +227,6 @@ public class Traincraft {
         EntityRegistry.registerModEntity(EntityBogie.class, "Entity Front Bogie", EntityIds.LOCOMOTIVE_BOGIE, Traincraft.instance, 512, 3, true);//front bogie
         EntityRegistry.registerModEntity(EntityZeppelinOneBalloon.class, "zeppelin big", EntityIds.ZEPPELIN_BIG, Traincraft.instance, 512, 1, true);//zepplin big
         EntityRegistry.registerModEntity(EntitySeat.class, "Seat", 16, Traincraft.instance,512,3,true);//seat
-        for(TrainRecord trains : EnumTrains.trains()){
-            //TraincraftRegistry.registerTransport(trains);
-        }
-
-
         TraincraftRegistry.registerTransports("", listspecial());
         TraincraftRegistry.registerTransports("", listfreight());
         TraincraftRegistry.registerTransports("", listpassenger());
@@ -242,6 +235,7 @@ public class Traincraft {
         TraincraftRegistry.registerTransports("", liststeam());
         TraincraftRegistry.registerTransports("", listdiesel());
         TraincraftRegistry.registerTransports("", listelectric());
+        TraincraftRegistry.registerTransports("", listwork());
 
 
 
@@ -282,9 +276,6 @@ public class Traincraft {
         TrainModCore.ModsLoaded();
 
         if(proxy.isClient()) {
-            if(DebugUtil.dev) {
-                trainConverter.write(EnumTrains.trains());
-            }
             TextureManager.collectIngotColors();
         }
 

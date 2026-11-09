@@ -60,7 +60,7 @@ import train.common.core.util.DepreciatedUtil;
 import train.common.entity.CollisionBox;
 import train.common.entity.EntityHitbox;
 import train.common.entity.TrustedPlayer;
-import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
+import train.common.entity.stock.special.EntityTracksBuilder;
 import train.common.items.ItemPadlock;
 import train.common.items.ItemPaintbrushThing;
 import train.common.items.ItemRollingStock;
@@ -1568,8 +1568,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
     @Override
     public List<ItemStack> getItemsDropped() {
         List<ItemStack> items = new ArrayList<ItemStack>();
-        TrainRecord train = Traincraft.instance.traincraftRegistry.getTrainRecord(this.getClass());
-        if (train != null) {
+        if (getItem() != null) {
             items.add(ItemRollingStock.setPersistentData(new ItemStack(getItem()), this, this.getUniqueTrainID(), trainCreator, trainOwner, getColor()));
             return items;
         }

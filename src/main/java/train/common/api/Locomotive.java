@@ -244,17 +244,14 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
      *
      * @return double
      */
-    public double getMaxSpeed() {
-        if (getSpec() != null) {
-            if (currentMassPulled > 1) {
-                float power = (float) currentMassPulled / (transportMetricHorsePower() * 0.37f);
-                if (power > 1) {
-                    return transportTopSpeed() / (power);
-                }
+    public float getMaxSpeed() {
+        if (currentMassPulled > 1 && transportMetricHorsePower() > 0) {
+            float power = (float) currentMassPulled / (transportMetricHorsePower() * 0.37f);
+            if (power > 1) {
+                return transportTopSpeed() / power;
             }
-            return transportTopSpeed();
         }
-        return 50;
+        return transportTopSpeed() > 0 ? transportTopSpeed() : 50;
     }
 
     /**
@@ -301,11 +298,11 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
      * @return int
      */
     public int getFuelConsumption() {
-        return fuelRate == 0 ? getSpec().getFuelConsumption() : fuelRate;
+        return fuelRate == 0 ? (getSpec() == null ? 80 : getSpec().getFuelConsumption()) : fuelRate;
     }
 
     public int getWaterConsumption() {
-        return getSpec().getWaterConsumption();
+        return getSpec() == null ? 0 : getSpec().getWaterConsumption();
     }
 
     /**
@@ -326,7 +323,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         }
     }
     public double getSpecAccel() {
-        return getSpec()==null?0.4:getSpec().getAccelerationRate();
+        return getSpec() == null ? 0.4 : getSpec().getAccelerationRate();
     }
 
     /**
@@ -343,7 +340,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
     }
 
     public double getSpecBrake() {
-        return getSpec()==null?0.97:getSpec().getBrakeRate();
+        return getSpec() == null ? 0.97 : getSpec().getBrakeRate();
     }
 
     @Override
@@ -569,7 +566,9 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
         return destination;
     }
 
-    public float transportTopSpeed(){return getSpec().getMaxSpeed();}
+    public float transportTopSpeed(){return getSpec() == null ? 0 : getSpec().getMaxSpeed();}
+
+    protected boolean usesSpeedBasedRunningSound(){return false;}
 
     public void soundHorn() {
         if(soundHorn==null){
@@ -695,8 +694,11 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
 
                     if(soundRunning==null){
                         soundRunning=getRunningSound();
+                        if(soundRunning!=null && usesSpeedBasedRunningSound()){
+                            soundRunning.enableRunningPitch();
+                        }
                     }
-                    if (soundRunning!=null && soundRunning.runningPitch && !soundRunning.addr.isEmpty() && whistleDelay == 0) {
+                    if (soundRunning!=null && soundRunning.addr != null && soundRunning.runningPitch && !soundRunning.addr.isEmpty() && whistleDelay == 0) {
                         if (speed > 0.01D && speed < 0.06D && soundPosition == 0) {
                             CommonUtil.playSound(this, soundRunning.addr, soundRunning.vol, soundRunning.pit-0.3f);
                             soundPosition = soundRunning.len;
@@ -707,7 +709,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
                             CommonUtil.playSound(this, soundRunning.addr, soundRunning.vol, soundRunning.pit);
                             soundPosition = soundRunning.len / 3;
                         }
-                    } else {
+                    } else if (soundRunning != null && soundRunning.addr != null && !soundRunning.addr.isEmpty()) {
                         if (speed > 0.01D && soundPosition == 0) {
                             CommonUtil.playSound(this, soundRunning.addr, soundRunning.vol, soundRunning.pit);
                             soundPosition = soundRunning.len;

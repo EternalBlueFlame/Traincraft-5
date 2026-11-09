@@ -28,8 +28,8 @@ import train.common.core.handlers.ChunkEvents;
 import train.common.core.handlers.WorldEvents;
 import train.common.core.util.MP3Player;
 import train.common.entity.digger.EntityRotativeDigger;
-import train.common.entity.rollingStockOld.special.EntityJukeBoxCart;
-import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
+import train.common.entity.stock.special.EntityJukeBoxCart;
+import train.common.entity.stock.special.EntityTracksBuilder;
 import train.common.entity.zeppelin.AbstractZeppelin;
 import train.common.inventory.*;
 import train.common.library.GuiIDs;
@@ -47,16 +47,9 @@ public class CommonProxy implements IGuiHandler {
     public static boolean debug = false;
 
     public static String configDirectory = "";
-    public void throwAlphaException() {
-        throw new IllegalStateException("You're trying to use a Traincraft alpha-version past its expiry date. Download a release-build at https://minecraft.curseforge.com/projects/traincraft.");
-    }
-
     public boolean isClient(){
 		return false;
 	}
-	public void setKeyBinding(String name, int value) {
-    }
-
     public void registerPlayerScaler(){}
 
     public void registerRenderInformation() {

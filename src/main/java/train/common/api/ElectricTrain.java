@@ -8,7 +8,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.util.ForgeDirection;
+import train.common.library.Info;
 
 public abstract class ElectricTrain extends Locomotive {
 
@@ -25,6 +26,27 @@ public abstract class ElectricTrain extends Locomotive {
 		//reduceExplosionChance = 1000;
 		Ignite = false;
 		timeSinceIgnited = 0;
+	}
+
+	@Override
+	public TrainSound getHorn() {
+		TrainSound recordSound = getRecordHornSound(0.8F);
+		if (recordSound != null) return recordSound;
+		return new TrainSound(Info.resourceLocation + ":vl10_horn", 0.8F, 1F, 0);
+	}
+
+	@Override
+	public TrainSound getRunningSound() {
+		TrainSound recordSound = getRecordRunningSound(0.6F, 0.4F);
+		if (recordSound != null) return recordSound;
+		return new TrainSound(Info.resourceLocation + ":vl10_idle", 0.6F, 0.4F, 50);
+	}
+
+	@Override
+	public TrainSound getIdleSound() {
+		TrainSound recordSound = getRecordIdleSound(0.6F, 0.001F);
+		if (recordSound != null) return recordSound;
+		return new TrainSound(Info.resourceLocation + ":vl10_idle", 0.6F, 0.001F, 50);
 	}
 
 	@Override//todo:why was this so much?

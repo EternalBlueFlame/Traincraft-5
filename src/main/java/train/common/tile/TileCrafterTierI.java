@@ -1,20 +1,14 @@
 package train.common.tile;
 
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
-import ebf.tim.utility.CommonUtil;
-import net.minecraft.client.Minecraft;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.IInventory;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.util.Constants;
-import net.minecraft.util.EnumFacing;
-import train.common.api.blocks.TileRenderFacing;
+import train.common.api.blocks.TileTraincraft;
 import train.common.core.interfaces.ITier;
 import train.common.core.managers.TierRecipe;
 import train.common.core.managers.TierRecipeManager;
@@ -23,29 +17,17 @@ import train.common.library.Info;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileCrafterTierI extends TileRenderFacing implements IInventory, ITier {
-	private ItemStack[] crafterInventory;
+public class TileCrafterTierI extends TileTraincraft implements ITier {
 
-	private EnumFacing facing;
 	private final int Tier = 1;
 	private List<Item>			resultList;
 	private static List<Item> knownRecipes = new ArrayList<Item>();
 	private static int[] slotSelected;
 
 	public TileCrafterTierI() {
-		crafterInventory = new ItemStack[26];
+		super(26);
 		this.resultList = new ArrayList<Item>();
 		slotSelected = new int[8];
-	}
-
-	@Override
-	public int getSizeInventory() {
-		return crafterInventory.length;
-	}
-
-	@Override
-	public ItemStack getStackInSlot(int i) {
-		return crafterInventory[i];
 	}
 
 	@Override
@@ -54,71 +36,14 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 	}
 
 	@Override
-	public ItemStack decrStackSize(int i, int j) {
-		if (crafterInventory[i] != null) {
-			if (crafterInventory[i].stackSize <= j) {
-				ItemStack itemstack = crafterInventory[i];
-				crafterInventory[i] = null;
-				return itemstack;
-			}
-			ItemStack itemstack1 = crafterInventory[i].splitStack(j);
-			if (crafterInventory[i].stackSize == 0) {
-				crafterInventory[i] = null;
-			}
-			return itemstack1;
-		}
-		else {
-			return null;
-		}
-	}
-
-	@Override
-	public ItemStack removeStackFromSlot(int i) {
-		if (crafterInventory[i] != null) {
-			ItemStack stack = this.crafterInventory[i];
-			crafterInventory[i] = null;
-			return stack;
-		}
-		else {
-			return null;
-		}
-	}
-
-	@Override
-	public void setInventorySlotContents(int i, ItemStack itemstack) {
-		crafterInventory[i] = itemstack;
-		if (itemstack != null && itemstack.getCount() > getInventoryStackLimit()) {
-			itemstack.getCount() = getInventoryStackLimit();
-		}
-	}
-
-	@Override
-	public String getName() {
+	public String getInventoryName() {
 		return "TierI";
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbtTag) {
-
 		super.readFromNBT(nbtTag);
-
-		facing = CommonUtil.getFacing(nbtTag.getByte("Orientation"));
 		slotSelected = nbtTag.getIntArray("Selected");
-		NBTTagList nbttaglist = nbtTag.getTagList("Items", Constants.NBT.TAG_COMPOUND);
-
-		this.crafterInventory = new ItemStack[this.getSizeInventory()];
-
-		for (int i = 0; i < nbttaglist.tagCount(); i++) {
-
-			NBTTagCompound nbttagcompound1 = nbttaglist.getCompoundTagAt(i);
-			byte byte0 = nbttagcompound1.getByte("Slot");
-
-			if (byte0 >= 0 && byte0 < crafterInventory.length) {
-
-				this.crafterInventory[byte0] = new ItemStack(nbttagcompound1);
-			}
-		}
-
 		NBTTagList nbttaglist2 = nbtTag.getTagList("Known", Constants.NBT.TAG_COMPOUND);
 
 		for (int i = 0; i < nbttaglist2.tagCount(); i++) {
@@ -139,33 +64,8 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 
 	@Override
 	public void writeToNBT(NBTTagCompound nbtTag) {
-
 		super.writeToNBT(nbtTag);
-
-		if (facing != null) {
-
-			nbtTag.setByte("Orientation", (byte) facing.ordinal());
-		}
-		else {
-
-			nbtTag.setByte("Orientation", (byte) EnumFacing.NORTH.ordinal());
-		}
-
 		nbtTag.setIntArray("Selected", slotSelected);
-		NBTTagList nbttaglist = new NBTTagList();
-
-		for (int i = 0; i < this.crafterInventory.length; i++) {
-
-			if (this.crafterInventory[i] != null) {
-
-				NBTTagCompound nbttagcompound1 = new NBTTagCompound();
-				nbttagcompound1.setByte("Slot", (byte) i);
-				this.crafterInventory[i].writeToNBT(nbttagcompound1);
-				nbttaglist.appendTag(nbttagcompound1);
-			}
-		}
-
-		nbtTag.setTag("Items", nbttaglist);
 		NBTTagList nbttaglist2 = new NBTTagList();
 
 		if (knownRecipes != null) {
@@ -183,24 +83,19 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 	}
 
 	@Override
-	public int getInventoryStackLimit() {
-		return 64;
-	}
-
-	@Override
 	public void markDirty() {
 		resultList.clear();
-		for (int i = 10; i < crafterInventory.length - 8; i++) {
-			crafterInventory[i] = null;
+		for (int i = 10; i < slots.length - 8; i++) {
+			slots[i] = null;
 		}
 
 		List<TierRecipe> recipes = TierRecipeManager.getInstance().getTierRecipeList(this.Tier());
 		int count = 0;
 		for (TierRecipe recipe : recipes) {
-			ItemStack stack = recipe.hasComponents(crafterInventory);
-			if (stack != null && !resultList.contains(stack.getItem()) && (count + 10) < crafterInventory.length - 8) {
+			ItemStack stack = recipe.hasComponents(slots);
+			if (stack != null && !resultList.contains(stack.getItem()) && (count + 10) < slots.length - 8) {
 				resultList.add(stack.getItem());
-				crafterInventory[count + 10] = stack;
+				slots[count + 10] = stack;
 				count++;
 			}
 		}
@@ -210,33 +105,6 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 				knownRecipes.add(resultList.get(i));
 			}
 		}
-	}
-
-	@Override
-	public boolean isUsableByPlayer(EntityPlayer entityplayer) {
-		if (getWorld() == null) {
-			return true;
-		}
-		if (CommonUtil.getTileEntity(worldObj, xCoord, yCoord, zCoord) != this) {
-			return false;
-		}
-		return entityplayer.getDistanceSq(xCoord + 0.5D, yCoord + 0.5D, zCoord + 0.5D) <= 64D;
-	}
-
-
-	@Override
-	public void openInventory(EntityPlayer p) {}
-
-	@Override
-	public void closeInventory(EntityPlayer p) {}
-
-	@Override
-	public SPacketUpdateTileEntity getDescriptionPacket() {
-
-		NBTTagCompound nbt = new NBTTagCompound();
-		this.writeToNBT(nbt);
-
-		return new SPacketUpdateTileEntity(getPos(), 1, nbt);
 	}
 
 	private boolean listContainsItem(List<Item> list, Item stack) {
@@ -299,6 +167,16 @@ public class TileCrafterTierI extends TileRenderFacing implements IInventory, IT
 		}
 
 		return false;
+	}
+
+	@Override
+	public boolean canInsertItem(int slot, ItemStack stack, int side) {
+		return isItemValidForSlot(slot, stack);
+	}
+
+	@Override
+	public boolean canExtractItem(int slot, ItemStack stack, int side) {
+		return true;
 	}
 
 	@Override

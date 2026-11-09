@@ -36,4 +36,5 @@ public interface TrainRenderRecord {
     int getSmokeIterations();
 
     int getExplosionFXIterations();
+
 }

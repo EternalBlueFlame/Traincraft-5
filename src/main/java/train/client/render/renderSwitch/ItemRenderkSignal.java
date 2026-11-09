@@ -69,19 +69,6 @@ public class ItemRenderkSignal implements IItemRenderer {
         this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":paintbrushThing");
     }
 
-    /*
-    public static ResourceLocation getTexture(Entity entity) {
-        for (RenderEnum renders : RenderEnum.values()) {
-            if (renders.getEntityClass() != null && renders.getEntityClass().equals(entity.getClass())) {
-                texture = Info.modID
-                return "texture.png";
-            }
-        }
-        return null;
-    }
-
-     */
-
     private void renderIcon() {
         IIconRegister iconRegister = (net.minecraft.client.renderer.texture.IIconRegister) IIconRegister;
         iconRegister.registerIcon(Info.modID.toLowerCase() + ":paintbrushThing");

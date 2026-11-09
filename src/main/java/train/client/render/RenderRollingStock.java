@@ -16,7 +16,7 @@ import train.common.Traincraft;
 import train.common.api.*;
 import train.common.blocks.BlockTCRail;
 import train.common.blocks.BlockTCRailGag;
-import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
+import train.common.entity.stock.special.EntityTracksBuilder;
 import train.common.library.Info;
 import train.common.overlaytexture.OverlayTextureManager;
 
@@ -137,7 +137,7 @@ public class RenderRollingStock extends Render {
         if(cart.render_cache.bogies!=null && cart.render_cache.bogies.length>0){
             DebugUtil.println(cart.render_cache.bogies.length);
             for (m=0;m<cart.render_cache.bogies.length;m++){
-                if(cart.render_cache.skin.bogieSkins.size()>m) {
+                if(cart.render_cache.skin != null && cart.render_cache.skin.bogieSkins.size()>m) {
                     Tessellator.bindTexture(new ResourceLocation(cart.render_cache.skin.bogieSkins.get(m)));
                 }
                 cart.render_cache.bogies[m].render(cart);
@@ -147,41 +147,11 @@ public class RenderRollingStock extends Render {
 
 
         //GL11.glEnable(GL11.GL_LIGHTING);
-        TrainRenderRecord render = cart.getRender();
-        if(render!=null) {
-            if (render.hasSmoke()) {
-                if (cart.render_cache.smokePosition == null) {
-                    cart.render_cache.smokePosition = new ArrayList<double[]>();
-                    if (render.getModel().getSmokePosition() != null) {
-                        cart.render_cache.smokePosition = render.getModel().getSmokePosition();
-                    }
-                    if (cart.getSmokePosition() != null) {
-                        cart.render_cache.smokePosition.addAll(cart.getSmokePosition());
-                    }
-                    if (render.getSmokeFX() != null) {
-                        cart.render_cache.smokePosition.addAll(render.getSmokeFX());
-                    }
-                }
-
-                if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
-                    renderSmokeFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, render.getSmokeType(), cart.render_cache.smokePosition, render.getSmokeIterations(), time, render.hasSmokeOnSlopes());
-                }
-            }
-            if (render.hasExplosion()) {
-                if (cart.bogieFront != null) {// || cart.bogieUtility[0]!=null){
-                    renderExplosionFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, render.getExplosionType(), render.getExplosionFX(), render.getExplosionFXIterations(), render.hasSmokeOnSlopes());
-                }
-            }
+        if (!cart.render_cache.effectsResolved) {
+            cart.render_cache.effects = cart.getEffects();
+            cart.render_cache.effectsResolved = true;
         }
-        if(cart.getEffects()!=null){
-            for(TrainParticle p : cart.getEffects()){
-                if(p.type.toLowerCase().contains("smoke")){
-                    renderSmokeFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, p.type, Collections.singletonList(p.position), p.density, time, true);
-                } else {
-                    renderExplosionFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, p.type, Collections.singletonList(p.position), p.density, true);
-                }
-            }
-        }
+        renderEffects(cart, cart.render_cache.effects, time);
 
         GL11.glPopMatrix();
     }
@@ -203,6 +173,36 @@ public class RenderRollingStock extends Render {
                                 0, 0, 0);
                     }
                 }
+            }
+        }
+    }
+
+    private static void renderEffects(EntityRollingStock cart, TrainParticle[] effects, float time) {
+        if (effects == null) {
+            return;
+        }
+        boolean[] processed = new boolean[effects.length];
+        for (int i = 0; i < effects.length; i++) {
+            TrainParticle effect = effects[i];
+            if (processed[i] || effect == null || effect.type == null || effect.type.isEmpty()
+                    || effect.position == null || effect.density <= 0) {
+                continue;
+            }
+            List<double[]> positions = new ArrayList<>();
+            positions.add(effect.position);
+            processed[i] = true;
+            for (int j = i + 1; j < effects.length; j++) {
+                TrainParticle other = effects[j];
+                if (!processed[j] && other != null && effect.type.equals(other.type)
+                        && effect.density == other.density && other.position != null) {
+                    positions.add(other.position);
+                    processed[j] = true;
+                }
+            }
+            if (effect.type.toLowerCase().contains("smoke")) {
+                renderSmokeFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, effect.type, positions, effect.density, time, true);
+            } else {
+                renderExplosionFX(cart, 90 + cart.rotationYaw, cart.rotationPitch, effect.type, positions, effect.density, true);
             }
         }
     }
@@ -288,19 +288,30 @@ public class RenderRollingStock extends Render {
     }
 
     public static ResourceLocation getTexture(AbstractTrains entity) {
-        if(!entity.render_cache.color.equals(entity.getColor())){
-            entity.render_cache.color=entity.getColor();
+        String color = entity.getColor();
+        if (color == null) color = "";
+        if(!entity.render_cache.color.equals(color)){
+            entity.render_cache.color=color;
             entity.render_cache.rend=entity.getRender();
-            entity.render_cache.skin=SkinRegistry.get(entity).get(entity.render_cache.color);
+            java.util.Map<String, ebf.tim.api.TransportSkin> skins = SkinRegistry.get(entity);
+            entity.render_cache.skin = skins == null ? null : skins.get(color);
+            if (entity.render_cache.skin == null && skins != null) {
+                for (ebf.tim.api.TransportSkin skin : skins.values()) {
+                    if (color.equals(skin.addr)) {
+                        entity.render_cache.skin = skin;
+                        break;
+                    }
+                }
+            }
         }
 
-        if(entity.entity_data.getString("color")!=null) {
-            return new ResourceLocation(entity.entity_data.getString("color"));
+        if (entity.render_cache.skin != null && entity.render_cache.skin.addr != null) {
+            return new ResourceLocation(entity.render_cache.skin.addr);
         }
         if (entity.render_cache.rend != null) {
-            return entity.render_cache.rend.getTextureFile(entity.render_cache.color);
+            return entity.render_cache.rend.getTextureFile(color);
         }
-        return null;
+        return color.isEmpty() ? null : new ResourceLocation(color);
     }
 
 	/**

@@ -90,9 +90,9 @@ return 1;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelLocoForney()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{-1.3f, -0.060000002f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{-0.5625f, -0.060000002f, 0.0f}};}
     @Override
-    public float[][] modelRotations(){return new float[][]{{0.0f, 90.0f, 0.0f}};}
+    public float[][] modelRotations(){return new float[][]{{0.0f, -90.0f, 0.0f}};}
     @Override
     public float[][] getRenderScale(){return new float[][]{null};}
     //these are separated for being fiddly.

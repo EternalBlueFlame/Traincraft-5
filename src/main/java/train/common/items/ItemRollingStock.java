@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 import train.common.Traincraft;
 import train.common.api.*;
 import train.common.core.handlers.ConfigHandler;
-import train.common.entity.rollingStockOld.special.EntityTracksBuilder;
+import train.common.entity.stock.special.EntityTracksBuilder;
 import train.common.library.BlockIDs;
 import train.common.library.EnumTracks;
 import train.common.tile.TileTCRail;
@@ -44,9 +44,23 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	private AbstractTrains getEntity(){
 		if(entity==null){
-			entity=Traincraft.instance.traincraftRegistry.findTrainRecordByItem(this).getEntity(null);
+			TrainRecord record = Traincraft.instance == null || Traincraft.instance.traincraftRegistry == null
+					? null : Traincraft.instance.traincraftRegistry.findTrainRecordByItem(this);
+			if (record != null) {
+				entity = record.getEntity(null);
+			}
 		}
 		return entity;
+	}
+
+	public String getIconName() {
+		return iconName;
+	}
+
+	public void setEntityTemplate(AbstractTrains entityTemplate) {
+		if (entity == null && entityTemplate != null) {
+			entity = entityTemplate;
+		}
 	}
 
 	public ItemRollingStock(String iconName) {
@@ -226,7 +240,10 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 	}
 
 	public String getTrainType() {
-		return Traincraft.instance.traincraftRegistry.findTrainRecordByItem(this).getTrainType();
+		TrainRecord record = Traincraft.instance.traincraftRegistry.findTrainRecordByItem(this);
+		AbstractTrains transport = getEntity();
+		return record != null ? record.getTrainType()
+				: transport == null ? "decorative" : transport.getTrainType();
 	}
 
 	@Override
@@ -360,17 +377,27 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	public EntityMinecart placeCart(EntityPlayer player, ItemStack itemstack, World world, int i, int j, int k) {
 		AbstractTrains rollingStock = null;
-
-
+		AbstractTrains entityTemplate = getEntity();
+		if (entityTemplate == null) {
+			DebugUtil.log("Cannot place rolling stock without a registered entity template: " + getUnlocalizedName());
+			if (player != null) {
+				CommonUtil.sendChat(player, "This rolling stock is not registered and cannot be placed.");
+			}
+			return null;
+		}
 
 		try {
-			rollingStock=getEntity().getClass().getConstructor(World.class)
+			rollingStock=entityTemplate.getClass().getConstructor(World.class)
 					.newInstance(world);
 		} catch (Exception e){
 			if(DebugUtil.dev){
 				e.printStackTrace();
 			}
-			DebugUtil.log("Failed to cast : " + getEntity().toString() + "to a new generic transport entity");
+			DebugUtil.log("Failed to create rolling stock entity: " + entityTemplate.getClass().getName());
+			if (player != null) {
+				CommonUtil.sendChat(player, "This rolling stock could not be created.");
+			}
+			return null;
 		}
 
 
