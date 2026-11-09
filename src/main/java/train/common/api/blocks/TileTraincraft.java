@@ -7,6 +7,7 @@
 
 package train.common.api.blocks;
 
+import ebf.tim.utility.CommonUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.inventory.ISidedInventory;
@@ -29,7 +30,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
 
     @Override
     public int[] getAccessibleSlotsFromSide(int side){
-        if(this.slots.length > 0){
+        if(this.slots != null && this.slots.length > 0){
             int[] theInt = new int[slots.length];
             for(int i = 0; i < theInt.length; i++){
                 theInt[i] = i;
@@ -57,12 +58,12 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
 
     @Override
     public ItemStack getStackInSlot(int slot){
-        return this.slots.length >= slot ? this.slots[slot] : null;
+        return this.slots != null && slot >= 0 && slot < this.slots.length ? this.slots[slot] : null;
     }
 
     @Override
     public ItemStack decrStackSize(int i, int j){
-        if (this.slots.length >= i && this.slots[i] != null) {
+        if (this.slots != null && i >= 0 && i < this.slots.length && this.slots[i] != null) {
             if (this.slots[i].stackSize <= j) {
                 ItemStack itemstack = this.slots[i];
                 this.slots[i] = null;
@@ -81,7 +82,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
 
     @Override
     public ItemStack getStackInSlotOnClosing(int slot){
-        if (this.slots[slot] != null) {
+        if (this.slots != null && slot >= 0 && slot < this.slots.length && this.slots[slot] != null) {
             ItemStack var2 = this.slots[slot];
             this.slots[slot] = null;
             return var2;
@@ -91,6 +92,9 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
 
     @Override
     public void setInventorySlotContents(int slot, ItemStack stack){
+        if(this.slots == null || slot < 0 || slot >= this.slots.length){
+            return;
+        }
         this.slots[slot] = stack;
         if (stack != null && stack.stackSize > getInventoryStackLimit()) {
             stack.stackSize = getInventoryStackLimit();
@@ -114,7 +118,9 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
 
     @Override
     public boolean isUseableByPlayer(EntityPlayer player){
-        return player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
+        return this.worldObj != null
+            && CommonUtil.getTileEntity(this.worldObj, this.xCoord, this.yCoord, this.zCoord) == this
+            && player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
     }
 
     @Override
@@ -133,14 +139,12 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     @Override
-    public final void writeToNBT(NBTTagCompound nbt){
-        super.writeToNBT(nbt);
+    public void writeToNBT(NBTTagCompound nbt){
         this.writeToNBT(nbt, false);
     }
 
     @Override
-    public final void readFromNBT(NBTTagCompound nbt){
-        super.readFromNBT(nbt);
+    public void readFromNBT(NBTTagCompound nbt){
         this.readFromNBT(nbt, false);
     }
 
@@ -148,7 +152,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
         super.writeToNBT(nbt);
         if(!forSyncing){
             NBTTagList nbttaglist = new NBTTagList();
-            for (int i = 0; i < this.slots.length; i++) {
+            for (int i = 0; this.slots != null && i < this.slots.length; i++) {
                 if (this.slots[i] != null) {
                     NBTTagCompound nbttagcompound1 = new NBTTagCompound();
                     nbttagcompound1.setByte("Slot", (byte) i);
@@ -190,14 +194,14 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     @Override
     public S35PacketUpdateTileEntity getDescriptionPacket() {
         NBTTagCompound nbt = new NBTTagCompound();
-        this.writeToNBT(nbt, true);
+        this.writeToNBT(nbt);
         return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
     }
 
     @Override
     public void onDataPacket(NetworkManager net, S35PacketUpdateTileEntity pkt){
         if(pkt != null){
-            this.readFromNBT(pkt.func_148857_g(), true);
+            this.readFromNBT(pkt.func_148857_g());
         }
     }
 

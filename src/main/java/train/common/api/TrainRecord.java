@@ -51,7 +51,8 @@ public abstract class TrainRecord {
                 SkinRegistry.addSkin(getEntityClass(),color);
             }
         }
-        return (List<TransportSkin>) SkinRegistry.get(getEntityClass()).values();
+        java.util.Map<String, TransportSkin> skins = SkinRegistry.get(getEntityClass());
+        return skins == null ? new ArrayList<TransportSkin>() : new ArrayList<TransportSkin>(skins.values());
     }
 
     public abstract double getBogieLocoPosition();

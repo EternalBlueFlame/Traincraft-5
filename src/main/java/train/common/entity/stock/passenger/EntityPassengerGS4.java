@@ -97,7 +97,7 @@ return 3;
     @Override
     public ModelBase[] getModel(){return new ModelBase[]{new train.client.render.models.ModelGS4Passenger()};}
     @Override
-    public float[][] modelOffsets(){return new float[][]{{0.0f, -0.53f, 0.0f}};}
+    public float[][] modelOffsets(){return new float[][]{{0.0f, 0.03f, 0.0f}};}
     @Override
     public float[][] modelRotations(){return new float[][]{{0.0f, 180.0f, 180.0f}};}
     @Override

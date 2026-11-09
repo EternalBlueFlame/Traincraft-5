@@ -1,7 +1,6 @@
 package train.common.library;
 
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
-import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Optional;
 import cpw.mods.fml.common.registry.EntityRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -34,7 +33,6 @@ import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import train.client.core.ClientProxy;
-import train.client.render.RenderEnum;
 import train.common.Traincraft;
 import train.common.api.*;
 import train.common.api.blocks.BlockDynamic;
@@ -45,6 +43,7 @@ import train.common.items.ItemRollingStock;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -55,8 +54,7 @@ public class TraincraftRegistry {
     private Map<Item, TrainRecord> trainRecordsByItem = new HashMap<>();
 
     private Map<Class<?>, TrainRenderRecord> trainRenderRecords = new HashMap<>();
-    private List<TrainSoundRecord> trainSoundRecords = new ArrayList<>();
-
+    private Map<Class<?>, TrainSoundRecord> trainSoundRecords = new HashMap<>();
     private static final List<TrackRecord> trackRecords = new ArrayList<>();
 
     private static Map<Item, TrackRecord> trackRecordsByItem = new HashMap<>();
@@ -66,25 +64,9 @@ public class TraincraftRegistry {
     }
 
     public void init() {
-        for (TrainRecord train : EnumTrains.trains()) {
-            TraincraftRegistry.this.registerTrainRecord(train);
-        }
-
         for (TrackRecord track : EnumTracks.values()){
             TraincraftRegistry.this.registerTrackRecord(track);
 
-        }
-
-
-        Side side = FMLCommonHandler.instance().getEffectiveSide();
-        if (side == Side.CLIENT) {
-            for (RenderEnum render : RenderEnum.values()) {
-                TraincraftRegistry.this.registerTrainRenderRecord(render);
-            }
-        }
-
-        for (TrainSoundRecord sound : EnumSounds.values()) {
-            TraincraftRegistry.this.registerTrainSoundRecord(sound);
         }
     }
 
@@ -98,25 +80,8 @@ public class TraincraftRegistry {
                 return record;
             }
         }
-        for(TrainRecord fallback : EnumTrains.trains()){
-            if (entityClass.equals(fallback.getEntityClass())) {
-                return fallback;
-            }
-        }
         return null;
     }
-
-    public TrainSoundRecord getTrainSoundRecord(Class<?> entityClass) {
-        if (entityClass == null) return null;
-
-        for (TrainSoundRecord record : trainSoundRecords) {
-            if (entityClass.equals(record.getEntityClass())) {
-                return record;
-            }
-        }
-        return null;
-    }
-
 
     public TrainRecord findTrainRecordByItem(Item item) {
         return trainRecordsByItem.get(item);
@@ -126,22 +91,52 @@ public class TraincraftRegistry {
         return trainRenderRecords.get(entityClass);
     }
 
-    public void registerTrainRecord(TrainRecord record) {
-        trainRecords.add(record);
-        trainRecordsByItem.put(record.getItem(), record);
+    public TrainSoundRecord getTrainSoundRecord(Class<?> entityClass) {
+        return trainSoundRecords.get(entityClass);
     }
 
-    public void registerTrainRenderRecord(TrainRenderRecord record) {
-        trainRenderRecords.put(record.getEntityClass(), record);
-        if(getTrainRecord(record.getEntityClass())!=null) {
-            for(String color:getTrainRecord(record.getEntityClass()).getColors()){
-                SkinRegistry.addSkin(record.getEntityClass(),color);
+    public void registerTrainSoundRecord(TrainSoundRecord record) {
+        if (record == null || record.getEntityClass() == null) {
+            return;
+        }
+        trainSoundRecords.put(record.getEntityClass(), record);
+    }
+
+    public void registerTrainRecord(TrainRecord record) {
+        if (record == null || record.getEntityClass() == null) {
+            return;
+        }
+        for (Iterator<TrainRecord> iterator = trainRecords.iterator(); iterator.hasNext();) {
+            TrainRecord existing = iterator.next();
+            if (record.getEntityClass().equals(existing.getEntityClass())) {
+                if (existing.getItem() != null && trainRecordsByItem.get(existing.getItem()) == existing) {
+                    trainRecordsByItem.remove(existing.getItem());
+                }
+                iterator.remove();
+            }
+        }
+        trainRecords.add(record);
+        if (record.getItem() != null) {
+            trainRecordsByItem.put(record.getItem(), record);
+        }
+        if (record.getColors() != null) {
+            for (String color : record.getColors()) {
+                SkinRegistry.addSkin(record.getEntityClass(), color);
             }
         }
     }
 
-    public void registerTrainSoundRecord(TrainSoundRecord sound) {
-        trainSoundRecords.add(sound);
+    public void registerTrainRenderRecord(TrainRenderRecord record) {
+        if (record == null || record.getEntityClass() == null) {
+            return;
+        }
+        trainRenderRecords.put(record.getEntityClass(), record);
+        TrainRecord trainRecord = getTrainRecord(record.getEntityClass());
+        if(trainRecord != null && trainRecord.getColors() != null) {
+            for(String color:trainRecord.getColors()){
+                SkinRegistry.addSkin(record.getEntityClass(),color);
+            }
+        }
     }
 
     public void addLivery(Class<? extends AbstractTrains> entityClass, String name){
@@ -178,12 +173,18 @@ public class TraincraftRegistry {
 
     public static int trainID= 32;
     public static void registerTransport(TrainRecord record){
+        if (record == null || record.getEntityClass() == null || Traincraft.instance == null || Traincraft.instance.traincraftRegistry == null) {
+            return;
+        }
+        Traincraft.instance.traincraftRegistry.registerTrainRecord(record);
         EntityRegistry.registerModEntity(record.getEntityClass(), record.getInternalName(), trainID, Traincraft.instance, 512, 1, true);
         AbstractTrains entity = record.getEntity(null);
         if(entity!=null) {
             entity.registerSkins();
-            for(String c: record.getColors()){
-                SkinRegistry.addSkin(record.getEntityClass(),c);
+            if (record.getColors() != null) {
+                for(String c: record.getColors()){
+                    SkinRegistry.addSkin(record.getEntityClass(),c);
+                }
             }
             if(entity.getRecipe()!=null){
                 TierRecipeManager.getInstance().addRecipe(entity.getTier(),
@@ -204,6 +205,15 @@ public class TraincraftRegistry {
             trains.registerSkins();
             Item item = trains.getItem();
             GameRegistry.registerItem(item, "entity/"+trains.transportName());
+            if (item instanceof ItemRollingStock) {
+                String iconName = ((ItemRollingStock) item).getIconName();
+                for (ItemIDs itemId : ItemIDs.values()) {
+                    if (itemId.item instanceof ItemRollingStock
+                            && iconName.equals(((ItemRollingStock) itemId.item).getIconName())) {
+                        ((ItemRollingStock) itemId.item).setEntityTemplate(trains);
+                    }
+                }
+            }
             if (Traincraft.proxy.isClient() && item instanceof ItemRollingStock) {
                 net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(item, ebf.tim.render.CustomItemModel.instance);
             }

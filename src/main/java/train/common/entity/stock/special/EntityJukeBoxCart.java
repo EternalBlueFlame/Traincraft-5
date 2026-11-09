@@ -1,24 +1,50 @@
 package train.common.entity.stock.special;
 
 import fexcraft.tmt.slim.ModelBase;
+import cpw.mods.fml.common.FMLCommonHandler;
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.api.SkinRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.item.EntityMinecart;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import train.common.Traincraft;
+import train.common.adminbook.ServerLogger;
 import train.common.api.*;
+import train.common.core.util.MP3Player;
 import train.common.items.ItemRollingStock;
 import train.common.library.Info;
 import train.common.library.ItemIDs;
+import train.common.library.GuiIDs;
+
+import java.util.Locale;
 
 public class EntityJukeBoxCart extends EntityRollingStock {
+
+    public boolean isPlaying = false;
+    public boolean isInvalid = false;
+    public String streamURL = "";
+    private Side side;
+    public float volume = 1.0f;
+    public MP3Player player;
 
     public static final Item thisItem = new ItemRollingStock(new EntityJukeBoxCart(null), Info.modID+":+train_jukebox", Traincraft.tcTab); 
 
     public EntityJukeBoxCart(World world) {
-    super (world); } 
+        super(world);
+        if (world != null) {
+            dataWatcher.addObject(22, streamURL);
+            dataWatcher.addObject(23, 0);
+        }
+        side = FMLCommonHandler.instance().getEffectiveSide();
+    }
     //main stats
     @Override
     public String transportName(){return "JukeBox Cart";}
@@ -98,6 +124,149 @@ return 3;
     public TrainParticle[] getEffects(){
     return new TrainParticle[]{
     };
+    }
+
+    @Override
+    public boolean attackEntityFrom(DamageSource source, float amount) {
+        if (worldObj != null && worldObj.isRemote) return true;
+        if (canBeDestroyedByPlayer(source)) return true;
+        super.attackEntityFrom(source, amount);
+        setRollingDirection(-getRollingDirection());
+        setRollingAmplitude(10);
+        setBeenAttacked();
+        setDamage(getDamage() + amount * 10);
+        if (getDamage() > 40) {
+            if (riddenByEntity != null) riddenByEntity.mountEntity(this);
+            setDead();
+            ServerLogger.deleteWagon(this);
+            if (source.getEntity() instanceof EntityPlayer) {
+                dropCartAsItem(((EntityPlayer) source.getEntity()).capabilities.isCreativeMode);
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void setDead() {
+        stopStream();
+        super.setDead();
+        isDead = true;
+    }
+
+    @Override
+    public void onUpdate() {
+        super.onUpdate();
+        if (worldObj == null) return;
+        if (!worldObj.isRemote && ticksExisted % 10 == 0) {
+            dataWatcher.updateObject(22, streamURL);
+            dataWatcher.updateObject(23, isPlaying ? 1 : 0);
+        }
+        if (side == Side.CLIENT) updateClientPlayback();
+    }
+
+    @SideOnly(Side.CLIENT)
+    private void updateClientPlayback() {
+        if (ticksExisted % 10 == 0 && !isPlaying() && dataWatcher.getWatchableObjectInt(23) != 0) {
+            streamURL = dataWatcher.getWatchableObjectString(22);
+            startStream();
+        }
+        if (Minecraft.getMinecraft().thePlayer != null && player != null && !isInvalid) {
+            float distance = (float) getDistanceSq(Minecraft.getMinecraft().thePlayer.posX,
+                    Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ);
+            if (distance >= volume * 1000.0F) {
+                player.setVolume(0.0F);
+            } else if (distance > 0) {
+                float attenuated = 100.0F / distance;
+                player.setVolume(Math.min(volume, attenuated));
+            }
+            if (distance == 0) invalidate();
+            if (isPlaying && rand.nextInt(5) == 0 && player.isPlaying()) {
+                int note = rand.nextInt(24) + 1;
+                worldObj.spawnParticle("note", posX, posY + 1.2D, posZ, note / 24.0D, 0.0D, 0.0D);
+            }
+        }
+    }
+
+    public void recievePacket(String url, boolean playing) {
+        streamURL = url;
+        isPlaying = playing;
+    }
+
+    @SideOnly(Side.CLIENT)
+    public void invalidate() {
+        isInvalid = true;
+        stopStream();
+    }
+
+    public void startStream() {
+        if (!isPlaying) {
+            isPlaying = true;
+            if (side == Side.CLIENT) {
+                player = new MP3Player(streamURL, worldObj, getEntityId());
+                player.setVolume(0);
+                Traincraft.proxy.playerList.add(player);
+            }
+        }
+    }
+
+    public void stopStream() {
+        if (isPlaying) {
+            isPlaying = false;
+            if (side == Side.CLIENT && player != null) {
+                player.stop();
+                Traincraft.proxy.playerList.remove(player);
+                player = null;
+            }
+        }
+    }
+
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    @Override
+    public boolean interactFirst(EntityPlayer player) {
+        playerEntity = player;
+        if (super.interactFirst(player)) return false;
+        if (locked && !player.getDisplayName().toLowerCase(Locale.ROOT).equals(trainOwner.toLowerCase(Locale.ROOT))) {
+            if (!worldObj.isRemote) ebf.tim.utility.CommonUtil.sendChat(player, "this train is locked");
+            return true;
+        }
+        player.openGui(Traincraft.instance, GuiIDs.JUKEBOX, worldObj, getEntityId(), -1, (int) posZ);
+        return true;
+    }
+
+    @Override
+    public boolean isStorageCart() {
+        return false;
+    }
+
+    @Override
+    public boolean isPoweredCart() {
+        return false;
+    }
+
+    @Override
+    public float getOptimalDistance(EntityMinecart cart) {
+        return 1.85F;
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound tag) {
+        super.writeEntityToNBT(tag);
+        tag.setString("StreamUrl", streamURL);
+        tag.setBoolean("isPlaying", isPlaying);
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound tag) {
+        super.readEntityFromNBT(tag);
+        streamURL = tag.getString("StreamUrl");
+        isPlaying = tag.getBoolean("isPlaying");
+        if (worldObj != null) {
+            dataWatcher.updateObject(22, streamURL);
+            dataWatcher.updateObject(23, isPlaying ? 1 : 0);
+        }
     }
 }
 

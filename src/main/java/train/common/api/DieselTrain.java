@@ -11,9 +11,10 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import train.common.api.LiquidManager.StandardTank;
-import train.common.entity.rollingStockOld.special.EntityBUnitDD35;
-import train.common.entity.rollingStockOld.special.EntityBUnitEMDF3;
-import train.common.entity.rollingStockOld.special.EntityBUnitEMDF7;
+import train.common.entity.stock.tanker.EntityBUnitDD35;
+import train.common.entity.stock.tanker.EntityBUnitEMDF3;
+import train.common.entity.stock.tanker.EntityBUnitEMDF7;
+import train.common.library.Info;
 
 public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 
@@ -46,6 +47,27 @@ public abstract class DieselTrain extends Locomotive implements IFluidHandler {
 		dataWatcher.addObject(4, 0);
 		this.dataWatcher.addObject(27, 0);
 		this.dataWatcher.addObject(5, "");
+	}
+
+	@Override
+	public TrainSound getHorn() {
+		TrainSound recordSound = getRecordHornSound(0.8F);
+		if (recordSound != null) return recordSound;
+		return new TrainSound(Info.resourceLocation + ":chme3_horn", 0.8F, 1F, 0);
+	}
+
+	@Override
+	public TrainSound getRunningSound() {
+		TrainSound recordSound = getRecordRunningSound(0.65F, 0.4F);
+		if (recordSound != null) return recordSound;
+		return new TrainSound(Info.resourceLocation + ":chme3_idle", 0.65F, 0.4F, 40);
+	}
+
+	@Override
+	public TrainSound getIdleSound() {
+		TrainSound recordSound = getRecordIdleSound(0.65F, 0.001F);
+		if (recordSound != null) return recordSound;
+		return new TrainSound(Info.resourceLocation + ":chme3_idle", 0.65F, 0.001F, 40);
 	}
 
 	@Override

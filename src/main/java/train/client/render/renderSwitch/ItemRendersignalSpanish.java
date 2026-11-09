@@ -65,19 +65,6 @@ public class ItemRendersignalSpanish implements IItemRenderer {
         this.itemIcon = iconRegister.registerIcon(Info.modID.toLowerCase() + ":paintbrushThing");
     }
 
-    /*
-    public static ResourceLocation getTexture(Entity entity) {
-        for (RenderEnum renders : RenderEnum.values()) {
-            if (renders.getEntityClass() != null && renders.getEntityClass().equals(entity.getClass())) {
-                texture = Info.modID
-                return "texture.png";
-            }
-        }
-        return null;
-    }
-
-     */
-
     private void renderSwitch(float x, float y, float z, float scale) {
         Tessellator.bindTexture(texture);
         GL11.glPushMatrix();

@@ -9,6 +9,7 @@ import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.*;
 import train.common.api.LiquidManager.StandardTank;
 import train.common.core.handlers.FuelHandler;
+import train.common.library.Info;
 
 public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 
@@ -41,6 +42,32 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	}
 
 	@Override
+	public TrainSound getHorn() {
+		TrainSound recordSound = getRecordHornSound(0.6F);
+		if (recordSound != null) return recordSound;
+		return new TrainSound(Info.resourceLocation + ":steam_horn", 0.6F, 1F, 0);
+	}
+
+	@Override
+	public TrainSound getRunningSound() {
+		TrainSound recordSound = getRecordRunningSound(0.4F, 0.4F);
+		if (recordSound != null) return recordSound;
+		return new TrainSound(Info.resourceLocation + ":steam_run", 0.4F, 0.4F, 20);
+	}
+
+	@Override
+	public TrainSound getIdleSound() {
+		TrainSound recordSound = getRecordIdleSound(0.4F, 0.001F);
+		if (recordSound != null) return recordSound;
+		return new TrainSound(Info.resourceLocation + ":steam_run", 0.4F, 0.001F, 20);
+	}
+
+	@Override
+	protected boolean usesSpeedBasedRunningSound() {
+		return true;
+	}
+
+	@Override
 	public int getSizeInventory() {
 		return 11+(getInventoryRows()*9);
 	}
@@ -51,7 +78,7 @@ public abstract class SteamTrain extends Locomotive implements IFluidHandler {
 	 * @return
 	 */
 	public int getWaterConsumption() {
-		return getSpec().getWaterConsumption();
+		return getSpec() == null ? 0 : getSpec().getWaterConsumption();
 	}
 
 	@Override

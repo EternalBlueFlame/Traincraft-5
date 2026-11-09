@@ -10,7 +10,7 @@ import net.minecraftforge.event.world.ChunkEvent;
 import train.common.api.AbstractTrains;
 import train.common.api.Locomotive;
 import train.common.entity.ai.EntityAIFearHorn;
-import train.common.entity.rollingStockOld.special.EntityJukeBoxCart;
+import train.common.entity.stock.special.EntityJukeBoxCart;
 
 import java.util.Random;
 
@@ -72,8 +72,7 @@ public class WorldEvents {
     public void chunkUnloadEvent(ChunkEvent.Unload event) {
         for (Object o : event.getChunk().entityLists) {
             if (o instanceof EntityJukeBoxCart && ((EntityJukeBoxCart) o).isPlaying) {
-                ((EntityJukeBoxCart) o).player.stop();
-                ((EntityJukeBoxCart) o).player.setVolume(0);
+                ((EntityJukeBoxCart) o).stopStream();
             }
         }
     }

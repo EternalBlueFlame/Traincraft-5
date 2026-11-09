@@ -20,9 +20,7 @@ import train.common.Traincraft;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.network.PacketKeyPress;
 import train.common.enums.DataMemberName;
-import train.common.library.EnumSounds;
 import train.common.library.GuiIDs;
-import train.common.library.Info;
 
 import java.util.List;
 
@@ -196,13 +194,11 @@ public abstract class AbstractControlCar extends EntityRollingStock implements I
 
     public void soundHorn()
     {
-        for (EnumSounds sounds : EnumSounds.values())
+        TrainSound horn = connectedLocomotive == null ? null : connectedLocomotive.getHorn();
+        if (horn != null && horn.addr != null && !horn.addr.isEmpty() && whistleDelay == 0)
         {
-            if (sounds.getEntityClass() != null && sounds.getEntityClass().equals(this.getClass()) && whistleDelay == 0)
-            {
-                CommonUtil.playSound(this, Info.resourceLocation + ":" + sounds.getHornString(), sounds.getHornVolume(), 1.0F);
-                whistleDelay = 65;
-            }
+            CommonUtil.playSound(this, horn.addr, horn.vol, horn.pit);
+            whistleDelay = 65;
         }
         List entities = worldObj.getEntitiesWithinAABB(EntityAnimal.class, ebf.tim.utility.CommonUtil.createAABB(
                 this.posX-20,this.posY-5,this.posZ-20,

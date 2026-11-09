@@ -46,7 +46,7 @@ import train.common.core.handlers.ConfigHandler;
 import train.common.entity.CollisionBox;
 import train.common.entity.digger.EntityRotativeDigger;
 import train.common.entity.digger.EntityRotativeWheel;
-import train.common.entity.rollingStockOld.special.EntityJukeBoxCart;
+import train.common.entity.stock.special.EntityJukeBoxCart;
 import train.common.entity.zeppelin.EntityZeppelinOneBalloon;
 import train.common.entity.zeppelin.EntityZeppelinTwoBalloons;
 import train.common.library.BlockIDs;
@@ -132,11 +132,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public boolean isClient(){
         return true;
-    }
-
-    @Override
-    public void throwAlphaException() {
-        throw new AlphaExpiredException();
     }
 
     @Override

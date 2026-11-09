@@ -101,6 +101,17 @@ return 1;
             new TrainParticle("explode", 2, new double[]{1.6, -0.4, 0.8}),
     };
     }    //Train specific stuff
+
+    public int getAmmountOfCargo() {
+        ItemStack[] inventory = getInventory();
+        if (inventory == null) return 0;
+        int amount = 0;
+        for (ItemStack stack : inventory) {
+            if (stack != null) amount += stack.stackSize;
+        }
+        return amount;
+    }
+
     @Override
     public String transportFuelType(){return "steam";}
     @Override

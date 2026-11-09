@@ -36,13 +36,11 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTankInfo;
 import net.minecraftforge.fluids.IFluidHandler;
 import train.client.render.Bogie;
-import train.client.render.RenderEnum;
 import train.client.render.TransportRenderCache;
 import train.common.Traincraft;
 import train.common.adminbook.ItemAdminBook;
 import train.common.core.handlers.ConfigHandler;
 import train.common.core.handlers.TrainHandler;
-import train.common.core.util.DepreciatedUtil;
 import train.common.entity.TrustedPlayer;
 import train.common.items.ItemChunkLoaderActivator;
 import train.common.items.ItemRollingStock;
@@ -50,7 +48,6 @@ import train.common.items.ItemWrench;
 import train.common.library.Info;
 import train.common.library.TraincraftRegistry;
 import train.common.overlaytexture.OverlayTextureManager;
-import train.common.trainConverter;
 
 import java.util.*;
 
@@ -81,19 +78,16 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     public ArrayList<AbstractTrains> consist;
     public double pullingWeight=0;
     public Integer consistLeadID=null;
-    /**
-     * A reference to EnumTrains containing all spec for this specific train
-     */
+    /** Optional add-on fallback data registered for this entity class. */
     private TrainRecord trainSpec = null;
 
     private TrainRenderRecord render = null;
+    private TrainSoundRecord soundRecord = null;
 
     public TrainRecord getSpec() {
         if(trainSpec==null){
-            trainSpec = Traincraft.instance.traincraftRegistry.getTrainRecord(this.getClass());
-            //fallback if that failed
-            if (trainSpec == null) {
-                Traincraft.instance.traincraftRegistry.findTrainRecordByItem(getCartItem().getItem());
+            if (Traincraft.instance != null && Traincraft.instance.traincraftRegistry != null) {
+                trainSpec = Traincraft.instance.traincraftRegistry.getTrainRecord(this.getClass());
             }
         }
         return trainSpec;
@@ -105,6 +99,14 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
             render = Traincraft.instance.traincraftRegistry.getTrainRenderRecord(this.getClass());
         }
         return render;
+    }
+
+    /** Returns an optional add-on sound record registered for this entity class. */
+    public TrainSoundRecord getSoundRecord() {
+        if (soundRecord == null && Traincraft.instance != null && Traincraft.instance.traincraftRegistry != null) {
+            soundRecord = Traincraft.instance.traincraftRegistry.getTrainSoundRecord(this.getClass());
+        }
+        return soundRecord;
     }
 
     //@Override
@@ -203,11 +205,9 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         this.setFlag(7, shouldChunkLoad);
 
 
-        if (getSpec() != null) {
-            this.setDefaultMass(weightKg()*0.1);
-            this.setSize(0.98f, 1.98f);
-            this.setMinecartName(transportName());
-        }
+        this.setDefaultMass(weightKg() * 0.1);
+        this.setSize(0.98f, 1.98f);
+        this.setMinecartName(transportName());
     }
 
     /**
@@ -356,28 +356,14 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * @param color
      * @see ItemRollingStock
      */
-	/*public void setColor(int color) {
-		if (color==-1 && EnumTrains.getCurrentTrain(getCartItem().getItem()).getColors()!=null){
-			color = getColorFromString(EnumTrains.getCurrentTrain(getCartItem().getItem()).getColors()[0]);
-		}
-		dataWatcher.updateObject(12, color);
-	}*/
-	/*public void setColor(int color) {
-		if (EnumTrains.getCurrentTrain(getCartItem().getItem()).getColors()!=null){
-			if (color==-1 || !ArrayUtils.contains(EnumTrains.getCurrentTrain(getCartItem().getItem()).getColors(),(byte)color)) {
-				color = (EnumTrains.getCurrentTrain(getCartItem().getItem()).getColors()[0]);
-			}
-		}
-		dataWatcher.updateObject(12, color);
-		this.getEntityData().setInteger("color", color);
-	}*/
     public void setColor(int color) {
-        TrainRecord trainRecord = Traincraft.instance.traincraftRegistry.findTrainRecordByItem(getCartItem().getItem());
-        if (trainRecord != null && !trainRecord.getLiveries().isEmpty()) {
-            if (color == -1 || !trainRecord.getLiveries().contains(DepreciatedUtil.getColorAsString(color))) {
-                color = color+1>trainRecord.getLiveries().size()-1?0:color+1;
-            }
-            entity_data.putString("color", trainRecord.getLiveries().get(color).addr);
+        List<TransportSkin> skins = getSpec() == null ? new ArrayList<TransportSkin>() : getSpec().getLiveries();
+        if (skins.isEmpty() && SkinRegistry.get(this) != null) {
+            skins.addAll(SkinRegistry.get(this).values());
+        }
+        if (!skins.isEmpty()) {
+            int next = color < 0 ? 0 : (color + 1) % skins.size();
+            entity_data.putString("color", skins.get(next).addr);
         }
         dataWatcher.updateObject(30, entity_data.toXMLString());
         this.getEntityData().setString("xml", entity_data.toXMLString());
@@ -385,15 +371,19 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     public void setColor(String color) {
         DebugUtil.println(color);
-        if (SkinRegistry.get(this) != null && SkinRegistry.get(this).size()>0) {
-            if (color.equals("-1") || !SkinRegistry.get(this).containsKey(color)) {
-                List<TransportSkin> skins = new ArrayList<>();
-                skins.addAll(SkinRegistry.get(this).values());
-                color = (skins.get(skins.indexOf(color)+1>skins.size()-1?0:skins.indexOf(color)+1).addr);
+        Map<String, TransportSkin> skins = SkinRegistry.get(this);
+        if (skins != null && !skins.isEmpty()) {
+            if ("-1".equals(color) || !skins.containsKey(color)) {
+                color = skins.keySet().iterator().next();
             }
+            TransportSkin skin = skins.get(color);
+            if (skin == null) {
+                return;
+            }
+            entity_data.putString("color", skin.addr);
+        } else {
+            return;
         }
-
-        entity_data.putString("color", SkinRegistry.get(this).get(color).addr);
         dataWatcher.updateObject(30, entity_data.toXMLString());
         this.getEntityData().setString("xml", entity_data.toXMLString());
     }
@@ -405,7 +395,8 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
                 return entity_data.getString("color");
             }
         }
-        return SkinRegistry.get(this).get(0).addr;
+        Map<String, TransportSkin> skins = SkinRegistry.get(this);
+        return skins == null || skins.isEmpty() ? "" : skins.values().iterator().next().addr;
     }
 
     @Override
@@ -923,7 +914,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
 
-    public Item getItem(){return getSpec().getItem();}
+    public Item getItem(){return getSpec() == null ? null : getSpec().getItem();}
 
 
     /**
@@ -942,7 +933,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * Functionality imported from TC5
      */
 
-    public String transportName(){return getSpec().getName();}
+    public String transportName(){return getSpec() == null ? getClass().getSimpleName() : getSpec().getName();}
 
     public String transportcountry(){return "";}
 
@@ -964,15 +955,18 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
     public boolean isFictional(){return false;}
 
-    public String[] additionalItemText(){return getSpec()==null?null:getSpec().getAdditionnalTooltip().split("\n");}
+    public String[] additionalItemText(){
+        if (getSpec() == null || getSpec().getAdditionnalTooltip() == null) return null;
+        return getSpec().getAdditionnalTooltip().split("\n");
+    }
     /**the top speed in km/h for the transport.
      * not used tor rollingstock.*/
-    public float transportTopSpeed(){return getSpec().getMaxSpeed();}
+    public float transportTopSpeed(){return getSpec() == null ? 0 : getSpec().getMaxSpeed();}
     /**the top speed in km/h for the transportwhen moving in reverse, default is half for diesel and 75% for others.
      * not used tor rollingstock.*/
     public float transportTopSpeedReverse(){return this instanceof DieselTrain?transportTopSpeed()*0.5f:transportTopSpeed();}
     /**this is the default value to define the acceleration speed and pulling power of a transport.*/
-    public float transportMetricHorsePower(){return getSpec().getMHP();}
+    public float transportMetricHorsePower(){return getSpec() == null ? 0 : getSpec().getMHP();}
     /**the tractive effort for the transport, this is a fallback if metric horsepower (mhp) is not available*/
     public float transportTractiveEffort(){return 0;}
 
@@ -1034,7 +1028,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
 
     /**defines the weight of the transport.*/
-    public float weightKg(){return (float)getSpec().getMass()*10f;}
+    public float weightKg(){return getSpec() == null ? (float) (defaultMass * 10) : (float)getSpec().getMass()*10f;}
 
         /*
     <h1>Bogies and models</h1>
@@ -1062,7 +1056,10 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         return new float[]{0,-(float)Math.abs(getSpec().getBogieLocoPosition())};}
 
     /**defines the scale to render the model at. Default is 0.0625*/
-    public float[][] getRenderScale(){return new float[][]{getRender().getScale()};}
+    public float[][] getRenderScale(){
+        TrainRenderRecord record = getRender();
+        return record == null ? null : new float[][]{record.getScale()};
+    }
 
     /**defines the scale to render the model at. Default is 0.65*/
     public float getPlayerScale(){return 0.65f;}
@@ -1072,7 +1069,10 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * return new float[][]{{x1,y1,z1},{x2,y2,z2}, etc...};
      * may return null.*/
     @SideOnly(Side.CLIENT)
-    public float[][] modelOffsets(){return new float[][]{getRender().getTrans()};}
+    public float[][] modelOffsets(){
+        TrainRenderRecord record = getRender();
+        return record == null ? null : new float[][]{record.getTrans()};
+    }
 
 
     /**returns the x/y/z rotation each model should render at in degrees, in order with getModels
@@ -1080,7 +1080,10 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * return new float[][]{{x1,y1,z1},{x2,y2,z2}, etc...};
      * may return null.*/
     @SideOnly(Side.CLIENT)
-    public float[][] modelRotations(){return new float[][]{getRender().getRotate()};}
+    public float[][] modelRotations(){
+        TrainRenderRecord record = getRender();
+        return record == null ? null : new float[][]{record.getRotate()};
+    }
 
     /**event is to add skins for the model to the skins registry on mod initialization.
      * this function can be used to register multiple skins, one after another.
@@ -1093,8 +1096,10 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * additionally the addSkin function may be called from any other class at any time.
      * the registerSkins method is only for organization and convenience.*/
     public void registerSkins(){
-        for (String col : getSpec().getColors()) {
-            SkinRegistry.addSkin(this.getClass(), Info.resourceLocation+":"+ col + ".png", col);
+        if (getSpec() != null && getSpec().getColors() != null) {
+            for (String col : getSpec().getColors()) {
+                SkinRegistry.addSkin(this.getClass(), Info.resourceLocation+":"+ col + ".png", col);
+            }
         }
     }
 
@@ -1102,10 +1107,13 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * return the name for the default TransportSkin of the transport.
      */
     public String getDefaultSkin(){
-        if(getSpec().getColors()!=null && getSpec().getColors().size()>0){
-            return SkinRegistry.get(this).get(getSpec().getColors().get(0)).addr;
+        if(getSpec() != null && getSpec().getColors()!=null && !getSpec().getColors().isEmpty()){
+            Map<String, TransportSkin> skins = SkinRegistry.get(this);
+            TransportSkin skin = skins == null ? null : skins.get(getSpec().getColors().get(0));
+            return skin == null ? getSpec().getColors().get(0) : skin.addr;
         }
-        return getSpec().getColors().size()>0?getSpec().getColors().get(0):"";
+        Map<String, TransportSkin> skins = SkinRegistry.get(this);
+        return skins == null || skins.isEmpty() ? "default" : skins.values().iterator().next().addr;
     }
 
     /**returns a list of models to be used for the transport
@@ -1113,10 +1121,11 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      * return new MyModel();
      * may return null. */
     @SideOnly(Side.CLIENT)
-    public ModelBase[] getModel(){return new ModelBase[]{getRender().getModel()};}
+    public ModelBase[] getModel(){
+        TrainRenderRecord record = getRender();
+        return record == null || record.getModel() == null ? new ModelBase[0] : new ModelBase[]{record.getModel()};
+    }
 
-
-    public ArrayList<double[]> getSmokePosition() {return null;}
 
     public int[] getParticleData(int id) {
         switch (id){
@@ -1134,45 +1143,82 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
      *         new TrainParticle(type,density, new double[]{x,y,z}),
      *         etc
      *         };
+     *     default state tries to parse from the TrainRenderRecord if available in case an add-on uses it.
      */
     public TrainParticle[] getEffects(){
-        return null;
+        TrainRenderRecord renderRecord = getRender();
+        if (renderRecord == null) {
+            return null;
+        }
+
+        List<TrainParticle> effects = new ArrayList<>();
+        if (renderRecord.hasSmoke() && renderRecord.getSmokeType() != null && !renderRecord.getSmokeType().isEmpty()) {
+            if (renderRecord.getSmokeFX() != null && renderRecord.getSmokeIterations() > 0) {
+                for (double[] position : renderRecord.getSmokeFX()) {
+                    if (position != null && position.length >= 3) {
+                        effects.add(new TrainParticle(renderRecord.getSmokeType(), renderRecord.getSmokeIterations(), position));
+                    }
+                }
+            }
+        }
+
+        if (renderRecord.hasExplosion() && renderRecord.getExplosionType() != null && !renderRecord.getExplosionType().isEmpty()) {
+            if (renderRecord.getExplosionFX() != null && renderRecord.getExplosionFXIterations() > 0) {
+                for (double[] position : renderRecord.getExplosionFX()) {
+                    if (position != null && position.length >= 3) {
+                        effects.add(new TrainParticle(renderRecord.getExplosionType(), renderRecord.getExplosionFXIterations(), position));
+                    }
+                }
+            }
+        }
+
+        return effects.isEmpty() ? null : effects.toArray(new TrainParticle[effects.size()]);
     }
 
     public ItemStack[] getRecipe(){return null;}
     public int getTier(){return 1;}
 
+    protected TrainSound getRecordHornSound(float defaultVolume) {
+        TrainSoundRecord record = getSoundRecord();
+        if (record == null || record.getHornString() == null) return null;
+        Float volume = record.getHornVolume();
+        return new TrainSound(record.getHornString(), volume == null ? defaultVolume : volume, 1F, 0);
+    }
+
+    protected TrainSound getRecordRunningSound(float defaultVolume, float defaultPitch) {
+        TrainSoundRecord record = getSoundRecord();
+        if (record == null || record.getRunString() == null) return null;
+        Float volume = record.getRunVolume();
+        TrainSound sound = new TrainSound(record.getRunString(), volume == null ? defaultVolume : volume,
+                defaultPitch, record.getRunSoundLength());
+        if (record.getSoundChangeWithSpeed()) sound.enableRunningPitch();
+        return sound;
+    }
+
+    protected TrainSound getRecordIdleSound(float defaultVolume, float defaultPitch) {
+        TrainSoundRecord record = getSoundRecord();
+        if (record == null || record.getIdleString() == null) return null;
+        Float volume = record.getIdleVolume();
+        return new TrainSound(record.getIdleString(), volume == null ? defaultVolume : volume,
+                defaultPitch, record.getIdleSoundLength());
+    }
+
     public TrainSound getHorn(){
-        TrainSoundRecord sound = Traincraft.instance.traincraftRegistry.getTrainSoundRecord(this.getClass());
-        if(sound != null && !sound.getHornString().isEmpty()){
-            return new TrainSound(sound.getHornString(),sound.getHornVolume(),1f, 0);
-        }
-        return null;
+        return getRecordHornSound(1F);
     }
 
     public TrainSound getBell(){
+        if (getSoundRecord() != null && getSoundRecord().getBell() != null) return getSoundRecord().getBell();
         return new TrainSound(Info.resourceLocation + ":bell",0.5f,1f, 0);
     }
 
     public TrainSound getRunningSound(){
-        TrainSoundRecord sound = Traincraft.instance.traincraftRegistry.getTrainSoundRecord(this.getClass());
-        if(sound != null && !sound.getRunString().isEmpty()){
-            if(sound.getSoundChangeWithSpeed()){
-                return new TrainSound(sound.getRunString(), sound.getRunVolume(), 0.4f, sound.getRunSoundLength()).enableRunningPitch();
-            } else {
-                return new TrainSound(sound.getRunString(), sound.getRunVolume(), 0.4f, sound.getRunSoundLength());
-            }
-        }
-        return null;
+        return getRecordRunningSound(1F, 0.4F);
     }
 
 
     public TrainSound getIdleSound(){
-        TrainSoundRecord sound = Traincraft.instance.traincraftRegistry.getTrainSoundRecord(this.getClass());
-        if(sound != null && !sound.getIdleString().isEmpty()){
-            return new TrainSound(sound.getIdleString(),sound.getIdleVolume(),0.001F, sound.getIdleSoundLength());
-        }
-        return null;
+        return getRecordIdleSound(1F, 0.001F);
     }
 
     public World getWorld(){ return worldObj;}
