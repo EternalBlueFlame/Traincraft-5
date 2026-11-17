@@ -3,29 +3,27 @@ package train.client.render.models.blocks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileWindMill;
 
 @SideOnly(Side.CLIENT)
 public class ModelWindMillWheel extends ModelBase {
-	//private IModelCustom modelWindMill;
-	private IModelCustom modelWindMillWheel;
+	private ModelRendererTurbo modelWindMillWheel;
 	private long lastframe;
 	private float wheel;
 	private int l;
 	public float wheel1 = 0.4188790204786391F;
 
 	public ModelWindMillWheel() {
-		modelWindMillWheel = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "wind_mill_wheel.obj"));
+		modelWindMillWheel = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "wind_mill_wheel.obj");
 	}
 
 	public void render() {
-		modelWindMillWheel.renderAll();
+		modelWindMillWheel.render(1);
 	}
 
 	public void render(TileWindMill windMill, double x, double y, double z) {
@@ -35,6 +33,7 @@ public class ModelWindMillWheel extends ModelBase {
 		// Move the object into the correct position on the block (because the OBJ's origin is the center of the object)
 		GL11.glTranslatef((float) x + 0.5f, (float) y + 1.43f, (float) z + 0.5f);
 
+		GL11.glRotatef(90,0,0,1);
 		// Bind the texture, so that OpenGL properly textures our block.
 		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "water_wheel_uv.png"));
 		int j = 0x7A7674;//0x331D14;//0x1C0F0A; //0x5a3222;

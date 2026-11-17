@@ -395,7 +395,7 @@ public class EntityTracksBuilder extends EntityRollingStock {
             if (event.isCanceled()) return false;
         }
         harvestBlock(x, y, z);
-        worldObj.setBlock(x, y, z, replacement, metadata, 3);
+        CommonUtil.setBlock(worldObj, x, y, z, replacement, metadata, 3);
         if (consume) decrStackSize(inventorySlot, 1);
         return true;
     }
@@ -436,7 +436,7 @@ public class EntityTracksBuilder extends EntityRollingStock {
             if (event.isCanceled()) return false;
         }
         harvestBlock(x, y, z);
-        worldObj.setBlockToAir(x, y, z);
+        CommonUtil.setBlockToAir(worldObj, x, y, z);
         ItemStack rail = builderInventory[SLOT_RAIL];
         if (!placeRailAt(this, rail, worldObj, x, y, z)) return false;
         decrStackSize(SLOT_RAIL, 1);
@@ -573,7 +573,7 @@ public class EntityTracksBuilder extends EntityRollingStock {
             if (event.isCanceled()) return false;
         }
         harvestBlock(x, y, z);
-        worldObj.setBlock(x, y, z, replacement, metadata, 3);
+        CommonUtil.setBlock(worldObj, x, y, z, replacement, metadata, 3);
         if (consume) decrStackSize(slot, 1);
         return true;
     }

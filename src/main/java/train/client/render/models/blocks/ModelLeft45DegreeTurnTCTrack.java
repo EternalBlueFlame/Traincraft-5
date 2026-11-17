@@ -3,9 +3,8 @@ package train.client.render.models.blocks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
@@ -14,31 +13,31 @@ import train.common.tile.TileTCRail;
 
 public class ModelLeft45DegreeTurnTCTrack {
 
-    private IModelCustom modelMediumLeft45DegreeTurn;
-    private IModelCustom modelLargeLeft45DegreeTurn;
-    private IModelCustom modelVeryLarge45DegreeTurn;
-    private IModelCustom modelSuperLarge45DegreeTurn;
-    private IModelCustom model9x2045DegreeTurn;
-    private IModelCustom model10x2245DegreeTurn;
+    private ModelRendererTurbo modelMediumLeft45DegreeTurn;
+    private ModelRendererTurbo modelLargeLeft45DegreeTurn;
+    private ModelRendererTurbo modelVeryLarge45DegreeTurn;
+    private ModelRendererTurbo modelSuperLarge45DegreeTurn;
+    private ModelRendererTurbo model9x2045DegreeTurn;
+    private ModelRendererTurbo model10x2245DegreeTurn;
 
     public ModelLeft45DegreeTurnTCTrack(){
-        modelMediumLeft45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_medium_left.obj"));
-        modelLargeLeft45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_large_left.obj"));
-        modelVeryLarge45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_very_large_left.obj"));
-        modelSuperLarge45DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_super_large_left.obj"));
-        model9x2045DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_9x20_left.obj"));
-        model10x2245DegreeTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_45degree_10x22_left.obj"));
+        modelMediumLeft45DegreeTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_45degree_medium_left.obj");
+        modelLargeLeft45DegreeTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_45degree_large_left.obj");
+        modelVeryLarge45DegreeTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_45degree_very_large_left.obj");
+        modelSuperLarge45DegreeTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_45degree_super_large_left.obj");
+        model9x2045DegreeTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_45degree_9x20_left.obj");
+        model10x2245DegreeTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_45degree_10x22_left.obj");
 
     }
 
-    public void renderMedium() {modelMediumLeft45DegreeTurn.renderAll();}
-    public void renderLarge() {modelLargeLeft45DegreeTurn.renderAll();}
-    public void renderVeryLarge() {modelVeryLarge45DegreeTurn.renderAll();}
-    public void renderSuperLarge() {modelSuperLarge45DegreeTurn.renderAll();}
+    public void renderMedium() {modelMediumLeft45DegreeTurn.render(1);}
+    public void renderLarge() {modelLargeLeft45DegreeTurn.render(1);}
+    public void renderVeryLarge() {modelVeryLarge45DegreeTurn.render(1);}
+    public void renderSuperLarge() {modelSuperLarge45DegreeTurn.render(1);}
 
-    public void render9x20() {model9x2045DegreeTurn.renderAll();}
+    public void render9x20() {model9x2045DegreeTurn.render(1);}
 
-    public void render10x22() {model10x2245DegreeTurn.renderAll();}
+    public void render10x22() {model10x2245DegreeTurn.render(1);}
 
 
     public void render(String type,String variant, TileTCRail tcRail, double x, double y, double z) {
@@ -77,6 +76,7 @@ public class ModelLeft45DegreeTurnTCTrack {
             GL11.glTranslatef(0.5f,0,0.5f);
         }
 
+        GL11.glRotatef(90,0,0,1);
         if (type.equals("medium") )
             this.renderMedium();
         if (type.equals("large") )

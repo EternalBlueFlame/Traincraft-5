@@ -3,10 +3,9 @@ package train.client.render.models.blocks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
@@ -14,15 +13,15 @@ import train.common.tile.TileTCRail;
 @SideOnly(Side.CLIENT)
 public class ModelSmallDiagonalStraightTCTrack extends ModelBase {
 
-    private IModelCustom modelSmallDiagonalStraight;
+    private ModelRendererTurbo modelSmallDiagonalStraight;
 
 
     public ModelSmallDiagonalStraightTCTrack() {
-        modelSmallDiagonalStraight = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_straight_diagonal.obj"));
+        modelSmallDiagonalStraight = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_straight_diagonal.obj");
     }
 
     public void render(String type) {
-        modelSmallDiagonalStraight.renderAll();
+        modelSmallDiagonalStraight.render(1);
     }
 
     public void render(String type, TileTCRail tcRail, double x, double y, double z) {
@@ -56,6 +55,7 @@ public class ModelSmallDiagonalStraightTCTrack extends ModelBase {
 
 
 
+        GL11.glRotatef(90,0,0,1);
 
         render(type);
 

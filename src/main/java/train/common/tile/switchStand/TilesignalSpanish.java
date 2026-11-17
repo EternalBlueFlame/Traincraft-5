@@ -67,7 +67,7 @@ public class TilesignalSpanish extends TileSwitch {
                         entityitem.motionZ = (float) rand.nextGaussian() * f3;
                         CommonUtil.spawnEntity(worldObj, entityitem);
                     }
-                    this.worldObj.setBlockToAir(this.xCoord, this.yCoord, this.zCoord);
+                    CommonUtil.setBlockToAir(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
                 }
                 syncTileEntity();
             }

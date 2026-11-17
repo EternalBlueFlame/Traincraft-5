@@ -10,8 +10,6 @@ package train.client.render.models.blocks;
 import fexcraft.tmt.slim.ModelBase;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.client.render.CustomModelRenderer;
 import train.common.library.Info;
@@ -105,7 +103,8 @@ public class ModelStopper extends ModelBase {
 		fexcraft.tmt.slim.Tessellator
 				.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
 		GL11.glColor4f(1, 1, 1, 1);
-		obj.render();
+		GL11.glRotatef(90,0,0,1);
+		obj.render(1);
 		GL11.glPopMatrix();
 	}
 
@@ -123,6 +122,7 @@ public class ModelStopper extends ModelBase {
 		fexcraft.tmt.slim.Tessellator
 				.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
 		GL11.glColor4f(1, 1, 1, 1);
-		obj.render();
+		GL11.glRotatef(90,0,0,1);
+		obj.render(1);
 	}
 }

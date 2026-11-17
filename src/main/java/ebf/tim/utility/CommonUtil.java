@@ -140,6 +140,10 @@ public class CommonUtil {
         return w.setBlockState(new BlockPos(x,y,z), b.getDefaultState());
     }
 
+    public static boolean setBlockToAir(World w, int x, int y, int z){
+        return w.setBlockToAir(x, y, z);
+    }
+
     public static boolean setBlock(World w, int x, int y, int z, Block b, int meta, int flags){
         return w.setBlock(x, y, z, b, meta, flags);
     }

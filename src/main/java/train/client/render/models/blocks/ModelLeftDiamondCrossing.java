@@ -3,22 +3,21 @@ package train.client.render.models.blocks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
 @SideOnly(Side.CLIENT)
 public class ModelLeftDiamondCrossing extends ModelBase{
-    private IModelCustom modelDiamondCrossing = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_diamond_crossing_l.obj"));
+    private ModelRendererTurbo modelDiamondCrossing = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_diamond_crossing_l.obj");
 
 
     public void render(String type) {
         if (type.equals("normal") || type.equals("embedded"))
-            modelDiamondCrossing.renderAll();
+            modelDiamondCrossing.render(1);
     }
 
     public void render(String type, TileTCRail tcRail, double x, double y, double z) {
@@ -41,6 +40,7 @@ public class ModelLeftDiamondCrossing extends ModelBase{
         if (facing == 1 || facing == 3) {
             GL11.glRotatef(90, 0, 1,0);
         }
+        GL11.glRotatef(90,0,0,1);
         this.render(type);
         // Pop this matrix from the stack.
         GL11.glPopMatrix();

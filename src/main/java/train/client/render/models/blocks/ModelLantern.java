@@ -9,19 +9,18 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileLantern;
 
 @SideOnly(Side.CLIENT)
 public class ModelLantern extends ModelBase {
-	private IModelCustom modelLantern;
+	private ModelRendererTurbo modelLantern;
 	private final RenderItem renderItem;
 
 	public ModelLantern() {
-		modelLantern = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "lantern.obj"));
+		modelLantern = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "lantern.obj");
 		renderItem = new RenderItem() {
 
 			@Override
@@ -35,7 +34,7 @@ public class ModelLantern extends ModelBase {
 	}
 
 	public void render() {
-		modelLantern.renderAll();
+		modelLantern.render(1);
 	}
 
 	public void render(TileLantern lantern, double x, double y, double z) {
@@ -57,8 +56,7 @@ public class ModelLantern extends ModelBase {
 		float f3 = (float) (j >> 8 & 255) / 255.0F;
 		float f4 = (float) (j & 255) / 255.0F;
 		GL11.glColor4f(f1 * f2, f1 * f3, f1 * f4,1);
-		// Render the object, using modelTutBox.renderAll();
-
+		GL11.glRotatef(90,0,0,1);
 		this.render();
 		GL11.glColor4f(1, 1, 1,1);
 

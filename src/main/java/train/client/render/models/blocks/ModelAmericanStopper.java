@@ -8,19 +8,18 @@
 package train.client.render.models.blocks;
 
 import fexcraft.tmt.slim.ModelBase;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 
 public class ModelAmericanStopper extends ModelBase {
 
-    private IModelCustom track;
+    private ModelRendererTurbo track;
 
     public ModelAmericanStopper(float scale) {
 
-        track =  AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "american_bumper.obj"));
+        track = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "american_bumper.obj");
 
 
     }
@@ -44,10 +43,11 @@ public class ModelAmericanStopper extends ModelBase {
         GL11.glPushMatrix();
         GL11.glTranslatef(0, 0, 0);
         GL11.glRotatef(90, 0, 1, 0);
+        GL11.glRotatef(90,0,0,1);
         fexcraft.tmt.slim.Tessellator
                 .bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "american_stopper.png"));
         GL11.glColor4f(1, 1, 1, 1);
-        track.renderAll();
+        track.render(1);
         GL11.glPopMatrix();
     }
 
@@ -58,6 +58,6 @@ public class ModelAmericanStopper extends ModelBase {
         fexcraft.tmt.slim.Tessellator
                 .bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "american_stopper.png"));
         GL11.glColor4f(1, 1, 1, 1);
-        track.renderAll();
+        track.render(1);
     }
 }
