@@ -377,7 +377,7 @@ public class EntityRotativeDigger extends Entity implements IInventory {
             double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j + 1)) / i) - 0.125D;
             AxisAlignedBB axisalignedbb = CommonUtil.createAABB(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
 
-            if (world.isAABBInMaterial(axisalignedbb, Material.water)) {
+            if (world.isAABBInMaterial(axisalignedbb, Material.WATER)) {
                 d += 1.0D / i;
             }
         }

@@ -28,6 +28,7 @@ import train.common.library.ItemIDs;
 import train.common.recipes.ShapedTrainRecipes;
 import train.common.recipes.ShapelessTrainRecipe;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -528,7 +529,7 @@ public class GuiRecipeBook extends GuiScreen {
 	}
 
     @Override
-	public void mouseClicked(int x, int y, int par3) {
+	public void mouseClicked(int x, int y, int par3) throws IOException {
 		super.mouseClicked(x, y, par3);
 		searchBar.mouseClicked(x, y, par3);
 	}
@@ -731,7 +732,7 @@ public class GuiRecipeBook extends GuiScreen {
         }
 
         if (itemList.get(0) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(0), var5 + 94 + offset, var6 + 76);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(0), var5 + 94 + offset, var6 + 76,"");
         }
 
         if (itemList.get(1) != null) {
@@ -739,14 +740,14 @@ public class GuiRecipeBook extends GuiScreen {
         }
 
         if (itemList.get(1) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(1), var5 + 113 + offset, var6 + 143);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(1), var5 + 113 + offset, var6 + 143,"");
         }
         if (itemList.get(2) != null) {
             renderItem.renderItemIntoGUI(itemList.get(2), var5 + 148 + offset, var6 + 143);
         }
 
         if (itemList.get(2) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(2), var5 + 148 + offset, var6 + 143);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(2), var5 + 148 + offset, var6 + 143,"");
         }
 
         if (itemList.get(3) != null) {
@@ -754,7 +755,7 @@ public class GuiRecipeBook extends GuiScreen {
         }
 
         if (itemList.get(3) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(3), var5 + 214 + offset, var6 + 143);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(3), var5 + 214 + offset, var6 + 143,"");
         }
 
         if (itemList.get(4) != null) {
@@ -762,7 +763,7 @@ public class GuiRecipeBook extends GuiScreen {
         }
 
         if (itemList.get(4) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(4), var5 + 148 + offset, var6 + 77);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(4), var5 + 148 + offset, var6 + 77,"");
         }
 
         if (itemList.get(5) != null) {
@@ -770,7 +771,7 @@ public class GuiRecipeBook extends GuiScreen {
         }
 
         if (itemList.get(5) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(5), var5 + 184 + offset, var6 + 77);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(5), var5 + 184 + offset, var6 + 77,"");
         }
 
         if (itemList.get(6) != null) {
@@ -778,7 +779,7 @@ public class GuiRecipeBook extends GuiScreen {
         }
 
         if (itemList.get(6) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(6), var5 + 149 + offset, var6 + 110);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(6), var5 + 149 + offset, var6 + 110,"");
         }
 
         if (itemList.get(7) != null) {
@@ -786,7 +787,7 @@ public class GuiRecipeBook extends GuiScreen {
         }
 
         if (itemList.get(7) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(7), var5 + 185 + offset, var6 + 110);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(7), var5 + 185 + offset, var6 + 110,"");
         }
 
         if (itemList.get(8) != null) {
@@ -794,7 +795,7 @@ public class GuiRecipeBook extends GuiScreen {
         }
 
         if (itemList.get(8) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(8), var5 + 94 + offset, var6 + 110);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(8), var5 + 94 + offset, var6 + 110,"");
         }
 
         if (itemList.get(9) != null) {
@@ -802,7 +803,7 @@ public class GuiRecipeBook extends GuiScreen {
         }
 
         if (itemList.get(9) != null) {
-            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(9), var5 + 214 + offset, var6 + 77);
+            renderItem.renderItemOverlayIntoGUI(this.fontRenderer, itemList.get(9), var5 + 214 + offset, var6 + 77,"");
         }
 
         ItemStack output = recipeList.get(page).getOutput();

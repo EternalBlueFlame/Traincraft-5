@@ -1,6 +1,5 @@
 package train.common.blocks;
 
-import cpw.mods.fml.client.registry.RenderingRegistry;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -14,6 +13,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import train.common.Traincraft;
 import train.common.library.ItemIDs;
 import train.common.tile.TileSignal;
@@ -33,7 +33,7 @@ import java.util.Random;
 public class BlockSignal extends BlockContainer {
 
 	public BlockSignal() {
-		super(Material.circuits);
+		super(Material.CIRCUITS);
 		this.setLightLevel(1.0F);
 		setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 2.6F, 0.8F);
 		setCreativeTab(Traincraft.tcTab);

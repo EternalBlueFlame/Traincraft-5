@@ -4,7 +4,6 @@ import ebf.tim.utility.CommonUtil;
 import fexcraft.tmt.slim.Vec3f;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.AxisAlignedBB;
 
 import java.util.List;
 
@@ -172,8 +171,8 @@ public class TileSwitch extends TileRenderFacing {
     public int checkBlockPower(int[] ... offset){
         int signalStrength=0;
         for(int[] o : offset) {
-            signalStrength = world.getBlockPowerInput(xCoord + o[0], yCoord + o[1], zCoord + o[2]);
-            if (signalStrength == 0 && world.isBlockIndirectlyGettingPowered(xCoord + o[0], yCoord + o[1], zCoord + o[2])) {
+            signalStrength = world.getBlockPowerInput(getPos().getX() + o[0],getPos().getY() + o[1],getPos().getZ() + o[2]);
+            if (signalStrength == 0 && world.isBlockIndirectlyGettingPowered(getPos().getX() + o[0],getPos().getY() + o[1],getPos().getZ() + o[2])) {
                 return 15;
             } else if(signalStrength!=0) {
                 return signalStrength;
@@ -185,11 +184,11 @@ public class TileSwitch extends TileRenderFacing {
     public int checkBlockPower(int[] offset, int depth){
         int signalStrength=0;
         for(int o =-1;o<depth-1;o++) {
-            signalStrength = world.getBlockPowerInput(xCoord + offset[0], yCoord + offset[1]+o, zCoord + offset[2]);
+            signalStrength = world.getBlockPowerInput(getPos().getX() + offset[0],getPos().getY() + offset[1]+o,getPos().getZ() + offset[2]);
             if(signalStrength==0){
                 //1.12 use getMaxCurrentStrength
-                signalStrength = CommonUtil.getBlockAt(getWorld(),xCoord + offset[0], yCoord + offset[1]+o, zCoord + offset[2])
-                        .isProvidingStrongPower(getWorld(),xCoord + offset[0], yCoord + offset[1]+o, zCoord + offset[2],0);
+                signalStrength = CommonUtil.getBlockAt(getWorld(),getPos().getX() + offset[0],getPos().getY() + offset[1]+o,getPos().getZ() + offset[2])
+                        .isProvidingStrongPower(getWorld(),getPos().getX() + offset[0],getPos().getY() + offset[1]+o,getPos().getZ() + offset[2],0);
                 //the 0 as the last arg is something with direction i think.
             }
             if(signalStrength!=0) {
@@ -248,9 +247,9 @@ public class TileSwitch extends TileRenderFacing {
             }
         }
 
-        List list = this.worldObj.getEntitiesWithinAABB(EntityMinecart.class, CommonUtil.createAABB(
-                xCoord+start.xCoord, yCoord+start.yCoord, zCoord+start.zCoord,
-                xCoord+end.xCoord, yCoord+end.yCoord, zCoord+end.zCoord));
+        List list = this.world.getEntitiesWithinAABB(EntityMinecart.class, CommonUtil.createAABB(
+                getPos().getX()+start.xCoord,getPos().getY()+start.yCoord,getPos().getZ()+start.zCoord,
+               getPos().getX()+end.xCoord,getPos().getY()+end.yCoord,getPos().getZ()+end.zCoord));
 
         if (list != null && list.size() > 0) {
             for (Object o : list) {
@@ -261,7 +260,7 @@ public class TileSwitch extends TileRenderFacing {
             }
         }
         if(useRedstone) {
-            setStrength(world.getBlockPowerInput(xCoord, yCoord, zCoord),0);
+            setStrength(world.getBlockPowerInput(getPos().getX(),getPos().getY(),getPos().getZ()),0);
         } else {
             setStrength(0,0);
         }

@@ -1,13 +1,13 @@
 package train.common.api;
 
 import buildcraft.api.fuels.BuildcraftFuelRegistry;
+import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import mods.railcraft.api.fuel.FuelManager;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
@@ -44,9 +44,9 @@ public class LiquidManager {
 	public void registerLiquids() {
 		FluidRegistry.registerFluid(DIESEL);
 		FluidRegistry.registerFluid(REFINED_FUEL);
-		BlockIDs.diesel.block = new BlockTraincraftFluid(DIESEL, Material.water).setFlammable(true).setFlammability(5);
+		BlockIDs.diesel.block = new BlockTraincraftFluid(DIESEL, Material.WATER).setFlammable(true).setFlammability(5);
 		DIESEL.setBlock(BlockIDs.diesel.block);
-		BlockIDs.refinedFuel.block = new BlockTraincraftFluid(REFINED_FUEL, Material.water).setFlammable(true).setFlammability(4);
+		BlockIDs.refinedFuel.block = new BlockTraincraftFluid(REFINED_FUEL, Material.WATER).setFlammable(true).setFlammability(4);
 		REFINED_FUEL.setBlock(BlockIDs.refinedFuel.block);
 		FluidContainerRegistry.registerFluidContainer(DIESEL, new ItemStack(ItemIDs.diesel.item), new ItemStack(ItemIDs.emptyCanister.item));
 		FluidContainerRegistry.registerFluidContainer(REFINED_FUEL, new ItemStack(ItemIDs.refinedFuel.item), new ItemStack(ItemIDs.emptyCanister.item));
@@ -134,11 +134,11 @@ public class LiquidManager {
 		FluidStack bucketLiquid = getFluidInContainer(itemstack);
 		ItemStack emptyItem = itemstack.getItem().getContainerItem(itemstack);
 		if ((bucketLiquid != null)) {
-			int used = tank.fill(EnumFacing.UNKNOWN,bucketLiquid, false);
+			int used = tank.fill(bucketLiquid, false);
 			if (used >= bucketLiquid.amount) {
-				tank.fill(EnumFacing.UNKNOWN,bucketLiquid, true);
-				if (itemstack.getItem() == Items.potionitem){
-					return new ItemStack(Items.glass_bottle, 1);
+				tank.fill(bucketLiquid, true);
+				if (itemstack.getItem() == Items.POTIONITEM){
+					return new ItemStack(Items.GLASS_BOTTLE, 1);
 				}
 				inventory.decrStackSize(inventoryIndex, 1);
 				return emptyItem;

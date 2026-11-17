@@ -1,5 +1,6 @@
 package train.client.render;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.entity.Entity;
@@ -14,6 +15,7 @@ public class RenderBogie extends Render {
     private static final ResourceLocation TEXTURE = new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "robot.png");
 
     public RenderBogie() {
+        super(Minecraft.getMinecraft().getRenderManager());
     }
 
 

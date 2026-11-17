@@ -78,7 +78,7 @@ null,
  null, 
 null, 
 null, 
-new ItemStack(Items.potionitem, 1),
+new ItemStack(Items.POTIONITEM, 1),
 new ItemStack(thisItem)
         };
     }

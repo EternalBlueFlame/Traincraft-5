@@ -169,7 +169,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
             liquidInSlot(tenderInvent, loco);
         }
 
-        if (ticksExisted % 5 == 0 && fill(EnumFacing.UNKNOWN, new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
+        if (ticksExisted % 5 == 0 && fill( new FluidStack(FluidRegistry.WATER, 100), false) == 100) {
             FluidStack drain = null;
             blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(worldObj, posX, posY - 1, posZ),
                     CommonUtil.getTileEntity(worldObj, posX, posY + 2, posZ),
@@ -206,7 +206,7 @@ public abstract class Tender extends Freight implements IFluidHandler {
                 }
             }
             if (drain != null) {
-                fill(EnumFacing.UNKNOWN, drain, true);
+                fill( drain, true);
             }
         }
     }

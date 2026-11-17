@@ -197,7 +197,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     public SPacketUpdateTileEntity getDescriptionPacket() {
         NBTTagCompound nbt = new NBTTagCompound();
         this.writeToNBT(nbt);
-        return new S35PacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
+        return new SPacketUpdateTileEntity(this.xCoord, this.yCoord, this.zCoord, 1, nbt);
     }
 
     @Override

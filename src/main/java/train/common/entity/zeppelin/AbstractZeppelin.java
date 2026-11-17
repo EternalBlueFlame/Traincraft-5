@@ -341,7 +341,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 			double d4 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j)) / i) - 0.125D;
 			double d8 = (boundingBox.minY + ((boundingBox.maxY - boundingBox.minY) * (j + 1)) / i) - 0.125D;
 			AxisAlignedBB axisalignedbb = CommonUtil.createAABB(boundingBox.minX, d4, boundingBox.minZ, boundingBox.maxX, d8, boundingBox.maxZ);
-			if (worldObj.isAABBInMaterial(axisalignedbb, Material.water)) {
+			if (worldObj.isAABBInMaterial(axisalignedbb, Material.WATER)) {
 				d += 1.0D / i;
 			}
 		}

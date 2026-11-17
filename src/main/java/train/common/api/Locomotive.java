@@ -899,7 +899,7 @@ public abstract class Locomotive extends Freight implements WirelessTransmitter,
             dataWatcher.updateObject(15, getMaxSpeed());
             dataWatcher.updateObject(26, guiDetailsJSON());
             dataWatcher.updateObject(28, lightingDetailsJSONString());
-            if (this.world.handleMaterialAcceleration(this.boundingBox.expand(0.0D, -0.2000000059604645D, 0.0D).contract(0.001D, 0.001D, 0.001D), Material.water, this) && this.updateTicks % 4 == 0) {
+            if (this.world.handleMaterialAcceleration(this.boundingBox.expand(0.0D, -0.2000000059604645D, 0.0D).contract(0.001D, 0.001D, 0.001D), Material.WATER, this) && this.updateTicks % 4 == 0) {
                 if (!hasDrowned && !world.isRemote && FMLCommonHandler.instance().getMinecraftServerInstance() != null && this.lastEntityRider instanceof EntityPlayer) {
                     FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendChatMsg(new ChatComponentText(((EntityPlayer) this.lastEntityRider).getDisplayName() + " drowned " + this.getTrainOwner() + "'s locomotive"));
                 }

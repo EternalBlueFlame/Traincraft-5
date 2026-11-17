@@ -19,10 +19,10 @@ public class FortyFootContainerRender extends TileEntitySpecialRenderer {
         //This will make your block brightness dependent from surroundings lighting.
 
         TileFortyFootContainer theTileEntity = (TileFortyFootContainer)tileEntity;
-        Block two = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord - 1, tileEntity.zCoord);
-        Block three = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord - 2, tileEntity.zCoord);
-        Block four = CommonUtil.getBlockAt(tileEntity.getWorldObj(), tileEntity.xCoord, tileEntity.yCoord - 3, tileEntity.zCoord);
-               /* int skyLight = tileEntity.getWorldObj().getSkyBlockTypeBrightness(EnumSkyBlock.Block, (int)x,(int)y,(int)z);
+        Block two = CommonUtil.getBlockAt(tileEntity.getWorld(), tileEntity.xCoord, tileEntity.yCoord - 1, tileEntity.zCoord);
+        Block three = CommonUtil.getBlockAt(tileEntity.getWorld(), tileEntity.xCoord, tileEntity.yCoord - 2, tileEntity.zCoord);
+        Block four = CommonUtil.getBlockAt(tileEntity.getWorld(), tileEntity.xCoord, tileEntity.yCoord - 3, tileEntity.zCoord);
+               /* int skyLight = tileEntity.getWorld().getSkyBlockTypeBrightness(EnumSkyBlock.Block, (int)x,(int)y,(int)z);
 
                // skyLight= tileEntity.world.getSkyBlockTypeBrightness(EnumSkyBlock.Sky, (int)x, (int)y, (int)z) << 20 | (skyLight<0?0:skyLight) << 4; OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit,  skyLight % 65536,  skyLight * 0.00001525878f);
                 GL11.glColor4f(1,1,1,1);

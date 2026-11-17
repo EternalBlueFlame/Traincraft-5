@@ -69,7 +69,7 @@ null,
  null, 
 null, 
 null, 
-new ItemStack(Blocks.log, 1),
+new ItemStack(Blocks.LOG, 1),
 new ItemStack(thisItem)
         };
     }

@@ -70,7 +70,7 @@ new ItemStack(ItemIDs.ironChimney.item, 1),
 new ItemStack(ItemIDs.ironCab.item, 1), 
 new ItemStack(ItemIDs.ironBoiler.item, 2), 
 new ItemStack(ItemIDs.ironFirebox.item, 1), 
-new ItemStack(Items.potionitem, 1),
+new ItemStack(Items.POTIONITEM, 1),
 new ItemStack(thisItem)
         };
     }

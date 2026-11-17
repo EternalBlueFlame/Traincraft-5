@@ -58,17 +58,17 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 		 */
 		if (!world.isRemote) {
 			if (updateTicks % 20 == 0) {
-				if (!this.worldObj.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
-					Block block = CommonUtil.getBlockAt(this.worldObj, this.xCoord, this.yCoord + 1, this.zCoord);
+				if (!this.world.isAirBlock(getPos().getX(), getPos().getY() + 1, getPos().getZ())) {
+					Block block = CommonUtil.getBlockAt(this.world, getPos().getX(), getPos().getY() + 1, getPos().getZ());
 					if (block != null) {
-						EntityItem entityitem = new EntityItem(getWorld(), this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(BlockIDs.windMill.block),1));
+						EntityItem entityitem = new EntityItem(getWorld(), getPos().getX(), getPos().getY() + 1, getPos().getZ(), new ItemStack(Item.getItemFromBlock(BlockIDs.windMill.block),1));
 						float f3 = 0.05F;
 						entityitem.motionX = (float) rand.nextGaussian() * f3;
 						entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
 						entityitem.motionZ = (float) rand.nextGaussian() * f3;
-						CommonUtil.spawnEntity(worldObj, entityitem);
+						CommonUtil.spawnEntity(world, entityitem);
 					}
-					CommonUtil.setBlockToAir(this.worldObj, this.xCoord, this.yCoord, this.zCoord);
+					CommonUtil.setBlockToAir(this.world, getPos().getX(), getPos().getY(), getPos().getZ());
 				}
 			}
 
@@ -83,7 +83,7 @@ public class TileWindMill extends Energy implements IEnergyProvider {
                    louter:
                    for(int x=-st;x<en;x++)
                      for(int z=-st;z<en;z++)
-                       if(!this.world.canBlockSeeTheSky(this.xCoord + x, this.yCoord + 1, this.zCoord + z))
+                       if(!this.world.canBlockSeeTheSky(getPos().getX() + x, getPos().getY() + 1, getPos().getZ() + z))
                        {
                            this.standsOpen++;
                            break louter;
@@ -95,7 +95,7 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 			 * Calculate production using wind strength
 			 */
 			if (this.standsOpen == 0 && updateTicks % 4 == 0) {
-				this.energy.receiveEnergy((WorldEvents.windStrength + (Math.round(this.yCoord *0.25f)) * 10), false);
+				this.energy.receiveEnergy((WorldEvents.windStrength + (Math.round(getPos().getY() *0.25f)) * 10), false);
 				if (this.world.isThundering()) {
 					this.energy.receiveEnergy(Math.round(this.energy.getEnergyStored() * 3.5f), false);
 				} else if (this.world.isRaining()) {

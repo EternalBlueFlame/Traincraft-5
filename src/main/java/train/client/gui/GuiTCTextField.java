@@ -7,12 +7,12 @@
 
 package train.client.gui;
 
+import fexcraft.tmt.slim.Tessellator;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.ChatAllowedCharacters;
 import org.lwjgl.opengl.GL11;
 
@@ -121,7 +121,7 @@ public class GuiTCTextField extends Gui {
      */
     public void writeText(String par1Str) {
         String s1 = "";
-        String s2 = ChatAllowedCharacters.filerAllowedCharacters(par1Str);
+        String s2 = ChatAllowedCharacters.filterAllowedCharacters(par1Str);
         int i = Math.min(this.cursorPosition, this.selectionEnd);
         int j = Math.max(this.cursorPosition, this.selectionEnd);
         int k = this.maxStringLength - this.text.length() - (i - this.selectionEnd);
@@ -469,16 +469,16 @@ public class GuiTCTextField extends Gui {
             par4 = i1;
         }
 
-        Tessellator tessellator = Tessellator.instance;
+        Tessellator tessellator = Tessellator.INSTANCE;
         GL11.glColor4f(0.0F, 0.0F, 255.0F, 255.0F);
         GL11.glDisable(GL11.GL_TEXTURE_2D);
         GL11.glEnable(GL11.GL_COLOR_LOGIC_OP);
         GL11.glLogicOp(GL11.GL_OR_REVERSE);
-        tessellator.startDrawingQuads();
-        tessellator.addVertex((double) par1, (double) par4, 0.0D);
-        tessellator.addVertex((double) par3, (double) par4, 0.0D);
-        tessellator.addVertex((double) par3, (double) par2, 0.0D);
-        tessellator.addVertex((double) par1, (double) par2, 0.0D);
+        tessellator.startDrawing(GL11.GL_QUADS);
+        tessellator.addVertex((float) par1, (float) par4, 0.0f);
+        tessellator.addVertex((float) par3, (float) par4, 0.0f);
+        tessellator.addVertex((float) par3, (float) par2, 0.0f);
+        tessellator.addVertex((float) par1, (float) par2, 0.0f);
         tessellator.draw();
         GL11.glDisable(GL11.GL_COLOR_LOGIC_OP);
         GL11.glEnable(GL11.GL_TEXTURE_2D);
