@@ -4,30 +4,25 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
 @SideOnly(Side.CLIENT)
-public class ModelLargeSlopeTCTrack extends ModelBase {
-	private IModelCustom modeltrack;
-
-	private IModelCustom modelLargeSlopeWood;
-	private IModelCustom modelLargeSlopeBallast;
+public class ModelLargeSlopeTCTrack {
+	private ModelRendererTurbo modeltrack;
+	private ModelRendererTurbo modelLargeSlopeWood;
+	private ModelRendererTurbo modelLargeSlopeBallast;
 	private String[] ballastTexture = new String[2];
 
 
 	public ModelLargeSlopeTCTrack() {
-		modeltrack = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_slope_long.obj"));
-		modelLargeSlopeWood = AdvancedModelLoader
-				.loadModel(new ResourceLocation(Info.modelPrefix + "supports_wood_long.obj"));
-		modelLargeSlopeBallast = AdvancedModelLoader
-				.loadModel(new ResourceLocation(Info.modelPrefix + "supports_ballast_long.obj"));
+		modeltrack = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_slope_long.obj");
+		modelLargeSlopeWood = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "supports_wood_long.obj");
+		modelLargeSlopeBallast = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "supports_ballast_long.obj");
 	}
 
 
@@ -45,48 +40,49 @@ public class ModelLargeSlopeTCTrack extends ModelBase {
 			ballastTexture[1] = ballast;
 
 		}
+        GL11.glRotatef(90,0,0,1);
 
 
 		if(type.equals("wood")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_slope.png"));
-			modelLargeSlopeWood.renderAll();
+			modelLargeSlopeWood.render(1);
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
-			modeltrack.renderAll();}
+			modeltrack.render(1);}
 		if(type.equals("gravel")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation("minecraft", "textures/blocks/gravel.png"));
-			modelLargeSlopeBallast.renderAll();
+			modelLargeSlopeBallast.render(1);
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
-			modeltrack.renderAll();}
+			modeltrack.render(1);}
 		if(type.equals("ballast")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/blocks/ballast_test.png"));
-			modelLargeSlopeBallast.renderAll();
+			modelLargeSlopeBallast.render(1);
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
-			modeltrack.renderAll();}
+			modeltrack.render(1);}
 		if (type.equals("snow")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, "textures/blocks/snowgravel.png"));
-			modelLargeSlopeBallast.renderAll();
+			modelLargeSlopeBallast.render(1);
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
-			modeltrack.renderAll();
+			modeltrack.render(1);
 		}
 		if (type.equals("dynamic")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
-			modeltrack.renderAll();
+			modeltrack.render(1);
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(ballastTexture[0],  "textures/blocks/" + ballastTexture[1] +".png"));
 			float r = (float)(ballastColour >> 16 & 255) / 255.0F;
 			float g = (float)(ballastColour >> 8 & 255) / 255.0F;
 			float b = (float)(ballastColour & 255) / 255.0F;
 			GL11.glColor4f(r,g,b,1);
-			modelLargeSlopeBallast.renderAll();
+			modelLargeSlopeBallast.render(1);
 		}
 		if (type.equals("embedded_dynamic")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
-			modeltrack.renderAll();
+			modeltrack.render(1);
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(ballastTexture[0],  "textures/blocks/" + ballastTexture[1] +".png"));
 			float r = (float)(ballastColour >> 16 & 255) / 255.0F;
 			float g = (float)(ballastColour >> 8 & 255) / 255.0F;
 			float b = (float)(ballastColour & 255) / 255.0F;
 			GL11.glColor4f(r,g,b,1);
-			modelLargeSlopeBallast.renderAll();
+			modelLargeSlopeBallast.render(1);
 		}
 	}
 

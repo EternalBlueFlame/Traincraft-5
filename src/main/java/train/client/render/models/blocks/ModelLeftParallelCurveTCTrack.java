@@ -3,10 +3,9 @@ package train.client.render.models.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
@@ -14,23 +13,23 @@ import train.common.tile.TileTCRail;
 @SideOnly(Side.CLIENT)
 public class ModelLeftParallelCurveTCTrack extends ModelBase {
 
-    private IModelCustom modelSmallLeftParallelCurve;
-    private IModelCustom modelMediumLeftParallelCurve;
-    private IModelCustom modelLargeLeftParallelCurve;
-    private IModelCustom model20x2SCurveLeft;
+    private ModelRendererTurbo modelSmallLeftParallelCurve;
+    private ModelRendererTurbo modelMediumLeftParallelCurve;
+    private ModelRendererTurbo modelLargeLeftParallelCurve;
+    private ModelRendererTurbo model20x2SCurveLeft;
 
     public ModelLeftParallelCurveTCTrack() {
-        modelSmallLeftParallelCurve = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_s_left.obj"));
-        modelMediumLeftParallelCurve = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_m_left.obj"));
-        modelLargeLeftParallelCurve = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_parallel_l_left.obj"));
-        model20x2SCurveLeft = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "20x2_s_curve_left.obj"));
+        modelSmallLeftParallelCurve = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_parallel_s_left.obj");
+        modelMediumLeftParallelCurve = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_parallel_m_left.obj");
+        modelLargeLeftParallelCurve = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_parallel_l_left.obj");
+        model20x2SCurveLeft = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "20x2_s_curve_left.obj");
     }
 
-    public void renderSmall() {modelSmallLeftParallelCurve.renderAll();}
-    public void renderMedium() {modelMediumLeftParallelCurve.renderAll();}
-    public void renderLarge() {modelLargeLeftParallelCurve.renderAll();}
+    public void renderSmall() {modelSmallLeftParallelCurve.render(1);}
+    public void renderMedium() {modelMediumLeftParallelCurve.render(1);}
+    public void renderLarge() {modelLargeLeftParallelCurve.render(1);}
 
-    public void render20x2() {model20x2SCurveLeft.renderAll();}
+    public void render20x2() {model20x2SCurveLeft.render(1);}
 
     public void render(String type, String variant, TileTCRail tcRail, double x, double y, double z) {
         render( type, variant, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1 );
@@ -76,6 +75,7 @@ public class ModelLeftParallelCurveTCTrack extends ModelBase {
             GL11.glTranslatef(2.0f, 0.0f, 0);
 
         }
+        GL11.glRotatef(90,0,0,1);
 
         if(type.equals("small"))this.renderSmall();
         if(type.equals("medium"))this.renderMedium();

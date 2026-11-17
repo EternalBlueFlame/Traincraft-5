@@ -10,26 +10,37 @@ package train.client.render.models.blocks;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 
 public class ModelLights extends ModelBase {
-	private IModelCustom present;
+	private ModelRendererTurbo branch;
+	private ModelRendererTurbo bulb;
+	private ModelRendererTurbo plane;
 	
 	public ModelLights() {
-		present = new AdvancedModelLoader().loadModel(new ResourceLocation(Info.modelPrefix + "lights2.obj"));
+		String model = Info.modelPrefix + "lights2.obj";
+		branch = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(model, "Branch_1");
+		bulb = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(model, "Bulb_1");
+		plane = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(model, "Plane_1");
 	}
 	
 	public void render(String partname) {
-		present.renderPart(partname);
+		if ("Branch_1".equals(partname)) {
+			branch.render();
+		} else if ("Bulb_1".equals(partname)) {
+			bulb.render();
+		} else if ("Plane_1".equals(partname)) {
+			plane.render();
+		}
 	}
 	
 	public void render(int color) {
 		//GL11.glEnable(GL11.GL_LIGHTING);
 		GL11.glPushMatrix();
 		GL11.glRotatef(90f, 0, 1, 0);
+		GL11.glRotatef(90,0,0,1);
 		fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "lights3.png"));
 		render("Branch_1");
 		Minecraft.getMinecraft().entityRenderer.disableLightmap(1D);

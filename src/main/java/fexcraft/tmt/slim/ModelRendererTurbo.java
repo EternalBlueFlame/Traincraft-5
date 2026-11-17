@@ -1225,6 +1225,23 @@ public class ModelRendererTurbo {
         return this;
     }
 
+    public ModelRendererTurbo addObj(String file, String group){
+        ModelPoolEntry entry = ModelPool.addFile(file, ModelPool.OBJ);
+        if(entry == null){
+            return this;
+        }
+        TextureGroup textureGroup = entry.textures.get(group);
+        if(textureGroup != null){
+            if(mirror){
+                for(TexturedPolygon face : textureGroup.poly){
+                    face.flipFace();
+                }
+            }
+            faces.addAll(textureGroup.poly);
+        }
+        return this;
+    }
+
     public void addObjF(String file){
         try{
             addModelF(file, ModelPool.OBJ);

@@ -3,37 +3,36 @@ package train.client.render.models.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
 @SideOnly(Side.CLIENT)
 public class ModelTwoWaysCrossingTCTrack extends ModelBase {
-	private IModelCustom modelTwoWaysCrossing;
-	private IModelCustom modelDoubleDiamondCrossing;
-	private IModelCustom modelDiagonalTwoWaysCrossing;
-	private IModelCustom modelFourWaysCrossing;
+	private ModelRendererTurbo modelTwoWaysCrossing;
+	private ModelRendererTurbo modelDoubleDiamondCrossing;
+	private ModelRendererTurbo modelDiagonalTwoWaysCrossing;
+	private ModelRendererTurbo modelFourWaysCrossing;
 
 	public ModelTwoWaysCrossingTCTrack() {
-		modelTwoWaysCrossing = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_x.obj"));
-		modelDoubleDiamondCrossing = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_double_diamond_crossing.obj"));
-		modelDiagonalTwoWaysCrossing = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_diagonal_crossing.obj"));
-		modelFourWaysCrossing = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_universal_crossing.obj"));
+		modelTwoWaysCrossing = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_x.obj");
+		modelDoubleDiamondCrossing = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_double_diamond_crossing.obj");
+		modelDiagonalTwoWaysCrossing = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_diagonal_crossing.obj");
+		modelFourWaysCrossing = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_universal_crossing.obj");
 	}
 
 	public void render(String type) {
 	if (type.equals("normal_crossing") || type.equals("embedded_crossing"))
-		modelTwoWaysCrossing.renderAll();
+		modelTwoWaysCrossing.render(1);
 	else if(type.equals("normal_diamond") || type.equals("embedded_diamond"))
-		modelDoubleDiamondCrossing.renderAll();
+		modelDoubleDiamondCrossing.render(1);
 	else if (type.equals("normal_diagonal_crossing") || type.equals("embedded_diagonal_crossing"))
-		modelDiagonalTwoWaysCrossing.renderAll();
+		modelDiagonalTwoWaysCrossing.render(1);
 	else if (type.equals("normal_universal_crossing") || type.equals("embedded_universal_crossing"))
-		modelFourWaysCrossing.renderAll();
+		modelFourWaysCrossing.render(1);
 	}
 
 
@@ -57,6 +56,7 @@ public class ModelTwoWaysCrossingTCTrack extends ModelBase {
 
 		GL11.glColor4f(r, g, b, a);
 		//GL11.glScalef(0.5f, 0.5f, 0.5f);
+		GL11.glRotatef(90,0,0,1);
 
 		if (type.contains("diamond"))
 			if (facing == 1 || facing == 3) {

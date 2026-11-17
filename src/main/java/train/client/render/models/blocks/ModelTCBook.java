@@ -12,21 +12,35 @@ import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileBook;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ModelTCBook extends ModelBase {
-	private IModelCustom book;
+	private final Map<String, ModelRendererTurbo> bookParts = new HashMap<String, ModelRendererTurbo>();
 	
 	private final GameSettings settings = Minecraft.getMinecraft().gameSettings;
 	
 	float rot = 0.0f;
 	
 	public ModelTCBook() {
-		book = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "book2.obj"));
+		String model = Info.modelPrefix + "book2.obj";
+		String[] parts = {"back", "divider_bottom", "cover_left", "cover_right", "page_left", "page_right", "divider_top", "back_logo"};
+		for (String part : parts) {
+			bookParts.put(part, new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(model, part));
+		}
+	}
+
+	private void renderPart(String part) {
+		ModelRendererTurbo modelPart = bookParts.get(part);
+		if (modelPart != null) {
+			GL11.glRotatef(90,0,0,1);
+			modelPart.render();
+		}
 	}
 	
 	public void render(int pages) {
@@ -34,44 +48,44 @@ public class ModelTCBook extends ModelBase {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.0f, 0.0f, 0.0f);
 		GL11.glScalef(1.0f+(pages*0.158f), 1.0f, 1.0f);
-		book.renderPart("back");
+		renderPart("back");
 		GL11.glPopMatrix();
 		
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.0f, 0.0f, 0.0f);
 		GL11.glScalef(1.0f, 1.0f, 1.0f);
-		book.renderPart("divider_bottom");
+		renderPart("divider_bottom");
 		GL11.glPopMatrix();
 		
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.0f-((pages-1)*0.005f), 0.0f, 0.0f);
 		GL11.glScalef(1.0f, 1.0f, 1.0f);
-		book.renderPart("cover_left");
+		renderPart("cover_left");
 		GL11.glPopMatrix();
 		
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.0f+((pages-1)*0.005f), 0.0f, 0.0f);
 		GL11.glScalef(1.0f, 1.0f, 1.0f);
-		book.renderPart("cover_right");
+		renderPart("cover_right");
 		GL11.glPopMatrix();
 		
 		for (int i = 0; i < pages; i++) {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0.0f+((pages-i)*0.005f), 0.0f, 0.0f);
 			GL11.glScalef(1.0f, 1.0f, 1.0f);
-			book.renderPart("page_left");
+			renderPart("page_left");
 			GL11.glPopMatrix();
 			
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0.0f-((pages-i)*0.005f), 0.0f, 0.0f);
 			GL11.glScalef(1.0f, 1.0f, 1.0f);
-			book.renderPart("page_right");
+			renderPart("page_right");
 			GL11.glPopMatrix();
 			
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0.0f+(i*0.005f), 0.0f, 0.0f);
 			GL11.glScalef(0.5f, 1.0f, 1.0f);
-			book.renderPart("divider_top");
+			renderPart("divider_top");
 			GL11.glPopMatrix();
 		}
 		
@@ -79,7 +93,7 @@ public class ModelTCBook extends ModelBase {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0.0f, 0.0f, 0.0f);
 			GL11.glScalef(1.0f, 1.0f, 1.0f);
-			book.renderPart("back_logo");
+			renderPart("back_logo");
 			GL11.glPopMatrix();
 		}
 	}
@@ -90,28 +104,28 @@ public class ModelTCBook extends ModelBase {
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.0f, 0.0f, 0.0f);
 		GL11.glScalef(1.0f+(pages*0.158f), 1.0f, 1.0f);
-		book.renderPart("back");
+		renderPart("back");
 		GL11.glPopMatrix();
 		
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.4f+pages*0.0012f, 0.0f, -0.478f+((pages-pages/10)*0.007f));
 		GL11.glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 		GL11.glScalef(1.0f, 1.0f, 1.0f);
-		book.renderPart("divider_bottom");
+		renderPart("divider_bottom");
 		GL11.glPopMatrix();
 		
 		GL11.glPushMatrix();
 		GL11.glTranslatef(-0.51f-((pages-1)*0.0048f), 0.0f, -0.47f);
 		GL11.glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
 		GL11.glScalef(1.0f, 1.0f, 1.0f);
-		book.renderPart("cover_left");
+		renderPart("cover_left");
 		GL11.glPopMatrix();
 		
 		GL11.glPushMatrix();
 		GL11.glTranslatef(0.51f+((pages-1)*0.0048f), 0.0f, -0.47f);
 		GL11.glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
 		GL11.glScalef(1.0f, 1.0f, 1.0f);
-		book.renderPart("cover_right");
+		renderPart("cover_right");
 		GL11.glPopMatrix();
 		
 		for (int i = 0; i < pages; i++) {
@@ -121,14 +135,14 @@ public class ModelTCBook extends ModelBase {
     		//GL11.glTranslatef(-0.51889f-i*0.0047898f+(float)(Math.log(pages-i)/49.76f), 0.0f, -0.477f+((pages-i)*0.007f)); + rotation
     		GL11.glRotatef(-90.0f/*+((pages-i)*0.155f)*/, 0.0f, 1.0f, 0.0f);
     		GL11.glDisable(GL11.GL_LIGHTING);
-    		book.renderPart("page_left");
+			renderPart("page_left");
     		GL11.glPopMatrix();
     		
     		GL11.glPushMatrix();
     		GL11.glTranslatef(0.50889f+i*0.0047898f-(float)(Math.log(pages-i)/102.5f), 0.0f, -0.477f+((pages-i)*0.007f));
     		GL11.glScalef(1.0f, 1.0f, 1.0f);
     		GL11.glRotatef(90.0f/*-((pages-i)*0.155f)*/, 0.0f, 1.0f, 0.0f);
-    		book.renderPart("page_right");
+			renderPart("page_right");
     		GL11.glPopMatrix();
 		}
 		
@@ -147,7 +161,7 @@ public class ModelTCBook extends ModelBase {
 			GL11.glPushMatrix();
 			GL11.glTranslatef(0.0f, 0.0f, 0.0f);
 			GL11.glScalef(1.0f, 1.0f, 1.0f);
-			book.renderPart("back_logo");
+			renderPart("back_logo");
 			GL11.glPopMatrix();
 		}
 	}

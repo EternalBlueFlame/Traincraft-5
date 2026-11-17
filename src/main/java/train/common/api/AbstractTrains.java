@@ -1185,6 +1185,13 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
         return new TrainSound(record.getHornString(), volume == null ? defaultVolume : volume, 1F, 0);
     }
 
+    protected TrainSound getRecordBellSound(float defaultVolume) {
+        TrainSoundRecord record = getSoundRecord();
+        if (record == null || record.getBellString() == null) return null;
+        Float volume = record.getBellVolume();
+        return new TrainSound(record.getBellString(), volume == null ? defaultVolume : volume, 1F, 0);
+    }
+
     protected TrainSound getRecordRunningSound(float defaultVolume, float defaultPitch) {
         TrainSoundRecord record = getSoundRecord();
         if (record == null || record.getRunString() == null) return null;
@@ -1208,8 +1215,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
     }
 
     public TrainSound getBell(){
-        if (getSoundRecord() != null && getSoundRecord().getBell() != null) return getSoundRecord().getBell();
-        return new TrainSound(Info.resourceLocation + ":bell",0.5f,1f, 0);
+        return getRecordBellSound(0.5f);
     }
 
     public TrainSound getRunningSound(){

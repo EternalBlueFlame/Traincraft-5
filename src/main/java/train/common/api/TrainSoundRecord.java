@@ -9,11 +9,15 @@ public interface TrainSoundRecord {
 
     String getHornString();
 
+    String getBellString();
+
     String getRunString();
 
     String getIdleString();
 
     Float getHornVolume();
+
+    Float getBellVolume();
 
     Float getRunVolume();
 

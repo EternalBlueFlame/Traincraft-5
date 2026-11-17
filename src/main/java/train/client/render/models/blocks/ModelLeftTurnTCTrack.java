@@ -3,10 +3,9 @@ package train.client.render.models.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
@@ -14,38 +13,38 @@ import train.common.tile.TileTCRail;
 @SideOnly(Side.CLIENT)
 public class ModelLeftTurnTCTrack extends ModelBase {
 
-	private IModelCustom model1XLeftTurn;
-	private IModelCustom modelMediumLeftTurn;
-	private IModelCustom modelLargeLeftTurn;
-	private IModelCustom modelVeryLargeLeftTurn;
-	private IModelCustom modelSuperLargeLeftTurn;
-	private IModelCustom model29XLeftTurn;
-	private IModelCustom model32XLeftTurn;
+	private ModelRendererTurbo model1XLeftTurn;
+	private ModelRendererTurbo modelMediumLeftTurn;
+	private ModelRendererTurbo modelLargeLeftTurn;
+	private ModelRendererTurbo modelVeryLargeLeftTurn;
+	private ModelRendererTurbo modelSuperLargeLeftTurn;
+	private ModelRendererTurbo model29XLeftTurn;
+	private ModelRendererTurbo model32XLeftTurn;
 
 	public ModelLeftTurnTCTrack() {
-		model1XLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_1x.obj"));
-		modelMediumLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_medium.obj"));
-		modelLargeLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_big.obj"));
-		modelVeryLargeLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_very_big.obj"));
-		modelSuperLargeLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_super_big.obj"));
-		model29XLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_29x.obj"));
-		model32XLeftTurn = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_curve_32x.obj"));
+		model1XLeftTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_1x.obj");
+		modelMediumLeftTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_medium.obj");
+		modelLargeLeftTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_big.obj");
+		modelVeryLargeLeftTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_very_big.obj");
+		modelSuperLargeLeftTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_super_big.obj");
+		model29XLeftTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_29x.obj");
+		model32XLeftTurn = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_curve_32x.obj");
 	}
 
-	public void render1X() {model1XLeftTurn.renderAll();}
+	public void render1X() {model1XLeftTurn.render(1);}
 	public void renderMedium() {
-		modelMediumLeftTurn.renderAll();
+		modelMediumLeftTurn.render(1);
 	}
 	public void renderLarge() {
-		modelLargeLeftTurn.renderAll();
+		modelLargeLeftTurn.render(1);
 	}
 	public void renderVeryLarge() {
-		modelVeryLargeLeftTurn.renderAll();
+		modelVeryLargeLeftTurn.render(1);
 	}
-	public void renderSuperLarge() { modelSuperLargeLeftTurn.renderAll();}
+	public void renderSuperLarge() { modelSuperLargeLeftTurn.render(1);}
 
-	public void render29X() {model29XLeftTurn.renderAll();}
-	public void render32X() {model32XLeftTurn.renderAll();}
+	public void render29X() {model29XLeftTurn.render(1);}
+	public void render32X() {model32XLeftTurn.render(1);}
 
 	public void render(String type, TileTCRail tcRail, double x, double y, double z) {
 		render( type, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1);
@@ -132,6 +131,7 @@ public class ModelLeftTurnTCTrack extends ModelBase {
 			if (type.equals("32x") || type.equals("embedded_32x"))
 				GL11.glTranslatef(0.5f,0,5.5f);
 		}
+		GL11.glRotatef(90,0,0,1);
 		if(type.equals("1x") || type.equals("embedded_1x"))this.render1X();
 		if(type.equals("medium") || type.equals("embedded_medium") )this.renderMedium();
 		if(type.equals("large") || type.equals("embedded_large"))this.renderLarge();

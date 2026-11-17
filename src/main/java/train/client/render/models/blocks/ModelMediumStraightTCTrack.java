@@ -3,25 +3,24 @@ package train.client.render.models.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
 @SideOnly(Side.CLIENT)
 public class ModelMediumStraightTCTrack extends ModelBase {
-	private IModelCustom modelMediumStraight;
-	private IModelCustom modelEmbeddedMediumStraight;
+	private ModelRendererTurbo modelMediumStraight;
+	private ModelRendererTurbo modelEmbeddedMediumStraight;
 
 	public ModelMediumStraightTCTrack() {
-		modelMediumStraight = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_normal.obj"));
+		modelMediumStraight = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_normal.obj");
 	}
 
 	public void render(String type) {
-		modelMediumStraight.renderAll();
+		modelMediumStraight.render(1);
 	}
 
 	public void render(String type, TileTCRail tcRail, double x, double y, double z) {
@@ -51,6 +50,7 @@ public class ModelMediumStraightTCTrack extends ModelBase {
 			GL11.glRotatef(180, 0, 1, 0);
 		}
 
+        GL11.glRotatef(90,0,0,1);
 		for (int i = 0; i < 3; i++) {
 			render(type);
 			GL11.glTranslatef(0.0f, 0.0f, -1.0f);

@@ -3,90 +3,89 @@ package train.client.render.models.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
 @SideOnly(Side.CLIENT)
 public class ModelRightSwitchTCTrack extends ModelBase {
-	private IModelCustom modelMediumRightSwitchActive;
-	private IModelCustom modelMediumRightSwitchInactive;
-	private IModelCustom modelMediumRightParallelSwitchInactive;
-	private IModelCustom modelMediumRightParallelSwitchActive;
+	private ModelRendererTurbo modelMediumRightSwitchActive;
+	private ModelRendererTurbo modelMediumRightSwitchInactive;
+	private ModelRendererTurbo modelMediumRightParallelSwitchInactive;
+	private ModelRendererTurbo modelMediumRightParallelSwitchActive;
 
-	private IModelCustom modelLargeRightParallelSwitchInactive;
-	private IModelCustom modelLargeRightParallelSwitchActive;
-	private IModelCustom modelLargeRightSwitchActive;
-	private IModelCustom modelLargeRightSwitchInactive;
+	private ModelRendererTurbo modelLargeRightParallelSwitchInactive;
+	private ModelRendererTurbo modelLargeRightParallelSwitchActive;
+	private ModelRendererTurbo modelLargeRightSwitchActive;
+	private ModelRendererTurbo modelLargeRightSwitchInactive;
 
-	private IModelCustom modelVeryLargeRightSwitchActive;
-	private IModelCustom modelVeryLargeRightSwitchInactive;
+	private ModelRendererTurbo modelVeryLargeRightSwitchActive;
+	private ModelRendererTurbo modelVeryLargeRightSwitchInactive;
 
-	private IModelCustom modelMediumRight45degreeSwitchActive;
-	private IModelCustom modelMediumRight45degreeSwitchInActive;
+	private ModelRendererTurbo modelMediumRight45degreeSwitchActive;
+	private ModelRendererTurbo modelMediumRight45degreeSwitchInActive;
 
-	private IModelCustom modelLargeRight45degreeSwitchActive;
-	private IModelCustom modelLargeRight45degreeSwitchInActive;
+	private ModelRendererTurbo modelLargeRight45degreeSwitchActive;
+	private ModelRendererTurbo modelLargeRight45degreeSwitchInActive;
 
 	public ModelRightSwitchTCTrack() {
-		modelMediumRightSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_small_active.obj"));
-		modelMediumRightSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_small_inactive.obj"));
-		modelMediumRightParallelSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_inactive.obj"));
-		modelMediumRightParallelSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_active.obj"));
-		modelLargeRightParallelSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_large_inactive.obj"));
-		modelLargeRightParallelSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_parallel_large_active.obj"));
-		modelLargeRightSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_medium_active.obj"));
-		modelLargeRightSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_medium_inactive.obj"));
-		modelMediumRight45degreeSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_medium_45degree_active.obj"));
-		modelMediumRight45degreeSwitchInActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_medium_45degree_inactive.obj"));
-		modelLargeRight45degreeSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_large_45degree_active.obj"));
-		modelLargeRight45degreeSwitchInActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_large_45degree_inactive.obj"));
-		modelVeryLargeRightSwitchActive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_very_large_active.obj"));
-		modelVeryLargeRightSwitchInactive = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_switch_very_large.obj"));
+		modelMediumRightSwitchActive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_small_active.obj");
+		modelMediumRightSwitchInactive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_small_inactive.obj");
+		modelMediumRightParallelSwitchInactive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_parallel_inactive.obj");
+		modelMediumRightParallelSwitchActive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_parallel_active.obj");
+		modelLargeRightParallelSwitchInactive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_parallel_large_inactive.obj");
+		modelLargeRightParallelSwitchActive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_parallel_large_active.obj");
+		modelLargeRightSwitchActive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_medium_active.obj");
+		modelLargeRightSwitchInactive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_medium_inactive.obj");
+		modelMediumRight45degreeSwitchActive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_medium_45degree_active.obj");
+		modelMediumRight45degreeSwitchInActive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_medium_45degree_inactive.obj");
+		modelLargeRight45degreeSwitchActive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_large_45degree_active.obj");
+		modelLargeRight45degreeSwitchInActive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_large_45degree_inactive.obj");
+		modelVeryLargeRightSwitchActive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_very_large_active.obj");
+		modelVeryLargeRightSwitchInactive = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_switch_very_large.obj");
 	}
 	public void renderMediumActive() {
-		modelMediumRightSwitchActive.renderAll();
+		modelMediumRightSwitchActive.render(1);
 	}
 	public void renderMediumInactive() {
-		modelMediumRightSwitchInactive.renderAll();
+		modelMediumRightSwitchInactive.render(1);
 	}
 	public void renderMediumParallelInactive() {
-		modelMediumRightParallelSwitchInactive.renderAll();
+		modelMediumRightParallelSwitchInactive.render(1);
 	}
 	public void renderMediumParallelActive() {
-		modelMediumRightParallelSwitchActive.renderAll();
+		modelMediumRightParallelSwitchActive.render(1);
 	}
 	public void renderLargeParallelInactive() {
-		modelLargeRightParallelSwitchInactive.renderAll();
+		modelLargeRightParallelSwitchInactive.render(1);
 	}
-	public void renderLargeParallelActive() { modelLargeRightParallelSwitchActive.renderAll();}
+	public void renderLargeParallelActive() { modelLargeRightParallelSwitchActive.render(1);}
 	public void renderLarge90Active() {
-		modelLargeRightSwitchActive.renderAll();
+		modelLargeRightSwitchActive.render(1);
 	}
 	public void renderLarge90Inactive() {
-		modelLargeRightSwitchInactive.renderAll();
+		modelLargeRightSwitchInactive.render(1);
 	}
 	public void renderVeryLarge90Active() {
-		modelVeryLargeRightSwitchActive.renderAll();
+		modelVeryLargeRightSwitchActive.render(1);
 	}
 	public void renderVeryLarge90Inactive() {
-		modelVeryLargeRightSwitchInactive.renderAll();
+		modelVeryLargeRightSwitchInactive.render(1);
 	}
 	public void renderMedium45degreeActive() {
-		modelMediumRight45degreeSwitchActive.renderAll();
+		modelMediumRight45degreeSwitchActive.render(1);
 	}
 	public void renderMedium45degreeInActive() {
-		modelMediumRight45degreeSwitchInActive.renderAll();
+		modelMediumRight45degreeSwitchInActive.render(1);
 	}
 	public void renderLarge45degreeActive() {
-		modelLargeRight45degreeSwitchActive.renderAll();
+		modelLargeRight45degreeSwitchActive.render(1);
 	}
 	public void renderLarge45degreeInActive() {
-		modelLargeRight45degreeSwitchInActive.renderAll();
+		modelLargeRight45degreeSwitchInActive.render(1);
 	}
 
 	public void render(String type, String variant, TileTCRail tcRail, double x, double y, double z) {
@@ -227,6 +226,7 @@ public class ModelRightSwitchTCTrack extends ModelBase {
 				GL11.glTranslatef(-0.5f, 0.0f, 1.5f);
 			}
 		}
+		GL11.glRotatef(90,0,0,1);
 		if(type.equals("medium")&&!active)this.renderMediumInactive();
 		if(type.equals("medium")&&active)this.renderMediumActive();
 		if(type.equals("medium_parallel")&&!active)this.renderMediumParallelInactive();

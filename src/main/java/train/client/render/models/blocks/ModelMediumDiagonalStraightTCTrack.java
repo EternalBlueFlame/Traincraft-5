@@ -3,10 +3,9 @@ package train.client.render.models.blocks;
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
@@ -14,17 +13,17 @@ import train.common.tile.TileTCRail;
 @SideOnly(Side.CLIENT)
 public class ModelMediumDiagonalStraightTCTrack extends ModelBase {
 
-    private IModelCustom modelMediumDiagonalStraight;
-    private IModelCustom modelEmbeddedMediumDiagonalStraight;
+    private ModelRendererTurbo modelMediumDiagonalStraight;
+    private ModelRendererTurbo modelEmbeddedMediumDiagonalStraight;
 
 
     public ModelMediumDiagonalStraightTCTrack() {
-        modelMediumDiagonalStraight = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_straight_diagonal_medium.obj"));
+        modelMediumDiagonalStraight = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_straight_diagonal_medium.obj");
 
     }
 
     public void render(String type) {
-        modelMediumDiagonalStraight.renderAll();
+        modelMediumDiagonalStraight.render(1);
     }
 
     public void render(String type, TileTCRail tcRail, double x, double y, double z) {
@@ -68,6 +67,7 @@ public class ModelMediumDiagonalStraightTCTrack extends ModelBase {
 
 
 
+        GL11.glRotatef(90,0,0,1);
 
         render(type);
 

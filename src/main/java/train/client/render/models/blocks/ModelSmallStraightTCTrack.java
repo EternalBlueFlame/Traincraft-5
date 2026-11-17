@@ -7,29 +7,29 @@ import net.minecraft.block.Block;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
 
 import javax.annotation.Nullable;
 
+import fexcraft.tmt.slim.ModelRendererTurbo;
+
 @SideOnly(Side.CLIENT)
 public class ModelSmallStraightTCTrack extends ModelBase {
 	
-	private IModelCustom modelSmallStraight;
-	private IModelCustom modelRoadCrossing;
-	private IModelCustom modelRoadCrossingBase;
-	private IModelCustom modelRoadCrossingDynamic;
+	private ModelRendererTurbo modelSmallStraight;
+	private ModelRendererTurbo modelRoadCrossing;
+	private ModelRendererTurbo modelRoadCrossingBase;
+	private ModelRendererTurbo modelRoadCrossingDynamic;
 
 	String[] ballastTexture = new String[2];
 
 	public ModelSmallStraightTCTrack() {
-		modelSmallStraight = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_normal.obj"));
-		modelRoadCrossing = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_roadcrossing.obj"));
-		modelRoadCrossingBase = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_roadcrossing_base.obj"));
-		modelRoadCrossingDynamic = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_roadcrossing_dynamic.obj"));
+		modelSmallStraight = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_normal.obj");
+		modelRoadCrossing = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_roadcrossing.obj");
+		modelRoadCrossingBase = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_roadcrossing_base.obj");
+		modelRoadCrossingDynamic = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_roadcrossing_dynamic.obj");
 	}
 
 	public void render(String type, TileTCRail tcRail, double x, double y, double z) {
@@ -63,7 +63,7 @@ public class ModelSmallStraightTCTrack extends ModelBase {
 		GL11.glTranslatef((float) x + 0.5f, (float) y, (float) z + 0.5f);
 
 		GL11.glColor4f(r, g, b, a);
-		// GL11.glScalef(0.5f, 0.5f, 0.5f);
+		GL11.glRotatef(90,0,0,1);
 
 		if (facing == 3) {
 			GL11.glRotatef(-90, 0, 1, 0);
@@ -104,34 +104,34 @@ public class ModelSmallStraightTCTrack extends ModelBase {
 		// Bind the texture, so that OpenGL properly textures our block.
 		if (type.equals("normal")) {
  			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
-		 	modelSmallStraight.renderAll();
+		 	modelSmallStraight.render(1);
 		}
 		if (type.equals("embedded")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
-			modelSmallStraight.renderAll();
+			modelSmallStraight.render(1);
 		}
 
 		if (type.equals("crossing")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_roadcrossing.png"));
-			modelRoadCrossing.renderAll();
+			modelRoadCrossing.render(1);
 		}		
 		if (type.equals("crossing1")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_roadcrossing_1.png"));
-			modelRoadCrossing.renderAll();
+			modelRoadCrossing.render(1);
 		}		
 		if (type.equals("crossing2")) {
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_roadcrossing_2.png"));
-			modelRoadCrossing.renderAll();
+			modelRoadCrossing.render(1);
 		}
 		if (type.equals("dynamic")){
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_roadcrossing_base.png"));
-			modelRoadCrossing.renderAll();
+			modelRoadCrossing.render(1);
 			fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(ballastTexture[0],  "textures/blocks/" + ballastTexture[1] +".png"));
 			float r =  (float)(colour >> 16 & 255) / 255.0F;
 			float g = (float)(colour >> 8 & 255) / 255.0F;
 			float b = (float)(colour & 255) / 255.0F;
 			GL11.glColor4f(r,g,b,1);
-			modelRoadCrossingDynamic.renderAll();
+			modelRoadCrossingDynamic.render(1);
 
 
 		}

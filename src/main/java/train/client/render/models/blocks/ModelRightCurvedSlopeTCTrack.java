@@ -3,33 +3,31 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
-import net.minecraft.client.model.ModelBase;
 import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.model.AdvancedModelLoader;
-import net.minecraftforge.client.model.IModelCustom;
 import org.lwjgl.opengl.GL11;
 import train.common.library.Info;
 import train.common.tile.TileTCRail;
+import fexcraft.tmt.slim.ModelRendererTurbo;
 
 @SideOnly(Side.CLIENT)
-public class ModelRightCurvedSlopeTCTrack extends ModelBase {
-    private IModelCustom modelLargeRightCurvedTrack;
-    private IModelCustom modelVeryLargeRightCurvedTrack;
-    private IModelCustom modelSuperLargeRightCurvedTrack;
-    private IModelCustom modelLargeRightCurvedBallast;
-    private IModelCustom modelVeryLargeRightCurvedBallast;
-    private IModelCustom modelSuperLargeRightCurvedBallast;
+public class ModelRightCurvedSlopeTCTrack {
+    private ModelRendererTurbo modelLargeRightCurvedTrack;
+    private ModelRendererTurbo modelVeryLargeRightCurvedTrack;
+    private ModelRendererTurbo modelSuperLargeRightCurvedTrack;
+    private ModelRendererTurbo modelLargeRightCurvedBallast;
+    private ModelRendererTurbo modelVeryLargeRightCurvedBallast;
+    private ModelRendererTurbo modelSuperLargeRightCurvedBallast;
 
     String[] ballastTexture = new String[2];
 
     public ModelRightCurvedSlopeTCTrack() {
-        modelLargeRightCurvedTrack = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_slope_curve_large.obj"));
-        modelVeryLargeRightCurvedTrack = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_slope_curve_very_large.obj"));
-        modelSuperLargeRightCurvedTrack = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "track_slope_curve_super_large.obj"));
-        modelLargeRightCurvedBallast = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "ballast_curved_slope_large.obj"));
-        modelVeryLargeRightCurvedBallast = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "ballast_curved_slope_very_large.obj"));
-        modelSuperLargeRightCurvedBallast = AdvancedModelLoader.loadModel(new ResourceLocation(Info.modelPrefix + "ballast_curved_slope_super_large.obj"));
+        modelLargeRightCurvedTrack = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_slope_curve_large.obj");
+        modelVeryLargeRightCurvedTrack = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_slope_curve_very_large.obj");
+        modelSuperLargeRightCurvedTrack = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "track_slope_curve_super_large.obj");
+        modelLargeRightCurvedBallast = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "ballast_curved_slope_large.obj");
+        modelVeryLargeRightCurvedBallast = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "ballast_curved_slope_very_large.obj");
+        modelSuperLargeRightCurvedBallast = new ModelRendererTurbo((fexcraft.tmt.slim.ModelBase) null).addObj(Info.modelPrefix + "ballast_curved_slope_super_large.obj");
     }
 
     public void render(String type, String ballast, int ballastColour) {
@@ -42,76 +40,77 @@ public class ModelRightCurvedSlopeTCTrack extends ModelBase {
 
         }
 
+        GL11.glRotatef(90,0,0,1);
         if (type.equals("large")) {
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
-           modelLargeRightCurvedTrack.renderAll();
+           modelLargeRightCurvedTrack.render(1);
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(ballastTexture[0],  "textures/blocks/" + ballastTexture[1] +".png"));
 
             float r = (float)(ballastColour >> 16 & 255) / 255.0F;
             float g = (float)(ballastColour >> 8 & 255) / 255.0F;
             float b = (float)(ballastColour & 255) / 255.0F;
             GL11.glColor4f(r,g,b,1);
-            modelLargeRightCurvedBallast.renderAll();
+            modelLargeRightCurvedBallast.render(1);
 
         }
         if (type.equals("embedded_large")) {
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
-            modelLargeRightCurvedTrack.renderAll();
+            modelLargeRightCurvedTrack.render(1);
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(ballastTexture[0],  "textures/blocks/" + ballastTexture[1] +".png"));
 
             float r = (float)(ballastColour >> 16 & 255) / 255.0F;
             float g = (float)(ballastColour >> 8 & 255) / 255.0F;
             float b = (float)(ballastColour & 255) / 255.0F;
             GL11.glColor4f(r,g,b,1);
-           modelLargeRightCurvedBallast.renderAll();
+           modelLargeRightCurvedBallast.render(1);
 
         }
         if (type.equals("verylarge")) {
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
-            modelVeryLargeRightCurvedTrack.renderAll();
+            modelVeryLargeRightCurvedTrack.render(1);
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(ballastTexture[0],  "textures/blocks/" + ballastTexture[1] +".png"));
 
             float r = (float)(ballastColour >> 16 & 255) / 255.0F;
             float g = (float)(ballastColour >> 8 & 255) / 255.0F;
             float b = (float)(ballastColour & 255) / 255.0F;
             GL11.glColor4f(r,g,b,1);
-            modelVeryLargeRightCurvedBallast.renderAll();
+            modelVeryLargeRightCurvedBallast.render(1);
 
         }
         if (type.equals("embedded_verylarge")) {
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
-            modelVeryLargeRightCurvedTrack.renderAll();
+            modelVeryLargeRightCurvedTrack.render(1);
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(ballastTexture[0],  "textures/blocks/" + ballastTexture[1] +".png"));
 
             float r = (float)(ballastColour >> 16 & 255) / 255.0F;
             float g = (float)(ballastColour >> 8 & 255) / 255.0F;
             float b = (float)(ballastColour & 255) / 255.0F;
             GL11.glColor4f(r,g,b,1);
-            modelVeryLargeRightCurvedBallast.renderAll();
+            modelVeryLargeRightCurvedBallast.render(1);
 
         }
         if (type.equals("superlarge")) {
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_normal.png"));
-            modelSuperLargeRightCurvedTrack.renderAll();
+            modelSuperLargeRightCurvedTrack.render(1);
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(ballastTexture[0],  "textures/blocks/" + ballastTexture[1] +".png"));
 
             float r = (float)(ballastColour >> 16 & 255) / 255.0F;
             float g = (float)(ballastColour >> 8 & 255) / 255.0F;
             float b = (float)(ballastColour & 255) / 255.0F;
             GL11.glColor4f(r,g,b,1);
-            modelSuperLargeRightCurvedBallast.renderAll();
+            modelSuperLargeRightCurvedBallast.render(1);
 
         }
         if (type.equals("embedded_superlarge")) {
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(Info.resourceLocation, Info.modelTexPrefix + "track_embedded.png"));
-            modelSuperLargeRightCurvedTrack.renderAll();
+            modelSuperLargeRightCurvedTrack.render(1);
             fexcraft.tmt.slim.Tessellator.bindTexture(new ResourceLocation(ballastTexture[0],  "textures/blocks/" + ballastTexture[1] +".png"));
 
             float r = (float)(ballastColour >> 16 & 255) / 255.0F;
             float g = (float)(ballastColour >> 8 & 255) / 255.0F;
             float b = (float)(ballastColour & 255) / 255.0F;
             GL11.glColor4f(r,g,b,1);
-            modelSuperLargeRightCurvedBallast.renderAll();
+            modelSuperLargeRightCurvedBallast.render(1);
 
         }
     }

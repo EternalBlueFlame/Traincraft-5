@@ -142,7 +142,7 @@ public class BlockFortyFootContainer extends BlockContainer {
 
     public void harvestBlock(World world, EntityPlayer player, int x, int y, int z,  int k) {
         super.harvestBlock(world, player, x,y,z,k);
-        world.setBlockToAir(x,y,z);
+        CommonUtil.setBlockToAir(world, x, y, z);
     }
 
     @Override
