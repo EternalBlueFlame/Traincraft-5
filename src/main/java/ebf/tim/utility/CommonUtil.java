@@ -51,6 +51,8 @@ public class CommonUtil {
     public static final float degreesF = (float) (180.0d / Math.PI);
     private static List<String> loggedLangChecks = new ArrayList<>();
 
+    public static Fluid nullFluid=null;
+
     /** Creates a bounding box using the version-specific construction API. */
     public static AxisAlignedBB createAABB(double minX, double minY, double minZ, double maxX, double maxY, double maxZ){
         return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);

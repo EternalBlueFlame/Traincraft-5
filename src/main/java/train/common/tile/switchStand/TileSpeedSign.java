@@ -21,7 +21,7 @@ public class TileSpeedSign extends TileRenderFacing {
 	}
 	public void setSkinstate(int skinstate) {
 		this.skinstate = skinstate;
-		CommonUtil.markBlockForUpdate(world, xCoord, yCoord, zCoord);
+		CommonUtil.markBlockForUpdate(getWorld(), xCoord, yCoord, zCoord);
 
 	}
 
@@ -35,7 +35,7 @@ public class TileSpeedSign extends TileRenderFacing {
 		} else {
 			skinstate++;
 		}
-		CommonUtil.markBlockForUpdate(world, xCoord, yCoord, zCoord);
+		CommonUtil.markBlockForUpdate(getWorld(), xCoord, yCoord, zCoord);
 	}
 
 

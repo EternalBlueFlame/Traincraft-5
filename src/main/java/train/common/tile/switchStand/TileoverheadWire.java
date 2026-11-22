@@ -26,19 +26,19 @@ public class TileoverheadWire extends TileTraincraft {
         /**
          * Remove any block on top of the wind mill
          */
-        if (!world.isRemote) {
+        if (!getWorld().isRemote) {
             if (updateTicks % 20 == 0) {
-                if (!this.world.isAirBlock(getPos().getX(), getPos().getY() + 1, getPos().getZ())) {
-                    Block block = CommonUtil.getBlockAt(this.world, getPos().getX(), getPos().getY() + 1, getPos().getZ());
+                if (!this.getWorld().isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
+                    Block block = CommonUtil.getBlockAt(this.getWorld(), this.xCoord, this.yCoord + 1, this.zCoord);
                     if (block != null) {
-                        EntityItem entityitem = new EntityItem(world, getPos().getX(), getPos().getY() + 1, getPos().getZ(), new ItemStack(Item.getItemFromBlock(BlockIDs.overheadWire.block), 1));
+                        EntityItem entityitem = new EntityItem(getWorld(), this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(BlockIDs.overheadWire.block), 1));
                         float f3 = 0.05F;
                         entityitem.motionX = (float) rand.nextGaussian() * f3;
                         entityitem.motionY = (float) rand.nextGaussian() * f3 + 0.2F;
                         entityitem.motionZ = (float) rand.nextGaussian() * f3;
-                        CommonUtil.spawnEntity(world, entityitem);
+                        CommonUtil.spawnEntity(getWorld(), entityitem);
                     }
-                    CommonUtil.setBlockToAir(this.world, getPos().getX(), getPos().getY(), getPos().getZ());
+                    CommonUtil.setBlockToAir(this.getWorld(), this.xCoord, this.yCoord, this.zCoord);
                 }
                 syncTileEntity();
             }

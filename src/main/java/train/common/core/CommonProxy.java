@@ -269,9 +269,6 @@ public class CommonProxy implements IGuiHandler {
     public void registerTextureFX() {
     }
 
-    public void registerSounds() {
-    }
-
     public void registerBookHandler() {
     }
 

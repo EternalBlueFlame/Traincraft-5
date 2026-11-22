@@ -92,7 +92,7 @@ public class GuiDistil extends GuiContainer {
         int k = (height - ySize) / 2;
         drawTexturedModalRect(j, k, 0, 0, xSize, ySize);
         int amount = distilInventory.getLiquid();
-        int liqui = Math.abs((amount * 50) / (distilInventory.getTankCapacity()));
+        int liqui = Math.abs((amount * 50) / (distilInventory.getTankCapacity()[0]));
         drawTexturedModalRect(j + 145, (k + 57) - liqui, 177, 107 - liqui, 18, liqui);
         if (LiquidManager.REFINED_FUEL != null && distilInventory.getLiquidItemID() == LiquidManager.REFINED_FUEL.getID()) {
             drawRect(j + 145, k + 57, 177, 107, 0);

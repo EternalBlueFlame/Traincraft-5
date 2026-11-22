@@ -89,9 +89,4 @@ public class BlockSwitch extends BlockDynamic {
             te.setStrength(0,0);
         }
     }
-
-    @Override
-    public void onNeighborBlockChange(World world, int x, int y, int z, Block other) {
-        super.onNeighborBlockChange(world, x, y, z, other);
-    }
 }

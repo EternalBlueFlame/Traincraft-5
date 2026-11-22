@@ -24,7 +24,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.client.MinecraftForgeClient;
-import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 import train.client.core.handlers.ClientTickHandler;
@@ -41,7 +40,6 @@ import train.common.api.EntityBogie;
 import train.common.api.EntityRollingStock;
 import train.common.blocks.TCBlocks;
 import train.common.core.CommonProxy;
-import train.common.core.Traincraft_EventSounds;
 import train.common.core.handlers.ConfigHandler;
 import train.common.entity.CollisionBox;
 import train.common.entity.digger.EntityRotativeDigger;
@@ -426,11 +424,6 @@ public class ClientProxy extends CommonProxy {
     @Override
     public void registerVillagerSkin(int villagerId, String textureName) {
         VillagerRegistry.instance().registerVillagerSkin(villagerId, new ResourceLocation(Info.resourceLocation, Info.villagerPrefix + textureName));
-    }
-
-    @Override
-    public void registerSounds() {
-        MinecraftForge.EVENT_BUS.register(new Traincraft_EventSounds());
     }
 
     @Override
