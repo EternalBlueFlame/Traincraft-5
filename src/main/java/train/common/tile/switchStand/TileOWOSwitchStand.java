@@ -35,7 +35,7 @@ public class TileOWOSwitchStand extends TileSwitch {
          */
         if (!worldObj.isRemote) {
             if (updateTicks % 20 == 0) {
-                if (!this.worldObj.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
+                if (!(CommonUtil.getBlockAt(getWorld(),this.xCoord, this.yCoord + 1, this.zCoord) instanceof BlockAir)) {
                     Block block = CommonUtil.getBlockAt(this.worldObj, this.xCoord, this.yCoord + 1, this.zCoord);
                     if (block != null) {
                         EntityItem entityitem = new EntityItem(worldObj, this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(TCBlocks.owoSwitchStand), 1));

@@ -4,6 +4,7 @@ import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -33,7 +34,7 @@ public class TileAutoSwitchStand extends TileSwitch {
          */
         if (!worldObj.isRemote) {
             if (updateTicks % 20 == 0) {
-                if (!this.worldObj.isAirBlock(this.xCoord, this.yCoord + 1, this.zCoord)) {
+                if (!(CommonUtil.getBlockAt(getWorld(),this.xCoord, this.yCoord + 1, this.zCoord) instanceof BlockAir)) {
                     Block block = CommonUtil.getBlockAt(this.worldObj, this.xCoord, this.yCoord + 1, this.zCoord);
                     if (block != null) {
                         EntityItem entityitem = new EntityItem(worldObj, this.xCoord, this.yCoord + 1, this.zCoord, new ItemStack(Item.getItemFromBlock(TCBlocks.autoSwtichStand), 1));
