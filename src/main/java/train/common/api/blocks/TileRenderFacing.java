@@ -94,8 +94,8 @@ public class TileRenderFacing extends TileEntity {
             if(blockGLID ==null) {
                 blockGLID = net.minecraft.client.renderer.GLAllocation.generateDisplayLists(1);
                 org.lwjgl.opengl.GL11.glNewList(blockGLID, org.lwjgl.opengl.GL11.GL_COMPILE);
-                if (worldObj == null) {
-                    ClientUtil.fixItemLighting(worldObj);
+                if (getWorld() == null) {
+                    ClientUtil.fixItemLighting(getWorld());
                 } else {
                     Minecraft.getMinecraft().entityRenderer.enableLightmap(1);
                 }
@@ -124,8 +124,8 @@ public class TileRenderFacing extends TileEntity {
                 org.lwjgl.opengl.GL11.glRotatef(180, 1, 0, 0);
 
                 renderModel();
-                if (worldObj == null) {
-                    ClientUtil.fixItemLighting(worldObj);
+                if (getWorld() == null) {
+                    ClientUtil.fixItemLighting(getWorld());
                 }
                 org.lwjgl.opengl.GL11.glEndList();
             }
@@ -175,11 +175,11 @@ public class TileRenderFacing extends TileEntity {
     @Override
     public void markDirty() {
         super.markDirty();
-        if(this.worldObj != null) {
-            CommonUtil.markBlockForUpdate(worldObj, xCoord, yCoord, zCoord);
-            worldObj.markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
-            this.worldObj.func_147453_f(this.xCoord, this.yCoord, this.zCoord, host);
-            if (worldObj.isRemote && blockGLID != null) {
+        if(this.getWorld() != null) {
+            CommonUtil.markBlockForUpdate(getWorld(), xCoord, yCoord, zCoord);
+            getWorld().markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
+            this.getWorld().func_147453_f(this.xCoord, this.yCoord, this.zCoord, host);
+            if (getWorld().isRemote && blockGLID != null) {
             //    org.lwjgl.opengl.GL11.glDeleteLists(blockGLID, 1);
             //    blockGLID = null;
             }
@@ -219,13 +219,13 @@ public class TileRenderFacing extends TileEntity {
     public void readFromNBT(NBTTagCompound tag){
         super.readFromNBT(tag);
         facing = tag.getInteger("f");
-        if(worldObj!=null && worldObj.isRemote) {
+        if(getWorld()!=null && getWorld().isRemote) {
             markDirty();
         }
     }
 
     public void syncTileEntity(){
-        for(Object o : this.worldObj.playerEntities){
+        for(Object o : this.getWorld().playerEntities){
             if(o instanceof EntityPlayerMP){
                 EntityPlayerMP player = (EntityPlayerMP) o;
                 if(player.getDistance(xCoord, yCoord, zCoord) <= 64) {

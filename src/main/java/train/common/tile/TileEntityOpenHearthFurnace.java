@@ -81,7 +81,7 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 		if (furnaceBurnTime > 0) {
 			furnaceBurnTime--;
 		}
-		if (!worldObj.isRemote) {
+		if (!getWorld().isRemote) {
 			if (furnaceBurnTime == 0 && canSmelt()) {
 				if (this.slots[2] != null) {
 					currentItemBurnTime = furnaceBurnTime = getItemBurnTime(this.slots[2]);
@@ -112,13 +112,13 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 			}
 			if (flag != (furnaceBurnTime > 0)) {
 				flag1 = true;
-				BlockOpenHearthFurnace.updateHearthFurnaceBlockState(furnaceBurnTime > 0, worldObj, xCoord, yCoord, zCoord, random);
+				BlockOpenHearthFurnace.updateHearthFurnaceBlockState(furnaceBurnTime > 0, getWorld(), xCoord, yCoord, zCoord, random);
 			}
 			this.syncTileEntity();
 		}
-		if (this.worldObj.isRemote) {
+		if (this.getWorld().isRemote) {
 			if (furnaceBurnTime > 0) {
-				smoke(worldObj, xCoord, yCoord, zCoord, random);
+				smoke(getWorld(), xCoord, yCoord, zCoord, random);
 			}
 		}
 		if (flag1) {
