@@ -137,9 +137,8 @@ public class CommonProxy implements IGuiHandler {
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        TileEntity te = CommonUtil.getTileEntity(world, x, y, z);
-        EntityPlayer riddenByEntity = null;
-        Entity entity = null;
+    TileEntity te = CommonUtil.getTileEntity(world, x, y, z);
+    EntityPlayer riddenByEntity = null;
 
     Entity entity = null;
     EntityPlayer passenger = null;
@@ -182,7 +181,7 @@ public class CommonProxy implements IGuiHandler {
             case (GuiIDs.OPEN_HEARTH_FURNACE):
                 return te instanceof TileEntityOpenHearthFurnace ? new ContainerOpenHearthFurnace(player.inventory, (TileEntityOpenHearthFurnace) te) : null;
             case (GuiIDs.TRAIN_WORKBENCH):
-                return te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, player.worldObj, (TileTrainWbench) te) : null;
+                return te instanceof TileTrainWbench ? new ContainerTrainWorkbench(player.inventory, player.getEntityWorld(), (TileTrainWbench) te) : null;
 
             case (GuiIDs.LOCO):
                 if (entity instanceof EntityRollingStock && passenger != null) {
@@ -203,7 +202,7 @@ public class CommonProxy implements IGuiHandler {
                 return null;
 
             case (GuiIDs.CRAFTING_CART):
-                return new ContainerWorkbenchCart(player.inventory, player.worldObj);
+                return new ContainerWorkbenchCart(player.inventory, player.getEntityWorld());
 
             case (GuiIDs.FURNACE_CART):
                 return passenger != null ? new InventoryWorkCart(player.inventory, entity) : null;
@@ -296,8 +295,6 @@ public class CommonProxy implements IGuiHandler {
         return world.getEntityByID(id) != null;
     }
 
-    public void doNEICheck(ItemStack stack) {
-    }
 
     public EntityPlayer getPlayer() {
         return null;

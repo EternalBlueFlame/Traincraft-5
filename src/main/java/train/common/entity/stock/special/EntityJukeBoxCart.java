@@ -170,9 +170,9 @@ return 3;
             streamURL = dataWatcher.getWatchableObjectString(22);
             startStream();
         }
-        if (Minecraft.getMinecraft().thePlayer != null && player != null && !isInvalid) {
-            float distance = (float) getDistanceSq(Minecraft.getMinecraft().thePlayer.posX,
-                    Minecraft.getMinecraft().thePlayer.posY, Minecraft.getMinecraft().thePlayer.posZ);
+        if (Minecraft.getMinecraft().player != null && player != null && !isInvalid) {
+            float distance = (float) getDistanceSq(Minecraft.getMinecraft().player.posX,
+                    Minecraft.getMinecraft().player.posY, Minecraft.getMinecraft().player.posZ);
             if (distance >= volume * 1000.0F) {
                 player.setVolume(0.0F);
             } else if (distance > 0) {

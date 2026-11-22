@@ -49,7 +49,7 @@ public class ServerLogger {
             if (!new File(sb.toString()).exists()) {
                 new File(sb.toString()).mkdir();
             }
-            sb.append(wagon.getCartItem().getItem().delegate.name().replace(":", "~").toLowerCase());
+            sb.append(wagon.getCartItem().getItem().delegate.name().toString().replace(":", "~").toLowerCase());
             sb.append("_");
             sb.append(wagon.getUniqueID().toString().toLowerCase());
             sb.append(".txt");
@@ -107,7 +107,7 @@ public class ServerLogger {
         }
 
         sb.append("/");
-        sb.append(wagon.getCartItem().getItem().delegate.name().replace(":", "~").toLowerCase());
+        sb.append(wagon.getCartItem().getItem().delegate.name().toString().replace(":", "~").toLowerCase());
         sb.append("_");
         sb.append(wagon.getUniqueID().toString().toLowerCase());
         sb.append(".txt");

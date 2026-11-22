@@ -18,7 +18,6 @@ import java.util.Objects;
 
 public class ClientTickHandler {
     private static final Minecraft mc = Minecraft.getMinecraft();
-    private static boolean isHidden = false;
 
     @SubscribeEvent
     public void tick(TickEvent event) {
@@ -51,14 +50,6 @@ public class ClientTickHandler {
                     // NOTE: func_152121_a = switchTexture
                     player.func_152121_a(MinecraftProfileTexture.Type.CAPE, user.getCurrentRL());
                 }
-            }
-        }
-
-        if (!isHidden && Traincraft.hasNotEnoughItems()) {
-            if (mc.theWorld != null && mc.theWorld.playerEntities != null) {
-                Traincraft.proxy.doNEICheck(new ItemStack(Block.getBlockFromName(Info.modID + ":tcRail")));
-                Traincraft.proxy.doNEICheck(new ItemStack(Block.getBlockFromName(Info.modID + ":tcRailGag")));
-                isHidden = true;
             }
         }
     }

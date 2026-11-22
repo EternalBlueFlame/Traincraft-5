@@ -22,8 +22,8 @@ public class PacketInteract implements IMessage {
     public PacketInteract() {}
     public PacketInteract(int entityId) {
         this.entityId = entityId;
-        this.dimensionId= ebf.tim.utility.CommonUtil.getDimensionId(Minecraft.getMinecraft().thePlayer.worldObj);
-        this.playerId=Minecraft.getMinecraft().thePlayer.getEntityId();
+        this.dimensionId= ebf.tim.utility.CommonUtil.getDimensionId(Minecraft.getMinecraft().player.worldObj);
+        this.playerId=Minecraft.getMinecraft().player.getEntityId();
 
     }
     /**reads the packet on server to get the variables from the Byte Buffer*/

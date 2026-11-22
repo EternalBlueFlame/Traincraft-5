@@ -53,7 +53,7 @@ public class PacketTextureOverlayConfig implements IMessage {
     /**
     * @param trainEntity    Entity ID of rolling stock; retrieve it by invoking the entity's getEntityId().
     * @param dimensionID    Dimension ID of player world; retrieve via CommonUtil.getDimensionId(world).
-     * @param playerEntityID Entity ID of player. Used to send the response back to only the requesting player; recommended to retrieve by accessing Minecraft.getMinecraft().thePlayer.getEntityId() on the client side.
+     * @param playerEntityID Entity ID of player. Used to send the response back to only the requesting player; recommended to retrieve by accessing Minecraft.getMinecraft().player.getEntityId() on the client side.
      * @author 02skaplan
      * <p>Client -> server communication packet for overlay texture requests.</p>
      * <p><b>This constructor is used by the client to request a configuration from the server!</b></p>

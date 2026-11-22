@@ -113,7 +113,7 @@ public class GuiJukebox extends GuiScreen {
 
         //fontRenderer.drawString("Date: " + Calendar.getInstance().get(Calendar.MONTH) + " " + Calendar.getInstance().get(Calendar.DATE), var5 - gui_width / 2, var6 - 30, 0xffffffff);
 
-        if (Minecraft.getMinecraft().thePlayer != null && (jukebox.player != null && !jukebox.isInvalid)) {
+        if (Minecraft.getMinecraft().player != null && (jukebox.player != null && !jukebox.isInvalid)) {
             fontRenderer.drawString("Volume: " + (int) Math.ceil(jukebox.volume * 100), width / 2 - 26, height / 2 + 18, 0xff0e0e0e);
         } else {
             fontRenderer.drawString("Volume: 0", width / 2 - 26, height / 2 + 18, 0xff0e0e0e);
@@ -243,7 +243,7 @@ public class GuiJukebox extends GuiScreen {
         }
 
         if (button.id == 4) {
-            if (Minecraft.getMinecraft().thePlayer != null && (jukebox.player != null && !jukebox.isInvalid)) {
+            if (Minecraft.getMinecraft().player != null && (jukebox.player != null && !jukebox.isInvalid)) {
                 if (jukebox.volume < 1.0f) {
                     jukebox.volume += 0.1f;
                 }
@@ -251,7 +251,7 @@ public class GuiJukebox extends GuiScreen {
         }
 
         if (button.id == 5) {
-            if (Minecraft.getMinecraft().thePlayer != null && (jukebox.player != null && !jukebox.isInvalid)) {
+            if (Minecraft.getMinecraft().player != null && (jukebox.player != null && !jukebox.isInvalid)) {
                 if (jukebox.volume > 0.0f) {
                     jukebox.volume -= 0.1f;
                 }

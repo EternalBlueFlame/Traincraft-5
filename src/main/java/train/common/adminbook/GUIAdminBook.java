@@ -54,12 +54,12 @@ public class GUIAdminBook extends GuiScreen {
         switch (button.id) {
             case -1: {
                 // Tell the server to drop items
-                Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient("0:" + list[0].substring(1), Minecraft.getMinecraft().thePlayer.getEntityId()));
+                Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient("0:" + list[0].substring(1), Minecraft.getMinecraft().player.getEntityId()));
                 break;
             }
             case 0: {
                 // Tell the server to drop items
-                Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient("1:" + list[0].substring(1), Minecraft.getMinecraft().thePlayer.getEntityId()));
+                Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient("1:" + list[0].substring(1), Minecraft.getMinecraft().player.getEntityId()));
                 break;
             }
             case 1: {
@@ -68,7 +68,7 @@ public class GUIAdminBook extends GuiScreen {
                     buttonList = new ArrayList<>();
                     initGui();
                 } else {
-                    Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient(list[1], Minecraft.getMinecraft().thePlayer.getEntityId()));//tell server to send a new gui
+                    Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient(list[1], Minecraft.getMinecraft().player.getEntityId()));//tell server to send a new gui
                 }
 
                 break;
@@ -81,13 +81,13 @@ public class GUIAdminBook extends GuiScreen {
             }
             case 3: {
                 if (list[0] != null && list[0].length() > 1) {
-                    Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient("0:" + list[0].substring(1), Minecraft.getMinecraft().thePlayer.getEntityId()));//tell server to drop items
-                    Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient("1:" + list[0].substring(1), Minecraft.getMinecraft().thePlayer.getEntityId()));//tell server to drop items
+                    Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient("0:" + list[0].substring(1), Minecraft.getMinecraft().player.getEntityId()));//tell server to drop items
+                    Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient("1:" + list[0].substring(1), Minecraft.getMinecraft().player.getEntityId()));//tell server to drop items
                 }
                 break;
             }
             default: {
-                Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient(list[button.id - 3], Minecraft.getMinecraft().thePlayer.getEntityId()));//tell server to send a new gui
+                Traincraft.keyChannel.sendToServer(new ItemAdminBook.PacketAdminBookClient(list[button.id - 3], Minecraft.getMinecraft().player.getEntityId()));//tell server to send a new gui
                 break;
             }
         }
@@ -226,8 +226,8 @@ public class GUIAdminBook extends GuiScreen {
     private void func_146977_a(ItemStack p_146977_1_, int xDisplayPosition, int yDisplayPosition) {
         GL11.glPushMatrix();
         GL11.glDisable(GL11.GL_LIGHTING);
-        itemRender.renderItemAndEffectIntoGUI(this.fontRenderer, this.mc.getTextureManager(), p_146977_1_, xDisplayPosition, yDisplayPosition);
-        itemRender.renderItemOverlayIntoGUI(this.fontRenderer, this.mc.getTextureManager(), p_146977_1_, xDisplayPosition, yDisplayPosition, null);
+        itemRender.renderItemAndEffectIntoGUI(p_146977_1_, xDisplayPosition, yDisplayPosition);
+        itemRender.renderItemOverlayIntoGUI(this.fontRenderer, p_146977_1_, xDisplayPosition, yDisplayPosition, null);
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glPopMatrix();
     }

@@ -83,7 +83,7 @@ public class ClientProxy extends CommonProxy {
                 GL11.glTranslated(x, (y + .35), z);
                 GL11.glScalef(scale, scale, scale);
                 GL11.glTranslated(-x, -(y + .35), -z);
-                if (player != Minecraft.getMinecraft().thePlayer && stock.getPlayerScale() != 1) {
+                if (player != Minecraft.getMinecraft().player && stock.getPlayerScale() != 1) {
                     GL11.glTranslated(0, 1 - (stock.getPlayerScale() - 0.2), 0); //rough approx. but gets the job done for everything in range 0.5-1
                 } else {
                     GL11.glTranslated(0, (1 - stock.getPlayerScale()) * -1, 0); //rough approx. but gets the job done for everything in range 0.5-1
@@ -445,31 +445,7 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public EntityPlayer getPlayer() {
-        return getMinecraft().thePlayer;
-    }
-
-    @Optional.Method(modid = "NotEnoughItems")
-    @Override
-    public void doNEICheck(ItemStack stack) {
-        if (Minecraft.getMinecraft().thePlayer != null) {
-            if (Loader.isModLoaded("Not Enough Items")) {
-                try {
-                    Class<?> neiApi = Class.forName("codechicken.nei.api.API");
-                    Method hideItem = neiApi.getDeclaredMethod("hideItem", stack.getClass());
-                    hideItem.invoke(null, stack);
-                } catch (ClassNotFoundException e) {
-                    Traincraft.tcLog.log(Level.WARN, "Chicken core didn't have required class: Wrong version of the library or something is horribly wrong", e);
-                } catch (NoSuchMethodException e) {
-                    Traincraft.tcLog.log(Level.WARN, "Chicken core didn't have required method: Wrong version of the library or something is horribly wrong", e);
-                } catch (SecurityException | IllegalAccessException e) {
-                    Traincraft.tcLog.log(Level.FATAL, "Something is horribly wrong", e);
-                } catch (IllegalArgumentException e) {
-                    Traincraft.tcLog.log(Level.WARN, "Chicken core had the method but it's signature was wrong: Wrong version of the library or something is horribly wrong", e);
-                } catch (InvocationTargetException e) {
-                    Traincraft.tcLog.log(Level.WARN, "The method we called from Chicken core threw an exception", e);
-                }
-            }
-        }
+        return getMinecraft().player;
     }
 
     @Override

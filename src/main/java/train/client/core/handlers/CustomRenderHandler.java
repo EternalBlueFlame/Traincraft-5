@@ -26,7 +26,7 @@ public class CustomRenderHandler {
 
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        EntityClientPlayerMP player = Minecraft.getMinecraft().thePlayer;
+        EntityClientPlayerMP player = Minecraft.getMinecraft().player;
         if (player != null && player.getHeldItem() != null && (player.getHeldItem().getItem() instanceof ItemTCRail)) {
             renderTCRailPreview(player, player.getHeldItem());
         }
