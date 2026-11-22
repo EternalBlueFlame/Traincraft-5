@@ -662,7 +662,7 @@ public abstract class AbstractTrains extends EntityMinecart implements IMinecart
 
 
     @Override
-    public String getCommandSenderName() {
+    public String getName() {
         String s = EntityList.getEntityString(this);
         if (s == null) {
             s = "generic";

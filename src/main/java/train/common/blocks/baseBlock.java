@@ -13,7 +13,7 @@ public class baseBlock extends Block {
     public baseBlock(String name, float hardness, float resistance, String harvestTool, int harvestLevel, Material material, SoundType stepSound, String textureLocation) {
         super(material);
         setCreativeTab(Traincraft.tcTab);
-        setBlockName(name);
+        setTranslationKey(name);
         setHardness(hardness);
         setResistance(resistance);
         setHarvestLevel(harvestTool,harvestLevel);

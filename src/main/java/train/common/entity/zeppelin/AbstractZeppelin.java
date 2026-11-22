@@ -671,7 +671,7 @@ public abstract class AbstractZeppelin extends Entity implements IInventory {
 		return true;
 	}
 	@Override
-	public String getCommandSenderName(){
+	public String getName(){
 		String s = EntityList.getEntityString(this);
 		if (s == null) {
 			s = "generic";

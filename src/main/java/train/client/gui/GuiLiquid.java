@@ -67,7 +67,7 @@ public class GuiLiquid extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 3) {
-            if (player != null && player.getCommandSenderName().equalsIgnoreCase(((AbstractTrains) liquid).getTrainOwner())) {
+            if (player != null && player.getName().equalsIgnoreCase(((AbstractTrains) liquid).getTrainOwner())) {
                 if (!liquid.getTrainLockedFromPacket()) {
                     AxisAlignedBB box = liquid.boundingBox.expand(5, 5, 5);
                     List lis3 = liquid.world.getEntitiesWithinAABBExcludingEntity(liquid, box);
@@ -110,16 +110,16 @@ public class GuiLiquid extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRenderer.drawString(liquid.getCommandSenderName(), 65, 1, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 65, 3, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 63, 1, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 63, 3, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 65, 1, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 65, 3, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 63, 1, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 63, 3, 0x000000);
 
-        fontRenderer.drawString(liquid.getCommandSenderName(), 65, 2, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 63, 2, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 64, 1, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 64, 3, 0x000000);
-        fontRenderer.drawString(liquid.getCommandSenderName(), 64, 2, 0xd3a900);
+        fontRenderer.drawString(liquid.getName(), 65, 2, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 63, 2, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 64, 1, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 64, 3, 0x000000);
+        fontRenderer.drawString(liquid.getName(), 64, 2, 0xd3a900);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);

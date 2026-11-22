@@ -70,7 +70,7 @@ null,
  null, 
 null, 
 null, 
-new ItemStack(Blocks.rail, 1),
+new ItemStack(Blocks.RAIL, 1),
 new ItemStack(thisItem)
         };
     }

@@ -26,7 +26,7 @@ public class BlockOreTC extends BlockFalling {
 	private static IIcon texture4;
 
 	public BlockOreTC() {
-		super(Material.rock);
+		super(Material.ROCK);
 		setCreativeTab(Traincraft.tcTab);
 	}
 

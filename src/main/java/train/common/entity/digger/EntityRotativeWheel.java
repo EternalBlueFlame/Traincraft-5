@@ -165,15 +165,15 @@ public class EntityRotativeWheel extends Entity {
             return;
         }
 
-        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.x, (int) pos.y, (int) pos.z);
-        int meta = CommonUtil.getBlockFacing(worldObj, (int) pos.x, (int) pos.y, (int) pos.z);
+        Block id = CommonUtil.getBlockAt(world, (int) pos.x, (int) pos.y, (int) pos.z);
+        int meta = CommonUtil.getBlockFacing(world, (int) pos.x, (int) pos.y, (int) pos.z);
         if (id != null) {
             this.playMiningEffect(pos, id);
         }
 
         if (!shouldIgnoreBlockForHarvesting(pos, id)) {
-            id.harvestBlock(worldObj, fakePlayer, (int) pos.x, (int) pos.y, (int) pos.z, meta);
-            CommonUtil.setBlock(worldObj, (int) pos.x, (int) pos.y, (int) pos.z, null);
+            id.harvestBlock(world, fakePlayer, (int) pos.x, (int) pos.y, (int) pos.z, meta);
+            CommonUtil.setBlock(world, (int) pos.x, (int) pos.y, (int) pos.z, null);
 
             world.playAuxSFX(2001, (int) pos.x, (int) pos.y, (int) pos.z, Block.getIdFromBlock(id) + (meta << 12));
             this.playMiningEffect(pos, id);
@@ -193,7 +193,7 @@ public class EntityRotativeWheel extends Entity {
             return true;
         }
 
-        return id.getCollisionBoundingBox(getWorld().getBlockState(new BlockPos((int) pos.x, (int) pos.y, (int) pos.z)), getWorld(), new BlockPos((int) pos.x, (int) pos.y, (int) pos.z)) == null;
+        return id.getCollisionBoundingBox(world.getBlockState(new BlockPos((int) pos.x, (int) pos.y, (int) pos.z)), getWorld(), new BlockPos((int) pos.x, (int) pos.y, (int) pos.z)) == null;
     }
 
     public int getStartWheel() {
@@ -211,7 +211,7 @@ public class EntityRotativeWheel extends Entity {
     @SideOnly(Side.CLIENT)
     private void playMiningEffect(Vec3d pos, Block block_index) {
         miningTickCounter++;
-        Block id = CommonUtil.getBlockAt(worldObj, (int) pos.x, (int) pos.y, (int) pos.z);
+        Block id = CommonUtil.getBlockAt(world, (int) pos.x, (int) pos.y, (int) pos.z);
     }
 
     /**

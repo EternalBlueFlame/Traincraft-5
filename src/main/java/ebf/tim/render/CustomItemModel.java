@@ -50,7 +50,7 @@ public class CustomItemModel implements IItemRenderer /*ICustomModelLoader*/ {
 
     @Override
     public boolean handleRenderType(ItemStack item, ItemRenderType type) {
-        return true;//models.containsKey(new ResourceLocation(item.getUnlocalizedName()));
+        return true;//models.containsKey(new ResourceLocation(item.getTranslationKey()));
     }
     float scale;
 

@@ -16,7 +16,7 @@ public class BlockBridgePillar extends Block implements ITileEntityProvider {
 	private IIcon texture;
 
 	public BlockBridgePillar() {
-		super(Material.wood);
+		super(Material.WOOD);
 		setCreativeTab(Traincraft.tcTab);
 		setHarvestLevel("axe", 0);
 		//this.setTickRandomly(true);

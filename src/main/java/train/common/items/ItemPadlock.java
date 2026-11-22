@@ -32,7 +32,7 @@ public class ItemPadlock extends ItemPart {
 	}
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> par3List, ITooltipFlag flagIn) {
 		par3List.add("\u00a77" + "Use it to lock/unlock train cars.");
 		par3List.add("\u00a77" + "Use it to trust players to locked train cars.");
 		par3List.add("\u00a77" + "Use it to lock & unlock switches.");

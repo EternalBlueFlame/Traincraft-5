@@ -21,8 +21,8 @@ public class GuiCraftingCart extends GuiContainer {
 
     @Override
     protected void drawGuiContainerForegroundLayer(int i, int j) {
-        this.fontRendererObj.drawString(CommonUtil.translate("container.crafting"), 28, 6, 4210752);
-        this.fontRendererObj.drawString(CommonUtil.translate("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+        this.fontRenderer.drawString(CommonUtil.translate("container.crafting"), 28, 6, 4210752);
+        this.fontRenderer.drawString(CommonUtil.translate("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
     }
 
     @Override

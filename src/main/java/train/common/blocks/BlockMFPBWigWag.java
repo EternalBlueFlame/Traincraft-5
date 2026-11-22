@@ -14,7 +14,7 @@ import train.common.tile.TileMFPBWigWag;
 public class BlockMFPBWigWag extends BlockSignal {
 
 	public BlockMFPBWigWag() {
-		super(Material.rock,0);
+		super(Material.ROCK,0);
 		setCreativeTab(Traincraft.tcTab);
 		this.setTickRandomly(true);
 	}

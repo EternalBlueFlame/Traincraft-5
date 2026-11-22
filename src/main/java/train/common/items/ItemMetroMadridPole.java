@@ -21,10 +21,10 @@ public class ItemMetroMadridPole extends Item {
     @Override
     public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l, float par8, float par9, float par10) {
         Block i1 = CommonUtil.getBlockAt(world, i, j, k);
-        if (i1 == Blocks.snow) {
+        if (i1 == Blocks.SNOW) {
             l = 0;
         }
-        else if (i1 != Blocks.vine) {
+        else if (i1 != Blocks.VINE) {
             if (l == 0) {
                 j--;
             }

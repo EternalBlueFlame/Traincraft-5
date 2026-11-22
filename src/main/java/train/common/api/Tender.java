@@ -7,6 +7,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.fluids.*;
+import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import train.common.api.LiquidManager.StandardTank;
 import train.common.entity.stock.tanker.EntityBUnitDD35;
 import train.common.entity.stock.tanker.EntityBUnitEMDF3;

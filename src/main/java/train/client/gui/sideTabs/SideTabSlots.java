@@ -85,42 +85,42 @@ public class SideTabSlots extends SideTab {
 		}
 
 		if ((x > -110 && x < -94) && (y < 49 && y > 33)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[0];
 			array[0] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -82 && x < -66) && (y < 49 && y > 33)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[1];
 			array[1] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -54 && x < -38) && (y < 49 && y > 33)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[2];
 			array[2] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -26 && x < -10) && (y < 49 && y > 33)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[3];
 			array[3] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -110 && x < -94) && (y < 72 && y > 58)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[4];
 			array[4] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -82 && x < -66) && (y < 72 && y > 58)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[5];
 			array[5] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -54 && x < -38) && (y < 72 && y > 58)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[6];
 			array[6] = current == 0 ? 1 : 0;
 			return true;
 		} else if ((x > -26 && x < -10) && (y < 72 && y > 58)) {
-			soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+			soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			current = array[7];
 			array[7] = current == 0 ? 1 : 0;
 			return true;

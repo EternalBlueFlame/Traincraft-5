@@ -1,5 +1,8 @@
 package train.common.items;
 
+import com.sun.istack.internal.Nullable;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -17,7 +20,7 @@ public class ItemBlockGeneratorWindMill extends ItemBlock{
 	
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> par3List, ITooltipFlag flagIn) {
 		par3List.add("\u00a77" + "RF generator.");
 		par3List.add("\u00a77" + "Max Production (storm): 15 RF/t.");
 	}

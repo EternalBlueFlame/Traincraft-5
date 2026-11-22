@@ -22,7 +22,7 @@ public class BlockWaterWheel extends Block {
 	private IIcon texture;
 
 	public BlockWaterWheel() {
-		super(Material.wood);
+		super(Material.WOOD);
 		setCreativeTab(Traincraft.tcTab);
 		this.setTickRandomly(true);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 1F, 1F);

@@ -114,13 +114,13 @@ public class GUISeatManager extends GuiScreen {
                     int width = fontRenderer.getStringWidth("Empty Seat") + 6;
                     if (entity.seats.get(i).getPassenger() instanceof EntityPlayer) {
 
-                        if (fontRenderer.getStringWidth(entity.seats.get(i).getPassenger().getCommandSenderName()) > width) {
-                            width = fontRenderer.getStringWidth(entity.seats.get(i).getPassenger().getCommandSenderName()) + 7;
+                        if (fontRenderer.getStringWidth(entity.seats.get(i).getPassenger().getName()) > width) {
+                            width = fontRenderer.getStringWidth(entity.seats.get(i).getPassenger().getName()) + 7;
                             if(width%2 !=0)
                                 width++;
                         }
                         buttonList.add(
-                                new GUIButton(percentLeft(50)-60-(totalColumns/2)+(column*120)-(width/2), percentTop(25)+(28*activeRow+1)-11, width,20,entity.seats.get(i).getPassenger().getCommandSenderName()) {
+                                new GUIButton(percentLeft(50)-60-(totalColumns/2)+(column*120)-(width/2), percentTop(25)+(28*activeRow+1)-11, width,20,entity.seats.get(i).getPassenger().getName()) {
                                     @Override
                                     public String getHoverText() {
                                         return "Seat is currently occupied";

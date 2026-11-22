@@ -27,7 +27,7 @@ public class ItemChunkLoaderActivator extends Item {
 	}
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> par3List, ITooltipFlag flagIn) {
 		par3List.add("\u00a77" + "Right click on a Locomotive");
 		par3List.add("\u00a77" + " to start/stop chunk loading.");
 		par3List.add("\u00a77" + "Locomotives will load chunks");

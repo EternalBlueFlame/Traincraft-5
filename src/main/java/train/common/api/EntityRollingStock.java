@@ -840,7 +840,7 @@ public class EntityRollingStock extends AbstractTrains implements ILinkableCart 
 
 
 
-        //double var49 = MathHelper.wrapAngleTo180_float(this.rotationYaw - this.prevRotationYaw);
+        //double var49 = MathHelper.wrapDegrees(this.rotationYaw - this.prevRotationYaw);
 
         if (bogieFront != null && bogieBack!=null) {
 

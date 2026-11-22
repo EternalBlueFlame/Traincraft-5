@@ -34,7 +34,7 @@ public class TileFortyFootContainer extends TileTraincraft {
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return true;
     }
 
@@ -66,7 +66,7 @@ public class TileFortyFootContainer extends TileTraincraft {
         if (slot < 0 || slot >= getSizeInventory()) {
             return;
         }
-        if (stack != null && stack.stackSize == 0) {
+        if (stack != null && stack.getCount() == 0) {
             stack = null;
         }
         super.setInventorySlotContents(slot, stack);

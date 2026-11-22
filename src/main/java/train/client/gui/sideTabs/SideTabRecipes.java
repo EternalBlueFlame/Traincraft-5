@@ -7,6 +7,7 @@
 
 package train.client.gui.sideTabs;
 
+import net.minecraft.init.SoundEvents;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -81,7 +82,7 @@ public class SideTabRecipes extends SideTab {
             }
 
             if (item != null) {
-                fontRenderer.drawString(CommonUtil.translate(item.getUnlocalizedName()), x - 93, y + 78, headerColour);
+                fontRenderer.drawString(CommonUtil.translate(item.getTranslationKey()), x - 93, y + 78, headerColour);
                 gui.currentKnownItem = item;
             } else {
                 fontRenderer.drawString("Item name not found", x - 93, y + 78, headerColour);
@@ -102,20 +103,20 @@ public class SideTabRecipes extends SideTab {
             return false;
         } else {
             if ((x > -98 && x < -88) && (y < 49 && y > 33)) {
-                soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+                soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 recipeSize--;
                 return true;
             } else if ((x > -36 && x < -10) && (y < 49 && y > 33)) {
-                soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+                soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 recipeSize++;
                 return true;
             } else if ((x > -98 && x < -71) && (y < 71 && y > 61)) {
-                soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+                soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 isShow = true;
                 isClear = false;
                 return true;
             } else if ((x > -54 && x < -26) && (y < 71 && y > 61)) {
-                soundManager.playSound(PositionedSoundRecord.func_147673_a(new ResourceLocation("random.click")));
+                soundManager.playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
                 isClear = true;
                 isShow = false;
                 return true;

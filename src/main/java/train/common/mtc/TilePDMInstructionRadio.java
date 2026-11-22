@@ -129,7 +129,7 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
 
     public ArrayList<WirelessTransmitter> getWirelessTransmittersInBoundingBox() {
        // System.out.println("Got some..");
-      /*  List list = this.world.getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.getBoundingBox(xCoord, yCoord, zCoord, xCoord + 100, yCoord +100, zCoord + 100));
+      /*  List list = this.world.getEntitiesWithinAABBExcludingEntity(null, AxisAlignedBB.getBoundingBox(getPos().getX(),getPos().getY(),getPos().getZ(), xCoord + 100, yCoord +100, zCoord + 100));
         ArrayList<EntityLocoElectricPeachDriverlessMetro> returnList = new ArrayList();
         if (list != null) {
             System.out.println(list.size());
@@ -201,7 +201,7 @@ public class TilePDMInstructionRadio extends TileEntity implements IPeripheral, 
     public AxisAlignedBB getRenderBoundingBox() {
         if (boundingBox == null) {
           //  System.out.println("new");
-            boundingBox = ebf.tim.utility.CommonUtil.createAABB(xCoord, yCoord, zCoord, xCoord + 2000, yCoord +2000, zCoord + 2000);
+            boundingBox = ebf.tim.utility.CommonUtil.createAABB(getPos().getX(),getPos().getY(),getPos().getZ(), xCoord + 2000, yCoord +2000, zCoord + 2000);
         }
         return boundingBox;
     }

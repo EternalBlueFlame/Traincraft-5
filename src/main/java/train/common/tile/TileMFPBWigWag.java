@@ -32,7 +32,7 @@ public class TileMFPBWigWag extends TileSwitch {
                 CommonUtil.playSound(this, Info.resourceLocation + ":" + "bell", 1f, 1f);
 
             }
-            powered = world.isBlockIndirectlyGettingPowered(xCoord, yCoord, zCoord);
+            powered = world.isBlockIndirectlyGettingPowered(getPos().getX(),getPos().getY(),getPos().getZ());
             if (powered ) {
                 rotation += flip ? 1.75f : -1.75f;
             } else {

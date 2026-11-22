@@ -29,7 +29,7 @@ public class BlockStopper extends BlockContainer {
 	private IIcon texture;
 
 	public BlockStopper() {
-		super(Material.iron);
+		super(Material.IRON);
 		setCreativeTab(Traincraft.tcTab);
 	}
 

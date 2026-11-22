@@ -203,16 +203,16 @@ public class GuiForney extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRenderer.drawString(loco.getCommandSenderName(), 37, 3, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 39, 1, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 37, 1, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 39, 3, 0x000000);
+        fontRenderer.drawString(loco.getName(), 37, 3, 0x000000);
+        fontRenderer.drawString(loco.getName(), 39, 1, 0x000000);
+        fontRenderer.drawString(loco.getName(), 37, 1, 0x000000);
+        fontRenderer.drawString(loco.getName(), 39, 3, 0x000000);
 
-        fontRenderer.drawString(loco.getCommandSenderName(), 38, 3, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 38, 1, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 37, 2, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 39, 2, 0x000000);
-        fontRenderer.drawString(loco.getCommandSenderName(), 38, 2, 0xd3a900);
+        fontRenderer.drawString(loco.getName(), 38, 3, 0x000000);
+        fontRenderer.drawString(loco.getName(), 38, 1, 0x000000);
+        fontRenderer.drawString(loco.getName(), 37, 2, 0x000000);
+        fontRenderer.drawString(loco.getName(), 39, 2, 0x000000);
+        fontRenderer.drawString(loco.getName(), 38, 2, 0xd3a900);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);

@@ -35,9 +35,9 @@ public class TCBlocks {
 	public static Block distilActive=new BlockDistil(2,true).setHardness(3.5F).setStepSound(Block.soundTypeStone).setLightLevel(0.8F);
 	public static Block openFurnaceIdle=new BlockOpenHearthFurnace(false).setHardness(3.5F).setStepSound(Block.soundTypeStone);
 	public static Block openFurnaceActive=new BlockOpenHearthFurnace(true).setHardness(3.5F).setStepSound(Block.soundTypeStone).setLightLevel(0.8F);
-	public static Block assemblyTableI=new BlockAssemblyTableI(Material.wood).setHardness(3.5F).setStepSound(Block.soundTypeWood);
-	public static Block assemblyTableII=new BlockAssemblyTableII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
-	public static Block assemblyTableIII=new BlockAssemblyTableIII(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeWood);
+	public static Block assemblyTableI=new BlockAssemblyTableI(Material.WOOD).setHardness(3.5F).setStepSound(Block.soundTypeWood);
+	public static Block assemblyTableII=new BlockAssemblyTableII(Material.ROCK).setHardness(3.5F).setStepSound(Block.soundTypeWood);
+	public static Block assemblyTableIII=new BlockAssemblyTableIII(Material.ROCK).setHardness(3.5F).setStepSound(Block.soundTypeWood);
 	public static Block trainWorkbench=new BlockTrainWorkbench(16).setHardness(1.7F).setStepSound(Block.soundTypeWood);
 	public static Block lantern=new BlockLantern().setHardness(1.7F).setStepSound(Block.soundTypeMetal);
 	public static Block MFPBWigWag=new BlockMFPBWigWag().setHardness(2.5F).setStepSound(Block.soundTypeMetal);
@@ -84,10 +84,10 @@ public class TCBlocks {
 		BlockIDs.oreTC.block = new BlockOreTC().setHardness(3.0F).setResistance(5F).setStepSound(Block.soundTypeStone);
 		BlockIDs.dirtyBallast.block = new baseBlock("Dirty Gravel", 1f, 1f, "shovel", 1, Material.ground, Block.soundTypeGravel, "dirtygravel");
 		BlockIDs.dirtierBallast.block = new baseBlock("Dirtier Gravel", 1f, 1f, "shovel", 1, Material.ground, Block.soundTypeGravel, "blackgravel");
-		BlockIDs.highSpeedBallast.block = new BlockHighSpeedBallast(Material.ground).setHardness(1F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:ballasthighspeed").setBlockName("tc.ballastHighSpeed").setResistance(10F).setCreativeTab(Traincraft.tcTab);
-		BlockIDs.snowGravel.block = new BlocksnowGravel(Material.ground).setHardness(1F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:snowgravel").setBlockName("snowGravel").setCreativeTab(Traincraft.tcTab);
-		BlockIDs.poweredGravel.block = new BlockpoweredGravel(Material.rock).setHardness(0F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:poweredGravel").setBlockName("poweredGravel").setCreativeTab(Traincraft.tcTab);
-		BlockIDs.asphalt.block = new Blockasphalt(Material.ground).setHardness(2F).setStepSound(Block.soundTypeStone).setBlockTextureName("tc:asphalt").setBlockName("tc.asphalt").setResistance(10F).setCreativeTab(Traincraft.tcTab);
+		BlockIDs.highSpeedBallast.block = new BlockHighSpeedBallast(Material.ground).setHardness(1F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:ballasthighspeed").setTranslationKey("tc.ballastHighSpeed").setResistance(10F).setCreativeTab(Traincraft.tcTab);
+		BlockIDs.snowGravel.block = new BlocksnowGravel(Material.ground).setHardness(1F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:snowgravel").setTranslationKey("snowGravel").setCreativeTab(Traincraft.tcTab);
+		BlockIDs.poweredGravel.block = new BlockpoweredGravel(Material.ROCK).setHardness(0F).setStepSound(Block.soundTypeGravel).setBlockTextureName("tc:poweredGravel").setTranslationKey("poweredGravel").setCreativeTab(Traincraft.tcTab);
+		BlockIDs.asphalt.block = new Blockasphalt(Material.ground).setHardness(2F).setStepSound(Block.soundTypeStone).setBlockTextureName("tc:asphalt").setTranslationKey("tc.asphalt").setResistance(10F).setCreativeTab(Traincraft.tcTab);
 
 
 		BlockIDs.ballastSlab.block = new BlockBallastSlab(false).setCreativeTab(Traincraft.tcTab).setBlockTextureName("tc:ballast_test");
@@ -104,12 +104,12 @@ public class TCBlocks {
 		BlockIDs.asphaltDoubleSlab.block = new BlockAsphaltSlab(true).setBlockTextureName("tc:asphalt");
 
 
-		BlockIDs.ballastStairs.block = new BlockBaseStairs(BlockIDs.oreTC.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
-		BlockIDs.dirtyBallastStairs.block = new BlockBaseStairs(BlockIDs.dirtyBallast.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("dirty ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
-		BlockIDs.dirtierBallastStairs.block = new BlockBaseStairs(BlockIDs.dirtierBallast.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("dirtier ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
-		BlockIDs.highSpeedBallastStairs.block = new BlockBaseStairs(BlockIDs.highSpeedBallast.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("high speed ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
-		BlockIDs.snowGravelStairs.block = new BlockBaseStairs(BlockIDs.snowGravel.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("snow gravel stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
-		BlockIDs.asphaltStairs.block = new BlockBaseStairs(BlockIDs.asphalt.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setBlockName("asphalt stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+		BlockIDs.ballastStairs.block = new BlockBaseStairs(BlockIDs.oreTC.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setTranslationKey("ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+		BlockIDs.dirtyBallastStairs.block = new BlockBaseStairs(BlockIDs.dirtyBallast.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setTranslationKey("dirty ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+		BlockIDs.dirtierBallastStairs.block = new BlockBaseStairs(BlockIDs.dirtierBallast.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setTranslationKey("dirtier ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+		BlockIDs.highSpeedBallastStairs.block = new BlockBaseStairs(BlockIDs.highSpeedBallast.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setTranslationKey("high speed ballast stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+		BlockIDs.snowGravelStairs.block = new BlockBaseStairs(BlockIDs.snowGravel.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setTranslationKey("snow gravel stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
+		BlockIDs.asphaltStairs.block = new BlockBaseStairs(BlockIDs.asphalt.block).setHardness(2.0F).setStepSound(Block.soundTypeStone).setTranslationKey("asphalt stairs").setCreativeTab(Traincraft.tcTab).setLightOpacity(0);
 
 
 		BlockIDs.tcRail.block = new BlockTCRail().setHardness(1.0F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
@@ -120,16 +120,16 @@ public class TCBlocks {
 		BlockIDs.overheadWireDouble.block = new BlockoverheadWireDouble().setHardness(2F);
 		BlockIDs.signalSpanish.block = new BlocksignalSpanish().setHardness(1F).setResistance(10F).setLightLevel(0.2F).setCreativeTab(Traincraft.tcTab).setStepSound(Block.soundTypeMetal);
 		BlockIDs.kSignal.block = new BlockkSignal().setHardness(1F).setResistance(10F).setLightLevel(0.2F).setStepSound(Block.soundTypeMetal).setCreativeTab(null);
-		BlockIDs.metroMadridPole.block = new BlockMetroMadridPole( Material.iron).setHardness(2F).setCreativeTab(Traincraft.tcTab).setBlockName("MetroMadridPole");
-		//BlockIDs.FortyFootContainer.block = new BlockFortyFootContainer(Material.rock).setHardness(4.5F).setCreativeTab(Traincraft.tcTab).setStepSound(Block.soundTypeMetal);
+		BlockIDs.metroMadridPole.block = new BlockMetroMadridPole( Material.IRON).setHardness(2F).setCreativeTab(Traincraft.tcTab).setTranslationKey("MetroMadridPole");
+		//BlockIDs.FortyFootContainer.block = new BlockFortyFootContainer(Material.ROCK).setHardness(4.5F).setCreativeTab(Traincraft.tcTab).setStepSound(Block.soundTypeMetal);
 
 		if (Loader.isModLoaded("ComputerCraft")) {
-			BlockIDs.mtcTransmitterSpeed.block = new BlockInfoTransmitterSpeed(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:speedTransmitter").setBlockName("mtcspeedtransmitter").setCreativeTab(Traincraft.tcTab);
-			BlockIDs.mtcTransmitterMTC.block = new BlockInfoTransmitterMTC(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:mtctransmitter").setBlockName("mtcstatustransmitter").setCreativeTab(Traincraft.tcTab);
-			BlockIDs.mtcATOStopTransmitter.block = new BlockATOTransmitterStopPoint(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:atostoptransmitter").setBlockName("mtcatostoppointtransmitter").setCreativeTab(Traincraft.tcTab);
-			BlockIDs.mtcReceiverMTC.block = new BlockInfoGrabberMTC(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:mtcreceiver").setBlockName("mtcstatusreceiver").setCreativeTab(Traincraft.tcTab);
-			BlockIDs.mtcReceiverDestination.block = new BlockInfoGrabberDestination(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:destinationreceiver").setBlockName("mtcdestinationreceiver").setCreativeTab(Traincraft.tcTab);
-			BlockIDs.pdmInstructionBlock.block = new BlockPDMInstructionRadio(Material.rock).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:pdmradio").setBlockName("pdmradio").setCreativeTab(Traincraft.tcTab);
+			BlockIDs.mtcTransmitterSpeed.block = new BlockInfoTransmitterSpeed(Material.ROCK).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:speedTransmitter").setTranslationKey("mtcspeedtransmitter").setCreativeTab(Traincraft.tcTab);
+			BlockIDs.mtcTransmitterMTC.block = new BlockInfoTransmitterMTC(Material.ROCK).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:mtctransmitter").setTranslationKey("mtcstatustransmitter").setCreativeTab(Traincraft.tcTab);
+			BlockIDs.mtcATOStopTransmitter.block = new BlockATOTransmitterStopPoint(Material.ROCK).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:atostoptransmitter").setTranslationKey("mtcatostoppointtransmitter").setCreativeTab(Traincraft.tcTab);
+			BlockIDs.mtcReceiverMTC.block = new BlockInfoGrabberMTC(Material.ROCK).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:mtcreceiver").setTranslationKey("mtcstatusreceiver").setCreativeTab(Traincraft.tcTab);
+			BlockIDs.mtcReceiverDestination.block = new BlockInfoGrabberDestination(Material.ROCK).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:destinationreceiver").setTranslationKey("mtcdestinationreceiver").setCreativeTab(Traincraft.tcTab);
+			BlockIDs.pdmInstructionBlock.block = new BlockPDMInstructionRadio(Material.ROCK).setHardness(3.5F).setStepSound(Block.soundTypeMetal).setBlockTextureName("tc:pdmradio").setTranslationKey("pdmradio").setCreativeTab(Traincraft.tcTab);
 		}
 
 	}
@@ -137,7 +137,7 @@ public class TCBlocks {
 	public static void registerBlocks() {
 		for (BlockIDs blocks : BlockIDs.values()) {
 			if(blocks.block != null) {
-				blocks.block.setBlockName(Info.modID + ":" + blocks.name());
+				blocks.block.setTranslationKey(Info.modID + ":" + blocks.name());
 				if (blocks.hasItemBlock) {
 					GameRegistry.registerBlock(blocks.block, blocks.itemBlockClass, blocks.name());
 				} else {
@@ -159,7 +159,7 @@ public class TCBlocks {
 		BlockIDs.asphalt.block.setHarvestLevel("pickaxe", 0);
 		BlockIDs.metroMadridPole.block.setHarvestLevel("pickaxed", 0);
 
-		Blocks.rail.setHarvestLevel("ItemStacked", 0);
+		Blocks.RAIL.setHarvestLevel("ItemStacked", 0);
 		Blocks.detector_rail.setHarvestLevel("ItemStacked", 0);
 		Blocks.GOLDEN_RAIL.setHarvestLevel("ItemStacked", 0);
 	}

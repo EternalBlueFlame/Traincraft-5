@@ -7,8 +7,8 @@
 
 package mods.railcraft.api.core;
 
+import com.sun.istack.internal.Nullable;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
 
@@ -19,7 +19,8 @@ import java.util.Objects;
  */
 public interface IWorldSupplier {
 
-    @Nullable World theWorld();
+    @Nullable
+    World theWorld();
 
     /**
      * A slightly more dangerous version.

@@ -38,7 +38,7 @@ public class ModelTwoWaysCrossingTCTrack extends ModelBase {
 
 
 	public void render(String type, TileTCRail tcRail,  double x, double y, double z) {
-		render(type, x, y, z, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), 1, 1, 1, 1);
+		render(type, x, y, z, CommonUtil.getBlockFacing(tcRail.getWorld(), tcRail.getPos().getX(), tcRail.getPos().getY(), tcRail.getPos().getZ()), 1, 1, 1, 1);
 
 	}
 

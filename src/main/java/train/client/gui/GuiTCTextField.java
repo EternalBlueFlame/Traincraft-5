@@ -374,7 +374,7 @@ public class GuiTCTextField extends Gui {
     /**
      * Args: x, y, buttonClicked
      */
-    public void mouseClicked(int par1, int par2, int par3) {
+    public void mouseClicked(int par1, int par2, int par3) throws IOException {
         boolean flag = par1 >= this.xPos && par1 < this.xPos + this.width && par2 >= this.yPos && par2 < this.yPos + this.height;
 
         if (this.canLoseFocus) {

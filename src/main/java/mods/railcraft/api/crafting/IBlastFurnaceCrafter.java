@@ -8,7 +8,6 @@
 package mods.railcraft.api.crafting;
 
 import net.minecraft.item.ItemStack;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
@@ -45,14 +44,14 @@ public interface IBlastFurnaceCrafter {
     /**
      * You can remove fuels from this list, but do not add them, it will throw an UnsupportedOperationException.
      */
-    default List<@NotNull ISimpleRecipe> getFuels() {
+    default List<ISimpleRecipe> getFuels() {
         return Collections.emptyList();
     }
 
     /**
      * You can remove recipes from this list, but do not add them, it will throw an UnsupportedOperationException.
      */
-    default List<@NotNull IRecipe> getRecipes() {
+    default List<IRecipe> getRecipes() {
         return Collections.emptyList();
     }
 

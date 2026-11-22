@@ -7,6 +7,8 @@
 
 package train.common.blocks;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -85,7 +87,7 @@ public class BlockOpenHearthFurnace extends BlockDynamic {
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
 		super.onBlockAdded(world, pos, state);
-		CommonUtil.markBlockForUpdate(world, i, j, k);
+		CommonUtil.markBlockForUpdate(world, pos.getX(),pos.getY(),pos.getZ());
 	}
 
 	@Override

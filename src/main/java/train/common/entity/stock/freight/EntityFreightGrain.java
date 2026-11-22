@@ -69,7 +69,7 @@ null,
  null, 
 null, 
 null, 
-new ItemStack(Items.wheat, 3),
+new ItemStack(Items.WHEAT, 3),
 new ItemStack(thisItem)
         };
     }

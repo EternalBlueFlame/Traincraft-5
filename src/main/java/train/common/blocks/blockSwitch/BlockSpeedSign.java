@@ -8,7 +8,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
@@ -23,7 +22,7 @@ public class BlockSpeedSign extends BlockDynamic {
 	private int skinstate = 0;
 
 	public BlockSpeedSign() {
-		super(Material.iron, 0);
+		super(Material.IRON, 0);
 		this.setTickRandomly(true);
 		setBlockBounds(0.2F,0.0F,0.2F,0.8F,1.25F,0.8F);
 	}

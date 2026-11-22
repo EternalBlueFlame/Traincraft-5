@@ -114,13 +114,13 @@ public class TileEntityOpenHearthFurnace extends TileTraincraft {
 			}
 			if (flag != (furnaceBurnTime > 0)) {
 				flag1 = true;
-				BlockOpenHearthFurnace.updateHearthFurnaceBlockState(furnaceBurnTime > 0, getWorld(), xCoord, yCoord, zCoord, random);
+				BlockOpenHearthFurnace.updateHearthFurnaceBlockState(furnaceBurnTime > 0, getWorld(), getPos().getX(),getPos().getY(),getPos().getZ(), random);
 			}
 			this.syncTileEntity();
 		}
 		if (this.getWorld().isRemote) {
 			if (furnaceBurnTime > 0) {
-				smoke(getWorld(), xCoord, yCoord, zCoord, random);
+				smoke(getWorld(), getPos().getX(),getPos().getY(),getPos().getZ(), random);
 			}
 		}
 		if (flag1) {

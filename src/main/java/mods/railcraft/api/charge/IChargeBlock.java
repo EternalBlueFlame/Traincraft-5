@@ -8,11 +8,11 @@
 package mods.railcraft.api.charge;
 
 import com.google.common.base.Objects;
+import com.sun.istack.internal.Nullable;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.EnumSet;
@@ -49,7 +49,8 @@ public interface IChargeBlock {
      *
      * Most blocks don't need to touch this, but Multi-blocks may want to redirect to the master block.
      */
-    default @Nullable Charge.IAccess getMeterAccess(Charge network, IBlockState state, World world, BlockPos pos) {
+    default @Nullable
+    Charge.IAccess getMeterAccess(Charge network, IBlockState state, World world, BlockPos pos) {
         return network.network(world).access(pos);
     }
 

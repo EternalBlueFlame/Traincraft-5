@@ -24,7 +24,7 @@ public class BlocksignalSpanish extends Block {
     private IIcon texture;
 
     public BlocksignalSpanish() {
-        super(Material.rock);
+        super(Material.ROCK);
         setCreativeTab(Traincraft.tcTab);
         //this.setTickRandomly(true);
         //this.setBlockBounds(0.5F , 0.0F, 0.5F , 0.5F ,  2.0F, 0.5F);

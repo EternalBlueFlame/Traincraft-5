@@ -1,5 +1,9 @@
 package train.common.blocks.slabs;
 
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -22,12 +26,12 @@ public class BlockAsphaltSlab extends BlockSlab
 {
     public BlockAsphaltSlab(boolean par2)
     {
-        super(par2, Material.rock);
+        super(par2, Material.ROCK);
         this.useNeighborBrightness = true;
-        this.setStepSound(soundTypeStone);
+        this.setSoundType(SoundType.STONE);
         this.setResistance(5.0F);
         this.setHardness(2.0F);
-        this.setBlockName("asphalt slab");
+        this.setTranslationKey("asphalt slab");
     }
 
     /************
@@ -35,18 +39,15 @@ public class BlockAsphaltSlab extends BlockSlab
      ************/
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item item, CreativeTabs tab, List list)
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> list)
     {
-        if (item != Item.getItemFromBlock(BlockIDs.asphaltDoubleSlab.block))
-        {
-            list.add(new ItemStack(item, 1, 0));
-        }
+        list.add(new ItemStack(this, 1, 0));
     }
 
     @Override
-    public String func_150002_b(int par1)
+    public String getTranslationKey(int par1)
     {
-        return super.getUnlocalizedName();
+        return super.getTranslationKey();
     }
 
     @SideOnly(Side.CLIENT)
@@ -57,16 +58,16 @@ public class BlockAsphaltSlab extends BlockSlab
 
     @Override
     @SideOnly(Side.CLIENT)
-    public Item getItem(World par1World, int par2, int par3, int par4)
+    public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state)
     {
-        return isBlockSingleSlab(this) ? Item.getItemFromBlock(this) : (this == BlockIDs.asphaltDoubleSlab.block ? Item.getItemFromBlock(BlockIDs.asphaltSlab.block) : Item.getItemFromBlock(BlockIDs.asphalt.block));
+        return isBlockSingleSlab(this) ? new ItemStack(Item.getItemFromBlock(this)) : (this == BlockIDs.asphaltDoubleSlab.block ? new ItemStack(Item.getItemFromBlock(BlockIDs.asphaltSlab.block)) : new ItemStack(Item.getItemFromBlock(BlockIDs.asphalt.block)));
     }
 
     /************
      * DROPS
      ************/
     @Override
-    public Item getItemDropped(int par1, Random par2Random, int par3)
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Item.getItemFromBlock(BlockIDs.asphaltSlab.block);
     }

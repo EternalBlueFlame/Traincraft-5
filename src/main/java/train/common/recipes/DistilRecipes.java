@@ -33,7 +33,7 @@ public class DistilRecipes {
 		addSmelting(Item.getItemFromBlock(Blocks.leaves), new ItemStack(ItemIDs.diesel.item), 0.2F, 6,
 				new ItemStack(ItemIDs.rawPlastic.item, 2));
 		addSmelting(ItemIDs.diesel.item, new ItemStack(ItemIDs.refinedFuel.item), 1F, 1, new ItemStack(ItemIDs.rawPlastic.item, 2));
-		addSmelting(Items.wheat, new ItemStack(ItemIDs.diesel.item), 0.2F, 4,
+		addSmelting(Items.WHEAT, new ItemStack(ItemIDs.diesel.item), 0.2F, 4,
 				new ItemStack(ItemIDs.rawPlastic.item, 1));
 	}
 

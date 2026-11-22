@@ -11,6 +11,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -90,14 +91,14 @@ public class BlockFortyFootContainer extends BlockContainer {
 
         TileEntity te = CommonUtil.getTileEntity(world, x, y, z);
         if (te instanceof TileFortyFootContainer && world.isRemote) {
-            if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemPaintbrushThing) {
+            if (player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemPaintbrushThing) {
                 ((TileFortyFootContainer) te).goToNextColor();
             }
         }
         if (world.isRemote) return true;
 
         if (te instanceof TileFortyFootContainer) {
-            if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemPaintbrushThing) {
+            if (player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemPaintbrushThing) {
                 ((TileFortyFootContainer)te).goToNextColor();
             } else {
                 player.openGui(Traincraft.instance, GuiIDs.FORTY_FOOT_CONTAINER, world, x, y, z);
@@ -168,7 +169,7 @@ public class BlockFortyFootContainer extends BlockContainer {
 
     /*@Override
     public Item getItemDropped(int metadata, Random rand, int fortuneLevel) {
-    *//*    ItemStack item = new ItemStack(new ItemFortyFootContainer(new BlockFortyFootContainer(Material.rock)));
+    *//*    ItemStack item = new ItemStack(new ItemFortyFootContainer(new BlockFortyFootContainer(Material.ROCK)));
         TileFortyFootContainer theContainerTile = theTile;
         NBTTagCompound nbt = new NBTTagCompound();
         NBTTagList list = new NBTTagList();
@@ -189,7 +190,7 @@ public class BlockFortyFootContainer extends BlockContainer {
         item.setTagCompound(nbt);
         System.out.println("Faile?");
         System.out.println(item.toString());
-        return new ItemFortyFootContainer(new BlockFortyFootContainer(Material.rock));*//*
+        return new ItemFortyFootContainer(new BlockFortyFootContainer(Material.ROCK));*//*
 
     }*/
 

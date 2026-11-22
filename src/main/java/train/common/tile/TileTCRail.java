@@ -1,5 +1,8 @@
 package train.common.tile;
 
+import net.minecraft.util.ITickable;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -13,7 +16,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import train.common.Traincraft;
@@ -29,7 +31,7 @@ import train.common.library.TraincraftRegistry;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TileTCRail extends TileEntity {
+public class TileTCRail extends TileEntity implements ITickable {
 
 	public double r;
 	public double cx;
@@ -175,14 +177,14 @@ public class TileTCRail extends TileEntity {
 
 	private byte checkBlockXZ=0;
 	@Override
-	public void updateEntity() {
+	public void update() {
 		if (world.isRemote || !TCRailTypes.isSwitchTrack(this)) {
 
 			return;
 		}
 
 		if (updateTicks % 11 == 0 || updateTicks==1) {
-			boolean flag = world.isBlockIndirectlyGettingPowered(getPos().getX(), getPos().getY(), getPos().getZ());
+			boolean flag = world.isBlockPowered(getPos());
 
 			if(checkBlockXZ==0){
 				if(CommonUtil.getBlockAt(world,getPos().getX(),getPos().getY(),getPos().getZ()+1) instanceof BlockTCRail){
@@ -193,14 +195,14 @@ public class TileTCRail extends TileEntity {
 			}
 			if(!flag){
 				if(checkBlockXZ==1){
-					flag = world.isBlockIndirectlyGettingPowered(getPos().getX(), getPos().getY(), getPos().getZ()+1);
+					flag = world.isBlockPowered(new BlockPos(getPos().getX(), getPos().getY(), getPos().getZ()+1));
 					if(!flag){
-						flag = world.isBlockIndirectlyGettingPowered(getPos().getX(), getPos().getY(), getPos().getZ()-1);
+						flag = world.isBlockPowered(new BlockPos(getPos().getX(), getPos().getY(), getPos().getZ()-1));
 					}
 				} else if(checkBlockXZ==2){
-					flag = world.isBlockIndirectlyGettingPowered(getPos().getX()+1, getPos().getY(), getPos().getZ());
+					flag = world.isBlockPowered(new BlockPos(getPos().getX()+1, getPos().getY(), getPos().getZ()));
 					if(!flag){
-						flag = world.isBlockIndirectlyGettingPowered(getPos().getX()-1, getPos().getY(), getPos().getZ());
+						flag = world.isBlockPowered(new BlockPos(getPos().getX()-1, getPos().getY(), getPos().getZ()));
 					}
 				}
 			}
@@ -331,7 +333,7 @@ public class TileTCRail extends TileEntity {
 	}
 
 	@Override
-	public void writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setByte("Orientation", (byte) facingMeta);
 		nbt.setDouble("r", r);
@@ -355,6 +357,7 @@ public class TileTCRail extends TileEntity {
 		nbt.setBoolean("hasModel", hasModel);
 		nbt.setBoolean("switchActive", switchActive);
 		nbt.setInteger("idDrop", Item.getIdFromItem(idDrop));
+		return nbt;
 	}
 
 	@Override

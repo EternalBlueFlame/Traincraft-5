@@ -139,7 +139,7 @@ public class TextureManager {
     public static List<ItemStack> getAcceptedRailItems(){
         List<ItemStack> Ores=new ArrayList<>();
 
-        Ores.add(new ItemStack(Items.diamond));
+        Ores.add(new ItemStack(Items.DIAMOND));
         Ores.add(new ItemStack(Items.blaze_rod));
 
         for(String o: OreDictionary.getOreNames()) {

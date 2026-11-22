@@ -86,6 +86,6 @@ public class ContainerTier extends ContainerTraincraft {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return tier.isUseableByPlayer(entityplayer);
+		return tier.isUsableByPlayer(entityplayer);
 	}
 }

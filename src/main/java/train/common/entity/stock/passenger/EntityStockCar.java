@@ -72,7 +72,7 @@ null,
  null, 
 null, 
 null, 
-new ItemStack(Items.leather, 1),
+new ItemStack(Items.LEATHER, 1),
 new ItemStack(thisItem)
         };
     }

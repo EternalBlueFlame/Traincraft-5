@@ -227,6 +227,6 @@ public class ItemTCCompositeSuit extends ItemTCArmor {
 
 	@Override
 	public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack) {
-		return(par2ItemStack.getItem() == Items.diamond);
+		return(par2ItemStack.getItem() == Items.DIAMOND);
 	}
 }

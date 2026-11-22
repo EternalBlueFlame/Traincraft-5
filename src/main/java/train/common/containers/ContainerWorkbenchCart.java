@@ -14,7 +14,7 @@ public class ContainerWorkbenchCart extends Container {
 	private World world;
 
 	public ContainerWorkbenchCart(InventoryPlayer par1InventoryPlayer, World par2World) {
-		this.getWorld() = par2World;
+		this.world = par2World;
 
 		this.addSlotToContainer(new SlotCrafting(par1InventoryPlayer.player, craftMatrix, craftResult, 0, 124, 35));
 		int var6;

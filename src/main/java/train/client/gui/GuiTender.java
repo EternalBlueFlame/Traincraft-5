@@ -135,16 +135,16 @@ public class GuiTender extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRenderer.drawString(tender.getCommandSenderName(), 34, 1, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 36, 3, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 34, 3, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 36, 1, 0x000000);
+        fontRenderer.drawString(tender.getName(), 34, 1, 0x000000);
+        fontRenderer.drawString(tender.getName(), 36, 3, 0x000000);
+        fontRenderer.drawString(tender.getName(), 34, 3, 0x000000);
+        fontRenderer.drawString(tender.getName(), 36, 1, 0x000000);
 
-        fontRenderer.drawString(tender.getCommandSenderName(), 34, 2, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 36, 2, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 35, 3, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 35, 1, 0x000000);
-        fontRenderer.drawString(tender.getCommandSenderName(), 35, 2, 0xd3a900);
+        fontRenderer.drawString(tender.getName(), 34, 2, 0x000000);
+        fontRenderer.drawString(tender.getName(), 36, 2, 0x000000);
+        fontRenderer.drawString(tender.getName(), 35, 3, 0x000000);
+        fontRenderer.drawString(tender.getName(), 35, 1, 0x000000);
+        fontRenderer.drawString(tender.getName(), 35, 2, 0xd3a900);
 
         GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glEnable(GL11.GL_DEPTH_TEST);

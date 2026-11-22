@@ -114,7 +114,7 @@ public class TileTCRailGag extends TileEntity {
 			for(int z : matrixXZ){
 				for(int y : matrixY){
 					if(CommonUtil.getBlockAt(p_149749_1_, xCoord,yCoord,zCoord)instanceof BlockTCRail){
-						p_149749_1_.func_147453_f(p_149749_2_,p_149749_3_,p_149749_4_, Blocks.air);
+						p_149749_1_.func_147453_f(p_149749_2_,p_149749_3_,p_149749_4_, Blocks.AIR);
 						CommonUtil.markBlockForUpdate(p_149749_1_, p_149749_2_,p_149749_3_,p_149749_4_);
 					}
 				}

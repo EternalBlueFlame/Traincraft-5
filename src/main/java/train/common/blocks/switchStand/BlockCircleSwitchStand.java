@@ -15,12 +15,12 @@ import train.common.tile.switchStand.TileCircleSwitchStand;
 public class BlockCircleSwitchStand extends BlockSwitch {
 
     public BlockCircleSwitchStand() {
-        super(Material.iron, 0);
+        super(Material.IRON, 0);
         setCreativeTab(Traincraft.tcTab);
         this.setTickRandomly(true);
         setHardness(1.75F);
         setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.75F, 0.8F);
-        setStepSound(soundTypeMetal);
+        setSoundType(SoundType.METAL);
     }
     @Override
     public void onBlockAdded(World world, int i, int j, int k) {

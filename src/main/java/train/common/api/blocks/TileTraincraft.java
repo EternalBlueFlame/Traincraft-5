@@ -119,7 +119,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
     }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player){
+    public boolean isUsableByPlayer(EntityPlayer player){
         return this.getWorld() != null
             && CommonUtil.getTileEntity(this.getWorld(), this.xCoord, this.yCoord, this.zCoord) == this
             && player.getDistanceSq((double) this.xCoord + 0.5D, (double) this.yCoord + 0.5D, (double) this.zCoord + 0.5D) <= 64.0D;
@@ -186,7 +186,7 @@ public class TileTraincraft extends TileRenderFacing implements ISidedInventory{
         for(Object o : this.getWorld().playerEntities){
             if(o instanceof EntityPlayerMP){
                 EntityPlayerMP player = (EntityPlayerMP) o;
-                if(player.getDistance(xCoord, yCoord, zCoord) <= 64) {
+                if(player.getDistance(getPos().getX(),getPos().getY(),getPos().getZ()) <= 64) {
                     player.playerNetServerHandler.sendPacket(this.getDescriptionPacket());
                 }
             }

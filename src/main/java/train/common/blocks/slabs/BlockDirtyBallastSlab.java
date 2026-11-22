@@ -1,5 +1,8 @@
 package train.common.blocks.slabs;
 
+import net.minecraft.block.SoundType;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -22,12 +25,12 @@ public class BlockDirtyBallastSlab extends BlockSlab
 {
     public BlockDirtyBallastSlab(boolean par2)
     {
-        super(par2, Material.rock);
+        super(par2, Material.ROCK);
         this.useNeighborBrightness = true;
-        this.setStepSound(soundTypeStone);
+        this.setSoundType(SoundType.STONE);
         this.setResistance(5.0F);
         this.setHardness(2.0F);
-        this.setBlockName("dirty ballast slab");
+        this.setTranslationKey("dirty ballast slab");
     }
 
     /************
@@ -35,18 +38,15 @@ public class BlockDirtyBallastSlab extends BlockSlab
      ************/
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item item, CreativeTabs tab, List list)
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> list)
     {
-        if (item != Item.getItemFromBlock(BlockIDs.dirtyBallastDoubleSlab.block))
-        {
-            list.add(new ItemStack(item, 1, 0));
-        }
+        list.add(new ItemStack(this, 1, 0));
     }
 
     @Override
-    public String func_150002_b(int par1)
+    public String getTranslationKey(int par1)
     {
-        return super.getUnlocalizedName();
+        return super.getTranslationKey();
     }
 
     @SideOnly(Side.CLIENT)
@@ -66,7 +66,7 @@ public class BlockDirtyBallastSlab extends BlockSlab
      * DROPS
      ************/
     @Override
-    public Item getItemDropped(int par1, Random par2Random, int par3)
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Item.getItemFromBlock(BlockIDs.dirtyBallastSlab.block);
     }

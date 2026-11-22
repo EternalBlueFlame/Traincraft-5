@@ -176,8 +176,8 @@ public class TileRenderFacing extends TileEntity {
     public void markDirty() {
         super.markDirty();
         if(this.getWorld() != null) {
-            CommonUtil.markBlockForUpdate(getWorld(), xCoord, yCoord, zCoord);
-            getWorld().markTileEntityChunkModified(xCoord, yCoord, zCoord, this);
+            CommonUtil.markBlockForUpdate(getWorld(), getPos().getX(),getPos().getY(),getPos().getZ());
+            getWorld().markTileEntityChunkModified(getPos().getX(),getPos().getY(),getPos().getZ(), this);
             this.getWorld().func_147453_f(this.xCoord, this.yCoord, this.zCoord, host);
             if (getWorld().isRemote && blockGLID != null) {
             //    org.lwjgl.opengl.GL11.glDeleteLists(blockGLID, 1);
@@ -228,7 +228,7 @@ public class TileRenderFacing extends TileEntity {
         for(Object o : this.getWorld().playerEntities){
             if(o instanceof EntityPlayerMP){
                 EntityPlayerMP player = (EntityPlayerMP) o;
-                if(player.getDistance(xCoord, yCoord, zCoord) <= 64) {
+                if(player.getDistance(getPos().getX(),getPos().getY(),getPos().getZ()) <= 64) {
                     player.playerNetServerHandler.sendPacket(this.getDescriptionPacket());
                 }
             }

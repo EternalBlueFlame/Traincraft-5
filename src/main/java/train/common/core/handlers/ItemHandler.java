@@ -63,7 +63,7 @@ public class ItemHandler {
 		if ((entity instanceof Freight) && ((Freight) entity).getCargoType() == EnumCargoTypes.CargoTypes.WOOD) {
             int isid = OreDictionary.getOreID(itemstack);
 			return isid == plankWood || isid == logWood || isid == slabWood || isid == stairWood ||
-					itemstack.getItem() == Item.getItemFromBlock(Blocks.ladder) || itemstack.getItem() == Item.getItemFromBlock(Blocks.fence) || itemstack.getItem() == Item.getItemFromBlock(Blocks.fence_gate) || isid == rubberWood;
+					itemstack.getItem() == Item.getItemFromBlock(Blocks.LADDER) || itemstack.getItem() == Item.getItemFromBlock(Blocks.fence) || itemstack.getItem() == Item.getItemFromBlock(Blocks.fence_gate) || isid == rubberWood;
 		}
 
 		if ((entity instanceof Freight) && ((Freight) entity).getCargoType() == EnumCargoTypes.CargoTypes.RAILS) {
@@ -71,8 +71,8 @@ public class ItemHandler {
 		}
 		if ((entity instanceof Freight) && ((Freight) entity).getCargoType() == EnumCargoTypes.CargoTypes.GRAIN) {
 			Item item = itemstack.getItem();
-			if (item == Items.wheat || item == Items.wheat_seeds || item == Items.melon_seeds
-					|| item == Items.pumpkin_seeds || item instanceof ItemSeeds) {
+			if (item == Items.WHEAT || item == Items.WHEAT_SEEDS || item == Items.MELON_SEEDS
+					|| item == Items.PUMPKIN_SEEDS || item instanceof ItemSeeds) {
 				return true;
 			}
 			return cropStuff(itemstack);
@@ -83,10 +83,10 @@ public class ItemHandler {
 
 
 		if ((entity instanceof Freight) && ((Freight) entity).getCargoType() == EnumCargoTypes.CargoTypes.STONE) {
-			return CommonUtil.getMaterial(block) == Material.rock;
+			return CommonUtil.getMaterial(block) == Material.ROCK;
 		}
 		if ((entity instanceof Freight) && ((Freight) entity).getCargoType() == EnumCargoTypes.CargoTypes.ICE) {
-			return CommonUtil.getMaterial(block) == Material.ice || CommonUtil.getMaterial(block) == Material.packedIce;
+			return CommonUtil.getMaterial(block) == Material.ICE || CommonUtil.getMaterial(block) == Material.PACKED_ICE;
 		}
 
 		else {
@@ -133,15 +133,15 @@ public class ItemHandler {
 		if (OREDICT_ORES==null){
 			OREDICT_ORES = new LinkedList<String>();
 		}
-		if (!OREDICT_ORES.contains(i.getUnlocalizedName())){
+		if (!OREDICT_ORES.contains(i.getTranslationKey())){
 			for(Integer ore : OreDictionary.getOreIDs(i)) {
 				if (OreDictionary.getOreName(ore).toLowerCase().startsWith("ore")){
-					OREDICT_ORES.add(i.getUnlocalizedName());
+					OREDICT_ORES.add(i.getTranslationKey());
 					return true;
 				}
 			}
 		}
-		return OREDICT_ORES.contains(i.getUnlocalizedName());
+		return OREDICT_ORES.contains(i.getTranslationKey());
 	}
 
 }

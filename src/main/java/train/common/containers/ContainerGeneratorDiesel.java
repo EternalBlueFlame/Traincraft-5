@@ -27,7 +27,7 @@ public class ContainerGeneratorDiesel extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return generator.isUseableByPlayer(entityplayer);
+		return generator.isUsableByPlayer(entityplayer);
 	}
 
 	@Override

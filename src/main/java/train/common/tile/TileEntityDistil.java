@@ -180,11 +180,11 @@ public class TileEntityDistil extends TileTraincraft implements IFluidHandler {
 
 			if (flag != (distilBurnTime > 0)) {
 				flag1 = true;
-				BlockDistil.updateDistilBlockState(distilBurnTime > 0, getWorld(), xCoord, yCoord, zCoord);
+				BlockDistil.updateDistilBlockState(distilBurnTime > 0, getWorld(), getPos().getX(),getPos().getY(),getPos().getZ());
 			}
 			else {
 				flag1 = false;
-				BlockDistil.updateDistilBlockState(distilBurnTime > 0, world, xCoord, yCoord, zCoord);
+				BlockDistil.updateDistilBlockState(distilBurnTime > 0, world, getPos().getX(),getPos().getY(),getPos().getZ());
 				CommonUtil.markBlockForUpdate(this.world, getPos().getX(), getPos().getY(), getPos().getZ());
 			}
 

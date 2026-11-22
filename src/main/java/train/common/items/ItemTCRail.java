@@ -475,7 +475,7 @@ public class ItemTCRail extends ItemPart {
         int facing0 = CommonUtil.floorDouble(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
         Vector2f dir0 = ItemTCRail.getDirectionVector(facing0);
 
-        float yaw = MathHelper.wrapAngleTo180_float(player.rotationYaw);
+        float yaw = MathHelper.wrapDegrees(player.rotationYaw);
         boolean isLeftTurn = getTrackOrientation(facing0, yaw).equals("left");
         int facing1 = isLeftTurn ? (facing0 + 4 - 1) % 4 : (facing0 + 1) % 4;
         Vector2f dir1 = getDirectionVector(facing1);
@@ -2004,7 +2004,7 @@ public class ItemTCRail extends ItemPart {
         if (!world.isRemote) {
 
             /** Determines if track is left or right*/
-            float yaw = MathHelper.wrapAngleTo180_float(player != null ? player.rotationYaw : par10);
+            float yaw = MathHelper.wrapDegrees(player != null ? player.rotationYaw : par10);
             tempType = type;
 
             if (type == EnumTracks.TURN_1X1) {
@@ -3261,7 +3261,7 @@ public class ItemTCRail extends ItemPart {
 
     private boolean turnTrack(EntityPlayer player, World world, int x, int y, int z, int dir, EnumTracks tempType, float pyaw, int[] xArray, int[]zArray, float radius){
 
-        float yaw = MathHelper.wrapAngleTo180_float(player != null ? player.rotationYaw : pyaw);
+        float yaw = MathHelper.wrapDegrees(player != null ? player.rotationYaw : pyaw);
         String orientation = getTrackOrientation(dir,yaw);
 
         if (orientation.equals("right")) {
@@ -3317,7 +3317,7 @@ public class ItemTCRail extends ItemPart {
     }
 
     public boolean SCurve(EntityPlayer player, World world, int x, int y, int z, int dir, EnumTracks tempType, float pyaw, int[] xArray, int[]zArray, int[] xArray2, int[] zArray2, float radius, int length, int width){
-        float yaw = MathHelper.wrapAngleTo180_float(player != null ? player.rotationYaw : pyaw);
+        float yaw = MathHelper.wrapDegrees(player != null ? player.rotationYaw : pyaw);
         String ori = getTrackOrientation(dir,yaw);
 
         if (ori.equals("right")) {
@@ -5008,7 +5008,7 @@ public class ItemTCRail extends ItemPart {
 
     @SideOnly(Side.CLIENT)
     @Override
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> par3List, ITooltipFlag flagIn) {
         par3List.add("\u00a77" + type.getItemToolTip());
     }
 

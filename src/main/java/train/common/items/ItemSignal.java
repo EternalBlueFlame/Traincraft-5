@@ -24,10 +24,10 @@ public class ItemSignal extends Item { // implements IBoxable TODO when IC2
 
 	public boolean onItemUse(ItemStack itemstack, EntityPlayer entityplayer, World world, int i, int j, int k, int l) {
 		Block i1 = CommonUtil.getBlockAt(world, i, j, k);
-		if (i1 == Blocks.snow) {
+		if (i1 == Blocks.SNOW) {
 			l = 0;
 		}
-		else if (i1 != Blocks.vine) {
+		else if (i1 != Blocks.VINE) {
 			if (l == 0) {
 				j--;
 			}

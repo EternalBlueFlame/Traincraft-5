@@ -33,7 +33,7 @@ public class ItemWrench extends ItemPart implements buildcraft.api.tools.IToolWr
 	}
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> par3List, ITooltipFlag flagIn) {
 		par3List.add("\u00a77" + "Works same as a BuildCraft wrench.");
 		par3List.add("\u00a77" + "Use it to change lantern color.");
 		par3List.add("\u00a77" + "Use it to lock/unlock certain carts (passenger)");

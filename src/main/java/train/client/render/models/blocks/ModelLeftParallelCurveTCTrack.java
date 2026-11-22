@@ -32,7 +32,7 @@ public class ModelLeftParallelCurveTCTrack extends ModelBase {
     public void render20x2() {model20x2SCurveLeft.render(1);}
 
     public void render(String type, String variant, TileTCRail tcRail, double x, double y, double z) {
-        render( type, variant, CommonUtil.getBlockFacing(tcRail.getWorldObj(), tcRail.xCoord, tcRail.yCoord, tcRail.zCoord), x, y, z, 1, 1, 1, 1 );
+        render( type, variant, CommonUtil.getBlockFacing(tcRail.getWorld(), tcRail.getPos().getX(), tcRail.getPos().getY(), tcRail.getPos().getZ()), x, y, z, 1, 1, 1, 1 );
     }
 
     public void render(String type,String variant,int facing, double x, double y, double z, float r, float g, float b, float a) {

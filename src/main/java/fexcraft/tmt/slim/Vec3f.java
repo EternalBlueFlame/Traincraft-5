@@ -188,7 +188,7 @@ public class Vec3f implements Serializable {
 
     @Override
     public String toString(){
-        return String.format("Vec3f[ %s, %s, %s ]", xCoord, yCoord, zCoord);
+        return String.format("Vec3f[ %s, %s, %s ]", getPos().getX(),getPos().getY(),getPos().getZ());
     }
 
 

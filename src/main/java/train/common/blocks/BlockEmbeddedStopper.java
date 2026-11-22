@@ -29,7 +29,7 @@ public class BlockEmbeddedStopper extends BlockContainer {
     private IIcon texture;
 
     public BlockEmbeddedStopper() {
-        super(Material.iron);
+        super(Material.IRON);
         setCreativeTab(Traincraft.tcTab);
     }
 

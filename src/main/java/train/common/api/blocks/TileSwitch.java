@@ -260,7 +260,7 @@ public class TileSwitch extends TileRenderFacing {
             }
         }
         if(useRedstone) {
-            setStrength(getWorld().getBlockPowerInput(xCoord, yCoord, zCoord),0);
+            setStrength(getWorld().getBlockPowerInput(getPos().getX(),getPos().getY(),getPos().getZ()),0);
         } else {
             setStrength(0,0);
         }

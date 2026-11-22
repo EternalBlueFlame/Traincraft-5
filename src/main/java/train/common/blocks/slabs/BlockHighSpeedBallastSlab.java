@@ -21,12 +21,12 @@ public class BlockHighSpeedBallastSlab extends BlockSlab
 {
     public BlockHighSpeedBallastSlab(boolean par2)
     {
-        super(par2, Material.rock);
+        super(par2, Material.ROCK);
         this.useNeighborBrightness = true;
-        this.setStepSound(soundTypeStone);
+        this.setSoundType(SoundType.STONE);
         this.setResistance(5.0F);
         this.setHardness(2.0F);
-        this.setBlockName("high speed ballast slab");
+        this.setTranslationKey("high speed ballast slab");
     }
 
     /************
@@ -34,7 +34,7 @@ public class BlockHighSpeedBallastSlab extends BlockSlab
      ************/
     @Override
     @SideOnly(Side.CLIENT)
-    public void getSubBlocks(Item item, CreativeTabs tab, List list)
+    public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> list)
     {
         if (item != Item.getItemFromBlock(BlockIDs.highSpeedBallastDoubleSlab.block))
         {
@@ -43,9 +43,9 @@ public class BlockHighSpeedBallastSlab extends BlockSlab
     }
 
     @Override
-    public String func_150002_b(int par1)
+    public String getTranslationKey(int par1)
     {
-        return super.getUnlocalizedName();
+        return super.getTranslationKey();
     }
 
     @SideOnly(Side.CLIENT)
@@ -65,7 +65,7 @@ public class BlockHighSpeedBallastSlab extends BlockSlab
      * DROPS
      ************/
     @Override
-    public Item getItemDropped(int par1, Random par2Random, int par3)
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
         return Item.getItemFromBlock(BlockIDs.highSpeedBallastSlab.block);
     }

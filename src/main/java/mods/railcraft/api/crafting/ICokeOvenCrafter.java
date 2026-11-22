@@ -7,9 +7,9 @@
 
 package mods.railcraft.api.crafting;
 
+import com.sun.istack.internal.Nullable;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Collections;
 import java.util.List;

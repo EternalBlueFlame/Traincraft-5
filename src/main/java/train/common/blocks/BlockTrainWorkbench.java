@@ -3,11 +3,13 @@ package train.common.blocks;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.util.EnumFacing;
 import train.common.Traincraft;
@@ -21,7 +23,7 @@ public class BlockTrainWorkbench extends BlockDynamic {
 
 
 	public BlockTrainWorkbench(int j) {
-		super(Material.wood,0);
+		super(Material.WOOD,0);
 		setCreativeTab(Traincraft.tcTab);
 		setHarvestLevel("axe", 0);
 	}
@@ -78,7 +80,7 @@ public class BlockTrainWorkbench extends BlockDynamic {
 	@Override
 	public void onBlockAdded(World world, BlockPos pos, IBlockState state) {
 		super.onBlockAdded(world, pos, state);
-		CommonUtil.markBlockForUpdate(world, i, j, k);
+		CommonUtil.markBlockForUpdate(world, pos.getX(),pos.getY(),pos.getZ());
 	}
 
 	@Override

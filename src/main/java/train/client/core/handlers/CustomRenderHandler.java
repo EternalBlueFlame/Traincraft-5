@@ -1,11 +1,15 @@
 package train.client.core.handlers;
 
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.item.EnumDyeColor;
+import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import ebf.tim.utility.ClientUtil;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityClientPlayerMP;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -26,29 +30,29 @@ public class CustomRenderHandler {
 
     @SubscribeEvent
     public void onRenderWorldLast(RenderWorldLastEvent event) {
-        EntityClientPlayerMP player = Minecraft.getMinecraft().player;
-        if (player != null && player.getHeldItem() != null && (player.getHeldItem().getItem() instanceof ItemTCRail)) {
-            renderTCRailPreview(player, player.getHeldItem());
+        AbstractClientPlayer player = Minecraft.getMinecraft().player;
+        if (player != null && player.getHeldItem(EnumHand.MAIN_HAND) != null && (player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemTCRail)) {
+            renderTCRailPreview(player, player.getHeldItem(EnumHand.MAIN_HAND));
         }
     }
 
-    private void renderTCRailPreview(EntityClientPlayerMP player, ItemStack stack) {
+    private void renderTCRailPreview(AbstractClientPlayer player, ItemStack stack) {
         World world = Minecraft.getMinecraft().world;
         if (world == null || Minecraft.getMinecraft().objectMouseOver == null) {
             return;
         }
-        int x = Minecraft.getMinecraft().objectMouseOver.blockX;
-        int y = Minecraft.getMinecraft().objectMouseOver.blockY;
-        int z = Minecraft.getMinecraft().objectMouseOver.blockZ;
+        int x = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getX();
+        int y = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getY();
+        int z = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getZ();
 
-        if (CommonUtil.getBlockAt(world, x, y, z) == Blocks.air) {
+        if (CommonUtil.getBlockAt(world, x, y, z) == Blocks.AIR) {
             return;
         }
 
-        ItemTCRail item = (ItemTCRail) player.getHeldItem().getItem();
+        ItemTCRail item = (ItemTCRail) player.getHeldItem(EnumHand.MAIN_HAND).getItem();
 
         // Check if item can be placed and select color
-        boolean validPlacement = item.tryToPlaceTrack(player.getHeldItem(), player, world, x, y, z, false);
+        boolean validPlacement = item.tryToPlaceTrack(player.getHeldItem(EnumHand.MAIN_HAND), player, world, x, y, z, false);
         float r = 1;
         float g = 0;
         float b = 0;
@@ -150,7 +154,7 @@ public class CustomRenderHandler {
             float dx = dir.getX();
             float dz = dir.getY();
 
-            if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
+            if (item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left")) {
                 RenderTCRail.modelLeftDiamondCrossing.render(labelType, dx, 0, dz, facing, r, g, b, a);
             } else {
                 RenderTCRail.modelRightDiamondCrossing.render(labelType, dx, 0, dz, facing, r, g, b, a);
@@ -237,7 +241,7 @@ public class CustomRenderHandler {
                 }
                 blockInfo();
 
-                if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
+                if (item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left")) {
                     RenderTCRail.modelLeftCurvedSlope.render(turnSize, facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
                 } else {
                     RenderTCRail.modelRightCurvedSlope.render(turnSize, facing, 0, 0, 0, r, g, b, a, ballastMaterial, blockColour);
@@ -255,7 +259,7 @@ public class CustomRenderHandler {
                 turnSize = "20x2";
                }
 
-            if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
+            if (item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left")) {
                 RenderTCRail.modelLeftParallelCurve.render(turnSize, variant, facing, 0, 0, 0, r, g, b, a);
             } else {
                 RenderTCRail.modelRightParallelCurve.render(turnSize, variant, facing, 0, 0, 0, r, g, b, a);
@@ -284,7 +288,7 @@ public class CustomRenderHandler {
                 turnSize = "10x22";
             }
 
-            if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
+            if (item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left")) {
                 RenderTCRail.model45DegreeLeftTurn.render(turnSize, variant, facing, 0, 0, 0, r, g, b, a);
             } else {
                 RenderTCRail.model45DegreeRightTurn.render(turnSize, variant, facing, 0, 0, 0, r, g, b, a);
@@ -313,7 +317,7 @@ public class CustomRenderHandler {
                 else if (item.getTrackType() == EnumTracks.TURN_1X1 || item.getTrackType() == EnumTracks.EMBEDDED_TURN_1X1)
                     turnSize = "1x";
 
-                if (item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left")) {
+                if (item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left")) {
                     RenderTCRail.modelLeftTurn.render((item.getTrackType().getLabel().contains("EMBEDDED") ? "embedded_" : "") + turnSize, facing, 0, 0, 0, r, g, b, a);
                 } else {
                     RenderTCRail.modelRightTurn.render((item.getTrackType().getLabel().contains("EMBEDDED") ? "embedded_" : "") + turnSize, facing, 0, 0, 0, r, g, b, a);
@@ -322,7 +326,7 @@ public class CustomRenderHandler {
 
             // Switches
         } else if (item.getTrackType().getRailType() == TCRailTypes.RailTypes.SWITCH) {
-            boolean isLeftTurn = item.getTrackOrientation(facing, MathHelper.wrapAngleTo180_float(player.rotationYaw)).equals("left");
+            boolean isLeftTurn = item.getTrackOrientation(facing, MathHelper.wrapDegrees(player.rotationYaw)).equals("left");
             float dx = dir.getX();
             float dz = dir.getY();
             int out_0_start = 3;
@@ -420,13 +424,25 @@ public class CustomRenderHandler {
 
     private void blockInfo() {
         World world = Minecraft.getMinecraft().world;
-        int x = Minecraft.getMinecraft().objectMouseOver.blockX;
-        int y = Minecraft.getMinecraft().objectMouseOver.blockY;
-        int z = Minecraft.getMinecraft().objectMouseOver.blockZ;
+        int x = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getX();
+        int y = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getY();
+        int z = Minecraft.getMinecraft().objectMouseOver.getBlockPos().getZ();
         Block block = CommonUtil.getBlockAt(world, x, y, z);
         int metadata = CommonUtil.getBlockFacing(world, x, y, z);
+        IBlockState state= world.getBlockState(Minecraft.getMinecraft().objectMouseOver.getBlockPos());
 
-        blockColour = block.colorMultiplier(world, x, y, z);
+        blockColour = EnumDyeColor.WHITE.getColorValue();
+        for (IProperty prop : state.getProperties().keySet())
+        {
+            if (prop.getName().equals("color") && prop.getValueClass() == net.minecraft.item.EnumDyeColor.class)
+            {
+                int current = ((net.minecraft.item.EnumDyeColor)state.getValue(prop)).getColorValue();
+                if (current != blockColour && prop.getAllowedValues().contains(blockColour))
+                {
+                    blockColour =current;
+                }
+            }
+        }
         TextureReference icon = ClientUtil.getBlockTexture(block, metadata, 1);
         if (icon != null && icon.getResourceName() != null) {
             ballastMaterial = icon.getResourceName();

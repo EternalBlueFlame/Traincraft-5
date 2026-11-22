@@ -8,6 +8,7 @@
 package mods.railcraft.api.tracks;
 
 import com.mojang.authlib.GameProfile;
+import com.sun.istack.internal.Nullable;
 import mods.railcraft.api.core.RailcraftFakePlayer;
 import mods.railcraft.api.items.IToolCrowbar;
 import net.minecraft.block.Block;
@@ -22,7 +23,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 import static net.minecraft.block.BlockRailBase.EnumRailDirection.*;
 

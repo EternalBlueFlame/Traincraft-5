@@ -6,13 +6,12 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.api.carts;
 
+import com.sun.istack.internal.Nullable;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 import java.util.function.Predicate;
@@ -102,8 +101,8 @@ public interface ITrainTransferHelper {
      * @return the FluidStack pulled from the Train, or null if the request cannot be met
      * @see mods.railcraft.api.carts.IFluidCart
      */
-    @Contract("_, null -> null")
-    default @Nullable FluidStack pullFluid(EntityMinecart requester, @Nullable FluidStack fluidStack) {
+    default @Nullable
+    FluidStack pullFluid(EntityMinecart requester, @Nullable FluidStack fluidStack) {
         return null;
     }
 

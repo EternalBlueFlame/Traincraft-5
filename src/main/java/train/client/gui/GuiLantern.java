@@ -125,7 +125,7 @@ public class GuiLantern extends GuiScreen {
      * Called when the mouse is clicked.
      */
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) {
+    protected void mouseClicked(int par1, int par2, int par3) throws IOException {
         super.mouseClicked(par1, par2, par3);
         this.colorTextField.mouseClicked(par1, par2, par3);
     }

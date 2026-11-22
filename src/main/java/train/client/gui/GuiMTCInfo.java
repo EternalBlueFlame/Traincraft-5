@@ -109,7 +109,7 @@ public class GuiMTCInfo extends GuiScreen {
     }
 
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) {
+    protected void mouseClicked(int par1, int par2, int par3) throws IOException {
         trainLevel.mouseClicked(par1, par2, par3);
         trainID.mouseClicked(par1, par2, par3);
         destination.mouseClicked(par1, par2, par3);

@@ -90,14 +90,14 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
 
         TileEntity te = CommonUtil.getTileEntity(world, x, y, z);
         if (te instanceof TileFortyFootContainer && world.isRemote) {
-            if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemPaintbrushThing) {
+            if (player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemPaintbrushThing) {
                 ((TileFortyFootContainer) te).goToNextColor();
             }
         }
         if (world.isRemote) return true;
 
         if (te instanceof TileFortyFootContainer) {
-            if (player.getHeldItem() != null && player.getHeldItem().getItem() instanceof ItemPaintbrushThing) {
+            if (player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemPaintbrushThing) {
                 ((TileFortyFootContainer)te).goToNextColor();
             } else {
                 player.openGui(Traincraft.instance, GuiIDs.FORTY_FOOT_CONTAINER, world, x, y, z);
@@ -168,7 +168,7 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
 
     /*@Override
     public Item getItemDropped(int metadata, Random rand, int fortuneLevel) {
-    *//*    ItemStack item = new ItemStack(new ItemFortyFootContainer(new BlockFortyFootContainer(Material.rock)));
+    *//*    ItemStack item = new ItemStack(new ItemFortyFootContainer(new BlockFortyFootContainer(Material.ROCK)));
         TileFortyFootContainer theContainerTile = theTile;
         NBTTagCompound nbt = new NBTTagCompound();
         NBTTagList list = new NBTTagList();
@@ -189,7 +189,7 @@ public class BlockFiftyThreeFootContainer extends BlockContainer {
         item.setTagCompound(nbt);
         System.out.println("Faile?");
         System.out.println(item.toString());
-        return new ItemFortyFootContainer(new BlockFortyFootContainer(Material.rock));*//*
+        return new ItemFortyFootContainer(new BlockFortyFootContainer(Material.ROCK));*//*
 
     }*/
 

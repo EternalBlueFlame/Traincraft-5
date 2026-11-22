@@ -1,5 +1,8 @@
 package train.common.wellcar;
 
+import com.sun.istack.internal.Nullable;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
@@ -16,7 +19,7 @@ public class ItemFortyFootContainer extends ItemBlock {
         setMaxStackSize(1);
     }
     @SideOnly(Side.CLIENT)
-    public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> par3List, ITooltipFlag flagIn) {
         par3List.add("\u00a77" + "A container that you can put items in.");
         par3List.add("\u00a77" + "Can be put on wellcars.");
         par3List.add("\u00a77" + "Color can be changed with a paintbrush.");

@@ -155,7 +155,7 @@ public class GuiSpeedTransmitter extends GuiScreen {
 
 
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) {
+    protected void mouseClicked(int par1, int par2, int par3) throws IOException {
         speedLimitTextField.mouseClicked(par1, par2, par3);
         nextSpeedLimitTextField.mouseClicked(par1, par2, par3);
         nextSpeedXTextField.mouseClicked(par1, par2, par3);

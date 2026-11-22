@@ -43,7 +43,7 @@ public class TileMetroMadridPole extends TileEntity {
     }
 
     public void setFacing(ForgeDirection face) {
-        CommonUtil.markBlockForUpdate(world, xCoord, yCoord, zCoord);
+        CommonUtil.markBlockForUpdate(world, getPos().getX(),getPos().getY(),getPos().getZ());
         this.facing = face;
     }
 

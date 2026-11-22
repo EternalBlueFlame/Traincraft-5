@@ -42,7 +42,7 @@ public class PacketRollingStockDitchLights implements IMessage
         @Override
         public IMessage onMessage(PacketRollingStockDitchLights message, MessageContext context)
         {
-			Entity TrainEntity = context.getServerHandler().playerEntity.world.getEntityByID(message.entityID);
+			Entity TrainEntity = context.getServerHandler().player.world.getEntityByID(message.entityID);
 			
 			if (TrainEntity instanceof IRollingStockLightControls)
             {

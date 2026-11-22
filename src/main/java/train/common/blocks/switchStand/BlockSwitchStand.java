@@ -1,5 +1,6 @@
 package train.common.blocks.switchStand;
 
+import net.minecraft.block.SoundType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.CommonUtil;
@@ -8,7 +9,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
 import train.common.api.blocks.BlockSwitch;
 import train.common.tile.switchStand.TileSwitchStand;
@@ -16,12 +16,12 @@ import train.common.tile.switchStand.TileSwitchStand;
 public class BlockSwitchStand extends BlockSwitch {
 
 	public BlockSwitchStand() {
-		super(Material.wood, 0);
+		super(Material.WOOD, 0);
 		setCreativeTab(Traincraft.tcTab);
 		this.setTickRandomly(true);
 		setHardness(1.75F);
 		setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.75F, 0.8F);
-		setStepSound(soundTypeMetal);
+		setSoundType(SoundType.METAL);
 	}
 
 	@Override

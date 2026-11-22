@@ -30,7 +30,7 @@ public class ContainerOpenHearthFurnace extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return furnace.isUseableByPlayer(entityplayer);
+		return furnace.isUsableByPlayer(entityplayer);
 	}
 
 	@Override

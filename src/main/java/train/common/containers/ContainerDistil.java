@@ -85,7 +85,7 @@ public class ContainerDistil extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer entityplayer) {
-		return distil.isUseableByPlayer(entityplayer);
+		return distil.isUsableByPlayer(entityplayer);
 	}
 
 	@Override

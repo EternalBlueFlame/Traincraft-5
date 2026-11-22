@@ -94,7 +94,7 @@ public class TileATOTransmitterStopPoint extends TileEntity implements IPeripher
    @Override
    public AxisAlignedBB getRenderBoundingBox() {
       if (boundingBox == null) {
-         boundingBox = ebf.tim.utility.CommonUtil.createAABB(xCoord, yCoord, zCoord, xCoord + 2, yCoord + 2, zCoord + 2);
+         boundingBox = ebf.tim.utility.CommonUtil.createAABB(getPos().getX(),getPos().getY(),getPos().getZ(), xCoord + 2, yCoord + 2, zCoord + 2);
       }
       return boundingBox;
    }

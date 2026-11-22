@@ -112,7 +112,7 @@ public class CapesHelper extends Thread {
 
     private static ThreadDownloadImageData dlImage(ResourceLocation rl, String url) {
         TextureManager textures = Minecraft.getMinecraft().renderEngine;
-        File file = new File(rl.getResourcePath());
+        File file = new File(rl.getPath());
         ThreadDownloadImageData data = new ThreadDownloadImageData(file, url, rl, null);
         textures.loadTexture(rl, data);
         return data;

@@ -99,7 +99,7 @@ public class GuiBuilder extends GuiContainer {
         }
 
         if (guibutton.id == 4) {
-            if (player != null && player.getCommandSenderName().equalsIgnoreCase(builder.getTrainOwner())) {
+            if (player != null && player.getName().equalsIgnoreCase(builder.getTrainOwner())) {
                 AxisAlignedBB box = builder.boundingBox.expand(5, 5, 5);
                 List<?> lis3 = builder.world.getEntitiesWithinAABBExcludingEntity(builder, box);
 

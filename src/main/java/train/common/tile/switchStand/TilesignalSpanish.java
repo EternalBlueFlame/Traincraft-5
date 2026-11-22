@@ -24,7 +24,7 @@ public class TilesignalSpanish extends TileSwitch {
 
     public void setState(int st){
         state = st;
-        CommonUtil.markBlockForUpdate(world, xCoord, yCoord, zCoord);
+        CommonUtil.markBlockForUpdate(world, getPos().getX(),getPos().getY(),getPos().getZ());
     }
 
     public int getState(){
@@ -58,7 +58,7 @@ public class TilesignalSpanish extends TileSwitch {
          */
         if (!world.isRemote) {
             if (updateTicks % 20 == 0) {
-                if (!this.world.isAirBlock(getPos().getX(), getPos().getY() + 1, getPos().getZ())) {
+                if (!(CommonUtil.getBlockAt(getWorld(), getPos().getX(), getPos().getY() + 1, getPos().getZ()) instanceof BlockAir)) {
                     Block block = CommonUtil.getBlockAt(this.world, getPos().getX(), getPos().getY() + 1, getPos().getZ());
                     if (block != null) {
                         EntityItem entityitem = new EntityItem(world, getPos().getX(), getPos().getY() + 1, getPos().getZ(), new ItemStack(Item.getItemFromBlock(BlockIDs.signalSpanish.block), 1));
@@ -78,6 +78,6 @@ public class TilesignalSpanish extends TileSwitch {
     @SideOnly(Side.CLIENT)
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-        return CommonUtil.createAABB(xCoord - 1, yCoord - 1, zCoord - 1, xCoord + 2, yCoord + 2, zCoord + 2);
+        return CommonUtil.createAABB(getPos().getX() - 1, getPos().getY() - 1, getPos().getZ() - 1, getPos().getX() + 2, getPos().getY() + 2, getPos().getZ() + 2);
     }
 }

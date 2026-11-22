@@ -91,7 +91,7 @@ public class GuiFreight extends GuiContainer {
     @Override
     protected void actionPerformed(GuiButton guibutton) {
         if (guibutton.id == 3) {
-            if (player != null && player.getCommandSenderName().equalsIgnoreCase(freight.getTrainOwner())) {
+            if (player != null && player.getName().equalsIgnoreCase(freight.getTrainOwner())) {
                 if (!freight.getTrainLockedFromPacket() && !isShiftKeyDown()) {
                     freight.locked = true;
                     guibutton.displayString = "Locked";
@@ -180,7 +180,7 @@ public class GuiFreight extends GuiContainer {
         GL11.glDisable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_DEPTH_TEST);
 
-        fontRenderer.drawString(freight.getCommandSenderName(), 10, 6, 0x404040);
+        fontRenderer.drawString(freight.getName(), 10, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 
         GL11.glEnable(GL11.GL_LIGHTING);

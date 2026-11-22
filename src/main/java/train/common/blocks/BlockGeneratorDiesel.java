@@ -33,7 +33,7 @@ public class BlockGeneratorDiesel extends BlockContainer {
 	private IIcon texture;
 
 	public BlockGeneratorDiesel() {
-		super(Material.iron);
+		super(Material.IRON);
 		setCreativeTab(Traincraft.tcTab);
 		this.setTickRandomly(true);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1F, 1F, 1F);

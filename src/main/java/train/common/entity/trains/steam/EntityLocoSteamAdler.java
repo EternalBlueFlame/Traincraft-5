@@ -69,7 +69,7 @@ new ItemStack(ItemIDs.ironChimney.item, 1),
 null, 
 new ItemStack(ItemIDs.ironBoiler.item, 1), 
 new ItemStack(ItemIDs.ironFirebox.item, 1), 
-new ItemStack(Items.gold_ingot, 2),
+new ItemStack(Items.GOLD_INGOT, 2),
 new ItemStack(thisItem)
         };
     }

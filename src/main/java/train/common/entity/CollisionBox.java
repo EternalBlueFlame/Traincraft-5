@@ -52,8 +52,8 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
     }
 
     @Override
-    public String getCommandSenderName() {
-        return host==null?"collisionBox":host.getCommandSenderName();
+    public String getName() {
+        return host==null?"collisionBox":host.getName();
     }
 
     @Override
@@ -174,7 +174,7 @@ public class CollisionBox extends EntityDragonPart implements IInventory, IFluid
 
     @Override
     public boolean isUsableByPlayer(EntityPlayer p_70300_1_) {
-        return host.isUseableByPlayer(p_70300_1_);
+        return host.isUsableByPlayer(p_70300_1_);
     }
 
     @Override

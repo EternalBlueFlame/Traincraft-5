@@ -1,12 +1,12 @@
 package train.common.blocks.switchStand;
 
 import ebf.tim.utility.CommonUtil;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import train.common.Traincraft;
 import train.common.api.blocks.BlockSwitch;
 import train.common.tile.switchStand.TileAutoSwitchStand;
@@ -15,12 +15,12 @@ import train.common.tile.switchStand.TileAutoSwitchStand;
 public class BlockAutoSwitchStand extends BlockSwitch {
 
     public BlockAutoSwitchStand() {
-        super(Material.iron, 0);
+        super(Material.IRON, 0);
         setCreativeTab(Traincraft.tcTab);
         this.setTickRandomly(true);
         setHardness(1.75F);
         setBlockBounds(0.2F, 0.0F, 0.2F, 0.8F, 0.75F, 0.8F);
-        setStepSound(soundTypeMetal);
+        setSoundType(SoundType.METAL);
     }
     @Override
     public void onBlockAdded(World world, int i, int j, int k) {

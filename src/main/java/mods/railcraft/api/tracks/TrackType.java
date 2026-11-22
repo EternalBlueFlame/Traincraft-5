@@ -7,6 +7,7 @@
 
 package mods.railcraft.api.tracks;
 
+import com.sun.istack.internal.Nullable;
 import mods.railcraft.api.core.IIngredientSource;
 import mods.railcraft.api.core.ILocalizedObject;
 import net.minecraft.block.Block;
@@ -22,7 +23,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * Created by CovertJaguar on 8/10/2016 for Railcraft.
@@ -169,7 +169,8 @@ public class TrackType extends IForgeRegistryEntry.Impl<TrackType> implements IS
         public void onMinecartPass(World worldIn, EntityMinecart cart, BlockPos pos, @Nullable TrackKit trackKit) {
         }
 
-        public @Nullable BlockRailBase.EnumRailDirection getRailDirectionOverride(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
+        public @Nullable
+        BlockRailBase.EnumRailDirection getRailDirectionOverride(IBlockAccess world, BlockPos pos, IBlockState state, @Nullable EntityMinecart cart) {
             return null;
         }
 

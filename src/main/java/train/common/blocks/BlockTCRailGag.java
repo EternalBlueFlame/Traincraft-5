@@ -28,7 +28,7 @@ public class BlockTCRailGag extends Block {
 	private IIcon texture;
 
 	public BlockTCRailGag() {
-		super(Material.iron);
+		super(Material.IRON);
 		setCreativeTab(Traincraft.tcTab);
 		this.setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 0.0F, 1.0F);
 	}
@@ -52,11 +52,11 @@ public class BlockTCRailGag extends Block {
 				for(int z : matrixXZ){
 					for(int y : matrixY){
 						if (CommonUtil.getBlockAt(world, x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRailGag){
-							world.notifyBlockChange((x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z  + tileEntity.zCoord), Blocks.air);
+							world.notifyBlockChange((x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z  + tileEntity.zCoord), Blocks.AIR);
 							CommonUtil.markBlockForUpdate(world, (x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1 ), (z  + tileEntity.zCoord));
 						}
 						if (CommonUtil.getBlockAt(world, x + tileEntity.xCoord, y + tileEntity.yCoord, z + tileEntity.zCoord)instanceof BlockTCRail){
-							world.notifyBlockChange((x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z  + tileEntity.zCoord), Blocks.air);
+							world.notifyBlockChange((x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1), (z  + tileEntity.zCoord), Blocks.AIR);
 							CommonUtil.markBlockForUpdate(world, (x  + tileEntity.xCoord), (y + tileEntity.yCoord + 1 ), (z  + tileEntity.zCoord));
 						}
 					}

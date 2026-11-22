@@ -59,7 +59,7 @@ public class TileWindMill extends Energy implements IEnergyProvider {
 		 */
 		if (!world.isRemote) {
 			if (updateTicks % 20 == 0) {
-				if (!this.world.isAirBlock(getPos().getX(), getPos().getY() + 1, getPos().getZ())) {
+				if (!(CommonUtil.getBlockAt(getWorld(), getPos().getX(), getPos().getY() + 1, getPos().getZ()) instanceof BlockAir)) {
 					Block block = CommonUtil.getBlockAt(this.world, getPos().getX(), getPos().getY() + 1, getPos().getZ());
 					if (block != null) {
 						EntityItem entityitem = new EntityItem(getWorld(), getPos().getX(), getPos().getY() + 1, getPos().getZ(), new ItemStack(Item.getItemFromBlock(BlockIDs.windMill.block),1));

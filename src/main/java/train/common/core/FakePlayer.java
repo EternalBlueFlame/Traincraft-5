@@ -35,7 +35,7 @@ public class FakePlayer extends EntityPlayer {
         super(world, new GameProfile(new UUID(0, 0), ""));
         inventory = new InventoryPlayer(this);
         inventory.currentItem = 0;
-        inventory.setInventorySlotContents(0, new ItemStack(Items.diamond_pickaxe, 1, 0));
+        inventory.setInventorySlotContents(0, new ItemStack(Items.DIAMOND_PICKAXE, 1, 0));
         flyToggleTimer = 0;
         xpCooldown = 0;
         timeUntilPortal = 20;

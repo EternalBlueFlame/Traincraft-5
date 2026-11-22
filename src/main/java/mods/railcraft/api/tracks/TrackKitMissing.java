@@ -6,11 +6,11 @@
  -----------------------------------------------------------------------------*/
 package mods.railcraft.api.tracks;
 
+import com.sun.istack.internal.Nullable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.Nullable;
 
 /**
  * @author CovertJaguar <http://www.railcraft.info>

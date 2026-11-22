@@ -24,8 +24,8 @@ public class VillagerTraincraftHandler implements IVillageCreationHandler, IVill
     @Override
     public void manipulateTradesForVillager(EntityVillager villager,
                                             MerchantRecipeList recipeList, Random random) {
-        recipeList.add(new MerchantRecipe(getRandomSizedStack(Blocks.rail, random, 20), Items.emerald));
-        recipeList.add(new MerchantRecipe(getRandomSizedItemStack(Items.emerald, random, 20), new ItemStack(Blocks.rail)));
+        recipeList.add(new MerchantRecipe(getRandomSizedStack(Blocks.RAIL, random, 20), Items.emerald));
+        recipeList.add(new MerchantRecipe(getRandomSizedItemStack(Items.emerald, random, 20), new ItemStack(Blocks.RAIL)));
 
         recipeList.add(new MerchantRecipe(getRandomSizedStack(Blocks.activator_rail, random, 4), Items.emerald));
         recipeList.add(new MerchantRecipe(getRandomSizedItemStack(Items.emerald, random, 4), new ItemStack(Blocks.activator_rail)));

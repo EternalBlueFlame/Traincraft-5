@@ -19,7 +19,7 @@ public class ContainerTrainWorkbench extends Container {
 	private World world;
 
 	public ContainerTrainWorkbench(InventoryPlayer invPlayer, World world, IInventory te) {
-		this.getWorld() = world;
+		this.world = world;
 		craftMatrix = te;
 
 		this.addSlotToContainer(new SlotTrainCrafting(invPlayer.player, craftMatrix, craftResult, 0, 124, 35));
@@ -62,7 +62,7 @@ public class ContainerTrainWorkbench extends Container {
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
-		return craftMatrix.isUseableByPlayer(player);
+		return craftMatrix.isUsableByPlayer(player);
 	}
 
 	@Override

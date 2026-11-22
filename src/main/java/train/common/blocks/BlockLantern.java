@@ -23,7 +23,7 @@ public class BlockLantern extends BlockDynamic {
 	private IIcon texture;
 
 	public BlockLantern() {
-		super(Material.rock,0);
+		super(Material.ROCK,0);
 		this.setTickRandomly(true);
 		setLightLevel(0.98F);
 	}

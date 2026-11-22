@@ -143,7 +143,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	@SideOnly(Side.CLIENT)
 	@Override
-	public void addInformation(ItemStack par1ItemStack, EntityPlayer par2EntityPlayer, List par3List, boolean par4) {
+	public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> par3List, ITooltipFlag flagIn) {
 		if (par1ItemStack.hasTagCompound()) {
 			NBTTagCompound var5 = par1ItemStack.getTagCompound();
 			trainCreator = var5.getString("trainCreator");

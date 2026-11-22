@@ -1,6 +1,7 @@
 package train.common.api;
 
 import com.mojang.authlib.GameProfile;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.entities.EntitySeat;
@@ -19,7 +20,6 @@ import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import train.common.blocks.BlockTCRail;
@@ -67,7 +67,7 @@ public class EntityBogie extends EntityMinecart implements IMinecart, IRoutableC
 		super(world);
 
 		this.isOnRail = false;
-		this.worldObj = world;
+		this.world = world;
 
 		setSize(0.5f, 0.25f);
 

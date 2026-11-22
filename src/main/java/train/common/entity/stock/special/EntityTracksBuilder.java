@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraftforge.common.MinecraftForge;
@@ -97,10 +96,10 @@ public class EntityTracksBuilder extends EntityRollingStock {
     @Override
     public void onUpdate() {
         super.onUpdate();
-        if (worldObj == null) return;
+        if (world == null) return;
         if (rand.nextInt(4) == 0) Smoke();
         currentHeight = posY;
-        if (worldObj.isRemote) return;
+        if (world.isRemote) return;
         updateFuel();
         moveStacks();
         updatePushForces();
@@ -127,8 +126,8 @@ public class EntityTracksBuilder extends EntityRollingStock {
     public boolean interactFirst(EntityPlayer player) {
         playerEntity = player;
         if (super.interactFirst(player)) return false;
-        if (worldObj != null && !worldObj.isRemote) {
-            player.openGui(Traincraft.instance, GuiIDs.BUILDER, worldObj, getEntityId(), -1, (int) posZ);
+        if (world != null && !world.isRemote) {
+            player.openGui(Traincraft.instance, GuiIDs.BUILDER, world, getEntityId(), -1, (int) posZ);
             pushX = posX - player.posX;
             pushZ = posZ - player.posZ;
         }
@@ -180,11 +179,11 @@ public class EntityTracksBuilder extends EntityRollingStock {
     public int getInventoryStackLimit() { return 64; }
 
     @Override
-    public boolean isUseableByPlayer(EntityPlayer player) {
+    public boolean isUsableByPlayer(EntityPlayer player) {
         return !isDead && player.getDistanceSqToEntity(this) <= 64.0D;
     }
 
-    public boolean canInteractWith(EntityPlayer player) { return isUseableByPlayer(player); }
+    public boolean canInteractWith(EntityPlayer player) { return isUsableByPlayer(player); }
 
     @Override
     public boolean isItemValidForSlot(int slot, ItemStack stack) { return true; }
@@ -199,11 +198,11 @@ public class EntityTracksBuilder extends EntityRollingStock {
     public void markDirty() { }
 
     public int getFuel() {
-        return worldObj != null && worldObj.isRemote ? dataWatcher.getWatchableObjectInt(24) : fuel;
+        return world != null && world.isRemote ? dataWatcher.getWatchableObjectInt(24) : fuel;
     }
 
     public boolean getState() {
-        return worldObj != null && dataWatcher.getWatchableObjectInt(28) == 1;
+        return world != null && dataWatcher.getWatchableObjectInt(28) == 1;
     }
 
     public void setPlannedHeightFromPacket(int delta) {
@@ -212,22 +211,22 @@ public class EntityTracksBuilder extends EntityRollingStock {
 
     public void setPlannedHeight(int height) {
         plannedHeight = height;
-        if (worldObj != null) dataWatcher.updateObject(26, height);
+        if (world != null) dataWatcher.updateObject(26, height);
     }
 
     public int getPlannedHeight() {
-        return worldObj == null ? plannedHeight : dataWatcher.getWatchableObjectInt(26);
+        return world == null ? plannedHeight : dataWatcher.getWatchableObjectInt(26);
     }
 
     public void setFollowTracksFromPacket(int follow) { setFollowTracks(follow); }
 
     public void setFollowTracks(int follow) {
         followTracks = follow == 1;
-        if (worldObj != null) dataWatcher.updateObject(27, followTracks ? 1 : 0);
+        if (world != null) dataWatcher.updateObject(27, followTracks ? 1 : 0);
     }
 
     public int getFollowTracks() {
-        return worldObj == null ? (followTracks ? 1 : 0) : dataWatcher.getWatchableObjectInt(27);
+        return world == null ? (followTracks ? 1 : 0) : dataWatcher.getWatchableObjectInt(27);
     }
 
     @Override
@@ -274,7 +273,7 @@ public class EntityTracksBuilder extends EntityRollingStock {
     public void Smoke() {
         if (fuel > 0) {
             fuel--;
-            if (worldObj != null && !worldObj.isRemote) dataWatcher.updateObject(24, fuel);
+            if (world != null && !world.isRemote) dataWatcher.updateObject(24, fuel);
         }
     }
 
@@ -367,8 +366,8 @@ public class EntityTracksBuilder extends EntityRollingStock {
         success &= replaceBlockAt(railX + sideX, railY + 4, railZ + sideZ, SLOT_ROOF_LEFT);
         success &= replaceBlockAt(railX, railY - 2, railZ, SLOT_UNDER_2);
         success &= replaceBlockAt(railX, railY - 1, railZ, SLOT_UNDER);
-        Block under = CommonUtil.getBlockAt(worldObj, railX, railY - 1, railZ);
-        if (under instanceof BlockFalling && BlockFalling.func_149831_e(worldObj, railX, railY - 2, railZ)) {
+        Block under = CommonUtil.getBlockAt(world, railX, railY - 1, railZ);
+        if (under instanceof BlockFalling && BlockFalling.func_149831_e(world, railX, railY - 2, railZ)) {
             skipTick = true;
             return false;
         }
@@ -377,7 +376,7 @@ public class EntityTracksBuilder extends EntityRollingStock {
     }
 
     private boolean replaceBlockAtLegacy(int x, int y, int z, int inventorySlot) {
-        Block replacement = Blocks.air;
+        Block replacement = Blocks.AIR;
         int metadata = 0;
         boolean consume = inventorySlot > 0 && inventorySlot < builderInventory.length;
         if (consume) {
@@ -386,26 +385,26 @@ public class EntityTracksBuilder extends EntityRollingStock {
             replacement = Block.getBlockFromItem(stack.getItem());
             metadata = stack.getItemDamage();
         }
-        Block current = worldObj.getBlock(x, y, z);
-        if (current == replacement && worldObj.getBlockMetadata(x, y, z) == metadata) return true;
+        Block current = world.getBlock(x, y, z);
+        if (current == replacement && world.getBlockMetadata(x, y, z) == metadata) return true;
         if (fakeplayer != null) {
-            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, current,
-                    worldObj.getBlockMetadata(x, y, z), fakeplayer);
+            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, world, current,
+                    world.getBlockMetadata(x, y, z), fakeplayer);
             MinecraftForge.EVENT_BUS.post(event);
             if (event.isCanceled()) return false;
         }
         harvestBlock(x, y, z);
-        CommonUtil.setBlock(worldObj, x, y, z, replacement, metadata, 3);
+        CommonUtil.setBlock(world, x, y, z, replacement, metadata, 3);
         if (consume) decrStackSize(inventorySlot, 1);
         return true;
     }
 
     private void harvestBlockLegacy(int x, int y, int z) {
-        Block block = worldObj.getBlock(x, y, z);
-        int metadata = worldObj.getBlockMetadata(x, y, z);
-        List<ItemStack> drops = block.getDrops(worldObj, x, y, z, metadata, 0);
+        Block block = world.getBlock(x, y, z);
+        int metadata = world.getBlockMetadata(x, y, z);
+        List<ItemStack> drops = block.getDrops(world, x, y, z, metadata, 0);
         for (ItemStack drop : new ArrayList<ItemStack>(drops)) putInInvent(drop);
-        worldObj.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
+        world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
     }
 
     private void putInInventLegacy(ItemStack stack) {
@@ -427,18 +426,18 @@ public class EntityTracksBuilder extends EntityRollingStock {
 
     private boolean placeRailAtLegacy(int x, int y, int z) {
         if (builderInventory[SLOT_RAIL] == null) return false;
-        Block current = worldObj.getBlock(x, y, z);
+        Block current = world.getBlock(x, y, z);
         if (BlockRailBase.func_150051_a(current) || current instanceof BlockTCRail || current instanceof BlockTCRailGag) return true;
         if (fakeplayer != null) {
-            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, current,
-                    worldObj.getBlockMetadata(x, y, z), fakeplayer);
+            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, world, current,
+                    world.getBlockMetadata(x, y, z), fakeplayer);
             MinecraftForge.EVENT_BUS.post(event);
             if (event.isCanceled()) return false;
         }
         harvestBlock(x, y, z);
-        CommonUtil.setBlockToAir(worldObj, x, y, z);
+        CommonUtil.setBlockToAir(world, x, y, z);
         ItemStack rail = builderInventory[SLOT_RAIL];
-        if (!placeRailAt(this, rail, worldObj, x, y, z)) return false;
+        if (!placeRailAt(this, rail, world, x, y, z)) return false;
         decrStackSize(SLOT_RAIL, 1);
         Smoke();
         return true;
@@ -549,15 +548,15 @@ public class EntityTracksBuilder extends EntityRollingStock {
         success &= replaceBlockAt(railX + sideX, railY + 4, railZ + sideZ, SLOT_ROOF_LEFT);
         success &= replaceBlockAt(railX, railY - 2, railZ, SLOT_UNDER_2);
         success &= replaceBlockAt(railX, railY - 1, railZ, SLOT_UNDER);
-        Block under = worldObj.getBlock(railX, railY - 1, railZ);
-        if (under instanceof BlockFalling && BlockFalling.func_149831_e(worldObj, railX, railY - 2, railZ)) {
+        Block under = world.getBlock(railX, railY - 1, railZ);
+        if (under instanceof BlockFalling && BlockFalling.func_149831_e(world, railX, railY - 2, railZ)) {
             skipTick = true; return false;
         }
         return success & placeRailAt(railX, railY, railZ);
     }
 
     private boolean replaceBlockAt(int x, int y, int z, int slot) {
-        Block replacement = Blocks.air;
+        Block replacement = Blocks.AIR;
         int metadata = 0;
         boolean consume = slot > 0 && slot < builderInventory.length;
         if (consume) {
@@ -565,25 +564,25 @@ public class EntityTracksBuilder extends EntityRollingStock {
             if (stack == null || !(stack.getItem() instanceof ItemBlock)) return true;
             replacement = Block.getBlockFromItem(stack.getItem()); metadata = stack.getItemDamage();
         }
-        Block current = worldObj.getBlock(x, y, z);
-        if (current == replacement && worldObj.getBlockMetadata(x, y, z) == metadata) return true;
+        Block current = world.getBlock(x, y, z);
+        if (current == replacement && world.getBlockMetadata(x, y, z) == metadata) return true;
         if (fakeplayer != null) {
-            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, worldObj, current, worldObj.getBlockMetadata(x, y, z), fakeplayer);
+            BlockEvent.BreakEvent event = new BlockEvent.BreakEvent(x, y, z, world, current, world.getBlockMetadata(x, y, z), fakeplayer);
             MinecraftForge.EVENT_BUS.post(event);
             if (event.isCanceled()) return false;
         }
         harvestBlock(x, y, z);
-        CommonUtil.setBlock(worldObj, x, y, z, replacement, metadata, 3);
+        CommonUtil.setBlock(world, x, y, z, replacement, metadata, 3);
         if (consume) decrStackSize(slot, 1);
         return true;
     }
 
     private void harvestBlock(int x, int y, int z) {
-        Block block = worldObj.getBlock(x, y, z);
-        int metadata = worldObj.getBlockMetadata(x, y, z);
-        List<ItemStack> drops = block.getDrops(worldObj, x, y, z, metadata, 0);
+        Block block = world.getBlock(x, y, z);
+        int metadata = world.getBlockMetadata(x, y, z);
+        List<ItemStack> drops = block.getDrops(world, x, y, z, metadata, 0);
         for (ItemStack drop : new ArrayList<ItemStack>(drops)) putInInvent(drop);
-        worldObj.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
+        world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (metadata << 12));
     }
 
     private void putInInvent(ItemStack stack) {
@@ -621,7 +620,7 @@ public class EntityTracksBuilder extends EntityRollingStock {
 
     @Override
     public boolean attackEntityFrom(DamageSource source, float amount) {
-        if (worldObj != null && worldObj.isRemote) return true;
+        if (world != null && world.isRemote) return true;
         if (canBeDestroyedByPlayer(source)) return true;
         super.attackEntityFrom(source, amount);
         setRollingDirection(-getRollingDirection());
@@ -719,7 +718,7 @@ new ItemStack(ItemIDs.steelchimney.item, 1),
 null, 
 new ItemStack(ItemIDs.boiler.item, 1), 
 new ItemStack(ItemIDs.firebox.item, 1), 
-new ItemStack(Blocks.rail, 16),
+new ItemStack(Blocks.RAIL, 16),
 new ItemStack(thisItem)
         };
     }

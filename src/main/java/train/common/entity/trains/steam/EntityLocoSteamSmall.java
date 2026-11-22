@@ -73,7 +73,7 @@ new ItemStack(ItemIDs.ironChimney.item, 1),
 new ItemStack(ItemIDs.woodenCab.item, 1), 
 new ItemStack(ItemIDs.ironBoiler.item, 1), 
 new ItemStack(ItemIDs.ironFirebox.item, 1), 
-new ItemStack(Blocks.torch, 1),
+new ItemStack(Blocks.TORCH, 1),
 new ItemStack(thisItem)
         };
     }

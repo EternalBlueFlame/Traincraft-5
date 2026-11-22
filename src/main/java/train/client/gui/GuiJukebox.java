@@ -189,14 +189,14 @@ public class GuiJukebox extends GuiScreen {
 
         if (par2 == 1 || par2 == mc.gameSettings.keyBindInventory.getKeyCode()) {
             if (!streamTextBox.isFocused()) {
-                mc.thePlayer.closeScreen();
+                mc.player.closeScreen();
             }
         }
         super.keyTyped(par1, par2);
     }
 
     @Override
-    protected void mouseClicked(int par1, int par2, int par3) {
+    protected void mouseClicked(int par1, int par2, int par3) throws IOException {
         streamTextBox.mouseClicked(par1, par2, par3);
         super.mouseClicked(par1, par2, par3);
     }

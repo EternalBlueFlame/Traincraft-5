@@ -7,8 +7,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
-import net.minecraftforge.common.util.ForgeDirection;
 import train.common.library.Info;
 
 public abstract class ElectricTrain extends Locomotive {
@@ -77,7 +77,7 @@ public abstract class ElectricTrain extends Locomotive {
 			{
 				fuelTrain += 2000;
 				decrStackSize(0, 1);
-			} else if (item == Item.getItemFromBlock(Blocks.redstone_block) && (getFuel() + (18000)) <= maxEnergy)
+			} else if (item == Item.getItemFromBlock(Blocks.REDSTONE_BLOCK) && (getFuel() + (18000)) <= maxEnergy)
 			{
 				fuelTrain += 18000;
 				decrStackSize(0, 1);
@@ -97,10 +97,10 @@ public abstract class ElectricTrain extends Locomotive {
 		  * 
 		  * if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!world.isRemote)) { locoInvent[u].setItemDamage(1); } } } } } else if ((locoInvent[0].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[23]).itemID)) { hasUranium = true; fuelTrain = 800 + 1000000; // locoInvent[0] = null; if (!world.isRemote) { decrStackSize(0, 1); } reduceExplosionChance = 1000; for (int u = 1; u < locoInvent.length; u++) {// checks the inventory if (locoInvent[u] != null) { if (locoInvent[u].itemID == PluginIndustrialCraft.getItems().get(PluginIndustrialCraft.getNames()[21]).itemID) { reduceExplosionChance += 10000; if (rand.nextInt(10) == 0 && (!world.isRemote)) { locoInvent[u].setItemDamage(1); } } } } } } } */
 
-		blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(worldObj, posX, posY-1, posZ),
-				CommonUtil.getTileEntity(worldObj, posX, posY+2, posZ),
-				CommonUtil.getTileEntity(worldObj, posX, posY+3, posZ),
-				CommonUtil.getTileEntity(worldObj, posX, posY+4, posZ)
+		blocksToCheck = new TileEntity[]{CommonUtil.getTileEntity(getWorld(), posX, posY-1, posZ),
+				CommonUtil.getTileEntity(getWorld(), posX, posY+2, posZ),
+				CommonUtil.getTileEntity(getWorld(), posX, posY+3, posZ),
+				CommonUtil.getTileEntity(getWorld(), posX, posY+4, posZ)
 		};
 
 		int draw = 0;
