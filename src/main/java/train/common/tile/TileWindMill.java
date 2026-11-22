@@ -4,6 +4,7 @@ package train.common.tile;
 import cofh.api.energy.IEnergyProvider;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockAir;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
