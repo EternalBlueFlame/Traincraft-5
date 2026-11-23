@@ -42,7 +42,7 @@ public class ItemRollingStock extends ItemMinecart implements IMinecart, IMineca
 
 	public AbstractTrains entity=null;
 
-	private AbstractTrains getEntity(){
+	public AbstractTrains getEntity(){
 		if(entity==null){
 			TrainRecord record = Traincraft.instance == null || Traincraft.instance.traincraftRegistry == null
 					? null : Traincraft.instance.traincraftRegistry.findTrainRecordByItem(this);

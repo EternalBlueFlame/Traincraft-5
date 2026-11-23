@@ -26,8 +26,6 @@ import net.minecraft.item.ItemBucket;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
-import net.minecraftforge.client.MinecraftForgeClient;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidContainerRegistry;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -215,7 +213,7 @@ public class TraincraftRegistry {
                 }
             }
             if (Traincraft.proxy.isClient() && item instanceof ItemRollingStock) {
-                net.minecraftforge.client.MinecraftForgeClient.registerItemRenderer(item, ebf.tim.render.CustomItemModel.instance);
+                item.setTileEntityItemStackRenderer(ebf.tim.render.CustomItemModel.instance);
             }
             trainID+=1;
             if(trains.getRecipe()!=null){
@@ -401,18 +399,10 @@ public class TraincraftRegistry {
         if (DebugUtil.dev && Traincraft.proxy != null && Traincraft.proxy.isClient() && itm.getUnlocalizedName().equals(CommonUtil.translate(itm.getUnlocalizedName()+".name"))) {
             DebugUtil.println("Item missing lang entry: " + itm.getUnlocalizedName());
         }
-        if (Traincraft.proxy.isClient() && itemRender != null) {
-            // MinecraftForgeClient.registerItemRenderer(itm, (IItemRenderer) itemRender);
-            // if (ClientProxy.preRenderModels) {
-            //     ebf.tim.render.CustomItemModel.instance.renderItem(IItemRenderer.ItemRenderType.INVENTORY, new ItemStack(itm));
-            // }
-        } else if (Traincraft.proxy.isClient() && itm instanceof ItemRollingStock) {
-            // MinecraftForgeClient.registerItemRenderer(itm, ebf.tim.render.CustomItemModel.instance);
-            // if (ClientProxy.preRenderModels) {
-            //     ebf.tim.render.CustomItemModel.instance.renderItem(IItemRenderer.ItemRenderType.INVENTORY, new ItemStack(itm));
-            // }
-        } else if(Traincraft.proxy.isClient()){
-            // itm.setTextureName(MODID+ ":" + textureName);
+        if (Traincraft.proxy.isClient() && (itemRender != null || itm instanceof ItemRollingStock)) {
+            itm.setTileEntityItemStackRenderer(ebf.tim.render.CustomItemModel.instance);
+        } else if (Traincraft.proxy.isClient()) {
+            // Texture/model registration is handled separately by resource and registry setup.
         }
         return itm;
     }
@@ -482,12 +472,8 @@ public class TraincraftRegistry {
         }
         if (TESR != null) {
             net.minecraftforge.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(tile, (TileEntitySpecialRenderer) TESR);
-            // MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(block), CustomItemModel.instance);
-            // CustomItemModel.registerBlockTextures(Item.getItemFromBlock(block), ((ITileEntityProvider) block).createNewTileEntity(null, 0));
         } else {
             net.minecraftforge.fml.client.registry.ClientRegistry.bindTileEntitySpecialRenderer(tile, (TileEntitySpecialRenderer) Traincraft.proxy.getTESR());
-            // MinecraftForgeClient.registerItemRenderer(Item.getItemFromBlock(block), CustomItemModel.instance);
-            // CustomItemModel.registerBlockTextures(Item.getItemFromBlock(block), ((ITileEntityProvider) block).createNewTileEntity(null, 0));
         }
     }
 

@@ -5,7 +5,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import ebf.tim.utility.ClientUtil;
 import ebf.tim.utility.CommonUtil;
 import net.minecraft.block.Block;
-import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import fexcraft.tmt.slim.ModelRendererTurbo;
 import org.lwjgl.opengl.GL11;

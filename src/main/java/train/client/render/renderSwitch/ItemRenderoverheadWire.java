@@ -1,13 +1,5 @@
 package train.client.render.renderSwitch;
 
-import fexcraft.tmt.slim.Tessellator;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.client.IItemRenderer;
-import org.lwjgl.opengl.GL11;
-import train.client.render.renderSwitch.models.ModeloverheadWire;
-import train.common.library.Info;
-
 public class ItemRenderoverheadWire implements IItemRenderer {
     private static final ModeloverheadWire modeSwitch = new ModeloverheadWire();
     private static final ResourceLocation texture = new ResourceLocation(Info.resourceLocation,Info.modelTexPrefix + "overheadWire.png");
